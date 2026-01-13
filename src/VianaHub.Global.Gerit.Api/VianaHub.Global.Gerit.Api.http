@@ -1,0 +1,6 @@
+@VianaHub.Global.Gerit.Api_HostAddress = http://localhost:5008
+
+GET {{VianaHub.Global.Gerit.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
