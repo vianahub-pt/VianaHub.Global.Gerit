@@ -1,4 +1,6 @@
-﻿namespace VianaHub.Global.Gerit.Api.Configuration.Swagger;
+﻿#nullable enable
+
+namespace VianaHub.Global.Gerit.Api.Configuration.Swagger;
 
 public class SwaggerContact
 {

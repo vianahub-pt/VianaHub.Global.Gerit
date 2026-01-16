@@ -14,9 +14,9 @@ public static class RouteValidatorSetup
     {
         services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-        // Action Route Validators
-        //services.AddScoped<IValidator<CreateActionRequest>, Validators.Action.CreateActionRouteValidator>();
-        //services.AddScoped<IValidator<UpdateActionRequest>, Validators.Action.UpdateActionRouteValidator>();
+        // ActionEntity Route Validators
+        //services.AddScoped<IValidator<CreateActionRequest>, Validators.ActionEntity.CreateActionRouteValidator>();
+        //services.AddScoped<IValidator<UpdateActionRequest>, Validators.ActionEntity.UpdateActionRouteValidator>();
 
 
         return services;

@@ -25,7 +25,7 @@ public class CurrentUserApiService : ICurrentUserService
     /// Obtém o ID do usuário logado
     /// Ordem de busca: 1) Token JWT (claims: sub, nameid, userId) 2) Header x-user-id
     /// </summary>
-    public Guid GetUserId()
+    public int GetUserId()
     {
         var httpContext = _httpContextAccessor.HttpContext;
 
@@ -44,16 +44,16 @@ public class CurrentUserApiService : ICurrentUserService
 
             if (!string.IsNullOrWhiteSpace(userId))
             {
-                return Guid.Parse(userId);
+                return int.Parse(userId);
             }
         }
 
         // Se não encontrou no token, busca no header
         if (httpContext.Request.Headers.TryGetValue("x-user-id", out var headerUserId))
         {
-            return Guid.Parse(headerUserId.ToString());
+            return int.Parse(headerUserId.ToString());
         }
-        return Guid.NewGuid(); //throw new Exception("User ID not found in JWT token or request headers.");
+        return 0;
     }
 
     /// <summary>
@@ -131,7 +131,7 @@ public class CurrentUserApiService : ICurrentUserService
     }
 
     /// <summary>
-    /// Obtém o identificador do usuário para usar em CreatedBy/UpdatedBy
+    /// Obtém o identificador do usuário para usar em CreatedBy/ModifiedBy
     /// Ordem de preferência: 1) Email 2) Nome de usuário 3) ID do usuário 4) "system"
     /// </summary>
     public string GetUserIdentifier()
@@ -145,7 +145,7 @@ public class CurrentUserApiService : ICurrentUserService
             return userName;
 
         var userId = GetUserId();
-        if (userId != Guid.Empty)
+        if (userId != 0)
             return userId.ToString();
 
         return "system";

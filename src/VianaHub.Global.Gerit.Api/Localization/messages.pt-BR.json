@@ -1,5 +1,17 @@
 {
   "//0": "====================================",
-  "//1": "VianaHub.Global.Gerit.Api",
-  "//2": "===================================="
+  "//1": "VianaHub.Global.Gerit.Api - pt-BR",
+  "//2": "====================================",
+  
+  "Swagger.Api.Title": "Gerit API",
+  "Swagger.Api.Title.Development": "Gerit API - Desenvolvimento",
+  "Swagger.Api.Title.Staging": "Gerit API - Homologação",
+  "Swagger.Api.Title.Production": "Gerit API - Produção",
+
+  "Swagger.Api.Description": "API de autenticação e autorização do Gerit",
+  "Swagger.Api.Description.Development": "API de autenticação e autorização do Gerit - Ambiente de Desenvolvimento",
+  "Swagger.Api.Description.Staging": "API de autenticação e autorização do Gerit - Ambiente de Homologação",
+  "Swagger.Api.Description.Production": "API de autenticação e autorização do Gerit - Ambiente de Produção",
+
+  "Swagger.Security.Bearer.Description": "Insira o token JWT no formato: Bearer {seu_token}"
 }

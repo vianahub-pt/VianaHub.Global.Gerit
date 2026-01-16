@@ -20,35 +20,50 @@ public static class CorsSetup
             return services;
         }
 
-        var policyName = corsConfig.GetValue<string>("PolicyName") ?? "VianaIDCorsPolicy";
+        var policyName = corsConfig.GetValue<string>("PolicyName") ?? "GeritCorsPolicy";
         var allowedOrigins = corsConfig.GetSection("AllowedOrigins").Get<string[]>() ?? Array.Empty<string>();
         var allowedMethods = corsConfig.GetSection("AllowedMethods").Get<string[]>() ?? Array.Empty<string>();
         var allowedHeaders = corsConfig.GetSection("AllowedHeaders").Get<string[]>() ?? Array.Empty<string>();
-        var allowCredentials = corsConfig.GetValue<bool>("AllowCredentials", true);
+        var allowCredentials = corsConfig.GetValue<bool?>("AllowCredentials");
         var maxAge = corsConfig.GetValue<int>("MaxAge", 600);
 
         services.AddCors(options =>
         {
             options.AddPolicy(policyName, policy =>
             {
+                // Detectar se é ambiente de desenvolvimento
+                var env = configuration.GetValue<string>("ASPNETCORE_ENVIRONMENT");
+                var isDevelopment = env?.Equals("Development", StringComparison.OrdinalIgnoreCase) == true;
+                
                 // Configurar origens permitidas
-                if (allowedOrigins.Length == 0 || allowedOrigins.Contains("*"))
+                var allowAnyOrigin = allowedOrigins.Length == 0 || 
+                                   allowedOrigins.Any(o => o.Equals("*", StringComparison.OrdinalIgnoreCase));
+
+                if (allowAnyOrigin)
                 {
                     // ATENÇÃO: Permitir qualquer origem é INSEGURO em produção
-                    var env = configuration.GetValue<string>("ASPNETCORE_ENVIRONMENT");
                     if (env?.Equals("Production", StringComparison.OrdinalIgnoreCase) == true)
                     {
                         throw new InvalidOperationException(
-                            "? ERRO DE SEGURANÇA: CORS com origens '*' não é permitido em produção. " +
+                            "🔒 ERRO DE SEGURANÇA: CORS com origens '*' não é permitido em produção. " +
                             "Configure origens específicas em appsettings.Production.json");
                     }
 
                     policy.AllowAnyOrigin();
+                    
+                    // Quando AllowAnyOrigin() é usado, não podemos usar AllowCredentials()
+                    // Isso é uma restrição de segurança do CORS
                 }
                 else
                 {
                     policy.WithOrigins(allowedOrigins)
                           .SetIsOriginAllowedToAllowWildcardSubdomains();
+                    
+                    // Credenciais: só permitir se configurado explicitamente ou se não for AllowAnyOrigin
+                    if (allowCredentials.HasValue ? allowCredentials.Value : true)
+                    {
+                        policy.AllowCredentials();
+                    }
                 }
 
                 // Configurar métodos permitidos
@@ -69,12 +84,6 @@ public static class CorsSetup
                 else
                 {
                     policy.WithHeaders(allowedHeaders);
-                }
-
-                // Credenciais
-                if (allowCredentials)
-                {
-                    policy.AllowCredentials();
                 }
 
                 // Headers expostos
@@ -101,7 +110,7 @@ public static class CorsSetup
         this IApplicationBuilder app,
         IConfiguration configuration)
     {
-        var policyName = configuration.GetValue<string>("Cors:PolicyName") ?? "VianaIDCorsPolicy";
+        var policyName = configuration.GetValue<string>("Cors:PolicyName") ?? "GeritCorsPolicy";
         app.UseCors(policyName);
         return app;
     }

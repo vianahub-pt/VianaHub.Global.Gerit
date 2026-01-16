@@ -1,4 +1,6 @@
-﻿using System.Net;
+﻿#nullable enable
+
+using System.Net;
 using VianaHub.Global.Gerit.Application.Dtos.Base;
 
 namespace VianaHub.Global.Gerit.Api.Filters;
@@ -12,7 +14,7 @@ public class UserValidationFilter : IEndpointFilter
         _logger = logger;
     }
 
-    public async ValueTask<object> InvokeAsync(
+    public async ValueTask<object?> InvokeAsync(
         EndpointFilterInvocationContext context,
         EndpointFilterDelegate next)
     {

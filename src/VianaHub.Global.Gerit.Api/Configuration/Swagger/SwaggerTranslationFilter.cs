@@ -1,443 +1,232 @@
-Ôªøusing Microsoft.AspNetCore.Localization;
+#nullable enable
+
 using Microsoft.OpenApi.Models;
 using Serilog;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Globalization;
-using VianaHub.Global.Gerit.Domain.Interfaces;
+using System.Text.Json;
 
 namespace VianaHub.Global.Gerit.Api.Configuration.Swagger;
 
 /// <summary>
-/// Document filter that translates Swagger/OpenAPI documentation based on the current culture
+/// Document filter que traduz a documentaÁ„o Swagger/OpenAPI baseado na cultura atual.
+/// Usa arquivos JSON est·ticos de localizaÁ„o (swagger.{culture}.json).
 /// </summary>
 public class SwaggerTranslationFilter : IDocumentFilter
 {
-    private readonly IServiceProvider _serviceProvider;
-
-    public SwaggerTranslationFilter(IServiceProvider serviceProvider)
-    {
-        _serviceProvider = serviceProvider;
-    }
+    private static readonly Dictionary<string, Dictionary<string, string>> _translationsCache = new();
+    private static readonly object _lock = new();
 
     public void Apply(OpenApiDocument swaggerDoc, DocumentFilterContext context)
     {
         try
         {
-            // Create a scope to resolve the scoped services
-            using var scope = _serviceProvider.CreateScope();
-            var localizationService = scope.ServiceProvider.GetRequiredService<ILocalizationService>();
-            var httpContextAccessor = scope.ServiceProvider.GetRequiredService<IHttpContextAccessor>();
+            // Pega a cultura do CurrentUICulture (definida pelo SwaggerLocalizationMiddleware)
+            var culture = CultureInfo.CurrentUICulture.Name;
 
-            // IMPORTANTE: Pegar cultura do HttpContext.Items (definido pelo SwaggerLocalizationMiddleware)
-            var culture = GetCultureFromHttpContext(httpContextAccessor);
+            Log.Debug("?? [Gerit:SwaggerTranslation] Applying translations for culture: {Culture}", culture);
 
-            // Apply the culture to the current thread so localization services that rely on CurrentUICulture work
-            if (!string.IsNullOrEmpty(culture))
+            // Carrega as traduÁıes do arquivo JSON
+            var translations = LoadTranslations(culture);
+            if (translations == null || translations.Count == 0)
             {
-                try
-                {
-                    var ci = CultureInfo.GetCultureInfo(culture);
-                    CultureInfo.CurrentCulture = ci;
-                    CultureInfo.CurrentUICulture = ci;
-                }
-                catch (Exception ex)
-                {
-                    Log.Warning(ex, "‚ö†Ô∏è [SwaggerTranslationFilter] Invalid culture '{Culture}' - keeping current cultures", culture);
-                }
+                Log.Warning("?? [Gerit:SwaggerTranslation] No translations found for culture: {Culture}", culture);
+                return;
             }
 
-            // Translate API info
-            TranslateApiInfo(swaggerDoc.Info, localizationService);
+            // Traduz as informaÁıes da API
+            TranslateApiInfo(swaggerDoc.Info, translations);
 
-            // Translate all paths (endpoints)
+            // Traduz todos os paths (endpoints)
             foreach (var path in swaggerDoc.Paths)
             {
                 foreach (var operation in path.Value.Operations.Values)
                 {
-                    TranslateOperation(operation, localizationService);
+                    TranslateOperation(operation, translations);
                 }
             }
 
-            // Translate schemas
+            // Traduz schemas
             if (swaggerDoc.Components?.Schemas != null)
             {
                 foreach (var schema in swaggerDoc.Components.Schemas.Values)
                 {
-                    TranslateSchema(schema, localizationService);
+                    TranslateSchema(schema, translations);
                 }
             }
 
-            // Translate security schemes
+            // Traduz security schemes
             if (swaggerDoc.Components?.SecuritySchemes != null)
             {
                 foreach (var securityScheme in swaggerDoc.Components.SecuritySchemes.Values)
                 {
-                    TranslateSecurityScheme(securityScheme, localizationService);
+                    TranslateSecurityScheme(securityScheme, translations);
                 }
             }
 
+            Log.Information("? [Gerit:SwaggerTranslation] Successfully translated Swagger document to {Culture}", culture);
         }
         catch (Exception ex)
         {
-            Log.Error(ex, "‚ùå [SwaggerTranslationFilter] Error translating Swagger document");
+            Log.Error(ex, "? [Gerit:SwaggerTranslation] Error translating Swagger document");
         }
     }
 
-    private string GetCultureFromHttpContext(IHttpContextAccessor httpContextAccessor)
+    /// <summary>
+    /// Carrega as traduÁıes do arquivo JSON com cache
+    /// </summary>
+    private Dictionary<string, string>? LoadTranslations(string culture)
     {
-        var httpContext = httpContextAccessor.HttpContext;
-
-        // 1. Tentar pegar do HttpContext.Items (definido pelo SwaggerLocalizationMiddleware) - PRIORIDADE M√ÅXIMA
-        if (httpContext?.Items.TryGetValue("RequestCulture", out var cultureFromContext) == true)
+        // Verifica cache primeiro
+        if (_translationsCache.TryGetValue(culture, out var cached))
         {
+            return cached;
+        }
+
+        lock (_lock)
+        {
+            // Double-check apÛs lock
+            if (_translationsCache.TryGetValue(culture, out cached))
+            {
+                return cached;
+            }
+
             try
             {
-                if (cultureFromContext is string cultureName)
-                    return cultureName;
+                var filePath = Path.Combine(
+                    Directory.GetCurrentDirectory(),
+                    "Localization",
+                    $"swagger.{culture}.json"
+                );
 
-                if (cultureFromContext is CultureInfo ci)
-                    return ci.Name;
+                if (!File.Exists(filePath))
+                {
+                    Log.Warning("?? [Gerit:SwaggerTranslation] Translation file not found: {FilePath}", filePath);
+                    return null;
+                }
 
-                if (cultureFromContext is RequestCulture rc)
-                    return rc.UICulture.Name;
+                var json = File.ReadAllText(filePath);
+                var translations = JsonSerializer.Deserialize<Dictionary<string, string>>(json);
+
+                if (translations != null)
+                {
+                    _translationsCache[culture] = translations;
+                    Log.Debug("? [Gerit:SwaggerTranslation] Loaded {Count} translations for {Culture}", translations.Count, culture);
+                }
+
+                return translations;
             }
             catch (Exception ex)
             {
-                Log.Warning(ex, "‚ö†Ô∏è [SwaggerTranslationFilter] Error reading culture from HttpContext.Items");
+                Log.Error(ex, "? [Gerit:SwaggerTranslation] Error loading translations for culture: {Culture}", culture);
+                return null;
             }
-        }
-
-        // 2. Fallback para query parameter
-        var langQueryParam = httpContext?.Request.Query["lang"].ToString();
-        if (!string.IsNullOrEmpty(langQueryParam))
-            return langQueryParam;
-
-        // 3. Fallback para CurrentUICulture (√∫ltimo recurso)
-        var fallbackCulture = CultureInfo.CurrentUICulture.Name;
-        return fallbackCulture;
-    }
-
-    private string SafeGetMessage(ILocalizationService localizationService, string key)
-    {
-        try
-        {
-            var result = localizationService.GetMessage(key);
-            return result;
-        }
-        catch (Exception ex)
-        {
-            Log.Warning(ex, "‚ö†Ô∏è [SwaggerTranslationFilter] Error getting message for key: {Key}", key);
-            return key; // Return key as fallback
         }
     }
 
-    private void TranslateApiInfo(OpenApiInfo info, ILocalizationService localizationService)
+    private void TranslateApiInfo(OpenApiInfo info, Dictionary<string, string> translations)
     {
-        try
+        if (info == null) return;
+
+        info.Title = GetTranslation(translations, "Swagger.Api.Title", info.Title);
+        info.Description = GetTranslation(translations, "Swagger.Api.Description", info.Description);
+
+        if (info.Contact != null)
         {
-            // Translate title - check if it's a translation key
-            if (!string.IsNullOrEmpty(info.Title))
-            {
-                // Check if title is a translation key (starts with "Swagger.")
-                if (info.Title.StartsWith("Swagger."))
-                {
-                    var titleTranslated = SafeGetMessage(localizationService, info.Title);
-
-                    if (titleTranslated != info.Title)
-                        info.Title = titleTranslated;
-                }
-                else
-                {
-                    // Try convention-based keys when title is pre-resolved (e.g. "IAM VianaID - Development")
-                    var candidates = new[]
-                    {
-                        "Swagger.Api.Title",
-                        "Swagger.Api.Title.Development",
-                        "Swagger.Api.Title.Staging",
-                        "Swagger.Api.Title.Production"
-                    };
-
-                    foreach (var candidate in candidates)
-                    {
-                        var translated = SafeGetMessage(localizationService, candidate);
-                        if (translated != candidate)
-                        {
-                            info.Title = translated;
-                            break;
-                        }
-                    }
-                }
-            }
-
-            // Translate description
-            if (!string.IsNullOrEmpty(info.Description))
-            {
-                if (info.Description.StartsWith("Swagger."))
-                {
-                    var descTranslated = SafeGetMessage(localizationService, info.Description);
-
-                    if (descTranslated != info.Description)
-                        info.Description = descTranslated;
-                }
-                else
-                {
-                    var candidates = new[]
-                    {
-                        "Swagger.Api.Description",
-                        "Swagger.Api.Description.Development",
-                        "Swagger.Api.Description.Staging",
-                        "Swagger.Api.Description.Production"
-                    };
-
-                    foreach (var candidate in candidates)
-                    {
-                        var translated = SafeGetMessage(localizationService, candidate);
-                        if (translated != candidate)
-                        {
-                            info.Description = translated;
-                            break;
-                        }
-                    }
-                }
-            }
+            info.Contact.Name = GetTranslation(translations, "Swagger.Api.Contact.Name", info.Contact.Name);
         }
-        catch (Exception ex)
+
+        if (info.License != null)
         {
-            Log.Warning(ex, "‚ö†Ô∏è [SwaggerTranslationFilter] Error translating API info");
+            info.License.Name = GetTranslation(translations, "Swagger.Api.License.Name", info.License.Name);
         }
     }
 
-    private void TranslateOperation(OpenApiOperation operation, ILocalizationService localizationService)
+    private void TranslateOperation(OpenApiOperation operation, Dictionary<string, string> translations)
     {
-        try
+        if (operation == null) return;
+
+        // Traduz o Summary se comeÁar com "Swagger."
+        if (!string.IsNullOrEmpty(operation.Summary) && operation.Summary.StartsWith("Swagger."))
         {
-            // Translate summary - check if it's a translation key
-            if (!string.IsNullOrEmpty(operation.Summary))
-            {
-                // If summary looks like a key (starts with "Swagger."), translate it
-                if (operation.Summary.StartsWith("Swagger."))
-                {
-                    var translated = SafeGetMessage(localizationService, operation.Summary);
-                    // Only replace if translation was found (not the same as the key)
-                    if (translated != operation.Summary)
-                        operation.Summary = translated;
-                }
-            }
+            operation.Summary = GetTranslation(translations, operation.Summary, operation.Summary);
+        }
 
-            // Translate description
-            if (!string.IsNullOrEmpty(operation.Description))
-            {
-                if (operation.Description.StartsWith("Swagger."))
-                {
-                    var translated = SafeGetMessage(localizationService, operation.Description);
-                    if (translated != operation.Description)
-                    {
-                        operation.Description = translated;
-                    }
-                }
-            }
+        // Traduz o OperationId
+        operation.Summary = GetTranslation(translations, $"Swagger.Endpoint.{operation.OperationId}.Summary", operation.Summary);
+        operation.Description = GetTranslation(translations, $"Swagger.Endpoint.{operation.OperationId}.Description", operation.Description);
 
-            // Translate parameters
-            if (operation.Parameters != null)
+        // Traduz par‚metros
+        if (operation.Parameters != null)
+        {
+            foreach (var param in operation.Parameters)
             {
-                foreach (var parameter in operation.Parameters)
-                {
-                    TranslateParameter(parameter, operation.OperationId, localizationService);
-                }
+                param.Description = GetTranslation(translations, $"Swagger.Parameter.{param.Name}.Description", param.Description);
             }
+        }
 
-            // Translate request body
-            if (operation.RequestBody != null)
-            {
-                TranslateRequestBody(operation.RequestBody, operation.OperationId, localizationService);
-            }
-
-            // Translate responses
+        // Traduz respostas
+        if (operation.Responses != null)
+        {
             foreach (var response in operation.Responses)
             {
-                TranslateResponse(response.Value, operation.OperationId, response.Key, localizationService);
+                response.Value.Description = GetTranslation(translations, $"Swagger.Response.{response.Key}.Description", response.Value.Description);
             }
         }
-        catch (Exception ex)
+
+        // Traduz tags
+        if (operation.Tags != null)
         {
-            Log.Warning(ex, "‚ö†Ô∏è [SwaggerTranslationFilter] Error translating operation {OperationId}", operation.OperationId);
+            for (int i = 0; i < operation.Tags.Count; i++)
+            {
+                var tag = operation.Tags[i];
+                var translatedName = GetTranslation(translations, $"Swagger.Tag.{tag.Name}", tag.Name);
+                if (translatedName != tag.Name)
+                {
+                    operation.Tags[i] = new OpenApiTag { Name = translatedName };
+                }
+            }
         }
     }
 
-    private void TranslateParameter(OpenApiParameter parameter, string operationId, ILocalizationService localizationService)
+    private void TranslateSchema(OpenApiSchema schema, Dictionary<string, string> translations)
     {
-        try
+        if (schema == null) return;
+
+        schema.Description = GetTranslation(translations, $"Swagger.Schema.{schema.Title}.Description", schema.Description);
+
+        // Traduz propriedades do schema
+        if (schema.Properties != null)
         {
-            if (!string.IsNullOrEmpty(parameter.Description))
+            foreach (var prop in schema.Properties)
             {
-                if (parameter.Description.StartsWith("Swagger."))
-                {
-                    var translated = SafeGetMessage(localizationService, parameter.Description);
-                    if (translated != parameter.Description)
-                    {
-                        parameter.Description = translated;
-                    }
-                }
-                else
-                {
-                    // Try to find translation by convention
-                    var key = $"Swagger.Parameter.{operationId}.{parameter.Name}.Description";
-                    var translated = SafeGetMessage(localizationService, key);
-                    if (translated != key)
-                    {
-                        parameter.Description = translated;
-                    }
-                }
+                prop.Value.Description = GetTranslation(translations, $"Swagger.Property.{prop.Key}.Description", prop.Value.Description);
             }
-        }
-        catch (Exception ex)
-        {
-            Log.Warning(ex, "‚ö†Ô∏è [SwaggerTranslationFilter] Error translating parameter {Parameter}", parameter.Name);
         }
     }
 
-    private void TranslateRequestBody(OpenApiRequestBody requestBody, string operationId, ILocalizationService localizationService)
+    private void TranslateSecurityScheme(OpenApiSecurityScheme securityScheme, Dictionary<string, string> translations)
     {
-        try
-        {
-            if (!string.IsNullOrEmpty(requestBody.Description))
-            {
-                if (requestBody.Description.StartsWith("Swagger."))
-                {
-                    var translated = SafeGetMessage(localizationService, requestBody.Description);
-                    if (translated != requestBody.Description)
-                    {
-                        requestBody.Description = translated;
-                    }
-                }
-                else
-                {
-                    var key = $"Swagger.RequestBody.{operationId}.Description";
-                    var translated = SafeGetMessage(localizationService, key);
-                    if (translated != key)
-                    {
-                        requestBody.Description = translated;
-                    }
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-            Log.Warning(ex, "‚ö†Ô∏è [SwaggerTranslationFilter] Error translating request body");
-        }
+        if (securityScheme == null) return;
+
+        securityScheme.Description = GetTranslation(translations, "Swagger.Security.Bearer.Description", securityScheme.Description);
     }
 
-    private void TranslateResponse(OpenApiResponse response, string operationId, string statusCode, ILocalizationService localizationService)
+    /// <summary>
+    /// ObtÈm a traduÁ„o ou retorna o valor padr„o se n„o encontrar
+    /// </summary>
+    private string GetTranslation(Dictionary<string, string> translations, string key, string? defaultValue)
     {
-        try
+        if (string.IsNullOrEmpty(key) || translations == null)
         {
-            if (!string.IsNullOrEmpty(response.Description))
-            {
-                // Check if description is a translation key
-                if (response.Description.StartsWith("Swagger."))
-                {
-                    var translated = SafeGetMessage(localizationService, response.Description);
-                    if (translated != response.Description)
-                    {
-                        response.Description = translated;
-                    }
-                }
-                else
-                {
-                    // Try endpoint-specific response description
-                    var key = $"Swagger.Response.{operationId}.{statusCode}.Description";
-                    var translated = SafeGetMessage(localizationService, key);
-                    if (translated != key)
-                    {
-                        response.Description = translated;
-                    }
-                    else
-                    {
-                        // Fallback to generic status code descriptions
-                        var genericKey = $"Swagger.Response.{statusCode}";
-                        translated = SafeGetMessage(localizationService, genericKey);
-                        if (translated != genericKey)
-                        {
-                            response.Description = translated;
-                        }
-                    }
-                }
-            }
+            return defaultValue ?? string.Empty;
         }
-        catch (Exception ex)
-        {
-            Log.Warning(ex, "‚ö†Ô∏è [SwaggerTranslationFilter] Error translating response {StatusCode}", statusCode);
-        }
-    }
 
-    private void TranslateSchema(OpenApiSchema schema, ILocalizationService localizationService)
-    {
-        try
+        if (translations.TryGetValue(key, out var translation) && !string.IsNullOrEmpty(translation))
         {
-            // Translate schema description
-            if (!string.IsNullOrEmpty(schema.Description))
-            {
-                if (schema.Description.StartsWith("Swagger."))
-                {
-                    var translated = SafeGetMessage(localizationService, schema.Description);
-                    if (translated != schema.Description)
-                    {
-                        schema.Description = translated;
-                    }
-                }
-            }
+            return translation;
+        }
 
-            // Translate property descriptions
-            if (schema.Properties != null)
-            {
-                foreach (var property in schema.Properties)
-                {
-                    if (!string.IsNullOrEmpty(property.Value.Description))
-                    {
-                        if (property.Value.Description.StartsWith("Swagger."))
-                        {
-                            var translated = SafeGetMessage(localizationService, property.Value.Description);
-                            if (translated != property.Value.Description)
-                            {
-                                property.Value.Description = translated;
-                            }
-                        }
-                        else
-                        {
-                            var key = $"Swagger.Property.{property.Key}.Description";
-                            var translated = SafeGetMessage(localizationService, key);
-                            if (translated != key)
-                            {
-                                property.Value.Description = translated;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-            Log.Warning(ex, "‚ö†Ô∏è [SwaggerTranslationFilter] Error translating schema");
-        }
-    }
-
-    private void TranslateSecurityScheme(OpenApiSecurityScheme securityScheme, ILocalizationService localizationService)
-    {
-        try
-        {
-            if (!string.IsNullOrEmpty(securityScheme.Description))
-            {
-                var key = "Swagger.Security.Bearer.Description";
-                var translated = SafeGetMessage(localizationService, key);
-                if (translated != key)
-                {
-                    securityScheme.Description = translated;
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-            Log.Warning(ex, "‚ö†Ô∏è [SwaggerTranslationFilter] Error translating security scheme");
-        }
+        return defaultValue ?? string.Empty;
     }
 }

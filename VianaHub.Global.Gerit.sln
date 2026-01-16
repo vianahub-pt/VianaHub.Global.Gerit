@@ -21,11 +21,22 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VianaHub.Global.Gerit.Infra
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VianaHub.Global.Gerit.Infra.IoC", "src\VianaHub.Global.Gerit.Infra.IoC\VianaHub.Global.Gerit.Infra.IoC.csproj", "{950442DB-CD79-4A7B-B3ED-FC020E68C27C}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5-tests", "5-tests", "{3DE317BB-6F5C-8DC8-3308-7F794E1E843A}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5-Tests", "5-Tests", "{3DE317BB-6F5C-8DC8-3308-7F794E1E843A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VianaHub.Global.Gerit.Tests", "tests\VianaHub.Global.Gerit.Tests\VianaHub.Global.Gerit.Tests.csproj", "{B59367AC-3FEB-4E39-A381-6F81BF042B09}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VianaHub.Global.Gerit.Infra.Integration", "src\VianaHub.Global.Gerit.Infra.Integration\VianaHub.Global.Gerit.Infra.Integration.csproj", "{4DEE4ED2-6422-471C-AA9C-B8CFEA675955}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "6-Doc", "6-Doc", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+	ProjectSection(SolutionItems) = preProject
+		docs\ARCHITECTURE.md = docs\ARCHITECTURE.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sql", "Sql", "{D4BE02A1-668D-4A86-9BC1-EF25B1BD0BAA}"
+	ProjectSection(SolutionItems) = preProject
+		docs\sql\Create-Tables.sql = docs\sql\Create-Tables.sql
+		docs\sql\Exclude Tebles.sql = docs\sql\Exclude Tebles.sql
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -133,5 +144,9 @@ Global
 		{950442DB-CD79-4A7B-B3ED-FC020E68C27C} = {C263FC6A-B645-7249-9C52-1318A4A3D2CA}
 		{B59367AC-3FEB-4E39-A381-6F81BF042B09} = {3DE317BB-6F5C-8DC8-3308-7F794E1E843A}
 		{4DEE4ED2-6422-471C-AA9C-B8CFEA675955} = {C263FC6A-B645-7249-9C52-1318A4A3D2CA}
+		{D4BE02A1-668D-4A86-9BC1-EF25B1BD0BAA} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AA98F41F-D832-43C6-8EBA-4906646D9437}
 	EndGlobalSection
 EndGlobal

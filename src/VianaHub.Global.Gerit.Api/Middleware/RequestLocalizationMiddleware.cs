@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Primitives;
+﻿#nullable enable
+
+using Microsoft.Extensions.Primitives;
 using Serilog;
 using System.Globalization;
 
@@ -6,7 +8,7 @@ namespace VianaHub.Global.Gerit.Api.Middleware;
 
 /// <summary>
 /// Middleware que define a cultura da aplicação com base no header Accept-Language.
-/// Faz fallback para en-US quando não houver match.
+/// Faz fallback para pt-BR quando não houver match (padrão do Gerit).
 /// </summary>
 public class RequestLocalizationMiddleware
 {
@@ -21,7 +23,7 @@ public class RequestLocalizationMiddleware
         var list = supportedCultures?.ToList();
         if (list == null || list.Count == 0)
         {
-            list = new List<string> { "en-US", "pt-BR", "es-ES" };
+            list = new List<string> { "pt-BR", "en-US", "es-ES" };
         }
 
         _supported = list.Select(c => new CultureInfo(c)).ToList();
@@ -36,8 +38,8 @@ public class RequestLocalizationMiddleware
         }
         catch (Exception ex)
         {
-            culture = new CultureInfo("en-US");
-            Log.Warning(ex, "?? [RequestLocalization] Error determining culture, using fallback: en-US");
+            culture = new CultureInfo("pt-BR");
+            Log.Warning(ex, "⚠️ [Gerit:RequestLocalization] Error determining culture, using fallback: pt-BR");
         }
 
         // Set culture for the current thread and async context
@@ -73,6 +75,6 @@ public class RequestLocalizationMiddleware
                     return neutral;
             }
         }
-        return new CultureInfo("en-US");
+        return new CultureInfo("pt-BR");
     }
 }

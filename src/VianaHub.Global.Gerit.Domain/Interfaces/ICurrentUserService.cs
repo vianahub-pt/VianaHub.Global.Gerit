@@ -13,7 +13,7 @@ public interface ICurrentUserService
     /// Busca primeiro no token JWT (claims: 'sub', 'nameid', 'userId'), depois no header 'x-user-id'.
     /// </summary>
     /// <returns>ID do usuário ou Guid.Empty se não encontrado</returns>
-    Guid GetUserId();
+    int GetUserId();
 
     /// <summary>
     /// Obtém o nome do usuário logado.
@@ -36,7 +36,7 @@ public interface ICurrentUserService
     bool IsAuthenticated();
 
     /// <summary>
-    /// Obtém o identificador do usuário para usar em campos de auditoria (CreatedBy/UpdatedBy).
+    /// Obtém o identificador do usuário para usar em campos de auditoria (CreatedBy/ModifiedBy).
     /// Ordem de preferência: 1) Email 2) Nome de usuário 3) ID do usuário 4) "system"
     /// </summary>
     /// <returns>Identificador do usuário ou "system" se não encontrado</returns>

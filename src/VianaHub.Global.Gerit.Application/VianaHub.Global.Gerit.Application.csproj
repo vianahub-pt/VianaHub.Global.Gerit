@@ -6,9 +6,15 @@
     <Nullable>disable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup> <Folder Include="AutoMapper\" /> <Folder Include="Interfaces\" /> <Folder Include="Dtos\Request\" /> <Folder Include="Dtos\Response\" /> <Folder Include="Services\" /> </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="12.0.1" />
+    <PackageReference Include="CsvHelper" Version="30.0.1" />
+    <PackageReference Include="FluentValidation" Version="12.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.17" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\VianaHub.Global.Gerit.Infra.Data\VianaHub.Global.Gerit.Infra.Data.csproj" />
     <ProjectReference Include="..\VianaHub.Global.Gerit.Domain\VianaHub.Global.Gerit.Domain.csproj" />
-  </ItemGroup> </Project>
+  </ItemGroup>
+</Project>

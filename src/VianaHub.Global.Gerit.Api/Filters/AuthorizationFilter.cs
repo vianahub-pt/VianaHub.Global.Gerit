@@ -49,7 +49,7 @@ public class AuthorizationFilter : IEndpointFilter
         var httpContext = context.HttpContext;
         var user = httpContext.User;
 
-        _logger.LogDebug("AuthorizationFilter executando para Resource: {Resource}, Action: {Action}", _resource, _action);
+        _logger.LogDebug("AuthorizationFilter executando para Resource: {Resource}, ActionEntity: {ActionEntity}", _resource, _action);
 
         // Verificar se o usuário está autenticado
         if (!user.Identity?.IsAuthenticated ?? true)
@@ -114,7 +114,7 @@ public class AuthorizationFilter : IEndpointFilter
             if (!hasPermission)
             {
                 _logger.LogWarning(
-                    "Acesso negado: Usuário {UserId} não tem permissão para {Action} em {Resource}",
+                    "Acesso negado: Usuário {UserId} não tem permissão para {ActionEntity} em {Resource}",
                     userId, _action, _resource);
 
                 var notify = httpContext.RequestServices.GetService<INotify>();

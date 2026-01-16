@@ -1,94 +1,112 @@
-ï»¿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
+using VianaHub.Global.Gerit.Domain.Entities;
 
 namespace VianaHub.Global.Gerit.Infra.Data.Context;
 
-/// <summary>
-/// Contexto principal do Entity Framework Core para a aplicaÃ§Ã£o Gerit.
-/// Gerencia todas as entidades e configuraÃ§Ãµes de mapeamento do banco de dados.
-/// </summary>
 public class GeritDbContext : DbContext
 {
-    private readonly ILogger<GeritDbContext>? _logger;
+    private readonly int? _tenantId;
 
-    public GeritDbContext(DbContextOptions<GeritDbContext> options) : base(options)
-    {
-    }
-
-    public GeritDbContext(DbContextOptions<GeritDbContext> options, ILogger<GeritDbContext> logger)
+    public GeritDbContext(DbContextOptions<GeritDbContext> options, int? tenantId = null) 
         : base(options)
     {
-        _logger = logger;
+        _tenantId = tenantId;
     }
 
-    // DbSets serÃ£o adicionados aqui conforme as entidades forem criadas
-    // Exemplo: public DbSet<User> Users => Set<User>();
+    #region DbSets - Core Multi-Tenant Tables
+    public DbSet<TenantEntity> Tenants { get; set; }
+    public DbSet<TenantContact> TenantContacts { get; set; }
+    public DbSet<TenantAddress> TenantAddresses { get; set; }
+    public DbSet<TenantFiscalDataEntity> TenantFiscalData { get; set; }
+    public DbSet<UserEntity> Users { get; set; }
+    #endregion
+
+    #region DbSets - RBAC Structure
+    public DbSet<RoleEntity> Roles { get; set; }
+    public DbSet<ResourceEntity> Resources { get; set; }
+    public DbSet<Domain.Entities.ActionEntity> Actions { get; set; }
+    public DbSet<RolePermissionEntity> RolePermissions { get; set; }
+    public DbSet<UserRoleEntity> UserRoles { get; set; }
+    public DbSet<JwtKeyEntity> JwtKeys { get; set; }
+    #endregion
+
+    #region DbSets - Domain Tables
+    public DbSet<ClientEntity> Clients { get; set; }
+    public DbSet<ClientContactEntity> ClientContacts { get; set; }
+    public DbSet<ClientAddressEntity> ClientAddresses { get; set; }
+    public DbSet<ClientFiscalDataEntity> ClientFiscalData { get; set; }
+    public DbSet<TeamMemberEntity> TeamMembers { get; set; }
+    public DbSet<TeamMemberContactEntity> TeamMemberContacts { get; set; }
+    public DbSet<TeamMemberAddressEntity> TeamMemberAddresses { get; set; }
+    public DbSet<EquipmentEntity> Equipments { get; set; }
+    public DbSet<VehicleEntity> Vehicles { get; set; }
+    public DbSet<InterventionEntity> Interventions { get; set; }
+    public DbSet<InterventionContactEntity> InterventionContacts { get; set; }
+    public DbSet<InterventionAddressEntity> InterventionAddresses { get; set; }
+    #endregion
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
 
-        // Aplica todas as configuraÃ§Ãµes de mapeamento do assembly atual
+        // Aplica todas as configurações de mapeamento do assembly
+        // Os mapeamentos estão na pasta Mappings e seguem exatamente as especificações
+        // do arquivo docs/sql/Create-Tables.sql incluindo:
+        // - Todos os índices (clusterizados, não-clusterizados, únicos, filtrados)
+        // - Todas as constraints (PK, FK, UQ, CHECK)
+        // - Configurações de Row Level Security (aplicadas via migrations)
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(GeritDbContext).Assembly);
 
-        // ConvenÃ§Ãµes globais
-        foreach (var entity in modelBuilder.Model.GetEntityTypes())
-        {
-            // Remove o plural das tabelas (se aplicÃ¡vel)
-            var tableName = entity.GetTableName();
-            if (!string.IsNullOrEmpty(tableName))
-            {
-                entity.SetTableName(tableName);
-            }
-
-            // Define DeleteBehavior.Restrict para todas as FKs por padrÃ£o
-            foreach (var relationship in entity.GetForeignKeys())
-            {
-                relationship.DeleteBehavior = DeleteBehavior.Restrict;
-            }
-        }
-
-        _logger?.LogInformation("ConfiguraÃ§Ãµes do modelo EF Core aplicadas com sucesso");
+        // Configura o schema padrão
+        modelBuilder.HasDefaultSchema("dbo");
     }
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        // Audit timestamps (se implementar entidade base com CreatedAt/UpdatedAt)
-        var entries = ChangeTracker.Entries()
-            .Where(e => e.State == EntityState.Added || e.State == EntityState.Modified);
-
-        foreach (var entry in entries)
+        // Define o TenantId no SESSION_CONTEXT antes de executar operações
+        // Isso é necessário para o Row Level Security funcionar corretamente
+        if (_tenantId.HasValue)
         {
-            if (entry.State == EntityState.Added)
-            {
-                if (entry.Properties.Any(p => p.Metadata.Name == "CreatedAt"))
-                {
-                    entry.Property("CreatedAt").CurrentValue = DateTime.UtcNow;
-                }
-            }
-
-            if (entry.State == EntityState.Modified)
-            {
-                if (entry.Properties.Any(p => p.Metadata.Name == "UpdatedAt"))
-                {
-                    entry.Property("UpdatedAt").CurrentValue = DateTime.UtcNow;
-                }
-            }
+            await Database.ExecuteSqlRawAsync(
+                $"EXEC sp_set_session_context @key = N'TenantId', @value = {_tenantId.Value}", 
+                cancellationToken);
         }
 
-        _logger?.LogDebug("Salvando {Count} alteraÃ§Ãµes no banco de dados", entries.Count());
+        return await base.SaveChangesAsync(cancellationToken);
+    }
 
-        try
+    public override int SaveChanges()
+    {
+        // Define o TenantId no SESSION_CONTEXT antes de executar operações
+        // Isso é necessário para o Row Level Security funcionar corretamente
+        if (_tenantId.HasValue)
         {
-            var result = await base.SaveChangesAsync(cancellationToken);
-            _logger?.LogInformation("AlteraÃ§Ãµes salvas com sucesso: {Count} registros afetados", result);
-            return result;
+            Database.ExecuteSqlRaw(
+                $"EXEC sp_set_session_context @key = N'TenantId', @value = {_tenantId.Value}");
         }
-        catch (Exception ex)
-        {
-            _logger?.LogError(ex, "Erro ao salvar alteraÃ§Ãµes no banco de dados");
-            throw;
-        }
+
+        return base.SaveChanges();
+    }
+
+    /// <summary>
+    /// Define o contexto do Tenant para Row Level Security
+    /// DEVE ser chamado antes de qualquer operação que envolva tabelas com RLS
+    /// </summary>
+    public async Task SetTenantContextAsync(int tenantId, CancellationToken cancellationToken = default)
+    {
+        await Database.ExecuteSqlRawAsync(
+            $"EXEC sp_set_session_context @key = N'TenantId', @value = {tenantId}", 
+            cancellationToken);
+    }
+
+    /// <summary>
+    /// Limpa o contexto do Tenant
+    /// Deve ser chamado ao finalizar operações ou trocar de tenant
+    /// </summary>
+    public async Task ClearTenantContextAsync(CancellationToken cancellationToken = default)
+    {
+        await Database.ExecuteSqlRawAsync(
+            "EXEC sp_set_session_context @key = N'TenantId', @value = NULL", 
+            cancellationToken);
     }
 }

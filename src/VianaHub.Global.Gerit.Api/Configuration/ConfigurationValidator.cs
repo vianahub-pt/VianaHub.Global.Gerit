@@ -35,16 +35,10 @@ public static class ConfigurationValidator
 
     private static void ValidateConnectionStrings(IConfiguration configuration, List<string> errors)
     {
-        var vianaIdConnection = configuration.GetConnectionString("VianaIDConnection");
-        if (string.IsNullOrWhiteSpace(vianaIdConnection))
+        var defaultConnection = configuration.GetConnectionString("DefaultConnection");
+        if (string.IsNullOrWhiteSpace(defaultConnection))
         {
-            errors.Add("? ConnectionStrings:VianaIDConnection não está configurada");
-        }
-
-        var hangfireConnection = configuration.GetConnectionString("HangfireConnection");
-        if (string.IsNullOrWhiteSpace(hangfireConnection))
-        {
-            errors.Add("? ConnectionStrings:HangfireConnection não está configurada");
+            errors.Add("⚠ ConnectionStrings:DefaultConnection não está configurada");
         }
     }
 
@@ -53,35 +47,35 @@ public static class ConfigurationValidator
         var encryptionKey = configuration["JwtKeyManagement:EncryptionKey"];
         if (string.IsNullOrWhiteSpace(encryptionKey))
         {
-            errors.Add("? JwtKeyManagement:EncryptionKey não está configurada");
+            errors.Add("⚠️ JwtKeyManagement:EncryptionKey não está configurada");
         }
         else if (encryptionKey.Length < 32)
         {
-            errors.Add($"? JwtKeyManagement:EncryptionKey deve ter no mínimo 32 caracteres (atual: {encryptionKey.Length})");
+            errors.Add($"⚠️ JwtKeyManagement:EncryptionKey deve ter no mínimo 32 caracteres (atual: {encryptionKey.Length})");
         }
 
         var issuer = configuration["JwtSettings:Issuer"];
         if (string.IsNullOrWhiteSpace(issuer))
         {
-            errors.Add("? JwtSettings:Issuer não está configurado");
+            errors.Add("⚠️ JwtSettings:Issuer não está configurado");
         }
 
         var audience = configuration["JwtSettings:Audience"];
         if (string.IsNullOrWhiteSpace(audience))
         {
-            errors.Add("? JwtSettings:Audience não está configurado");
+            errors.Add("⚠️ JwtSettings:Audience não está configurado");
         }
 
         var accessTokenExpiration = configuration.GetValue<int>("JwtSettings:AccessTokenExpirationMinutes");
         if (accessTokenExpiration <= 0)
         {
-            errors.Add("? JwtSettings:AccessTokenExpirationMinutes deve ser maior que zero");
+            errors.Add("⚠️ JwtSettings:AccessTokenExpirationMinutes deve ser maior que zero");
         }
 
         var refreshTokenExpiration = configuration.GetValue<int>("JwtSettings:RefreshTokenExpirationDays");
         if (refreshTokenExpiration <= 0)
         {
-            errors.Add("? JwtSettings:RefreshTokenExpirationDays deve ser maior que zero");
+            errors.Add("⚠️ JwtSettings:RefreshTokenExpirationDays deve ser maior que zero");
         }
     }
 
@@ -96,13 +90,13 @@ public static class ConfigurationValidator
         var generalPermitLimit = configuration.GetValue<int>("RateLimiting:GeneralRules:PermitLimit");
         if (generalPermitLimit <= 0)
         {
-            errors.Add("? RateLimiting:GeneralRules:PermitLimit deve ser maior que zero");
+            errors.Add("⚠️ RateLimiting:GeneralRules:PermitLimit deve ser maior que zero");
         }
 
         var authPermitLimit = configuration.GetValue<int>("RateLimiting:AuthenticationEndpoints:PermitLimit");
         if (authPermitLimit <= 0)
         {
-            errors.Add("? RateLimiting:AuthenticationEndpoints:PermitLimit deve ser maior que zero");
+            errors.Add("⚠️ RateLimiting:AuthenticationEndpoints:PermitLimit deve ser maior que zero");
         }
     }
 
@@ -119,13 +113,13 @@ public static class ConfigurationValidator
         // Em produção, não deve permitir origins vazias
         if (environment.IsProduction() && allowedOrigins.Length == 0)
         {
-            errors.Add("?? AVISO: Cors:AllowedOrigins está vazia em ambiente de produção. Configure origins específicas.");
+            errors.Add("⚠️ AVISO: Cors:AllowedOrigins está vazia em ambiente de produção. Configure origins específicas.");
         }
 
         // Verifica se há wildcard (*) em produção
         if (environment.IsProduction() && allowedOrigins.Any(o => o == "*"))
         {
-            errors.Add("? CRÍTICO: Cors:AllowedOrigins não deve conter '*' em ambiente de produção");
+            errors.Add("❌ CRÍTICO: Cors:AllowedOrigins não deve conter '*' em ambiente de produção");
         }
     }
 }

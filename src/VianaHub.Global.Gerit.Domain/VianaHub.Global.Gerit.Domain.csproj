@@ -11,12 +11,5 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.1" />
     <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="10.0.1" />
     <PackageReference Include="Polly.Extensions.Http" Version="3.0.0" />
-  </ItemGroup>  
-  
-  <ItemGroup>
-    <Folder Include="Entities\" />
-    <Folder Include="Entities\ValueObject\" />
-    <Folder Include="Validators\" />
-    <Folder Include="Services\" />
   </ItemGroup>
 </Project>

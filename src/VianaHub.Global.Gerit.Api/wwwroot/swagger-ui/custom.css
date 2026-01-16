@@ -1,0 +1,63 @@
+/* Custom Swagger UI Styles for Language Switcher */
+
+.lang-switcher {
+    display: flex;
+    align-items: center;
+    margin-left: 20px;
+    padding: 0 15px;
+}
+
+.lang-select {
+    padding: 8px 12px;
+    font-size: 14px;
+    font-weight: 500;
+    border: 1px solid #89bf04;
+    border-radius: 4px;
+    background-color: white;
+    color: #3b4151;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.3s ease;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+    .lang-select:hover {
+        background-color: #f7f7f7;
+        border-color: #79af00;
+    }
+
+    .lang-select:focus {
+        border-color: #89bf04;
+        box-shadow: 0 0 0 3px rgba(137, 191, 4, 0.1);
+    }
+
+    .lang-select option {
+        padding: 8px;
+        font-size: 14px;
+    }
+
+/* Dark theme support */
+@media (prefers-color-scheme: dark) {
+    .lang-select {
+        background-color: #1f1f1f;
+        color: #ffffff;
+        border-color: #89bf04;
+    }
+
+        .lang-select:hover {
+            background-color: #2a2a2a;
+        }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .lang-switcher {
+        margin-left: 10px;
+        padding: 0 10px;
+    }
+
+    .lang-select {
+        padding: 6px 10px;
+        font-size: 13px;
+    }
+}

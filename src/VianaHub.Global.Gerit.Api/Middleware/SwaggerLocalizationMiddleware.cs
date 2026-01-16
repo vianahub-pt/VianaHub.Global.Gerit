@@ -1,19 +1,22 @@
-ï»¿using Microsoft.Extensions.Primitives;
+#nullable enable
+
+using Serilog;
 using System.Globalization;
 
 namespace VianaHub.Global.Gerit.Api.Middleware;
 
 /// <summary>
-/// Middleware that sets culture for Swagger document generation based on ?lang= query parameter
-/// or Accept-Language header. This middleware has PRIORITY over RequestLocalizationMiddleware
-/// for Swagger routes.
+/// Middleware que captura a cultura da query string para tradução do Swagger.
+/// Exemplo: /swagger/v1/swagger.json?lang=pt-BR
 /// </summary>
 public class SwaggerLocalizationMiddleware
 {
     private readonly RequestDelegate _next;
-    private readonly IList<CultureInfo> _supportedCultures;
+    private readonly IList<string> _supportedCultures;
 
-    public SwaggerLocalizationMiddleware(RequestDelegate next, IEnumerable<string>? supportedCultures = null)
+    public SwaggerLocalizationMiddleware(
+        RequestDelegate next,
+        IEnumerable<string>? supportedCultures = null)
     {
         _next = next;
 
@@ -23,79 +26,66 @@ public class SwaggerLocalizationMiddleware
             list = new List<string> { "en-US", "pt-BR", "es-ES" };
         }
 
-        _supportedCultures = list.Select(c => new CultureInfo(c)).ToList();
-
+        _supportedCultures = list;
     }
 
     public async Task InvokeAsync(HttpContext context)
     {
-        // Only intercept Swagger routes (/swagger or /swagger/*)
-        if (context.Request.Path.StartsWithSegments("/swagger"))
+        // Só processa se for requisição do Swagger
+        var path = context.Request.Path.Value?.ToLower() ?? string.Empty;
+        if (path.Contains("/swagger"))
         {
-            var culture = DetermineSwaggerCulture(context);
+            var requestedCulture = GetCultureFromRequest(context);
+            if (!string.IsNullOrEmpty(requestedCulture))
+            {
+                try
+                {
+                    var culture = new CultureInfo(requestedCulture);
+                    CultureInfo.CurrentCulture = culture;
+                    CultureInfo.CurrentUICulture = culture;
 
-            // IMPORTANT: Set culture for the current async context
-            // This ensures the culture is available when SwaggerGen executes
-            CultureInfo.CurrentCulture = culture;
-            CultureInfo.CurrentUICulture = culture;
+                    // Armazena no HttpContext.Items para uso no SwaggerTranslationFilter
+                    context.Items["SwaggerCulture"] = requestedCulture;
 
-            // Store culture in HttpContext.Items for LocalizationService
-            // This OVERRIDES the value set by RequestLocalizationMiddleware
-            context.Items["RequestCulture"] = culture.Name;
-
+                    Log.Debug("?? [Gerit:SwaggerLocalization] Culture set to: {Culture} for Swagger", requestedCulture);
+                }
+                catch (CultureNotFoundException ex)
+                {
+                    Log.Warning(ex, "?? [Gerit:SwaggerLocalization] Invalid culture requested: {Culture}", requestedCulture);
+                }
+            }
         }
 
         await _next(context);
     }
 
-    private CultureInfo DetermineSwaggerCulture(HttpContext context)
+    private string GetCultureFromRequest(HttpContext context)
     {
-        // Priority 1: Query parameter ?lang=xx-YY (HIGHEST PRIORITY for Swagger)
-        if (context.Request.Query.TryGetValue("lang", out var langValue))
+        // 1. Tenta pegar da query string (?lang=pt-BR)
+        if (context.Request.Query.TryGetValue("lang", out var langQuery))
         {
-            var requestedLang = langValue.ToString();
-            var match = _supportedCultures.FirstOrDefault(c =>
-                string.Equals(c.Name, requestedLang, StringComparison.OrdinalIgnoreCase));
-
-            if (match != null)
-                return match;
-        }
-
-        // Priority 2: Cookie (for Swagger UI persistence)
-        if (context.Request.Cookies.TryGetValue("swagger-locale", out var cookieValue))
-        {
-            var match = _supportedCultures.FirstOrDefault(c =>
-                string.Equals(c.Name, cookieValue, StringComparison.OrdinalIgnoreCase));
-
-            if (match != null)
-                return match;
-        }
-
-        // Priority 3: Accept-Language header
-        if (context.Request.Headers.TryGetValue("Accept-Language", out StringValues values))
-        {
-            var accepted = values.ToString();
-            var parts = accepted.Split(',').Select(p => p.Trim()).Where(p => !string.IsNullOrEmpty(p));
-            foreach (var part in parts)
+            var lang = langQuery.ToString();
+            if (_supportedCultures.Contains(lang, StringComparer.OrdinalIgnoreCase))
             {
-                var lang = part.Split(';')[0].Trim();
-
-                // Try exact match
-                var match = _supportedCultures.FirstOrDefault(s =>
-                    string.Equals(s.Name, lang, StringComparison.OrdinalIgnoreCase));
-
-                if (match != null)
-                    return match;
-
-                // Try neutral match (language only)
-                var neutral = _supportedCultures.FirstOrDefault(s =>
-                    string.Equals(s.TwoLetterISOLanguageName, lang, StringComparison.OrdinalIgnoreCase));
-
-                if (neutral != null)
-                    return neutral;
+                return lang;
             }
         }
 
-        return new CultureInfo("pt-BR");
+        // 2. Tenta pegar do header Accept-Language
+        if (context.Request.Headers.TryGetValue("Accept-Language", out var acceptLanguage))
+        {
+            var langs = acceptLanguage.ToString().Split(',');
+            foreach (var l in langs)
+            {
+                var lang = l.Split(';')[0].Trim();
+                if (_supportedCultures.Contains(lang, StringComparer.OrdinalIgnoreCase))
+                {
+                    return lang;
+                }
+            }
+        }
+
+        // 3. Fallback para pt-BR (padrão do Gerit)
+        return "pt-BR";
     }
 }
