@@ -1,4 +1,4 @@
-/* Custom Swagger UI Styles for Language Switcher */
+/* Custom Swagger UI Styles for Language Switcher and Theme Switcher */
 
 .lang-switcher {
     display: flex;
@@ -21,32 +21,101 @@
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
-    .lang-select:hover {
-        background-color: #f7f7f7;
-        border-color: #79af00;
-    }
+.lang-select:hover {
+    background-color: #f7f7f7;
+    border-color: #79af00;
+}
 
-    .lang-select:focus {
-        border-color: #89bf04;
-        box-shadow: 0 0 0 3px rgba(137, 191, 4, 0.1);
-    }
+.lang-select:focus {
+    border-color: #89bf04;
+    box-shadow: 0 0 0 3px rgba(137, 191, 4, 0.1);
+}
 
-    .lang-select option {
-        padding: 8px;
-        font-size: 14px;
-    }
+.lang-select option {
+    padding: 8px;
+    font-size: 14px;
+}
 
-/* Dark theme support */
-@media (prefers-color-scheme: dark) {
-    .lang-select {
-        background-color: #1f1f1f;
-        color: #ffffff;
-        border-color: #89bf04;
-    }
+/* Theme Switcher Styles */
+.theme-switcher {
+    display: flex;
+    align-items: center;
+    margin-left: 15px;
+    padding: 0 10px;
+}
 
-        .lang-select:hover {
-            background-color: #2a2a2a;
-        }
+.theme-toggle {
+    background: none;
+    border: 1px solid #89bf04;
+    border-radius: 4px;
+    padding: 8px 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    color: #3b4151;
+    font-size: 18px;
+    width: 40px;
+    height: 40px;
+}
+
+.theme-toggle:hover {
+    background-color: #f7f7f7;
+    border-color: #79af00;
+}
+
+.theme-toggle:focus {
+    outline: none;
+    border-color: #89bf04;
+    box-shadow: 0 0 0 3px rgba(137, 191, 4, 0.1);
+}
+
+.theme-toggle svg {
+    display: block;
+    width: 18px;
+    height: 18px;
+}
+
+/* Dark Theme Styles */
+body.dark-theme {
+    background-color: #1a1a1a;
+}
+
+body.dark-theme .swagger-ui {
+    filter: invert(88%) hue-rotate(180deg);
+}
+
+body.dark-theme .swagger-ui .microlight {
+    filter: invert(100%) hue-rotate(180deg);
+}
+
+body.dark-theme .swagger-ui .topbar {
+    filter: invert(100%) hue-rotate(180deg);
+}
+
+body.dark-theme .lang-select {
+    background-color: #1f1f1f;
+    color: #ffffff;
+    border-color: #89bf04;
+}
+
+body.dark-theme .lang-select:hover {
+    background-color: #2a2a2a;
+}
+
+body.dark-theme .theme-toggle {
+    background-color: #1f1f1f;
+    color: #ffffff;
+    border-color: #89bf04;
+}
+
+body.dark-theme .theme-toggle:hover {
+    background-color: #2a2a2a;
+}
+
+body.dark-theme .theme-toggle svg {
+    stroke: #ffffff;
 }
 
 /* Responsive design */
@@ -59,5 +128,22 @@
     .lang-select {
         padding: 6px 10px;
         font-size: 13px;
+    }
+
+    .theme-switcher {
+        margin-left: 10px;
+        padding: 0 5px;
+    }
+
+    .theme-toggle {
+        width: 36px;
+        height: 36px;
+        padding: 6px 10px;
+        font-size: 16px;
+    }
+
+    .theme-toggle svg {
+        width: 16px;
+        height: 16px;
     }
 }

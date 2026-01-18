@@ -30,6 +30,12 @@ public class ResourceMapping : IEntityTypeConfiguration<ResourceEntity>
             .HasMaxLength(100)
             .IsRequired();
 
+        builder.Property(r => r.Description)
+            .HasColumnName("Description")
+            .HasColumnType("NVARCHAR(255)")
+            .HasMaxLength(255)
+            .IsRequired();
+
         builder.Property(r => r.IsActive)
             .HasColumnName("IsActive")
             .HasColumnType("BIT")
@@ -44,8 +50,7 @@ public class ResourceMapping : IEntityTypeConfiguration<ResourceEntity>
 
         builder.Property(r => r.CreatedBy)
             .HasColumnName("CreatedBy")
-            .HasColumnType("NVARCHAR(50)")
-            .HasMaxLength(50)
+            .HasColumnType("INT")
             .IsRequired();
 
         builder.Property(r => r.CreatedAt)
@@ -56,8 +61,7 @@ public class ResourceMapping : IEntityTypeConfiguration<ResourceEntity>
 
         builder.Property(r => r.ModifiedBy)
             .HasColumnName("ModifiedBy")
-            .HasColumnType("NVARCHAR(50)")
-            .HasMaxLength(50)
+            .HasColumnType("INT")
             .IsRequired(false);
 
         builder.Property(r => r.ModifiedAt)

@@ -8,6 +8,10 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using VianaHub.Global.Gerit.Domain.Tools.Cryptography;
+using FluentValidation;
+using VianaHub.Global.Gerit.Domain.Tools.Notifications;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace VianaHub.Global.Gerit.Domain.Helpers;
 
@@ -717,6 +721,20 @@ public static class DomainExtensions
         {
             return false;
         }
+    }
+
+    public static async Task<bool> NotifyValidationErrorsAsync<T>(this IValidator<T> validator, T request, INotify notify, CancellationToken ct)
+    {
+        var validationResult = await validator.ValidateAsync(request, ct);
+        if (!validationResult.IsValid)
+        {
+            foreach (var error in validationResult.Errors)
+            {
+                notify.Add(error.ErrorMessage, 400);
+            }
+            return false;
+        }
+        return true;
     }
 
     #region Private Methods

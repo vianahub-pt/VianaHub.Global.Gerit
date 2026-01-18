@@ -60,7 +60,7 @@ public class TenantSessionConnectionInterceptor : DbConnectionInterceptor
             user?.Identity?.IsAuthenticated ?? false,
             user != null);
 
-        // Em Development, se não há usuário autenticado, habilita IsSuperAdmin automaticamente
+        // Em Development, se não há usuário authenticated, habilita IsSuperAdmin automaticamente
         if (_environment.IsDevelopment() && (user?.Identity is not { IsAuthenticated: true }))
         {
             _logger.LogInformation("?? [RLS] Development mode without authentication. Setting SuperAdmin context for local debugging.");
@@ -110,22 +110,22 @@ public class TenantSessionConnectionInterceptor : DbConnectionInterceptor
         }
 
         // Fonte da verdade: claim do JWT, nunca header
-        object tenantValue;
-        if (tenantIdClaim is not null && Guid.TryParse(tenantIdClaim.Value, out var tenantGuid))
+        int tenantValue = 0; // Default para SuperAdmin
+        
+        if (tenantIdClaim is not null && int.TryParse(tenantIdClaim.Value, out var tenantInt))
         {
-            tenantValue = tenantGuid;
-            _logger.LogDebug("?? [RLS] Setting TenantId context: {TenantId}", tenantGuid);
+            tenantValue = tenantInt;
+            _logger.LogDebug("?? [RLS] Setting TenantId context: {TenantId}", tenantInt);
         }
         else if (tenantIdClaim is not null)
         {
-            tenantValue = tenantIdClaim.Value; // fallback string
-            _logger.LogDebug("?? [RLS] Setting TenantId context (string): {TenantId}", tenantIdClaim.Value);
+            _logger.LogWarning("?? [RLS] TenantId claim value is not a valid INT: {TenantId}", tenantIdClaim.Value);
+            tenantValue = 0; // Fallback para SuperAdmin mode
         }
         else
         {
-            // Super admin sem tenant -> usa Guid.Empty apenas para satisfazer o parâmetro
-            tenantValue = Guid.Empty;
-            _logger.LogDebug("?? [RLS] SuperAdmin without tenant. Using Guid.Empty.");
+            // Super admin sem tenant -> usa 0
+            _logger.LogDebug("?? [RLS] SuperAdmin without tenant. Using 0 as TenantId.");
         }
 
         var tenantParam = cmd.CreateParameter();
@@ -155,14 +155,14 @@ public class TenantSessionConnectionInterceptor : DbConnectionInterceptor
 
         var tenantParam = cmd.CreateParameter();
         tenantParam.ParameterName = "@tenantId";
-        tenantParam.Value = Guid.Empty; // Guid.Empty para super admin
+        tenantParam.Value = 0; // 0 para super admin (INT ao invés de GUID)
         cmd.Parameters.Add(tenantParam);
 
         await cmd.ExecuteNonQueryAsync(cancellationToken);
 
         _logger.LogInformation(
             "? [RLS] Development SuperAdmin context configured successfully. IsSuperAdmin=1, TenantId={TenantId}",
-            Guid.Empty);
+            0);
     }
 
     /// <summary>
@@ -186,7 +186,7 @@ public class TenantSessionConnectionInterceptor : DbConnectionInterceptor
 
         var tenantParam = cmd.CreateParameter();
         tenantParam.ParameterName = "@tenantId";
-        tenantParam.Value = Guid.Empty; // Guid.Empty para super admin
+        tenantParam.Value = 0; // 0 para super admin (INT ao invés de GUID)
         cmd.Parameters.Add(tenantParam);
 
         var jobNameParam = cmd.CreateParameter();

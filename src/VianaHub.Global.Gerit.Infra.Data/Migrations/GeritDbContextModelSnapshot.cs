@@ -937,6 +937,96 @@ namespace VianaHub.Global.Gerit.Infra.Data.Migrations
                     b.ToTable("JwtKeys", "dbo");
                 });
 
+            modelBuilder.Entity("VianaHub.Global.Gerit.Domain.Entities.PlanEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("Id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasColumnName("CreatedAt")
+                        .HasDefaultValueSql("SYSDATETIME()");
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int")
+                        .HasColumnName("CreatedBy");
+
+                    b.Property<string>("Currency")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(3)
+                        .HasColumnType("nvarchar(3)")
+                        .HasDefaultValue("USD")
+                        .HasColumnName("Currency");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)")
+                        .HasColumnName("Description");
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true)
+                        .HasColumnName("IsActive");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false)
+                        .HasColumnName("IsDeleted");
+
+                    b.Property<int>("MaxPhotosPerInterventions")
+                        .HasColumnType("int")
+                        .HasColumnName("MaxPhotosPerInterventions");
+
+                    b.Property<int>("MaxUsers")
+                        .HasColumnType("int")
+                        .HasColumnName("MaxUsers");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("ModifiedAt");
+
+                    b.Property<int?>("ModifiedBy")
+                        .HasColumnType("int")
+                        .HasColumnName("ModifiedBy");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("Name");
+
+                    b.Property<decimal?>("PricePerDay")
+                        .HasColumnType("decimal(10,2)")
+                        .HasColumnName("PricePerDay");
+
+                    b.Property<decimal?>("PricePerHour")
+                        .HasColumnType("decimal(10,2)")
+                        .HasColumnName("PricePerHour");
+
+                    b.Property<decimal?>("PricePerMonth")
+                        .HasColumnType("decimal(10,2)")
+                        .HasColumnName("PricePerMonth");
+
+                    b.Property<decimal?>("PricePerYear")
+                        .HasColumnType("decimal(10,2)")
+                        .HasColumnName("PricePerYear");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Plans", "dbo", t =>
+                        {
+                            t.HasCheckConstraint("CK_Plans_DeletedImpliesInactive", "[IsDeleted] = 0 OR [IsActive] = 0");
+                        });
+                });
+
             modelBuilder.Entity("VianaHub.Global.Gerit.Domain.Entities.ResourceEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -952,11 +1042,15 @@ namespace VianaHub.Global.Gerit.Infra.Data.Migrations
                         .HasColumnName("CreatedAt")
                         .HasDefaultValueSql("SYSDATETIME()");
 
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("NVARCHAR(50)")
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("INT")
                         .HasColumnName("CreatedBy");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("NVARCHAR(255)")
+                        .HasColumnName("Description");
 
                     b.Property<bool>("IsActive")
                         .ValueGeneratedOnAdd()
@@ -974,9 +1068,8 @@ namespace VianaHub.Global.Gerit.Infra.Data.Migrations
                         .HasColumnType("DATETIME2")
                         .HasColumnName("ModifiedAt");
 
-                    b.Property<string>("ModifiedBy")
-                        .HasMaxLength(50)
-                        .HasColumnType("NVARCHAR(50)")
+                    b.Property<int?>("ModifiedBy")
+                        .HasColumnType("INT")
                         .HasColumnName("ModifiedBy");
 
                     b.Property<string>("Name")
@@ -1010,11 +1103,15 @@ namespace VianaHub.Global.Gerit.Infra.Data.Migrations
                         .HasColumnName("CreatedAt")
                         .HasDefaultValueSql("SYSDATETIME()");
 
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("NVARCHAR(50)")
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int")
                         .HasColumnName("CreatedBy");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("NVARCHAR(255)")
+                        .HasColumnName("Description");
 
                     b.Property<bool>("IsActive")
                         .ValueGeneratedOnAdd()
@@ -1032,9 +1129,8 @@ namespace VianaHub.Global.Gerit.Infra.Data.Migrations
                         .HasColumnType("DATETIME2")
                         .HasColumnName("ModifiedAt");
 
-                    b.Property<string>("ModifiedBy")
-                        .HasMaxLength(50)
-                        .HasColumnType("NVARCHAR(50)")
+                    b.Property<int?>("ModifiedBy")
+                        .HasColumnType("int")
                         .HasColumnName("ModifiedBy");
 
                     b.Property<string>("Name")
@@ -1117,6 +1213,108 @@ namespace VianaHub.Global.Gerit.Infra.Data.Migrations
                         .HasDatabaseName("UQ_RolePermissions");
 
                     b.ToTable("RolePermissions", "dbo");
+                });
+
+            modelBuilder.Entity("VianaHub.Global.Gerit.Domain.Entities.SubscriptionEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("Id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("CancelAtPeriodEnd")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false)
+                        .HasColumnName("CancelAtPeriodEnd");
+
+                    b.Property<DateTime?>("CanceledAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("CanceledAt");
+
+                    b.Property<string>("CancellationReason")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)")
+                        .HasColumnName("CancellationReason");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasColumnName("CreatedAt")
+                        .HasDefaultValueSql("SYSDATETIME()");
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int")
+                        .HasColumnName("CreatedBy");
+
+                    b.Property<DateTime>("CurrentPeriodEnd")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("CurrentPeriodEnd");
+
+                    b.Property<DateTime>("CurrentPeriodStart")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("CurrentPeriodStart");
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true)
+                        .HasColumnName("IsActive");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false)
+                        .HasColumnName("IsDeleted");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("ModifiedAt");
+
+                    b.Property<int?>("ModifiedBy")
+                        .HasColumnType("int")
+                        .HasColumnName("ModifiedBy");
+
+                    b.Property<int>("PlanId")
+                        .HasColumnType("int")
+                        .HasColumnName("PlanId");
+
+                    b.Property<string>("StripeCustomerId")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("StripeCustomerId");
+
+                    b.Property<string>("StripeId")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("StripeId");
+
+                    b.Property<int>("TenantId")
+                        .HasColumnType("int")
+                        .HasColumnName("TenantId");
+
+                    b.Property<DateTime?>("TrialEnd")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("TrialEnd");
+
+                    b.Property<DateTime?>("TrialStart")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("TrialStart");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PlanId");
+
+                    b.HasIndex("TenantId", "Id")
+                        .IsUnique()
+                        .HasDatabaseName("AK_Subscriptions_TenantId_Id");
+
+                    b.ToTable("Subscriptions", "dbo", t =>
+                        {
+                            t.HasCheckConstraint("CK_Subscriptions_DeletedImpliesInactive", "[IsDeleted] = 0 OR [IsActive] = 0");
+                        });
                 });
 
             modelBuilder.Entity("VianaHub.Global.Gerit.Domain.Entities.TeamMemberAddressEntity", b =>
@@ -1401,10 +1599,8 @@ namespace VianaHub.Global.Gerit.Infra.Data.Migrations
                         .HasColumnName("CreatedAt")
                         .HasDefaultValueSql("SYSDATETIME()");
 
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("NVARCHAR(50)")
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("INT")
                         .HasColumnName("CreatedBy");
 
                     b.Property<string>("District")
@@ -1434,9 +1630,8 @@ namespace VianaHub.Global.Gerit.Infra.Data.Migrations
                         .HasColumnType("DATETIME2")
                         .HasColumnName("ModifiedAt");
 
-                    b.Property<string>("ModifiedBy")
-                        .HasMaxLength(50)
-                        .HasColumnType("NVARCHAR(50)")
+                    b.Property<int?>("ModifiedBy")
+                        .HasColumnType("INT")
                         .HasColumnName("ModifiedBy");
 
                     b.Property<string>("PostalCode")
@@ -1478,10 +1673,8 @@ namespace VianaHub.Global.Gerit.Infra.Data.Migrations
                         .HasColumnName("CreatedAt")
                         .HasDefaultValueSql("SYSDATETIME()");
 
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("NVARCHAR(50)")
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("INT")
                         .HasColumnName("CreatedBy");
 
                     b.Property<string>("Email")
@@ -1512,9 +1705,8 @@ namespace VianaHub.Global.Gerit.Infra.Data.Migrations
                         .HasColumnType("DATETIME2")
                         .HasColumnName("ModifiedAt");
 
-                    b.Property<string>("ModifiedBy")
-                        .HasMaxLength(50)
-                        .HasColumnType("NVARCHAR(50)")
+                    b.Property<int?>("ModifiedBy")
+                        .HasColumnType("INT")
                         .HasColumnName("ModifiedBy");
 
                     b.Property<string>("Name")
@@ -1563,10 +1755,8 @@ namespace VianaHub.Global.Gerit.Infra.Data.Migrations
                         .HasColumnName("CreatedAt")
                         .HasDefaultValueSql("SYSDATETIME()");
 
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("NVARCHAR(50)")
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("INT")
                         .HasColumnName("CreatedBy");
 
                     b.Property<bool>("IsActive")
@@ -1591,9 +1781,8 @@ namespace VianaHub.Global.Gerit.Infra.Data.Migrations
                         .HasColumnType("DATETIME2")
                         .HasColumnName("ModifiedAt");
 
-                    b.Property<string>("ModifiedBy")
-                        .HasMaxLength(50)
-                        .HasColumnType("NVARCHAR(50)")
+                    b.Property<int?>("ModifiedBy")
+                        .HasColumnType("INT")
                         .HasColumnName("ModifiedBy");
 
                     b.Property<string>("TradeName")
@@ -1627,10 +1816,8 @@ namespace VianaHub.Global.Gerit.Infra.Data.Migrations
                         .HasColumnName("CreatedAt")
                         .HasDefaultValueSql("SYSDATETIME()");
 
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("NVARCHAR(50)")
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("INT")
                         .HasColumnName("CreatedBy");
 
                     b.Property<string>("FiscalCountry")
@@ -1663,9 +1850,8 @@ namespace VianaHub.Global.Gerit.Infra.Data.Migrations
                         .HasColumnType("DATETIME2")
                         .HasColumnName("ModifiedAt");
 
-                    b.Property<string>("ModifiedBy")
-                        .HasMaxLength(50)
-                        .HasColumnType("NVARCHAR(50)")
+                    b.Property<int?>("ModifiedBy")
+                        .HasColumnType("INT")
                         .HasColumnName("ModifiedBy");
 
                     b.Property<string>("NIF")
@@ -1711,23 +1897,21 @@ namespace VianaHub.Global.Gerit.Infra.Data.Migrations
                         .HasColumnName("CreatedAt")
                         .HasDefaultValueSql("SYSDATETIME()");
 
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("NVARCHAR(50)")
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int")
                         .HasColumnName("CreatedBy");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("NVARCHAR(255)")
+                        .HasMaxLength(256)
+                        .HasColumnType("NVARCHAR(256)")
                         .HasColumnName("Email");
 
-                    b.Property<string>("FullName")
-                        .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("NVARCHAR(150)")
-                        .HasColumnName("FullName");
+                    b.Property<bool>("EmailConfirmed")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("BIT")
+                        .HasDefaultValue(false)
+                        .HasColumnName("EmailConfirmed");
 
                     b.Property<bool>("IsActive")
                         .ValueGeneratedOnAdd()
@@ -1741,20 +1925,46 @@ namespace VianaHub.Global.Gerit.Infra.Data.Migrations
                         .HasDefaultValue(false)
                         .HasColumnName("IsDeleted");
 
+                    b.Property<DateTime?>("LastAccessAt")
+                        .HasColumnType("DATETIME2")
+                        .HasColumnName("LastAccessAt");
+
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("DATETIME2")
                         .HasColumnName("ModifiedAt");
 
-                    b.Property<string>("ModifiedBy")
-                        .HasMaxLength(50)
-                        .HasColumnType("NVARCHAR(50)")
+                    b.Property<int?>("ModifiedBy")
+                        .HasColumnType("int")
                         .HasColumnName("ModifiedBy");
 
-                    b.Property<byte[]>("PasswordHash")
+                    b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(64)
-                        .HasColumnType("VARBINARY(64)")
+                        .HasMaxLength(150)
+                        .HasColumnType("NVARCHAR(150)")
+                        .HasColumnName("Name");
+
+                    b.Property<string>("NormalizedEmail")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("NVARCHAR(256)")
+                        .HasColumnName("NormalizedEmail");
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("NVARCHAR(500)")
                         .HasColumnName("PasswordHash");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasMaxLength(50)
+                        .HasColumnType("NVARCHAR(50)")
+                        .HasColumnName("PhoneNumber");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("BIT")
+                        .HasDefaultValue(false)
+                        .HasColumnName("PhoneNumberConfirmed");
 
                     b.Property<int>("TenantId")
                         .HasColumnType("int")
@@ -1794,9 +2004,6 @@ namespace VianaHub.Global.Gerit.Infra.Data.Migrations
                     b.Property<int?>("ModifiedBy")
                         .HasColumnType("int");
 
-                    b.Property<int?>("RoleEntityId")
-                        .HasColumnType("int");
-
                     b.Property<int>("RoleId")
                         .HasColumnType("int")
                         .HasColumnName("RoleId");
@@ -1811,8 +2018,6 @@ namespace VianaHub.Global.Gerit.Infra.Data.Migrations
 
                     b.HasKey("Id")
                         .HasName("PK_UserRoles");
-
-                    b.HasIndex("RoleEntityId");
 
                     b.HasIndex("RoleId")
                         .HasDatabaseName("IX_UserRoles_RoleId");
@@ -2125,6 +2330,25 @@ namespace VianaHub.Global.Gerit.Infra.Data.Migrations
                     b.Navigation("Tenant");
                 });
 
+            modelBuilder.Entity("VianaHub.Global.Gerit.Domain.Entities.SubscriptionEntity", b =>
+                {
+                    b.HasOne("VianaHub.Global.Gerit.Domain.Entities.PlanEntity", "Plan")
+                        .WithMany("Subscriptions")
+                        .HasForeignKey("PlanId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("VianaHub.Global.Gerit.Domain.Entities.TenantEntity", "Tenant")
+                        .WithMany()
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Plan");
+
+                    b.Navigation("Tenant");
+                });
+
             modelBuilder.Entity("VianaHub.Global.Gerit.Domain.Entities.TeamMemberAddressEntity", b =>
                 {
                     b.HasOne("VianaHub.Global.Gerit.Domain.Entities.TeamMemberEntity", "TeamMember")
@@ -2229,12 +2453,8 @@ namespace VianaHub.Global.Gerit.Infra.Data.Migrations
 
             modelBuilder.Entity("VianaHub.Global.Gerit.Domain.Entities.UserRoleEntity", b =>
                 {
-                    b.HasOne("VianaHub.Global.Gerit.Domain.Entities.RoleEntity", null)
-                        .WithMany("UserRoles")
-                        .HasForeignKey("RoleEntityId");
-
                     b.HasOne("VianaHub.Global.Gerit.Domain.Entities.RoleEntity", "Role")
-                        .WithMany()
+                        .WithMany("UserRoles")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
@@ -2292,6 +2512,11 @@ namespace VianaHub.Global.Gerit.Infra.Data.Migrations
                     b.Navigation("Addresses");
 
                     b.Navigation("Contacts");
+                });
+
+            modelBuilder.Entity("VianaHub.Global.Gerit.Domain.Entities.PlanEntity", b =>
+                {
+                    b.Navigation("Subscriptions");
                 });
 
             modelBuilder.Entity("VianaHub.Global.Gerit.Domain.Entities.ResourceEntity", b =>

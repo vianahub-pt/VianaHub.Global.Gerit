@@ -14,6 +14,8 @@ public class GeritDbContext : DbContext
     }
 
     #region DbSets - Core Multi-Tenant Tables
+    public DbSet<PlanEntity> Plans { get; set; }
+    public DbSet<SubscriptionEntity> Subscriptions { get; set; }
     public DbSet<TenantEntity> Tenants { get; set; }
     public DbSet<TenantContact> TenantContacts { get; set; }
     public DbSet<TenantAddress> TenantAddresses { get; set; }

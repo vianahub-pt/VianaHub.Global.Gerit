@@ -66,8 +66,7 @@ public class TenantContactMapping : IEntityTypeConfiguration<TenantContact>
 
         builder.Property(tc => tc.CreatedBy)
             .HasColumnName("CreatedBy")
-            .HasColumnType("NVARCHAR(50)")
-            .HasMaxLength(50)
+            .HasColumnType("INT")
             .IsRequired();
 
         builder.Property(tc => tc.CreatedAt)
@@ -78,8 +77,7 @@ public class TenantContactMapping : IEntityTypeConfiguration<TenantContact>
 
         builder.Property(tc => tc.ModifiedBy)
             .HasColumnName("ModifiedBy")
-            .HasColumnType("NVARCHAR(50)")
-            .HasMaxLength(50)
+            .HasColumnType("INT")
             .IsRequired(false);
 
         builder.Property(tc => tc.ModifiedAt)

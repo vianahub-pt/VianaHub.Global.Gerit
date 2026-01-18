@@ -33,6 +33,19 @@ public class TenantEntity : Entity, IAggregateRoot
     /// <summary>
     /// Construtor para criação de um novo Tenant
     /// </summary>
+    public TenantEntity(string legalName, string tradeName, bool consent, int createdBy)
+    {
+        SetLegalName(legalName);
+        TradeName = tradeName;
+        Consent = consent;
+        IsActive = true;
+        IsDeleted = false;
+        CreatedBy = createdBy;
+    }
+
+    /// <summary>
+    /// Construtor para criação de um novo Tenant (backward compatibility)
+    /// </summary>
     public TenantEntity(string legalName, string tradeName, bool consent = true)
     {
         SetLegalName(legalName);
@@ -55,7 +68,7 @@ public class TenantEntity : Entity, IAggregateRoot
 
     public void SetTradeName(string tradeName)
     {
-        if (tradeName.Length > 200)
+        if (tradeName?.Length > 200)
             throw new ArgumentException("Nome comercial não pode ter mais de 200 caracteres.", nameof(tradeName));
 
         TradeName = tradeName;
@@ -66,6 +79,38 @@ public class TenantEntity : Entity, IAggregateRoot
         Consent = consent;
     }
 
+    public void Update(string legalName, string tradeName, bool consent, int modifiedBy)
+    {
+        SetLegalName(legalName);
+        SetTradeName(tradeName);
+        UpdateConsent(consent);
+        ModifiedBy = modifiedBy;
+        ModifiedAt = DateTime.UtcNow;
+    }
+
+    public void Activate(int? modifiedBy)
+    {
+        IsActive = true;
+        ModifiedBy = modifiedBy;
+        ModifiedAt = DateTime.UtcNow;
+    }
+
+    public void Deactivate(int? modifiedBy)
+    {
+        IsActive = false;
+        ModifiedBy = modifiedBy;
+        ModifiedAt = DateTime.UtcNow;
+    }
+
+    public void Delete(int? modifiedBy)
+    {
+        IsDeleted = true;
+        IsActive = false;
+        ModifiedBy = modifiedBy;
+        ModifiedAt = DateTime.UtcNow;
+    }
+
+    // Métodos legados mantidos para compatibilidade
     public void Activate()
     {
         IsActive = true;

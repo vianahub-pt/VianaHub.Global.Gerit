@@ -38,11 +38,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-    <Folder Include="Validations\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\VianaHub.Global.Gerit.Application\VianaHub.Global.Gerit.Application.csproj" />
     <ProjectReference Include="..\VianaHub.Global.Gerit.Infra.IoC\VianaHub.Global.Gerit.Infra.IoC.csproj" />
   </ItemGroup>

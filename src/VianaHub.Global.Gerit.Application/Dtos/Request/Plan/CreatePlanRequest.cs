@@ -1,0 +1,14 @@
+namespace VianaHub.Global.Gerit.Application.Dtos.Request.Plan;
+
+public class CreatePlanRequest
+{
+    public string Name { get; set; }
+    public string Description { get; set; }
+    public decimal? PricePerHour { get; set; }
+    public decimal? PricePerDay { get; set; }
+    public decimal? PricePerMonth { get; set; }
+    public decimal? PricePerYear { get; set; }
+    public string Currency { get; set; }
+    public int MaxUsers { get; set; }
+    public int MaxPhotosPerInterventions { get; set; }
+}

@@ -40,8 +40,7 @@ public class ActionDataRepository : IActionDataRepository
 
             query = query.Where(x =>
                 EF.Functions.Like(x.Name.ToLower(), $"%{search}%")
-                || EF.Functions.Like(x.CreatedBy.ToString(), $"%{search}%")
-                || EF.Functions.Like(x.IsActive.ToString().ToLower(), $"%{search}%")
+                || EF.Functions.Like(x.Description.ToLower(), $"%{search}%")
             );
         }
 

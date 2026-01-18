@@ -28,22 +28,51 @@ public class UserMapping : IEntityTypeConfiguration<UserEntity>
             .HasColumnName("TenantId")
             .IsRequired();
 
+        builder.Property(u => u.Name)
+            .HasColumnName("Name")
+            .HasColumnType("NVARCHAR(150)")
+            .HasMaxLength(150)
+            .IsRequired();
+
         builder.Property(u => u.Email)
             .HasColumnName("Email")
-            .HasColumnType("NVARCHAR(255)")
-            .HasMaxLength(255)
+            .HasColumnType("NVARCHAR(256)")
+            .HasMaxLength(256)
             .IsRequired();
+
+        builder.Property(u => u.NormalizedEmail)
+            .HasColumnName("NormalizedEmail")
+            .HasColumnType("NVARCHAR(256)")
+            .HasMaxLength(256)
+            .IsRequired();
+
+        builder.Property(u => u.EmailConfirmed)
+            .HasColumnName("EmailConfirmed")
+            .HasColumnType("BIT")
+            .HasDefaultValue(false)
+            .IsRequired();
+
+        builder.Property(u => u.PhoneNumber)
+            .HasColumnName("PhoneNumber")
+            .HasColumnType("NVARCHAR(50)")
+            .HasMaxLength(50)
+            .IsRequired(false);
+
+        builder.Property(u => u.PhoneNumberConfirmed)
+            .HasColumnName("PhoneNumberConfirmed")
+            .HasColumnType("BIT")
+            .HasDefaultValue(false)
+            .IsRequired();
+
+        builder.Property(u => u.LastAccessAt)
+            .HasColumnName("LastAccessAt")
+            .HasColumnType("DATETIME2")
+            .IsRequired(false);
 
         builder.Property(u => u.PasswordHash)
             .HasColumnName("PasswordHash")
-            .HasColumnType("VARBINARY(64)")
-            .HasMaxLength(64)
-            .IsRequired();
-
-        builder.Property(u => u.FullName)
-            .HasColumnName("FullName")
-            .HasColumnType("NVARCHAR(150)")
-            .HasMaxLength(150)
+            .HasColumnType("NVARCHAR(500)")
+            .HasMaxLength(500)
             .IsRequired();
 
         builder.Property(u => u.IsActive)
@@ -60,8 +89,6 @@ public class UserMapping : IEntityTypeConfiguration<UserEntity>
 
         builder.Property(u => u.CreatedBy)
             .HasColumnName("CreatedBy")
-            .HasColumnType("NVARCHAR(50)")
-            .HasMaxLength(50)
             .IsRequired();
 
         builder.Property(u => u.CreatedAt)
@@ -72,8 +99,6 @@ public class UserMapping : IEntityTypeConfiguration<UserEntity>
 
         builder.Property(u => u.ModifiedBy)
             .HasColumnName("ModifiedBy")
-            .HasColumnType("NVARCHAR(50)")
-            .HasMaxLength(50)
             .IsRequired(false);
 
         builder.Property(u => u.ModifiedAt)
@@ -93,11 +118,9 @@ public class UserMapping : IEntityTypeConfiguration<UserEntity>
             .HasFilter("[IsDeleted] = 0");
 
         // Relacionamentos
-        builder.HasOne(u => u.Tenant)
-            .WithMany(t => t.Users)
-            .HasForeignKey(u => u.TenantId)
-            .HasConstraintName("FK_Users_Tenant")
-            .OnDelete(DeleteBehavior.Restrict);
+        // NOTA: O relacionamento User -> Tenant já está configurado no TenantMapping.cs
+        // através de HasMany(t => t.Users).WithOne(u => u.Tenant).HasForeignKey(u => u.TenantId)
+        // Não configurar novamente aqui para evitar propriedades sombra (shadow properties)
 
         builder.HasMany(u => u.UserRoles)
             .WithOne(ur => ur.User)

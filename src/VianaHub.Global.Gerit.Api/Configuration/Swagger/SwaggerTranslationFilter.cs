@@ -10,7 +10,7 @@ namespace VianaHub.Global.Gerit.Api.Configuration.Swagger;
 
 /// <summary>
 /// Document filter que traduz a documentação Swagger/OpenAPI baseado na cultura atual.
-/// Usa arquivos JSON estáticos de localização (swagger.{culture}.json).
+/// Usa arquivos JSON estáticos de localização (messages.{culture}.json).
 /// </summary>
 public class SwaggerTranslationFilter : IDocumentFilter
 {
@@ -96,7 +96,7 @@ public class SwaggerTranslationFilter : IDocumentFilter
                 var filePath = Path.Combine(
                     Directory.GetCurrentDirectory(),
                     "Localization",
-                    $"swagger.{culture}.json"
+                    $"messages.{culture}.json"
                 );
 
                 if (!File.Exists(filePath))

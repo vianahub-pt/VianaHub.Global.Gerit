@@ -1,0 +1,20 @@
+using VianaHub.Global.Gerit.Domain.Entities;
+using VianaHub.Global.Gerit.Domain.ReadModels;
+using VianaHub.Global.Gerit.Domain.Tools.Pagination;
+
+namespace VianaHub.Global.Gerit.Domain.Interfaces.Repository;
+
+public interface ISubscriptionDataRepository
+{
+    Task<SubscriptionEntity> GetByIdAsync(int id, CancellationToken ct);
+    Task<IEnumerable<SubscriptionEntity>> GetAllAsync(CancellationToken ct);
+    Task<ListPage<SubscriptionEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct);
+    Task<bool> ExistsByIdAsync(int id, CancellationToken ct);
+    Task<bool> ExistsByTenantIdAsync(int tenantId, CancellationToken ct);
+    Task<SubscriptionEntity> GetByTenantIdAsync(int tenantId, CancellationToken ct);
+    Task<IEnumerable<SubscriptionEntity>> GetByPlanIdAsync(int planId, CancellationToken ct);
+    Task<IEnumerable<SubscriptionEntity>> GetActiveSubscriptionsAsync(CancellationToken ct);
+    Task<IEnumerable<SubscriptionEntity>> GetExpiringSubscriptionsAsync(int daysBeforeExpiration, CancellationToken ct);
+    Task<bool> AddAsync(SubscriptionEntity entity, CancellationToken ct);
+    Task<bool> UpdateAsync(SubscriptionEntity entity, CancellationToken ct);
+}

@@ -37,8 +37,10 @@ DROP TABLE IF EXISTS dbo.ClientAddresses;
 DROP TABLE IF EXISTS dbo.ClientContacts;
 DROP TABLE IF EXISTS dbo.Clients;
 
+DROP TABLE IF EXISTS dbo.Subscriptions;
 DROP TABLE IF EXISTS dbo.TenantFiscalData;
 DROP TABLE IF EXISTS dbo.TenantContacts;
 DROP TABLE IF EXISTS dbo.TenantAddresses;
 DROP TABLE IF EXISTS dbo.Tenants;
+DROP TABLE IF EXISTS dbo.Plans;
 GO

@@ -9,6 +9,7 @@ public class RoleEntity : Entity
 {
     public int TenantId { get; private set; }
     public string Name { get; private set; }
+    public string Description { get; private set; }
     public bool IsActive { get; private set; }
     public bool IsDeleted { get; private set; }
 
@@ -27,39 +28,44 @@ public class RoleEntity : Entity
     /// <summary>
     /// Construtor para criação de uma nova Role
     /// </summary>
-    public RoleEntity(int tenantId, string name)
+    public RoleEntity(int tenantId, string name, string description, int createdBy)
     {
         TenantId = tenantId;
-        SetName(name);
+        Name = name;
+        Description = description;
         IsActive = true;
         IsDeleted = false;
+        CreatedBy = createdBy;
     }
 
-    public void SetName(string name)
+    public void Update(string name, string description, int modifiedBy)
     {
-        if (string.IsNullOrWhiteSpace(name))
-            throw new ArgumentException("Nome da role não pode ser vazio.", nameof(name));
-
-        if (name.Length > 100)
-            throw new ArgumentException("Nome da role não pode ter mais de 100 caracteres.", nameof(name));
-
         Name = name;
+        Description = description;
+        ModifiedBy = modifiedBy;
+        ModifiedAt = DateTime.UtcNow;
     }
 
-    public void Activate()
+    public void Activate(int? modifiedBy)
     {
         IsActive = true;
+        ModifiedBy = modifiedBy;
+        ModifiedAt = DateTime.UtcNow;
     }
 
-    public void Deactivate()
+    public void Deactivate(int? modifiedBy)
     {
         IsActive = false;
+        ModifiedBy = modifiedBy;
+        ModifiedAt = DateTime.UtcNow;
     }
 
-    public void Delete()
+    public void Delete(int? modifiedBy)
     {
         IsDeleted = true;
         IsActive = false;
+        ModifiedBy = modifiedBy;
+        ModifiedAt = DateTime.UtcNow;
     }
 
     public void AddPermission(RolePermissionEntity permission)

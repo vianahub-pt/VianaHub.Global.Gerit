@@ -57,12 +57,9 @@ public class UserRoleMapping : IEntityTypeConfiguration<UserRoleEntity>
             .HasConstraintName("FK_UserRoles_Tenant")
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder.HasOne(ur => ur.Role)
-            .WithMany()
-            .HasForeignKey(ur => ur.RoleId)
-            .HasConstraintName("FK_UserRoles_Role")
-            .OnDelete(DeleteBehavior.Restrict);
-
-        // Relacionamento com User configurado no UserMapping
+        // NOTA: Relacionamentos com User e Role já estão configurados em:
+        // - UserMapping: HasMany(u => u.UserRoles).WithOne(ur => ur.User).HasForeignKey(ur => ur.UserId)
+        // - RoleMapping: HasMany(r => r.UserRoles).WithOne(ur => ur.Role).HasForeignKey(ur => ur.RoleId)
+        // Não configurar novamente aqui para evitar propriedades sombra (shadow properties)
     }
 }

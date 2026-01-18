@@ -73,8 +73,7 @@ public class TenantFiscalDataMapping : IEntityTypeConfiguration<TenantFiscalData
 
         builder.Property(tfd => tfd.CreatedBy)
             .HasColumnName("CreatedBy")
-            .HasColumnType("NVARCHAR(50)")
-            .HasMaxLength(50)
+            .HasColumnType("INT")
             .IsRequired();
 
         builder.Property(tfd => tfd.CreatedAt)
@@ -85,8 +84,7 @@ public class TenantFiscalDataMapping : IEntityTypeConfiguration<TenantFiscalData
 
         builder.Property(tfd => tfd.ModifiedBy)
             .HasColumnName("ModifiedBy")
-            .HasColumnType("NVARCHAR(50)")
-            .HasMaxLength(50)
+            .HasColumnType("INT")
             .IsRequired(false);
 
         builder.Property(tfd => tfd.ModifiedAt)

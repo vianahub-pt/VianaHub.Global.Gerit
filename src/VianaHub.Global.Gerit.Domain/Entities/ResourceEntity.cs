@@ -8,6 +8,7 @@ namespace VianaHub.Global.Gerit.Domain.Entities;
 public class ResourceEntity : Entity
 {
     public string Name { get; private set; }
+    public string Description { get; set; }
     public bool IsActive { get; private set; }
     public bool IsDeleted { get; private set; }
 
@@ -21,37 +22,42 @@ public class ResourceEntity : Entity
     /// <summary>
     /// Construtor para criação de um novo recurso
     /// </summary>
-    public ResourceEntity(string name)
+    public ResourceEntity(string name, string description, int createdBy)
     {
-        SetName(name);
+        Name = name;
+        Description = description;
         IsActive = true;
         IsDeleted = false;
+        CreatedBy = createdBy;
     }
 
-    public void SetName(string name)
+    public void Update(string name, string description, int modifiedBy)
     {
-        if (string.IsNullOrWhiteSpace(name))
-            throw new ArgumentException("Nome do recurso não pode ser vazio.", nameof(name));
-
-        if (name.Length > 100)
-            throw new ArgumentException("Nome do recurso não pode ter mais de 100 caracteres.", nameof(name));
-
         Name = name;
+        Description = description;
+        ModifiedBy = modifiedBy;
+        ModifiedAt = DateTime.UtcNow;
     }
-
-    public void Activate()
+    
+    public void Activate(int? modifiedBy)
     {
         IsActive = true;
+        ModifiedBy = modifiedBy;
+        ModifiedAt = DateTime.UtcNow;
     }
 
-    public void Deactivate()
+    public void Deactivate(int? modifiedBy)
     {
         IsActive = false;
+        ModifiedBy = modifiedBy;
+        ModifiedAt = DateTime.UtcNow;
     }
 
-    public void Delete()
+    public void Delete(int? modifiedBy)
     {
         IsDeleted = true;
         IsActive = false;
+        ModifiedBy = modifiedBy;
+        ModifiedAt = DateTime.UtcNow;
     }
 }

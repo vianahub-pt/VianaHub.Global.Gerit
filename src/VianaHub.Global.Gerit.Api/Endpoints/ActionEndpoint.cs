@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Mvc;
 using VianaHub.Global.Gerit.Api.Helpers;
 using VianaHub.Global.Gerit.Application.Dtos.Base;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Action;
@@ -11,7 +12,7 @@ public static class ActionEndpoint
 {
     public static void MapActionEndpoints(this IEndpointRouteBuilder app)
     {
-        var groupV1 = app.MapGroup("/v1/actions").WithTags("Actions").WithGroupName("v1");
+        var groupV1 = app.MapGroup("/v1/actions").WithTags("Actions").WithGroupName("v1").RequireAuthorization();
 
         groupV1.MapGet("/", async (IActionAppService appService, INotify notify, CancellationToken ct) =>
         {
@@ -19,6 +20,7 @@ public static class ActionEndpoint
             return notify.CustomResponse(response, 200);
         })
         //.CustomAuthorize("Admin,Manager,Operator", "Action", "GetAllActions")
+        .AllowAnonymous()
         .WithName("GetAllActions")
         .WithSummary("Swagger.Endpoint.Action.GetAllActions.Summary")
         .Produces(StatusCodes.Status200OK)
@@ -30,6 +32,7 @@ public static class ActionEndpoint
             return notify.CustomResponse(response, 200);
         })
         //.CustomAuthorize("Admin,Manager,Operator", "Action", "GetActionsPaged")
+        .AllowAnonymous()
         .WithName("GetActionsPaged")
         .WithSummary("Swagger.Endpoint.Action.GetActionsPaged.Summary")
         .Produces(StatusCodes.Status200OK)
@@ -41,6 +44,7 @@ public static class ActionEndpoint
             return notify.CustomResponse(response, 200);
         })
         //.CustomAuthorize("Admin,Manager,Operator", "Action", "GetActionById")
+        .AllowAnonymous()
         .WithName("GetActionById")
         .WithSummary("Swagger.Endpoint.Action.GetActionById.Summary")
         .Produces(StatusCodes.Status200OK)
@@ -50,14 +54,16 @@ public static class ActionEndpoint
         groupV1.MapPost("/", async ([FromBody] CreateActionRequest request, IActionAppService appService, INotify notify, CancellationToken ct) =>
         {
             var created = await appService.CreateAsync(request, ct);
-            return notify.CustomResponse(created ? 201 : 400);
+            return notify.CustomResponse(201);
         })
         //.CustomAuthorize("Admin,Manager,Operator", "Action", "CreateAction")
+        .AllowAnonymous()
         .WithName("CreateAction")
         .WithSummary("Swagger.Endpoint.Action.CreateAction.Summary")
         .Produces(StatusCodes.Status201Created)
         .Produces<ErrorResponse>(StatusCodes.Status400BadRequest)
-        .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
+        .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError)
+        .WithValidation<CreateActionRequest>();
 
         groupV1.MapPut("/{id}", async (int id, [FromBody] UpdateActionRequest request, IActionAppService appService, INotify notify, CancellationToken ct) =>
         {
@@ -65,12 +71,14 @@ public static class ActionEndpoint
             return notify.CustomResponse(updated, 200);
         })
         //.CustomAuthorize("Admin,Manager,Operator", "Action", "UpdateAction")
+        .AllowAnonymous()
         .WithName("UpdateAction")
         .WithSummary("Swagger.Endpoint.Action.UpdateAction.Summary")
         .Produces(StatusCodes.Status204NoContent)
         .Produces<ErrorResponse>(StatusCodes.Status400BadRequest)
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
-        .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
+        .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError)
+        .WithValidation<UpdateActionRequest>();
 
         groupV1.MapPatch("/{id}/activate", async (int id, IActionAppService appService, INotify notify, CancellationToken ct) =>
         {
@@ -78,6 +86,7 @@ public static class ActionEndpoint
             return notify.CustomResponse();
         })
         //.CustomAuthorize("Admin,Manager", "Action", "ActivateAction")
+        .AllowAnonymous()
         .WithName("ActivateAction")
         .WithSummary("Swagger.Endpoint.Action.ActivateAction.Summary")
         .Produces(StatusCodes.Status204NoContent)
@@ -90,6 +99,7 @@ public static class ActionEndpoint
             return notify.CustomResponse();
         })
         //.CustomAuthorize("Admin,Manager", "Action", "DeactivateAction")
+        .AllowAnonymous()
         .WithName("DeactivateAction")
         .WithSummary("Swagger.Endpoint.Action.DeactivateAction.Summary")
         .Produces(StatusCodes.Status204NoContent)
@@ -102,6 +112,7 @@ public static class ActionEndpoint
             return notify.CustomResponse();
         })
         //.CustomAuthorize("Admin,Manager", "Action", "DeleteAction")
+        .AllowAnonymous()
         .WithName("DeleteAction")
         .WithSummary("Swagger.Endpoint.Action.DeleteAction.Summary")
         .Produces(StatusCodes.Status204NoContent)
@@ -122,6 +133,7 @@ public static class ActionEndpoint
             return notify.CustomResponse(success ? 200 : 400);
         })
         //.CustomAuthorize("Admin,Manager", "Action", "BulkUploadActions")
+        .AllowAnonymous()
         .WithName("BulkUploadActions")
         .WithSummary("Swagger.Endpoint.Action.BulkUploadActions.Summary")
         .DisableAntiforgery()

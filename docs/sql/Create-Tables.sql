@@ -2,6 +2,28 @@
    CORE MULTI-TENANT TABLES
    ========================= */
 
+CREATE TABLE dbo.Plans (                                                            -- Catálogo global de planos (licenciamento)
+    Id                          INT IDENTITY(1,1)   NOT NULL,                       -- PK interna
+    Name                        NVARCHAR(100)       NOT NULL,                       -- Nome do plano (UI)
+    Description                 NVARCHAR(500)           NULL,                       -- Descrição do plano
+    PricePerHour                DECIMAL(10,2)           NULL,                       -- Preço por hora
+    PricePerDay                 DECIMAL(10,2)           NULL,                       -- Preço por dia
+    PricePerMonth               DECIMAL(10,2)           NULL,                       -- Preço por mês
+    PricePerYear                DECIMAL(10,2)           NULL,                       -- Preço por ano
+    Currency                    NVARCHAR(3)         NOT NULL DEFAULT N'USD',        -- ISO currency code
+    MaxUsers                    INT                 NOT NULL,                       -- Limite de usuários
+    MaxPhotosPerInterventions   INT			        NOT NULL,                       -- Limite de fotos por intervenção
+    IsActive	                BIT					NOT NULL DEFAULT 1,             -- Flag de ativo
+    IsDeleted	                BIT					NOT NULL DEFAULT 0,             -- Soft delete
+    CreatedBy	                INT         		NOT NULL,						-- Usuário criador
+    CreatedAt	                DATETIME2			NOT NULL DEFAULT SYSDATETIME(),	-- Data de criação
+    ModifiedBy	                INT         		NULL,							-- Usuário modificador
+    ModifiedAt	                DATETIME2			NULL,							-- Data de modificação
+    CONSTRAINT PK_Plans PRIMARY KEY CLUSTERED (Id),                                 -- PK
+    CONSTRAINT CK_Plans_DeletedImpliesInactive CHECK (IsDeleted = 0 OR IsActive = 0)-- Soft delete -> não ativo
+);
+GO
+
 CREATE TABLE dbo.Tenants (											-- Tabela principal de tenants
     Id			INT IDENTITY(1,1)	NOT NULL,						-- Identificador único do tenant, chave primária
     LegalName	NVARCHAR(200)		NOT NULL,						-- Razão social
@@ -73,22 +95,54 @@ CREATE TABLE dbo.TenantFiscalData (										-- Dados fiscais do tenant
     CONSTRAINT FK_TenantFiscalData_Tenant FOREIGN KEY (TenantId) REFERENCES dbo.Tenants(Id)		-- FK para tenant    
 );
 GO
-CREATE TABLE dbo.Users (												-- Usuários do sistema
-    Id				INT IDENTITY(1,1)	NOT NULL,						-- Identificador do usuário, chave primária
-    TenantId		INT					NOT NULL,						-- Tenant do usuário
-    Email			NVARCHAR(255)		NOT NULL,						-- Email
-    PasswordHash	VARBINARY(64)		NOT NULL,						-- Hash da senha
-    FullName		NVARCHAR(150)		NOT NULL,						-- Nome completo
-    IsActive		BIT					NOT NULL DEFAULT 1,				-- Flag de ativo
-    IsDeleted		BIT					NOT NULL DEFAULT 0,				-- Soft delete
-    CreatedBy		INT         		NOT NULL,						-- Usuário criador
-    CreatedAt		DATETIME2			NOT NULL DEFAULT SYSDATETIME(),	-- Data de criação
-    ModifiedBy	    INT         		    NULL,						-- Usuário modificador
-    ModifiedAt		DATETIME2				NULL,                       -- Data de modificação
-	CONSTRAINT PK_Users PRIMARY KEY CLUSTERED (Id),
-    CONSTRAINT UQ_Users_Tenant_Email UNIQUE (TenantId, Email),			-- Email único por tenant
-    CONSTRAINT FK_Users_Tenant FOREIGN KEY (TenantId) REFERENCES dbo.Tenants(Id)	-- FK para tenant
+CREATE TABLE dbo.Subscriptions (                                                -- Assinatura do tenant (contrato de billing)
+    Id                      INT IDENTITY(1,1)   NOT NULL,                       -- Identificador da assinatura, chave primária
+    TenantId                INT                 NOT NULL,                       -- FK para tenant
+    PlanId                  INT                 NOT NULL,                       -- FK para plano global
+    StripeId                NVARCHAR(100)           NULL,                       -- Id do subscription no Stripe
+    CurrentPeriodStart      DATETIME2           NOT NULL,                       -- Início do período faturado
+    CurrentPeriodEnd        DATETIME2           NOT NULL,                       -- Fim do período faturado
+    TrialStart              DATETIME2               NULL,                       -- Trial
+    TrialEnd                DATETIME2               NULL,                       -- Trial
+    CancelAtPeriodEnd       BIT                 NOT NULL DEFAULT 0,             -- Cancelar no fim do ciclo
+    CanceledAt              DATETIME2               NULL,                       -- Quando cancelou
+    CancellationReason      NVARCHAR(500)           NULL,                       -- Motivo
+    StripeCustomerId        NVARCHAR(100)           NULL,                       -- Customer id
+    IsActive		        BIT					NOT NULL DEFAULT 1,				-- Flag de ativo
+    IsDeleted		        BIT					NOT NULL DEFAULT 0,				-- Soft delete
+    CreatedBy		        INT         		NOT NULL,						-- Usuário criador
+    CreatedAt		        DATETIME2			NOT NULL DEFAULT SYSDATETIME(),	-- Data de criação
+    ModifiedBy	            INT         		    NULL,						-- Usuário modificador
+    ModifiedAt		        DATETIME2				NULL,						-- Data de modificação
+    CONSTRAINT PK_Subscriptions PRIMARY KEY CLUSTERED (Id),                     -- PK
+    CONSTRAINT FK_Subscriptions_Tenant FOREIGN KEY (TenantId) REFERENCES dbo.Tenants(Id),       -- Tenant-safe
+    CONSTRAINT FK_Subscriptions_Plan FOREIGN KEY (PlanId) REFERENCES dbo.Plans(Id),             -- Global plan
+    CONSTRAINT AK_Subscriptions_TenantId_Id UNIQUE (TenantId, Id),                              -- Chave alternativa (TenantId, Id) p/ FKs compostas
+    CONSTRAINT CK_Subscriptions_DeletedImpliesInactive CHECK (IsDeleted = 0 OR IsActive = 0)    -- Se está deletado, não pode estar ativo
         
+);
+
+
+CREATE TABLE dbo.Users (                                                -- Usuários do sistema
+    Id				        INT IDENTITY(1,1)	NOT NULL,                       -- Identificador do usuário, chave primária
+    TenantId		        INT					NOT NULL,                       -- Tenant do usuário
+    Name		            NVARCHAR(150)		NOT NULL,                       -- Nome completo
+    Email                   NVARCHAR(256)       NOT NULL,                       -- Email original
+    NormalizedEmail         NVARCHAR(256)       NOT NULL,                       -- Email normalizado (case-insensitive)
+    EmailConfirmed          BIT                 NOT NULL DEFAULT 0,             -- Confirmação de email
+    PhoneNumber             NVARCHAR(50)            NULL,                       -- Telefone (opcional)
+    PhoneNumberConfirmed    BIT                 NOT NULL DEFAULT 0,             -- Confirmação de telefone
+    LastAccessAt            DATETIME2               NULL,                       -- Último login/acesso
+    PasswordHash	        NVARCHAR(500)		NOT NULL,						-- Hash da senha
+    IsActive		        BIT					NOT NULL DEFAULT 1,				-- Flag de ativo
+    IsDeleted		        BIT					NOT NULL DEFAULT 0,				-- Soft delete
+    CreatedBy		        INT         		NOT NULL,						-- Usuário criador
+    CreatedAt		        DATETIME2			NOT NULL DEFAULT SYSDATETIME(),	-- Data de criação
+    ModifiedBy	            INT         		    NULL,						-- Usuário modificador
+    ModifiedAt		        DATETIME2				NULL,                       -- Data de modificação
+	CONSTRAINT PK_Users PRIMARY KEY CLUSTERED (Id),
+    CONSTRAINT UQ_Users_Tenant_Email UNIQUE (TenantId, NormalizedEmail),			-- Email único por tenant
+    CONSTRAINT FK_Users_Tenant FOREIGN KEY (TenantId) REFERENCES dbo.Tenants(Id)	-- FK para tenant    
 );
 GO
 /* =========================
@@ -472,17 +526,25 @@ GO
    ROW LEVEL SECURITY
    ========================= */
 
-CREATE FUNCTION dbo.fn_TenantAccessPredicate (              -- Função de isolamento
-    @TenantId INT                                   -- Tenant avaliado
+-- Função de isolamento multi-tenant com suporte a SuperAdmin
+CREATE FUNCTION dbo.fn_TenantAccessPredicate (
+    @TenantId INT
 )
 RETURNS TABLE
 WITH SCHEMABINDING
 AS
 RETURN
-    SELECT 1 AS fn_access                                        -- Retorno dummy
-	WHERE CAST(SESSION_CONTEXT(N'TenantId') AS INT) IS NOT NULL
-	  AND @TenantId = CAST(SESSION_CONTEXT(N'TenantId') AS INT);
-
+    SELECT 1 AS fn_access
+    WHERE 
+        -- SuperAdmin tem acesso a tudo (bypass RLS)
+        CAST(SESSION_CONTEXT(N'IsSuperAdmin') AS INT) = 1
+        OR
+        -- Tenant ID deve corresponder
+        -- SESSION_CONTEXT retorna VARBINARY, então convertemos de volta para INT
+        (
+            SESSION_CONTEXT(N'TenantId') IS NOT NULL
+            AND @TenantId = CONVERT(INT, SESSION_CONTEXT(N'TenantId'))
+        );
 GO
 
 CREATE SECURITY POLICY dbo.TenantSecurityPolicy												-- Criação da policy de RLS
@@ -491,6 +553,7 @@ ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.Roles,					--
 ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.UserRoles,				-- Aplica RLS em UserRoles
 ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.RolePermissions,			-- Aplica RLS em RolePermissions
 ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.JwtKeys,					-- Aplica RLS em JwtKeys
+ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.Subscriptions,			-- Aplica RLS em Subscriptions
 ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.TenantContacts,			-- Aplica RLS em TenantContacts
 ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.TenantAddresses,			-- Aplica RLS em TenantAddresses
 ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.TenantFiscalData,		-- Aplica RLS em TenantFiscalData
@@ -521,6 +584,9 @@ ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.RolePermission
 ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.JwtKeys AFTER INSERT,            -- Bloqueia INSERT fora do Tenant
 ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.JwtKeys AFTER UPDATE,            -- Bloqueia UPDATE fora do Tenant
 ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.JwtKeys BEFORE DELETE,           -- Bloqueia DELETE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.Subscriptions AFTER INSERT,      -- Bloqueia INSERT fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.Subscriptions AFTER UPDATE,      -- Bloqueia UPDATE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.Subscriptions BEFORE DELETE,     -- Bloqueia DELETE fora do Tenant
 ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.TenantContacts AFTER INSERT,     -- Bloqueia INSERT fora do Tenant
 ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.TenantContacts AFTER UPDATE,     -- Bloqueia UPDATE fora do Tenant
 ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.TenantContacts BEFORE DELETE,    -- Bloqueia DELETE fora do Tenant
@@ -565,16 +631,3 @@ ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.Equipments AFT
 ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.Equipments BEFORE DELETE         -- Bloqueia DELETE fora do Tenant
 WITH (STATE = ON);																		            -- Ativa a policy
 GO
-
-
-
-
-
-
-
-
-
-
-
-
-

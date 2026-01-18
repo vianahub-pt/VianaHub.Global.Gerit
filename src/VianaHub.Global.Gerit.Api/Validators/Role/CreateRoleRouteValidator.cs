@@ -1,0 +1,22 @@
+using FluentValidation;
+using VianaHub.Global.Gerit.Application.Dtos.Request.Role;
+using VianaHub.Global.Gerit.Domain.Interfaces;
+
+namespace VianaHub.Global.Gerit.Api.Validators.Role;
+
+public class CreateRoleRouteValidator : AbstractValidator<CreateRoleRequest>
+{
+    private readonly ILocalizationService _localization;
+
+    public CreateRoleRouteValidator(ILocalizationService localization)
+    {
+        _localization = localization;
+
+        RuleFor(x => x.Name)
+            .NotEmpty().WithMessage(_localization.GetMessage("Api.Validator.Role.Create.Name"))
+            .MaximumLength(100).WithMessage(_localization.GetMessage("Api.Validator.Role.Create.Name.MaximumLength", 100));
+
+        RuleFor(x => x.Description)
+            .MaximumLength(255).WithMessage(_localization.GetMessage("Api.Validator.Role.Create.Description.MaximumLength", 255));
+    }
+}

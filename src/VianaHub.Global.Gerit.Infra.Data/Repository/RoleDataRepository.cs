@@ -1,0 +1,91 @@
+using Microsoft.EntityFrameworkCore;
+using VianaHub.Global.Gerit.Domain.Entities;
+using VianaHub.Global.Gerit.Domain.Interfaces.Repository;
+using VianaHub.Global.Gerit.Domain.ReadModels;
+using VianaHub.Global.Gerit.Domain.Tools.Pagination;
+using VianaHub.Global.Gerit.Infra.Data.Context;
+
+namespace VianaHub.Global.Gerit.Infra.Data.Repository;
+
+public class RoleDataRepository : IRoleDataRepository
+{
+    private readonly GeritDbContext _context;
+
+    public RoleDataRepository(GeritDbContext context)
+    {
+        _context = context;
+    }
+
+    public async Task<RoleEntity> GetByIdAsync(int id, CancellationToken ct)
+    {
+        return await _context.Set<RoleEntity>().AsNoTracking().FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted, ct);
+    }
+
+    public async Task<IEnumerable<RoleEntity>> GetAllAsync(CancellationToken ct)
+    {
+        return await _context.Set<RoleEntity>()
+            .AsNoTracking()
+            .Where(x => !x.IsDeleted)
+            .OrderBy(x => x.Name)
+            .ToListAsync(ct);
+    }
+
+    public async Task<ListPage<RoleEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct)
+    {
+        var query = _context.Set<RoleEntity>().AsNoTracking().Where(x => !x.IsDeleted);
+
+        // ?? Filtro de busca
+        if (!string.IsNullOrWhiteSpace(request.Search))
+        {
+            var search = request.Search.Trim().ToLower();
+
+            query = query.Where(x =>
+                EF.Functions.Like(x.Name.ToLower(), $"%{search}%")
+                || EF.Functions.Like(x.Description.ToLower(), $"%{search}%")
+            );
+        }
+
+        var count = await query.CountAsync(ct);
+
+        var orderedQuery = CreateSort.ApplyOrdering(query, request);
+
+        var pageNumber = request.PageNumber ?? 1;
+        var pageSize = request.PageSize ?? Paging.MinPageSize();
+
+        var result = await orderedQuery
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync(ct);
+
+        return new ListPage<RoleEntity>
+        {
+            Data = result,
+            PageNumber = pageNumber,
+            PageSize = pageSize,
+            TotalItems = count,
+            TotalPages = (int)Math.Ceiling((double)count / pageSize)
+        };
+    }
+
+    public async Task<bool> ExistsByIdAsync(int id, CancellationToken ct)
+    {
+        return await _context.Set<RoleEntity>().AsNoTracking().AnyAsync(x => x.Id == id && !x.IsDeleted, ct);
+    }
+
+    public async Task<bool> ExistsByNameAsync(int tenantId, string name, CancellationToken ct)
+    {
+        return await _context.Set<RoleEntity>().AsNoTracking().AnyAsync(x => x.TenantId == tenantId && x.Name == name && !x.IsDeleted, ct);
+    }
+
+    public async Task<bool> AddAsync(RoleEntity entity, CancellationToken ct)
+    {
+        await _context.Set<RoleEntity>().AddAsync(entity, ct);
+        return await _context.SaveChangesAsync(ct) > 0;
+    }
+
+    public async Task<bool> UpdateAsync(RoleEntity entity, CancellationToken ct)
+    {
+        _context.Set<RoleEntity>().Update(entity);
+        return await _context.SaveChangesAsync(ct) > 0;
+    }
+}

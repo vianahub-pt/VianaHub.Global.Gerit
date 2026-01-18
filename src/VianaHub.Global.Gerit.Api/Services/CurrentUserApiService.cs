@@ -57,6 +57,43 @@ public class CurrentUserApiService : ICurrentUserService
     }
 
     /// <summary>
+    /// Obtém o TenantId do usuário logado
+    /// Ordem de busca: 1) Token JWT (claims: tenant_id, tenantId) 2) Header x-tenant-id
+    /// </summary>
+    public int GetTenantId()
+    {
+        var httpContext = _httpContextAccessor.HttpContext;
+
+        if (httpContext == null)
+            throw new Exception("HTTP context is not available.");
+
+        // Tenta buscar no token JWT
+        var user = httpContext.User;
+        if (user?.Identity?.IsAuthenticated == true)
+        {
+            // Busca nas claims padrões do JWT
+            var tenantId = user.FindFirst("tenant_id")?.Value
+                        ?? user.FindFirst("tenantId")?.Value
+                        ?? user.FindFirst("TenantId")?.Value;
+
+            if (!string.IsNullOrWhiteSpace(tenantId))
+            {
+                return int.Parse(tenantId);
+            }
+        }
+
+        // Se não encontrou no token, busca no header
+        if (httpContext.Request.Headers.TryGetValue("x-tenant-id", out var headerTenantId))
+        {
+            return int.Parse(headerTenantId.ToString());
+        }
+
+        // TODO: Quando a emissão de tokens estiver implementada, este valor default não será mais necessário
+        // Por enquanto, retorna 1 para desenvolvimento
+        return 1;
+    }
+
+    /// <summary>
     /// Obtém o nome do usuário logado
     /// Ordem de busca: 1) Token JWT (claims: name, username) 2) Header x-user-name
     /// </summary>

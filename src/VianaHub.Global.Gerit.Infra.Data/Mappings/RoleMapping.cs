@@ -34,6 +34,12 @@ public class RoleMapping : IEntityTypeConfiguration<RoleEntity>
             .HasMaxLength(100)
             .IsRequired();
 
+        builder.Property(r => r.Description)
+            .HasColumnName("Description")
+            .HasColumnType("NVARCHAR(255)")
+            .HasMaxLength(255)
+            .IsRequired();
+
         builder.Property(r => r.IsActive)
             .HasColumnName("IsActive")
             .HasColumnType("BIT")
@@ -48,8 +54,6 @@ public class RoleMapping : IEntityTypeConfiguration<RoleEntity>
 
         builder.Property(r => r.CreatedBy)
             .HasColumnName("CreatedBy")
-            .HasColumnType("NVARCHAR(50)")
-            .HasMaxLength(50)
             .IsRequired();
 
         builder.Property(r => r.CreatedAt)
@@ -60,8 +64,6 @@ public class RoleMapping : IEntityTypeConfiguration<RoleEntity>
 
         builder.Property(r => r.ModifiedBy)
             .HasColumnName("ModifiedBy")
-            .HasColumnType("NVARCHAR(50)")
-            .HasMaxLength(50)
             .IsRequired(false);
 
         builder.Property(r => r.ModifiedAt)

@@ -12,8 +12,15 @@ public interface ICurrentUserService
     /// Obtém o ID do usuário logado.
     /// Busca primeiro no token JWT (claims: 'sub', 'nameid', 'userId'), depois no header 'x-user-id'.
     /// </summary>
-    /// <returns>ID do usuário ou Guid.Empty se não encontrado</returns>
+    /// <returns>ID do usuário ou 0 se não encontrado</returns>
     int GetUserId();
+
+    /// <summary>
+    /// Obtém o ID do Tenant do usuário logado.
+    /// Busca primeiro no token JWT (claims: 'tenant_id', 'tenantId'), depois no header 'x-tenant-id'.
+    /// </summary>
+    /// <returns>ID do tenant ou valor default se não encontrado</returns>
+    int GetTenantId();
 
     /// <summary>
     /// Obtém o nome do usuário logado.
