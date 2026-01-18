@@ -33,8 +33,5 @@ public class CreateUserRouteValidator : AbstractValidator<CreateUserRequest>
         RuleFor(x => x.ConfirmPassword)
             .NotEmpty().WithMessage(_localization.GetMessage("Api.Validator.User.Create.ConfirmPassword"))
             .Equal(x => x.Password).WithMessage(_localization.GetMessage("Api.Validator.User.Create.ConfirmPassword.Equal"));
-
-        RuleFor(x => x.PhoneNumber)
-            .MaximumLength(20).WithMessage(_localization.GetMessage("Api.Validator.User.Create.PhoneNumber.MaximumLength", 20));
     }
 }

@@ -24,15 +24,6 @@ public class UserRoleEntity : Entity
     /// </summary>
     public UserRoleEntity(int tenantId, int userId, int roleId)
     {
-        if (tenantId <= 0)
-            throw new ArgumentException("TenantId inválido.", nameof(tenantId));
-
-        if (userId <= 0)
-            throw new ArgumentException("UserId inválido.", nameof(userId));
-
-        if (roleId <= 0)
-            throw new ArgumentException("RoleId inválido.", nameof(roleId));
-
         TenantId = tenantId;
         UserId = userId;
         RoleId = roleId;

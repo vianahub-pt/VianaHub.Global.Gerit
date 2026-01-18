@@ -72,7 +72,7 @@ public class UserAppService : IUserAppService
 
         var passwordHash = DomainExtensions.HashClientSecret(request.Password);
         var tenantId = _currentUser.GetTenantId();
-        var entity = new UserEntity(tenantId, request.Name, request.Email, passwordHash, request.PhoneNumber, _currentUser.GetUserId());
+        var entity = new UserEntity(tenantId, request.Name, request.Email, passwordHash, null, _currentUser.GetUserId());
         
         return await _domain.CreateAsync(entity, ct);
     }

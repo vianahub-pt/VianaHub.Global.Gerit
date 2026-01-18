@@ -115,6 +115,7 @@ public static class NotifyExtensions
     /// </summary>
     public static void AddFieldError(this INotify notify, string field, string message, int statusCode = 400)
     {
+        // Mantém formato "field: message" mas exige que callers passem chaves de tradução sempre que possível.
         notify.Add($"{field}: {message}", statusCode);
     }
 
@@ -122,22 +123,23 @@ public static class NotifyExtensions
     {
         var localization = GetLocalizationService();
 
+        // Em vez de retornar mensagens hardcoded, retornamos a chave correspondente.
+        // Isso garante que todas as mensagens passem por tradução conforme diretriz de arquitetura.
         if (localization == null)
         {
-            // Fallback para inglês se não houver localização disponível
             return statusCode switch
             {
-                400 => "Validation Error",
-                401 => "Unauthorized",
-                403 => "Forbidden",
-                404 => "Resource Not Found",
-                409 => "Conflict",
-                410 => "Resource Gone",
-                422 => "Unprocessable Entity",
-                429 => "Too Many Requests",
-                500 => "Internal Server Error",
-                503 => "Service Unavailable",
-                _ => "Error"
+                400 => "Api.Error.ValidationError",
+                401 => "Api.Error.Unauthorized",
+                403 => "Api.Error.Forbidden",
+                404 => "Api.Error.NotFound",
+                409 => "Api.Error.Conflict",
+                410 => "Api.Error.Gone",
+                422 => "Api.Error.UnprocessableEntity",
+                429 => "Api.Error.TooManyRequests",
+                500 => "Api.Error.InternalServerError",
+                503 => "Api.Error.ServiceUnavailable",
+                _ => "Api.Error.Generic"
             };
         }
 
@@ -160,7 +162,8 @@ public static class NotifyExtensions
     private static string GetLocalizedErrorLabel()
     {
         var localization = GetLocalizationService();
-        return localization?.GetMessage("Common.Error") ?? "Error";
+        // Sempre retornar chave quando localization não estiver disponível
+        return localization?.GetMessage("Common.Error") ?? "Common.Error";
     }
 
     private static ILocalizationService GetLocalizationService()

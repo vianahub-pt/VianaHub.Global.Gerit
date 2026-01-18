@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System.Data.Common;
+using System.Diagnostics;
 
 namespace VianaHub.Global.Gerit.Infra.Data.Interceptors;
 
@@ -60,9 +61,37 @@ public class TenantSessionConnectionInterceptor : DbConnectionInterceptor
             user?.Identity?.IsAuthenticated ?? false,
             user != null);
 
+        // If running in Development and debugger is attached, always enable SuperAdmin to simplify local debugging
+        if (_environment.IsDevelopment() && Debugger.IsAttached)
+        {
+            _logger.LogInformation("?? [RLS] Debugger attached in Development. Forcing SuperAdmin session context for local debugging.");
+            await SetDevelopmentSuperAdminContextAsync(connection, cancellationToken);
+            return;
+        }
+
         // Em Development, se não há usuário authenticated, habilita IsSuperAdmin automaticamente
         if (_environment.IsDevelopment() && (user?.Identity is not { IsAuthenticated: true }))
         {
+            // Antes de setar o SuperAdmin automático, verificar se há cabeçalhos de fallback (apenas em Development)
+            var headers = httpContext.Request.Headers;
+            if (headers != null && (headers.ContainsKey("x-tenant-id") || headers.ContainsKey("x-super-admin")))
+            {
+                // Use header values se presentes
+                int tenantFromHeader = 0;
+                bool superAdminFromHeader = false;
+
+                if (headers.TryGetValue("x-tenant-id", out var headerTenant))
+                    int.TryParse(headerTenant.ToString(), out tenantFromHeader);
+
+                if (headers.TryGetValue("x-super-admin", out var headerSuper))
+                    bool.TryParse(headerSuper.ToString(), out superAdminFromHeader);
+
+                _logger.LogInformation("?? [RLS] Development mode with header fallback. Using x-tenant-id={Tenant}, x-super-admin={Super}", tenantFromHeader, superAdminFromHeader);
+
+                await SetSessionContextFromValuesAsync(connection, tenantFromHeader, superAdminFromHeader, cancellationToken);
+                return;
+            }
+
             _logger.LogInformation("?? [RLS] Development mode without authentication. Setting SuperAdmin context for local debugging.");
             await SetDevelopmentSuperAdminContextAsync(connection, cancellationToken);
             return;
@@ -87,6 +116,24 @@ public class TenantSessionConnectionInterceptor : DbConnectionInterceptor
             // Nenhum tenant e nenhum super admin -> em Development, habilita super admin
             if (_environment.IsDevelopment())
             {
+                // Em Development, antes de setar automático, verificar cabeçalhos
+                var headers = httpContext.Request.Headers;
+                if (headers != null && (headers.ContainsKey("x-tenant-id") || headers.ContainsKey("x-super-admin")))
+                {
+                    int tenantFromHeader = 0;
+                    bool superAdminFromHeader = false;
+
+                    if (headers.TryGetValue("x-tenant-id", out var headerTenant))
+                        int.TryParse(headerTenant.ToString(), out tenantFromHeader);
+
+                    if (headers.TryGetValue("x-super-admin", out var headerSuper))
+                        bool.TryParse(headerSuper.ToString(), out superAdminFromHeader);
+
+                    _logger.LogInformation("?? [RLS] Development mode without tenant claims but header provided. Using x-tenant-id={Tenant}, x-super-admin={Super}", tenantFromHeader, superAdminFromHeader);
+                    await SetSessionContextFromValuesAsync(connection, tenantFromHeader, superAdminFromHeader, cancellationToken);
+                    return;
+                }
+
                 _logger.LogInformation("?? [RLS] Development mode without tenant claims. Setting SuperAdmin context for local debugging.");
                 await SetDevelopmentSuperAdminContextAsync(connection, cancellationToken);
                 return;
@@ -163,6 +210,26 @@ public class TenantSessionConnectionInterceptor : DbConnectionInterceptor
         _logger.LogInformation(
             "? [RLS] Development SuperAdmin context configured successfully. IsSuperAdmin=1, TenantId={TenantId}",
             0);
+    }
+
+    private async Task SetSessionContextFromValuesAsync(DbConnection connection, int tenantId, bool isSuperAdmin, CancellationToken cancellationToken)
+    {
+        await using var cmd = connection.CreateCommand();
+        cmd.CommandText = @"EXEC sp_set_session_context @key=N'IsSuperAdmin', @value=@isSuperAdmin; EXEC sp_set_session_context @key=N'TenantId', @value=@tenantId;";
+
+        var pSuper = cmd.CreateParameter();
+        pSuper.ParameterName = "@isSuperAdmin";
+        pSuper.Value = isSuperAdmin ? 1 : 0;
+        cmd.Parameters.Add(pSuper);
+
+        var pTenant = cmd.CreateParameter();
+        pTenant.ParameterName = "@tenantId";
+        pTenant.Value = tenantId;
+        cmd.Parameters.Add(pTenant);
+
+        await cmd.ExecuteNonQueryAsync(cancellationToken);
+
+        _logger.LogInformation("?? [RLS] Session context set from header values. TenantId={TenantId}, IsSuperAdmin={IsSuperAdmin}", tenantId, isSuperAdmin);
     }
 
     /// <summary>

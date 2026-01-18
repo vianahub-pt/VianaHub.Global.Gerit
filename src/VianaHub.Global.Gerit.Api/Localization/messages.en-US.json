@@ -25,10 +25,12 @@
   "Swagger.Tag.Tenants": "Tenants",
   "Swagger.Tag.Users": "Users",
   "Swagger.Tag.Subscriptions": "Subscriptions",
+  "Swagger.Tag.UserRoles": "UserRoles",
+  "Swagger.Tag.RolePermissions": "Role Permissions",
   
   "Swagger.Endpoint.HealthCheck.Summary": "Health Check",
   "Swagger.Endpoint.HealthCheck.Description": "Checks if the API is working correctly",
-
+  
   "Swagger.Endpoint.User.GetAllUsers.Summary": "Get all users",
   "Swagger.Endpoint.User.GetUsersPaged.Summary": "Get paged users",
   "Swagger.Endpoint.User.GetUserById.Summary": "Get user by ID",
@@ -103,6 +105,21 @@
   "Swagger.Endpoint.Subscription.RenewSubscription.Summary": "Renew subscription",
   "Swagger.Endpoint.Subscription.DeleteSubscription.Summary": "Delete subscription",
 
+  "Swagger.Endpoint.UserRole.GetAllUserRoles.Summary": "Get all user-role associations",
+  "Swagger.Endpoint.UserRole.GetUserRoleById.Summary": "Get user-role association by ID",
+  "Swagger.Endpoint.UserRole.DeleteUserRole.Summary": "Delete user-role association",
+  "Swagger.Endpoint.UserRole.GetUserRolesByUser.Summary": "Get associations by user",
+  "Swagger.Endpoint.UserRole.GetUserRolesByRole.Summary": "Get associations by role",
+  "Swagger.Endpoint.UserRole.CreateUserRole.Summary": "Create new user-role association",
+  "Swagger.Endpoint.UserRole.UpdateUserRole.Summary": "Update user-role association",
+
+  "Swagger.Endpoint.RolePermission.GetAllRolePermissions.Summary": "Get all role permissions",
+  "Swagger.Endpoint.RolePermission.GetRolePermissionById.Summary": "Get role permission by ID",
+  "Swagger.Endpoint.RolePermission.GetRolePermissionsByRole.Summary": "Get permissions by role",
+  "Swagger.Endpoint.RolePermission.GetRolePermissionsByResource.Summary": "Get permissions by resource",
+  "Swagger.Endpoint.RolePermission.CreateRolePermission.Summary": "Create new role permission",
+  "Swagger.Endpoint.RolePermission.DeleteRolePermission.Summary": "Delete role permission",
+
   "Swagger.Response.200.Description": "Success",
   "Swagger.Response.201.Description": "Created",
   "Swagger.Response.204.Description": "No Content",
@@ -112,6 +129,20 @@
   "Swagger.Response.404.Description": "Not Found",
   "Swagger.Response.500.Description": "Internal Server Error",
   
+  "Api.Error.ValidationError": "Validation Error",
+  "Api.Error.Unauthorized": "Unauthorized",
+  "Api.Error.Forbidden": "Forbidden",
+  "Api.Error.NotFound": "Not Found",
+  "Api.Error.Conflict": "Conflict",
+  "Api.Error.Gone": "Gone",
+  "Api.Error.UnprocessableEntity": "Unprocessable Entity",
+  "Api.Error.TooManyRequests": "Too Many Requests",
+  "Api.Error.InternalServerError": "Internal Server Error",
+  "Api.Error.ServiceUnavailable": "Service Unavailable",
+  "Api.Error.Generic": "Error",
+
+  "Common.Error": "Error",
+
   "Api.Validator.Action.Create.Name": "Action name is required",
   "Api.Validator.Action.Create.Name.MaximumLength": "Action name cannot be longer than {0} characters",
   "Api.Validator.Action.Create.Description.MaximumLength": "Action description cannot be longer than {0} characters",
@@ -400,5 +431,23 @@
   "Domain.User.CannotUpdateDeleted": "Cannot update a deleted user",
   "Domain.User.CannotActivateDeleted": "Cannot activate a deleted user",
   "Domain.User.CannotDeactivateDeleted": "Cannot deactivate a deleted user",
-  "Domain.User.AlreadyDeleted": "User has already been deleted"
+  "Domain.User.AlreadyDeleted": "User has already been deleted",
+
+  "Application.Service.UserRole.Create.ResourceAlreadyExists": "User-role association already exists for this tenant",
+  "Application.Service.UserRole.Create.RoleNotFound": "Role not found",
+
+  "Application.Service.RolePermission.Create.ResourceAlreadyExists": "Permission already exists for this role/resource/action",
+  "Application.Service.RolePermission.Create.RoleNotFound": "Role not found",
+  "Application.Service.RolePermission.Create.ResourceNotFound": "Resource not found",
+  "Application.Service.RolePermission.Create.ActionNotFound": "Action not found",
+  "Application.Service.RolePermission.Delete.ResourceNotFound": "Permission not found",
+
+  "Domain.UserRole.TenantIdRequired": "Tenant ID is required",
+  "Domain.UserRole.UserIdRequired": "User ID is required",
+  "Domain.UserRole.RoleIdRequired": "Role ID is required",
+
+  "Domain.RolePermission.TenantIdRequired": "Tenant ID is required",
+  "Domain.RolePermission.RoleIdRequired": "Role ID is required",
+  "Domain.RolePermission.ResourceIdRequired": "Resource ID is required",
+  "Domain.RolePermission.ActionIdRequired": "Action ID is required"
 }

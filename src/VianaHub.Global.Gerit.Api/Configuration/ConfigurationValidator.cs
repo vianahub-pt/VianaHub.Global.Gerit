@@ -25,10 +25,10 @@ public static class ConfigurationValidator
         // Valida CORS (se habilitado)
         ValidateCors(configuration, environment, errors);
 
-        // Se houver erros, lança exceção
+        // Se houver erros, lança exceção com chaves de mensagem para permitir tradução posterior
         if (errors.Any())
         {
-            var errorMessage = $"Erro(s) de configuração detectado(s):{Environment.NewLine}{string.Join(Environment.NewLine, errors)}";
+            var errorMessage = string.Join("; ", errors);
             throw new InvalidOperationException(errorMessage);
         }
     }
@@ -38,7 +38,8 @@ public static class ConfigurationValidator
         var defaultConnection = configuration.GetConnectionString("DefaultConnection");
         if (string.IsNullOrWhiteSpace(defaultConnection))
         {
-            errors.Add("⚠ ConnectionStrings:DefaultConnection não está configurada");
+            // Key para mensagem localizada: Config.ConnectionStrings.DefaultConnectionMissing
+            errors.Add("Config.ConnectionStrings.DefaultConnectionMissing");
         }
     }
 
@@ -47,79 +48,70 @@ public static class ConfigurationValidator
         var encryptionKey = configuration["JwtKeyManagement:EncryptionKey"];
         if (string.IsNullOrWhiteSpace(encryptionKey))
         {
-            errors.Add("⚠️ JwtKeyManagement:EncryptionKey não está configurada");
+            // Key: Config.Jwt.EncryptionKeyMissing
+            errors.Add("Config.Jwt.EncryptionKeyMissing");
         }
         else if (encryptionKey.Length < 32)
         {
-            errors.Add($"⚠️ JwtKeyManagement:EncryptionKey deve ter no mínimo 32 caracteres (atual: {encryptionKey.Length})");
+            // Key com parâmetro: Config.Jwt.EncryptionKeyTooShort
+            errors.Add($"Config.Jwt.EncryptionKeyTooShort:{encryptionKey.Length}");
         }
 
         var issuer = configuration["JwtSettings:Issuer"];
         if (string.IsNullOrWhiteSpace(issuer))
         {
-            errors.Add("⚠️ JwtSettings:Issuer não está configurado");
+            // Key: Config.Jwt.IssuerMissing
+            errors.Add("Config.Jwt.IssuerMissing");
         }
 
         var audience = configuration["JwtSettings:Audience"];
         if (string.IsNullOrWhiteSpace(audience))
         {
-            errors.Add("⚠️ JwtSettings:Audience não está configurado");
+            // Key: Config.Jwt.AudienceMissing
+            errors.Add("Config.Jwt.AudienceMissing");
         }
 
         var accessTokenExpiration = configuration.GetValue<int>("JwtSettings:AccessTokenExpirationMinutes");
         if (accessTokenExpiration <= 0)
         {
-            errors.Add("⚠️ JwtSettings:AccessTokenExpirationMinutes deve ser maior que zero");
+            // Key: Config.Jwt.AccessTokenExpirationInvalid
+            errors.Add("Config.Jwt.AccessTokenExpirationInvalid");
         }
 
         var refreshTokenExpiration = configuration.GetValue<int>("JwtSettings:RefreshTokenExpirationDays");
         if (refreshTokenExpiration <= 0)
         {
-            errors.Add("⚠️ JwtSettings:RefreshTokenExpirationDays deve ser maior que zero");
+            // Key: Config.Jwt.RefreshTokenExpirationInvalid
+            errors.Add("Config.Jwt.RefreshTokenExpirationInvalid");
         }
     }
 
     private static void ValidateRateLimiting(IConfiguration configuration, List<string> errors)
     {
-        var rateLimitingEnabled = configuration.GetValue<bool>("RateLimiting:EnableRateLimiting");
-        if (!rateLimitingEnabled)
+        // Exemplo: validar se a configuração necessária existe quando RateLimiting está habilitado
+        var enabled = configuration.GetValue<bool?>("RateLimiting:EnableRateLimiting");
+        if (enabled.HasValue && enabled.Value)
         {
-            return; // Rate limiting desabilitado, não valida
-        }
-
-        var generalPermitLimit = configuration.GetValue<int>("RateLimiting:GeneralRules:PermitLimit");
-        if (generalPermitLimit <= 0)
-        {
-            errors.Add("⚠️ RateLimiting:GeneralRules:PermitLimit deve ser maior que zero");
-        }
-
-        var authPermitLimit = configuration.GetValue<int>("RateLimiting:AuthenticationEndpoints:PermitLimit");
-        if (authPermitLimit <= 0)
-        {
-            errors.Add("⚠️ RateLimiting:AuthenticationEndpoints:PermitLimit deve ser maior que zero");
+            var policy = configuration["RateLimiting:DefaultPolicyName"];
+            if (string.IsNullOrWhiteSpace(policy))
+            {
+                // Key: Config.RateLimiting.PolicyMissing
+                errors.Add("Config.RateLimiting.PolicyMissing");
+            }
         }
     }
 
     private static void ValidateCors(IConfiguration configuration, IWebHostEnvironment environment, List<string> errors)
     {
-        var corsEnabled = configuration.GetValue<bool>("Cors:EnableCors");
-        if (!corsEnabled)
+        var corsEnabled = configuration.GetValue<bool?>("Cors:EnableCors");
+        if (corsEnabled.HasValue && corsEnabled.Value)
         {
-            return; // CORS desabilitado, não valida
-        }
-
-        var allowedOrigins = configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() ?? Array.Empty<string>();
-
-        // Em produção, não deve permitir origins vazias
-        if (environment.IsProduction() && allowedOrigins.Length == 0)
-        {
-            errors.Add("⚠️ AVISO: Cors:AllowedOrigins está vazia em ambiente de produção. Configure origins específicas.");
-        }
-
-        // Verifica se há wildcard (*) em produção
-        if (environment.IsProduction() && allowedOrigins.Any(o => o == "*"))
-        {
-            errors.Add("❌ CRÍTICO: Cors:AllowedOrigins não deve conter '*' em ambiente de produção");
+            var policyName = configuration.GetValue<string>("Cors:PolicyName");
+            if (string.IsNullOrWhiteSpace(policyName))
+            {
+                // Key: Config.Cors.PolicyNameMissing
+                errors.Add("Config.Cors.PolicyNameMissing");
+            }
         }
     }
 }

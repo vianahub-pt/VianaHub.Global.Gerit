@@ -52,6 +52,11 @@ public class ActionAppService : IActionAppService
     public async Task<ActionResponse> GetByIdAsync(int id, CancellationToken ct)
     {
         var entity = await _repo.GetByIdAsync(id, ct);
+        if (entity == null || entity.IsDeleted || !entity.IsActive)
+        {
+            _notify.Add(_localization.GetMessage("Application.Service.Action.Update.ResourceNotFound"), 410);
+            return null;
+        }
         return _mapper.Map<ActionResponse>(entity);
     }
     public async Task<ListPageResponse<ActionResponse>> GetPagedAsync(PagedFilterRequest request, CancellationToken ct)
@@ -77,7 +82,7 @@ public class ActionAppService : IActionAppService
     public async Task<bool> UpdateAsync(int id, UpdateActionRequest request, CancellationToken ct)
     {
         var entity = await _repo.GetByIdAsync(id, ct);
-        if (entity == null)
+        if (entity == null || entity.IsDeleted || !entity.IsActive)
         {
             _notify.Add(_localization.GetMessage("Application.Service.Action.Update.ResourceNotFound"), 410);
             return false;
@@ -89,7 +94,7 @@ public class ActionAppService : IActionAppService
     public async Task<bool> ActivateAsync(int id, CancellationToken ct)
     {
         var entity = await _repo.GetByIdAsync(id, ct);
-        if (entity == null)
+        if (entity == null || entity.IsDeleted)
         {
             _notify.Add(_localization.GetMessage("Application.Service.Action.Activate.ResourceNotFound"), 410);
             return false;
@@ -101,7 +106,7 @@ public class ActionAppService : IActionAppService
     public async Task<bool> DeactivateAsync(int id, CancellationToken ct)
     {
         var entity = await _repo.GetByIdAsync(id, ct);
-        if (entity == null)
+        if (entity == null || entity.IsDeleted || !entity.IsActive)
         {
             _notify.Add(_localization.GetMessage("Application.Service.Action.Deactivate.ResourceNotFound"), 410);
             return false;
@@ -113,7 +118,7 @@ public class ActionAppService : IActionAppService
     public async Task<bool> DeleteAsync(int id, CancellationToken ct)
     {
         var entity = await _repo.GetByIdAsync(id, ct);
-        if (entity == null)
+        if (entity == null || entity.IsDeleted)
         {
             _notify.Add(_localization.GetMessage("Application.Service.Action.Delete.ResourceNotFound"), 410);
             return false;

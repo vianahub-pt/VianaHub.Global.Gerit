@@ -24,17 +24,44 @@
 
 ## Tratamento de Exceções
 
-- Não coloque `try/catch` generalistas nos serviços de aplicação ou domain apenas para transformar exceções técnicas em respostas HTTP. Exceções técnicas (por exemplo `DbUpdateException`) devem ser lançadas e tratadas pelo middleware global, que:
-  - Loga detalhes técnicos (incluindo stack trace e inner exception) de forma estruturada.
-  - Constrói uma resposta amigável ao usuário usando `INotify` e `ErrorResponse`.
-  - Em ambientes de desenvolvimento, pode incluir informações de debug adicionais; em produção, deve omitir detalhes sensíveis.
+- A aplicação NÃO deve usar `throw new Exception` (ou qualquer `throw new ...`) de forma explícita para controlar fluxo ou comunicar mensagens para o usuário. Sempre que for necessário enviar uma mensagem ao consumidor, utilize a interface `INotify` para agregar a(s) mensagem(ns) e o código HTTP apropriado.
 
-- Exceções de domínio (representando regras de negócio) podem ser expostas como notificações via `INotify` e não devem conter detalhes técnicos.
+- Evite `try/catch` generalistas nos serviços de Application ou Domain apenas para mapear exceções técnicas em respostas HTTP. O fluxo esperado é:
+  - As classes da camada de Application executam validações e, quando necessário, adicionam notificações via `INotify` (sem lançar exceções explícitas para o usuário).
+  - Exceções técnicas inesperadas (ex.: `DbUpdateException`, `SqlException`, `JsonException`) serão capturadas pelo `GlobalExceptionMiddleware`, que:
+    - Gera um `ErrorId` único e registra o erro de forma estruturada nos logs (Serilog).
+    - Constrói uma resposta amigável ao usuário usando mensagens localizadas e adiciona também uma notificação via `INotify` para garantir consistência no formato de resposta.
+
+- Exceções de domínio (representando regras de negócio) devem ser comunicadas como notificações via `INotify` e não devem conter detalhes técnicos.
+
+## Regras de Recursos e Status HTTP (Obrigatórias)
+
+1. Validação de existência por ID (410 Gone):
+   - Sempre que um endpoint receber um `id` na rota (em requisições `GET`, `POST`, `PATCH` ou `DELETE`), a existência e o estado do recurso (por exemplo: ativo/inativo) devem ser validados pela camada `VianaHub.Global.Gerit.Application/Services`.
+   - Se o recurso com o `id` informado não existir ou estiver desativado, a aplicação deve responder com o status `410 Gone`.
+   - A classe de serviço deve adicionar a notificação apropriada via `INotify` com a mensagem localizada e o código `410`.
+
+2. Validação de unicidade na criação (409 Conflict):
+   - Sempre que for criado um novo recurso, a camada de `VianaHub.Global.Gerit.Application/Services` deve verificar se já existe um recurso equivalente na base de dados (regra de unicidade definida pelo negócio).
+   - Se o recurso já existir, a aplicação deve responder com `409 Conflict` e a validação deve ser sinalizada via `INotify` pela classe de serviço responsável.
+
+Essas regras garantem que a lógica de decisão sobre códigos HTTP semânticos (410, 409, etc.) esteja centralizada na camada de Application, mantendo a API mais fina e consistente.
 
 ## Notificações e Respostas
 
-- Use `INotify` para agregar mensagens e códigos de status (ex.: 400, 404, 409) ao longo do fluxo de execução.
+- Use `INotify` para agregar mensagens e códigos de status (ex.: 400, 404, 409, 410) ao longo do fluxo de execução.
 - Os endpoints devem retornar `notify.CustomResponse(...)` para padronizar o formato das respostas de erro/sucesso.
+
+## Internacionalização e Mensagens (Obrigatório)
+
+- A aplicação Gerit é Multi-Idioma.
+- Todas as mensagens retornadas ao usuário (erros, validações, notificações, respostas de sucesso, etc.) devem obrigatoriamente utilizar chaves de tradução.
+- É estritamente proibido o uso de mensagens hardcoded em qualquer camada da aplicação.
+- Todas as mensagens devem:
+  - Possuir uma chave de tradução padronizada.
+  - Estar devidamente traduzidas nos arquivos de localização localizados em VianaHub.Global.Gerit.Api/Localization.
+- Mensagens não traduzidas ou hardcoded serão consideradas violação arquitetural e não devem ser aprovadas em PRs.
+- O uso de INotify deve sempre referenciar chaves de tradução, nunca textos literais.
 
 ## Logging
 

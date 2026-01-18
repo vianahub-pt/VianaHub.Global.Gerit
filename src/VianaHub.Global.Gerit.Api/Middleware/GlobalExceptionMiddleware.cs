@@ -36,19 +36,64 @@ public class GlobalExceptionMiddleware
         try
         {
             await _next(context);
+
+            // Se serviços adicionaram notificações (sem lançar exceção), retornar resposta padronizada
+            if (notify != null && notify.HasNotify())
+            {
+                // Evitar reprocessamento se a resposta já começou
+                if (context.Response.HasStarted)
+                {
+                    Log.Warning("⚠️ [NOTIFY] Response already started; cannot modify");
+                    return;
+                }
+
+                var statusCode = (int)notify.GetStatusCode();
+
+                // Logar resumo da notificação para rastreabilidade
+                Log.Information("🔔 [NOTIFY] Notifications found after pipeline execution at {Path}. Status: {StatusCode}", context.Request.Path, statusCode);
+
+                context.Response.StatusCode = statusCode;
+                context.Response.ContentType = "application/json; charset=utf-8";
+
+                var errorResponse = new ErrorResponse(GetErrorTitle(statusCode, localization));
+
+                foreach (var message in notify.GetErrorMessage())
+                {
+                    if (message.Contains(":"))
+                    {
+                        var parts = message.Split(':', 2);
+                        // Field may be a key or literal; we keep as-is for consistency
+                        var field = parts[0].Trim();
+                        var payload = parts[1].Trim();
+
+                        // If payload encodes key with args (key|arg1|arg2), resolve for response
+                        var resolved = ResolvePayloadLocalization(payload, localization);
+                        errorResponse.AddError(field, resolved);
+                    }
+                    else
+                    {
+                        var resolved = ResolvePayloadLocalization(message, localization);
+                        errorResponse.AddError(localization.GetMessage("Api.Middleware.GlobalException.Notification.FieldLabel.Error"), resolved);
+                    }
+                }
+
+                var json = JsonSerializer.Serialize(errorResponse, GetJsonSerializerOptions());
+                await context.Response.WriteAsync(json);
+                return;
+            }
         }
         catch (BadHttpRequestException ex) when (ex.InnerException is JsonException jsonEx)
         {
             // Tratamento específico para JSON malformatado
             var errorId = Guid.NewGuid().ToString("N")[..12];
-            Log.Warning(ex, "⚠️ [ERROR-{ErrorId}] JSON malformatado recebido em {Path}", errorId, context.Request.Path);
+            Log.Warning(ex, "⚠️ [ERROR-{ErrorId}] Malformed JSON received at {Path}", errorId, context.Request.Path);
             await HandleJsonException(context, jsonEx, errorId, notify, localization);
         }
         catch (JsonException jsonEx)
         {
             // Tratamento específico para erros de deserialização JSON
             var errorId = Guid.NewGuid().ToString("N")[..12];
-            Log.Warning(jsonEx, "⚠️ [ERROR-{ErrorId}] Erro ao processar JSON em {Path}", errorId, context.Request.Path);
+            Log.Warning(jsonEx, "⚠️ [ERROR-{ErrorId}] Error processing JSON at {Path}", errorId, context.Request.Path);
             await HandleJsonException(context, jsonEx, errorId, notify, localization);
         }
         catch (Exception ex)
@@ -58,7 +103,7 @@ public class GlobalExceptionMiddleware
 
             // Log completo e estruturado do erro
             Log.Error(ex,
-                "❌ [ERROR-{ErrorId}] Exceção não tratada na API\n" +
+                "❌ [ERROR-{ErrorId}] Unhandled exception in API\n" +
                 "   📍 Path: {Path}\n" +
                 "   🔧 Method: {Method}\n" +
                 "   🌐 IP: {RemoteIP}\n" +
@@ -71,7 +116,7 @@ public class GlobalExceptionMiddleware
                 context.Connection.RemoteIpAddress?.ToString(),
                 ex.GetType().Name,
                 ex.Message,
-                context.User?.Identity?.Name ?? "Anônimo");
+                context.User?.Identity?.Name ?? "Anonymous");
 
             await HandleExceptionAsync(context, ex, errorId, notify, localization);
         }
@@ -85,18 +130,19 @@ public class GlobalExceptionMiddleware
         // Evitar reprocessamento se a resposta já começou
         if (context.Response.HasStarted)
         {
-            Log.Warning("⚠️ [ERROR-{ErrorId}] Resposta já iniciada, não é possível modificar", errorId);
+            Log.Warning("⚠️ [ERROR-{ErrorId}] Response already started; cannot modify", errorId);
             return;
         }
 
         context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
         context.Response.ContentType = "application/json; charset=utf-8";
 
-        string friendlyMessage = GetFriendlyJsonErrorMessage(jsonEx, localization);
-        notify.Add(friendlyMessage, (int)HttpStatusCode.BadRequest);
+        string friendlyKey = GetFriendlyJsonErrorKey(jsonEx);
+        // Adiciona chave de tradução ao notify (sem resolver aqui)
+        notify.Add(friendlyKey, (int)HttpStatusCode.BadRequest);
 
         var errorResponse = new ErrorResponse(localization.GetMessage("Api.Middleware.GlobalException.JsonException.Error.JsonFormatError"));
-        errorResponse.AddError(localization.GetMessage("Api.Middleware.GlobalException.JsonException.Error.FieldLabel.Format"), friendlyMessage);
+        errorResponse.AddError(localization.GetMessage("Api.Middleware.GlobalException.JsonException.Error.FieldLabel.Format"), localization.GetMessage(friendlyKey));
         errorResponse.AddError(localization.GetMessage("Api.Middleware.GlobalException.JsonException.Error.FieldLabel.ErrorId"), localization.GetMessage("Api.Middleware.GlobalException.JsonException.Error.ContactSupport", errorId));
 
         var lineNumber = GetLineNumber(jsonEx);
@@ -120,7 +166,7 @@ public class GlobalExceptionMiddleware
         // Evitar reprocessamento se a resposta já começou
         if (context.Response.HasStarted)
         {
-            Log.Warning("⚠️ [ERROR-{ErrorId}] Resposta já iniciada, não é possível modificar", errorId);
+            Log.Warning("⚠️ [ERROR-{ErrorId}] Response already started; cannot modify", errorId);
             return;
         }
 
@@ -131,7 +177,7 @@ public class GlobalExceptionMiddleware
         {
             // Logar detalhes completos internos para diagnóstico
             Log.Error(sqlEx,
-                "[ERROR-{ErrorId}] SqlException detalhada:\n" +
+                "[ERROR-{ErrorId}] Detailed SqlException:\n" +
                 "   🔢 Error Number: {ErrorNumber}\n" +
                 "   📝 Message: {Message}\n" +
                 "   🔧 Procedure: {Procedure}\n" +
@@ -142,7 +188,8 @@ public class GlobalExceptionMiddleware
                 sqlEx.Procedure ?? "N/A",
                 sqlEx.LineNumber);
 
-            notify.Add(localization.GetMessage("Api.Middleware.GlobalException.SqlException.Error.DatabaseError"), 500);
+            // Adiciona a chave de mensagem ao notify
+            notify.Add("Api.Middleware.GlobalException.SqlException.Error.DatabaseError", 500);
 
             var statusCode = (int)notify.GetStatusCode();
             context.Response.StatusCode = statusCode;
@@ -164,7 +211,7 @@ public class GlobalExceptionMiddleware
 
             // Logar detalhes completos internos para diagnóstico
             Log.Error(dbEx,
-                "[ERROR-{ErrorId}] DbUpdateException detalhada:\n" +
+                "[ERROR-{ErrorId}] Detailed DbUpdateException:\n" +
                 "   📝 Message: {Message}\n" +
                 "   🔥 Inner Exception: {InnerException}\n" +
                 "   📋 Entries: {EntriesCount}",
@@ -176,16 +223,16 @@ public class GlobalExceptionMiddleware
             if (innerMessage.IndexOf("FK_", StringComparison.OrdinalIgnoreCase) >= 0 ||
                 innerMessage.IndexOf("FOREIGN KEY", StringComparison.OrdinalIgnoreCase) >= 0)
             {
-                notify.Add(localization.GetMessage("Api.Middleware.GlobalException.DbUpdateException.Error.TenantNotExistOrInactive"), 400);
+                notify.Add("Api.Middleware.GlobalException.DbUpdateException.Error.TenantNotExistOrInactive", 400);
             }
             else if (innerMessage.IndexOf("UNIQUE", StringComparison.OrdinalIgnoreCase) >= 0 ||
                      innerMessage.IndexOf("duplicate", StringComparison.OrdinalIgnoreCase) >= 0)
             {
-                notify.Add(localization.GetMessage("Api.Middleware.GlobalException.DbUpdateException.Error.DuplicateApplication"), 409);
+                notify.Add("Api.Middleware.GlobalException.DbUpdateException.Error.DuplicateApplication", 409);
             }
             else
             {
-                notify.Add(localization.GetMessage("Api.Middleware.GlobalException.DbUpdateException.Error.SaveDataError"), 400);
+                notify.Add("Api.Middleware.GlobalException.DbUpdateException.Error.SaveDataError", 400);
             }
 
             // Construir resposta a partir do notify para retornar mensagens amigáveis ao consumidor
@@ -200,11 +247,11 @@ public class GlobalExceptionMiddleware
                 if (message.Contains(":"))
                 {
                     var parts = message.Split(':', 2);
-                    efErrorResponse.AddError(parts[0].Trim(), parts[1].Trim());
+                    efErrorResponse.AddError(parts[0].Trim(), ResolvePayloadLocalization(parts[1].Trim(), localization));
                 }
                 else
                 {
-                    efErrorResponse.AddError(localization.GetMessage("Api.Middleware.GlobalException.DbUpdateException.Error.FieldLabel.Error"), message);
+                    efErrorResponse.AddError(localization.GetMessage("Api.Middleware.GlobalException.DbUpdateException.Error.FieldLabel.Error"), ResolvePayloadLocalization(message, localization));
                 }
             }
 
@@ -218,7 +265,7 @@ public class GlobalExceptionMiddleware
 
         // Log detalhado para diagnóstico
         Log.Error(exception,
-            "[ERROR-{ErrorId}] Exceção genérica detalhada:\n" +
+            "[ERROR-{ErrorId}] Detailed generic exception:\n" +
             "   🔥 Exception Type: {ExceptionType}\n" +
             "   📝 Message: {Message}\n" +
             "   🔗 Inner Exception: {InnerException}\n" +
@@ -229,8 +276,8 @@ public class GlobalExceptionMiddleware
             exception.InnerException?.Message ?? "N/A",
             exception.StackTrace ?? "N/A");
 
-        // Adicionar notificação amigável
-        notify.Add(localization.GetMessage("Api.Middleware.GlobalException.DbUpdateException.Error.UnexpectedError"), 500);
+        // Adicionar notificação amigável (uma chave)
+        notify.Add("Api.Middleware.GlobalException.DbUpdateException.Error.UnexpectedError", 500);
 
         // Criar resposta padronizada - APENAS informações seguras para o cliente
         var errorResponse = new ErrorResponse(localization.GetMessage("Api.Middleware.GlobalException.DbUpdateException.Error.InternalServerError"));
@@ -248,34 +295,63 @@ public class GlobalExceptionMiddleware
     }
 
     /// <summary>
-    /// Retorna uma mensagem amigável baseada no tipo de erro JSON.
+    /// Retorna uma chave de mensagem amigável baseada no tipo de erro JSON.
     /// </summary>
-    private static string GetFriendlyJsonErrorMessage(JsonException jsonEx, ILocalizationService localization)
+    private static string GetFriendlyJsonErrorKey(JsonException jsonEx)
     {
         var message = jsonEx.Message.ToLower();
 
         if (message.Contains("trailing comma"))
-            return localization.GetMessage("Api.Middleware.GlobalException.JsonException.Error.JsonTrailingComma");
+            return "Api.Middleware.GlobalException.JsonException.Error.JsonTrailingComma";
 
         if (message.Contains("unexpected character") || message.Contains("invalid character"))
-            return localization.GetMessage("Api.Middleware.GlobalException.JsonException.Error.JsonInvalidCharacter");
+            return "Api.Middleware.GlobalException.JsonException.Error.JsonInvalidCharacter";
 
         if (message.Contains("unterminated string"))
-            return localization.GetMessage("Api.Middleware.GlobalException.JsonException.Error.JsonUnterminatedString");
+            return "Api.Middleware.GlobalException.JsonException.Error.JsonUnterminatedString";
 
         if (message.Contains("expected") && message.Contains("got"))
-            return localization.GetMessage("Api.Middleware.GlobalException.JsonException.Error.JsonMalformed");
+            return "Api.Middleware.GlobalException.JsonException.Error.JsonMalformed";
 
         if (message.Contains("depth"))
-            return localization.GetMessage("Api.Middleware.GlobalException.JsonException.Error.JsonTooManyLevels");
+            return "Api.Middleware.GlobalException.JsonException.Error.JsonTooManyLevels";
 
         if (message.Contains("property name"))
-            return localization.GetMessage("Api.Middleware.GlobalException.JsonException.Error.JsonInvalidPropertyName");
+            return "Api.Middleware.GlobalException.JsonException.Error.JsonInvalidPropertyName";
 
         if (message.Contains("missing"))
-            return localization.GetMessage("Api.Middleware.GlobalException.JsonException.Error.JsonIncomplete");
+            return "Api.Middleware.GlobalException.JsonException.Error.JsonIncomplete";
 
-        return localization.GetMessage("Api.Middleware.GlobalException.JsonException.Error.JsonGeneric");
+        return "Api.Middleware.GlobalException.JsonException.Error.JsonGeneric";
+    }
+
+    /// <summary>
+    /// Resolve payload que pode ser uma chave com argumentos (key|arg1|arg2) ou texto literal.
+    /// </summary>
+    private static string ResolvePayloadLocalization(string payload, ILocalizationService localization)
+    {
+        if (localization == null)
+            return payload;
+
+        if (string.IsNullOrWhiteSpace(payload))
+            return string.Empty;
+
+        if (payload.Contains('|'))
+        {
+            var parts = payload.Split('|');
+            var key = parts[0];
+            var args = parts.Skip(1).ToArray();
+            return localization.GetMessage(key, args);
+        }
+
+        // Heurística: se parece com uma chave (contém ponto e sem espaços), trata como chave
+        if (payload.Contains('.') && !payload.Contains(' '))
+        {
+            return localization.GetMessage(payload);
+        }
+
+        // Caso contrário, assume que é texto já localizado
+        return payload;
     }
 
     /// <summary>

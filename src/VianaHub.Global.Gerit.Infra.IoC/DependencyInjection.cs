@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using FluentValidation;
 using VianaHub.Global.Gerit.Application.Interfaces;
 using VianaHub.Global.Gerit.Application.Services;
 using VianaHub.Global.Gerit.Domain.Base;
@@ -14,6 +15,11 @@ using VianaHub.Global.Gerit.Domain.Validators.Role;
 using VianaHub.Global.Gerit.Domain.Validators.Subscription;
 using VianaHub.Global.Gerit.Domain.Validators.Tenant;
 using VianaHub.Global.Gerit.Domain.Validators.User;
+using VianaHub.Global.Gerit.Domain.Validators.UserRole;
+using VianaHub.Global.Gerit.Domain.Validators.RolePermission;
+using VianaHub.Global.Gerit.Application.Interfaces;
+using VianaHub.Global.Gerit.Application.Services;
+using VianaHub.Global.Gerit.Domain.Interfaces.Domain;
 using VianaHub.Global.Gerit.Infra.Data.Repository;
 
 namespace VianaHub.Global.Gerit.Infra.IoC;
@@ -39,6 +45,8 @@ public static class DependencyInjection
         services.AddScoped<IEntityDomainValidator<TenantEntity>, TenantValidator>();
         services.AddScoped<IEntityDomainValidator<SubscriptionEntity>, SubscriptionValidator>();
         services.AddScoped<IEntityDomainValidator<UserEntity>, UserValidator>();
+        services.AddScoped<IValidator<UserRoleEntity>, UserRoleValidator>();
+        services.AddScoped<IValidator<RolePermissionEntity>, RolePermissionValidator>();
 
         // Application
         services.AddScoped<IActionAppService, ActionAppService>();
@@ -48,6 +56,9 @@ public static class DependencyInjection
         services.AddScoped<ITenantAppService, TenantAppService>();
         services.AddScoped<ISubscriptionAppService, SubscriptionAppService>();
         services.AddScoped<IUserAppService, UserAppService>();
+        services.AddScoped<IUserRoleAppService, UserRoleAppService>();
+        services.AddScoped<IUserRoleDomainService, UserRoleDomainService>();
+        services.AddScoped<IRolePermissionAppService, RolePermissionAppService>();
 
         // Domain
         services.AddScoped<IActionDomainService, ActionDomainService>();
@@ -57,6 +68,7 @@ public static class DependencyInjection
         services.AddScoped<ITenantDomainService, TenantDomainService>();
         services.AddScoped<ISubscriptionDomainService, SubscriptionDomainService>();
         services.AddScoped<IUserDomainService, UserDomainService>();
+        services.AddScoped<IRolePermissionDomainService, RolePermissionDomainService>();
 
         // Infra.Data - Repositories
         services.AddScoped<IActionDataRepository, ActionDataRepository>();
@@ -67,6 +79,8 @@ public static class DependencyInjection
         services.AddScoped<ISubscriptionDataRepository, SubscriptionDataRepository>();
         services.AddScoped<IJwtKeyDataRepository, JwtKeyDataRepository>();
         services.AddScoped<IUserDataRepository, UserDataRepository>();
+        services.AddScoped<IUserRoleDataRepository, UserRoleDataRepository>();
+        services.AddScoped<IRolePermissionDataRepository, RolePermissionDataRepository>();
 
         return services;
     }

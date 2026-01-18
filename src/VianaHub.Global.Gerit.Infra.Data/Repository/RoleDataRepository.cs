@@ -4,16 +4,21 @@ using VianaHub.Global.Gerit.Domain.Interfaces.Repository;
 using VianaHub.Global.Gerit.Domain.ReadModels;
 using VianaHub.Global.Gerit.Domain.Tools.Pagination;
 using VianaHub.Global.Gerit.Infra.Data.Context;
+using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Logging;
+using System.Data.Common;
 
 namespace VianaHub.Global.Gerit.Infra.Data.Repository;
 
 public class RoleDataRepository : IRoleDataRepository
 {
     private readonly GeritDbContext _context;
+    private readonly ILogger<RoleDataRepository> _logger;
 
-    public RoleDataRepository(GeritDbContext context)
+    public RoleDataRepository(GeritDbContext context, ILogger<RoleDataRepository> logger)
     {
         _context = context;
+        _logger = logger;
     }
 
     public async Task<RoleEntity> GetByIdAsync(int id, CancellationToken ct)
@@ -87,5 +92,35 @@ public class RoleDataRepository : IRoleDataRepository
     {
         _context.Set<RoleEntity>().Update(entity);
         return await _context.SaveChangesAsync(ct) > 0;
+    }
+
+    // Diagnostic helper: lê o SESSION_CONTEXT na conexão atual e registra no logger.
+    public async Task LogSessionContextAsync(CancellationToken ct)
+    {
+        try
+        {
+            var conn = _context.Database.GetDbConnection();
+            if (conn.State != System.Data.ConnectionState.Open)
+                await conn.OpenAsync(ct);
+
+            await using var cmd = conn.CreateCommand();
+            cmd.CommandText = "SELECT SESSION_CONTEXT(N'TenantId') AS TenantId, SESSION_CONTEXT(N'IsSuperAdmin') AS IsSuperAdmin";
+
+            await using var reader = await cmd.ExecuteReaderAsync(ct);
+            if (await reader.ReadAsync(ct))
+            {
+                var tenant = reader.IsDBNull(0) ? null : reader.GetValue(0);
+                var isSuper = reader.IsDBNull(1) ? null : reader.GetValue(1);
+                _logger.LogDebug("[RLS][Diagnostic] Current SESSION_CONTEXT - TenantId={Tenant}, IsSuperAdmin={IsSuper}", tenant, isSuper);
+            }
+            else
+            {
+                _logger.LogDebug("[RLS][Diagnostic] SESSION_CONTEXT query returned no rows");
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "[RLS][Diagnostic] Failed to read SESSION_CONTEXT");
+        }
     }
 }
