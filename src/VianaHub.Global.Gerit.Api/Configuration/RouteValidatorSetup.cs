@@ -6,6 +6,7 @@ using VianaHub.Global.Gerit.Application.Dtos.Request.Plan;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Tenant;
 using VianaHub.Global.Gerit.Application.Dtos.Request.User;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Subscription;
+using VianaHub.Global.Gerit.Application.Dtos.Request.Auth;
 
 namespace VianaHub.Global.Gerit.Api.Configuration;
 
@@ -51,6 +52,11 @@ public static class RouteValidatorSetup
         // Subscription Route Validators
         services.AddScoped<IValidator<CreateSubscriptionRequest>, Validators.Subscription.CreateSubscriptionRouteValidator>();
         services.AddScoped<IValidator<UpdateSubscriptionRequest>, Validators.Subscription.UpdateSubscriptionRouteValidator>();
+
+        // Auth Route Validators
+        services.AddScoped<IValidator<RegisterRequest>, Validators.Auth.RegisterRouteValidator>();
+        services.AddScoped<IValidator<LoginRequest>, Validators.Auth.LoginRouteValidator>();
+        services.AddScoped<IValidator<RefreshRequest>, Validators.Auth.RefreshRouteValidator>();
 
         return services;
     }

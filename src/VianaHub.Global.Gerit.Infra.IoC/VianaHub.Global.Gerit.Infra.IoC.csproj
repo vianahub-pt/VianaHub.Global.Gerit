@@ -16,4 +16,8 @@
     <ProjectReference Include="..\VianaHub.Global.Gerit.Application\VianaHub.Global.Gerit.Application.csproj" />
     <ProjectReference Include="..\VianaHub.Global.Gerit.Infra.Data\VianaHub.Global.Gerit.Infra.Data.csproj" />
     <ProjectReference Include="..\VianaHub.Global.Gerit.Infra.Integration\VianaHub.Global.Gerit.Infra.Integration.csproj" />
-  </ItemGroup> </Project>
+    <ProjectReference Include="..\VianaHub.Global.Gerit.Infra.Job\VianaHub.Global.Gerit.Infra.Job.csproj" />
+    <ProjectReference Include="..\VianaHub.Global.Gerit.Domain\VianaHub.Global.Gerit.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

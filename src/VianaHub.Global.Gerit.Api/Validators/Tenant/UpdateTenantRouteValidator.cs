@@ -12,10 +12,7 @@ public class UpdateTenantRouteValidator : AbstractValidator<UpdateTenantRequest>
     {
         _localization = localization;
 
-        RuleFor(x => x.LegalName)
-            .MaximumLength(200).WithMessage(_localization.GetMessage("Api.Validator.Tenant.Update.LegalName.MaximumLength", 200));
-
-        RuleFor(x => x.TradeName)
-            .MaximumLength(200).WithMessage(_localization.GetMessage("Api.Validator.Tenant.Update.TradeName.MaximumLength", 200));
+        RuleFor(x => x.Name)
+            .MaximumLength(200).WithMessage(_localization.GetMessage("Api.Validator.Tenant.Update.Name.MaximumLength", 200));
     }
 }

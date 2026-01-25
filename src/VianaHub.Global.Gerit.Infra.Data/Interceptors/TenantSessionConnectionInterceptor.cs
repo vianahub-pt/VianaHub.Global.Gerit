@@ -11,7 +11,7 @@ namespace VianaHub.Global.Gerit.Infra.Data.Interceptors;
 // Interceptor responsável por popular SESSION_CONTEXT com TenantId e IsSuperAdmin
 // baseado exclusivamente nos claims do JWT do usuário autenticado.
 // Em Development, quando não há token JWT, automaticamente habilita IsSuperAdmin para facilitar testes.
-// Em Jobs em Background (identificados via IBackgroundJobContext), sempre habilita IsSuperAdmin para permitir acesso cross-tenant.
+// Em Jobs (identificados via IJobContext), sempre habilita IsSuperAdmin para permitir acesso cross-tenant.
 public class TenantSessionConnectionInterceptor : DbConnectionInterceptor
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
@@ -236,7 +236,7 @@ public class TenantSessionConnectionInterceptor : DbConnectionInterceptor
     /// Configura o SESSION_CONTEXT para modo Super Admin em jobs de background.
     /// Jobs em background precisam acessar dados de múltiplos tenants (ex: ReconcileJwtKeys, CleanupExpiredSessions).
     /// </summary>
-    private async Task SetBackgroundJobSuperAdminContextAsync(
+    private async Task SetJobSuperAdminContextAsync(
         DbConnection connection,
         string? jobName,
         string? executionId,

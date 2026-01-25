@@ -19,24 +19,10 @@ public static class TenantEndpoint
             var result = await appService.GetAllAsync(ct);
             return notify.CustomResponse(result);
         })
-        //.CustomAuthorize("Admin,Manager", "Tenant", "GetAllTenants")
-        .AllowAnonymous()
+        .CustomAuthorize("Admin,BackOffice", "Tenants", "GetAll")
         .WithName("GetAllTenants")
         .WithSummary("Swagger.Endpoint.Tenant.GetAllTenants.Summary")
         .Produces<IEnumerable<TenantResponse>>(StatusCodes.Status200OK)
-        .Produces<ErrorResponse>(StatusCodes.Status401Unauthorized)
-        .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
-
-        groupV1.MapGet("/paged", async ([AsParameters] PagedFilterRequest request, ITenantAppService appService, INotify notify, CancellationToken ct) =>
-        {
-            var result = await appService.GetPagedAsync(request, ct);
-            return notify.CustomResponse(result);
-        })
-        //.CustomAuthorize("Admin,Manager", "Tenant", "GetPagedTenants")
-        .AllowAnonymous()
-        .WithName("GetPagedTenants")
-        .WithSummary("Swagger.Endpoint.Tenant.GetPagedTenants.Summary")
-        .Produces<ListPageResponse<TenantResponse>>(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status401Unauthorized)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
@@ -45,12 +31,23 @@ public static class TenantEndpoint
             var result = await appService.GetByIdAsync(id, ct);
             return notify.CustomResponse(result);
         })
-        //.CustomAuthorize("Admin,Manager", "Tenant", "GetTenantById")
-        .AllowAnonymous()
+        .CustomAuthorize("Admin,BackOffice", "Tenants", "GetBy")
         .WithName("GetTenantById")
         .WithSummary("Swagger.Endpoint.Tenant.GetTenantById.Summary")
         .Produces<TenantResponse>(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
+        .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
+
+        groupV1.MapGet("/paged", async ([AsParameters] PagedFilterRequest request, ITenantAppService appService, INotify notify, CancellationToken ct) =>
+        {
+            var result = await appService.GetPagedAsync(request, ct);
+            return notify.CustomResponse(result);
+        })
+        .CustomAuthorize("Admin,BackOffice", "Tenants", "GetPaged")
+        .WithName("GetPagedTenants")
+        .WithSummary("Swagger.Endpoint.Tenant.GetPagedTenants.Summary")
+        .Produces<ListPageResponse<TenantResponse>>(StatusCodes.Status200OK)
+        .Produces<ErrorResponse>(StatusCodes.Status401Unauthorized)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
         groupV1.MapPost("/", async (CreateTenantRequest request, ITenantAppService appService, INotify notify, CancellationToken ct) =>
@@ -58,8 +55,7 @@ public static class TenantEndpoint
             var created = await appService.CreateAsync(request, ct);
             return notify.CustomResponse(201);
         })
-        //.CustomAuthorize("Admin,Manager", "Tenant", "CreateTenant")
-        .AllowAnonymous()
+        .CustomAuthorize("Admin,BackOffice", "Tenants", "Create")
         .WithName("CreateTenant")
         .WithSummary("Swagger.Endpoint.Tenant.CreateTenant.Summary")
         .Produces(StatusCodes.Status201Created)
@@ -72,8 +68,7 @@ public static class TenantEndpoint
             var ok = await appService.UpdateAsync(id, request, ct);
             return notify.CustomResponse();
         })
-        //.CustomAuthorize("Admin,Manager", "Tenant", "UpdateTenant")
-        .AllowAnonymous()
+        .CustomAuthorize("Admin,BackOffice", "Tenants", "Update")
         .WithName("UpdateTenant")
         .WithSummary("Swagger.Endpoint.Tenant.UpdateTenant.Summary")
         .Produces(StatusCodes.Status204NoContent)
@@ -86,8 +81,7 @@ public static class TenantEndpoint
             var ok = await appService.ActivateAsync(id, ct);
             return notify.CustomResponse();
         })
-        //.CustomAuthorize("Admin,Manager", "Tenant", "ActivateTenant")
-        .AllowAnonymous()
+        .CustomAuthorize("Admin,BackOffice", "Tenants", "Activate")
         .WithName("ActivateTenant")
         .WithSummary("Swagger.Endpoint.Tenant.ActivateTenant.Summary")
         .Produces(StatusCodes.Status204NoContent)
@@ -99,8 +93,7 @@ public static class TenantEndpoint
             var ok = await appService.DeactivateAsync(id, ct);
             return notify.CustomResponse();
         })
-        //.CustomAuthorize("Admin,Manager", "Tenant", "DeactivateTenant")
-        .AllowAnonymous()
+        .CustomAuthorize("Admin,BackOffice", "Tenants", "Deactivate")
         .WithName("DeactivateTenant")
         .WithSummary("Swagger.Endpoint.Tenant.DeactivateTenant.Summary")
         .Produces(StatusCodes.Status204NoContent)
@@ -112,8 +105,7 @@ public static class TenantEndpoint
             var ok = await appService.DeleteAsync(id, ct);
             return notify.CustomResponse();
         })
-        //.CustomAuthorize("Admin,Manager", "Tenant", "DeleteTenant")
-        .AllowAnonymous()
+        .CustomAuthorize("Admin,BackOffice", "Tenants", "Delete")
         .WithName("DeleteTenant")
         .WithSummary("Swagger.Endpoint.Tenant.DeleteTenant.Summary")
         .Produces(StatusCodes.Status204NoContent)
@@ -133,8 +125,7 @@ public static class TenantEndpoint
             var success = await appService.BulkUploadAsync(file, ct);
             return notify.CustomResponse(success ? 200 : 400);
         })
-        //.CustomAuthorize("Admin,Manager", "Tenant", "BulkUploadTenants")
-        .AllowAnonymous()
+        .CustomAuthorize("Admin,BackOffice", "Tenants", "BulkUpload")
         .WithName("BulkUploadTenants")
         .WithSummary("Swagger.Endpoint.Tenant.BulkUploadTenants.Summary")
         .DisableAntiforgery()

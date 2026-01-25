@@ -9,6 +9,8 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
     <PackageReference Include="Azure.Monitor.OpenTelemetry.Exporter" Version="1.5.0" />
+    <PackageReference Include="Hangfire.AspNetCore" Version="1.8.22" />
+    <PackageReference Include="Hangfire.SqlServer" Version="1.8.22" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageReference Include="Microsoft.AspNetCore.Localization" Version="2.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.11" />
@@ -40,5 +42,11 @@
   <ItemGroup>
     <ProjectReference Include="..\VianaHub.Global.Gerit.Application\VianaHub.Global.Gerit.Application.csproj" />
     <ProjectReference Include="..\VianaHub.Global.Gerit.Infra.IoC\VianaHub.Global.Gerit.Infra.IoC.csproj" />
+    <ProjectReference Include="..\VianaHub.Global.Gerit.Domain\VianaHub.Global.Gerit.Domain.csproj" />
+    <ProjectReference Include="..\VianaHub.Global.Gerit.Infra.Job\VianaHub.Global.Gerit.Infra.Job.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="logs\" />
   </ItemGroup>
 </Project>

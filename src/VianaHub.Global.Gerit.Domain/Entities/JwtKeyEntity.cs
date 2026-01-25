@@ -64,10 +64,13 @@ public class JwtKeyEntity : Entity
         KeyType = keyType;
         RevokedReason = string.Empty;
         UsageCount = 0;
-        ActivatedAt = null;
-        ExpiresAt = DateTime.UtcNow.AddDays(rotationPolicyDays);
+
+        // Set activation and schedule based on activation time
+        ActivatedAt = DateTime.UtcNow;
+        ExpiresAt = ActivatedAt.Value.AddDays(rotationPolicyDays);
+        NextRotationAt = ActivatedAt.Value.AddDays(rotationPolicyDays - overlapPeriodDays);
+
         LastUsedAt = null;
-        NextRotationAt = DateTime.UtcNow.AddDays(rotationPolicyDays - overlapPeriodDays);
         RevokedAt = null;
         LastValidatedAt = null;
         ValidationCount = 0;
@@ -76,7 +79,13 @@ public class JwtKeyEntity : Entity
         MaxTokenLifetimeMinutes = maxTokenLifetimeMinutes;
         IsActive = true;
         IsDeleted = false;
+
+        // Auditing fields
         CreatedBy = createdBy;
+        CreatedAt = DateTime.UtcNow;
+        ModifiedBy = createdBy;
+        ModifiedAt = CreatedAt;
+
         PlainPrivateKey = string.Empty;
     }
 

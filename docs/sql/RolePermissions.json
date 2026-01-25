@@ -1,0 +1,245 @@
+[
+	{
+		"Id": 1,
+		"TenantId": 1,
+		"RoleId": 2,
+		"ResourceId": 1,
+		"ActionId": 1,
+		"CreatedBy": 0,
+		"CreatedAt": "2026-01-18T18:26:18.6039806"
+	},
+	{
+		"Id": 2,
+		"TenantId": 1,
+		"RoleId": 2,
+		"ResourceId": 1,
+		"ActionId": 2,
+		"CreatedBy": 0,
+		"CreatedAt": "2026-01-18T18:26:59.6006735"
+	},
+	{
+		"Id": 3,
+		"TenantId": 1,
+		"RoleId": 2,
+		"ResourceId": 1,
+		"ActionId": 3,
+		"CreatedBy": 0,
+		"CreatedAt": "2026-01-18T18:27:04.5932017"
+	},
+	{
+		"Id": 4,
+		"TenantId": 1,
+		"RoleId": 2,
+		"ResourceId": 1,
+		"ActionId": 4,
+		"CreatedBy": 0,
+		"CreatedAt": "2026-01-18T18:27:09.1995935"
+	},
+	{
+		"Id": 5,
+		"TenantId": 1,
+		"RoleId": 2,
+		"ResourceId": 1,
+		"ActionId": 5,
+		"CreatedBy": 0,
+		"CreatedAt": "2026-01-18T18:27:14.9776337"
+	},
+	{
+		"Id": 6,
+		"TenantId": 1,
+		"RoleId": 2,
+		"ResourceId": 1,
+		"ActionId": 6,
+		"CreatedBy": 0,
+		"CreatedAt": "2026-01-18T18:27:20.7270772"
+	},
+	{
+		"Id": 7,
+		"TenantId": 1,
+		"RoleId": 2,
+		"ResourceId": 1,
+		"ActionId": 7,
+		"CreatedBy": 0,
+		"CreatedAt": "2026-01-18T18:27:25.3758530"
+	},
+	{
+		"Id": 8,
+		"TenantId": 1,
+		"RoleId": 2,
+		"ResourceId": 1,
+		"ActionId": 8,
+		"CreatedBy": 0,
+		"CreatedAt": "2026-01-18T18:27:29.9747999"
+	},
+	{
+		"Id": 9,
+		"TenantId": 1,
+		"RoleId": 2,
+		"ResourceId": 1,
+		"ActionId": 9,
+		"CreatedBy": 0,
+		"CreatedAt": "2026-01-18T18:27:35.2736556"
+	},
+	{
+		"Id": 10,
+		"TenantId": 1,
+		"RoleId": 2,
+		"ResourceId": 11,
+		"ActionId": 1,
+		"CreatedBy": 0,
+		"CreatedAt": "2026-01-18T18:29:08.7919796"
+	},
+	{
+		"Id": 11,
+		"TenantId": 1,
+		"RoleId": 2,
+		"ResourceId": 11,
+		"ActionId": 2,
+		"CreatedBy": 0,
+		"CreatedAt": "2026-01-18T18:29:13.9111939"
+	},
+	{
+		"Id": 12,
+		"TenantId": 1,
+		"RoleId": 2,
+		"ResourceId": 11,
+		"ActionId": 3,
+		"CreatedBy": 0,
+		"CreatedAt": "2026-01-18T18:29:18.1434023"
+	},
+	{
+		"Id": 13,
+		"TenantId": 1,
+		"RoleId": 2,
+		"ResourceId": 11,
+		"ActionId": 4,
+		"CreatedBy": 0,
+		"CreatedAt": "2026-01-18T18:29:22.6121641"
+	},
+	{
+		"Id": 14,
+		"TenantId": 1,
+		"RoleId": 2,
+		"ResourceId": 11,
+		"ActionId": 5,
+		"CreatedBy": 0,
+		"CreatedAt": "2026-01-18T18:29:28.1055669"
+	},
+	{
+		"Id": 15,
+		"TenantId": 1,
+		"RoleId": 2,
+		"ResourceId": 11,
+		"ActionId": 6,
+		"CreatedBy": 0,
+		"CreatedAt": "2026-01-18T18:29:33.0979531"
+	},
+	{
+		"Id": 16,
+		"TenantId": 1,
+		"RoleId": 2,
+		"ResourceId": 11,
+		"ActionId": 7,
+		"CreatedBy": 0,
+		"CreatedAt": "2026-01-18T18:29:38.1132156"
+	},
+	{
+		"Id": 17,
+		"TenantId": 1,
+		"RoleId": 2,
+		"ResourceId": 11,
+		"ActionId": 8,
+		"CreatedBy": 0,
+		"CreatedAt": "2026-01-18T18:29:43.5127062"
+	},
+	{
+		"Id": 18,
+		"TenantId": 1,
+		"RoleId": 2,
+		"ResourceId": 11,
+		"ActionId": 9,
+		"CreatedBy": 0,
+		"CreatedAt": "2026-01-18T18:30:16.2704342"
+	},
+	{
+		"Id": 19,
+		"TenantId": 1,
+		"RoleId": 2,
+		"ResourceId": 13,
+		"ActionId": 1,
+		"CreatedBy": 0,
+		"CreatedAt": "2026-01-18T18:30:47.0272715"
+	},
+	{
+		"Id": 20,
+		"TenantId": 1,
+		"RoleId": 2,
+		"ResourceId": 13,
+		"ActionId": 2,
+		"CreatedBy": 0,
+		"CreatedAt": "2026-01-18T18:30:51.2801405"
+	},
+	{
+		"Id": 21,
+		"TenantId": 1,
+		"RoleId": 2,
+		"ResourceId": 13,
+		"ActionId": 3,
+		"CreatedBy": 0,
+		"CreatedAt": "2026-01-18T18:30:56.0607359"
+	},
+	{
+		"Id": 22,
+		"TenantId": 1,
+		"RoleId": 2,
+		"ResourceId": 13,
+		"ActionId": 4,
+		"CreatedBy": 0,
+		"CreatedAt": "2026-01-18T18:31:01.4269279"
+	},
+	{
+		"Id": 23,
+		"TenantId": 1,
+		"RoleId": 2,
+		"ResourceId": 13,
+		"ActionId": 5,
+		"CreatedBy": 0,
+		"CreatedAt": "2026-01-18T18:31:05.6772804"
+	},
+	{
+		"Id": 24,
+		"TenantId": 1,
+		"RoleId": 2,
+		"ResourceId": 13,
+		"ActionId": 6,
+		"CreatedBy": 0,
+		"CreatedAt": "2026-01-18T18:31:10.9997754"
+	},
+	{
+		"Id": 25,
+		"TenantId": 1,
+		"RoleId": 2,
+		"ResourceId": 13,
+		"ActionId": 7,
+		"CreatedBy": 0,
+		"CreatedAt": "2026-01-18T18:31:16.0478627"
+	},
+	{
+		"Id": 26,
+		"TenantId": 1,
+		"RoleId": 2,
+		"ResourceId": 13,
+		"ActionId": 8,
+		"CreatedBy": 0,
+		"CreatedAt": "2026-01-18T18:31:21.2426627"
+	},
+	{
+		"Id": 27,
+		"TenantId": 1,
+		"RoleId": 2,
+		"ResourceId": 13,
+		"ActionId": 9,
+		"CreatedBy": 0,
+		"CreatedAt": "2026-01-18T18:31:27.5473432"
+	}
+]

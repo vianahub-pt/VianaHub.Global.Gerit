@@ -44,9 +44,9 @@ public class TenantDomainService : ITenantDomainService
         return await _repo.ExistsByIdAsync(id, ct);
     }
     
-    public async Task<bool> ExistsByLegalNameAsync(string legalName, CancellationToken ct)
+    public async Task<bool> ExistsByNameAsync(string name, CancellationToken ct)
     {
-        return await _repo.ExistsByLegalNameAsync(legalName, ct);
+        return await _repo.ExistsByNameAsync(name, ct);
     }
 
     public async Task<bool> CreateAsync(TenantEntity entity, CancellationToken ct)

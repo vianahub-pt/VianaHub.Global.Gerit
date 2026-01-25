@@ -19,22 +19,9 @@ public static class PlanEndpoint
             var response = await appService.GetAllAsync(ct);
             return notify.CustomResponse(response, 200);
         })
-        //.CustomAuthorize("Admin,Manager,Operator", "Plan", "GetAllPlans")
-        .AllowAnonymous()
+        .CustomAuthorize("Admin,BackOffice,Manager,Operator", "Plans", "GetAll")
         .WithName("GetAllPlans")
         .WithSummary("Swagger.Endpoint.Plan.GetAllPlans.Summary")
-        .Produces(StatusCodes.Status200OK)
-        .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
-
-        groupV1.MapGet("/paged", async ([AsParameters] PagedFilterRequest request, IPlanAppService appService, INotify notify, CancellationToken ct) =>
-        {
-            var response = await appService.GetPagedAsync(request, ct);
-            return notify.CustomResponse(response, 200);
-        })
-        //.CustomAuthorize("Admin,Manager,Operator", "Plan", "GetPagedPlans")
-        .AllowAnonymous()
-        .WithName("GetPagedPlans")
-        .WithSummary("Swagger.Endpoint.Plan.GetPagedPlans.Summary")
         .Produces(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
@@ -43,12 +30,22 @@ public static class PlanEndpoint
             var response = await appService.GetByIdAsync(id, ct);
             return notify.CustomResponse(response, 200);
         })
-        //.CustomAuthorize("Admin,Manager,Operator", "Plan", "GetPlanById")
-        .AllowAnonymous()
+        .CustomAuthorize("Admin,BackOffice,Manager,Operator", "Plans", "GetBy")
         .WithName("GetPlanById")
         .WithSummary("Swagger.Endpoint.Plan.GetPlanById.Summary")
         .Produces(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
+        .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
+
+        groupV1.MapGet("/paged", async ([AsParameters] PagedFilterRequest request, IPlanAppService appService, INotify notify, CancellationToken ct) =>
+        {
+            var response = await appService.GetPagedAsync(request, ct);
+            return notify.CustomResponse(response, 200);
+        })
+        .CustomAuthorize("Admin,BackOffice,Manager,Operator", "Plans", "GetPaged")
+        .WithName("GetPagedPlans")
+        .WithSummary("Swagger.Endpoint.Plan.GetPagedPlans.Summary")
+        .Produces(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
         groupV1.MapPost("/", async ([FromBody] CreatePlanRequest request, IPlanAppService appService, INotify notify, CancellationToken ct) =>
@@ -56,8 +53,7 @@ public static class PlanEndpoint
             var created = await appService.CreateAsync(request, ct);
             return notify.CustomResponse(201);
         })
-        //.CustomAuthorize("Admin,Manager", "Plan", "CreatePlan")
-        .AllowAnonymous()
+        .CustomAuthorize("Admin,BackOffice,Manager", "Plans", "Create")
         .WithName("CreatePlan")
         .WithSummary("Swagger.Endpoint.Plan.CreatePlan.Summary")
         .Produces(StatusCodes.Status201Created)
@@ -70,8 +66,7 @@ public static class PlanEndpoint
             var updated = await appService.UpdateAsync(id, request, ct);
             return notify.CustomResponse(updated, 200);
         })
-        //.CustomAuthorize("Admin,Manager", "Plan", "UpdatePlan")
-        .AllowAnonymous()
+        .CustomAuthorize("Admin,BackOffice,Manager", "Plans", "Update")
         .WithName("UpdatePlan")
         .WithSummary("Swagger.Endpoint.Plan.UpdatePlan.Summary")
         .Produces(StatusCodes.Status204NoContent)
@@ -84,8 +79,7 @@ public static class PlanEndpoint
             var ok = await appService.ActivateAsync(id, ct);
             return notify.CustomResponse();
         })
-        //.CustomAuthorize("Admin,Manager", "Plan", "ActivatePlan")
-        .AllowAnonymous()
+        .CustomAuthorize("Admin,BackOffice,Manager", "Plans", "Activate")
         .WithName("ActivatePlan")
         .WithSummary("Swagger.Endpoint.Plan.ActivatePlan.Summary")
         .Produces(StatusCodes.Status204NoContent)
@@ -97,8 +91,7 @@ public static class PlanEndpoint
             var ok = await appService.DeactivateAsync(id, ct);
             return notify.CustomResponse();
         })
-        //.CustomAuthorize("Admin,Manager", "Plan", "DeactivatePlan")
-        .AllowAnonymous()
+        .CustomAuthorize("Admin,BackOffice,Manager", "Plans", "Deactivate")
         .WithName("DeactivatePlan")
         .WithSummary("Swagger.Endpoint.Plan.DeactivatePlan.Summary")
         .Produces(StatusCodes.Status204NoContent)
@@ -110,8 +103,7 @@ public static class PlanEndpoint
             var ok = await appService.DeleteAsync(id, ct);
             return notify.CustomResponse();
         })
-        //.CustomAuthorize("Admin,Manager", "Plan", "DeletePlan")
-        .AllowAnonymous()
+        .CustomAuthorize("Admin,BackOffice,Manager", "Plans", "Delete")
         .WithName("DeletePlan")
         .WithSummary("Swagger.Endpoint.Plan.DeletePlan.Summary")
         .Produces(StatusCodes.Status204NoContent)

@@ -11,6 +11,11 @@ using VianaHub.Global.Gerit.Infra.Data.Context;
 using VianaHub.Global.Gerit.Infra.Data.Interceptors;
 using VianaHub.Global.Gerit.Infra.IoC;
 using VianaHub.Global.Gerit.Application.Mappings;
+using Hangfire;
+using Hangfire.SqlServer;
+using VianaHub.Global.Gerit.Infra.Job.Services;
+using VianaHub.Global.Gerit.Api.Security;
+using VianaHub.Global.Gerit.Infra.Data.Tools;
 
 namespace VianaHub.Global.Gerit.Api;
 
@@ -54,10 +59,40 @@ public class Program
         });
         builder.Services.AddJwt(builder.Configuration);
         builder.Services.AddRouteValidatorSetup();
-        builder.Services.AddAuthorization();
+        // Add authorization and register named policies
+        builder.Services.AddAuthorization(options =>
+        {
+            // 'BackOffice' policy used by endpoints. Requires authenticated user; adjust requirements as needed.
+            options.AddPolicy("BackOffice", policy =>
+            {
+                policy.RequireAuthenticatedUser();
+                // Additional requirements (roles/claims) can be added here, e.g.:
+                // policy.RequireRole("Admin");
+            });
+        });
         builder.Services.AddRateLimitingConfiguration(builder.Configuration);
         builder.Services.AddCorsConfiguration(builder.Configuration);
 
+        // Hangfire configuration - usa conexão separada se fornecida (HangfireConnection)
+        var hangfireConn = builder.Configuration.GetConnectionString("HangfireConnection")
+                          ?? builder.Configuration.GetConnectionString("DefaultConnection");
+
+        builder.Services.AddHangfire(configuration =>
+        {
+            configuration.SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+                         .UseSimpleAssemblyNameTypeSerializer()
+                         .UseRecommendedSerializerSettings()
+                         .UseSqlServerStorage(hangfireConn, new SqlServerStorageOptions
+                         {
+                             SchemaName = "dbo",
+                             PrepareSchemaIfNecessary = true,
+                             QueuePollInterval = TimeSpan.FromSeconds(15)
+                         });
+        });
+
+        builder.Services.AddHangfireServer();
+
+        // Registrar infra services - chama o método que registra todos os serviços da aplicação
         builder.Services.AddGeritInfrastructure();
 
         // Localization service can be resolved from root during app startup (health endpoint)
@@ -70,6 +105,20 @@ public class Program
 
         // Inicializar ServiceProviderHolder para uso em helpers estáticos
         ServiceProviderHolder.ServiceProvider = app.Services;
+
+        // Garantir inicialização do banco de dados (migrations + validação do schema)
+        try
+        {
+            var autoMigrate = builder.Configuration.GetValue<bool>("Database:AutoMigrate", true);
+            // Executa de forma síncrona no startup
+            app.InitializeDatabaseAsync(autoMigrate).GetAwaiter().GetResult();
+        }
+        catch (Exception ex)
+        {
+            Log.Logger.Error(ex, "Falha ao inicializar o banco de dados");
+            // Rethrow to fail fast
+            throw;
+        }
 
         // Habilita arquivos estáticos (custom.css e custom.js do Swagger)
         app.UseStaticFiles();
@@ -100,6 +149,12 @@ public class Program
         app.UseAuthentication();
         app.UseAuthorization();
 
+        // Hangfire dashboard (protegido por autorização em produção)
+        app.UseHangfireDashboard("/hangfire", new DashboardOptions
+        {
+            Authorization = new[] { new HangfireDashboardAuthorizationFilter() }
+        });
+
         app.MapActionEndpoints();
         app.MapResourceEndpoints();
         app.MapRoleEndpoints();
@@ -109,6 +164,9 @@ public class Program
         app.MapUserEndpoints();
         app.MapUserRoleEndpoints();
         app.MapRolePermissionEndpoints();
+        app.MapAuthEndpoints(); // Map Auth endpoints
+        app.MapJobEndpoints();
+        app.MapJwtKeyEndpoints();
 
         // Minimal API Endpoints
         var localization = app.Services.GetService(typeof(ILocalizationService)) as ILocalizationService;

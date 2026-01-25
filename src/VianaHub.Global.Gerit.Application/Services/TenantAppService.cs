@@ -63,14 +63,14 @@ public class TenantAppService : ITenantAppService
 
     public async Task<bool> CreateAsync(CreateTenantRequest request, CancellationToken ct)
     {
-        var exists = await _repo.ExistsByLegalNameAsync(request.LegalName, ct);
+        var exists = await _repo.ExistsByNameAsync(request.Name, ct);
         if (exists)
         {
             _notify.Add(_localization.GetMessage("Application.Service.Tenant.Create.ResourceAlreadyExists"), 400);
             return false;
         }
 
-        var entity = new TenantEntity(request.LegalName, request.TradeName, request.Consent, _currentUser.GetUserId());
+        var entity = new TenantEntity(request.Name, request.Consent, _currentUser.GetUserId());
         return await _domain.CreateAsync(entity, ct);
     }
     
@@ -83,7 +83,7 @@ public class TenantAppService : ITenantAppService
             return false;
         }
 
-        entity.Update(request.LegalName, request.TradeName, request.Consent, _currentUser.GetUserId());
+        entity.Update(request.Name, request.Consent, _currentUser.GetUserId());
         return await _domain.UpdateAsync(entity, ct);
     }
     
@@ -213,19 +213,12 @@ public class TenantAppService : ITenantAppService
                     if (record != null)
                     {
                         // Sanitiza e normaliza campos
-                        record.LegalName = record.LegalName?.SanitizeCsvInput().NormalizeUtf8();
-                        record.TradeName = record.TradeName?.SanitizeCsvInput().NormalizeUtf8();
+                        record.Name = record.Name?.SanitizeCsvInput().NormalizeUtf8();
 
                         // Valida se os campos não contêm conteúdo perigoso
-                        if (!string.IsNullOrEmpty(record.LegalName) && !record.LegalName.IsSafeCsvValue())
+                        if (!string.IsNullOrEmpty(record.Name) && !record.Name.IsSafeCsvValue())
                         {
-                            _notify.Add(_localization.GetMessage("Application.Service.Tenant.ReadCsvFile.LegalName.IsSafeCsvValue", rowCount + 2), 400);
-                            continue;
-                        }
-
-                        if (!string.IsNullOrEmpty(record.TradeName) && !record.TradeName.IsSafeCsvValue())
-                        {
-                            _notify.Add(_localization.GetMessage("Application.Service.Tenant.ReadCsvFile.TradeName.IsSafeCsvValue", rowCount + 2), 400);
+                            _notify.Add(_localization.GetMessage("Application.Service.Tenant.ReadCsvFile.Name.IsSafeCsvValue", rowCount + 2), 400);
                             continue;
                         }
 
@@ -271,23 +264,23 @@ public class TenantAppService : ITenantAppService
             }
 
             // Verifica duplicidade
-            var exists = await _repo.ExistsByLegalNameAsync(item.LegalName, ct);
+            var exists = await _repo.ExistsByNameAsync(item.Name, ct);
             if (exists)
             {
-                _notify.Add(_localization.GetMessage("Application.Service.Tenant.ProcessBulkItems.ExistsByLegalName", item.LegalName), 400);
+                _notify.Add(_localization.GetMessage("Application.Service.Tenant.ProcessBulkItems.ExistsBylName", item.Name), 400);
                 hasErrors = true;
                 continue;
             }
 
             // Cria a entidade
-            var entity = new TenantEntity(item.LegalName, item.TradeName, item.Consent, _currentUser.GetUserId());
+            var entity = new TenantEntity(item.Name, item.Consent, _currentUser.GetUserId());
 
             // Tenta criar no domínio
             var success = await _domain.CreateAsync(entity, ct);
 
             if (!success)
             {
-                _notify.Add(_localization.GetMessage("Application.Service.Tenant.ProcessBulkItems.FailedToCreate", item.LegalName), 400);
+                _notify.Add(_localization.GetMessage("Application.Service.Tenant.ProcessBulkItems.FailedToCreate", item.Name), 400);
                 hasErrors = true;
             }
         }
@@ -297,9 +290,9 @@ public class TenantAppService : ITenantAppService
     
     private bool ValidateBulkItem(BulkUploadTenantItem item)
     {
-        if (string.IsNullOrWhiteSpace(item.LegalName))
+        if (string.IsNullOrWhiteSpace(item.Name))
         {
-            _notify.Add(_localization.GetMessage("Application.Service.Tenant.ValidateBulkItem.LegalName", item.LegalName), 400);
+            _notify.Add(_localization.GetMessage("Application.Service.Tenant.ValidateBulkItem.Name", item.Name), 400);
             return false;
         }
 

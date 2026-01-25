@@ -10,7 +10,7 @@ public interface ITenantDomainService
     Task<IEnumerable<TenantEntity>> GetAllAsync(CancellationToken ct);
     Task<ListPage<TenantEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct);
     Task<bool> ExistsByIdAsync(int id, CancellationToken ct);
-    Task<bool> ExistsByLegalNameAsync(string legalName, CancellationToken ct);
+    Task<bool> ExistsByNameAsync(string name, CancellationToken ct);
     Task<bool> CreateAsync(TenantEntity entity, CancellationToken ct);
     Task<bool> UpdateAsync(TenantEntity entity, CancellationToken ct);
     Task<bool> ActivateAsync(TenantEntity entity, CancellationToken ct);

@@ -1771,11 +1771,11 @@ namespace VianaHub.Global.Gerit.Infra.Data.Migrations
                         .HasDefaultValue(false)
                         .HasColumnName("IsDeleted");
 
-                    b.Property<string>("LegalName")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("NVARCHAR(200)")
-                        .HasColumnName("LegalName");
+                        .HasColumnName("Name");
 
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("DATETIME2")
@@ -1784,11 +1784,6 @@ namespace VianaHub.Global.Gerit.Infra.Data.Migrations
                     b.Property<int?>("ModifiedBy")
                         .HasColumnType("INT")
                         .HasColumnName("ModifiedBy");
-
-                    b.Property<string>("TradeName")
-                        .HasMaxLength(200)
-                        .HasColumnType("NVARCHAR(200)")
-                        .HasColumnName("TradeName");
 
                     b.HasKey("Id")
                         .HasName("PK_Tenants");

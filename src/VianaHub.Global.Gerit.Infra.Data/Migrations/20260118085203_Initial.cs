@@ -90,10 +90,8 @@ namespace VianaHub.Global.Gerit.Infra.Data.Migrations
                 schema: "dbo",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    LegalName = table.Column<string>(type: "NVARCHAR(200)", maxLength: 200, nullable: false),
-                    TradeName = table.Column<string>(type: "NVARCHAR(200)", maxLength: 200, nullable: true),
+                    Id = table.Column<int>(type: "int", nullable: false).Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "NVARCHAR(200)", maxLength: 200, nullable: false),
                     Consent = table.Column<bool>(type: "BIT", nullable: false, defaultValue: true),
                     IsActive = table.Column<bool>(type: "BIT", nullable: false, defaultValue: true),
                     IsDeleted = table.Column<bool>(type: "BIT", nullable: false, defaultValue: false),

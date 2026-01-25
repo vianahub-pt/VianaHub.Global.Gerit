@@ -45,6 +45,7 @@ public class GeritDbContext : DbContext
     public DbSet<InterventionEntity> Interventions { get; set; }
     public DbSet<InterventionContactEntity> InterventionContacts { get; set; }
     public DbSet<InterventionAddressEntity> InterventionAddresses { get; set; }
+    public DbSet<RefreshTokenEntity> RefreshTokens { get; set; }
     #endregion
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

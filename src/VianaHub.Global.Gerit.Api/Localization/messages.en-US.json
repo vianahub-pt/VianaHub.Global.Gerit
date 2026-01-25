@@ -27,6 +27,8 @@
   "Swagger.Tag.Subscriptions": "Subscriptions",
   "Swagger.Tag.UserRoles": "UserRoles",
   "Swagger.Tag.RolePermissions": "Role Permissions",
+  "Swagger.Tag.JobDefinitions": "Job Definitions",
+  "Swagger.Tag.JwtKeys": "JWT Keys",
   
   "Swagger.Endpoint.HealthCheck.Summary": "Health Check",
   "Swagger.Endpoint.HealthCheck.Description": "Checks if the API is working correctly",
@@ -140,26 +142,20 @@
   "Api.Error.InternalServerError": "Internal Server Error",
   "Api.Error.ServiceUnavailable": "Service Unavailable",
   "Api.Error.Generic": "Error",
-
+  
   "Common.Error": "Error",
 
   "Api.Validator.Action.Create.Name": "Action name is required",
   "Api.Validator.Action.Create.Name.MaximumLength": "Action name cannot be longer than {0} characters",
   "Api.Validator.Action.Create.Description.MaximumLength": "Action description cannot be longer than {0} characters",
-  "Api.Validator.Action.Update.Name.MaximumLength": "Action name cannot be longer than {0} characters",
-  "Api.Validator.Action.Update.Description.MaximumLength": "Action description cannot be longer than {0} characters",
 
   "Api.Validator.Resource.Create.Name": "Resource name is required",
   "Api.Validator.Resource.Create.Name.MaximumLength": "Resource name cannot be longer than {0} characters",
   "Api.Validator.Resource.Create.Description.MaximumLength": "Resource description cannot be longer than {0} characters",
-  "Api.Validator.Resource.Update.Name.MaximumLength": "Resource name cannot be longer than {0} characters",
-  "Api.Validator.Resource.Update.Description.MaximumLength": "Resource description cannot be longer than {0} characters",
 
   "Api.Validator.Role.Create.Name": "Role name is required",
   "Api.Validator.Role.Create.Name.MaximumLength": "Role name cannot be longer than {0} characters",
   "Api.Validator.Role.Create.Description.MaximumLength": "Role description cannot be longer than {0} characters",
-  "Api.Validator.Role.Update.Name.MaximumLength": "Role name cannot be longer than {0} characters",
-  "Api.Validator.Role.Update.Description.MaximumLength": "Role description cannot be longer than {0} characters",
 
   "Api.Validator.Plan.Create.Name": "Plan name is required",
   "Api.Validator.Plan.Create.Name.MaximumLength": "Plan name cannot be longer than {0} characters",
@@ -182,11 +178,9 @@
   "Api.Validator.Plan.Update.PricePerMonth": "Price per month must be greater than or equal to zero",
   "Api.Validator.Plan.Update.PricePerYear": "Price per year must be greater than or equal to zero",
 
-  "Api.Validator.Tenant.Create.LegalName": "Legal name is required",
-  "Api.Validator.Tenant.Create.LegalName.MaximumLength": "Legal name cannot be longer than {0} characters",
-  "Api.Validator.Tenant.Create.TradeName.MaximumLength": "Trade name cannot be longer than {0} characters",
-  "Api.Validator.Tenant.Update.LegalName.MaximumLength": "Legal name cannot be longer than {0} characters",
-  "Api.Validator.Tenant.Update.TradeName.MaximumLength": "Trade name cannot be longer than {0} characters",
+  "Api.Validator.Tenant.Create.Name": "Name is required",
+  "Api.Validator.Tenant.Create.Name.MaximumLength": "Name cannot be longer than {0} characters",
+  "Api.Validator.Tenant.Update.Name.MaximumLength": "Name cannot be longer than {0} characters",
 
   "Api.Validator.Subscription.Create.TenantId": "Tenant ID is required",
   "Api.Validator.Subscription.Create.PlanId": "Plan ID is required",
@@ -217,7 +211,7 @@
   "Api.Validator.User.Create.ConfirmPassword": "Confirm password is required",
   "Api.Validator.User.Create.ConfirmPassword.Equal": "Password confirmation must match the password.",
   "Api.Validator.User.Update.Name.MaximumLength": "User name cannot be longer than {0} characters",
-  "Api.Validator.User.Update.Email.MaximumLength": "Email cannot be longer than {0} characters",
+  "Api.Validator.User.Update.Email.MaximumLength": "User email cannot be longer than {0} characters",
   "Api.Validator.User.Update.Email.Invalid": "Email is invalid",
   "Api.Validator.User.Update.PhoneNumber.MaximumLength": "Phone number cannot be longer than {0} characters",
   "Api.Validator.User.UpdatePassword.CurrentPassword": "Current password is required",
@@ -248,7 +242,7 @@
   "Application.Service.Action.ProcessBulkItems.FailedToCreate": "Failed to create action '{0}'",
   "Application.Service.Action.ValidateBulkItem.Name": "'Name' field is required for action '{0}'",
   "Application.Service.Action.ValidateBulkItem.Description": "'Description' field is required for action '{0}'",
-  
+
   "Application.Service.Resource.Create.ResourceAlreadyExists": "Resource with this name already exists",
   "Application.Service.Resource.Update.ResourceNotFound": "Resource not found",
   "Application.Service.Resource.Activate.ResourceNotFound": "Resource not found",
@@ -305,14 +299,14 @@
   "Application.Service.Tenant.ValidateFile.IsValidCsvFileSize": "CSV file size exceeds allowed limit",
   "Application.Service.Tenant.ValidateFile.IsSafeCsvFileName": "File name contains invalid characters",
   "Application.Service.Tenant.ValidateFile.OnlyCsvAllowed": "Only CSV files are allowed",
-  "Application.Service.Tenant.ReadCsvFile.LegalName.IsSafeCsvValue": "Row {0}: 'LegalName' field contains invalid characters",
+  "Application.Service.Tenant.ReadCsvFile.Name.IsSafeCsvValue": "Row {0}: 'Name' field contains invalid characters",
   "Application.Service.Tenant.ReadCsvFile.TradeName.IsSafeCsvValue": "Row {0}: 'TradeName' field contains invalid characters",
   "Application.Service.Tenant.ReadCsvFile.CsvHelperException": "Error processing row {0} of CSV file",
   "Application.Service.Tenant.ReadCsvFile.MaxRows": "CSV file exceeds the limit of {0} rows",
   "Application.Service.Tenant.ReadCsvFile.Exception": "Error reading CSV file",
-  "Application.Service.Tenant.ProcessBulkItems.ExistsByLegalName": "Tenant '{0}' already exists",
+  "Application.Service.Tenant.ProcessBulkItems.ExistsByName": "Tenant '{0}' already exists",
   "Application.Service.Tenant.ProcessBulkItems.FailedToCreate": "Failed to create tenant '{0}'",
-  "Application.Service.Tenant.ValidateBulkItem.LegalName": "'LegalName' field is required for tenant '{0}'",
+  "Application.Service.Tenant.ValidateBulkItem.Name": "'Name' field is required for tenant '{0}'",
 
   "Application.Service.Subscription.Create.TenantAlreadyHasSubscription": "Tenant already has an active subscription",
   "Application.Service.Subscription.Update.ResourceNotFound": "Subscription not found",
@@ -395,8 +389,8 @@
   "Domain.Plan.CannotDeactivateDeleted": "Cannot deactivate a deleted plan",
   "Domain.Plan.AlreadyDeleted": "Plan has already been deleted",
 
-  "Domain.Tenant.LegalNameRequired": "Legal name is required",
-  "Domain.Tenant.LegalNameMaxLength": "Legal name cannot be longer than 200 characters",
+  "Domain.Tenant.NameRequired": "Name is required",
+  "Domain.Tenant.NameMaxLength": "Name cannot be longer than 200 characters",
   "Domain.Tenant.TradeNameMaxLength": "Trade name cannot be longer than 200 characters",
   "Domain.Tenant.InvalidId": "Invalid tenant ID",
   "Domain.Tenant.CannotUpdateDeleted": "Cannot update a deleted tenant",
@@ -449,5 +443,53 @@
   "Domain.RolePermission.TenantIdRequired": "Tenant ID is required",
   "Domain.RolePermission.RoleIdRequired": "Role ID is required",
   "Domain.RolePermission.ResourceIdRequired": "Resource ID is required",
-  "Domain.RolePermission.ActionIdRequired": "Action ID is required"
+  "Domain.RolePermission.ActionIdRequired": "Action ID is required",
+
+  "Domain.Job.JobCategoryRequired": "Job category is required",
+  "Domain.Job.JobNameRequired": "Job name is required",
+  "Domain.Job.JobNameMaxLength": "Job name must be at most {0} characters",
+  "Domain.Job.JobTypeRequired": "Job type (namespace.class) is required",
+  "Domain.Job.JobTypeMaxLength": "Job type must be at most {0} characters",
+  "Domain.Job.JobMethodMaxLength": "Job method must be at most {0} characters",
+  "Domain.Job.TimeoutMustBeGreaterThanZero": "Timeout must be greater than zero",
+  "Domain.Job.PriorityRange": "Priority must be between {0} and {1}",
+  "Domain.Job.MaxRetriesNonNegative": "MaxRetries must be greater than or equal to zero",
+  "Domain.Job.ExecuteOnlyOnceMustNotHaveCron": "Fire-and-forget jobs must not have a CronExpression",
+  "Domain.Job.CronRequiredForRecurring": "CronExpression is required for recurring jobs",
+  "Domain.Job.JobConfigurationInvalid": "JobConfiguration must be a valid JSON",
+  "Domain.Job.DescriptionMaxLength": "Description must be at most {0} characters",
+  "Domain.Job.CannotDeleteSystemJob": "System jobs cannot be deleted",
+
+  "Swagger.Endpoint.Job.GetPaged.Summary": "Get paged jobs",
+  "Swagger.Endpoint.Job.GetPaged.Description": "Get a paged list of job definitions",
+  "Swagger.Endpoint.Job.GetById.Summary": "Get job by ID",
+  "Swagger.Endpoint.Job.GetById.Description": "Get details of a job definition by ID",
+  "Swagger.Endpoint.Job.Create.Summary": "Create new job",
+  "Swagger.Endpoint.Job.Create.Description": "Create a new job definition",
+  "Swagger.Endpoint.Job.Update.Summary": "Update job",
+  "Swagger.Endpoint.Job.Update.Description": "Update an existing job definition",
+  "Swagger.Endpoint.Job.Delete.Summary": "Delete job",
+  "Swagger.Endpoint.Job.Delete.Description": "Soft-delete a job definition",
+  "Swagger.Endpoint.Job.Activate.Summary": "Activate job",
+  "Swagger.Endpoint.Job.Activate.Description": "Activate and register the job in Hangfire",
+  "Swagger.Endpoint.Job.Deactivate.Summary": "Deactivate job",
+  "Swagger.Endpoint.Job.Deactivate.Description": "Deactivate and remove the job from Hangfire",
+  "Swagger.Endpoint.Job.Execute.Summary": "Execute job",
+  "Swagger.Endpoint.Job.Execute.Description": "Execute the job manually via Hangfire",
+
+  "Swagger.Endpoint.JwtKey.GetByTenant.Summary": "Get JWT keys by tenant",
+  "Swagger.Endpoint.JwtKey.GetActive.Summary": "Get active JWT key by tenant",
+  "Swagger.Endpoint.JwtKey.CreateInitial.Summary": "Create initial JWT key for tenant",
+  "Swagger.Endpoint.JwtKey.Revoke.Summary": "Revoke JWT key",
+
+  "Application.Service.Jwt.Create.InvalidTenantId": "Invalid tenant id",
+  "Application.Service.Jwt.Create.FailedToPersist": "Failed to persist JWT key",
+
+  "Application.Service.Jwt.Revoke.ResourceNotFound": "JWT key not found",
+  "Application.Service.Jwt.Revoke.AlreadyRevoked": "JWT key already revoked",
+  "Application.Service.Jwt.Revoke.ReasonRequired": "Revocation reason is required",
+  "Application.Service.Jwt.Revoke.FailedCreateReplacement": "Failed to create replacement key before revocation",
+  "Application.Service.Jwt.Revoke.FailedToPersist": "Failed to persist key revocation",
+
+  "//end": "..."
 }

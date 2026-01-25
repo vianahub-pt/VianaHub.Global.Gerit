@@ -1,0 +1,27 @@
+using Microsoft.Extensions.Logging;
+using VianaHub.Global.Gerit.Domain.Interfaces;
+
+namespace VianaHub.Global.Gerit.Infra.Messaging;
+
+public class NoOpEmailSender : IEmailSender
+{
+    private readonly ILogger<NoOpEmailSender> _logger;
+    private readonly ILocalizationService _localization;
+
+    public NoOpEmailSender(ILogger<NoOpEmailSender> logger, ILocalizationService localization)
+    {
+        _logger = logger;
+        _localization = localization;
+    }
+
+    public Task SendAsync(string to, string subjectKey, string bodyKey, params object[] args)
+    {
+        // Log apenas; usa chaves de tradução para não hardcodear mensagens
+        var subject = _localization?.GetMessage(subjectKey) ?? subjectKey;
+        var body = _localization?.GetMessage(bodyKey, args) ?? bodyKey;
+
+        _logger.LogInformation("[NoOpEmailSender] Simulating email to {To} | Subject: {Subject}", to, subject);
+        _logger.LogDebug("[NoOpEmailSender] Email body: {Body}", body);
+        return Task.CompletedTask;
+    }
+}

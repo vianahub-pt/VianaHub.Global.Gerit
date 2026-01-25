@@ -19,24 +19,10 @@ public static class RoleEndpoint
             var result = await appService.GetAllAsync(ct);
             return notify.CustomResponse(result);
         })
-        //.CustomAuthorize("Admin,Manager", "Role", "GetAllRoles")
-        .AllowAnonymous()
+        .CustomAuthorize("Admin,BackOffice,Manager", "Roles", "GetAll")
         .WithName("GetAllRoles")
         .WithSummary("Swagger.Endpoint.Role.GetAllRoles.Summary")
         .Produces<IEnumerable<RoleResponse>>(StatusCodes.Status200OK)
-        .Produces<ErrorResponse>(StatusCodes.Status401Unauthorized)
-        .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
-
-        groupV1.MapGet("/paged", async ([AsParameters] PagedFilterRequest request, IRoleAppService appService, INotify notify, CancellationToken ct) =>
-        {
-            var result = await appService.GetPagedAsync(request, ct);
-            return notify.CustomResponse(result);
-        })
-        //.CustomAuthorize("Admin,Manager", "Role", "GetPagedRoles")
-        .AllowAnonymous()
-        .WithName("GetPagedRoles")
-        .WithSummary("Swagger.Endpoint.Role.GetPagedRoles.Summary")
-        .Produces<ListPageResponse<RoleResponse>>(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status401Unauthorized)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
@@ -45,21 +31,32 @@ public static class RoleEndpoint
             var result = await appService.GetByIdAsync(id, ct);
             return notify.CustomResponse(result);
         })
-        //.CustomAuthorize("Admin,Manager", "Role", "GetRoleById")
-        .AllowAnonymous()
+        .CustomAuthorize("Admin,BackOffice,Manager", "Roles", "GetBy")
         .WithName("GetRoleById")
         .WithSummary("Swagger.Endpoint.Role.GetRoleById.Summary")
         .Produces<RoleResponse>(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
+        groupV1.MapGet("/paged", async ([AsParameters] PagedFilterRequest request, IRoleAppService appService, INotify notify, CancellationToken ct) =>
+        {
+            var result = await appService.GetPagedAsync(request, ct);
+            return notify.CustomResponse(result);
+        })
+        .CustomAuthorize("Admin,BackOffice,Manager", "Roles", "GetPaged")
+        .WithName("GetPagedRoles")
+        .WithSummary("Swagger.Endpoint.Role.GetPagedRoles.Summary")
+        .Produces<ListPageResponse<RoleResponse>>(StatusCodes.Status200OK)
+        .Produces<ErrorResponse>(StatusCodes.Status401Unauthorized)
+        .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
+
+
         groupV1.MapPost("/", async (CreateRoleRequest request, IRoleAppService appService, INotify notify, CancellationToken ct) =>
         {
             var created = await appService.CreateAsync(request, ct);
             return notify.CustomResponse(201);
         })
-        //.CustomAuthorize("Admin,Manager", "Role", "CreateRole")
-        .AllowAnonymous()
+        .CustomAuthorize("Admin,BackOffice,Manager", "Roles", "Create")
         .WithName("CreateRole")
         .WithSummary("Swagger.Endpoint.Role.CreateRole.Summary")
         .Produces(StatusCodes.Status201Created)
@@ -72,8 +69,7 @@ public static class RoleEndpoint
             var ok = await appService.UpdateAsync(id, request, ct);
             return notify.CustomResponse();
         })
-        //.CustomAuthorize("Admin,Manager", "Role", "UpdateRole")
-        .AllowAnonymous()
+        .CustomAuthorize("Admin,BackOffice,Manager", "Roles", "Update")
         .WithName("UpdateRole")
         .WithSummary("Swagger.Endpoint.Role.UpdateRole.Summary")
         .Produces(StatusCodes.Status204NoContent)
@@ -86,8 +82,7 @@ public static class RoleEndpoint
             var ok = await appService.ActivateAsync(id, ct);
             return notify.CustomResponse();
         })
-        //.CustomAuthorize("Admin,Manager", "Role", "ActivateRole")
-        .AllowAnonymous()
+        .CustomAuthorize("Admin,BackOffice,Manager", "Roles", "Activate")
         .WithName("ActivateRole")
         .WithSummary("Swagger.Endpoint.Role.ActivateRole.Summary")
         .Produces(StatusCodes.Status204NoContent)
@@ -99,8 +94,7 @@ public static class RoleEndpoint
             var ok = await appService.DeactivateAsync(id, ct);
             return notify.CustomResponse();
         })
-        //.CustomAuthorize("Admin,Manager", "Role", "DeactivateRole")
-        .AllowAnonymous()
+        .CustomAuthorize("Admin,BackOffice,Manager", "Roles", "Deactivate")
         .WithName("DeactivateRole")
         .WithSummary("Swagger.Endpoint.Role.DeactivateRole.Summary")
         .Produces(StatusCodes.Status204NoContent)
@@ -112,8 +106,7 @@ public static class RoleEndpoint
             var ok = await appService.DeleteAsync(id, ct);
             return notify.CustomResponse();
         })
-        //.CustomAuthorize("Admin,Manager", "Role", "DeleteRole")
-        .AllowAnonymous()
+        .CustomAuthorize("Admin,BackOffice,Manager", "Roles", "Delete")
         .WithName("DeleteRole")
         .WithSummary("Swagger.Endpoint.Role.DeleteRole.Summary")
         .Produces(StatusCodes.Status204NoContent)
@@ -133,8 +126,7 @@ public static class RoleEndpoint
             var success = await appService.BulkUploadAsync(file, ct);
             return notify.CustomResponse(success ? 200 : 400);
         })
-        //.CustomAuthorize("Admin,Manager", "Role", "BulkUploadRoles")
-        .AllowAnonymous()
+        .CustomAuthorize("Admin,BackOffice,Manager", "Roles", "BulkUpload")
         .WithName("BulkUploadRoles")
         .WithSummary("Swagger.Endpoint.Role.BulkUploadRoles.Summary")
         .DisableAntiforgery()

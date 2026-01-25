@@ -24,17 +24,11 @@ public class TenantMapping : IEntityTypeConfiguration<TenantEntity>
             .IsRequired();
 
         // Propriedades
-        builder.Property(t => t.LegalName)
-            .HasColumnName("LegalName")
+        builder.Property(t => t.Name)
+            .HasColumnName("Name")
             .HasColumnType("NVARCHAR(200)")
             .HasMaxLength(200)
             .IsRequired();
-
-        builder.Property(t => t.TradeName)
-            .HasColumnName("TradeName")
-            .HasColumnType("NVARCHAR(200)")
-            .HasMaxLength(200)
-            .IsRequired(false);
 
         builder.Property(t => t.Consent)
             .HasColumnName("Consent")

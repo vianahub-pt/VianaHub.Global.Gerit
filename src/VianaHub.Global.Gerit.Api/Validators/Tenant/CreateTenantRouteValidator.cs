@@ -12,11 +12,8 @@ public class CreateTenantRouteValidator : AbstractValidator<CreateTenantRequest>
     {
         _localization = localization;
 
-        RuleFor(x => x.LegalName)
-            .NotEmpty().WithMessage(_localization.GetMessage("Api.Validator.Tenant.Create.LegalName"))
-            .MaximumLength(200).WithMessage(_localization.GetMessage("Api.Validator.Tenant.Create.LegalName.MaximumLength", 200));
-
-        RuleFor(x => x.TradeName)
-            .MaximumLength(200).WithMessage(_localization.GetMessage("Api.Validator.Tenant.Create.TradeName.MaximumLength", 200));
+        RuleFor(x => x.Name)
+            .NotEmpty().WithMessage(_localization.GetMessage("Api.Validator.Tenant.Create.Name"))
+            .MaximumLength(200).WithMessage(_localization.GetMessage("Api.Validator.Tenant.Create.Name.MaximumLength", 200));
     }
 }

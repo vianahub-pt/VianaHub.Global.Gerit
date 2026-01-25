@@ -3,6 +3,7 @@ using VianaHub.Global.Gerit.Application.Dtos.Base;
 using VianaHub.Global.Gerit.Application.Dtos.Response.Action;
 using VianaHub.Global.Gerit.Domain.Entities;
 using VianaHub.Global.Gerit.Domain.Tools.Pagination;
+using VianaHub.Global.Gerit.Application.Dtos.Response.Jwt;
 
 namespace VianaHub.Global.Gerit.Application.Mappings;
 
@@ -21,5 +22,7 @@ public class ActionMappingProfile : Profile
             .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsActive));
 
         CreateMap<ListPage<ActionEntity>, ListPageResponse<ActionResponse>>();
+
+        CreateMap<JwtKeyEntity, JwtKeyResponse>();
     }
 }

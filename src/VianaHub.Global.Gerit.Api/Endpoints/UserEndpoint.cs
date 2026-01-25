@@ -19,22 +19,10 @@ public static class UserEndpoint
             var response = await appService.GetAllAsync(ct);
             return notify.CustomResponse(response, 200);
         })
-        //.CustomAuthorize("Admin,Manager,Operator", "User", "GetAllUsers")
+        .CustomAuthorize("Admin,Manager,Operator", "Users", "GetAll")
         .AllowAnonymous()
         .WithName("GetAllUsers")
         .WithSummary("Swagger.Endpoint.User.GetAllUsers.Summary")
-        .Produces(StatusCodes.Status200OK)
-        .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
-
-        groupV1.MapGet("/paged", async ([AsParameters] PagedFilterRequest request, IUserAppService appService, INotify notify, CancellationToken ct) =>
-        {
-            var response = await appService.GetPagedAsync(request, ct);
-            return notify.CustomResponse(response, 200);
-        })
-        //.CustomAuthorize("Admin,Manager,Operator", "User", "GetUsersPaged")
-        .AllowAnonymous()
-        .WithName("GetUsersPaged")
-        .WithSummary("Swagger.Endpoint.User.GetUsersPaged.Summary")
         .Produces(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
@@ -43,7 +31,7 @@ public static class UserEndpoint
             var response = await appService.GetByIdAsync(id, ct);
             return notify.CustomResponse(response, 200);
         })
-        //.CustomAuthorize("Admin,Manager,Operator", "User", "GetUserById")
+        .CustomAuthorize("Admin,Manager,Operator", "Users", "GetBy")
         .AllowAnonymous()
         .WithName("GetUserById")
         .WithSummary("Swagger.Endpoint.User.GetUserById.Summary")
@@ -51,12 +39,24 @@ public static class UserEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
+        groupV1.MapGet("/paged", async ([AsParameters] PagedFilterRequest request, IUserAppService appService, INotify notify, CancellationToken ct) =>
+        {
+            var response = await appService.GetPagedAsync(request, ct);
+            return notify.CustomResponse(response, 200);
+        })
+        .CustomAuthorize("Admin,Manager,Operator", "User", "GetPaged")
+        .AllowAnonymous()
+        .WithName("GetUsersPaged")
+        .WithSummary("Swagger.Endpoint.User.GetUsersPaged.Summary")
+        .Produces(StatusCodes.Status200OK)
+        .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
+
         groupV1.MapPost("/", async ([FromBody] CreateUserRequest request, IUserAppService appService, INotify notify, CancellationToken ct) =>
         {
             var created = await appService.CreateAsync(request, ct);
             return notify.CustomResponse(201);
         })
-        //.CustomAuthorize("Admin,Manager", "User", "CreateUser")
+        .CustomAuthorize("Admin,Manager", "Users", "Create")
         .AllowAnonymous()
         .WithName("CreateUser")
         .WithSummary("Swagger.Endpoint.User.CreateUser.Summary")
@@ -70,7 +70,7 @@ public static class UserEndpoint
             var updated = await appService.UpdateAsync(id, request, ct);
             return notify.CustomResponse(updated, 200);
         })
-        //.CustomAuthorize("Admin,Manager", "User", "UpdateUser")
+        .CustomAuthorize("Admin,Manager", "Users", "Update")
         .AllowAnonymous()
         .WithName("UpdateUser")
         .WithSummary("Swagger.Endpoint.User.UpdateUser.Summary")
@@ -85,7 +85,7 @@ public static class UserEndpoint
             var updated = await appService.UpdatePasswordAsync(id, request, ct);
             return notify.CustomResponse();
         })
-        //.CustomAuthorize("Admin,Manager,User", "User", "UpdatePassword")
+        .CustomAuthorize("Admin,Manager,User", "Users", "Update")
         .AllowAnonymous()
         .WithName("UpdateUserPassword")
         .WithSummary("Swagger.Endpoint.User.UpdateUserPassword.Summary")
@@ -99,7 +99,7 @@ public static class UserEndpoint
             var ok = await appService.ActivateAsync(id, ct);
             return notify.CustomResponse();
         })
-        //.CustomAuthorize("Admin,Manager", "User", "ActivateUser")
+        .CustomAuthorize("Admin,Manager", "Users", "Activate")
         .AllowAnonymous()
         .WithName("ActivateUser")
         .WithSummary("Swagger.Endpoint.User.ActivateUser.Summary")
@@ -112,7 +112,7 @@ public static class UserEndpoint
             var ok = await appService.DeactivateAsync(id, ct);
             return notify.CustomResponse();
         })
-        //.CustomAuthorize("Admin,Manager", "User", "DeactivateUser")
+        .CustomAuthorize("Admin,Manager", "Users", "Deactivate")
         .AllowAnonymous()
         .WithName("DeactivateUser")
         .WithSummary("Swagger.Endpoint.User.DeactivateUser.Summary")
@@ -125,7 +125,7 @@ public static class UserEndpoint
             var ok = await appService.DeleteAsync(id, ct);
             return notify.CustomResponse();
         })
-        //.CustomAuthorize("Admin", "User", "DeleteUser")
+        .CustomAuthorize("Admin", "Users", "Delete")
         .AllowAnonymous()
         .WithName("DeleteUser")
         .WithSummary("Swagger.Endpoint.User.DeleteUser.Summary")
@@ -133,7 +133,6 @@ public static class UserEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        // Upload massivo de users via CSV
         groupV1.MapPost("/bulk-upload", async (HttpRequest request, IUserAppService appService, INotify notify, CancellationToken ct) =>
         {
             if (!request.HasFormContentType || request.Form.Files.Count == 0)
@@ -146,7 +145,7 @@ public static class UserEndpoint
             var success = await appService.BulkUploadAsync(file, ct);
             return notify.CustomResponse(success ? 200 : 400);
         })
-        //.CustomAuthorize("Admin", "User", "BulkUploadUsers")
+        .CustomAuthorize("Admin", "Users", "BulkUpload")
         .AllowAnonymous()
         .WithName("BulkUploadUsers")
         .WithSummary("Swagger.Endpoint.User.BulkUploadUsers.Summary")

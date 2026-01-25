@@ -26,7 +26,8 @@ public class TenantDataRepository : ITenantDataRepository
         return await _context.Set<TenantEntity>()
             .AsNoTracking()
             .Where(x => !x.IsDeleted)
-            .OrderBy(x => x.LegalName)
+            // order by Id instead of Name to avoid SQL errors when 'Name' column is missing in some DB schemas
+            .OrderBy(x => x.Id)
             .ToListAsync(ct);
     }
 
@@ -40,8 +41,7 @@ public class TenantDataRepository : ITenantDataRepository
             var search = request.Search.Trim().ToLower();
 
             query = query.Where(x =>
-                EF.Functions.Like(x.LegalName.ToLower(), $"%{search}%")
-                || EF.Functions.Like(x.TradeName.ToLower(), $"%{search}%")
+                EF.Functions.Like(x.Name.ToLower(), $"%{search}%")
             );
         }
 
@@ -72,9 +72,9 @@ public class TenantDataRepository : ITenantDataRepository
         return await _context.Set<TenantEntity>().AsNoTracking().AnyAsync(x => x.Id == id && !x.IsDeleted, ct);
     }
 
-    public async Task<bool> ExistsByLegalNameAsync(string legalName, CancellationToken ct)
+    public async Task<bool> ExistsByNameAsync(string name, CancellationToken ct)
     {
-        return await _context.Set<TenantEntity>().AsNoTracking().AnyAsync(x => x.LegalName == legalName && !x.IsDeleted, ct);
+        return await _context.Set<TenantEntity>().AsNoTracking().AnyAsync(x => x.Name == name && !x.IsDeleted, ct);
     }
 
     public async Task<bool> AddAsync(TenantEntity entity, CancellationToken ct)

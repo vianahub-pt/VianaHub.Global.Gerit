@@ -19,22 +19,9 @@ public static class ActionEndpoint
             var response = await appService.GetAllAsync(ct);
             return notify.CustomResponse(response, 200);
         })
-        //.CustomAuthorize("Admin,Manager,Operator", "Action", "GetAllActions")
-        .AllowAnonymous()
+        .CustomAuthorize("Admin,BackOffice,Manager,Operator", "Actions", "GetAll")
         .WithName("GetAllActions")
         .WithSummary("Swagger.Endpoint.Action.GetAllActions.Summary")
-        .Produces(StatusCodes.Status200OK)
-        .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
-
-        groupV1.MapGet("/paged", async ([AsParameters] PagedFilterRequest request, IActionAppService appService, INotify notify, CancellationToken ct) =>
-        {
-            var response = await appService.GetPagedAsync(request, ct);
-            return notify.CustomResponse(response, 200);
-        })
-        //.CustomAuthorize("Admin,Manager,Operator", "Action", "GetActionsPaged")
-        .AllowAnonymous()
-        .WithName("GetActionsPaged")
-        .WithSummary("Swagger.Endpoint.Action.GetActionsPaged.Summary")
         .Produces(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
@@ -43,12 +30,22 @@ public static class ActionEndpoint
             var response = await appService.GetByIdAsync(id, ct);
             return notify.CustomResponse(response, 200);
         })
-        //.CustomAuthorize("Admin,Manager,Operator", "Action", "GetActionById")
-        .AllowAnonymous()
+        .CustomAuthorize("Admin,BackOffice,Manager,Operator", "Actions", "GetBy")
         .WithName("GetActionById")
         .WithSummary("Swagger.Endpoint.Action.GetActionById.Summary")
         .Produces(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
+        .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
+
+        groupV1.MapGet("/paged", async ([AsParameters] PagedFilterRequest request, IActionAppService appService, INotify notify, CancellationToken ct) =>
+        {
+            var response = await appService.GetPagedAsync(request, ct);
+            return notify.CustomResponse(response, 200);
+        })
+        .CustomAuthorize("Admin,BackOffice,Manager,Operator", "Actions", "GetPaged")
+        .WithName("GetActionsPaged")
+        .WithSummary("Swagger.Endpoint.Action.GetActionsPaged.Summary")
+        .Produces(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
         groupV1.MapPost("/", async ([FromBody] CreateActionRequest request, IActionAppService appService, INotify notify, CancellationToken ct) =>
@@ -56,7 +53,7 @@ public static class ActionEndpoint
             var created = await appService.CreateAsync(request, ct);
             return notify.CustomResponse(201);
         })
-        //.CustomAuthorize("Admin,Manager,Operator", "Action", "CreateAction")
+        //.CustomAuthorize("Admin,BackOffice", "Actions", "Create")
         .AllowAnonymous()
         .WithName("CreateAction")
         .WithSummary("Swagger.Endpoint.Action.CreateAction.Summary")
@@ -70,8 +67,7 @@ public static class ActionEndpoint
             var updated = await appService.UpdateAsync(id, request, ct);
             return notify.CustomResponse(updated, 200);
         })
-        //.CustomAuthorize("Admin,Manager,Operator", "Action", "UpdateAction")
-        .AllowAnonymous()
+        .CustomAuthorize("Admin,BackOffice", "Actions", "Update")
         .WithName("UpdateAction")
         .WithSummary("Swagger.Endpoint.Action.UpdateAction.Summary")
         .Produces(StatusCodes.Status204NoContent)
@@ -85,8 +81,7 @@ public static class ActionEndpoint
             var ok = await appService.ActivateAsync(id, ct);
             return notify.CustomResponse();
         })
-        //.CustomAuthorize("Admin,Manager", "Action", "ActivateAction")
-        .AllowAnonymous()
+        .CustomAuthorize("Admin,BackOffice", "Actions", "Activate")
         .WithName("ActivateAction")
         .WithSummary("Swagger.Endpoint.Action.ActivateAction.Summary")
         .Produces(StatusCodes.Status204NoContent)
@@ -98,8 +93,7 @@ public static class ActionEndpoint
             var ok = await appService.DeactivateAsync(id, ct);
             return notify.CustomResponse();
         })
-        //.CustomAuthorize("Admin,Manager", "Action", "DeactivateAction")
-        .AllowAnonymous()
+        .CustomAuthorize("Admin,BackOffice", "Actions", "Deactivate")
         .WithName("DeactivateAction")
         .WithSummary("Swagger.Endpoint.Action.DeactivateAction.Summary")
         .Produces(StatusCodes.Status204NoContent)
@@ -111,8 +105,7 @@ public static class ActionEndpoint
             var ok = await appService.DeleteAsync(id, ct);
             return notify.CustomResponse();
         })
-        //.CustomAuthorize("Admin,Manager", "Action", "DeleteAction")
-        .AllowAnonymous()
+        .CustomAuthorize("Admin,BackOffice", "Actions", "Delete")
         .WithName("DeleteAction")
         .WithSummary("Swagger.Endpoint.Action.DeleteAction.Summary")
         .Produces(StatusCodes.Status204NoContent)
@@ -132,8 +125,7 @@ public static class ActionEndpoint
             var success = await appService.BulkUploadAsync(file, ct);
             return notify.CustomResponse(success ? 200 : 400);
         })
-        //.CustomAuthorize("Admin,Manager", "Action", "BulkUploadActions")
-        .AllowAnonymous()
+        .CustomAuthorize("Admin,BackOffice", "Actions", "BulkUpload")
         .WithName("BulkUploadActions")
         .WithSummary("Swagger.Endpoint.Action.BulkUploadActions.Summary")
         .DisableAntiforgery()

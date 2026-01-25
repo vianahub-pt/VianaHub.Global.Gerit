@@ -15,7 +15,7 @@ GO
 /* =========================
    REMOÇÃO DAS TABELAS (ORDEM CORRETA)
    ========================= */
-
+DROP TABLE IF EXISTS dbo.JobDefinitions
 DROP TABLE IF EXISTS dbo.JwtKeys;
 DROP TABLE IF EXISTS dbo.UserRoles;
 DROP TABLE IF EXISTS dbo.RolePermissions;
@@ -43,4 +43,5 @@ DROP TABLE IF EXISTS dbo.TenantContacts;
 DROP TABLE IF EXISTS dbo.TenantAddresses;
 DROP TABLE IF EXISTS dbo.Tenants;
 DROP TABLE IF EXISTS dbo.Plans;
+delete __EFMigrationsHistory;
 GO

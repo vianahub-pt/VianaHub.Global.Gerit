@@ -19,8 +19,7 @@ public static class ResourceEndpoint
             var resources = await appService.GetAllAsync(ct);
             return notify.CustomResponse(resources, 200);
         })
-        //.CustomAuthorize("Admin,Manager", "Resource", "ListResources")
-        .AllowAnonymous()
+        .CustomAuthorize("Admin,BackOffice,Manager", "Resources", "GetAll")
         .WithName("GetAllResources")
         .WithSummary("Swagger.Endpoint.Resource.GetAllResources.Summary")
         .Produces(StatusCodes.Status200OK)
@@ -31,8 +30,7 @@ public static class ResourceEndpoint
             var resource = await appService.GetByIdAsync(id, ct);
             return notify.CustomResponse(resource, 200);
         })
-        //.CustomAuthorize("Admin,Manager", "Resource", "GetResource")
-        .AllowAnonymous()
+        .CustomAuthorize("Admin,BackOffice,Manager", "Resources", "GetBy")
         .WithName("GetResourceById")
         .WithSummary("Swagger.Endpoint.Resource.GetResourceById.Summary")
         .Produces(StatusCodes.Status200OK)
@@ -44,8 +42,7 @@ public static class ResourceEndpoint
             var resources = await appService.GetPagedAsync(request, ct);
             return notify.CustomResponse(resources, 200);
         })
-        //.CustomAuthorize("Admin,Manager", "Resource", "ListResources")
-        .AllowAnonymous()
+        .CustomAuthorize("Admin,BackOffice,Manager", "Resources", "GetPaged")
         .WithName("GetPagedResources")
         .WithSummary("Swagger.Endpoint.Resource.GetPagedResources.Summary")
         .Produces(StatusCodes.Status200OK)
@@ -56,8 +53,7 @@ public static class ResourceEndpoint
             var created = await appService.CreateAsync(request, ct);
             return notify.CustomResponse(201);
         })
-        //.CustomAuthorize("Admin,Manager", "Resource", "CreateResource")
-        .AllowAnonymous()
+        .CustomAuthorize("Admin,BackOffice,Manager", "Resources", "Create")
         .WithName("CreateResource")
         .WithSummary("Swagger.Endpoint.Resource.CreateResource.Summary")
         .Produces(StatusCodes.Status201Created)
@@ -70,8 +66,7 @@ public static class ResourceEndpoint
             var updated = await appService.UpdateAsync(id, request, ct);
             return notify.CustomResponse(updated, 200);
         })
-        //.CustomAuthorize("Admin,Manager", "Resource", "UpdateResource")
-        .AllowAnonymous()
+        .CustomAuthorize("Admin,BackOffice,Manager", "Resources", "Update")
         .WithName("UpdateResource")
         .WithSummary("Swagger.Endpoint.Resource.UpdateResource.Summary")
         .Produces(StatusCodes.Status204NoContent)
@@ -84,8 +79,7 @@ public static class ResourceEndpoint
             var ok = await appService.ActivateAsync(id, ct);
             return notify.CustomResponse();
         })
-        //.CustomAuthorize("Admin,Manager", "Resource", "ActivateResource")
-        .AllowAnonymous()
+        .CustomAuthorize("Admin,BackOffice,Manager", "Resources", "Activate")
         .WithName("ActivateResource")
         .WithSummary("Swagger.Endpoint.Resource.ActivateResource.Summary")
         .Produces(StatusCodes.Status204NoContent)
@@ -97,8 +91,7 @@ public static class ResourceEndpoint
             var ok = await appService.DeactivateAsync(id, ct);
             return notify.CustomResponse();
         })
-        //.CustomAuthorize("Admin,Manager", "Resource", "DeactivateResource")
-        .AllowAnonymous()
+        .CustomAuthorize("Admin,BackOffice,Manager", "Resource", "Deactivate")
         .WithName("DeactivateResource")
         .WithSummary("Swagger.Endpoint.Resource.DeactivateResource.Summary")
         .Produces(StatusCodes.Status204NoContent)
@@ -110,8 +103,7 @@ public static class ResourceEndpoint
             var ok = await appService.DeleteAsync(id, ct);
             return notify.CustomResponse();
         })
-        //.CustomAuthorize("Admin,Manager", "Resource", "DeleteResource")
-        .AllowAnonymous()
+        .CustomAuthorize("Admin,BackOffice,Manager", "Resources", "Delete")
         .WithName("DeleteResource")
         .WithSummary("Swagger.Endpoint.Resource.DeleteResource.Summary")
         .Produces(StatusCodes.Status204NoContent)
@@ -131,8 +123,7 @@ public static class ResourceEndpoint
             var success = await appService.BulkUploadAsync(file, ct);
             return notify.CustomResponse(success ? 200 : 400);
         })
-        //.CustomAuthorize("Admin,Manager", "Resource", "BulkUploadResources")
-        .AllowAnonymous()
+        .CustomAuthorize("Admin,BackOffice,Manager", "Resource", "BulkUpload")
         .WithName("BulkUploadResources")
         .WithSummary("Swagger.Endpoint.Resource.BulkUploadResources.Summary")
         .DisableAntiforgery()

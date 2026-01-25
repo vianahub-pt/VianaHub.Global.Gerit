@@ -20,7 +20,7 @@ public static class UserRoleEndpoint
             var result = await appService.GetAllAsync();
             return notify.CustomResponse(result, 200);
         })
-        //.CustomAuthorize("Admin,Manager", "UserRole", "GetAllUserRoles")
+        .CustomAuthorize("Admin,Manager", "UserRoles", "GetAll")
         .AllowAnonymous()
         .WithName("GetAllUserRoles")
         .WithSummary("Swagger.Endpoint.UserRole.GetAllUserRoles.Summary")
@@ -32,7 +32,7 @@ public static class UserRoleEndpoint
             var result = await appService.GetByIdAsync(id);
             return notify.CustomResponse(result, result != null ? 200 : 404);
         })
-        //.CustomAuthorize("Admin,Manager", "UserRole", "GetUserRoleById")
+        .CustomAuthorize("Admin,Manager", "UserRoles", "GetBy")
         .AllowAnonymous()
         .WithName("GetUserRoleById")
         .WithSummary("Swagger.Endpoint.UserRole.GetUserRoleById.Summary")
@@ -45,7 +45,7 @@ public static class UserRoleEndpoint
             var result = await appService.GetByUserAsync(userId);
             return notify.CustomResponse(result, 200);
         })
-        //.CustomAuthorize("Admin,Manager,User", "UserRole", "GetUserRolesByUser")
+        .CustomAuthorize("Admin,Manager,User", "UserRoles", "GetBy")
         .AllowAnonymous()
         .WithName("GetUserRolesByUser")
         .WithSummary("Swagger.Endpoint.UserRole.GetUserRolesByUser.Summary")
@@ -57,7 +57,7 @@ public static class UserRoleEndpoint
             var result = await appService.GetByRoleAsync(roleId);
             return notify.CustomResponse(result, 200);
         })
-        //.CustomAuthorize("Admin,Manager,User", "UserRole", "GetUserRolesByRole")
+        .CustomAuthorize("Admin,Manager,User", "UserRoles", "GetBy")
         .AllowAnonymous()
         .WithName("GetUserRolesByRole")
         .WithSummary("Swagger.Endpoint.UserRole.GetUserRolesByRole.Summary")
@@ -69,7 +69,7 @@ public static class UserRoleEndpoint
             var created = await appService.CreateAsync(request);
             return notify.CustomResponse(201);
         })
-        //.CustomAuthorize("Admin,Manager", "UserRole", "CreateUserRole")
+        .CustomAuthorize("Admin,Manager", "UserRoles", "Create")
         .AllowAnonymous()
         .WithName("CreateUserRole")
         .WithSummary("Swagger.Endpoint.UserRole.CreateUserRole.Summary")
@@ -84,7 +84,7 @@ public static class UserRoleEndpoint
             var updated = await appService.UpdateAsync(request);
             return notify.CustomResponse(204);
         })
-        //.CustomAuthorize("Admin,Manager", "UserRole", "UpdateUserRole")
+        .CustomAuthorize("Admin,Manager", "UserRoles", "Update")
         .AllowAnonymous()
         .WithName("UpdateUserRole")
         .WithSummary("Swagger.Endpoint.UserRole.UpdateUserRole.Summary")
@@ -99,7 +99,7 @@ public static class UserRoleEndpoint
             await appService.DeleteAsync(id);
             return notify.CustomResponse();
         })
-        //.CustomAuthorize("Admin,Manager", "UserRole", "DeleteUserRole")
+        .CustomAuthorize("Admin,Manager", "UserRoles", "Delete")
         .AllowAnonymous()
         .WithName("DeleteUserRole")
         .WithSummary("Swagger.Endpoint.UserRole.DeleteUserRole.Summary")

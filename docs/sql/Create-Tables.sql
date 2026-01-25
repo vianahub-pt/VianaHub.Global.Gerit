@@ -26,8 +26,7 @@ GO
 
 CREATE TABLE dbo.Tenants (											-- Tabela principal de tenants
     Id			INT IDENTITY(1,1)	NOT NULL,						-- Identificador único do tenant, chave primária
-    LegalName	NVARCHAR(200)		NOT NULL,						-- Razão social
-    TradeName	NVARCHAR(200)		NULL,							-- Nome comercial
+    Name	    NVARCHAR(200)		NOT NULL,						-- Razão social
 	Consent		BIT					NOT NULL DEFAULT 1,				-- Consentimento LGPD
     IsActive	BIT					NOT NULL DEFAULT 1,             -- Flag de ativo
     IsDeleted	BIT					NOT NULL DEFAULT 0,             -- Soft delete
@@ -219,13 +218,27 @@ CREATE TABLE dbo.UserRoles (															-- Relação usuário x role
         
 );
 GO
-
+CREATE TABLE dbo.RefreshTokens (
+    Id 						INT IDENTITY(1,1)	NOT NULL,
+    TenantId 				INT					NOT NULL,
+	UserId 					INT					NOT NULL,
+	Token					NVARCHAR(MAX)		NOT NULL,
+	ExpiresAt				DATETIME2 			NOT	NULL,
+    RevokedAt 				DATETIME2 				NULL,
+	RevokedbY				INT 					NULL,
+    CreatedBy		        INT		            NOT NULL,
+    CreatedAt		        DATETIME2			NOT NULL DEFAULT SYSDATETIME(),
+    ModifiedBy	            INT         		    NULL,
+    ModifiedAt		        DATETIME2				NULL,
+    CONSTRAINT PK_RefreshTokens PRIMARY KEY CLUSTERED (Id),
+    CONSTRAINT FK_RefreshTokens_Tenant FOREIGN KEY (TenantId) REFERENCES dbo.Tenants(Id),
+	CONSTRAINT FK_RefreshTokens_User FOREIGN KEY (userId) REFERENCES dbo.Users(Id)
+);
+GO
 CREATE TABLE dbo.JwtKeys (
     Id 						INT IDENTITY(1,1)	NOT NULL,
     TenantId 				INT					NOT NULL,
-    ApplicationId 			INT					NOT NULL,
     KeyId 					UNIQUEIDENTIFIER	NOT NULL,
-    Code 					NVARCHAR(100) 		NOT NULL,
     PublicKey 				NVARCHAR(MAX) 		NOT NULL,
     PrivateKeyEncrypted 	NVARCHAR(MAX) 		NOT NULL,
     Algorithm 				NVARCHAR(50) 		NOT NULL DEFAULT 'RS256',
@@ -243,7 +256,6 @@ CREATE TABLE dbo.JwtKeys (
     RotationPolicyDays 		INT 				NOT NULL DEFAULT 90,
     OverlapPeriodDays 		INT 				NOT NULL DEFAULT 7,
     MaxTokenLifetimeMinutes INT 				NOT NULL DEFAULT 60,
-    Status 					INT 				NOT NULL DEFAULT 1,
     IsActive 				BIT 				NOT NULL DEFAULT 0,
     IsDeleted 				BIT 				NOT NULL DEFAULT 0,
     CreatedBy		        INT		            NOT NULL,
@@ -251,13 +263,57 @@ CREATE TABLE dbo.JwtKeys (
     ModifiedBy	            INT         		    NULL,
     ModifiedAt		        DATETIME2				NULL,
     CONSTRAINT PK_JwtKeys PRIMARY KEY CLUSTERED (Id),
-    CONSTRAINT UQ_JwtKeys_Code UNIQUE (Code),
     CONSTRAINT UQ_JwtKeys_KeyId UNIQUE (KeyId),
     CONSTRAINT FK_JwtKeys_Tenant FOREIGN KEY (TenantId) REFERENCES dbo.Tenants(Id),
     CONSTRAINT CK_JwtKeys_RotationPolicy CHECK (RotationPolicyDays BETWEEN 30 AND 365),
     CONSTRAINT CK_JwtKeys_OverlapPeriod CHECK (OverlapPeriodDays BETWEEN 1 AND 30),
     CONSTRAINT CK_JwtKeys_MaxTokenLifetime CHECK (MaxTokenLifetimeMinutes BETWEEN 5 AND 1440)
 );
+GO
+
+CREATE TABLE dbo.JobDefinitions (
+    Id                      INT IDENTITY(1,1)	NOT NULL,
+    JobCategory             NVARCHAR(100)		NOT NULL,                              -- Categoria (Cleanup, Maintenance, Security, Billing, Sync)
+    JobName                 NVARCHAR(150)		NOT NULL,                              -- Nome único do job (usado como JobId no Hangfire)
+    Description             NVARCHAR(500)		    NULL,                              -- Descrição detalhada
+    JobPurpose              NVARCHAR(500)		    NULL,                              -- Propósito/objetivo do job
+    JobType                 NVARCHAR(200)		NOT NULL,                              -- Namespace. Classe do job no código
+    JobMethod               NVARCHAR(100)		NOT NULL DEFAULT 'Execute',            -- Nome do método a ser executado
+    CronExpression          NVARCHAR(100)		    NULL,                              -- Expressão Cron para agendamento (null se fire-and-forget)
+    TimeZoneId              NVARCHAR(100)		NOT NULL DEFAULT 'GMT Standard Time',  -- Timezone padrão (Portugal - UTC+0/UTC+1)
+    ExecuteOnlyOnce         BIT					NOT NULL DEFAULT 0,                    -- Se deve executar apenas uma vez (fire-and-forget)
+    TimeoutMinutes          INT					NOT NULL DEFAULT 5,                    -- Timeout em minutos
+    Priority                INT					NOT NULL DEFAULT 5,                    -- Prioridade (1=highest, 10=lowest)
+    Queue                   NVARCHAR(50)		NOT NULL DEFAULT 'default',            -- Fila do Hangfire (default, critical, low)
+    MaxRetries              INT					NOT NULL DEFAULT 3,                    -- Máximo de tentativas automáticas
+    JobConfiguration        NVARCHAR(MAX)		    NULL,                              -- JSON com configurações específicas do job
+    IsSystemJob             BIT					NOT NULL DEFAULT 0,                    -- Job crítico do sistema (não pode ser deletado)
+    HangfireJobId           NVARCHAR(100)		    NULL,                              -- ID do job recorrente no Hangfire
+    LastRegisteredAt        DATETIME2			    NULL,                              -- Última vez que foi registrado no Hangfire
+    IsActive                BIT					NOT NULL DEFAULT 1,                    -- Indica se o job está ativo
+    IsDeleted               BIT					NOT NULL DEFAULT 0,                    -- Indica se foi excluído (soft delete)
+    CreatedBy               INT					NOT NULL,                              -- Quem criou o job
+    CreatedAt               DATETIME2			NOT NULL DEFAULT GETDATE(),            -- Data de criação
+    UpdatedBy               INT					    NULL,                              -- Quem fez a última alteração
+    UpdatedAt               DATETIME2			    NULL,                              -- Data da última alteração
+    CONSTRAINT UQ_Job_JobName UNIQUE (JobName),
+    CONSTRAINT CK_Job_Priority CHECK (Priority BETWEEN 1 AND 10),
+    CONSTRAINT CK_Job_TimeoutMinutes CHECK (TimeoutMinutes > 0),
+    CONSTRAINT CK_Job_MaxRetries CHECK (MaxRetries >= 0)
+);
+GO
+
+-- Índices para performance
+CREATE INDEX IX_Services_Category_Active 
+    ON dbo.JobDefinitions(JobCategory, IsActive, IsDeleted);
+
+CREATE INDEX IX_Services_Active_System 
+    ON dbo.JobDefinitions(IsActive, IsSystemJob) 
+    WHERE IsDeleted = 0;
+
+CREATE INDEX IX_Services_HangfireJobId 
+    ON dbo.JobDefinitions(HangfireJobId) 
+    WHERE HangfireJobId IS NOT NULL;
 GO
 
 /* =========================

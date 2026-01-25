@@ -8,8 +8,7 @@ namespace VianaHub.Global.Gerit.Domain.Entities;
 /// </summary>
 public class TenantEntity : Entity, IAggregateRoot
 {
-    public string LegalName { get; private set; }
-    public string TradeName { get; private set; }
+    public string Name { get; private set; }
     public bool Consent { get; private set; }
     public bool IsActive { get; private set; }
     public bool IsDeleted { get; private set; }
@@ -33,10 +32,9 @@ public class TenantEntity : Entity, IAggregateRoot
     /// <summary>
     /// Construtor para criação de um novo Tenant
     /// </summary>
-    public TenantEntity(string legalName, string tradeName, bool consent, int createdBy)
+    public TenantEntity(string name, bool consent, int createdBy)
     {
-        SetLegalName(legalName);
-        TradeName = tradeName;
+        Name = name;
         Consent = consent;
         IsActive = true;
         IsDeleted = false;
@@ -46,32 +44,12 @@ public class TenantEntity : Entity, IAggregateRoot
     /// <summary>
     /// Construtor para criação de um novo Tenant (backward compatibility)
     /// </summary>
-    public TenantEntity(string legalName, string tradeName, bool consent = true)
+    public TenantEntity(string name, bool consent = true)
     {
-        SetLegalName(legalName);
-        TradeName = tradeName;
+        Name = name;
         Consent = consent;
         IsActive = true;
         IsDeleted = false;
-    }
-
-    public void SetLegalName(string legalName)
-    {
-        if (string.IsNullOrWhiteSpace(legalName))
-            throw new ArgumentException("Razão social não pode ser vazia.", nameof(legalName));
-
-        if (legalName.Length > 200)
-            throw new ArgumentException("Razão social não pode ter mais de 200 caracteres.", nameof(legalName));
-
-        LegalName = legalName;
-    }
-
-    public void SetTradeName(string tradeName)
-    {
-        if (tradeName?.Length > 200)
-            throw new ArgumentException("Nome comercial não pode ter mais de 200 caracteres.", nameof(tradeName));
-
-        TradeName = tradeName;
     }
 
     public void UpdateConsent(bool consent)
@@ -79,11 +57,10 @@ public class TenantEntity : Entity, IAggregateRoot
         Consent = consent;
     }
 
-    public void Update(string legalName, string tradeName, bool consent, int modifiedBy)
+    public void Update(string name, bool consent, int modifiedBy)
     {
-        SetLegalName(legalName);
-        SetTradeName(tradeName);
-        UpdateConsent(consent);
+        Name = name;
+        Consent = consent;
         ModifiedBy = modifiedBy;
         ModifiedAt = DateTime.UtcNow;
     }
@@ -125,14 +102,6 @@ public class TenantEntity : Entity, IAggregateRoot
     {
         IsDeleted = true;
         IsActive = false;
-    }
-
-    public void AddContact(TenantContact contact)
-    {
-        if (contact == null)
-            throw new ArgumentNullException(nameof(contact));
-
-        _contacts.Add(contact);
     }
 
     public void AddAddress(TenantAddress address)

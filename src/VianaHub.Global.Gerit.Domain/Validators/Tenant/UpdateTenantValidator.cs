@@ -12,16 +12,11 @@ public class UpdateTenantValidator : AbstractValidator<TenantEntity>
             .GreaterThan(0)
             .WithMessage(localization.GetMessage("Domain.Tenant.InvalidId"));
 
-        RuleFor(x => x.LegalName)
+        RuleFor(x => x.Name)
             .NotEmpty()
-            .WithMessage(localization.GetMessage("Domain.Tenant.LegalNameRequired"))
+            .WithMessage(localization.GetMessage("Domain.Tenant.NameRequired"))
             .MaximumLength(200)
-            .WithMessage(localization.GetMessage("Domain.Tenant.LegalNameMaxLength", 200));
-
-        RuleFor(x => x.TradeName)
-            .MaximumLength(200)
-            .When(x => !string.IsNullOrEmpty(x.TradeName))
-            .WithMessage(localization.GetMessage("Domain.Tenant.TradeNameMaxLength", 200));
+            .WithMessage(localization.GetMessage("Domain.Tenant.NameMaxLength", 200));
 
         RuleFor(x => x.IsDeleted)
             .Equal(false)

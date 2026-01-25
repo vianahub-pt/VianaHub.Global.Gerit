@@ -27,6 +27,8 @@
   "Swagger.Tag.Subscriptions": "Suscripciones",
   "Swagger.Tag.UserRoles": "Asociaciones Usuario-Rol",
   "Swagger.Tag.RolePermissions": "Permisos de Rol",
+  "Swagger.Tag.JobDefinitions": "Definiciones de Jobs",
+  "Swagger.Tag.JwtKeys": "Claves JWT",
   
   "Swagger.Endpoint.HealthCheck.Summary": "Verificación de Salud",
   "Swagger.Endpoint.HealthCheck.Description": "Verifica si la API está funcionando correctamente",
@@ -150,5 +152,53 @@
   "Domain.RolePermission.TenantIdRequired": "El ID del inquilino es obligatorio",
   "Domain.RolePermission.RoleIdRequired": "El ID del rol es obligatorio",
   "Domain.RolePermission.ResourceIdRequired": "El ID del recurso es obligatorio",
-  "Domain.RolePermission.ActionIdRequired": "El ID de la acción es obligatorio"
+  "Domain.RolePermission.ActionIdRequired": "El ID de la acción es obligatorio",
+
+  "Domain.Job.JobCategoryRequired": "La categoría del job es obligatoria",
+  "Domain.Job.JobNameRequired": "El nombre del job es obligatorio",
+  "Domain.Job.JobNameMaxLength": "El nombre del job debe tener como máximo {0} caracteres",
+  "Domain.Job.JobTypeRequired": "El tipo de job (namespace.clase) es obligatorio",
+  "Domain.Job.JobTypeMaxLength": "El tipo de job debe tener como máximo {0} caracteres",
+  "Domain.Job.JobMethodMaxLength": "El método del job debe tener como máximo {0} caracteres",
+  "Domain.Job.TimeoutMustBeGreaterThanZero": "Timeout debe ser mayor que cero",
+  "Domain.Job.PriorityRange": "La prioridad debe estar entre {0} y {1}",
+  "Domain.Job.MaxRetriesNonNegative": "MaxRetries debe ser mayor o igual a cero",
+  "Domain.Job.ExecuteOnlyOnceMustNotHaveCron": "Los jobs fire-and-forget no pueden tener CronExpression",
+  "Domain.Job.CronRequiredForRecurring": "CronExpression es obligatoria para jobs recurrentes",
+  "Domain.Job.JobConfigurationInvalid": "JobConfiguration debe ser un JSON válido",
+  "Domain.Job.DescriptionMaxLength": "La descripción debe tener como máximo {0} caracteres",
+  "Domain.Job.CannotDeleteSystemJob": "Los jobs del sistema no pueden ser eliminados",
+
+  "Swagger.Endpoint.Job.GetPaged.Summary": "Obtener jobs paginados",
+  "Swagger.Endpoint.Job.GetPaged.Description": "Obtener una lista paginada de definiciones de jobs",
+  "Swagger.Endpoint.Job.GetById.Summary": "Obtener job por ID",
+  "Swagger.Endpoint.Job.GetById.Description": "Obtener detalles de una definición de job por ID",
+  "Swagger.Endpoint.Job.Create.Summary": "Crear nuevo job",
+  "Swagger.Endpoint.Job.Create.Description": "Crear una nueva definición de job",
+  "Swagger.Endpoint.Job.Update.Summary": "Actualizar job",
+  "Swagger.Endpoint.Job.Update.Description": "Actualizar una definición de job existente",
+  "Swagger.Endpoint.Job.Delete.Summary": "Eliminar job",
+  "Swagger.Endpoint.Job.Delete.Description": "Eliminar (soft delete) una definición de job",
+  "Swagger.Endpoint.Job.Activate.Summary": "Activar job",
+  "Swagger.Endpoint.Job.Activate.Description": "Activar y registrar el job en Hangfire",
+  "Swagger.Endpoint.Job.Deactivate.Summary": "Desactivar job",
+  "Swagger.Endpoint.Job.Deactivate.Description": "Desactivar y eliminar el job de Hangfire",
+  "Swagger.Endpoint.Job.Execute.Summary": "Ejecutar job",
+  "Swagger.Endpoint.Job.Execute.Description": "Ejecutar el job manualmente a través de Hangfire",
+
+  "Swagger.Endpoint.JwtKey.GetByTenant.Summary": "Obtener claves JWT por inquilino",
+  "Swagger.Endpoint.JwtKey.GetActive.Summary": "Obtener clave JWT activa por inquilino",
+  "Swagger.Endpoint.JwtKey.CreateInitial.Summary": "Crear clave JWT inicial para inquilino",
+  "Swagger.Endpoint.JwtKey.Revoke.Summary": "Revocar clave JWT",
+
+  "Application.Service.Jwt.Create.InvalidTenantId": "ID de inquilino inválido",
+  "Application.Service.Jwt.Create.FailedToPersist": "Error al persistir la clave JWT",
+
+  "Application.Service.Jwt.Revoke.ResourceNotFound": "Clave JWT no encontrada",
+  "Application.Service.Jwt.Revoke.AlreadyRevoked": "Clave JWT ya revocada",
+  "Application.Service.Jwt.Revoke.ReasonRequired": "Se requiere motivo de revocación",
+  "Application.Service.Jwt.Revoke.FailedCreateReplacement": "Error al crear clave de reemplazo antes de la revocación",
+  "Application.Service.Jwt.Revoke.FailedToPersist": "Error al persistir la revocación de la clave",
+
+  "//end": "..."
 }
