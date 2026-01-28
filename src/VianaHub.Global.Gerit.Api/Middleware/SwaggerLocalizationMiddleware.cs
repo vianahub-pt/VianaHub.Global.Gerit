@@ -71,6 +71,23 @@ public class SwaggerLocalizationMiddleware
             }
         }
 
+        // 1.5 Tenta pegar do cookie 'swagger-locale' (definido pelo custom.js)
+        if (context.Request.Cookies != null && context.Request.Cookies.TryGetValue("swagger-locale", out var cookieLang))
+        {
+            var lang = cookieLang?.ToString() ?? string.Empty;
+            if (!string.IsNullOrWhiteSpace(lang) && _supportedCultures.Contains(lang, StringComparer.OrdinalIgnoreCase))
+            {
+                return lang;
+            }
+
+            // Caso o cookie contenha apenas linguagem neutra (ex: 'en' ou 'pt'), tentar mapear para supported cultures
+            if (!string.IsNullOrWhiteSpace(lang) && lang.Length == 2)
+            {
+                var match = _supportedCultures.FirstOrDefault(c => c.StartsWith(lang, StringComparison.OrdinalIgnoreCase));
+                if (match != null) return match;
+            }
+        }
+
         // 2. Tenta pegar do header Accept-Language
         if (context.Request.Headers.TryGetValue("Accept-Language", out var acceptLanguage))
         {
@@ -85,7 +102,6 @@ public class SwaggerLocalizationMiddleware
             }
         }
 
-        // 3. Fallback para pt-BR (padrão do Gerit)
-        return "pt-BR";
+        return string.Empty;
     }
 }
