@@ -92,8 +92,8 @@ public class JobAppService : IJobAppService
         var vr = await _validator.ValidateForCreateAsync(entity);
         if (!vr.IsValid)
         {
-            foreach (var err in vr.Errors)
-                _notify.Add(err.ErrorMessage, 400);
+            foreach (var error in vr.Errors)
+                _notify.Add(error.ErrorMessage, 400);
             return false;
         }
 
@@ -130,8 +130,8 @@ public class JobAppService : IJobAppService
         var vr = await _validator.ValidateForUpdateAsync(entity);
         if (!vr.IsValid)
         {
-            foreach (var err in vr.Errors)
-                _notify.Add(err.ErrorMessage, 400);
+            foreach (var error in vr.Errors)
+                _notify.Add(error.ErrorMessage, 400);
             return false;
         }
 
@@ -162,8 +162,8 @@ public class JobAppService : IJobAppService
         var vr = await _validator.ValidateForActivateAsync(entity);
         if (!vr.IsValid)
         {
-            foreach (var err in vr.Errors)
-                _notify.Add(err.ErrorMessage, 400);
+            foreach (var error in vr.Errors)
+                _notify.Add(error.ErrorMessage, 400);
             return false;
         }
 
@@ -192,8 +192,8 @@ public class JobAppService : IJobAppService
         var vr = await _validator.ValidateForDeactivateAsync(entity);
         if (!vr.IsValid)
         {
-            foreach (var err in vr.Errors)
-                _notify.Add(err.ErrorMessage, 400);
+            foreach (var error in vr.Errors)
+                _notify.Add(error.ErrorMessage, 400);
             return false;
         }
 
@@ -219,8 +219,8 @@ public class JobAppService : IJobAppService
         var vr = await _validator.ValidateForDeleteAsync(entity);
         if (!vr.IsValid)
         {
-            foreach (var err in vr.Errors)
-                _notify.Add(err.ErrorMessage, 400);
+            foreach (var error in vr.Errors)
+                _notify.Add(error.ErrorMessage, 400);
             return false;
         }
 

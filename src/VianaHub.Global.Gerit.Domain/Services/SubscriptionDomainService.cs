@@ -156,4 +156,21 @@ public class SubscriptionDomainService : ISubscriptionDomainService
     {
         return await _repo.UpdateAsync(entity, ct);
     }
+
+    public async Task<(bool IsValid, bool IsTrial)> IsTenantSubscriptionValidAsync(int tenantId, CancellationToken ct)
+    {
+        var subscription = await _repo.GetByTenantIdAsync(tenantId, ct);
+        if (subscription == null || !subscription.IsActive || subscription.IsDeleted)
+            return (false, false);
+
+        var now = DateTime.UtcNow;
+
+        var currentPeriodValid = subscription.CurrentPeriodStart <= now && subscription.CurrentPeriodEnd >= now;
+        var trialPeriodValid = subscription.TrialStart.HasValue && subscription.TrialEnd.HasValue
+            && subscription.TrialStart.Value <= now && subscription.TrialEnd.Value >= now;
+
+        var isValid = (currentPeriodValid || trialPeriodValid) && !(subscription.CanceledAt.HasValue && !subscription.CancelAtPeriodEnd);
+
+        return (isValid, trialPeriodValid && isValid);
+    }
 }

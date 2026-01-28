@@ -129,33 +129,33 @@ public static class NotifyExtensions
         {
             return statusCode switch
             {
-                400 => "Api.Error.ValidationError",
-                401 => "Api.Error.Unauthorized",
-                403 => "Api.Error.Forbidden",
-                404 => "Api.Error.NotFound",
-                409 => "Api.Error.Conflict",
-                410 => "Api.Error.Gone",
-                422 => "Api.Error.UnprocessableEntity",
-                429 => "Api.Error.TooManyRequests",
-                500 => "Api.Error.InternalServerError",
-                503 => "Api.Error.ServiceUnavailable",
-                _ => "Api.Error.Generic"
+                400 => "Api.Helpers.NotifyExtensions.Error.ValidationError",
+                401 => "Api.Helpers.NotifyExtensions.Error.Unauthorized",
+                403 => "Api.Helpers.NotifyExtensions.Error.Forbidden",
+                404 => "Api.Helpers.NotifyExtensions.Error.NotFound",
+                409 => "Api.Helpers.NotifyExtensions.Error.Conflict",
+                410 => "Api.Helpers.NotifyExtensions.Error.Gone",
+                422 => "Api.Helpers.NotifyExtensions.Error.UnprocessableEntity",
+                429 => "Api.Helpers.NotifyExtensions.Error.TooManyRequests",
+                500 => "Api.Helpers.NotifyExtensions.Error.InternalServerError",
+                503 => "Api.Helpers.NotifyExtensions.Error.ServiceUnavailable",
+                _ => "Api.Helpers.NotifyExtensions.Error.Generic"
             };
         }
 
         return statusCode switch
         {
-            400 => localization.GetMessage("Api.Error.ValidationError"),
-            401 => localization.GetMessage("Api.Error.Unauthorized"),
-            403 => localization.GetMessage("Api.Error.Forbidden"),
-            404 => localization.GetMessage("Api.Error.NotFound"),
-            409 => localization.GetMessage("Api.Error.Conflict"),
-            410 => localization.GetMessage("Api.Error.Gone"),
-            422 => localization.GetMessage("Api.Error.UnprocessableEntity"),
-            429 => localization.GetMessage("Api.Error.TooManyRequests"),
-            500 => localization.GetMessage("Api.Error.InternalServerError"),
-            503 => localization.GetMessage("Api.Error.ServiceUnavailable"),
-            _ => localization.GetMessage("Api.Error.Generic")
+            400 => localization.GetMessage("Api.Helpers.NotifyExtensions.Error.ValidationError"),
+            401 => localization.GetMessage("Api.Helpers.NotifyExtensions.Error.Unauthorized"),
+            403 => localization.GetMessage("Api.Helpers.NotifyExtensions.Error.Forbidden"),
+            404 => localization.GetMessage("Api.Helpers.NotifyExtensions.Error.NotFound"),
+            409 => localization.GetMessage("Api.Helpers.NotifyExtensions.Error.Conflict"),
+            410 => localization.GetMessage("Api.Helpers.NotifyExtensions.Error.Gone"),
+            422 => localization.GetMessage("Api.Helpers.NotifyExtensions.Error.UnprocessableEntity"),
+            429 => localization.GetMessage("Api.Helpers.NotifyExtensions.Error.TooManyRequests"),
+            500 => localization.GetMessage("Api.Helpers.NotifyExtensions.Error.InternalServerError"),
+            503 => localization.GetMessage("Api.Helpers.NotifyExtensions.Error.ServiceUnavailable"),
+            _ => localization.GetMessage("Api.Helpers.NotifyExtensions.Error.Generic")
         };
     }
 
@@ -163,7 +163,7 @@ public static class NotifyExtensions
     {
         var localization = GetLocalizationService();
         // Sempre retornar chave quando localization não estiver disponível
-        return localization?.GetMessage("Common.Error") ?? "Common.Error";
+        return localization?.GetMessage("Api.Helpers.NotifyExtensions.Common.Error") ?? "Api.Helpers.NotifyExtensions.Common.Error";
     }
 
     private static ILocalizationService GetLocalizationService()

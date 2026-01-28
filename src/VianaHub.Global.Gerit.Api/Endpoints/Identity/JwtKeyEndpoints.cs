@@ -1,5 +1,7 @@
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using VianaHub.Global.Gerit.Api.Helpers;
+using VianaHub.Global.Gerit.Application.Dtos.Base;
 using VianaHub.Global.Gerit.Domain.Tools.Notifications;
 using VianaHub.Global.Gerit.Application.Interfaces.Identity;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Identity.Auth;
@@ -8,45 +10,59 @@ namespace VianaHub.Global.Gerit.Api.Endpoints.Identity;
 
 public static class JwtKeyEndpoints
 {
-    public static void MapJwtKeyEndpoints(this WebApplication app)
+    public static void MapJwtKeyEndpoints(this IEndpointRouteBuilder app)
     {
-        app.MapGet("/v1/admin/jwtkeys/{tenantId}", async (IJwtKeyAppService service, INotify notify, int tenantId, CancellationToken ct) =>
+        var groupV1 = app.MapGroup("/v1/admin/jwtkeys").WithTags("JwtKeys").WithGroupName("v1").RequireAuthorization();
+
+        groupV1.MapGet("/{tenantId}", async (int tenantId, IJwtKeyAppService service, INotify notify, CancellationToken ct) =>
         {
             var result = await service.GetByTenantAsync(tenantId, ct);
-            return notify.CustomResponse(result);
+            return notify.CustomResponse(result, StatusCodes.Status200OK);
         })
+        .CustomAuthorize("Admin,BackOffice", "JwtKeys", "GetBy")
         .WithName("GetJwtKeysByTenant")
-        .WithTags("JwtKeys");
+        .WithSummary("Swagger.Endpoint.JwtKey.GetJwtKeysByTenant.Summary")
+        .Produces(StatusCodes.Status200OK)
+        .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        app.MapGet("/v1/admin/jwtkeys/{tenantId}/active", async (IJwtKeyAppService service, INotify notify, int tenantId, CancellationToken ct) =>
+        groupV1.MapGet("/{tenantId}/active", async (int tenantId, IJwtKeyAppService service, INotify notify, CancellationToken ct) =>
         {
             var result = await service.GetActiveKeyAsync(tenantId, ct);
             if (result == null)
             {
-                // Service is expected to have added notifications when appropriate
-                return notify.CustomResponse(204);
+                return notify.CustomResponse(StatusCodes.Status204NoContent);
             }
-            return notify.CustomResponse(result);
+            return notify.CustomResponse(result, StatusCodes.Status200OK);
         })
+        .CustomAuthorize("Admin,BackOffice", "JwtKeys", "GetActive")
         .WithName("GetActiveJwtKey")
-        .WithTags("JwtKeys");
+        .WithSummary("Swagger.Endpoint.JwtKey.GetActiveJwtKey.Summary")
+        .Produces(StatusCodes.Status200OK)
+        .Produces(StatusCodes.Status204NoContent)
+        .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        app.MapPost("/v1/admin/jwtkeys/{tenantId}/create-initial", async (IJwtKeyAppService service, INotify notify, int tenantId, CancellationToken ct) =>
+        groupV1.MapPost("/{tenantId}/create-initial", async (int tenantId, IJwtKeyAppService service, INotify notify, CancellationToken ct) =>
         {
             var ok = await service.CreateInitialIfNotExistsAsync(tenantId, ct);
             if (!ok) return notify.CustomResponse();
-            return notify.CustomResponse(201);
+            return notify.CustomResponse(StatusCodes.Status201Created);
         })
+        .CustomAuthorize("Admin,BackOffice", "JwtKeys", "Create")
         .WithName("CreateInitialJwtKey")
-        .WithTags("JwtKeys");
+        .WithSummary("Swagger.Endpoint.JwtKey.CreateInitialJwtKey.Summary")
+        .Produces(StatusCodes.Status201Created)
+        .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        app.MapPatch("/v1/admin/jwtkeys/{id}/revoke", async (IJwtKeyAppService service, INotify notify, int id, [FromBody] RevokeRequest req, CancellationToken ct) =>
+        groupV1.MapPatch("/{id}/revoke", async (int id, [FromBody] RevokeRequest req, IJwtKeyAppService service, INotify notify, CancellationToken ct) =>
         {
             var ok = await service.RevokeAsync(id, req.Reason, ct);
             if (!ok) return notify.CustomResponse();
-            return notify.CustomResponse(200);
+            return notify.CustomResponse(StatusCodes.Status200OK);
         })
+        .CustomAuthorize("Admin,BackOffice", "JwtKeys", "Revoke")
         .WithName("RevokeJwtKey")
-        .WithTags("JwtKeys");
+        .WithSummary("Swagger.Endpoint.JwtKey.RevokeJwtKey.Summary")
+        .Produces(StatusCodes.Status200OK)
+        .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
     }
 }

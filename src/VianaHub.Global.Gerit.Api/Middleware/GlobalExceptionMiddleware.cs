@@ -134,12 +134,12 @@ public class GlobalExceptionMiddleware
             return;
         }
 
-        context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+        context.Response.StatusCode = 400;
         context.Response.ContentType = "application/json; charset=utf-8";
 
         string friendlyKey = GetFriendlyJsonErrorKey(jsonEx);
         // Adiciona chave de tradução ao notify (sem resolver aqui)
-        notify.Add(friendlyKey, (int)HttpStatusCode.BadRequest);
+        notify.Add(friendlyKey, 400);
 
         var errorResponse = new ErrorResponse(localization.GetMessage("Api.Middleware.GlobalException.JsonException.Error.JsonFormatError"));
         errorResponse.AddError(localization.GetMessage("Api.Middleware.GlobalException.JsonException.Error.FieldLabel.Format"), localization.GetMessage(friendlyKey));

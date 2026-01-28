@@ -1,6 +1,4 @@
 using Microsoft.Extensions.Logging;
-using System.Net;
-using System.Security.Cryptography;
 using VianaHub.Global.Gerit.Domain.Base;
 using VianaHub.Global.Gerit.Domain.Entities;
 using VianaHub.Global.Gerit.Domain.Interfaces;
@@ -69,7 +67,7 @@ public class JwtKeyDomainService : IJwtKeyDomainService
         // Validar tenant
         if (!await ValidateTenantAsync(entity.TenantId, ct))
         {
-            _notify.Add(_localization.GetMessage("Domain.JwtKey.TenantNotFound"), (int)HttpStatusCode.BadRequest);
+            _notify.Add(_localization.GetMessage("Domain.JwtKey.TenantNotFound"), 400);
             return null;
         }
 
@@ -80,8 +78,8 @@ public class JwtKeyDomainService : IJwtKeyDomainService
             _logger.LogWarning("?? [CreateAsync] Validação de JwtKey falhou. Errors={Errors}",
                 string.Join(", ", validation.Errors.Select(e => e.ErrorMessage)));
 
-            foreach (var err in validation.Errors)
-                _notify.Add(err.ErrorMessage, (int)HttpStatusCode.BadRequest);
+            foreach (var error in validation.Errors)
+                _notify.Add(error.ErrorMessage, 400);
             return null;
         }
 
@@ -89,14 +87,14 @@ public class JwtKeyDomainService : IJwtKeyDomainService
         var hasActiveKey = await _repo.HasActiveKeyAsync(entity.TenantId, ct);
         if (hasActiveKey)
         {
-            _notify.Add(_localization.GetMessage("Domain.JwtKey.ActiveKeyAlreadyExists"), (int)HttpStatusCode.Conflict);
+            _notify.Add(_localization.GetMessage("Domain.JwtKey.ActiveKeyAlreadyExists"), 409);
             return null;
         }
 
         var created = await _repo.AddAsync(entity, ct);
         if (!created)
         {
-            _notify.Add(_localization.GetMessage("Domain.JwtKey.CreateFailed"), (int)HttpStatusCode.InternalServerError);
+            _notify.Add(_localization.GetMessage("Domain.JwtKey.CreateFailed"), 400);
             _logger.LogError("? [CreateAsync] Falha ao persistir JwtKey. TenantId={TenantId}", entity.TenantId);
             if (_notify.HasNotify())
             {
@@ -115,15 +113,15 @@ public class JwtKeyDomainService : IJwtKeyDomainService
         var existing = await _repo.GetByIdAsync(key.Id, ct);
         if (existing == null)
         {
-            _notify.Add(_localization.GetMessage("Domain.JwtKey.NotFound"), (int)HttpStatusCode.NotFound);
+            _notify.Add(_localization.GetMessage("Domain.JwtKey.NotFound"), 404);
             return false;
         }
 
         var validation = await _validator.ValidateForActivateAsync(existing);
         if (!validation.IsValid)
         {
-            foreach (var err in validation.Errors)
-                _notify.Add(err.ErrorMessage, (int)HttpStatusCode.BadRequest);
+            foreach (var error in validation.Errors)
+                _notify.Add(error.ErrorMessage, 400);
             return false;
         }
 
@@ -156,15 +154,15 @@ public class JwtKeyDomainService : IJwtKeyDomainService
         var existing = await _repo.GetByIdAsync(key.Id, ct);
         if (existing == null)
         {
-            _notify.Add(_localization.GetMessage("Domain.JwtKey.NotFound"), (int)HttpStatusCode.NotFound);
+            _notify.Add(_localization.GetMessage("Domain.JwtKey.NotFound"), 404);
             return false;
         }
 
         var validation = await _validator.ValidateForDeactivateAsync(existing);
         if (!validation.IsValid)
         {
-            foreach (var err in validation.Errors)
-                _notify.Add(err.ErrorMessage, (int)HttpStatusCode.BadRequest);
+            foreach (var error in validation.Errors)
+                _notify.Add(error.ErrorMessage, 400);
             return false;
         }
 
@@ -185,15 +183,15 @@ public class JwtKeyDomainService : IJwtKeyDomainService
         var existing = await _repo.GetByIdAsync(id, ct);
         if (existing == null)
         {
-            _notify.Add(_localization.GetMessage("Domain.JwtKey.NotFound"), (int)HttpStatusCode.NotFound);
+            _notify.Add(_localization.GetMessage("Domain.JwtKey.NotFound"), 404);
             return false;
         }
 
         var validation = await _validator.ValidateForRevokeAsync(existing);
         if (!validation.IsValid)
         {
-            foreach (var err in validation.Errors)
-                _notify.Add(err.ErrorMessage, (int)HttpStatusCode.BadRequest);
+            foreach (var error in validation.Errors)
+                _notify.Add(error.ErrorMessage, 400);
             return false;
         }
 
@@ -248,15 +246,15 @@ public class JwtKeyDomainService : IJwtKeyDomainService
         var existing = await _repo.GetByIdAsync(key.Id, ct);
         if (existing == null)
         {
-            _notify.Add(_localization.GetMessage("Domain.JwtKey.NotFound"), (int)HttpStatusCode.NotFound);
+            _notify.Add(_localization.GetMessage("Domain.JwtKey.NotFound"), 404);
             return false;
         }
 
         var validation = await _validator.ValidateForDeleteAsync(existing);
         if (!validation.IsValid)
         {
-            foreach (var err in validation.Errors)
-                _notify.Add(err.ErrorMessage, (int)HttpStatusCode.BadRequest);
+            foreach (var error in validation.Errors)
+                _notify.Add(error.ErrorMessage, 400);
             return false;
         }
 
@@ -269,25 +267,25 @@ public class JwtKeyDomainService : IJwtKeyDomainService
         var existing = await _repo.GetByIdAsync(id, ct);
         if (existing == null)
         {
-            _notify.Add(_localization.GetMessage("Domain.JwtKey.NotFound"), (int)HttpStatusCode.NotFound);
+            _notify.Add(_localization.GetMessage("Domain.JwtKey.NotFound"), 404);
             return false;
         }
 
         if (rotationPolicyDays < 30 || rotationPolicyDays > 365)
         {
-            _notify.Add(_localization.GetMessage("Domain.JwtKey.InvalidRotationPolicy"), (int)HttpStatusCode.BadRequest);
+            _notify.Add(_localization.GetMessage("Domain.JwtKey.InvalidRotationPolicy"), 400);
             return false;
         }
 
         if (overlapPeriodDays < 1 || overlapPeriodDays > 30)
         {
-            _notify.Add(_localization.GetMessage("Domain.JwtKey.InvalidOverlapPeriod"), (int)HttpStatusCode.BadRequest);
+            _notify.Add(_localization.GetMessage("Domain.JwtKey.InvalidOverlapPeriod"), 400);
             return false;
         }
 
         if (overlapPeriodDays >= rotationPolicyDays)
         {
-            _notify.Add(_localization.GetMessage("Domain.JwtKey.OverlapMustBeLessThanRotation"), (int)HttpStatusCode.BadRequest);
+            _notify.Add(_localization.GetMessage("Domain.JwtKey.OverlapMustBeLessThanRotation"), 400);
             return false;
         }
 
@@ -309,7 +307,7 @@ public class JwtKeyDomainService : IJwtKeyDomainService
         if (string.IsNullOrWhiteSpace(masterKey))
         {
             _logger.LogError("? [GenerateKeyPairAsync] Chave mestra para criptografia não disponível");
-            _notify.Add(_localization.GetMessage("Domain.JwtKey.EncryptionKeyMissing"), (int)HttpStatusCode.InternalServerError);
+            _notify.Add(_localization.GetMessage("Domain.JwtKey.EncryptionKeyMissing"), 400);
             throw new InvalidOperationException("Master encryption key is not available");
         }
 
@@ -325,7 +323,7 @@ public class JwtKeyDomainService : IJwtKeyDomainService
         catch (Exception ex)
         {
             _logger.LogError(ex, "? [GenerateKeyPairAsync] Erro ao criptografar chave privada");
-            _notify.Add(_localization.GetMessage("Domain.JwtKey.CreateFailed"), (int)HttpStatusCode.InternalServerError);
+            _notify.Add(_localization.GetMessage("Domain.JwtKey.CreateFailed"), 500);
             throw;
         }
     }
@@ -338,7 +336,7 @@ public class JwtKeyDomainService : IJwtKeyDomainService
         if (string.IsNullOrWhiteSpace(masterKey))
         {
             _logger.LogError("? [DecryptPrivateKeyAsync] Chave mestra para descriptografia não disponível");
-            _notify.Add(_localization.GetMessage("Domain.JwtKey.EncryptionKeyMissing"), (int)HttpStatusCode.InternalServerError);
+            _notify.Add(_localization.GetMessage("Domain.JwtKey.EncryptionKeyMissing"), 400);
             throw new InvalidOperationException("Master encryption key is not available");
         }
 
@@ -349,7 +347,7 @@ public class JwtKeyDomainService : IJwtKeyDomainService
         catch (Exception ex)
         {
             _logger.LogError(ex, "? [DecryptPrivateKeyAsync] Erro ao descriptografar chave privada");
-            _notify.Add(_localization.GetMessage("Domain.JwtKey.InvalidPrivateKey"), (int)HttpStatusCode.InternalServerError);
+            _notify.Add(_localization.GetMessage("Domain.JwtKey.InvalidPrivateKey"), 500);
             throw;
         }
     }
@@ -461,7 +459,7 @@ public class JwtKeyDomainService : IJwtKeyDomainService
         if (!await ValidateTenantAsync(tenantId, ct))
         {
             _logger.LogWarning("?? [EnsureKeyExistsAsync] Tenant não encontrado ou inativo. TenantId={TenantId}", tenantId);
-            _notify.Add(_localization.GetMessage("Domain.JwtKey.TenantNotFound"), (int)HttpStatusCode.BadRequest);
+            _notify.Add(_localization.GetMessage("Domain.JwtKey.TenantNotFound"), 400);
             return null;
         }
 
@@ -502,8 +500,8 @@ public class JwtKeyDomainService : IJwtKeyDomainService
             {
                 _logger.LogWarning("?? [EnsureKeyExistsAsync] Validação da nova chave falhou. Errors={Errors}", string.Join(", ", validation.Errors.Select(e => e.ErrorMessage)));
 
-                foreach (var err in validation.Errors)
-                    _notify.Add(err.ErrorMessage, (int)HttpStatusCode.BadRequest);
+                foreach (var error in validation.Errors)
+                    _notify.Add(error.ErrorMessage, 400);
                 return null;
             }
 
@@ -528,7 +526,7 @@ public class JwtKeyDomainService : IJwtKeyDomainService
                     _logger.LogError("? [EnsureKeyExistsAsync] Notificações: {Notifications}", string.Join("; ", _notify.GetErrorMessage()));
                 }
 
-                _notify.Add(_localization.GetMessage("Domain.JwtKey.CreateFailed"), (int)HttpStatusCode.InternalServerError);
+                _notify.Add(_localization.GetMessage("Domain.JwtKey.CreateFailed"), 400);
                 return null;
             }
 
@@ -543,7 +541,7 @@ public class JwtKeyDomainService : IJwtKeyDomainService
             }
 
             // Repassar uma notificação amigável
-            _notify.Add(_localization.GetMessage("Domain.JwtKey.CreateFailed"), (int)HttpStatusCode.InternalServerError);
+            _notify.Add(_localization.GetMessage("Domain.JwtKey.CreateFailed"), 500);
             return null;
         }
     }

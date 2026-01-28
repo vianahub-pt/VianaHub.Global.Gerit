@@ -13,11 +13,11 @@ using VianaHub.Global.Gerit.Domain.Interfaces.Repository;
 using VianaHub.Global.Gerit.Domain.Tools.Notifications;
 using VianaHub.Global.Gerit.Domain.Tools.Cryptography;
 using VianaHub.Global.Gerit.Infra.Data.Context;
-using System.Linq;
 using System.Text.Json;
 using VianaHub.Global.Gerit.Application.Interfaces.Identity;
 using VianaHub.Global.Gerit.Application.Dtos.Response.Identity.Auth;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Identity.Auth;
+using VianaHub.Global.Gerit.Domain.Interfaces.Domain;
 
 namespace VianaHub.Global.Gerit.Application.Services.Identity;
 
@@ -37,6 +37,7 @@ public class AuthAppService : IAuthAppService
     private readonly ISecretProvider _secretProvider;
     private readonly IUserRoleDataRepository _userRoleRepo;
     private readonly IRolePermissionDataRepository _rolePermissionRepo;
+    private readonly ISubscriptionDomainService _subscriptionDomain;
 
     public AuthAppService(
         IUserDataRepository userRepo,
@@ -51,6 +52,7 @@ public class AuthAppService : IAuthAppService
         IJwtKeyDataRepository jwtKeyRepo,
         GeritDbContext dbContext,
         ISecretProvider secretProvider,
+        ISubscriptionDomainService subscriptionDomain,
         IUserRoleDataRepository userRoleRepo,
         IRolePermissionDataRepository rolePermissionRepo)
     {
@@ -66,6 +68,7 @@ public class AuthAppService : IAuthAppService
         _jwtKeyRepo = jwtKeyRepo;
         _dbContext = dbContext;
         _secretProvider = secretProvider;
+        _subscriptionDomain = subscriptionDomain;
         _userRoleRepo = userRoleRepo;
         _rolePermissionRepo = rolePermissionRepo;
     }
@@ -112,7 +115,7 @@ public class AuthAppService : IAuthAppService
         }
 
         // Enviar email de confirmação (NoOp por enquanto)
-        await _emailSender.SendAsync(user.Email, "Email.Auth.Confirm.Subject", "Email.Auth.Confirm.Body", user.Name);
+        await _emailSender.SendAsync(user.Email, "Application.Service.Auth.Email.Confirm.Subject", "Application.Service.Auth.Email.Confirm.Body", user.Name);
 
         // Limpar contexto tenant
         try { await _dbContext.ClearTenantContextAsync(ct); } catch { }
@@ -160,8 +163,16 @@ public class AuthAppService : IAuthAppService
             return null;
         }
 
+        // Validar assinatura do tenant via domain service
+        var (isValidSub, isTrial) = await _subscriptionDomain.IsTenantSubscriptionValidAsync(user.TenantId, ct);
+        if (!isValidSub)
+        {
+            _notify.Add(_localization.GetMessage("Application.Service.Auth.Login.InvalidTenantSignature"), 403);
+            return null;
+        }
+
         // Gera tokens (usa chave RSA do tenant)
-        var accessToken = await GenerateAccessTokenAsync(user, ct);
+        var accessToken = await GenerateAccessTokenAsync(user, isTrial, ct);
         if (accessToken.Token == null)
         {
             // Erro já notificado
@@ -220,6 +231,14 @@ public class AuthAppService : IAuthAppService
             return null;
         }
 
+        // Validar assinatura do tenant também no refresh
+        var (isValidOnRefresh, isTrialOnRefresh) = await _subscriptionDomain.IsTenantSubscriptionValidAsync(user.TenantId, ct);
+        if (!isValidOnRefresh)
+        {
+            _notify.Add(_localization.GetMessage("Application.Service.Auth.Login.InvalidTenantSignature"), 403);
+            return null;
+        }
+
         // Rotação: revogar token antigo e criar novo
         await _refreshRepo.RevokeAsync(tokenEntity.Token, user.Id, request.TenantId);
 
@@ -227,7 +246,7 @@ public class AuthAppService : IAuthAppService
         var newRefresh = new RefreshTokenEntity(request.TenantId, user.Id, newRefreshValue, DateTime.UtcNow.AddDays(_jwtSettings.RefreshTokenExpirationDays), user.Id);
         await _refreshRepo.AddAsync(newRefresh);
 
-        var accessToken = await GenerateAccessTokenAsync(user, ct);
+        var accessToken = await GenerateAccessTokenAsync(user, isTrialOnRefresh, ct);
 
         try { await _dbContext.ClearTenantContextAsync(ct); } catch { }
 
@@ -244,7 +263,7 @@ public class AuthAppService : IAuthAppService
         };
     }
 
-    private async Task<(string Token, DateTime ExpiresAt)> GenerateAccessTokenAsync(UserEntity user, CancellationToken ct)
+    private async Task<(string Token, DateTime ExpiresAt)> GenerateAccessTokenAsync(UserEntity user, bool isTrial, CancellationToken ct)
     {
         var now = DateTime.UtcNow;
         var expires = now.AddMinutes(_jwtSettings.AccessTokenExpirationMinutes);
@@ -257,6 +276,11 @@ public class AuthAppService : IAuthAppService
             new Claim(JwtRegisteredClaimNames.Email, user.Email ?? string.Empty),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
+
+        if (isTrial)
+        {
+            claims.Add(new Claim("tenant_subscription_type", "trial"));
+        }
 
         string permissionsJson = null;
 

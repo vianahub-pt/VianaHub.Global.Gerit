@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using FluentValidation;
 using VianaHub.Global.Gerit.Domain.Entities;
 using VianaHub.Global.Gerit.Domain.Interfaces.Domain;

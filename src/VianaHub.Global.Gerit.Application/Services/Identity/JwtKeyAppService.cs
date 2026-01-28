@@ -16,19 +16,22 @@ public class JwtKeyAppService : IJwtKeyAppService
     private readonly INotify _notify;
     private readonly IMapper _mapper;
     private readonly ICurrentUserService _currentUser;
+    private readonly ILocalizationService _localization;
 
     public JwtKeyAppService(
         IJwtKeyDataRepository repo,
         IJwtKeyDomainService domain,
         INotify notify,
         IMapper mapper,
-        ICurrentUserService currentUser)
+        ICurrentUserService currentUser,
+        ILocalizationService localization)
     {
         _repo = repo;
         _domain = domain;
         _notify = notify;
         _mapper = mapper;
         _currentUser = currentUser;
+        _localization = localization;
     }
 
     public async Task<IEnumerable<JwtKeyResponse>> GetByTenantAsync(int tenantId, CancellationToken ct)
@@ -59,19 +62,19 @@ public class JwtKeyAppService : IJwtKeyAppService
         var entity = await _repo.GetByIdAsync(id, ct);
         if (entity == null)
         {
-            _notify.Add("Application.Service.Jwt.Revoke.ResourceNotFound", 410);
+            _notify.Add(_localization.GetMessage("Application.Service.Jwt.Revoke.ResourceNotFound"), 410);
             return false;
         }
 
         if (entity.IsRevoked())
         {
-            _notify.Add("Application.Service.Jwt.Revoke.AlreadyRevoked", 400);
+            _notify.Add(_localization.GetMessage("Application.Service.Jwt.Revoke.AlreadyRevoked"), 400);
             return false;
         }
 
         if (string.IsNullOrWhiteSpace(reason))
         {
-            _notify.Add("Application.Service.Jwt.Revoke.ReasonRequired", 400);
+            _notify.Add(_localization.GetMessage("Application.Service.Jwt.Revoke.ReasonRequired"), 400);
             return false;
         }
 

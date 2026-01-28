@@ -59,7 +59,7 @@ public class FileValidationFilter : IEndpointFilter
                 _logger.LogError(ex, "Erro ao ler arquivo do form");
                 if (notify != null)
                 {
-                    notify.Add($"Erro ao processar arquivo: {ex.Message}", (int)HttpStatusCode.BadRequest);
+                    notify.Add($"Erro ao processar arquivo: {ex.Message}", 400);
                 }
                 return Results.BadRequest(new
                 {
@@ -80,7 +80,7 @@ public class FileValidationFilter : IEndpointFilter
             {
                 foreach (var error in validationResult.Errors)
                 {
-                    notify.Add(error.ErrorMessage, (int)HttpStatusCode.BadRequest);
+                    notify.Add(error.ErrorMessage, 400);
                     _logger.LogDebug("Erro de validação: {ErrorMessage}", error.ErrorMessage);
                 }
             }

@@ -23,4 +23,9 @@ public interface ISubscriptionDomainService
     Task<bool> DeleteAsync(SubscriptionEntity entity, CancellationToken ct);
     Task<bool> CancelAsync(SubscriptionEntity entity, CancellationToken ct);
     Task<bool> RenewAsync(SubscriptionEntity entity, CancellationToken ct);
+    /// <summary>
+    /// Verifica se o tenant possui uma assinatura válida. Retorna uma tupla onde
+    /// Item1 = é válida (true/false) e Item2 = indica se a assinatura válida é um trial.
+    /// </summary>
+    Task<(bool IsValid, bool IsTrial)> IsTenantSubscriptionValidAsync(int tenantId, CancellationToken ct);
 }

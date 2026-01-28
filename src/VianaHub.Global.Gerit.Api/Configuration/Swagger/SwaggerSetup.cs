@@ -1,4 +1,6 @@
 ﻿using Microsoft.OpenApi.Models;
+using VianaHub.Global.Gerit.Domain.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace VianaHub.Global.Gerit.Api.Configuration.Swagger;
 
@@ -11,27 +13,35 @@ public static class SwaggerSetup
         configuration.GetSection("Swagger").Bind(swaggerSettings);
 
         services.AddEndpointsApiExplorer();
+
+        // Tenta obter o serviço de localização (caso já tenha sido registrado) para evitar strings hardcoded
+        var provider = services.BuildServiceProvider();
+        var localization = provider.GetService<ILocalizationService>();
+
         services.AddSwaggerGen(options =>
         {
-            // Define title and description based on environment
-            string title;
-            string description;
+            // Define title and description based on environment via chaves de tradução
+            string titleKey;
+            string descriptionKey;
 
             if (environment.IsProduction())
             {
-                title = "VianaHub Gerit API - Production";
-                description = "Gerit Platform API for VianaHub - Production Environment";
+                titleKey = "Swagger.Api.Title.Production";
+                descriptionKey = "Swagger.Api.Description.Production";
             }
             else if (environment.IsStaging())
             {
-                title = "VianaHub Gerit API - Staging";
-                description = "Gerit Platform API for VianaHub - Staging Environment";
+                titleKey = "Swagger.Api.Title.Staging";
+                descriptionKey = "Swagger.Api.Description.Staging";
             }
             else
             {
-                title = "VianaHub Gerit API - Development";
-                description = "Gerit Platform API for VianaHub - Development Environment";
+                titleKey = "Swagger.Api.Title.Development";
+                descriptionKey = "Swagger.Api.Description.Development";
             }
+
+            var title = localization?.GetMessage(titleKey) ?? titleKey;
+            var description = localization?.GetMessage(descriptionKey) ?? descriptionKey;
 
             options.SwaggerDoc("v1", new OpenApiInfo
             {
@@ -40,13 +50,14 @@ public static class SwaggerSetup
                 Description = description,
                 Contact = new OpenApiContact
                 {
-                    Name = "VianaHub Support",
+                    // Nome do contato via chave de tradução
+                    Name = localization?.GetMessage("Swagger.Api.Contact.Name") ?? "Swagger.Api.Contact.Name",
                     Email = "support@vianahub.pt",
                     Url = new Uri("https://vianahub.pt")
                 },
                 License = new OpenApiLicense
                 {
-                    Name = "Proprietary",
+                    Name = localization?.GetMessage("Swagger.Api.License.Name") ?? "Swagger.Api.License.Name",
                     Url = new Uri("https://vianahub.pt/license")
                 }
             });
@@ -61,7 +72,8 @@ public static class SwaggerSetup
                 Scheme = "Bearer",
                 BearerFormat = "JWT",
                 In = ParameterLocation.Header,
-                Description = "JWT Authorization header using the Bearer scheme. Enter 'Bearer' [space] and then your token in the text input below. Example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'"
+                // Define a descrição como chave de tradução para que o SwaggerTranslationFilter faça a substituição
+                Description = localization?.GetMessage("Swagger.Security.Bearer.Description") ?? "Swagger.Security.Bearer.Description"
             });
 
             options.AddSecurityRequirement(new OpenApiSecurityRequirement
@@ -117,9 +129,15 @@ public static class SwaggerSetup
             });
             app.UseSwaggerUI(options =>
             {
-                options.SwaggerEndpoint("/swagger/v1/swagger.json", "VianaHub Gerit API v1");
+                // Tenta obter o serviço de localização do provider da aplicação
+                var localization = app.Services.GetService<ILocalizationService>();
+
+                // Endpoint name (exibido no seletor) via tradução
+                var endpointName = localization?.GetMessage("Swagger.UI.EndpointName", "v1") ?? "Swagger.UI.EndpointName";
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", endpointName);
                 options.RoutePrefix = "swagger";
-                options.DocumentTitle = "VianaHub Gerit API - Documentation";
+
+                options.DocumentTitle = localization?.GetMessage("Swagger.UI.DocumentTitle") ?? "Swagger.UI.DocumentTitle";
                 options.DisplayRequestDuration();
                 options.EnableDeepLinking();
                 options.EnableFilter();

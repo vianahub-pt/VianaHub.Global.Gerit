@@ -1,6 +1,4 @@
 using Hangfire.Dashboard;
-using Microsoft.AspNetCore.Http;
-using System.Security.Claims;
 
 namespace VianaHub.Global.Gerit.Api.Security;
 
@@ -15,7 +13,7 @@ public class HangfireDashboardAuthorizationFilter : IDashboardAuthorizationFilte
         var httpContext = context.GetHttpContext();
 
         // Permitir acesso quando em Development sem autenticação
-        var env = httpContext.RequestServices.GetService(typeof(Microsoft.AspNetCore.Hosting.IWebHostEnvironment)) as Microsoft.AspNetCore.Hosting.IWebHostEnvironment;
+        var env = httpContext.RequestServices.GetService(typeof(IWebHostEnvironment)) as IWebHostEnvironment;
         if (env != null && env.IsDevelopment())
             return true;
 

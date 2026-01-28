@@ -73,7 +73,7 @@ public class ValidationFilter<TRequest> : IEndpointFilter where TRequest : class
             {
                 foreach (var error in validationResult.Errors)
                 {
-                    notify.Add($"{error.PropertyName}: {error.ErrorMessage}", (int)HttpStatusCode.BadRequest);
+                    notify.Add($"{error.PropertyName}: {error.ErrorMessage}", 400);
                     _logger.LogDebug("Erro de validação adicionado ao Notify: {PropertyName} - {ErrorMessage}",
                         error.PropertyName, error.ErrorMessage);
                 }
