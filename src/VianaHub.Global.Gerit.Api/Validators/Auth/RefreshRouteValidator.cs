@@ -1,5 +1,5 @@
 using FluentValidation;
-using VianaHub.Global.Gerit.Application.Dtos.Request.Auth;
+using VianaHub.Global.Gerit.Application.Dtos.Request.Identity.Auth;
 
 namespace VianaHub.Global.Gerit.Api.Validators.Auth;
 

@@ -10,12 +10,13 @@ using VianaHub.Global.Gerit.Domain.Interfaces;
 using VianaHub.Global.Gerit.Infra.Data.Context;
 using VianaHub.Global.Gerit.Infra.Data.Interceptors;
 using VianaHub.Global.Gerit.Infra.IoC;
-using VianaHub.Global.Gerit.Application.Mappings;
 using Hangfire;
 using Hangfire.SqlServer;
 using VianaHub.Global.Gerit.Infra.Job.Services;
 using VianaHub.Global.Gerit.Api.Security;
 using VianaHub.Global.Gerit.Infra.Data.Tools;
+using VianaHub.Global.Gerit.Api.Endpoints.Identity;
+using VianaHub.Global.Gerit.Application.Mappings.Identity;
 
 namespace VianaHub.Global.Gerit.Api;
 

@@ -1,5 +1,5 @@
 using FluentValidation;
-using VianaHub.Global.Gerit.Application.Dtos.Request.Role;
+using VianaHub.Global.Gerit.Application.Dtos.Request.Identity.Role;
 using VianaHub.Global.Gerit.Domain.Interfaces;
 
 namespace VianaHub.Global.Gerit.Api.Validators.Role;

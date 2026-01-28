@@ -1,4 +1,5 @@
 ﻿using VianaHub.Global.Gerit.Api.Filters;
+using VianaHub.Global.Gerit.Domain.Interfaces;
 
 namespace VianaHub.Global.Gerit.Api.Helpers;
 
@@ -30,11 +31,13 @@ public static class EndpointAuthorizationExtensions
     {
         return builder.AddEndpointFilter(async (context, next) =>
         {
+            var services = context.HttpContext.RequestServices;
             var filter = new AuthorizationFilter(
                 allowedRoles,
                 resource,
                 action,
-                context.HttpContext.RequestServices.GetRequiredService<ILogger<AuthorizationFilter>>());
+                services.GetRequiredService<ILogger<AuthorizationFilter>>(),
+                services.GetRequiredService<ILocalizationService>());
 
             return await filter.InvokeAsync(context, next);
         });

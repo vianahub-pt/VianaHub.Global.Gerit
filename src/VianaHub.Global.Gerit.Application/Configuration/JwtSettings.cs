@@ -79,4 +79,10 @@ public class JwtSettings
     /// Período de graça para tokens antigos após rotação (em segundos).
     /// </summary>
     public int RotationGracePeriodSeconds { get; set; } = 30;
+
+    /// <summary>
+    /// Toggle para emitir claims no formato antigo (várias claims "permission": "resource:action").
+    /// Por padrão false: apenas o novo formato agrupado em claim "permissions" será emitido.
+    /// </summary>
+    public bool EmitLegacyPermissionClaims { get; set; } = false;
 }

@@ -1,7 +1,10 @@
 ﻿using System.Net;
 using System.Security.Claims;
+using System.Text.Json;
+using System.Linq;
 using VianaHub.Global.Gerit.Application.Dtos.Base;
 using VianaHub.Global.Gerit.Domain.Tools.Notifications;
+using VianaHub.Global.Gerit.Domain.Interfaces;
 
 namespace VianaHub.Global.Gerit.Api.Filters;
 
@@ -16,6 +19,7 @@ public class AuthorizationFilter : IEndpointFilter
     private readonly string _resource;
     private readonly string _action;
     private readonly ILogger<AuthorizationFilter> _logger;
+    private readonly ILocalizationService _localization;
 
     /// <summary>
     /// Inicializa uma nova instância do <see cref="AuthorizationFilter"/>.
@@ -24,11 +28,13 @@ public class AuthorizationFilter : IEndpointFilter
     /// <param name="resource">Nome do recurso (ex: "Actions", "Resources", "Permissions")</param>
     /// <param name="action">Ação permitida (ex: "Read", "Write", "Delete")</param>
     /// <param name="logger">Logger</param>
+    /// <param name="localization">Serviço de localização para mensagens</param>
     public AuthorizationFilter(
         string allowedRoles,
         string resource,
         string action,
-        ILogger<AuthorizationFilter> logger)
+        ILogger<AuthorizationFilter> logger,
+        ILocalizationService localization)
     {
         _allowedRoles = allowedRoles?.Split(',', StringSplitOptions.RemoveEmptyEntries)
             .Select(r => r.Trim().ToLower())
@@ -36,6 +42,7 @@ public class AuthorizationFilter : IEndpointFilter
         _resource = resource;
         _action = action;
         _logger = logger;
+        _localization = localization;
     }
 
     /// <summary>
@@ -94,22 +101,23 @@ public class AuthorizationFilter : IEndpointFilter
             var notify = httpContext.RequestServices.GetService<INotify>();
             if (notify != null)
             {
-                notify.Add(
-                    $"Você não tem permissão para acessar este recurso. Perfil necessário: {string.Join(", ", _allowedRoles)}",
-                    (int)HttpStatusCode.Forbidden);
+                var msg = _localization?.GetMessage("Api.Authorization.Forbidden.Roles")
+                    ?? $"Você não tem permissão para acessar este recurso. Perfil necessário: {string.Join(", ", _allowedRoles)}";
+                notify.Add(msg, (int)HttpStatusCode.Forbidden);
             }
 
-            var errorResponse = new ErrorResponse("Acesso Negado");
-            errorResponse.AddError("Authorization", $"Você não tem permissão para acessar este recurso. Perfis necessários: {string.Join(", ", _allowedRoles)}");
+            var errorResponse = new ErrorResponse(_localization?.GetMessage("Api.Authorization.AccessDenied") ?? "Acesso Negado");
+            errorResponse.AddError("Authorization", _localization?.GetMessage("Api.Authorization.Forbidden.Roles.Detail") ?? $"Você não tem permissão para acessar este recurso. Perfis necessários: {string.Join(", ", _allowedRoles)}");
 
             return Results.Json(errorResponse, statusCode: (int)HttpStatusCode.Forbidden);
         }
 
         // Verificar permissões específicas do recurso e ação (se configurado)
-        // As permissões já estão no token como claims no formato "resource:action"
+        // Suporta formato antigo: várias claims 'permission': 'resource:action'
+        // E novo formato único 'permissions' cujo valor é um JSON com chaves por recurso
         if (!string.IsNullOrEmpty(_resource) && !string.IsNullOrEmpty(_action))
         {
-            var hasPermission = ValidateResourcePermissionFromClaims(user, _resource, _action);
+            var hasPermission = ValidateResourcePermissionFromClaims(user, _resource, _action, httpContext);
 
             if (!hasPermission)
             {
@@ -120,13 +128,13 @@ public class AuthorizationFilter : IEndpointFilter
                 var notify = httpContext.RequestServices.GetService<INotify>();
                 if (notify != null)
                 {
-                    notify.Add(
-                        $"Você não tem permissão para executar a ação '{_action}' no recurso '{_resource}'",
-                        (int)HttpStatusCode.Forbidden);
+                    var msg = _localization?.GetMessage("Api.Authorization.Forbidden.Permission")
+                        ?? $"Você não tem permissão para executar a ação '{_action}' no recurso '{_resource}'";
+                    notify.Add(msg, (int)HttpStatusCode.Forbidden);
                 }
 
-                var errorResponse = new ErrorResponse("Acesso Negado");
-                errorResponse.AddError("Authorization", $"Você não tem permissão para executar a ação '{_action}' no recurso '{_resource}'");
+                var errorResponse = new ErrorResponse(_localization?.GetMessage("Api.Authorization.AccessDenied") ?? "Acesso Negado");
+                errorResponse.AddError("Authorization", _localization?.GetMessage("Api.Authorization.Forbidden.Permission.Detail") ?? $"Você não tem permissão para executar a ação '{_action}' no recurso '{_resource}'");
 
                 return Results.Json(errorResponse, statusCode: (int)HttpStatusCode.Forbidden);
             }
@@ -158,32 +166,83 @@ public class AuthorizationFilter : IEndpointFilter
     private bool ValidateResourcePermissionFromClaims(
         ClaimsPrincipal user,
         string resource,
-        string action)
+        string action,
+        HttpContext httpContext)
     {
-        // Formato padrão: "resource:action" (case-insensitive)
+        // Formato padrão antigo: "resource:action" (case-insensitive)
         var requiredPermission = $"{resource}:{action}".ToLower();
 
-        // Extrair todas as permissões das claims do token
+        // 1) Tentar formato antigo: várias claims 'permission'
         var userPermissions = user.FindAll("permission")
             .Select(c => c.Value.ToLower())
             .ToHashSet();
 
-        var hasPermission = userPermissions.Contains(requiredPermission);
-
-        if (hasPermission)
+        if (userPermissions.Contains(requiredPermission))
         {
             _logger.LogDebug(
-                "Permissão '{Permission}' encontrada nas claims do token",
+                "Permissão '{Permission}' encontrada nas claims do token (formato antigo)",
                 requiredPermission);
-        }
-        else
-        {
-            _logger.LogDebug(
-                "Permissão '{Permission}' NÃO encontrada. Permissões disponíveis: [{Permissions}]",
-                requiredPermission,
-                string.Join(", ", userPermissions));
+            return true;
         }
 
-        return hasPermission;
+        // 2) Tentar novo formato: claim único 'permissions' com JSON
+        // Cachear o dicionário parseado no HttpContext.Items para este request
+        const string cacheKey = "__permissions_parsed__";
+        if (!httpContext.Items.TryGetValue(cacheKey, out var cached))
+        {
+            // Encontrar claim 'permissions'
+            var permClaim = user.FindFirst("permissions")?.Value;
+            if (string.IsNullOrWhiteSpace(permClaim))
+            {
+                _logger.LogDebug("Nenhuma claim 'permission' nem 'permissions' encontrada para o usuário");
+                return false;
+            }
+
+            try
+            {
+                // Desserializar para Dictionary<string,List<string>>
+                var dict = JsonSerializer.Deserialize<Dictionary<string, List<string>>>(permClaim);
+                if (dict == null)
+                {
+                    _logger.LogWarning("Claim 'permissions' presente mas não pôde ser desserializada como JSON");
+                    httpContext.Items[cacheKey] = new Dictionary<string, HashSet<string>>();
+                }
+                else
+                {
+                    var normalized = dict.ToDictionary(kvp => kvp.Key.ToLower(), kvp => kvp.Value.Select(x => x.ToLower()).ToHashSet());
+                    httpContext.Items[cacheKey] = normalized;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "Erro ao desserializar claim 'permissions'");
+                httpContext.Items[cacheKey] = new Dictionary<string, HashSet<string>>();
+            }
+
+            cached = httpContext.Items[cacheKey];
+        }
+
+        if (cached is Dictionary<string, HashSet<string>> permissionsDict)
+        {
+            var resourceKey = resource.ToLower();
+            if (permissionsDict.TryGetValue(resourceKey, out var actions))
+            {
+                var actionKey = action.ToLower();
+                var has = actions.Contains(actionKey);
+                if (has)
+                {
+                    _logger.LogDebug("Permissão '{Permission}' encontrada no claim 'permissions' (formato agrupado)", requiredPermission);
+                    return true;
+                }
+                else
+                {
+                    _logger.LogDebug("Permissão '{Permission}' NÃO encontrada no claim 'permissions' (ações disponíveis: {Actions})", requiredPermission, string.Join(", ", actions));
+                    return false;
+                }
+            }
+        }
+
+        _logger.LogDebug("Permissão '{Permission}' NÃO encontrada nas claims do token (nenhum formato)", requiredPermission);
+        return false;
     }
 }

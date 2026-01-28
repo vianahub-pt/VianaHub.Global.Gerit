@@ -29,6 +29,10 @@ using VianaHub.Global.Gerit.Infra.Job.HostedServices;
 using VianaHub.Global.Gerit.Domain.Interfaces.Job;
 using VianaHub.Global.Gerit.Infra.Job.Interfaces;
 using VianaHub.Global.Gerit.Domain.Validators.Jwt;
+using VianaHub.Global.Gerit.Application.Services.Identity;
+using VianaHub.Global.Gerit.Application.Interfaces.Identity;
+using VianaHub.Global.Gerit.Domain.Services.Identity;
+using VianaHub.Global.Gerit.Infra.Data.Repository.Identity;
 
 namespace VianaHub.Global.Gerit.Infra.IoC;
 

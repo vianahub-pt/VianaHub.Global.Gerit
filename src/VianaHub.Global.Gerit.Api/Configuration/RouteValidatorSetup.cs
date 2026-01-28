@@ -1,12 +1,12 @@
 ﻿using FluentValidation;
-using VianaHub.Global.Gerit.Application.Dtos.Request.Action;
-using VianaHub.Global.Gerit.Application.Dtos.Request.Resource;
-using VianaHub.Global.Gerit.Application.Dtos.Request.Role;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Plan;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Tenant;
-using VianaHub.Global.Gerit.Application.Dtos.Request.User;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Subscription;
-using VianaHub.Global.Gerit.Application.Dtos.Request.Auth;
+using VianaHub.Global.Gerit.Application.Dtos.Request.Identity.Auth;
+using VianaHub.Global.Gerit.Application.Dtos.Request.Identity.Action;
+using VianaHub.Global.Gerit.Application.Dtos.Request.Identity.Resource;
+using VianaHub.Global.Gerit.Application.Dtos.Request.Identity.Role;
+using VianaHub.Global.Gerit.Application.Dtos.Request.Identity.User;
 
 namespace VianaHub.Global.Gerit.Api.Configuration;
 
