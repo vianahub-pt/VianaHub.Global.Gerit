@@ -10,6 +10,7 @@ public interface IUserDataRepository
     Task<UserEntity> GetByIdAsync(int id, CancellationToken ct);
     Task<UserEntity> GetByEmailAsync(string email, CancellationToken ct);
     Task<ListPage<UserEntity>> GetPagedAsync(PagedFilter filter, CancellationToken ct);
+    Task<bool> ExistsByIdAsync(int id, CancellationToken ct);
     Task<bool> ExistsByEmailAsync(string email, CancellationToken ct);
     Task<bool> ExistsByEmailAsync(string email, int excludeId, CancellationToken ct);
     Task<bool> CreateAsync(UserEntity entity, CancellationToken ct);

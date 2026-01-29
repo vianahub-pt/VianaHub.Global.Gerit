@@ -15,11 +15,6 @@ public class UpdateUserRouteValidator : AbstractValidator<UpdateUserRequest>
         RuleFor(x => x.Name)
             .MaximumLength(200).WithMessage(_localization.GetMessage("Api.Validator.User.Update.Name.MaximumLength", 200));
 
-        RuleFor(x => x.Email)
-            .MaximumLength(255).WithMessage(_localization.GetMessage("Api.Validator.User.Update.Email.MaximumLength", 255))
-            .EmailAddress().When(x => !string.IsNullOrEmpty(x.Email))
-            .WithMessage(_localization.GetMessage("Api.Validator.User.Update.Email.Invalid"));
-
         RuleFor(x => x.PhoneNumber)
             .MaximumLength(20).WithMessage(_localization.GetMessage("Api.Validator.User.Update.PhoneNumber.MaximumLength", 20));
     }

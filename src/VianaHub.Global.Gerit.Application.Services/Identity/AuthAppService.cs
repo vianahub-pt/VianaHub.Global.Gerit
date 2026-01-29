@@ -163,34 +163,15 @@ public class AuthAppService : IAuthAppService
             return null;
         }
 
-        if (!await _subscriptionDomain.IsActiveAsync(request.TenantId, ct))
+        // Validar assinatura do tenant via domain service
+        var (isValidSub, isTrial, failureKey) = await _subscriptionDomain.IsTenantSubscriptionValidAsync(user.TenantId, ct);
+        if (!isValidSub)
         {
-            _notify.Add(_localization.GetMessage("Application.Service.Auth.Login.Subscription.NonActive"), 403);
-            return null;
-        }
-        if (await _subscriptionDomain.IsCanceledAsync(request.TenantId, ct))
-        {
-            _notify.Add(_localization.GetMessage("Application.Service.Auth.Login.Subscription.Canceled"), 403);
-            return null;
-        }
-        if (await _subscriptionDomain.IsDeletedAsync(request.TenantId, ct))
-        {
-            _notify.Add(_localization.GetMessage("Application.Service.Auth.Login.Subscription.Deleted"), 403);
-            return null;
-        }
+            var message = !string.IsNullOrWhiteSpace(failureKey)
+                ? _localization.GetMessage(failureKey)
+                : _localization.GetMessage("Application.Service.Auth.Login.InvalidTenantSignature");
 
-        var isTrial = await _subscriptionDomain.IsTrialAsync(request.TenantId, ct);
-        if (isTrial)
-        {
-            if (await _subscriptionDomain.IsTrialPeriodExpiredAsync(request.TenantId, ct))
-            {
-                _notify.Add(_localization.GetMessage("Application.Service.Auth.Login.Subscription.TrialPeriodExpired"), 403);
-                return null;
-            }
-        }
-        else if (await _subscriptionDomain.IsSubscriptionPeriodExpiredAsync(request.TenantId, ct))
-        {
-            _notify.Add(_localization.GetMessage("Application.Service.Auth.Login.Subscription.PeriodExpired"), 403);
+            _notify.Add(message, 403);
             return null;
         }
 
@@ -254,34 +235,15 @@ public class AuthAppService : IAuthAppService
             return null;
         }
 
-        if (!await _subscriptionDomain.IsActiveAsync(request.TenantId, ct))
+        // Validar assinatura do tenant também no refresh
+        var (isValidOnRefresh, isTrialOnRefresh, failureKeyOnRefresh) = await _subscriptionDomain.IsTenantSubscriptionValidAsync(user.TenantId, ct);
+        if (!isValidOnRefresh)
         {
-            _notify.Add(_localization.GetMessage("Application.Service.Auth.RefreshToken.Subscription.NonActive"), 403);
-            return null;
-        }
-        if (await _subscriptionDomain.IsCanceledAsync(request.TenantId, ct))
-        {
-            _notify.Add(_localization.GetMessage("Application.Service.Auth.RefreshToken.Subscription.Canceled"), 403);
-            return null;
-        }
-        if (await _subscriptionDomain.IsDeletedAsync(request.TenantId, ct))
-        {
-            _notify.Add(_localization.GetMessage("Application.Service.Auth.RefreshToken.Subscription.Deleted"), 403);
-            return null;
-        }
+            var message = !string.IsNullOrWhiteSpace(failureKeyOnRefresh)
+                ? _localization.GetMessage(failureKeyOnRefresh)
+                : _localization.GetMessage("Application.Service.Auth.Login.InvalidTenantSignature");
 
-        var isTrial = await _subscriptionDomain.IsTrialAsync(user.Id, ct);
-        if (isTrial)
-        {
-            if (await _subscriptionDomain.IsTrialPeriodExpiredAsync(user.Id, ct))
-            {
-                _notify.Add(_localization.GetMessage("Application.Service.Auth.RefreshToken.Subscription.TrialPeriodExpired"), 403);
-                return null;
-            }
-        }
-        else if (await _subscriptionDomain.IsSubscriptionPeriodExpiredAsync(user.Id, ct))
-        {
-            _notify.Add(_localization.GetMessage("Application.Service.Auth.RefreshToken.Subscription.PeriodExpired"), 403);
+            _notify.Add(message, 403);
             return null;
         }
 
@@ -292,7 +254,7 @@ public class AuthAppService : IAuthAppService
         var newRefresh = new RefreshTokenEntity(request.TenantId, user.Id, newRefreshValue, DateTime.UtcNow.AddDays(_jwtSettings.RefreshTokenExpirationDays), user.Id);
         await _refreshRepo.AddAsync(newRefresh);
 
-        var accessToken = await GenerateAccessTokenAsync(user, isTrial, ct);
+        var accessToken = await GenerateAccessTokenAsync(user, isTrialOnRefresh, ct);
 
         try { await _dbContext.ClearTenantContextAsync(ct); } catch { }
 

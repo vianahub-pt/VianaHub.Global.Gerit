@@ -136,6 +136,37 @@ public class SubscriptionDataRepository : ISubscriptionDataRepository
             .ToListAsync(ct);
     }
 
+    public async Task<bool> IsTrialAsync(int tenantId, CancellationToken ct)
+    {
+        return await _context.Set<SubscriptionEntity>()
+            .AsNoTracking().AnyAsync(x => x.TenantId == tenantId && x.TrialStart.HasValue && x.TrialEnd.HasValue, ct);
+    }
+    public async Task<bool> IsDeletedAsync(int tenantId, CancellationToken ct)
+    {
+        return await _context.Set<SubscriptionEntity>()
+            .AsNoTracking().AnyAsync(x => x.TenantId == tenantId && x.IsDeleted, ct);
+    }
+    public async Task<bool> IsActiveAsync(int tenantId, CancellationToken ct)
+    {
+        return await _context.Set<SubscriptionEntity>()
+            .AsNoTracking().AnyAsync(x => x.TenantId == tenantId && x.IsActive, ct);
+    }
+    public async Task<bool> IsCanceledAsync(int tenantId, CancellationToken ct)
+    {
+        return await _context.Set<SubscriptionEntity>()
+            .AsNoTracking().AnyAsync(x => x.TenantId == tenantId && x.CanceledAt.HasValue && x.CancelAtPeriodEnd, ct);
+    }
+    public async Task<bool> IsTrialPeriodExpiredAsync(int tenantId, CancellationToken ct)
+    {
+        return await _context.Set<SubscriptionEntity>()
+            .AsNoTracking().AnyAsync(x => x.TenantId == tenantId && x.TrialEnd.HasValue && x.TrialEnd.Value < DateTime.UtcNow, ct);
+    }
+    public async Task<bool> IsSubscriptionPeriodExpiredAsync(int tenantId, CancellationToken ct)
+    {
+        return await _context.Set<SubscriptionEntity>()
+            .AsNoTracking().AnyAsync(x => x.TenantId == tenantId && x.CurrentPeriodEnd < DateTime.UtcNow, ct);
+    }
+
     public async Task<bool> AddAsync(SubscriptionEntity entity, CancellationToken ct)
     {
         await _context.Set<SubscriptionEntity>().AddAsync(entity, ct);

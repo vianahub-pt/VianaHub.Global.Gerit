@@ -19,7 +19,7 @@ public static class UserEndpoint
             var response = await appService.GetAllAsync(ct);
             return notify.CustomResponse(response, 200);
         })
-        .CustomAuthorize("Admin,Manager,Operator", "Users", "GetAll")
+        .CustomAuthorize("Admin,BackOffice,Manager,Operator", "Users", "GetAll")
         .AllowAnonymous()
         .WithName("GetAllUsers")
         .WithSummary("Swagger.Endpoint.User.GetAllUsers.Summary")
@@ -31,7 +31,7 @@ public static class UserEndpoint
             var response = await appService.GetByIdAsync(id, ct);
             return notify.CustomResponse(response, 200);
         })
-        .CustomAuthorize("Admin,Manager,Operator", "Users", "GetBy")
+        .CustomAuthorize("Admin,BackOffice,Manager,Operator", "Users", "GetBy")
         .AllowAnonymous()
         .WithName("GetUserById")
         .WithSummary("Swagger.Endpoint.User.GetUserById.Summary")
@@ -44,7 +44,7 @@ public static class UserEndpoint
             var response = await appService.GetPagedAsync(request, ct);
             return notify.CustomResponse(response, 200);
         })
-        .CustomAuthorize("Admin,Manager,Operator", "User", "GetPaged")
+        .CustomAuthorize("Admin,BackOffice,Manager,Operator", "Users", "GetPaged")
         .AllowAnonymous()
         .WithName("GetUsersPaged")
         .WithSummary("Swagger.Endpoint.User.GetUsersPaged.Summary")
@@ -56,7 +56,7 @@ public static class UserEndpoint
             var created = await appService.CreateAsync(request, ct);
             return notify.CustomResponse(201);
         })
-        .CustomAuthorize("Admin,Manager", "Users", "Create")
+        .CustomAuthorize("Admin,BackOffice,Manager", "Users", "Create")
         .AllowAnonymous()
         .WithName("CreateUser")
         .WithSummary("Swagger.Endpoint.User.CreateUser.Summary")
@@ -70,7 +70,7 @@ public static class UserEndpoint
             var updated = await appService.UpdateAsync(id, request, ct);
             return notify.CustomResponse(updated, 200);
         })
-        .CustomAuthorize("Admin,Manager", "Users", "Update")
+        .CustomAuthorize("Admin,BackOffice,Manager", "Users", "Update")
         .AllowAnonymous()
         .WithName("UpdateUser")
         .WithSummary("Swagger.Endpoint.User.UpdateUser.Summary")
@@ -85,7 +85,7 @@ public static class UserEndpoint
             var updated = await appService.UpdatePasswordAsync(id, request, ct);
             return notify.CustomResponse();
         })
-        .CustomAuthorize("Admin,Manager,User", "Users", "Update")
+        .CustomAuthorize("Admin,BackOffice,Manager,User", "Users", "Update")
         .AllowAnonymous()
         .WithName("UpdateUserPassword")
         .WithSummary("Swagger.Endpoint.User.UpdateUserPassword.Summary")
@@ -99,7 +99,7 @@ public static class UserEndpoint
             var ok = await appService.ActivateAsync(id, ct);
             return notify.CustomResponse();
         })
-        .CustomAuthorize("Admin,Manager", "Users", "Activate")
+        .CustomAuthorize("Admin,BackOffice,Manager", "Users", "Activate")
         .AllowAnonymous()
         .WithName("ActivateUser")
         .WithSummary("Swagger.Endpoint.User.ActivateUser.Summary")
@@ -112,7 +112,7 @@ public static class UserEndpoint
             var ok = await appService.DeactivateAsync(id, ct);
             return notify.CustomResponse();
         })
-        .CustomAuthorize("Admin,Manager", "Users", "Deactivate")
+        .CustomAuthorize("Admin,BackOffice,Manager", "Users", "Deactivate")
         .AllowAnonymous()
         .WithName("DeactivateUser")
         .WithSummary("Swagger.Endpoint.User.DeactivateUser.Summary")
@@ -125,7 +125,7 @@ public static class UserEndpoint
             var ok = await appService.DeleteAsync(id, ct);
             return notify.CustomResponse();
         })
-        .CustomAuthorize("Admin", "Users", "Delete")
+        .CustomAuthorize("Admin,BackOffice", "Users", "Delete")
         .AllowAnonymous()
         .WithName("DeleteUser")
         .WithSummary("Swagger.Endpoint.User.DeleteUser.Summary")
@@ -145,7 +145,7 @@ public static class UserEndpoint
             var success = await appService.BulkUploadAsync(file, ct);
             return notify.CustomResponse(success ? 200 : 400);
         })
-        .CustomAuthorize("Admin", "Users", "BulkUpload")
+        .CustomAuthorize("Admin,BackOffice", "Users", "BulkUpload")
         .AllowAnonymous()
         .WithName("BulkUploadUsers")
         .WithSummary("Swagger.Endpoint.User.BulkUploadUsers.Summary")

@@ -157,20 +157,29 @@ public class SubscriptionDomainService : ISubscriptionDomainService
         return await _repo.UpdateAsync(entity, ct);
     }
 
-    public async Task<(bool IsValid, bool IsTrial)> IsTenantSubscriptionValidAsync(int tenantId, CancellationToken ct)
+    public async Task<bool> IsTrialAsync(int tenantId, CancellationToken ct)
     {
-        var subscription = await _repo.GetByTenantIdAsync(tenantId, ct);
-        if (subscription == null || !subscription.IsActive || subscription.IsDeleted)
-            return (false, false);
-
-        var now = DateTime.UtcNow;
-
-        var currentPeriodValid = subscription.CurrentPeriodStart <= now && subscription.CurrentPeriodEnd >= now;
-        var trialPeriodValid = subscription.TrialStart.HasValue && subscription.TrialEnd.HasValue
-            && subscription.TrialStart.Value <= now && subscription.TrialEnd.Value >= now;
-
-        var isValid = (currentPeriodValid || trialPeriodValid) && !(subscription.CanceledAt.HasValue && !subscription.CancelAtPeriodEnd);
-
-        return (isValid, trialPeriodValid && isValid);
+        return await _repo.IsTrialAsync(tenantId, ct);
     }
+    public async Task<bool> IsDeletedAsync(int tenantId, CancellationToken ct)
+    {
+        return await _repo.IsDeletedAsync(tenantId, ct);
+    }
+    public async Task<bool> IsActiveAsync(int tenantId, CancellationToken ct)
+    {
+        return await _repo.IsActiveAsync(tenantId, ct);
+    }
+    public async Task<bool> IsCanceledAsync(int tenantId, CancellationToken ct)
+    {
+        return await _repo.IsCanceledAsync(tenantId, ct);
+    }
+    public async Task<bool> IsTrialPeriodExpiredAsync(int tenantId, CancellationToken ct)
+    {
+        return await _repo.IsTrialPeriodExpiredAsync(tenantId, ct);
+    }
+    public async Task<bool> IsSubscriptionPeriodExpiredAsync(int tenantId, CancellationToken ct)
+    {
+        return await _repo.IsSubscriptionPeriodExpiredAsync(tenantId, ct);
+    }
+
 }

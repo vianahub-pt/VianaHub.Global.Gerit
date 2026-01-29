@@ -86,15 +86,7 @@ public class UserAppService : IUserAppService
             return false;
         }
 
-        // Verifica se o email já existe para outro usuário
-        var existsByEmail = await _repo.ExistsByEmailAsync(request.Email, id, ct);
-        if (existsByEmail)
-        {
-            _notify.Add(_localization.GetMessage("Application.Service.User.Update.EmailAlreadyExists"), 400);
-            return false;
-        }
-
-        entity.Update(request.Name, request.Email, request.PhoneNumber, _currentUser.GetUserId());
+        entity.Update(request.Name, request.PhoneNumber, _currentUser.GetUserId());
         return await _domain.UpdateAsync(entity, ct);
     }
 

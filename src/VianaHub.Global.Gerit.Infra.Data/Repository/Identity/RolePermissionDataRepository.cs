@@ -42,6 +42,7 @@ public class RolePermissionDataRepository : IRolePermissionDataRepository
     public async Task<IList<RolePermissionEntity>> GetByRoleAsync(int roleId, int tenantId)
     {
         return await _context.RolePermissions
+            .Include(x => x.Role)
             .Include(x => x.Resource)
             .Include(x => x.Action)
             .Where(x => x.RoleId == roleId && x.TenantId == tenantId)
@@ -53,6 +54,7 @@ public class RolePermissionDataRepository : IRolePermissionDataRepository
         return await _context.RolePermissions
             .Include(x => x.Role)
             .Include(x => x.Action)
+            .Include(x => x.Resource)
             .Where(x => x.ResourceId == resourceId && x.TenantId == tenantId)
             .ToListAsync();
     }

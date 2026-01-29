@@ -15,6 +15,12 @@ public interface ISubscriptionDomainService
     Task<IEnumerable<SubscriptionEntity>> GetByPlanIdAsync(int planId, CancellationToken ct);
     Task<IEnumerable<SubscriptionEntity>> GetActiveSubscriptionsAsync(CancellationToken ct);
     Task<IEnumerable<SubscriptionEntity>> GetExpiringSubscriptionsAsync(int daysBeforeExpiration, CancellationToken ct);
+    Task<bool> IsTrialAsync(int tenantId, CancellationToken ct);
+    Task<bool> IsDeletedAsync(int tenantId, CancellationToken ct);
+    Task<bool> IsActiveAsync(int tenantId, CancellationToken ct);
+    Task<bool> IsCanceledAsync(int tenantId, CancellationToken ct);
+    Task<bool> IsTrialPeriodExpiredAsync(int tenantId, CancellationToken ct);
+    Task<bool> IsSubscriptionPeriodExpiredAsync(int tenantId, CancellationToken ct);
 
     Task<bool> CreateAsync(SubscriptionEntity entity, CancellationToken ct);
     Task<bool> UpdateAsync(SubscriptionEntity entity, CancellationToken ct);
@@ -23,9 +29,4 @@ public interface ISubscriptionDomainService
     Task<bool> DeleteAsync(SubscriptionEntity entity, CancellationToken ct);
     Task<bool> CancelAsync(SubscriptionEntity entity, CancellationToken ct);
     Task<bool> RenewAsync(SubscriptionEntity entity, CancellationToken ct);
-    /// <summary>
-    /// Verifica se o tenant possui uma assinatura válida. Retorna uma tupla onde
-    /// Item1 = é válida (true/false) e Item2 = indica se a assinatura válida é um trial.
-    /// </summary>
-    Task<(bool IsValid, bool IsTrial)> IsTenantSubscriptionValidAsync(int tenantId, CancellationToken ct);
 }

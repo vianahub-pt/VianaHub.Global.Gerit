@@ -15,6 +15,13 @@ public interface ISubscriptionDataRepository
     Task<IEnumerable<SubscriptionEntity>> GetByPlanIdAsync(int planId, CancellationToken ct);
     Task<IEnumerable<SubscriptionEntity>> GetActiveSubscriptionsAsync(CancellationToken ct);
     Task<IEnumerable<SubscriptionEntity>> GetExpiringSubscriptionsAsync(int daysBeforeExpiration, CancellationToken ct);
+    Task<bool> IsTrialAsync(int tenantId, CancellationToken ct);
+    Task<bool> IsDeletedAsync(int tenantId, CancellationToken ct);
+    Task<bool> IsActiveAsync(int tenantId, CancellationToken ct);
+    Task<bool> IsCanceledAsync(int tenantId, CancellationToken ct);
+    Task<bool> IsTrialPeriodExpiredAsync(int tenantId, CancellationToken ct);
+    Task<bool> IsSubscriptionPeriodExpiredAsync(int tenantId, CancellationToken ct);
+
     Task<bool> AddAsync(SubscriptionEntity entity, CancellationToken ct);
     Task<bool> UpdateAsync(SubscriptionEntity entity, CancellationToken ct);
 }

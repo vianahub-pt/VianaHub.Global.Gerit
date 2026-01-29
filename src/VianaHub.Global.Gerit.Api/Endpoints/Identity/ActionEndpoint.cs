@@ -53,7 +53,7 @@ public static class ActionEndpoint
             var created = await appService.CreateAsync(request, ct);
             return notify.CustomResponse(201);
         })
-        //.CustomAuthorize("Admin,BackOffice", "Actions", "Create")
+        .CustomAuthorize("Admin,BackOffice", "Actions", "Create")
         .AllowAnonymous()
         .WithName("CreateAction")
         .WithSummary("Swagger.Endpoint.Action.CreateAction.Summary")

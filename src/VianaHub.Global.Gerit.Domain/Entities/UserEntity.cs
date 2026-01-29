@@ -46,11 +46,9 @@ public class UserEntity : Entity
         CreatedBy = createdBy;
     }
 
-    public void Update(string name, string email, string phoneNumber, int modifiedBy)
+    public void Update(string name, string phoneNumber, int modifiedBy)
     {
         Name = name;
-        Email = email;
-        NormalizedEmail = email?.ToUpperInvariant();
         PhoneNumber = phoneNumber;
         ModifiedBy = modifiedBy;
         ModifiedAt = DateTime.UtcNow;

@@ -79,6 +79,13 @@ public class UserDataRepository : IUserDataRepository
         };
     }
 
+    public async Task<bool> ExistsByIdAsync(int id, CancellationToken ct)
+    {
+        return await _context.Set<UserEntity>()
+            .AsNoTracking()
+            .AnyAsync(x => x.Id == id && !x.IsDeleted, ct);
+    }
+
     public async Task<bool> ExistsByEmailAsync(string email, CancellationToken ct)
     {
         var normalizedEmail = email?.ToUpperInvariant();
