@@ -167,9 +167,10 @@ public class Program
         app.MapUserEndpoints();
         app.MapUserRoleEndpoints();
         app.MapRolePermissionEndpoints();
-        app.MapAuthEndpoints(); // Map Auth endpoints
+        app.MapAuthEndpoints();
         app.MapJobEndpoints();
         app.MapJwtKeyEndpoints();
+        app.MapEquipmentEndpoints();
         app.MapVehicleEndpoints();
 
         // Minimal API Endpoints

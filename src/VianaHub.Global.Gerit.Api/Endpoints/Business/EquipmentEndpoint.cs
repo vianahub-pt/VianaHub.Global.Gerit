@@ -1,0 +1,113 @@
+using Microsoft.AspNetCore.Mvc;
+using VianaHub.Global.Gerit.Api.Helpers;
+using VianaHub.Global.Gerit.Application.Dtos.Base;
+using VianaHub.Global.Gerit.Domain.Tools.Notifications;
+using FluentValidation;
+using VianaHub.Global.Gerit.Application.Dtos.Request.Business.Equipment;
+using VianaHub.Global.Gerit.Application.Interfaces.Business;
+
+namespace VianaHub.Global.Gerit.Api.Endpoints.Business;
+
+public static class EquipmentEndpoint
+{
+    public static void MapEquipmentEndpoints(this IEndpointRouteBuilder app)
+    {
+        var groupV1 = app.MapGroup("/v1/equipments").WithTags("Equipments").WithGroupName("v1").RequireAuthorization();
+
+        groupV1.MapGet("/", async (IEquipmentAppService appService, INotify notify, CancellationToken ct) =>
+        {
+            var response = await appService.GetAllAsync(ct);
+            return notify.CustomResponse(response, 200);
+        })
+        .CustomAuthorize("Admin,BackOffice,Manager", "Equipments", "GetAll")
+        .WithName("GetEquipments")
+        .WithSummary("Swagger.Endpoint.Equipment.GetEquipments.Summary")
+        .Produces(StatusCodes.Status200OK)
+        .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
+
+        groupV1.MapGet("/{id}", async (int id, IEquipmentAppService appService, INotify notify, CancellationToken ct) =>
+        {
+            var response = await appService.GetByIdAsync(id, ct);
+            return notify.CustomResponse(response, 200);
+        })
+        .CustomAuthorize("Admin,BackOffice,Manager", "Equipments", "GetBy")
+        .WithName("GetEquipmentById")
+        .WithSummary("Swagger.Endpoint.Equipment.GetById.Summary")
+        .Produces(StatusCodes.Status200OK)
+        .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
+        .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
+
+        groupV1.MapGet("/paged", async ([AsParameters] PagedFilterRequest request, IEquipmentAppService appService, INotify notify, CancellationToken ct) =>
+        {
+            var response = await appService.GetPagedAsync(request, ct);
+            return notify.CustomResponse(response, 200);
+        })
+        .CustomAuthorize("Admin,BackOffice,Manager", "Equipments", "GetPaged")
+        .WithName("GetEquipmentsPaged")
+        .WithSummary("Swagger.Endpoint.Equipment.GetPaged.Summary")
+        .Produces(StatusCodes.Status200OK)
+        .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
+
+        groupV1.MapPost("/", async ([FromBody] CreateEquipmentRequest request, IEquipmentAppService appService, INotify notify, CancellationToken ct) =>
+        {
+            var created = await appService.CreateAsync(request, ct);
+            return notify.CustomResponse(created ? 201 : 400);
+        })
+        .CustomAuthorize("Admin,BackOffice,Manager", "Equipments", "Create")
+        .WithName("CreateEquipment")
+        .WithSummary("Swagger.Endpoint.Equipment.Create.Summary")
+        .Produces(StatusCodes.Status201Created)
+        .Produces<ErrorResponse>(StatusCodes.Status400BadRequest)
+        .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError)
+        .WithValidation<CreateEquipmentRequest>();
+
+        groupV1.MapPut("/{id}", async (int id, [FromBody] UpdateEquipmentRequest request, IEquipmentAppService appService, INotify notify, CancellationToken ct) =>
+        {
+            var updated = await appService.UpdateAsync(id, request, ct);
+            return notify.CustomResponse(updated ? 204 : 400);
+        })
+        .CustomAuthorize("Admin,BackOffice,Manager", "Equipments", "Update")
+        .WithName("UpdateEquipment")
+        .WithSummary("Swagger.Endpoint.Equipment.Update.Summary")
+        .Produces(StatusCodes.Status204NoContent)
+        .Produces<ErrorResponse>(StatusCodes.Status400BadRequest)
+        .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError)
+        .WithValidation<UpdateEquipmentRequest>();
+
+        groupV1.MapPatch("/{id}/activate", async (int id, IEquipmentAppService appService, INotify notify, CancellationToken ct) =>
+        {
+            var ok = await appService.ActivateAsync(id, ct);
+            return notify.CustomResponse();
+        })
+        .CustomAuthorize("Admin,BackOffice,Manager", "Equipments", "Activate")
+        .WithName("ActivateEquipment")
+        .WithSummary("Swagger.Endpoint.Equipment.Activate.Summary")
+        .Produces(StatusCodes.Status204NoContent)
+        .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
+        .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
+
+        groupV1.MapPatch("/{id}/deactivate", async (int id, IEquipmentAppService appService, INotify notify, CancellationToken ct) =>
+        {
+            var ok = await appService.DeactivateAsync(id, ct);
+            return notify.CustomResponse();
+        })
+        .CustomAuthorize("Admin,BackOffice,Manager", "Equipments", "Deactivate")
+        .WithName("DeactivateEquipment")
+        .WithSummary("Swagger.Endpoint.Equipment.Deactivate.Summary")
+        .Produces(StatusCodes.Status204NoContent)
+        .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
+        .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
+
+        groupV1.MapDelete("/{id}", async (int id, IEquipmentAppService appService, INotify notify, CancellationToken ct) =>
+        {
+            var ok = await appService.DeleteAsync(id, ct);
+            return notify.CustomResponse();
+        })
+        .CustomAuthorize("Admin,BackOffice,Manager", "Equipments", "Delete")
+        .WithName("DeleteEquipment")
+        .WithSummary("Swagger.Endpoint.Equipment.Delete.Summary")
+        .Produces(StatusCodes.Status204NoContent)
+        .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
+        .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
+    }
+}

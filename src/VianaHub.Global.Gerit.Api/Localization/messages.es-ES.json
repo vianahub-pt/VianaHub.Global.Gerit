@@ -25,6 +25,8 @@
   "Swagger.Tag.RolePermissions": "Permisos de Rol",
   "Swagger.Tag.JobDefinitions": "Definiciones de Jobs",
   "Swagger.Tag.JwtKeys": "Claves JWT",
+  "Swagger.Tag.Vehicles": "Vehículos",
+
   "Swagger.Endpoint.HealthCheck.Summary": "Verificação de Saúde",
   "Swagger.Endpoint.HealthCheck.Description": "Verifica se a API está funcionando corretamente",
   "Swagger.Endpoint.Action.GetAllActions.Summary": "Obter todas as ações",
@@ -491,7 +493,7 @@
   "Api.Validator.Tenant.Create.Name.MaximumLength": "Nome deve ter no máximo {0} caracteres",
   "Api.Validator.Tenant.Create.Description.MaximumLength": "Descrição deve ter no máximo {0} caracteres",
   "Api.Validator.Tenant.Update.Name.MaximumLength": "Nome deve ter no máximo {0} caracteres",
-  "Api.Validator.Tenant.Update.Description.MaximumLength": "Descrição deve ter no máximo {0} caracteres",
+  "Api.Validator.Tenant.Update.Description.maximumLength": "Descrição deve ter no máximo {0} caracteres",
   "Api.Validator.User.Create.Name": "Nome é obrigatório",
   "Api.Validator.User.Create.Name.MaximumLength": "Nome deve ter no máximo {0} caracteres",
   "Api.Validator.User.Create.Description.MaximumLength": "Descrição deve ter no máximo {0} caracteres",
@@ -524,5 +526,16 @@
   "Application.Service.Vehicle.Update.ResourceNotFound": "Vehículo no encontrado",
   "Application.Service.Vehicle.Activate.ResourceNotFound": "Vehículo no encontrado",
   "Application.Service.Vehicle.Deactivate.ResourceNotFound": "Vehículo no encontrado",
-  "Application.Service.Vehicle.Delete.ResourceNotFound": "Vehículo no encontrado"
+  "Application.Service.Vehicle.Delete.ResourceNotFound": "Vehículo no encontrado",
+
+  "Api.Filters.UserValidation.UserId.Required": "userId es obligatorio en la URL",
+  "Api.Filters.UserValidation.UserId.Required.Message": "userId es obligatorio en la URL",
+  "Api.Filters.UserValidation.UserId.Invalid": "userId en la URL es inválido",
+  "Api.Filters.UserValidation.UserId.Invalid.Message": "userId en la URL es inválido",
+  "Api.Filters.UserValidation.AccessDenied.Title": "Acceso Denegado",
+  "Api.Filters.UserValidation.AccessDenied.Message": "No tiene permiso para acceder a recursos de este usuario",
+
+  "Api.Configuration.Jwt.NoActiveSigningKeys": "No se encontraron claves JWT activas",
+  "Api.Configuration.Jwt.NoValidSigningKeys": "No se encontraron claves JWT válidas después del procesamiento",
+  "Api.Configuration.Jwt.FailedToLoadSigningKeys": "Error al cargar claves JWT do banco de dados"
 }

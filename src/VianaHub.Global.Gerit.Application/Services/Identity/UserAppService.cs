@@ -7,7 +7,7 @@ using VianaHub.Global.Gerit.Application.Dtos.Base;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Identity.User;
 using VianaHub.Global.Gerit.Application.Dtos.Response.Identity.User;
 using VianaHub.Global.Gerit.Application.Interfaces.Identity;
-using VianaHub.Global.Gerit.Domain.Entities;
+using VianaHub.Global.Gerit.Domain.Entities.Identity;
 using VianaHub.Global.Gerit.Domain.Helpers;
 using VianaHub.Global.Gerit.Domain.Interfaces;
 using VianaHub.Global.Gerit.Domain.Interfaces.Identity;

@@ -2,6 +2,8 @@
 
 using System.Net;
 using VianaHub.Global.Gerit.Application.Dtos.Base;
+using VianaHub.Global.Gerit.Domain.Interfaces;
+using VianaHub.Global.Gerit.Api.Helpers;
 
 namespace VianaHub.Global.Gerit.Api.Filters;
 
@@ -21,19 +23,24 @@ public class UserValidationFilter : IEndpointFilter
         var httpContext = context.HttpContext;
         var user = httpContext.User;
 
+        // Tenta resolver serviço de localização do container
+        var localization = httpContext.RequestServices.GetService(typeof(ILocalizationService)) as ILocalizationService;
+
         // Extrair userId da rota
         var userIdParam = httpContext.Request.RouteValues["userId"]?.ToString();
 
         if (string.IsNullOrEmpty(userIdParam))
         {
             _logger.LogWarning("? userId não encontrado na URL da requisição");
-            return CreateErrorResponse("userId é obrigatório na URL");
+            var title = localization?.GetMessage("Api.Filters.UserValidation.UserId.Required") ?? "Api.Filters.UserValidation.UserId.Required";
+            return CreateErrorResponse(title, localization?.GetMessage("Api.Filters.UserValidation.UserId.Required.Message") ?? "Api.Filters.UserValidation.UserId.Required.Message");
         }
 
         if (!Guid.TryParse(userIdParam, out var requesteduserId))
         {
             _logger.LogWarning("? userId inválido na URL: {userId}", userIdParam);
-            return CreateErrorResponse("userId inválido na URL");
+            var title = localization?.GetMessage("Api.Filters.UserValidation.UserId.Invalid") ?? "Api.Filters.UserValidation.UserId.Invalid";
+            return CreateErrorResponse(title, localization?.GetMessage("Api.Filters.UserValidation.UserId.Invalid.Message") ?? "Api.Filters.UserValidation.UserId.Invalid.Message");
         }
 
         // Verificar se usuário está autenticado
@@ -92,10 +99,10 @@ public class UserValidationFilter : IEndpointFilter
                 httpContext.Request.Path,
                 httpContext.Connection.RemoteIpAddress);
 
-            return CreateErrorResponse(
-                "Acesso Negado",
-                "Você não tem permissão para acessar recursos deste user",
-                HttpStatusCode.Forbidden);
+            var title = localization?.GetMessage("Api.Filters.UserValidation.AccessDenied.Title") ?? "Api.Filters.UserValidation.AccessDenied.Title";
+            var message = localization?.GetMessage("Api.Filters.UserValidation.AccessDenied.Message") ?? "Api.Filters.UserValidation.AccessDenied.Message";
+
+            return CreateErrorResponse(title, message, HttpStatusCode.Forbidden, localization);
         }
 
         _logger.LogDebug(
@@ -109,13 +116,21 @@ public class UserValidationFilter : IEndpointFilter
     private IResult CreateErrorResponse(
         string title,
         string? message = null,
-        HttpStatusCode statusCode = HttpStatusCode.BadRequest)
+        HttpStatusCode statusCode = HttpStatusCode.BadRequest,
+        ILocalizationService? localization = null)
     {
-        var errorResponse = new ErrorResponse(title);
+        // Se localization não for fornecida, tentamos resolver a partir do provider atual
+        localization ??= ServiceProviderHolder.ServiceProvider?.GetService(typeof(ILocalizationService)) as ILocalizationService;
+
+        var localizedTitle = localization?.GetMessage(title) ?? title;
+
+        var errorResponse = new ErrorResponse(localizedTitle);
 
         if (!string.IsNullOrEmpty(message))
         {
-            errorResponse.AddError("userValidation", message);
+            var label = localization?.GetMessage("Api.Helpers.NotifyExtensions.Common.Error") ?? "Api.Helpers.NotifyExtensions.Common.Error";
+            var localizedMessage = localization?.GetMessage(message) ?? message;
+            errorResponse.AddError(label, localizedMessage);
         }
 
         return Results.Json(errorResponse, statusCode: (int)statusCode);

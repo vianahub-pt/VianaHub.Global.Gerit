@@ -1,5 +1,6 @@
 using VianaHub.Global.Gerit.Domain.Base;
 using VianaHub.Global.Gerit.Domain.Entities.Billing;
+using VianaHub.Global.Gerit.Domain.Enums;
 
 namespace VianaHub.Global.Gerit.Domain.Entities.Business;
 
@@ -11,6 +12,8 @@ public class EquipmentEntity : Entity
     public int TenantId { get; private set; }
     public string Name { get; private set; }
     public string SerialNumber { get; private set; }
+    public TypeEquipament TypeEquipament { get; private set; }
+    public EquipmentStatus Status { get; private set; }
     public bool IsActive { get; private set; }
     public bool IsDeleted { get; private set; }
 
@@ -23,34 +26,23 @@ public class EquipmentEntity : Entity
     /// <summary>
     /// Construtor para criação de um novo Equipamento
     /// </summary>
-    public EquipmentEntity(int tenantId, string name, string serialNumber = null)
+    public EquipmentEntity(int tenantId, string name, TypeEquipament typeEquipament, string serialNumber = null)
     {
         TenantId = tenantId;
-        SetName(name);
+        Name = name;
+        TypeEquipament = typeEquipament;
+        Status = EquipmentStatus.Available;
         SerialNumber = serialNumber;
         IsActive = true;
         IsDeleted = false;
     }
 
-    public void SetName(string name)
+    public void Update(string name, TypeEquipament typeEquipament, string serialNumber = null)
     {
-        if (string.IsNullOrWhiteSpace(name))
-            throw new ArgumentException("Nome do equipamento não pode ser vazio.", nameof(name));
-
-        if (name.Length > 150)
-            throw new ArgumentException("Nome do equipamento não pode ter mais de 150 caracteres.", nameof(name));
-
         Name = name;
-    }
-
-    public void SetSerialNumber(string serialNumber)
-    {
-        if (serialNumber?.Length > 100)
-            throw new ArgumentException("Número de série não pode ter mais de 100 caracteres.", nameof(serialNumber));
-
+        TypeEquipament = typeEquipament;
         SerialNumber = serialNumber;
     }
-
     public void Activate()
     {
         IsActive = true;

@@ -19,10 +19,7 @@ public class VehicleMappingProfile : Profile
             .ForMember(dest => dest.Year, opt => opt.MapFrom(src => src.Year))
             .ForMember(dest => dest.Color, opt => opt.MapFrom(src => src.Color))
             .ForMember(dest => dest.FuelType, opt => opt.MapFrom(src => src.FuelType))
-            .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsActive))
-            .ForMember(dest => dest.IsDeleted, opt => opt.MapFrom(src => src.IsDeleted))
-            .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => src.CreatedAt))
-            .ForMember(dest => dest.ModifiedAt, opt => opt.MapFrom(src => src.ModifiedAt));
+            .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsActive));
 
         CreateMap<ListPage<VehicleEntity>, ListPageResponse<VehicleResponse>>();
     }

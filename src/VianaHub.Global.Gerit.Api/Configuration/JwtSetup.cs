@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using VianaHub.Global.Gerit.Application.Configuration;
+using VianaHub.Global.Gerit.Domain.Interfaces;
 using VianaHub.Global.Gerit.Domain.Interfaces.Identity;
 using VianaHub.Global.Gerit.Domain.Tools.Cryptography;
 
@@ -76,6 +77,9 @@ public static class JwtSetup
                     var logger = context.HttpContext.RequestServices
                         .GetRequiredService<ILogger<JwtBearerHandler>>();
 
+                    // tentar resolver serviço de localização para mensagens legíveis
+                    var localization = context.HttpContext.RequestServices.GetService(typeof(ILocalizationService)) as ILocalizationService;
+
                     try
                     {
                         // NOTA: Como não temos TenantId no contexto ainda, buscar todas as chaves ativas
@@ -86,7 +90,8 @@ public static class JwtSetup
                         if (!keys.Any())
                         {
                             logger.LogError("❌ Nenhuma chave JWT ativa encontrada no banco de dados");
-                            context.Fail("No active JWT signing keys available");
+                            var msg = localization?.GetMessage("Api.Configuration.Jwt.NoActiveSigningKeys") ?? "Api.Configuration.Jwt.NoActiveSigningKeys";
+                            context.Fail(msg);
                             return;
                         }
 
@@ -115,7 +120,8 @@ public static class JwtSetup
                         if (!securityKeys.Any())
                         {
                             logger.LogError("❌ Nenhuma chave JWT válida encontrada após processamento");
-                            context.Fail("No valid JWT signing keys available");
+                            var msg = localization?.GetMessage("Api.Configuration.Jwt.NoValidSigningKeys") ?? "Api.Configuration.Jwt.NoValidSigningKeys";
+                            context.Fail(msg);
                             return;
                         }
 
@@ -129,7 +135,8 @@ public static class JwtSetup
                     catch (Exception ex)
                     {
                         logger.LogError(ex, "❌ Erro ao carregar chaves JWT do banco de dados");
-                        context.Fail("Failed to load JWT signing keys");
+                        var msg = localization?.GetMessage("Api.Configuration.Jwt.FailedToLoadSigningKeys") ?? "Api.Configuration.Jwt.FailedToLoadSigningKeys";
+                        context.Fail(msg);
                     }
                 },
 

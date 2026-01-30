@@ -51,7 +51,7 @@ public static class VehicleEndpoint
         groupV1.MapPost("/", async ([FromBody] CreateVehicleRequest request, IVehicleAppService appService, INotify notify, CancellationToken ct) =>
         {
             var created = await appService.CreateAsync(request, ct);
-            return notify.CustomResponse(created ? 201 : 400);
+            return notify.CustomResponse(created, 201);
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "Vehicles", "Create")
         .WithName("CreateVehicle")
@@ -64,7 +64,7 @@ public static class VehicleEndpoint
         groupV1.MapPut("/{id}", async (int id, [FromBody] UpdateVehicleRequest request, IVehicleAppService appService, INotify notify, CancellationToken ct) =>
         {
             var updated = await appService.UpdateAsync(id, request, ct);
-            return notify.CustomResponse(updated ? 204 : 400);
+            return notify.CustomResponse(updated, 200);
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "Vehicles", "Update")
         .WithName("UpdateVehicle")

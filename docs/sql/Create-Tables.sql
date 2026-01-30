@@ -16,9 +16,9 @@ CREATE TABLE dbo.Plans (                                                        
     IsActive	                BIT					NOT NULL DEFAULT 1,             -- Flag de ativo
     IsDeleted	                BIT					NOT NULL DEFAULT 0,             -- Soft delete
     CreatedBy	                INT         		NOT NULL,						-- Usuário criador
-    CreatedAt	                DATETIME2(3)			NOT NULL DEFAULT SYSDATETIME(),	-- Data de criação
+    CreatedAt	                DATETIME2(7)		NOT NULL DEFAULT SYSDATETIME(),	-- Data de criação
     ModifiedBy	                INT         		NULL,							-- Usuário modificador
-    ModifiedAt	                DATETIME2(3)			NULL,							-- Data de modificação
+    ModifiedAt	                DATETIME2(7)		NULL,							-- Data de modificação
     CONSTRAINT PK_Plans PRIMARY KEY CLUSTERED (Id),                                 -- PK
     CONSTRAINT CK_Plans_DeletedImpliesInactive CHECK (IsDeleted = 0 OR IsActive = 0)-- Soft delete -> não ativo
 );
@@ -31,9 +31,9 @@ CREATE TABLE dbo.Tenants (											-- Tabela principal de tenants
     IsActive	BIT					NOT NULL DEFAULT 1,             -- Flag de ativo
     IsDeleted	BIT					NOT NULL DEFAULT 0,             -- Soft delete
     CreatedBy	INT         		NOT NULL,						-- Usuário criador
-    CreatedAt	DATETIME2(3)			NOT NULL DEFAULT SYSDATETIME(),	-- Data de criação
+    CreatedAt	DATETIME2(7)		NOT NULL DEFAULT SYSDATETIME(),	-- Data de criação
     ModifiedBy	INT         		NULL,							-- Usuário modificador
-    ModifiedAt	DATETIME2(3)			NULL,							-- Data de modificação
+    ModifiedAt	DATETIME2(7)		NULL,							-- Data de modificação
 	CONSTRAINT PK_Tenants PRIMARY KEY CLUSTERED (Id)
 );
 GO
@@ -47,9 +47,9 @@ CREATE TABLE dbo.TenantContacts (									    -- Contatos do tenant
     IsActive	BIT					NOT NULL DEFAULT 1,				    -- Flag de ativo
     IsDeleted	BIT					NOT NULL DEFAULT 0,				    -- Soft delete
     CreatedBy	INT         		NOT NULL,						    -- Usuário criador
-    CreatedAt	DATETIME2(3)			NOT NULL DEFAULT SYSDATETIME(),	-- Data de criação
+    CreatedAt	DATETIME2(7)		NOT NULL DEFAULT SYSDATETIME(),	-- Data de criação
     ModifiedBy	INT         		    NULL,						    -- Usuário modificador
-    ModifiedAt	DATETIME2(3)				NULL,						-- Data de modificação
+    ModifiedAt	DATETIME2(7)			NULL,						-- Data de modificação
 	CONSTRAINT PK_TenantContacts PRIMARY KEY CLUSTERED (Id),
     CONSTRAINT CK_TenantContacts_Email CHECK (Email LIKE '%_@_%._%'),                       -- Validação simples de email
     CONSTRAINT UQ_TenantContacts_Email UNIQUE (TenantId, Email),			                -- Email único por client
@@ -69,9 +69,9 @@ CREATE TABLE dbo.TenantAddresses (									-- Endereços do tenant
     IsActive	BIT					NOT NULL DEFAULT 1,				-- Flag de ativo
     IsDeleted	BIT					NOT NULL DEFAULT 0,				-- Soft delete
     CreatedBy	INT         		NOT NULL,						-- Usuário criador
-    CreatedAt	DATETIME2(3)			NOT NULL DEFAULT SYSDATETIME(),	-- Data de criação
+    CreatedAt	DATETIME2(7)		NOT NULL DEFAULT SYSDATETIME(),	-- Data de criação
     ModifiedBy	INT         		    NULL,						-- Usuário modificador
-    ModifiedAt	DATETIME2(3)				NULL,						-- Data de modificação
+    ModifiedAt	DATETIME2(7)			NULL,						-- Data de modificação
 	CONSTRAINT PK_TenantAddresses PRIMARY KEY CLUSTERED (Id),		
     CONSTRAINT FK_TenantAddresses_Tenant FOREIGN KEY (TenantId) REFERENCES dbo.Tenants(Id)	-- FK para tenant
         
@@ -88,9 +88,9 @@ CREATE TABLE dbo.TenantFiscalData (										-- Dados fiscais do tenant
     IsActive		BIT					NOT NULL DEFAULT 1,				-- Flag de ativo
     IsDeleted		BIT					NOT NULL DEFAULT 0,				-- Soft delete
     CreatedBy		INT         		NOT NULL,						-- Usuário criador
-    CreatedAt		DATETIME2(3)			NOT NULL DEFAULT SYSDATETIME(),	-- Data de criação
+    CreatedAt		DATETIME2(7)		NOT NULL DEFAULT SYSDATETIME(),	-- Data de criação
     ModifiedBy	    INT         		    NULL,						-- Usuário modificador
-    ModifiedAt		DATETIME2(3)				NULL,						-- Data de modificação
+    ModifiedAt		DATETIME2(7)			NULL,						-- Data de modificação
 	CONSTRAINT PK_TenantFiscalData PRIMARY KEY CLUSTERED (Id),			
     CONSTRAINT UQ_TenantFiscalData_NIF UNIQUE (NIF),					-- NIF único
     CONSTRAINT FK_TenantFiscalData_Tenant FOREIGN KEY (TenantId) REFERENCES dbo.Tenants(Id)		-- FK para tenant    
@@ -101,20 +101,20 @@ CREATE TABLE dbo.Subscriptions (                                                
     TenantId                INT                 NOT NULL,                       -- FK para tenant
     PlanId                  INT                 NOT NULL,                       -- FK para plano global
     StripeId                NVARCHAR(100)           NULL,                       -- Id do subscription no Stripe
-    CurrentPeriodStart      DATETIME2(3)           NOT NULL,                       -- Início do período faturado
-    CurrentPeriodEnd        DATETIME2(3)           NOT NULL,                       -- Fim do período faturado
-    TrialStart              DATETIME2(3)               NULL,                       -- Trial
-    TrialEnd                DATETIME2(3)               NULL,                       -- Trial
+    CurrentPeriodStart      DATETIME2(7)           NOT NULL,                       -- Início do período faturado
+    CurrentPeriodEnd        DATETIME2(7)           NOT NULL,                       -- Fim do período faturado
+    TrialStart              DATETIME2(7)               NULL,                       -- Trial
+    TrialEnd                DATETIME2(7)               NULL,                       -- Trial
     CancelAtPeriodEnd       BIT                 NOT NULL DEFAULT 0,             -- Cancelar no fim do ciclo
-    CanceledAt              DATETIME2(3)               NULL,                       -- Quando cancelou
+    CanceledAt              DATETIME2(7)               NULL,                       -- Quando cancelou
     CancellationReason      NVARCHAR(500)           NULL,                       -- Motivo
     StripeCustomerId        NVARCHAR(100)           NULL,                       -- Customer id
     IsActive		        BIT					NOT NULL DEFAULT 1,				-- Flag de ativo
     IsDeleted		        BIT					NOT NULL DEFAULT 0,				-- Soft delete
     CreatedBy		        INT         		NOT NULL,						-- Usuário criador
-    CreatedAt		        DATETIME2(3)			NOT NULL DEFAULT SYSDATETIME(),	-- Data de criação
+    CreatedAt		        DATETIME2(7)		NOT NULL DEFAULT SYSDATETIME(),	-- Data de criação
     ModifiedBy	            INT         		    NULL,						-- Usuário modificador
-    ModifiedAt		        DATETIME2(3)				NULL,						-- Data de modificação
+    ModifiedAt		        DATETIME2(7)			NULL,						-- Data de modificação
     CONSTRAINT PK_Subscriptions PRIMARY KEY CLUSTERED (Id),                     -- PK
     CONSTRAINT FK_Subscriptions_Tenant FOREIGN KEY (TenantId) REFERENCES dbo.Tenants(Id),       -- Tenant-safe
     CONSTRAINT FK_Subscriptions_Plan FOREIGN KEY (PlanId) REFERENCES dbo.Plans(Id),             -- Global plan
@@ -133,14 +133,14 @@ CREATE TABLE dbo.Users (                                                        
     EmailConfirmed          BIT                 NOT NULL DEFAULT 0,                 -- Confirmação de email
     PhoneNumber             NVARCHAR(50)            NULL,                           -- Telefone (opcional)
     PhoneNumberConfirmed    BIT                 NOT NULL DEFAULT 0,                 -- Confirmação de telefone
-    LastAccessAt            DATETIME2(3)            NULL,                           -- Último login/acesso
+    LastAccessAt            DATETIME2(7)            NULL,                           -- Último login/acesso
     PasswordHash	        NVARCHAR(500)		NOT NULL,						    -- Hash da senha
     IsActive		        BIT					NOT NULL DEFAULT 1,				    -- Flag de ativo
     IsDeleted		        BIT					NOT NULL DEFAULT 0,				    -- Soft delete
     CreatedBy		        INT         		NOT NULL,						    -- Usuário criador
-    CreatedAt		        DATETIME2(3)			NOT NULL DEFAULT SYSDATETIME(),	-- Data de criação
+    CreatedAt		        DATETIME2(7)		NOT NULL DEFAULT SYSDATETIME(),	-- Data de criação
     ModifiedBy	            INT         		    NULL,						    -- Usuário modificador
-    ModifiedAt		        DATETIME2(3)			NULL,                           -- Data de modificação
+    ModifiedAt		        DATETIME2(7)		NULL,                           -- Data de modificação
 	CONSTRAINT PK_Users PRIMARY KEY CLUSTERED (Id),
     CONSTRAINT CK_Users_Email CHECK (Email LIKE '%_@_%._%'),                        -- Validação simples de email
     CONSTRAINT UQ_Users_Tenant_Email UNIQUE (TenantId, Email),			            -- Nome único por tenant
@@ -159,9 +159,9 @@ CREATE TABLE dbo.Roles (												-- Roles por tenant
     IsActive		BIT					NOT NULL DEFAULT 1,             -- Flag de ativo
     IsDeleted		BIT					NOT NULL DEFAULT 0,             -- Soft delete
     CreatedBy		INT         		NOT NULL,						-- Usuário criador
-    CreatedAt		DATETIME2(3)			NOT NULL DEFAULT SYSDATETIME(),	-- Data de criação
+    CreatedAt		DATETIME2(7)		NOT NULL DEFAULT SYSDATETIME(),	-- Data de criação
     ModifiedBy	    INT         		    NULL,						-- Usuário modificador
-    ModifiedAt		DATETIME2(3)				NULL,                       -- Data de modificação
+    ModifiedAt		DATETIME2(7)			NULL,                       -- Data de modificação
 	CONSTRAINT PK_Roles PRIMARY KEY CLUSTERED (Id),						
     CONSTRAINT UQ_Roles_Tenant_Name UNIQUE (TenantId, Name),			-- Role única por tenant
     CONSTRAINT FK_Roles_Tenant FOREIGN KEY (TenantId) REFERENCES dbo.Tenants(Id)	-- FK para tenant
@@ -174,9 +174,9 @@ CREATE TABLE dbo.Resources (											-- Recursos do sistema
     IsActive		BIT					NOT NULL DEFAULT 1,             -- Flag de ativo
     IsDeleted		BIT					NOT NULL DEFAULT 0,             -- Soft delete
     CreatedBy		INT         		NOT NULL,						-- Usuário criador
-    CreatedAt		DATETIME2(3)			NOT NULL DEFAULT SYSDATETIME(),	-- Data de criação
+    CreatedAt		DATETIME2(7)		NOT NULL DEFAULT SYSDATETIME(),	-- Data de criação
     ModifiedBy	    INT         		    NULL,						-- Usuário modificador
-    ModifiedAt		DATETIME2(3)				NULL,						-- Data de modificação
+    ModifiedAt		DATETIME2(7)			NULL,						-- Data de modificação
 	CONSTRAINT PK_Resources PRIMARY KEY CLUSTERED (Id),					
 	CONSTRAINT UQ_Resources_Name UNIQUE (Name)							-- Recursos únicos
 );
@@ -188,9 +188,9 @@ CREATE TABLE dbo.Actions (												-- Ações possíveis
     IsActive		BIT					NOT NULL DEFAULT 1,             -- Flag de ativo
     IsDeleted		BIT					NOT NULL DEFAULT 0,             -- Soft delete
     CreatedBy		INT         		NOT NULL,						-- Usuário criador
-    CreatedAt		DATETIME2(3)			NOT NULL DEFAULT SYSDATETIME(),	-- Data de criação
+    CreatedAt		DATETIME2(7)		NOT NULL DEFAULT SYSDATETIME(),	-- Data de criação
     ModifiedBy	    INT         		    NULL,						-- Usuário modificador
-    ModifiedAt		DATETIME2(3)				NULL,                       -- Data de modificação
+    ModifiedAt		DATETIME2(7)			NULL,                       -- Data de modificação
 	CONSTRAINT PK_Actions PRIMARY KEY CLUSTERED (Id),					
 	CONSTRAINT UQ_Actions_Name UNIQUE (Name)							-- Açoes única
 );
@@ -227,13 +227,13 @@ CREATE TABLE dbo.RefreshTokens (
     TenantId 				INT					NOT NULL,
 	UserId 					INT					NOT NULL,
 	Token					NVARCHAR(MAX)		NOT NULL,
-	ExpiresAt				DATETIME2(3) 			NOT	NULL,
-    RevokedAt 				DATETIME2(3) 				NULL,
+	ExpiresAt				DATETIME2(7) 			NOT	NULL,
+    RevokedAt 				DATETIME2(7) 				NULL,
 	RevokedbY				INT 					NULL,
     CreatedBy		        INT		            NOT NULL,
-    CreatedAt		        DATETIME2(3)			NOT NULL DEFAULT SYSDATETIME(),
+    CreatedAt		        DATETIME2(7)		NOT NULL DEFAULT SYSDATETIME(),
     ModifiedBy	            INT         		    NULL,
-    ModifiedAt		        DATETIME2(3)				NULL,
+    ModifiedAt		        DATETIME2(7)			NULL,
     CONSTRAINT PK_RefreshTokens PRIMARY KEY CLUSTERED (Id),
     CONSTRAINT FK_RefreshTokens_Tenant FOREIGN KEY (TenantId) REFERENCES dbo.Tenants(Id),
 	CONSTRAINT FK_RefreshTokens_User FOREIGN KEY (userId) REFERENCES dbo.Users(Id)
@@ -250,12 +250,12 @@ CREATE TABLE dbo.JwtKeys (
     KeyType 				NVARCHAR(50) 		NOT NULL DEFAULT 'RSA',
     RevokedReason 			NVARCHAR(500) 			NULL,
     UsageCount 				BIGINT 				NOT NULL DEFAULT 0,
-    ActivatedAt 			DATETIME2(3) 				NULL,
-    ExpiresAt 				DATETIME2(3) 			NOT NULL,
-    LastUsedAt 				DATETIME2(3) 				NULL,
-    NextRotationAt 			DATETIME2(3) 			NOT NULL,
-    RevokedAt 				DATETIME2(3) 				NULL,
-    LastValidatedAt 		DATETIME2(3) 				NULL,
+    ActivatedAt 			DATETIME2(7) 				NULL,
+    ExpiresAt 				DATETIME2(7) 			NOT NULL,
+    LastUsedAt 				DATETIME2(7) 				NULL,
+    NextRotationAt 			DATETIME2(7) 			NOT NULL,
+    RevokedAt 				DATETIME2(7) 				NULL,
+    LastValidatedAt 		DATETIME2(7) 				NULL,
     ValidationCount 		BIGINT 				NOT NULL DEFAULT 0,
     RotationPolicyDays 		INT 				NOT NULL DEFAULT 90,
     OverlapPeriodDays 		INT 				NOT NULL DEFAULT 7,
@@ -263,9 +263,9 @@ CREATE TABLE dbo.JwtKeys (
     IsActive 				BIT 				NOT NULL DEFAULT 0,
     IsDeleted 				BIT 				NOT NULL DEFAULT 0,
     CreatedBy		        INT		            NOT NULL,
-    CreatedAt		        DATETIME2(3)			NOT NULL DEFAULT SYSDATETIME(),
+    CreatedAt		        DATETIME2(7)		NOT NULL DEFAULT SYSDATETIME(),
     ModifiedBy	            INT         		    NULL,
-    ModifiedAt		        DATETIME2(3)				NULL,
+    ModifiedAt		        DATETIME2(7)			NULL,
     CONSTRAINT PK_JwtKeys PRIMARY KEY CLUSTERED (Id),
     CONSTRAINT UQ_JwtKeys_KeyId UNIQUE (KeyId),
     CONSTRAINT FK_JwtKeys_Tenant FOREIGN KEY (TenantId) REFERENCES dbo.Tenants(Id),
@@ -293,13 +293,13 @@ CREATE TABLE dbo.JobDefinitions (
     JobConfiguration        NVARCHAR(MAX)		    NULL,                              -- JSON com configurações específicas do job
     IsSystemJob             BIT					NOT NULL DEFAULT 0,                    -- Job crítico do sistema (não pode ser deletado)
     HangfireJobId           NVARCHAR(100)		    NULL,                              -- ID do job recorrente no Hangfire
-    LastRegisteredAt        DATETIME2(3)			    NULL,                              -- Última vez que foi registrado no Hangfire
+    LastRegisteredAt        DATETIME2(7)		    NULL,                              -- Última vez que foi registrado no Hangfire
     IsActive                BIT					NOT NULL DEFAULT 1,                    -- Indica se o job está ativo
     IsDeleted               BIT					NOT NULL DEFAULT 0,                    -- Indica se foi excluído (soft delete)
     CreatedBy               INT					NOT NULL,                              -- Quem criou o job
-    CreatedAt               DATETIME2(3)			NOT NULL DEFAULT GETDATE(),            -- Data de criação
+    CreatedAt               DATETIME2(7)		NOT NULL DEFAULT GETDATE(),            -- Data de criação
     UpdatedBy               INT					    NULL,                              -- Quem fez a última alteração
-    UpdatedAt               DATETIME2(3)			    NULL,                              -- Data da última alteração
+    UpdatedAt               DATETIME2(7)		    NULL,                              -- Data da última alteração
     CONSTRAINT UQ_Job_JobName UNIQUE (JobName),
     CONSTRAINT CK_Job_Priority CHECK (Priority BETWEEN 1 AND 10),
     CONSTRAINT CK_Job_TimeoutMinutes CHECK (TimeoutMinutes > 0),
@@ -335,9 +335,9 @@ CREATE TABLE dbo.Clients (
     IsActive		BIT					NOT NULL DEFAULT 1,             -- Flag de ativo
     IsDeleted		BIT					NOT NULL DEFAULT 0,             -- Soft delete
     CreatedBy		INT         		NOT NULL,						-- Usuário criador
-    CreatedAt		DATETIME2(3)			NOT NULL DEFAULT SYSDATETIME(),	-- Data de criação
+    CreatedAt		DATETIME2(7)		NOT NULL DEFAULT SYSDATETIME(),	-- Data de criação
     ModifiedBy	    INT         		    NULL,						-- Usuário modificador
-    ModifiedAt		DATETIME2(3)				NULL,                       -- Data de modificação
+    ModifiedAt		DATETIME2(7)			NULL,                       -- Data de modificação
 	CONSTRAINT PK_Clients PRIMARY KEY CLUSTERED (Id),
     CONSTRAINT CK_Users_Email CHECK (Email LIKE '%_@_%._%'),                -- Validação simples de email
     CONSTRAINT UQ_Clients_Email UNIQUE (TenantId, Email),			        -- Email único por tenant
@@ -356,9 +356,9 @@ CREATE TABLE dbo.ClientContacts (															-- Contatos do client
     IsActive	BIT					NOT NULL DEFAULT 1,				-- Flag de ativo
     IsDeleted	BIT					NOT NULL DEFAULT 0,				-- Soft delete
     CreatedBy	INT         		NOT NULL,						-- Usuário criador
-    CreatedAt	DATETIME2(3)			NOT NULL DEFAULT SYSDATETIME(),	-- Data de criação
+    CreatedAt	DATETIME2(7)		NOT NULL DEFAULT SYSDATETIME(),	-- Data de criação
     ModifiedBy	INT         		    NULL,						-- Usuário modificador
-    ModifiedAt	DATETIME2(3)				NULL,						-- Data de modificação
+    ModifiedAt	DATETIME2(7)			NULL,						-- Data de modificação
 	CONSTRAINT PK_ClientContacts PRIMARY KEY CLUSTERED (Id),
     CONSTRAINT CK_PK_ClientContacts_Email CHECK (Email LIKE '%_@_%._%'),                    -- Validação simples de email
     CONSTRAINT UQ_ClientContacts_Client_Email UNIQUE (TenantId, ClientId, Email),			-- Email único por client
@@ -379,9 +379,9 @@ CREATE TABLE dbo.ClientAddresses (															-- Endereços do client
     IsActive	BIT					NOT NULL DEFAULT 1,				-- Flag de ativo
     IsDeleted	BIT					NOT NULL DEFAULT 0,				-- Soft delete
     CreatedBy	INT         		NOT NULL,						-- Usuário criador
-    CreatedAt	DATETIME2(3)			NOT NULL DEFAULT SYSDATETIME(),	-- Data de criação
+    CreatedAt	DATETIME2(7)		NOT NULL DEFAULT SYSDATETIME(),	-- Data de criação
     ModifiedBy	INT         		    NULL,						-- Usuário modificador
-    ModifiedAt	DATETIME2(3)				NULL,						-- Data de modificação
+    ModifiedAt	DATETIME2(7)			NULL,						-- Data de modificação
 	CONSTRAINT PK_ClientAddresses PRIMARY KEY CLUSTERED (Id),		
     CONSTRAINT FK_ClientAddresses_Tenant FOREIGN KEY (TenantId) REFERENCES dbo.Tenants(Id),	-- FK para tenant
     CONSTRAINT FK_ClientAddresses_Client FOREIGN KEY (ClientId) REFERENCES dbo.Clients(Id)	-- FK para client     
@@ -399,9 +399,9 @@ CREATE TABLE dbo.ClientFiscalData (										-- Dados fiscais do tenant
     IsActive		BIT					NOT NULL DEFAULT 1,				-- Flag de ativo
     IsDeleted		BIT					NOT NULL DEFAULT 0,				-- Soft delete
     CreatedBy		INT         		NOT NULL,						-- Usuário criador
-    CreatedAt		DATETIME2(3)			NOT NULL DEFAULT SYSDATETIME(),	-- Data de criação
+    CreatedAt		DATETIME2(7)		NOT NULL DEFAULT SYSDATETIME(),	-- Data de criação
     ModifiedBy	    INT         		    NULL,						-- Usuário modificador
-    ModifiedAt		DATETIME2(3)				NULL,						-- Data de modificação
+    ModifiedAt		DATETIME2(7)			NULL,						-- Data de modificação
 	CONSTRAINT PK_ClientFiscalData PRIMARY KEY CLUSTERED (Id),			
     CONSTRAINT UQ_ClientFiscalData_NIF UNIQUE (NIF),					-- NIF único
     CONSTRAINT FK_ClientFiscalData_Tenant FOREIGN KEY (TenantId) REFERENCES dbo.Tenants(Id),		-- FK para tenant    
@@ -416,9 +416,9 @@ CREATE TABLE dbo.TeamMembers (
     IsActive	BIT					NOT NULL DEFAULT 1,				-- Flag de ativo
     IsDeleted	BIT					NOT NULL DEFAULT 0,				-- Soft delete
     CreatedBy	INT         		NOT NULL,						-- Usuário criador
-    CreatedAt	DATETIME2(3)			NOT NULL DEFAULT SYSDATETIME(),	-- Data de criação
+    CreatedAt	DATETIME2(7)		NOT NULL DEFAULT SYSDATETIME(),	-- Data de criação
     ModifiedBy	INT         		    NULL,						-- Usuário modificador
-    ModifiedAt	DATETIME2(3)				NULL,						-- Data de modificação
+    ModifiedAt	DATETIME2(7)			NULL,						-- Data de modificação
 	CONSTRAINT PK_TeamMembers PRIMARY KEY CLUSTERED (Id),
     CONSTRAINT FK_TeamMembers_Tenant FOREIGN KEY (TenantId) REFERENCES dbo.Tenants(Id)
 );
@@ -434,9 +434,9 @@ CREATE TABLE dbo.TeamMemberContacts (									-- Contatos do TeamMember
     IsActive		BIT					NOT NULL DEFAULT 1,				-- Flag de ativo
     IsDeleted		BIT					NOT NULL DEFAULT 0,				-- Soft delete
     CreatedBy		INT         		NOT NULL,						-- Usuário criador
-    CreatedAt		DATETIME2(3)			NOT NULL DEFAULT SYSDATETIME(),	-- Data de criação
+    CreatedAt		DATETIME2(7)		NOT NULL DEFAULT SYSDATETIME(),	-- Data de criação
     ModifiedBy	    INT         		    NULL,						-- Usuário modificador
-    ModifiedAt		DATETIME2(3)				NULL,						-- Data de modificação
+    ModifiedAt		DATETIME2(7)			NULL,						-- Data de modificação
 	CONSTRAINT PK_TeamMemberContacts PRIMARY KEY CLUSTERED (Id),		
     CONSTRAINT FK_TeamMemberContacts_Tenant FOREIGN KEY (TenantId) REFERENCES dbo.Tenants(Id),				-- FK para tenant
     CONSTRAINT FK_TeamMemberContacts_TeamMember FOREIGN KEY (TeamMemberId) REFERENCES dbo.TeamMembers(Id)	-- FK para client
@@ -455,27 +455,29 @@ CREATE TABLE dbo.TeamMemberAddresses (									-- Endereços do TeamMember
     IsActive		BIT					NOT NULL DEFAULT 1,				-- Flag de ativo
     IsDeleted		BIT					NOT NULL DEFAULT 0,				-- Soft delete
     CreatedBy		INT         		NOT NULL,						-- Usuário criador
-    CreatedAt		DATETIME2(3)			NOT NULL DEFAULT SYSDATETIME(),	-- Data de criação
+    CreatedAt		DATETIME2(7)		NOT NULL DEFAULT SYSDATETIME(),	-- Data de criação
     ModifiedBy	    INT         		    NULL,						-- Usuário modificador
-    ModifiedAt		DATETIME2(3)				NULL,						-- Data de modificação
+    ModifiedAt		DATETIME2(7)			NULL,						-- Data de modificação
 	CONSTRAINT PK_TeamMemberAddresses PRIMARY KEY CLUSTERED (Id),		
     CONSTRAINT FK_TeamMemberAddresses_Tenant FOREIGN KEY (TenantId) REFERENCES dbo.Tenants(Id),				-- FK para tenant
     CONSTRAINT FK_TeamMemberAddresses_TeamMember FOREIGN KEY (TeamMemberId) REFERENCES dbo.TeamMembers(Id)	-- FK para client     
 );
 GO
 CREATE TABLE dbo.Equipments (
-    Id				INT IDENTITY(1,1)	NOT NULL,						-- Identificador, chave primária
-	TenantId		INT					NOT NULL,						-- Tenant dono
-    Name			NVARCHAR(150)		NOT NULL,						-- Nome do equipamento
-    SerialNumber	NVARCHAR(100)			NULL,						-- Número de série do equipamento
-    IsActive		BIT					NOT NULL DEFAULT 1,				-- Flag de ativo
-    IsDeleted		BIT					NOT NULL DEFAULT 0,				-- Soft delete
-    CreatedBy		INT         		NOT NULL,						-- Usuário criador
-    CreatedAt		DATETIME2(3)			NOT NULL DEFAULT SYSDATETIME(),	-- Data de criação
-    ModifiedBy	    INT         		    NULL,						-- Usuário modificador
-    ModifiedAt		DATETIME2(3)				NULL,						-- Data de modificação
+    Id				INT IDENTITY(1,1)	NOT NULL,						    -- Identificador, chave primária
+	TenantId		INT					NOT NULL,						    -- Tenant dono
+    Name			NVARCHAR(150)		NOT NULL,						    -- Nome do equipamento
+	TypeEquipament	INT					NOT NULL,                           -- Tipo de equipamento (1=Ferramenta Elétrica, 2=Ferramenta Manual, 3=Medição)
+    SerialNumber	NVARCHAR(100)			NULL,						    -- Número de série do equipamento
+	Status			INT					NOT NULL,						    -- Estado (0=Disponível, 1=Em uso, 2=Em manutenção)						-- Estado do equipamento,
+    IsActive		BIT					NOT NULL DEFAULT 1,				    -- Flag de ativo
+    IsDeleted		BIT					NOT NULL DEFAULT 0,				    -- Soft delete
+    CreatedBy		INT         		NOT NULL,						    -- Usuário criador
+    CreatedAt		DATETIME2(7)		NOT NULL DEFAULT SYSDATETIME(),	-- Data de criação
+    ModifiedBy	    INT         		    NULL,						    -- Usuário modificador
+    ModifiedAt		DATETIME2(7)			NULL,						-- Data de modificação
 	CONSTRAINT PK_Equipments PRIMARY KEY CLUSTERED (Id),
-    CONSTRAINT FK_Equipments_Tenant FOREIGN KEY (TenantId) REFERENCES dbo.Tenants(Id)	-- FK para tenant
+    CONSTRAINT FK_Equipments_Tenant FOREIGN KEY (TenantId) REFERENCES dbo.Tenants(Id)
 );
 GO
 CREATE TABLE dbo.Vehicles (
@@ -490,9 +492,9 @@ CREATE TABLE dbo.Vehicles (
     IsActive		BIT					NOT NULL DEFAULT 1,					-- Flag de ativo
     IsDeleted		BIT					NOT NULL DEFAULT 0,					-- Soft delete
     CreatedBy		INT         		NOT NULL,							-- Usuário criador
-    CreatedAt		DATETIME2(3)		NOT NULL DEFAULT SYSDATETIME(),		-- Data de criação
+    CreatedAt		DATETIME2(7)		NOT NULL DEFAULT SYSDATETIME(),		-- Data de criação
     ModifiedBy	    INT         		    NULL,							-- Usuário modificador
-    ModifiedAt		DATETIME2(3)				NULL,						-- Data de modificação
+    ModifiedAt		DATETIME2(7)			NULL,						-- Data de modificação
     CONSTRAINT CK_Vehicles_Active_Deleted CHECK (NOT (IsActive = 1 AND IsDeleted = 1)),
 	CONSTRAINT PK_Vehicles PRIMARY KEY CLUSTERED (Id),
     CONSTRAINT UQ_Vehicles_Tenant_Plate UNIQUE (TenantId, Plate),			-- Role única por tenant
@@ -507,17 +509,17 @@ CREATE TABLE dbo.Interventions (
     VehicleId		INT					NOT NULL,
 	Title			NVARCHAR(200)		NOT NULL,
     Description		NVARCHAR(2000)		NOT NULL,
-    StartDateTime	DATETIME2(3)			NOT NULL,
-    EndDateTime		DATETIME2(3)				NULL,
+    StartDateTime	DATETIME2(7)		NOT NULL,
+    EndDateTime		DATETIME2(7)			NULL,
     EstimatedValue	DECIMAL(10,2)		NOT NULL CHECK (EstimatedValue >= 0),
 	RealValue		DECIMAL(10,2)			NULL,
     Status			TINYINT				NOT NULL,
     IsActive		BIT					NOT NULL DEFAULT 1,								-- Flag de ativo
     IsDeleted		BIT					NOT NULL DEFAULT 0,								-- Soft delete
     CreatedBy		INT         		NOT NULL,										-- Usuário criador
-    CreatedAt		DATETIME2(3)			NOT NULL DEFAULT SYSDATETIME(),					-- Data de criação
+    CreatedAt		DATETIME2(7)		NOT NULL DEFAULT SYSDATETIME(),					-- Data de criação
     ModifiedBy	    INT         		    NULL,										-- Usuário modificador
-    ModifiedAt		DATETIME2(3)				NULL,										-- Data de modificação
+    ModifiedAt		DATETIME2(7)			NULL,										-- Data de modificação
 	CONSTRAINT PK_Interventions PRIMARY KEY CLUSTERED (Id),
 	CONSTRAINT FK_Interventions_Tenants FOREIGN KEY (TenantId) REFERENCES dbo.Tenants(Id),
 	CONSTRAINT FK_Interventions_Clients FOREIGN KEY (ClientId) REFERENCES dbo.Clients(Id),
@@ -539,9 +541,9 @@ CREATE TABLE dbo.InterventionContacts (									-- Contatos do TeamMember
     IsActive		BIT					NOT NULL DEFAULT 1,				-- Flag de ativo
     IsDeleted		BIT					NOT NULL DEFAULT 0,				-- Soft delete
     CreatedBy		INT         		NOT NULL,						-- Usuário criador
-    CreatedAt		DATETIME2(3)			NOT NULL DEFAULT SYSDATETIME(),	-- Data de criação
+    CreatedAt		DATETIME2(7)		NOT NULL DEFAULT SYSDATETIME(),	-- Data de criação
     ModifiedBy	    INT         		    NULL,						-- Usuário modificador
-    ModifiedAt		DATETIME2(3)				NULL,						-- Data de modificação
+    ModifiedAt		DATETIME2(7)			NULL,						-- Data de modificação
 	CONSTRAINT PK_InterventionContacts PRIMARY KEY CLUSTERED (Id),		
     CONSTRAINT FK_InterventionContacts_Tenant FOREIGN KEY (TenantId) REFERENCES dbo.Tenants(Id),				-- FK para tenant
     CONSTRAINT FK_InterventionContacts_Intervention FOREIGN KEY (InterventionId) REFERENCES dbo.Interventions(Id)	-- FK para client
@@ -560,9 +562,9 @@ CREATE TABLE dbo.InterventionAddresses (								-- Endereços do TeamMember
     IsActive		BIT					NOT NULL DEFAULT 1,				-- Flag de ativo
     IsDeleted		BIT					NOT NULL DEFAULT 0,				-- Soft delete
     CreatedBy		INT         		NOT NULL,						-- Usuário criador
-    CreatedAt		DATETIME2(3)			NOT NULL DEFAULT SYSDATETIME(),	-- Data de criação
+    CreatedAt		DATETIME2(7)		NOT NULL DEFAULT SYSDATETIME(),	-- Data de criação
     ModifiedBy	    INT         		    NULL,						-- Usuário modificador
-    ModifiedAt		DATETIME2(3)				NULL,						-- Data de modificação
+    ModifiedAt		DATETIME2(7)			NULL,						-- Data de modificação
 	CONSTRAINT PK_InterventionAddresses PRIMARY KEY CLUSTERED (Id),		
     CONSTRAINT FK_InterventionAddresses_Tenant FOREIGN KEY (TenantId) REFERENCES dbo.Tenants(Id),					-- FK para tenant
     CONSTRAINT FK_InterventionAddresses_Intervention FOREIGN KEY (InterventionId) REFERENCES dbo.Interventions(Id)	-- FK para client     

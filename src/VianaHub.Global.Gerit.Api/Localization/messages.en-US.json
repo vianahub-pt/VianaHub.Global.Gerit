@@ -25,6 +25,8 @@
   "Swagger.Tag.RolePermissions": "Role Permissions",
   "Swagger.Tag.JobDefinitions": "Job Definitions",
   "Swagger.Tag.JwtKeys": "JWT Keys",
+  "Swagger.Tag.Vehicles": "Vehicles",
+
   "Swagger.Endpoint.HealthCheck.Summary": "Verificação de Saúde",
   "Swagger.Endpoint.HealthCheck.Description": "Verifica se a API está funcionando corretamente",
   "Swagger.Endpoint.Action.GetAllActions.Summary": "Obter todas as ações",
@@ -348,5 +350,16 @@
   "Application.Service.Vehicle.Update.ResourceNotFound": "Vehicle not found",
   "Application.Service.Vehicle.Activate.ResourceNotFound": "Vehicle not found",
   "Application.Service.Vehicle.Deactivate.ResourceNotFound": "Vehicle not found",
-  "Application.Service.Vehicle.Delete.ResourceNotFound": "Vehicle not found"
+  "Application.Service.Vehicle.Delete.ResourceNotFound": "Vehicle not found",
+
+  "Api.Filters.UserValidation.UserId.Required": "userId is required in the URL",
+  "Api.Filters.UserValidation.UserId.Required.Message": "userId is required in the URL",
+  "Api.Filters.UserValidation.UserId.Invalid": "userId in URL is invalid",
+  "Api.Filters.UserValidation.UserId.Invalid.Message": "userId in URL is invalid",
+  "Api.Filters.UserValidation.AccessDenied.Title": "Access Denied",
+  "Api.Filters.UserValidation.AccessDenied.Message": "You do not have permission to access resources for this user",
+
+  "Api.Configuration.Jwt.NoActiveSigningKeys": "No active JWT signing keys available",
+  "Api.Configuration.Jwt.NoValidSigningKeys": "No valid JWT signing keys available",
+  "Api.Configuration.Jwt.FailedToLoadSigningKeys": "Failed to load JWT signing keys"
 }

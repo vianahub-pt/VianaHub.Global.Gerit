@@ -1,9 +1,9 @@
-using FluentValidation;
 using VianaHub.Global.Gerit.Domain.Entities.Identity;
 using VianaHub.Global.Gerit.Domain.Interfaces;
 using VianaHub.Global.Gerit.Domain.Interfaces.Identity;
 using VianaHub.Global.Gerit.Domain.Tools.Notifications;
-using VianaHub.Global.Gerit.Domain.Validators.User;
+using VianaHub.Global.Gerit.Domain.Validators.Identity.User;
+
 
 namespace VianaHub.Global.Gerit.Domain.Services.Identity;
 

@@ -16,6 +16,14 @@ using VianaHub.Global.Gerit.Api.Validators.Identity.Role;
 using VianaHub.Global.Gerit.Api.Validators.Identity.User;
 using VianaHub.Global.Gerit.Api.Validators.Identity.Auth;
 
+// Vehicle DTOs & Validators
+using VianaHub.Global.Gerit.Application.Dtos.Request.Business.Vehicle;
+
+// Equipment DTOs & Validators
+using VianaHub.Global.Gerit.Application.Dtos.Request.Business.Equipment;
+using VianaHub.Global.Gerit.Api.Validators.Business.Equipment;
+using VianaHub.Global.Gerit.Api.Validators.Business.Vehicle;
+
 namespace VianaHub.Global.Gerit.Api.Configuration;
 
 /// <summary>
@@ -65,6 +73,13 @@ public static class RouteValidatorSetup
         services.AddScoped<IValidator<RegisterRequest>, RegisterRouteValidator>();
         services.AddScoped<IValidator<LoginRequest>, LoginRouteValidator>();
         services.AddScoped<IValidator<RefreshRequest>, RefreshRouteValidator>();
+
+        // Vehicle Route Validators
+        services.AddScoped<IValidator<CreateVehicleRequest>, CreateVehicleRouteValidator>();
+        services.AddScoped<IValidator<UpdateVehicleRequest>, UpdateVehicleRouteValidator>();
+        // Equipment Route Validators
+        services.AddScoped<IValidator<CreateEquipmentRequest>, CreateEquipmentRouteValidator>();
+        services.AddScoped<IValidator<UpdateEquipmentRequest>, UpdateEquipmentRouteValidator>();
 
         return services;
     }

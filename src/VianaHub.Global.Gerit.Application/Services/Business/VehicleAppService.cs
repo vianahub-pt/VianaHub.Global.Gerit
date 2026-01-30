@@ -1,13 +1,13 @@
 using AutoMapper;
 using VianaHub.Global.Gerit.Application.Dtos.Base;
 using VianaHub.Global.Gerit.Domain.ReadModels;
-using VianaHub.Global.Gerit.Domain.Entities;
 using VianaHub.Global.Gerit.Domain.Tools.Notifications;
 using VianaHub.Global.Gerit.Domain.Interfaces;
 using VianaHub.Global.Gerit.Application.Dtos.Response.Business.Vehicle;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Business.Vehicle;
 using VianaHub.Global.Gerit.Application.Interfaces.Business;
 using VianaHub.Global.Gerit.Domain.Interfaces.Business;
+using VianaHub.Global.Gerit.Domain.Entities.Business;
 
 namespace VianaHub.Global.Gerit.Application.Services.Business;
 
@@ -83,12 +83,7 @@ public class VehicleAppService : IVehicleAppService
             return false;
         }
 
-        entity.SetPlate(request.Plate);
-        entity.SetBrand(request.Brand);
-        entity.SetModel(request.Model);
-        entity.SetYear(request.Year);
-        entity.SetColor(request.Color);
-        entity.SetFuelType(request.FuelType);
+        entity.Update(request.Plate, request.Brand, request.Model, request.Year, request.Color, request.FuelType);
         return await _domain.UpdateAsync(entity, ct);
     }
 

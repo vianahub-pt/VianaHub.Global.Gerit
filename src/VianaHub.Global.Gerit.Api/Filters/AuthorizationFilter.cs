@@ -101,16 +101,19 @@ public class AuthorizationFilter : IEndpointFilter
             var notify = httpContext.RequestServices.GetService<INotify>();
             if (notify != null)
             {
-                var msg = _localization?.GetMessage("Api.Authorization.Forbidden.Roles")
-                    ?? $"Você não tem permissão para acessar este recurso. Perfil necessário: {string.Join(", ", _allowedRoles)}";
-                notify.Add(msg, (int)HttpStatusCode.Forbidden);
+                // Sempre adicionar chave de tradução, nunca texto literal
+                notify.Add("Api.Authorization.Forbidden.Roles", (int)HttpStatusCode.Forbidden);
             }
 
-            var errorResponse = new ErrorResponse(_localization?.GetMessage("Api.Authorization.AccessDenied") ?? "Acesso Negado");
-            errorResponse.AddError("Authorization", _localization?.GetMessage("Api.Authorization.Forbidden.Roles.Detail") ?? $"Você não tem permissão para acessar este recurso. Perfis necessários: {string.Join(", ", _allowedRoles)}");
+            var titleKey = "Api.Authorization.AccessDenied";
+            var detailKey = "Api.Authorization.Forbidden.Roles.Detail";
+
+            var errorResponse = new ErrorResponse(_localization?.GetMessage(titleKey) ?? titleKey);
+            errorResponse.AddError("Authorization", _localization?.GetMessage(detailKey) ?? detailKey);
 
             return Results.Json(errorResponse, statusCode: (int)HttpStatusCode.Forbidden);
         }
+
 
         // Verificar permissões específicas do recurso e ação (se configurado)
         // Suporta formato antigo: várias claims 'permission': 'resource:action'
@@ -128,13 +131,15 @@ public class AuthorizationFilter : IEndpointFilter
                 var notify = httpContext.RequestServices.GetService<INotify>();
                 if (notify != null)
                 {
-                    var msg = _localization?.GetMessage("Api.Authorization.Forbidden.Permission")
-                        ?? $"Você não tem permissão para executar a ação '{_action}' no recurso '{_resource}'";
-                    notify.Add(msg, (int)HttpStatusCode.Forbidden);
+                    // Adicionar chave de tradução em notify
+                    notify.Add("Api.Authorization.Forbidden.Permission", (int)HttpStatusCode.Forbidden);
                 }
 
-                var errorResponse = new ErrorResponse(_localization?.GetMessage("Api.Authorization.AccessDenied") ?? "Acesso Negado");
-                errorResponse.AddError("Authorization", _localization?.GetMessage("Api.Authorization.Forbidden.Permission.Detail") ?? $"Você não tem permissão para executar a ação '{_action}' no recurso '{_resource}'");
+                var titleKey = "Api.Authorization.AccessDenied";
+                var detailKey = "Api.Authorization.Forbidden.Permission.Detail";
+
+                var errorResponse = new ErrorResponse(_localization?.GetMessage(titleKey) ?? titleKey);
+                errorResponse.AddError("Authorization", _localization?.GetMessage(detailKey) ?? detailKey);
 
                 return Results.Json(errorResponse, statusCode: (int)HttpStatusCode.Forbidden);
             }

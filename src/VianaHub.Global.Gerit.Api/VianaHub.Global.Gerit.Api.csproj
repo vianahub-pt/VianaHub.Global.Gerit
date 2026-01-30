@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="logs\**" />
+    <Content Remove="logs\**" />
+    <EmbeddedResource Remove="logs\**" />
+    <None Remove="logs\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
     <PackageReference Include="Azure.Monitor.OpenTelemetry.Exporter" Version="1.5.0" />
     <PackageReference Include="Hangfire.AspNetCore" Version="1.8.22" />
@@ -44,9 +51,5 @@
     <ProjectReference Include="..\VianaHub.Global.Gerit.Infra.IoC\VianaHub.Global.Gerit.Infra.IoC.csproj" />
     <ProjectReference Include="..\VianaHub.Global.Gerit.Domain\VianaHub.Global.Gerit.Domain.csproj" />
     <ProjectReference Include="..\VianaHub.Global.Gerit.Infra.Job\VianaHub.Global.Gerit.Infra.Job.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Validators\Business\" />
   </ItemGroup>
 </Project>

@@ -2,7 +2,6 @@ using FluentValidation.Results;
 using VianaHub.Global.Gerit.Domain.Base;
 using VianaHub.Global.Gerit.Domain.Entities.Identity;
 using VianaHub.Global.Gerit.Domain.Interfaces;
-using VianaHub.Global.Gerit.Domain.Validators.Resource;
 
 namespace VianaHub.Global.Gerit.Domain.Validators.Identity.Resource;
 

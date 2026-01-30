@@ -1,0 +1,17 @@
+using VianaHub.Global.Gerit.Application.Dtos.Base;
+using VianaHub.Global.Gerit.Application.Dtos.Request.Business.Equipment;
+using VianaHub.Global.Gerit.Application.Dtos.Response.Business.Equipment;
+
+namespace VianaHub.Global.Gerit.Application.Interfaces.Business;
+
+public interface IEquipmentAppService
+{
+    Task<IEnumerable<EquipmentResponse>> GetAllAsync(CancellationToken ct);
+    Task<EquipmentResponse> GetByIdAsync(int id, CancellationToken ct);
+    Task<ListPageResponse<EquipmentResponse>> GetPagedAsync(PagedFilterRequest request, CancellationToken ct);
+    Task<bool> CreateAsync(CreateEquipmentRequest request, CancellationToken ct);
+    Task<bool> UpdateAsync(int id, UpdateEquipmentRequest request, CancellationToken ct);
+    Task<bool> ActivateAsync(int id, CancellationToken ct);
+    Task<bool> DeactivateAsync(int id, CancellationToken ct);
+    Task<bool> DeleteAsync(int id, CancellationToken ct);
+}

@@ -2,7 +2,6 @@ using FluentValidation.Results;
 using VianaHub.Global.Gerit.Domain.Base;
 using VianaHub.Global.Gerit.Domain.Entities.Billing;
 using VianaHub.Global.Gerit.Domain.Interfaces;
-using VianaHub.Global.Gerit.Domain.Validators.Subscription;
 
 namespace VianaHub.Global.Gerit.Domain.Validators.Billing.Subscription;
 

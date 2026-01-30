@@ -42,6 +42,7 @@ using VianaHub.Global.Gerit.Domain.Validators.Identity.User;
 using VianaHub.Global.Gerit.Domain.Validators.Identity.Jwt;
 using VianaHub.Global.Gerit.Domain.Validators.Identity.UserRole;
 using VianaHub.Global.Gerit.Domain.Validators.Business.Vehicle;
+using VianaHub.Global.Gerit.Domain.Validators.Business.Equipment;
 using VianaHub.Global.Gerit.Infra.Data.Repository.Job;
 using VianaHub.Global.Gerit.Infra.Data.Repository.Business;
 using VianaHub.Global.Gerit.Infra.Data.Repository.Billing;
@@ -80,10 +81,13 @@ public static class DependencyInjection
 
         // Vehicle validators
         services.AddScoped<IEntityDomainValidator<VehicleEntity>, VehicleValidator>();
+        // Equipment validators
+        services.AddScoped<IEntityDomainValidator<EquipmentEntity>, EquipmentValidator>();
 
         // Application
         services.AddScoped<IActionAppService, ActionAppService>();
         services.AddScoped<IVehicleAppService, VehicleAppService>();
+        services.AddScoped<IEquipmentAppService, EquipmentAppService>();
         services.AddScoped<IResourceAppService, ResourceAppService>();
         services.AddScoped<IRoleAppService, RoleAppService>();
         services.AddScoped<IPlanAppService, PlanAppService>();
@@ -108,8 +112,10 @@ public static class DependencyInjection
         services.AddScoped<IRolePermissionDomainService, RolePermissionDomainService>();
         services.AddScoped<IJwtKeyDomainService, JwtKeyDomainService>();
         services.AddScoped<IVehicleDomainService, VehicleDomainService>();
+        services.AddScoped<IEquipmentDomainService, EquipmentDomainService>();
         // Infra.Data - Repositories
         services.AddScoped<IVehicleDataRepository, VehicleDataRepository>();
+        services.AddScoped<IEquipmentDataRepository, EquipmentDataRepository>();
         services.AddScoped<IActionDataRepository, ActionDataRepository>();
         services.AddScoped<IResourceDataRepository, ResourceDataRepository>();
         services.AddScoped<IRoleDataRepository, RoleDataRepository>();

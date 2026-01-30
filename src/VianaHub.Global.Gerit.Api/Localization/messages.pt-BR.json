@@ -23,6 +23,8 @@
   "Swagger.Tag.RolePermissions": "Permissões de Papéis",
   "Swagger.Tag.JobDefinitions": "Definições de Jobs",
   "Swagger.Tag.JwtKeys": "Chaves JWT",
+  "Swagger.Tag.Vehicles": "Veículos",
+  "Swagger.Tag.Equipments": "Equipamentos",
 
   "Swagger.Endpoint.HealthCheck.Summary": "Verificação de Saúde",
   "Swagger.Endpoint.HealthCheck.Description": "Verifica se a API está funcionando corretamente",
@@ -351,11 +353,42 @@
   "Domain.Vehicle.CannotDeactivateDeleted": "Não é possível desativar um veículo removido",
   "Domain.Vehicle.AlreadyDeleted": "O veículo já foi excluído",
 
+  "Domain.Equipment.TenantIdRequired": "ID do inquilino é obrigatório para o equipamento",
+  "Domain.Equipment.NameRequired": "Nome do equipamento é obrigatório",
+  "Domain.Equipment.NameMaxLength": "Nome do equipamento deve ter no máximo {0} caracteres",
+  "Domain.Equipment.InvalidId": "ID do equipamento inválido",
+  "Domain.Equipment.CannotUpdateDeleted": "Não é possível atualizar um equipamento removido",
+  "Domain.Equipment.CannotActivateDeleted": "Não é possível ativar um equipamento removido",
+  "Domain.Equipment.CannotDeactivateDeleted": "Não é possível desativar um equipamento removido",
+  "Domain.Equipment.AlreadyDeleted": "O equipamento já foi excluído",
+
   "Application.Service.Vehicle.Create.ResourceAlreadyExists": "Veículo com esta placa já existe para este inquilino",
+  "Application.Service.Equipment.Create.ResourceAlreadyExists": "Equipamento com este nome já existe para este inquilino",
   "Application.Service.Vehicle.Update.ResourceNotFound": "Veículo não encontrado",
   "Application.Service.Vehicle.Activate.ResourceNotFound": "Veículo não encontrado",
   "Application.Service.Vehicle.Deactivate.ResourceNotFound": "Veículo não encontrado",
   "Application.Service.Vehicle.Delete.ResourceNotFound": "Veículo não encontrado",
+  "Application.Service.Equipment.Update.ResourceNotFound": "Equipamento não encontrado",
+  "Application.Service.Equipment.Activate.ResourceNotFound": "Equipamento não encontrado",
+  "Application.Service.Equipment.Deactivate.ResourceNotFound": "Equipamento não encontrado",
+  "Application.Service.Equipment.Delete.ResourceNotFound": "Equipamento não encontrado",
 
-  "Api.Validator.Auth.Refresh.Token": "Refresh token é obrigatório"
+  "Api.Validator.Auth.Refresh.Token": "Refresh token é obrigatório",
+  "Api.Validator.Equipment.Create.Name": "Nome é obrigatório",
+  "Api.Validator.Equipment.Create.Name.MaximumLength": "Nome deve ter no máximo {0} caracteres",
+  "Api.Validator.Equipment.Create.SerialNumber.MaximumLength": "Número de série deve ter no máximo {0} caracteres",
+  "Api.Validator.Equipment.Update.Name": "Nome é obrigatório",
+  "Api.Validator.Equipment.Update.Name.MaximumLength": "Nome deve ter no máximo {0} caracteres",
+  "Api.Validator.Equipment.Update.SerialNumber.MaximumLength": "Número de série deve ter no máximo {0} caracteres",
+
+  "Api.Filters.UserValidation.UserId.Required": "userId é obrigatório na URL",
+  "Api.Filters.UserValidation.UserId.Required.Message": "userId é obrigatório na URL",
+  "Api.Filters.UserValidation.UserId.Invalid": "userId inválido na URL",
+  "Api.Filters.UserValidation.UserId.Invalid.Message": "userId inválido na URL",
+  "Api.Filters.UserValidation.AccessDenied.Title": "Acesso Negado",
+  "Api.Filters.UserValidation.AccessDenied.Message": "Você não tem permissão para acessar recursos deste usuário",
+
+  "Api.Configuration.Jwt.NoActiveSigningKeys": "Nenhuma chave JWT ativa encontrada no banco de dados",
+  "Api.Configuration.Jwt.NoValidSigningKeys": "Nenhuma chave JWT válida encontrada após processamento",
+  "Api.Configuration.Jwt.FailedToLoadSigningKeys": "Falha ao carregar chaves JWT do banco de dados"
 }

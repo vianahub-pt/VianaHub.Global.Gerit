@@ -3,7 +3,7 @@ using VianaHub.Global.Gerit.Application.Dtos.Base;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Billing.Subscription;
 using VianaHub.Global.Gerit.Application.Dtos.Response.Billing.Subscription;
 using VianaHub.Global.Gerit.Application.Interfaces.Billing;
-using VianaHub.Global.Gerit.Domain.Entities;
+using VianaHub.Global.Gerit.Domain.Entities.Billing;
 using VianaHub.Global.Gerit.Domain.Interfaces;
 using VianaHub.Global.Gerit.Domain.Interfaces.Billing;
 using VianaHub.Global.Gerit.Domain.ReadModels;

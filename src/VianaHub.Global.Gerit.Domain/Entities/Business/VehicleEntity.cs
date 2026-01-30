@@ -30,74 +30,25 @@ public class VehicleEntity : Entity
     public VehicleEntity(int tenantId, string plate, string brand, string model, int year, string color = null, string fuelType = null)
     {
         TenantId = tenantId;
-        SetPlate(plate);
-        SetBrand(brand);
-        SetModel(model);
-        SetYear(year);
-        SetColor(color);
-        SetFuelType(fuelType);
+        Plate = plate;
+        Brand = brand;
+        Model = model;
+        Year = year;
+        Color = color;
+        FuelType = fuelType;
         IsActive = true;
         IsDeleted = false;
     }
 
-    public void SetPlate(string plate)
+    public void Update(string plate, string brand, string model, int year, string color = null, string fuelType = null)
     {
-        if (string.IsNullOrWhiteSpace(plate))
-            throw new ArgumentException("Placa não pode ser vazia.", nameof(plate));
-
-        if (plate.Length > 20)
-            throw new ArgumentException("Placa não pode ter mais de 20 caracteres.", nameof(plate));
-
-        Plate = plate.ToUpper();
-    }
-
-    public void SetBrand(string brand)
-    {
-        if (string.IsNullOrWhiteSpace(brand))
-            throw new ArgumentException("Marca não pode ser vazia.", nameof(brand));
-
-        if (brand.Length > 100)
-            throw new ArgumentException("Marca não pode ter mais de 100 caracteres.", nameof(brand));
-
+        Plate = plate;
         Brand = brand;
-    }
-
-    public void SetModel(string model)
-    {
-        if (string.IsNullOrWhiteSpace(model))
-            throw new ArgumentException("Modelo não pode ser vazio.", nameof(model));
-
-        if (model.Length > 100)
-            throw new ArgumentException("Modelo não pode ter mais de 100 caracteres.", nameof(model));
-
         Model = model;
-    }
-
-    public void SetYear(int year)
-    {
-        var currentYear = DateTime.UtcNow.Year + 1; // accept next year optionally
-        if (year < 1886 || year > currentYear)
-            throw new ArgumentException($"Ano inválido. Deve estar entre 1886 e {currentYear}.", nameof(year));
-
         Year = year;
-    }
-
-    public void SetColor(string color)
-    {
-        if (color != null && color.Length > 50)
-            throw new ArgumentException("Cor não pode ter mais de 50 caracteres.", nameof(color));
-
         Color = color;
-    }
-
-    public void SetFuelType(string fuelType)
-    {
-        if (fuelType != null && fuelType.Length > 50)
-            throw new ArgumentException("Tipo de combustível não pode ter mais de 50 caracteres.", nameof(fuelType));
-
         FuelType = fuelType;
     }
-
     public void Activate()
     {
         IsActive = true;

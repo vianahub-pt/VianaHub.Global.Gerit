@@ -19,6 +19,7 @@ public static class NotifyExtensions
             statusCode = (int)notify.GetStatusCode();
             var errorMessages = notify.GetErrorMessage();
 
+            var localization = GetLocalizationService();
             var errorResponse = new ErrorResponse(GetErrorTitle(statusCode));
 
             foreach (var message in errorMessages)
@@ -27,12 +28,14 @@ public static class NotifyExtensions
                 {
                     var parts = message.Split(':', 2);
                     var field = parts[0].Trim();
-                    var errorMsg = parts[1].Trim();
-                    errorResponse.AddError(field, errorMsg);
+                    var payload = parts[1].Trim();
+                    var resolved = ResolvePayloadLocalization(payload, localization);
+                    errorResponse.AddError(field, resolved);
                 }
                 else
                 {
-                    errorResponse.AddError(GetLocalizedErrorLabel(), message);
+                    var resolved = ResolvePayloadLocalization(message, localization);
+                    errorResponse.AddError(GetLocalizedErrorLabel(), resolved);
                 }
             }
             return Results.Json(errorResponse, statusCode: statusCode);
@@ -54,6 +57,7 @@ public static class NotifyExtensions
             statusCode = (int)notify.GetStatusCode();
             var errorMessages = notify.GetErrorMessage();
 
+            var localization = GetLocalizationService();
             var errorResponse = new ErrorResponse(GetErrorTitle(statusCode));
 
             foreach (var message in errorMessages)
@@ -61,11 +65,15 @@ public static class NotifyExtensions
                 if (message.Contains(":"))
                 {
                     var parts = message.Split(':', 2);
-                    errorResponse.AddError(parts[0].Trim(), parts[1].Trim());
+                    var field = parts[0].Trim();
+                    var payload = parts[1].Trim();
+                    var resolved = ResolvePayloadLocalization(payload, localization);
+                    errorResponse.AddError(field, resolved);
                 }
                 else
                 {
-                    errorResponse.AddError(GetLocalizedErrorLabel(), message);
+                    var resolved = ResolvePayloadLocalization(message, localization);
+                    errorResponse.AddError(GetLocalizedErrorLabel(), resolved);
                 }
             }
 
@@ -89,6 +97,7 @@ public static class NotifyExtensions
         {
             statusCode = (int)notify.GetStatusCode();
             var errorMessages = notify.GetErrorMessage();
+            var localization = GetLocalizationService();
             var errorResponse = new ErrorResponse(GetErrorTitle(statusCode));
             foreach (var message in errorMessages)
             {
@@ -96,12 +105,14 @@ public static class NotifyExtensions
                 {
                     var parts = message.Split(':', 2);
                     var field = parts[0].Trim();
-                    var errorMsg = parts[1].Trim();
-                    errorResponse.AddError(field, errorMsg);
+                    var payload = parts[1].Trim();
+                    var resolved = ResolvePayloadLocalization(payload, localization);
+                    errorResponse.AddError(field, resolved);
                 }
                 else
                 {
-                    errorResponse.AddError(GetLocalizedErrorLabel(), message);
+                    var resolved = ResolvePayloadLocalization(message, localization);
+                    errorResponse.AddError(GetLocalizedErrorLabel(), resolved);
                 }
             }
             return Results.Json(errorResponse, statusCode: statusCode);
@@ -115,7 +126,7 @@ public static class NotifyExtensions
     /// </summary>
     public static void AddFieldError(this INotify notify, string field, string message, int statusCode = 400)
     {
-        // Mantém formato "field: message" mas exige que callers passem chaves de tradução sempre que possível.
+        // Mantém formato "field: payload" onde payload pode ser uma chave ou texto literal.
         notify.Add($"{field}: {message}", statusCode);
     }
 
@@ -171,5 +182,34 @@ public static class NotifyExtensions
         // Tenta obter o serviço do contexto HTTP atual via IHttpContextAccessor
         var httpContextAccessor = ServiceProviderHolder.ServiceProvider?.GetService(typeof(IHttpContextAccessor)) as IHttpContextAccessor;
         return httpContextAccessor?.HttpContext?.RequestServices.GetService(typeof(ILocalizationService)) as ILocalizationService;
+    }
+
+    /// <summary>
+    /// Resolve payload que pode ser uma chave com argumentos (key|arg1|arg2) ou texto literal.
+    /// </summary>
+    private static string ResolvePayloadLocalization(string payload, ILocalizationService? localization)
+    {
+        if (localization == null)
+            return payload;
+
+        if (string.IsNullOrWhiteSpace(payload))
+            return string.Empty;
+
+        if (payload.Contains('|'))
+        {
+            var parts = payload.Split('|');
+            var key = parts[0];
+            var args = parts.Skip(1).ToArray();
+            return localization.GetMessage(key, args);
+        }
+
+        // Heurística: se parece com uma chave (contém ponto e sem espaços), trata como chave
+        if (payload.Contains('.') && !payload.Contains(' '))
+        {
+            return localization.GetMessage(payload);
+        }
+
+        // Caso contrário, assume que é texto já localizado
+        return payload;
     }
 }

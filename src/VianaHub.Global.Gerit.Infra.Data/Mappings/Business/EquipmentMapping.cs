@@ -40,6 +40,16 @@ public class EquipmentMapping : IEntityTypeConfiguration<EquipmentEntity>
             .HasMaxLength(100)
             .IsRequired(false);
 
+        builder.Property(e => e.TypeEquipament)
+            .HasColumnName("TypeEquipament")
+            .HasColumnType("TINYINT")
+            .IsRequired();
+
+        builder.Property(e => e.Status)
+            .HasColumnName("Status")
+            .HasColumnType("TINYINT")
+            .IsRequired();
+
         builder.Property(e => e.IsActive)
             .HasColumnName("IsActive")
             .HasColumnType("BIT")
