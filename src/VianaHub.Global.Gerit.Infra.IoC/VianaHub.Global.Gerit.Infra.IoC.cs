@@ -1,11 +1,10 @@
 using Microsoft.Extensions.DependencyInjection;
-using VianaHub.Global.Gerit.Domain.Interfaces.Repository;
-using VianaHub.Global.Gerit.Domain.Interfaces.Domain;
 using VianaHub.Global.Gerit.Domain.Tools.Notifications;
 using VianaHub.Global.Gerit.Application.Services.Identity;
 using VianaHub.Global.Gerit.Application.Interfaces.Identity;
 using VianaHub.Global.Gerit.Domain.Services.Identity;
 using VianaHub.Global.Gerit.Infra.Data.Repository.Identity;
+using VianaHub.Global.Gerit.Domain.Interfaces.Identity;
 
 namespace VianaHub.Global.Gerit.Infra.IoC;
 

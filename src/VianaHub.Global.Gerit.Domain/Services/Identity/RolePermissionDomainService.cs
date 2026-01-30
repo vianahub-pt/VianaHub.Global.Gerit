@@ -1,8 +1,7 @@
 using System.Threading.Tasks;
 using FluentValidation;
-using VianaHub.Global.Gerit.Domain.Entities;
-using VianaHub.Global.Gerit.Domain.Interfaces.Domain;
-using VianaHub.Global.Gerit.Domain.Interfaces.Repository;
+using VianaHub.Global.Gerit.Domain.Entities.Identity;
+using VianaHub.Global.Gerit.Domain.Interfaces.Identity;
 
 namespace VianaHub.Global.Gerit.Domain.Services.Identity;
 

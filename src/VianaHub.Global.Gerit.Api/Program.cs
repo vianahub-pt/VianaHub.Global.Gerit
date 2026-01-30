@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using Serilog;
 using VianaHub.Global.Gerit.Api.Configuration;
 using VianaHub.Global.Gerit.Api.Configuration.Swagger;
-using VianaHub.Global.Gerit.Api.Endpoints;
 using VianaHub.Global.Gerit.Api.Helpers;
 using VianaHub.Global.Gerit.Api.Services;
 using VianaHub.Global.Gerit.Domain.Interfaces;
@@ -17,6 +16,9 @@ using VianaHub.Global.Gerit.Api.Security;
 using VianaHub.Global.Gerit.Infra.Data.Tools;
 using VianaHub.Global.Gerit.Api.Endpoints.Identity;
 using VianaHub.Global.Gerit.Application.Mappings.Identity;
+using VianaHub.Global.Gerit.Api.Endpoints.Billing;
+using VianaHub.Global.Gerit.Api.Endpoints.Business;
+using VianaHub.Global.Gerit.Api.Endpoints.Job;
 
 namespace VianaHub.Global.Gerit.Api;
 
@@ -168,6 +170,7 @@ public class Program
         app.MapAuthEndpoints(); // Map Auth endpoints
         app.MapJobEndpoints();
         app.MapJwtKeyEndpoints();
+        app.MapVehicleEndpoints();
 
         // Minimal API Endpoints
         var localization = app.Services.GetService(typeof(ILocalizationService)) as ILocalizationService;

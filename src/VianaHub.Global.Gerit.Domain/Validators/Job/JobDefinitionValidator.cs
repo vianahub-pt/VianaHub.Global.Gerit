@@ -1,6 +1,6 @@
 using FluentValidation.Results;
 using VianaHub.Global.Gerit.Domain.Base;
-using VianaHub.Global.Gerit.Domain.Entities;
+using VianaHub.Global.Gerit.Domain.Entities.Job;
 using VianaHub.Global.Gerit.Domain.Interfaces;
 
 namespace VianaHub.Global.Gerit.Domain.Validators.Job;

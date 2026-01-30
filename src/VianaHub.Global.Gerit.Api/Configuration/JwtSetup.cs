@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using VianaHub.Global.Gerit.Application.Configuration;
-using VianaHub.Global.Gerit.Domain.Interfaces.Repository;
+using VianaHub.Global.Gerit.Domain.Interfaces.Identity;
 using VianaHub.Global.Gerit.Domain.Tools.Cryptography;
 
 namespace VianaHub.Global.Gerit.Api.Configuration;

@@ -2,8 +2,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using VianaHub.Global.Gerit.Domain.Entities;
-using VianaHub.Global.Gerit.Domain.Interfaces.Repository;
+using VianaHub.Global.Gerit.Domain.Entities.Identity;
+using VianaHub.Global.Gerit.Domain.Interfaces.Identity;
 using VianaHub.Global.Gerit.Infra.Data.Context;
 
 namespace VianaHub.Global.Gerit.Infra.Data.Repository.Identity;

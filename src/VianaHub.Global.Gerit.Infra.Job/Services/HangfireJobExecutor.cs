@@ -1,7 +1,7 @@
 ﻿using Hangfire;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using VianaHub.Global.Gerit.Domain.Entities;
+using VianaHub.Global.Gerit.Domain.Entities.Job;
 using VianaHub.Global.Gerit.Domain.Interfaces.Job;
 using VianaHub.Global.Gerit.Infra.Job.Interfaces;
 

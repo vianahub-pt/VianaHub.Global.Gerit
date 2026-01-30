@@ -45,4 +45,8 @@
     <ProjectReference Include="..\VianaHub.Global.Gerit.Domain\VianaHub.Global.Gerit.Domain.csproj" />
     <ProjectReference Include="..\VianaHub.Global.Gerit.Infra.Job\VianaHub.Global.Gerit.Infra.Job.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Validators\Business\" />
+  </ItemGroup>
 </Project>

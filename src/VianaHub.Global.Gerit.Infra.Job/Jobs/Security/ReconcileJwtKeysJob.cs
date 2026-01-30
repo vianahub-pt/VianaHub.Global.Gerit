@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
-using VianaHub.Global.Gerit.Domain.Interfaces.Domain;
-using VianaHub.Global.Gerit.Domain.Interfaces.Repository;
+using VianaHub.Global.Gerit.Domain.Interfaces.Billing;
+using VianaHub.Global.Gerit.Domain.Interfaces.Identity;
 using VianaHub.Global.Gerit.Infra.Job.Interfaces;
 
 namespace VianaHub.Global.Gerit.Infra.Job.Jobs.Security;

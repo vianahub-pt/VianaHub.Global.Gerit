@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using VianaHub.Global.Gerit.Domain.Entities;
+using VianaHub.Global.Gerit.Domain.Entities.Billing;
+using VianaHub.Global.Gerit.Domain.Entities.Business;
+using VianaHub.Global.Gerit.Domain.Entities.Identity;
 
 namespace VianaHub.Global.Gerit.Infra.Data.Context;
 
@@ -26,7 +28,7 @@ public class GeritDbContext : DbContext
     #region DbSets - RBAC Structure
     public DbSet<RoleEntity> Roles { get; set; }
     public DbSet<ResourceEntity> Resources { get; set; }
-    public DbSet<Domain.Entities.ActionEntity> Actions { get; set; }
+    public DbSet<ActionEntity> Actions { get; set; }
     public DbSet<RolePermissionEntity> RolePermissions { get; set; }
     public DbSet<UserRoleEntity> UserRoles { get; set; }
     public DbSet<JwtKeyEntity> JwtKeys { get; set; }

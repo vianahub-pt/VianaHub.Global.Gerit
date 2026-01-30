@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using VianaHub.Global.Gerit.Domain.Entities;
-using VianaHub.Global.Gerit.Domain.Interfaces.Repository;
+using VianaHub.Global.Gerit.Domain.Entities.Identity;
+using VianaHub.Global.Gerit.Domain.Interfaces.Identity;
 using VianaHub.Global.Gerit.Domain.ReadModels;
 using VianaHub.Global.Gerit.Domain.Tools.Pagination;
 using VianaHub.Global.Gerit.Infra.Data.Context;

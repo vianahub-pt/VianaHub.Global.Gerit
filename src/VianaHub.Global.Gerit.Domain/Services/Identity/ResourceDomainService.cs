@@ -1,7 +1,6 @@
 using VianaHub.Global.Gerit.Domain.Base;
-using VianaHub.Global.Gerit.Domain.Entities;
-using VianaHub.Global.Gerit.Domain.Interfaces.Domain;
-using VianaHub.Global.Gerit.Domain.Interfaces.Repository;
+using VianaHub.Global.Gerit.Domain.Entities.Identity;
+using VianaHub.Global.Gerit.Domain.Interfaces.Identity;
 using VianaHub.Global.Gerit.Domain.ReadModels;
 using VianaHub.Global.Gerit.Domain.Tools.Notifications;
 using VianaHub.Global.Gerit.Domain.Tools.Pagination;

@@ -1,0 +1,113 @@
+using Microsoft.AspNetCore.Mvc;
+using VianaHub.Global.Gerit.Api.Helpers;
+using VianaHub.Global.Gerit.Application.Dtos.Base;
+using VianaHub.Global.Gerit.Domain.Tools.Notifications;
+using FluentValidation;
+using VianaHub.Global.Gerit.Application.Dtos.Request.Business.Vehicle;
+using VianaHub.Global.Gerit.Application.Interfaces.Business;
+
+namespace VianaHub.Global.Gerit.Api.Endpoints.Business;
+
+public static class VehicleEndpoint
+{
+    public static void MapVehicleEndpoints(this IEndpointRouteBuilder app)
+    {
+        var groupV1 = app.MapGroup("/v1/vehicles").WithTags("Vehicles").WithGroupName("v1").RequireAuthorization();
+
+        groupV1.MapGet("/", async (IVehicleAppService appService, INotify notify, CancellationToken ct) =>
+        {
+            var response = await appService.GetAllAsync(ct);
+            return notify.CustomResponse(response, 200);
+        })
+        .CustomAuthorize("Admin,BackOffice,Manager", "Vehicles", "GetAll")
+        .WithName("GetVehicles")
+        .WithSummary("Swagger.Endpoint.Vehicle.GetVehicles.Summary")
+        .Produces(StatusCodes.Status200OK)
+        .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
+
+        groupV1.MapGet("/{id}", async (int id, IVehicleAppService appService, INotify notify, CancellationToken ct) =>
+        {
+            var response = await appService.GetByIdAsync(id, ct);
+            return notify.CustomResponse(response, 200);
+        })
+        .CustomAuthorize("Admin,BackOffice,Manager", "Vehicles", "GetBy")
+        .WithName("GetVehicleById")
+        .WithSummary("Swagger.Endpoint.Vehicle.GetById.Summary")
+        .Produces(StatusCodes.Status200OK)
+        .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
+        .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
+
+        groupV1.MapGet("/paged", async ([AsParameters] PagedFilterRequest request, IVehicleAppService appService, INotify notify, CancellationToken ct) =>
+        {
+            var response = await appService.GetPagedAsync(request, ct);
+            return notify.CustomResponse(response, 200);
+        })
+        .CustomAuthorize("Admin,BackOffice,Manager", "Vehicles", "GetPaged")
+        .WithName("GetVehiclesPaged")
+        .WithSummary("Swagger.Endpoint.Vehicle.GetPaged.Summary")
+        .Produces(StatusCodes.Status200OK)
+        .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
+
+        groupV1.MapPost("/", async ([FromBody] CreateVehicleRequest request, IVehicleAppService appService, INotify notify, CancellationToken ct) =>
+        {
+            var created = await appService.CreateAsync(request, ct);
+            return notify.CustomResponse(created ? 201 : 400);
+        })
+        .CustomAuthorize("Admin,BackOffice,Manager", "Vehicles", "Create")
+        .WithName("CreateVehicle")
+        .WithSummary("Swagger.Endpoint.Vehicle.Create.Summary")
+        .Produces(StatusCodes.Status201Created)
+        .Produces<ErrorResponse>(StatusCodes.Status400BadRequest)
+        .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError)
+        .WithValidation<CreateVehicleRequest>();
+
+        groupV1.MapPut("/{id}", async (int id, [FromBody] UpdateVehicleRequest request, IVehicleAppService appService, INotify notify, CancellationToken ct) =>
+        {
+            var updated = await appService.UpdateAsync(id, request, ct);
+            return notify.CustomResponse(updated ? 204 : 400);
+        })
+        .CustomAuthorize("Admin,BackOffice,Manager", "Vehicles", "Update")
+        .WithName("UpdateVehicle")
+        .WithSummary("Swagger.Endpoint.Vehicle.Update.Summary")
+        .Produces(StatusCodes.Status204NoContent)
+        .Produces<ErrorResponse>(StatusCodes.Status400BadRequest)
+        .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError)
+        .WithValidation<UpdateVehicleRequest>();
+
+        groupV1.MapPatch("/{id}/activate", async (int id, IVehicleAppService appService, INotify notify, CancellationToken ct) =>
+        {
+            var ok = await appService.ActivateAsync(id, ct);
+            return notify.CustomResponse();
+        })
+        .CustomAuthorize("Admin,BackOffice,Manager", "Vehicles", "Activate")
+        .WithName("ActivateVehicle")
+        .WithSummary("Swagger.Endpoint.Vehicle.Activate.Summary")
+        .Produces(StatusCodes.Status204NoContent)
+        .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
+        .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
+
+        groupV1.MapPatch("/{id}/deactivate", async (int id, IVehicleAppService appService, INotify notify, CancellationToken ct) =>
+        {
+            var ok = await appService.DeactivateAsync(id, ct);
+            return notify.CustomResponse();
+        })
+        .CustomAuthorize("Admin,BackOffice,Manager", "Vehicles", "Deactivate")
+        .WithName("DeactivateVehicle")
+        .WithSummary("Swagger.Endpoint.Vehicle.Deactivate.Summary")
+        .Produces(StatusCodes.Status204NoContent)
+        .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
+        .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
+
+        groupV1.MapDelete("/{id}", async (int id, IVehicleAppService appService, INotify notify, CancellationToken ct) =>
+        {
+            var ok = await appService.DeleteAsync(id, ct);
+            return notify.CustomResponse();
+        })
+        .CustomAuthorize("Admin,BackOffice,Manager", "Vehicles", "Delete")
+        .WithName("DeleteVehicle")
+        .WithSummary("Swagger.Endpoint.Vehicle.Delete.Summary")
+        .Produces(StatusCodes.Status204NoContent)
+        .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
+        .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
+    }
+}

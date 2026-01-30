@@ -1,6 +1,5 @@
 using Hangfire;
 using Microsoft.Extensions.Logging;
-using VianaHub.Global.Gerit.Domain.Entities;
 using VianaHub.Global.Gerit.Domain.Interfaces;
 using VianaHub.Global.Gerit.Domain.Interfaces.Repository;
 using System.Linq;
@@ -9,6 +8,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using VianaHub.Global.Gerit.Domain.Interfaces.Job;
 using System.Threading;
+using VianaHub.Global.Gerit.Domain.Entities.Job;
 
 namespace VianaHub.Global.Gerit.Infra.Job.Services;
 

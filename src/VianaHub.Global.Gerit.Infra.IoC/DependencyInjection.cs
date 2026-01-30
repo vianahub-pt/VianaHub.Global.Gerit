@@ -1,24 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using FluentValidation;
-using VianaHub.Global.Gerit.Application.Interfaces;
-using VianaHub.Global.Gerit.Application.Services;
 using VianaHub.Global.Gerit.Domain.Base;
-using VianaHub.Global.Gerit.Domain.Entities;
-using VianaHub.Global.Gerit.Domain.Interfaces.Domain;
-using VianaHub.Global.Gerit.Domain.Interfaces.Repository;
-using VianaHub.Global.Gerit.Domain.Services;
 using VianaHub.Global.Gerit.Domain.Tools.Notifications;
-using VianaHub.Global.Gerit.Domain.Validators.Action;
-using VianaHub.Global.Gerit.Domain.Validators.Plan;
-using VianaHub.Global.Gerit.Domain.Validators.Resource;
-using VianaHub.Global.Gerit.Domain.Validators.Role;
-using VianaHub.Global.Gerit.Domain.Validators.Subscription;
-using VianaHub.Global.Gerit.Domain.Validators.Tenant;
-using VianaHub.Global.Gerit.Domain.Validators.User;
-using VianaHub.Global.Gerit.Domain.Validators.UserRole;
-using VianaHub.Global.Gerit.Domain.Validators.RolePermission;
 using VianaHub.Global.Gerit.Domain.Validators.Job;
-using VianaHub.Global.Gerit.Infra.Data.Repository;
 using VianaHub.Global.Gerit.Domain.Interfaces;
 using VianaHub.Global.Gerit.Infra.Messaging;
 using VianaHub.Global.Gerit.Infra.Data.Context;
@@ -28,11 +12,39 @@ using VianaHub.Global.Gerit.Infra.Job.Services;
 using VianaHub.Global.Gerit.Infra.Job.HostedServices;
 using VianaHub.Global.Gerit.Domain.Interfaces.Job;
 using VianaHub.Global.Gerit.Infra.Job.Interfaces;
-using VianaHub.Global.Gerit.Domain.Validators.Jwt;
 using VianaHub.Global.Gerit.Application.Services.Identity;
 using VianaHub.Global.Gerit.Application.Interfaces.Identity;
 using VianaHub.Global.Gerit.Domain.Services.Identity;
 using VianaHub.Global.Gerit.Infra.Data.Repository.Identity;
+using VianaHub.Global.Gerit.Application.Interfaces.Billing;
+using VianaHub.Global.Gerit.Application.Interfaces.Business;
+using VianaHub.Global.Gerit.Application.Interfaces.Job;
+using VianaHub.Global.Gerit.Application.Services.Job;
+using VianaHub.Global.Gerit.Application.Services.Billing;
+using VianaHub.Global.Gerit.Application.Services.Business;
+using VianaHub.Global.Gerit.Domain.Entities.Billing;
+using VianaHub.Global.Gerit.Domain.Entities.Business;
+using VianaHub.Global.Gerit.Domain.Entities.Job;
+using VianaHub.Global.Gerit.Domain.Entities.Identity;
+using VianaHub.Global.Gerit.Domain.Interfaces.Billing;
+using VianaHub.Global.Gerit.Domain.Interfaces.Business;
+using VianaHub.Global.Gerit.Domain.Interfaces.Identity;
+using VianaHub.Global.Gerit.Domain.Services.Billing;
+using VianaHub.Global.Gerit.Domain.Services.Business;
+using VianaHub.Global.Gerit.Domain.Validators.Billing.Plan;
+using VianaHub.Global.Gerit.Domain.Validators.Billing.Subscription;
+using VianaHub.Global.Gerit.Domain.Validators.Billing.Tenant;
+using VianaHub.Global.Gerit.Domain.Validators.Identity.Action;
+using VianaHub.Global.Gerit.Domain.Validators.Identity.Resource;
+using VianaHub.Global.Gerit.Domain.Validators.Identity.Role;
+using VianaHub.Global.Gerit.Domain.Validators.Identity.RolePermission;
+using VianaHub.Global.Gerit.Domain.Validators.Identity.User;
+using VianaHub.Global.Gerit.Domain.Validators.Identity.Jwt;
+using VianaHub.Global.Gerit.Domain.Validators.Identity.UserRole;
+using VianaHub.Global.Gerit.Domain.Validators.Business.Vehicle;
+using VianaHub.Global.Gerit.Infra.Data.Repository.Job;
+using VianaHub.Global.Gerit.Infra.Data.Repository.Business;
+using VianaHub.Global.Gerit.Infra.Data.Repository.Billing;
 
 namespace VianaHub.Global.Gerit.Infra.IoC;
 
@@ -66,8 +78,12 @@ public static class DependencyInjection
         // Register JwtKey validator
         services.AddScoped<IEntityDomainValidator<JwtKeyEntity>, JwtKeyValidator>();
 
+        // Vehicle validators
+        services.AddScoped<IEntityDomainValidator<VehicleEntity>, VehicleValidator>();
+
         // Application
         services.AddScoped<IActionAppService, ActionAppService>();
+        services.AddScoped<IVehicleAppService, VehicleAppService>();
         services.AddScoped<IResourceAppService, ResourceAppService>();
         services.AddScoped<IRoleAppService, RoleAppService>();
         services.AddScoped<IPlanAppService, PlanAppService>();
@@ -91,7 +107,9 @@ public static class DependencyInjection
         services.AddScoped<IUserDomainService, UserDomainService>();
         services.AddScoped<IRolePermissionDomainService, RolePermissionDomainService>();
         services.AddScoped<IJwtKeyDomainService, JwtKeyDomainService>();
+        services.AddScoped<IVehicleDomainService, VehicleDomainService>();
         // Infra.Data - Repositories
+        services.AddScoped<IVehicleDataRepository, VehicleDataRepository>();
         services.AddScoped<IActionDataRepository, ActionDataRepository>();
         services.AddScoped<IResourceDataRepository, ResourceDataRepository>();
         services.AddScoped<IRoleDataRepository, RoleDataRepository>();
@@ -111,11 +129,9 @@ public static class DependencyInjection
         // Hangfire Job service
         services.AddScoped<IJobSchedulerService, HangfireJobService>();
         services.AddScoped<IJobExecutor, HangfireJobExecutor>();
-        services.AddScoped<IJobSyncService, VianaHub.Global.Gerit.Infra.Job.Services.JobSyncService>();
-        // Register the new scheduled sync job so it can be resolved by the job scheduler
-        services.AddScoped<VianaHub.Global.Gerit.Infra.Job.Jobs.Maintenance.ScheduledSyncJobDefinitionsJob>();
-        // Register JWT rotation job
-        services.AddScoped<VianaHub.Global.Gerit.Infra.Job.Jobs.Security.JwtKeyRotationJob>();
+        services.AddScoped<IJobSyncService, JobSyncService>();
+        services.AddScoped<Job.Jobs.Maintenance.ScheduledSyncJobDefinitionsJob>();
+        services.AddScoped<Job.Jobs.Security.JwtKeyRotationJob>();
         services.AddHostedService<JobSyncHostedService>();
 
         // Data Context
@@ -125,7 +141,7 @@ public static class DependencyInjection
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
         // Secret provider (chave mestra gerenciada externamente) - por padrão lê variável de ambiente JWT_MASTER_KEY
-        services.AddSingleton<VianaHub.Global.Gerit.Domain.Interfaces.ISecretProvider, SecretProviderEnvironment>();
+        services.AddSingleton<ISecretProvider, SecretProviderEnvironment>();
 
         return services;
     }

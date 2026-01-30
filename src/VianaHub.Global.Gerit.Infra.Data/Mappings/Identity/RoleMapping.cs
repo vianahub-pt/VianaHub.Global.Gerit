@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using VianaHub.Global.Gerit.Domain.Entities;
+using VianaHub.Global.Gerit.Domain.Entities.Identity;
 
 namespace VianaHub.Global.Gerit.Infra.Data.Mappings.Identity;
 

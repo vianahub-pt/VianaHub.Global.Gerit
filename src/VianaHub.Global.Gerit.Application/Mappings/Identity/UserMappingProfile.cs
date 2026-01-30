@@ -1,7 +1,7 @@
 using AutoMapper;
 using VianaHub.Global.Gerit.Application.Dtos.Base;
 using VianaHub.Global.Gerit.Application.Dtos.Response.Identity.User;
-using VianaHub.Global.Gerit.Domain.Entities;
+using VianaHub.Global.Gerit.Domain.Entities.Identity;
 using VianaHub.Global.Gerit.Domain.Tools.Pagination;
 
 namespace VianaHub.Global.Gerit.Application.Mappings.Identity;

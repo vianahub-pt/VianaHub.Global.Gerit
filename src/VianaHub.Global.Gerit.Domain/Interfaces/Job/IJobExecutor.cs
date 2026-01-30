@@ -1,4 +1,4 @@
-﻿using VianaHub.Global.Gerit.Domain.Entities;
+﻿using VianaHub.Global.Gerit.Domain.Entities.Job;
 
 namespace VianaHub.Global.Gerit.Domain.Interfaces.Job;
 

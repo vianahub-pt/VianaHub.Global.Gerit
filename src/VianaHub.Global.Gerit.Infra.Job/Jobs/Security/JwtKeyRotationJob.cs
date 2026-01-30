@@ -1,9 +1,9 @@
 ﻿using Hangfire;
 using Microsoft.Extensions.Logging;
-using VianaHub.Global.Gerit.Domain.Interfaces.Domain;
 using VianaHub.Global.Gerit.Infra.Job.Interfaces;
-using VianaHub.Global.Gerit.Domain.Interfaces.Repository;
 using VianaHub.Global.Gerit.Domain.Interfaces;
+using VianaHub.Global.Gerit.Domain.Interfaces.Billing;
+using VianaHub.Global.Gerit.Domain.Interfaces.Identity;
 
 namespace VianaHub.Global.Gerit.Infra.Job.Jobs.Security;
 

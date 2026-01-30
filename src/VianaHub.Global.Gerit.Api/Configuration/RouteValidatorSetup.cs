@@ -1,12 +1,20 @@
 ﻿using FluentValidation;
-using VianaHub.Global.Gerit.Application.Dtos.Request.Plan;
-using VianaHub.Global.Gerit.Application.Dtos.Request.Tenant;
-using VianaHub.Global.Gerit.Application.Dtos.Request.Subscription;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Identity.Auth;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Identity.Action;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Identity.Resource;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Identity.Role;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Identity.User;
+using VianaHub.Global.Gerit.Application.Dtos.Request.Billing.Plan;
+using VianaHub.Global.Gerit.Application.Dtos.Request.Billing.Subscription;
+using VianaHub.Global.Gerit.Application.Dtos.Request.Billing.Tenant;
+using VianaHub.Global.Gerit.Api.Validators.Billing.Plan;
+using VianaHub.Global.Gerit.Api.Validators.Billing.Subscription;
+using VianaHub.Global.Gerit.Api.Validators.Billing.Tenant;
+using VianaHub.Global.Gerit.Api.Validators.Identity.Action;
+using VianaHub.Global.Gerit.Api.Validators.Identity.Resource;
+using VianaHub.Global.Gerit.Api.Validators.Identity.Role;
+using VianaHub.Global.Gerit.Api.Validators.Identity.User;
+using VianaHub.Global.Gerit.Api.Validators.Identity.Auth;
 
 namespace VianaHub.Global.Gerit.Api.Configuration;
 
@@ -25,38 +33,38 @@ public static class RouteValidatorSetup
         services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
         // Action Route Validators
-        services.AddScoped<IValidator<CreateActionRequest>, Validators.Action.CreateActionRouteValidator>();
-        services.AddScoped<IValidator<UpdateActionRequest>, Validators.Action.UpdateActionRouteValidator>();
+        services.AddScoped<IValidator<CreateActionRequest>, CreateActionRouteValidator>();
+        services.AddScoped<IValidator<UpdateActionRequest>, UpdateActionRouteValidator>();
 
         // Resource Route Validators
-        services.AddScoped<IValidator<CreateResourceRequest>, Validators.Resource.CreateResourceRouteValidator>();
-        services.AddScoped<IValidator<UpdateResourceRequest>, Validators.Resource.UpdateResourceRouteValidator>();
+        services.AddScoped<IValidator<CreateResourceRequest>, CreateResourceRouteValidator>();
+        services.AddScoped<IValidator<UpdateResourceRequest>, UpdateResourceRouteValidator>();
 
         // Role Route Validators
-        services.AddScoped<IValidator<CreateRoleRequest>, Validators.Role.CreateRoleRouteValidator>();
-        services.AddScoped<IValidator<UpdateRoleRequest>, Validators.Role.UpdateRoleRouteValidator>();
+        services.AddScoped<IValidator<CreateRoleRequest>, CreateRoleRouteValidator>();
+        services.AddScoped<IValidator<UpdateRoleRequest>, UpdateRoleRouteValidator>();
 
         // Plan Route Validators
-        services.AddScoped<IValidator<CreatePlanRequest>, Validators.Plan.CreatePlanRouteValidator>();
-        services.AddScoped<IValidator<UpdatePlanRequest>, Validators.Plan.UpdatePlanRouteValidator>();
+        services.AddScoped<IValidator<CreatePlanRequest>, CreatePlanRouteValidator>();
+        services.AddScoped<IValidator<UpdatePlanRequest>, UpdatePlanRouteValidator>();
 
         // Tenant Route Validators
-        services.AddScoped<IValidator<CreateTenantRequest>, Validators.Tenant.CreateTenantRouteValidator>();
-        services.AddScoped<IValidator<UpdateTenantRequest>, Validators.Tenant.UpdateTenantRouteValidator>();
+        services.AddScoped<IValidator<CreateTenantRequest>, CreateTenantRouteValidator>();
+        services.AddScoped<IValidator<UpdateTenantRequest>, UpdateTenantRouteValidator>();
 
         // User Route Validators
-        services.AddScoped<IValidator<CreateUserRequest>, Validators.User.CreateUserRouteValidator>();
-        services.AddScoped<IValidator<UpdateUserRequest>, Validators.User.UpdateUserRouteValidator>();
-        services.AddScoped<IValidator<UpdatePasswordRequest>, Validators.User.UpdatePasswordRouteValidator>();
+        services.AddScoped<IValidator<CreateUserRequest>, CreateUserRouteValidator>();
+        services.AddScoped<IValidator<UpdateUserRequest>, UpdateUserRouteValidator>();
+        services.AddScoped<IValidator<UpdatePasswordRequest>, UpdatePasswordRouteValidator>();
 
         // Subscription Route Validators
-        services.AddScoped<IValidator<CreateSubscriptionRequest>, Validators.Subscription.CreateSubscriptionRouteValidator>();
-        services.AddScoped<IValidator<UpdateSubscriptionRequest>, Validators.Subscription.UpdateSubscriptionRouteValidator>();
+        services.AddScoped<IValidator<CreateSubscriptionRequest>, CreateSubscriptionRouteValidator>();
+        services.AddScoped<IValidator<UpdateSubscriptionRequest>, UpdateSubscriptionRouteValidator>();
 
         // Auth Route Validators
-        services.AddScoped<IValidator<RegisterRequest>, Validators.Auth.RegisterRouteValidator>();
-        services.AddScoped<IValidator<LoginRequest>, Validators.Auth.LoginRouteValidator>();
-        services.AddScoped<IValidator<RefreshRequest>, Validators.Auth.RefreshRouteValidator>();
+        services.AddScoped<IValidator<RegisterRequest>, RegisterRouteValidator>();
+        services.AddScoped<IValidator<LoginRequest>, LoginRouteValidator>();
+        services.AddScoped<IValidator<RefreshRequest>, RefreshRouteValidator>();
 
         return services;
     }

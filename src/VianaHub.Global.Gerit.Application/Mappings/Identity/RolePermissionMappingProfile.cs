@@ -1,6 +1,6 @@
 using AutoMapper;
 using VianaHub.Global.Gerit.Application.Dtos.Response.Identity.RolePermission;
-using VianaHub.Global.Gerit.Domain.Entities;
+using VianaHub.Global.Gerit.Domain.Entities.Identity;
 
 namespace VianaHub.Global.Gerit.Application.Mappings.Identity;
 

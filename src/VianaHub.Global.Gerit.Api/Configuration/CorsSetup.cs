@@ -27,30 +27,32 @@ public static class CorsSetup
         var allowCredentials = corsConfig.GetValue<bool?>("AllowCredentials");
         var maxAge = corsConfig.GetValue<int>("MaxAge", 600);
 
+        // Detectar se é ambiente de desenvolvimento
+        var env = configuration.GetValue<string>("ASPNETCORE_ENVIRONMENT");
+        var isDevelopment = env?.Equals("Development", StringComparison.OrdinalIgnoreCase) == true;
+
+        // Detectar se o array de origens contém '*'
+        var allowAnyOrigin = allowedOrigins.Length == 0 ||
+                           allowedOrigins.Any(o => o.Equals("*", StringComparison.OrdinalIgnoreCase));
+
+        if (allowAnyOrigin)
+        {
+            // ATENÇÃO: Permitir qualquer origem é INSEGURO em produção
+            if (env?.Equals("Production", StringComparison.OrdinalIgnoreCase) == true)
+            {
+                throw new InvalidOperationException(
+                    "🔒 ERRO DE SEGURANÇA: CORS com origens '*' não é permitido em produção. " +
+                    "Configure origens específicas em appsettings.Production.json");
+            }
+        }
+
         services.AddCors(options =>
         {
             options.AddPolicy(policyName, policy =>
             {
-                // Detectar se é ambiente de desenvolvimento
-                var env = configuration.GetValue<string>("ASPNETCORE_ENVIRONMENT");
-                var isDevelopment = env?.Equals("Development", StringComparison.OrdinalIgnoreCase) == true;
-                
-                // Configurar origens permitidas
-                var allowAnyOrigin = allowedOrigins.Length == 0 || 
-                                   allowedOrigins.Any(o => o.Equals("*", StringComparison.OrdinalIgnoreCase));
-
                 if (allowAnyOrigin)
                 {
-                    // ATENÇÃO: Permitir qualquer origem é INSEGURO em produção
-                    if (env?.Equals("Production", StringComparison.OrdinalIgnoreCase) == true)
-                    {
-                        throw new InvalidOperationException(
-                            "🔒 ERRO DE SEGURANÇA: CORS com origens '*' não é permitido em produção. " +
-                            "Configure origens específicas em appsettings.Production.json");
-                    }
-
                     policy.AllowAnyOrigin();
-                    
                     // Quando AllowAnyOrigin() é usado, não podemos usar AllowCredentials()
                     // Isso é uma restrição de segurança do CORS
                 }
@@ -58,7 +60,7 @@ public static class CorsSetup
                 {
                     policy.WithOrigins(allowedOrigins)
                           .SetIsOriginAllowedToAllowWildcardSubdomains();
-                    
+
                     // Credenciais: só permitir se configurado explicitamente ou se não for AllowAnyOrigin
                     if (allowCredentials.HasValue ? allowCredentials.Value : true)
                     {
