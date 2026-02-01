@@ -93,28 +93,40 @@ public class SwaggerTranslationFilter : IDocumentFilter
 
             try
             {
-                var filePath = Path.Combine(
-                    Directory.GetCurrentDirectory(),
-                    "Localization",
-                    $"messages.{culture}.json"
-                );
+                var basePath = Directory.GetCurrentDirectory();
 
-                if (!File.Exists(filePath))
+                string[] tryCultures = new[] { culture, CultureInfo.GetCultureInfo(culture).Name, CultureInfo.GetCultureInfo(culture).TwoLetterISOLanguageName };
+
+                foreach (var c in tryCultures)
                 {
-                    Log.Warning("?? [Gerit:SwaggerTranslation] Translation file not found: {FilePath}", filePath);
-                    return null;
+                    if (string.IsNullOrWhiteSpace(c)) continue;
+
+                    var filePath = Path.Combine(
+                        basePath,
+                        "Localization",
+                        $"messages.{c}.json"
+                    );
+
+                    if (!File.Exists(filePath))
+                    {
+                        Log.Debug("?? [Gerit:SwaggerTranslation] Translation file not found: {FilePath}", filePath);
+                        continue;
+                    }
+
+                    var json = File.ReadAllText(filePath);
+                    var translations = JsonSerializer.Deserialize<Dictionary<string, string>>(json);
+
+                    if (translations != null)
+                    {
+                        _translationsCache[culture] = translations;
+                        Log.Debug("? [Gerit:SwaggerTranslation] Loaded {Count} translations for {Culture}", translations.Count, c);
+                        return translations;
+                    }
                 }
 
-                var json = File.ReadAllText(filePath);
-                var translations = JsonSerializer.Deserialize<Dictionary<string, string>>(json);
+                Log.Warning("?? [Gerit:SwaggerTranslation] No translation files found for culture chain: {Culture}", culture);
 
-                if (translations != null)
-                {
-                    _translationsCache[culture] = translations;
-                    Log.Debug("? [Gerit:SwaggerTranslation] Loaded {Count} translations for {Culture}", translations.Count, culture);
-                }
-
-                return translations;
+                return null;
             }
             catch (Exception ex)
             {

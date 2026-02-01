@@ -109,5 +109,28 @@ public static class VehicleEndpoint
         .Produces(StatusCodes.Status204NoContent)
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
+
+        // Upload massivo de vehicles via CSV
+        groupV1.MapPost("/bulk-upload", async (HttpRequest request, IVehicleAppService appService, INotify notify, CancellationToken ct) =>
+        {
+            if (!request.HasFormContentType || request.Form.Files.Count == 0)
+            {
+                // Chave de tradução para mensagem de erro quando nenhum arquivo for enviado
+                notify.Add("Api.Upload.NoFileProvided", 400);
+                return notify.CustomResponse();
+            }
+
+            var file = request.Form.Files[0];
+            var success = await appService.BulkUploadAsync(file, ct);
+            return notify.CustomResponse(success);
+        })
+        .CustomAuthorize("Admin,BackOffice,Manager", "Vehicles", "BulkUpload")
+        .WithName("BulkUploadVehicles")
+        .WithSummary("Swagger.Endpoint.Vehicle.BulkUploadVehicles.Summary")
+        .DisableAntiforgery()
+        .Accepts<IFormFile>("multipart/form-data")
+        .Produces(StatusCodes.Status200OK)
+        .Produces<ErrorResponse>(StatusCodes.Status400BadRequest)
+        .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
     }
 }

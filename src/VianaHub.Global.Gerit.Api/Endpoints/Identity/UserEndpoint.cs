@@ -143,7 +143,7 @@ public static class UserEndpoint
 
             var file = request.Form.Files[0];
             var success = await appService.BulkUploadAsync(file, ct);
-            return notify.CustomResponse(success ? 200 : 400);
+            return notify.CustomResponse(success);
         })
         .CustomAuthorize("Admin,BackOffice", "Users", "BulkUpload")
         .AllowAnonymous()

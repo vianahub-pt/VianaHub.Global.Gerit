@@ -467,15 +467,15 @@ CREATE TABLE dbo.Equipments (
     Id				INT IDENTITY(1,1)	NOT NULL,						    -- Identificador, chave primária
 	TenantId		INT					NOT NULL,						    -- Tenant dono
     Name			NVARCHAR(150)		NOT NULL,						    -- Nome do equipamento
-	TypeEquipament	INT					NOT NULL,                           -- Tipo de equipamento (1=Ferramenta Elétrica, 2=Ferramenta Manual, 3=Medição)
+	TypeEquipament	INT					NOT NULL,                           -- Tipo de equipamento (0=Ferramenta Elétrica, 1=Ferramenta Manual, 2=Medição)
     SerialNumber	NVARCHAR(100)			NULL,						    -- Número de série do equipamento
 	Status			INT					NOT NULL,						    -- Estado (0=Disponível, 1=Em uso, 2=Em manutenção)						-- Estado do equipamento,
     IsActive		BIT					NOT NULL DEFAULT 1,				    -- Flag de ativo
     IsDeleted		BIT					NOT NULL DEFAULT 0,				    -- Soft delete
     CreatedBy		INT         		NOT NULL,						    -- Usuário criador
-    CreatedAt		DATETIME2(7)		NOT NULL DEFAULT SYSDATETIME(),	-- Data de criação
+    CreatedAt		DATETIME2(7)		NOT NULL DEFAULT SYSDATETIME(),	    -- Data de criação
     ModifiedBy	    INT         		    NULL,						    -- Usuário modificador
-    ModifiedAt		DATETIME2(7)			NULL,						-- Data de modificação
+    ModifiedAt		DATETIME2(7)			NULL,						    -- Data de modificação
 	CONSTRAINT PK_Equipments PRIMARY KEY CLUSTERED (Id),
     CONSTRAINT FK_Equipments_Tenant FOREIGN KEY (TenantId) REFERENCES dbo.Tenants(Id)
 );

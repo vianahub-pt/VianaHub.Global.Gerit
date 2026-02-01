@@ -129,6 +129,9 @@ public class Program
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {
+            // Show developer exception page in development to capture any startup/runtime errors
+            app.UseDeveloperExceptionPage();
+
             app.UseSwaggerConfiguration();
         }
 

@@ -40,14 +40,15 @@ public class EquipmentMapping : IEntityTypeConfiguration<EquipmentEntity>
             .HasMaxLength(100)
             .IsRequired(false);
 
+        // Use INT to match the existing DB schema (columns are INT) so EF can materialize into byte-backed enums
         builder.Property(e => e.TypeEquipament)
             .HasColumnName("TypeEquipament")
-            .HasColumnType("TINYINT")
+            .HasColumnType("INT")
             .IsRequired();
 
         builder.Property(e => e.Status)
             .HasColumnName("Status")
-            .HasColumnType("TINYINT")
+            .HasColumnType("INT")
             .IsRequired();
 
         builder.Property(e => e.IsActive)
@@ -62,10 +63,10 @@ public class EquipmentMapping : IEntityTypeConfiguration<EquipmentEntity>
             .HasDefaultValue(false)
             .IsRequired();
 
+        // Audit fields: use INT for CreatedBy/ModifiedBy to match Domain.Entity and DB schema
         builder.Property(e => e.CreatedBy)
             .HasColumnName("CreatedBy")
-            .HasColumnType("NVARCHAR(50)")
-            .HasMaxLength(50)
+            .HasColumnType("INT")
             .IsRequired();
 
         builder.Property(e => e.CreatedAt)
@@ -76,8 +77,7 @@ public class EquipmentMapping : IEntityTypeConfiguration<EquipmentEntity>
 
         builder.Property(e => e.ModifiedBy)
             .HasColumnName("ModifiedBy")
-            .HasColumnType("NVARCHAR(50)")
-            .HasMaxLength(50)
+            .HasColumnType("INT")
             .IsRequired(false);
 
         builder.Property(e => e.ModifiedAt)

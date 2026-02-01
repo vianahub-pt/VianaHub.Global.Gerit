@@ -25,7 +25,7 @@
     <Using Include="Xunit" />
   </ItemGroup>
 
-  <ItemGroup> <Folder Include="Application\" /> <Folder Include="Domain\" /> <Folder Include="Infra\" /> <Folder Include="Infra\\Caching\" /> <Folder Include="Infra\\Data\" /> <Folder Include="Infra\\Integration\" /> <Folder Include="Infra\\Messaging\" /> <Folder Include="Validators\" /> </ItemGroup>
+  <ItemGroup> <Folder Include="Domain\" /> <Folder Include="Infra\" /> <Folder Include="Infra\\Caching\" /> <Folder Include="Infra\\Data\" /> <Folder Include="Infra\\Integration\" /> <Folder Include="Infra\\Messaging\" /> <Folder Include="Validators\" /> </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\VianaHub.Global.Gerit.Api\VianaHub.Global.Gerit.Api.csproj" />

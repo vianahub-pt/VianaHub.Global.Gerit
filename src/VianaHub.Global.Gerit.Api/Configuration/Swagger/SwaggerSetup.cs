@@ -111,7 +111,7 @@ public static class SwaggerSetup
         if (app.Environment.IsDevelopment())
         {
             // ✅ Adiciona o middleware de localização do Swagger ANTES do UseSwagger
-            app.UseMiddleware<Middleware.SwaggerLocalizationMiddleware>(
+            app.UseMiddleware<VianaHub.Global.Gerit.Api.Middleware.SwaggerLocalizationMiddleware>(
                 new List<string> { "en-US", "pt-BR", "es-ES" }
             );
 

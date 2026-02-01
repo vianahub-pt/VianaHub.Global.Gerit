@@ -11,8 +11,17 @@ select * from dbo.RolePermissions;
 select * from dbo.Clients;
 select * from dbo.JwtKeys;
 select * from dbo.RefreshTokens order by ExpiresAt desc;
-select * from dbo.JobDefinitions
+select * from dbo.JobDefinitions;
+---------------------------------------
+select * from dbo.Vehicles;
+select * from dbo.Equipments;
+select * from dbo.TeamMembers;
+select * from dbo.Clients;
+
 FOR JSON AUTO;
+
+
+
 
 /*
 

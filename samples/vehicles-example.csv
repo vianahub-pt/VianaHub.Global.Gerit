@@ -1,0 +1,31 @@
+Plate;Brand;Model;Year;Color;FuelType
+VH-0001;Toyota;Corolla;2018;White;Petrol
+VH-0002;Volkswagen;Golf;2017;Black;Diesel
+VH-0003;Ford;Focus;2016;Blue;Petrol
+VH-0004;Renault;Clio;2015;Red;Petrol
+VH-0005;Honda;Civic;2019;Silver;Petrol
+VH-0006;BMW;3 Series;2020;Grey;Diesel
+VH-0007;Mercedes;C-Class;2021;Black;Diesel
+VH-0008;Audi;A4;2019;White;Diesel
+VH-0009;Peugeot;208;2018;Blue;Petrol
+VH-0010;Fiat;Punto;2014;Red;Petrol
+VH-0011;Hyundai;i30;2022;White;Petrol
+VH-0012;Kia;Rio;2016;Silver;Petrol
+VH-0013;Nissan;Leaf;2020;Green;Electric
+VH-0014;Tesla;Model 3;2022;White;Electric
+VH-0015;Chevrolet;Cruze;2015;Blue;Diesel
+VH-0016;Opel;Astra;2017;Grey;Petrol
+VH-0017;Seat;Leon;2018;Black;Petrol
+VH-0018;Citroen;C3;2016;Red;Petrol
+VH-0019;Subaru;Impreza;2014;Blue;Petrol
+VH-0020;Mitsubishi;Lancer;2013;Silver;Petrol
+VH-0021;Volvo;S60;2021;Black;Hybrid
+VH-0022;Lexus;IS;2019;White;Hybrid
+VH-0023;Jaguar;XE;2020;Silver;Petrol
+VH-0024;Alfa Romeo;Giulia;2018;Red;Petrol
+VH-0025;Skoda;Octavia;2017;Grey;Diesel
+VH-0026;Mazda;3;2016;Blue;Petrol
+VH-0027;Suzuki;Swift;2015;Green;Petrol
+VH-0028;Mini;Cooper;2019;Yellow;Petrol
+VH-0029;Porsche;911;2021;Black;Petrol
+VH-0030;Jeep;Renegade;2018;White;Diesel

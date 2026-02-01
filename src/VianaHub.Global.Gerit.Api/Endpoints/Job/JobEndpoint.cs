@@ -70,7 +70,7 @@ public static class JobEndpoint
         groupV1.MapPatch("/{id}/activate", async (int id, IJobAppService appService, INotify notify, CancellationToken ct) =>
         {
             var ok = await appService.ActivateAsync(id, ct);
-            return notify.CustomResponse(ok ? 200 : 400);
+            return notify.CustomResponse(ok);
         })
         .CustomAuthorize("Admin", "JobDefinitions", "Activate")
         .AllowAnonymous()
@@ -83,7 +83,7 @@ public static class JobEndpoint
         groupV1.MapPatch("/{id}/deactivate", async (int id, IJobAppService appService, INotify notify, CancellationToken ct) =>
         {
             var ok = await appService.DeactivateAsync(id, ct);
-            return notify.CustomResponse(ok ? 200 : 400);
+            return notify.CustomResponse(ok);
         })
         .CustomAuthorize("Admin", "JobDefinitions", "Deactivate")
         .AllowAnonymous()
@@ -96,7 +96,7 @@ public static class JobEndpoint
         groupV1.MapPost("/{id}/execute", async (int id, IJobAppService appService, INotify notify, CancellationToken ct) =>
         {
             var ok = await appService.ExecuteAsync(id, ct);
-            return notify.CustomResponse(ok ? 200 : 400);
+            return notify.CustomResponse(ok);
         })
         .CustomAuthorize("Admin", "JobDefinitions", "Execute")
         .AllowAnonymous()

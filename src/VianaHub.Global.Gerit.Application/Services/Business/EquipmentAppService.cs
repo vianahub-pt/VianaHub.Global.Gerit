@@ -1,4 +1,8 @@
 using AutoMapper;
+using CsvHelper;
+using CsvHelper.Configuration;
+using Microsoft.AspNetCore.Http;
+using System.Globalization;
 using VianaHub.Global.Gerit.Application.Dtos.Base;
 using VianaHub.Global.Gerit.Domain.ReadModels;
 using VianaHub.Global.Gerit.Domain.Tools.Notifications;
@@ -9,6 +13,7 @@ using VianaHub.Global.Gerit.Application.Interfaces.Business;
 using VianaHub.Global.Gerit.Domain.Interfaces.Business;
 using VianaHub.Global.Gerit.Domain.Entities.Business;
 using VianaHub.Global.Gerit.Domain.Enums;
+using VianaHub.Global.Gerit.Domain.Helpers;
 
 namespace VianaHub.Global.Gerit.Application.Services.Business;
 
@@ -126,5 +131,189 @@ public class EquipmentAppService : IEquipmentAppService
 
         entity.Delete();
         return await _domain.DeleteAsync(entity, ct);
+    }
+
+    public async Task<bool> BulkUploadAsync(IFormFile file, CancellationToken ct)
+    {
+        // Valida arquivo
+        if (!ValidateFile(file))
+            return false;
+
+        // Lê itens do CSV
+        var items = ReadCsvFile(file);
+        if (items == null)
+            return false;
+
+        if (!items.Any())
+        {
+            _notify.Add(_localization.GetMessage("Application.Service.Equipment.BulkUpload.EmptyFile"), 400);
+            return false;
+        }
+
+        // Processa cada item
+        return await ProcessBulkItemsAsync(items, ct);
+    }
+
+    private bool ValidateFile(IFormFile file)
+    {
+        if (file == null || file.Length == 0)
+        {
+            _notify.Add(_localization.GetMessage("Application.Service.Equipment.ValidateFile.InvalidFile"), 400);
+            return false;
+        }
+
+        // Valida tamanho do arquivo
+        if (!file.Length.IsValidCsvFileSize())
+        {
+            _notify.Add(_localization.GetMessage("Application.Service.Equipment.ValidateFile.IsValidCsvFileSize"), 400);
+            return false;
+        }
+
+        // Valida nome do arquivo (previne path traversal)
+        if (!file.FileName.IsSafeCsvFileName())
+        {
+            _notify.Add(_localization.GetMessage("Application.Service.Equipment.ValidateFile.IsSafeCsvFileName"), 400);
+            return false;
+        }
+
+        // Valida extensão
+        if (!file.FileName.HasValidCsvExtension())
+        {
+            _notify.Add(_localization.GetMessage("Application.Service.Equipment.ValidateFile.OnlyCsvAllowed"), 400);
+            return false;
+        }
+
+        return true;
+    }
+
+    private List<BulkUploadEquipmentItem> ReadCsvFile(IFormFile file)
+    {
+        try
+        {
+            // Cria StreamReader com encoding UTF-8 forçado
+            using var reader = file.OpenReadStream().CreateUtf8StreamReader();
+
+            var config = new CsvConfiguration(CultureInfo.InvariantCulture)
+            {
+                HasHeaderRecord = true,
+                Delimiter = ";", // CSV usa ponto e vírgula como delimitador
+                MissingFieldFound = null,
+                HeaderValidated = null,
+                TrimOptions = TrimOptions.Trim,
+                BadDataFound = null // Ignora linhas mal formatadas ao invés de lançar exceção
+            };
+
+            using var csv = new CsvReader(reader, config);
+            var records = new List<BulkUploadEquipmentItem>();
+
+            csv.Read();
+            csv.ReadHeader();
+
+            int rowCount = 0;
+            int maxRows = DomainExtensions.GetMaxCsvRows();
+
+            while (csv.Read() && rowCount < maxRows)
+            {
+                try
+                {
+                    var record = csv.GetRecord<BulkUploadEquipmentItem>();
+                    if (record != null)
+                    {
+                        // Sanitiza e normaliza campos
+                        record.Name = record.Name?.SanitizeCsvInput().NormalizeUtf8();
+                        record.SerialNumber = record.SerialNumber?.SanitizeCsvInput().NormalizeUtf8();
+
+                        // Valida se os campos não contêm conteúdo perigoso
+                        if (!string.IsNullOrEmpty(record.Name) && !record.Name.IsSafeCsvValue())
+                        {
+                            _notify.Add(_localization.GetMessage("Application.Service.Equipment.ReadCsvFile.Name.IsSafeCsvValue", rowCount + 2), 400);
+                            continue;
+                        }
+
+                        if (!string.IsNullOrEmpty(record.SerialNumber) && !record.SerialNumber.IsSafeCsvValue())
+                        {
+                            _notify.Add(_localization.GetMessage("Application.Service.Equipment.ReadCsvFile.SerialNumber.IsSafeCsvValue", rowCount + 2), 400);
+                            continue;
+                        }
+
+                        records.Add(record);
+                    }
+                    rowCount++;
+                }
+                catch (CsvHelperException ex)
+                {
+                    // Log linha com erro mas continua processamento
+                    _notify.Add(_localization.GetMessage("Application.Service.Equipment.ReadCsvFile.CsvHelperException", rowCount + 2), 400);
+                    rowCount++;
+                    continue;
+                }
+            }
+
+            if (rowCount >= maxRows)
+            {
+                _notify.Add(_localization.GetMessage("Application.Service.Equipment.ReadCsvFile.MaxRows", maxRows), 400);
+                return null;
+            }
+
+            return records;
+        }
+        catch (Exception ex)
+        {
+            _notify.Add(_localization.GetMessage("Application.Service.Equipment.ReadCsvFile.Exception"), 400);
+            return null;
+        }
+    }
+
+    private async Task<bool> ProcessBulkItemsAsync(List<BulkUploadEquipmentItem> items, CancellationToken ct)
+    {
+        var hasErrors = false;
+        var tenantId = _currentUser.GetTenantId();
+
+        foreach (var item in items)
+        {
+            // Valida campos obrigatórios
+            if (!ValidateBulkItem(item))
+            {
+                hasErrors = true;
+                continue;
+            }
+
+            // Verifica duplicidade
+            var exists = await _repo.ExistsByNameAsync(tenantId, item.Name, ct);
+            if (exists)
+            {
+                _notify.Add(_localization.GetMessage("Application.Service.Equipment.ProcessBulkItems.ExistsByName", item.Name), 400);
+                hasErrors = true;
+                continue;
+            }
+
+            // Define tipo do equipamento padrão se não fornecido
+            var type = item.TypeEquipament ?? VianaHub.Global.Gerit.Domain.Enums.TypeEquipament.ManualTool;
+
+            // Cria a entidade
+            var entity = new EquipmentEntity(tenantId, item.Name, type, item.SerialNumber);
+
+            // Tenta criar no domínio
+            var success = await _domain.CreateAsync(entity, ct);
+
+            if (!success)
+            {
+                _notify.Add(_localization.GetMessage("Application.Service.Equipment.ProcessBulkItems.FailedToCreate", item.Name), 400);
+                hasErrors = true;
+            }
+        }
+
+        return !hasErrors;
+    }
+
+    private bool ValidateBulkItem(BulkUploadEquipmentItem item)
+    {
+        if (string.IsNullOrWhiteSpace(item.Name))
+        {
+            _notify.Add(_localization.GetMessage("Application.Service.Equipment.ValidateBulkItem.Name", item.Name), 400);
+            return false;
+        }
+
+        return true;
     }
 }
