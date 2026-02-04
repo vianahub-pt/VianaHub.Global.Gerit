@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Configuration;
 using VianaHub.Global.Gerit.Domain.Interfaces;
 
-namespace VianaHub.Global.Gerit.Infra.IoC;
+namespace VianaHub.Global.Gerit.Infra.Data.Security;
 
 public class SecretProviderEnvironment : ISecretProvider
 {

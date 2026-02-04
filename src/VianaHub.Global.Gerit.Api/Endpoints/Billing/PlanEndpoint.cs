@@ -1,10 +1,10 @@
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using VianaHub.Global.Gerit.Api.Helpers;
 using VianaHub.Global.Gerit.Application.Dtos.Base;
-using VianaHub.Global.Gerit.Domain.Tools.Notifications;
-using FluentValidation;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Billing.Plan;
 using VianaHub.Global.Gerit.Application.Interfaces.Billing;
+using VianaHub.Global.Gerit.Domain.Tools.Notifications;
 
 namespace VianaHub.Global.Gerit.Api.Endpoints.Billing;
 
@@ -108,6 +108,29 @@ public static class PlanEndpoint
         .WithSummary("Swagger.Endpoint.Plan.DeletePlan.Summary")
         .Produces(StatusCodes.Status204NoContent)
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
+        .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
+
+        // Upload massivo de Functions via CSV
+        groupV1.MapPost("/bulk-upload", async (HttpRequest request, IPlanAppService appService, INotify notify, CancellationToken ct) =>
+        {
+            if (!request.HasFormContentType || request.Form.Files.Count == 0)
+            {
+                // Utiliza chave de tradução para mensagem
+                notify.Add("Api.Upload.NoFileProvided", 400);
+                return notify.CustomResponse();
+            }
+
+            var file = request.Form.Files[0];
+            var success = await appService.BulkUploadAsync(file, ct);
+            return notify.CustomResponse(success);
+        })
+        .CustomAuthorize("Admin,BackOffice,Manager", "Plans", "BulkUpload")
+        .WithName("BulkUploadPlans")
+        .WithSummary("Swagger.Endpoint.Plan.BulkUploadPlans.Summary")
+        .DisableAntiforgery()
+        .Accepts<IFormFile>("multipart/form-data")
+        .Produces(StatusCodes.Status200OK)
+        .Produces<ErrorResponse>(StatusCodes.Status400BadRequest)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
     }
 }

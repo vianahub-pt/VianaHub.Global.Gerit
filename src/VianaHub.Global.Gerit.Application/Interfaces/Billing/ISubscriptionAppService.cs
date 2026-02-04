@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http;
 using VianaHub.Global.Gerit.Application.Dtos.Base;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Billing.Subscription;
 using VianaHub.Global.Gerit.Application.Dtos.Response.Billing.Subscription;
@@ -20,4 +21,5 @@ public interface ISubscriptionAppService
     Task<bool> DeleteAsync(int id, CancellationToken ct);
     Task<bool> CancelAsync(int id, CancelSubscriptionRequest request, CancellationToken ct);
     Task<bool> RenewAsync(int id, RenewSubscriptionRequest request, CancellationToken ct);
+    Task<bool> BulkUploadAsync(IFormFile file, CancellationToken ct);
 }

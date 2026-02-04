@@ -36,10 +36,10 @@ public class SubscriptionEntity : Entity
         int planId,
         DateTime currentPeriodStart,
         DateTime currentPeriodEnd,
-        int createdBy,
-        DateTime? trialStart = null,
-        DateTime? trialEnd = null,
-        string stripeCustomerId = null)
+        DateTime? trialStart,
+        DateTime? trialEnd,
+        string stripeCustomerId,
+        int createdBy)
     {
         TenantId = tenantId;
         PlanId = planId;
@@ -58,23 +58,15 @@ public class SubscriptionEntity : Entity
         int planId,
         DateTime currentPeriodStart,
         DateTime currentPeriodEnd,
-        int modifiedBy,
-        DateTime? trialStart = null,
-        DateTime? trialEnd = null)
+        DateTime? trialStart,
+        DateTime? trialEnd,
+        int modifiedBy)
     {
         PlanId = planId;
         CurrentPeriodStart = currentPeriodStart;
         CurrentPeriodEnd = currentPeriodEnd;
         TrialStart = trialStart;
         TrialEnd = trialEnd;
-        ModifiedBy = modifiedBy;
-        ModifiedAt = DateTime.UtcNow;
-    }
-
-    public void UpdateStripeData(string stripeId, string stripeCustomerId, int modifiedBy)
-    {
-        StripeId = stripeId;
-        StripeCustomerId = stripeCustomerId;
         ModifiedBy = modifiedBy;
         ModifiedAt = DateTime.UtcNow;
     }

@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Logging;
 using VianaHub.Global.Gerit.Domain.Interfaces;
 
-namespace VianaHub.Global.Gerit.Infra.Messaging;
+namespace VianaHub.Global.Gerit.Infra.Integration.Messaging;
 
 public class NoOpEmailSender : IEmailSender
 {

@@ -1,9 +1,19 @@
 using AutoMapper;
+using CsvHelper;
+using CsvHelper.Configuration;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
+using System.Globalization;
 using VianaHub.Global.Gerit.Application.Dtos.Base;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Billing.Plan;
+using VianaHub.Global.Gerit.Application.Dtos.Request.Business.Function;
 using VianaHub.Global.Gerit.Application.Dtos.Response.Billing.Plan;
 using VianaHub.Global.Gerit.Application.Interfaces.Billing;
+using VianaHub.Global.Gerit.Application.Interfaces.Common;
+using VianaHub.Global.Gerit.Application.Services.Business;
 using VianaHub.Global.Gerit.Domain.Entities.Billing;
+using VianaHub.Global.Gerit.Domain.Entities.Business;
+using VianaHub.Global.Gerit.Domain.Helpers;
 using VianaHub.Global.Gerit.Domain.Interfaces;
 using VianaHub.Global.Gerit.Domain.Interfaces.Billing;
 using VianaHub.Global.Gerit.Domain.ReadModels;
@@ -19,6 +29,8 @@ public class PlanAppService : IPlanAppService
     private readonly INotify _notify;
     private readonly IMapper _mapper;
     private readonly ILocalizationService _localization;
+    private readonly ILogger<PlanAppService> _logger;
+    private readonly IFileValidationService _fileValidation;
 
     public PlanAppService(
         IPlanDataRepository repo,
@@ -26,7 +38,9 @@ public class PlanAppService : IPlanAppService
         INotify notify,
         IMapper mapper,
         ICurrentUserService currentUser,
-        ILocalizationService localization)
+        ILocalizationService localization,
+        ILogger<PlanAppService> logger,
+        IFileValidationService fileValidation)
     {
         _repo = repo;
         _domain = domain;
@@ -34,6 +48,8 @@ public class PlanAppService : IPlanAppService
         _mapper = mapper;
         _currentUser = currentUser;
         _localization = localization;
+        _logger = logger;
+        _fileValidation = fileValidation;
     }
 
     public async Task<IEnumerable<PlanResponse>> GetAllAsync(CancellationToken ct)
@@ -140,5 +156,163 @@ public class PlanAppService : IPlanAppService
 
         entity.Delete(_currentUser.GetUserId());
         return await _domain.DeleteAsync(entity, ct);
+    }
+
+    public async Task<bool> BulkUploadAsync(IFormFile file, CancellationToken ct)
+    {
+        // Valida arquivo usando serviço centralizado
+        if (!_fileValidation.ValidateFile(file))
+            return false;
+
+        // Lê itens do CSV
+        var items = ReadCsvFile(file);
+        if (items == null)
+            return false;
+
+        if (!items.Any())
+        {
+            _notify.Add(_localization.GetMessage("Application.Service.Plan.BulkUpload.EmptyFile"), 400);
+            return false;
+        }
+
+        // Processa cada item
+        return await ProcessBulkItemsAsync(items, ct);
+    }
+
+    private List<BulkUploadPlanItem> ReadCsvFile(IFormFile file)
+    {
+        try
+        {
+            // Cria StreamReader com encoding UTF-8 forçado
+            using var reader = file.OpenReadStream().CreateUtf8StreamReader();
+
+            var config = new CsvConfiguration(CultureInfo.InvariantCulture)
+            {
+                HasHeaderRecord = true,
+                Delimiter = ";", // CSV usa ponto e vírgula como delimitador
+                MissingFieldFound = null,
+                HeaderValidated = null,
+                TrimOptions = TrimOptions.Trim,
+                BadDataFound = null // Ignora linhas mal formatadas ao invés de lançar exceção
+            };
+
+            using var csv = new CsvReader(reader, config);
+            var records = new List<BulkUploadPlanItem>();
+
+            csv.Read();
+            csv.ReadHeader();
+
+            int rowCount = 0;
+            int maxRows = DomainExtensions.GetMaxCsvRows();
+
+            while (csv.Read() && rowCount < maxRows)
+            {
+                try
+                {
+                    var record = csv.GetRecord<BulkUploadPlanItem>();
+                    if (record != null)
+                    {
+                        // Sanitiza e normaliza campos
+                        record.Name = record.Name?.SanitizeCsvInput().NormalizeUtf8();
+                        record.Description = record.Description?.SanitizeCsvInput().NormalizeUtf8();
+                        record.PricePerHour = record.PricePerHour;
+                        record.PricePerDay = record.PricePerDay;
+                        record.PricePerMonth = record.PricePerMonth;
+                        record.PricePerYear = record.PricePerYear;
+                        record.Currency = record.Currency?.SanitizeCsvInput().NormalizeUtf8();
+                        record.MaxUsers = record.MaxUsers;
+                        record.MaxPhotosPerInterventions = record.MaxPhotosPerInterventions;
+
+                        // Valida se os campos não contêm conteúdo perigoso
+                        if (!string.IsNullOrEmpty(record.Name) && !record.Name.IsSafeCsvValue())
+                        {
+                            _notify.Add(_localization.GetMessage("Application.Service.Plan.ReadCsvFile.Name.IsSafeCsvValue", rowCount + 2), 400);
+                            continue;
+                        }
+
+                        if (!string.IsNullOrEmpty(record.Description) && !record.Description.IsSafeCsvValue())
+                        {
+                            _notify.Add(_localization.GetMessage("Application.Service.Plan.ReadCsvFile.Description.IsSafeCsvValue", rowCount + 2), 400);
+                            continue;
+                        }
+
+                        records.Add(record);
+                    }
+                    rowCount++;
+                }
+                catch (CsvHelperException ex)
+                {
+                    // Log linha com erro mas continua processamento
+                    _logger.LogWarning(ex, "Erro ao processar linha {RowNumber} do CSV de Plans", rowCount + 2);
+                    _notify.Add(_localization.GetMessage("Application.Service.Plan.ReadCsvFile.CsvHelperException", rowCount + 2), 400);
+                    rowCount++;
+                    continue;
+                }
+            }
+
+            if (rowCount >= maxRows)
+            {
+                _notify.Add(_localization.GetMessage("Application.Service.Plan.ReadCsvFile.MaxRows", maxRows), 400);
+                return null;
+            }
+
+            return records;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Erro ao ler arquivo CSV de Plans: {Message}", ex.Message);
+            _notify.Add(_localization.GetMessage("Application.Service.Plan.ReadCsvFile.Exception"), 400);
+            return null;
+        }
+    }
+
+    private async Task<bool> ProcessBulkItemsAsync(List<BulkUploadPlanItem> items, CancellationToken ct)
+    {
+        var hasErrors = false;
+        var tenantId = _currentUser.GetTenantId();
+
+        foreach (var item in items)
+        {
+            // Valida campos obrigatórios
+            if (!ValidateBulkItem(item))
+            {
+                hasErrors = true;
+                continue;
+            }
+
+            // Verifica duplicidade
+            var exists = await _repo.ExistsByNameAsync(item.Name, ct);
+            if (exists)
+            {
+                _notify.Add(_localization.GetMessage("Application.Service.Plan.ProcessBulkItems.ExistsByName", item.Name), 400);
+                hasErrors = true;
+                continue;
+            }
+
+            // Cria a entidade
+            var entity = new PlanEntity(item.Name, item.Description, item.PricePerHour, item.PricePerDay, item.PricePerMonth, item.PricePerYear, item.Currency, item.MaxUsers, item.MaxPhotosPerInterventions, _currentUser.GetUserId());
+
+            // Tenta criar no domínio
+            var success = await _domain.CreateAsync(entity, ct);
+
+            if (!success)
+            {
+                _notify.Add(_localization.GetMessage("Application.Service.Plan.ProcessBulkItems.FailedToCreate", item.Name), 400);
+                hasErrors = true;
+            }
+        }
+
+        return !hasErrors;
+    }
+
+    private bool ValidateBulkItem(BulkUploadPlanItem item)
+    {
+        if (string.IsNullOrWhiteSpace(item.Name))
+        {
+            _notify.Add(_localization.GetMessage("Application.Service.Plan.ValidateBulkItem.Name", item.Name), 400);
+            return false;
+        }
+
+        return true;
     }
 }

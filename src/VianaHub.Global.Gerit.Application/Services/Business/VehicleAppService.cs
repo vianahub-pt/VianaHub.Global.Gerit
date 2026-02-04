@@ -10,6 +10,7 @@ using VianaHub.Global.Gerit.Domain.Interfaces;
 using VianaHub.Global.Gerit.Application.Dtos.Response.Business.Vehicle;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Business.Vehicle;
 using VianaHub.Global.Gerit.Application.Interfaces.Business;
+using VianaHub.Global.Gerit.Application.Interfaces.Common;
 using VianaHub.Global.Gerit.Domain.Interfaces.Business;
 using VianaHub.Global.Gerit.Domain.Entities.Business;
 using VianaHub.Global.Gerit.Domain.Helpers;
@@ -24,6 +25,7 @@ public class VehicleAppService : IVehicleAppService
     private readonly INotify _notify;
     private readonly ILocalizationService _localization;
     private readonly ICurrentUserService _currentUser;
+    private readonly IFileValidationService _fileValidation;
 
     public VehicleAppService(
         IVehicleDataRepository repo,
@@ -31,7 +33,8 @@ public class VehicleAppService : IVehicleAppService
         IMapper mapper,
         INotify notify,
         ILocalizationService localization,
-        ICurrentUserService currentUser)
+        ICurrentUserService currentUser,
+        IFileValidationService fileValidation)
     {
         _repo = repo;
         _domain = domain;
@@ -39,6 +42,7 @@ public class VehicleAppService : IVehicleAppService
         _notify = notify;
         _localization = localization;
         _currentUser = currentUser;
+        _fileValidation = fileValidation;
     }
 
     public async Task<IEnumerable<VehicleResponse>> GetAllAsync(CancellationToken ct)
@@ -133,8 +137,8 @@ public class VehicleAppService : IVehicleAppService
 
     public async Task<bool> BulkUploadAsync(IFormFile file, CancellationToken ct)
     {
-        // Valida arquivo
-        if (!ValidateFile(file))
+        // Valida arquivo usando serviço centralizado
+        if (!_fileValidation.ValidateFile(file))
             return false;
 
         // Lê itens do CSV
@@ -150,38 +154,6 @@ public class VehicleAppService : IVehicleAppService
 
         // Processa cada item
         return await ProcessBulkItemsAsync(items, ct);
-    }
-
-    private bool ValidateFile(IFormFile file)
-    {
-        if (file == null || file.Length == 0)
-        {
-            _notify.Add(_localization.GetMessage("Application.Service.Vehicle.ValidateFile.InvalidFile"), 400);
-            return false;
-        }
-
-        // Valida tamanho do arquivo
-        if (!file.Length.IsValidCsvFileSize())
-        {
-            _notify.Add(_localization.GetMessage("Application.Service.Vehicle.ValidateFile.IsValidCsvFileSize"), 400);
-            return false;
-        }
-
-        // Valida nome do arquivo (previne path traversal)
-        if (!file.FileName.IsSafeCsvFileName())
-        {
-            _notify.Add(_localization.GetMessage("Application.Service.Vehicle.ValidateFile.IsSafeCsvFileName"), 400);
-            return false;
-        }
-
-        // Valida extensão
-        if (!file.FileName.HasValidCsvExtension())
-        {
-            _notify.Add(_localization.GetMessage("Application.Service.Vehicle.ValidateFile.OnlyCsvAllowed"), 400);
-            return false;
-        }
-
-        return true;
     }
 
     private List<BulkUploadVehicleItem> ReadCsvFile(IFormFile file)

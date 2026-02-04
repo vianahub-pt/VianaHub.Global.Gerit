@@ -4,9 +4,9 @@ using VianaHub.Global.Gerit.Domain.Base;
 using VianaHub.Global.Gerit.Domain.Tools.Notifications;
 using VianaHub.Global.Gerit.Domain.Validators.Job;
 using VianaHub.Global.Gerit.Domain.Interfaces;
-using VianaHub.Global.Gerit.Infra.Messaging;
+using VianaHub.Global.Gerit.Infra.Integration.Messaging;
 using VianaHub.Global.Gerit.Infra.Data.Context;
-using AutoMapper;
+using VianaHub.Global.Gerit.Infra.Data.Security;
 using System.Reflection;
 using VianaHub.Global.Gerit.Infra.Job.Services;
 using VianaHub.Global.Gerit.Infra.Job.HostedServices;
@@ -19,9 +19,11 @@ using VianaHub.Global.Gerit.Infra.Data.Repository.Identity;
 using VianaHub.Global.Gerit.Application.Interfaces.Billing;
 using VianaHub.Global.Gerit.Application.Interfaces.Business;
 using VianaHub.Global.Gerit.Application.Interfaces.Job;
+using VianaHub.Global.Gerit.Application.Interfaces.Common;
 using VianaHub.Global.Gerit.Application.Services.Job;
 using VianaHub.Global.Gerit.Application.Services.Billing;
 using VianaHub.Global.Gerit.Application.Services.Business;
+using VianaHub.Global.Gerit.Application.Services.Common;
 using VianaHub.Global.Gerit.Domain.Entities.Billing;
 using VianaHub.Global.Gerit.Domain.Entities.Business;
 using VianaHub.Global.Gerit.Domain.Entities.Job;
@@ -43,6 +45,7 @@ using VianaHub.Global.Gerit.Domain.Validators.Identity.Jwt;
 using VianaHub.Global.Gerit.Domain.Validators.Identity.UserRole;
 using VianaHub.Global.Gerit.Domain.Validators.Business.Vehicle;
 using VianaHub.Global.Gerit.Domain.Validators.Business.Equipment;
+using VianaHub.Global.Gerit.Domain.Validators.Business.Function;
 using VianaHub.Global.Gerit.Infra.Data.Repository.Job;
 using VianaHub.Global.Gerit.Infra.Data.Repository.Business;
 using VianaHub.Global.Gerit.Infra.Data.Repository.Billing;
@@ -83,9 +86,15 @@ public static class DependencyInjection
         services.AddScoped<IEntityDomainValidator<VehicleEntity>, VehicleValidator>();
         // Equipment validators
         services.AddScoped<IEntityDomainValidator<EquipmentEntity>, EquipmentValidator>();
+        // Function validators
+        services.AddScoped<IEntityDomainValidator<FunctionEntity>, FunctionValidator>();
+
+        // Application - Common Services
+        services.AddScoped<IFileValidationService, FileValidationService>();
 
         // Application
         services.AddScoped<IActionAppService, ActionAppService>();
+        services.AddScoped<IFunctionAppService, FunctionAppService>();
         services.AddScoped<IVehicleAppService, VehicleAppService>();
         services.AddScoped<IEquipmentAppService, EquipmentAppService>();
         services.AddScoped<IResourceAppService, ResourceAppService>();
@@ -111,9 +120,12 @@ public static class DependencyInjection
         services.AddScoped<IUserDomainService, UserDomainService>();
         services.AddScoped<IRolePermissionDomainService, RolePermissionDomainService>();
         services.AddScoped<IJwtKeyDomainService, JwtKeyDomainService>();
+        services.AddScoped<IFunctionDomainService, FunctionDomainService>();
         services.AddScoped<IVehicleDomainService, VehicleDomainService>();
         services.AddScoped<IEquipmentDomainService, EquipmentDomainService>();
+
         // Infra.Data - Repositories
+        services.AddScoped<IFunctionDataRepository, FunctionDataRepository>();
         services.AddScoped<IVehicleDataRepository, VehicleDataRepository>();
         services.AddScoped<IEquipmentDataRepository, EquipmentDataRepository>();
         services.AddScoped<IActionDataRepository, ActionDataRepository>();

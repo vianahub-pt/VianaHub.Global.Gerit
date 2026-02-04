@@ -15,15 +15,36 @@ select * from dbo.JobDefinitions;
 ---------------------------------------
 select * from dbo.Vehicles;
 select * from dbo.Equipments;
+select * from dbo.Functions;
 select * from dbo.TeamMembers;
 select * from dbo.Clients;
 
 FOR JSON AUTO;
 
 
-
-
 /*
+
+FunctionsEntity
+
+ActivateFunctionValidator
+CreateFunctionValidator
+DeactivateFunctionValidator
+DeleteFunctionValidator
+FunctionValidator
+UpdateFunctionValidator
+FunctionMapping
+FunctionDataRepository
+IFunctionAppService
+BulkUploadFunctionItem
+CreateFunctionRequest
+UpdateFunctionRequest
+FunctionResponse
+FunctionMappingProfile
+FunctionAppService
+FunctionEndpoint
+CreateFunctionRouteValidator
+UpdateFunctionRouteValidator
+
 
 Update dbo.Actions Set name = 'PostDeactivate' where id = 7;
 delete dbo.Actions;

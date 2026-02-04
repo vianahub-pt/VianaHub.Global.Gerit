@@ -7,6 +7,7 @@ using VianaHub.Global.Gerit.Application.Dtos.Base;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Identity.User;
 using VianaHub.Global.Gerit.Application.Dtos.Response.Identity.User;
 using VianaHub.Global.Gerit.Application.Interfaces.Identity;
+using VianaHub.Global.Gerit.Application.Interfaces.Common;
 using VianaHub.Global.Gerit.Domain.Entities.Identity;
 using VianaHub.Global.Gerit.Domain.Helpers;
 using VianaHub.Global.Gerit.Domain.Interfaces;
@@ -24,6 +25,7 @@ public class UserAppService : IUserAppService
     private readonly INotify _notify;
     private readonly IMapper _mapper;
     private readonly ILocalizationService _localization;
+    private readonly IFileValidationService _fileValidation;
 
     public UserAppService(
         IUserDataRepository repo,
@@ -31,7 +33,8 @@ public class UserAppService : IUserAppService
         INotify notify,
         IMapper mapper,
         ICurrentUserService currentUser,
-        ILocalizationService localization)
+        ILocalizationService localization,
+        IFileValidationService fileValidation)
     {
         _repo = repo;
         _domain = domain;
@@ -39,6 +42,7 @@ public class UserAppService : IUserAppService
         _mapper = mapper;
         _currentUser = currentUser;
         _localization = localization;
+        _fileValidation = fileValidation;
     }
 
     public async Task<IEnumerable<UserResponse>> GetAllAsync(CancellationToken ct)
@@ -153,8 +157,8 @@ public class UserAppService : IUserAppService
 
     public async Task<bool> BulkUploadAsync(IFormFile file, CancellationToken ct)
     {
-        // Valida arquivo
-        if (!ValidateFile(file))
+        // Valida arquivo usando serviço centralizado
+        if (!_fileValidation.ValidateFile(file))
             return false;
 
         // Lê itens do CSV
@@ -170,38 +174,6 @@ public class UserAppService : IUserAppService
 
         // Processa cada item
         return await ProcessBulkItemsAsync(items, ct);
-    }
-
-    private bool ValidateFile(IFormFile file)
-    {
-        if (file == null || file.Length == 0)
-        {
-            _notify.Add(_localization.GetMessage("Application.Service.User.ValidateFile.InvalidFile"), 400);
-            return false;
-        }
-
-        // Valida tamanho do arquivo
-        if (!file.Length.IsValidCsvFileSize())
-        {
-            _notify.Add(_localization.GetMessage("Application.Service.User.ValidateFile.IsValidCsvFileSize"), 400);
-            return false;
-        }
-
-        // Valida nome do arquivo (previne path traversal)
-        if (!file.FileName.IsSafeCsvFileName())
-        {
-            _notify.Add(_localization.GetMessage("Application.Service.User.ValidateFile.IsSafeCsvFileName"), 400);
-            return false;
-        }
-
-        // Valida extensão
-        if (!file.FileName.HasValidCsvExtension())
-        {
-            _notify.Add(_localization.GetMessage("Application.Service.User.ValidateFile.OnlyCsvAllowed"), 400);
-            return false;
-        }
-
-        return true;
     }
 
     private List<BulkUploadUserItem> ReadCsvFile(IFormFile file)

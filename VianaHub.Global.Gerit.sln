@@ -46,6 +46,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RN", "RN", "{91AE9324-D440-
 		docs\rn\27-jwt-key-management-business-rules.md = docs\rn\27-jwt-key-management-business-rules.md
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{CAF8439D-15F1-41A6-9CD7-443CE6B1F11A}"
+	ProjectSection(SolutionItems) = preProject
+		docs\samples\equipments-bulk-upload.csv = docs\samples\equipments-bulk-upload.csv
+		docs\samples\functions-bulk-upload.csv = docs\samples\functions-bulk-upload.csv
+		docs\samples\plans-bulk-upload.csv = docs\samples\plans-bulk-upload.csv
+		docs\samples\tenants-bulk-upload.csv = docs\samples\tenants-bulk-upload.csv
+		docs\samples\vehicles-bulk-upload.csv = docs\samples\vehicles-bulk-upload.csv
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -167,6 +176,7 @@ Global
 		{D4BE02A1-668D-4A86-9BC1-EF25B1BD0BAA} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{66B87326-311A-4F43-BBA8-B71D6B9A88BD} = {C263FC6A-B645-7249-9C52-1318A4A3D2CA}
 		{91AE9324-D440-477C-9ECA-F67AC35743DF} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{CAF8439D-15F1-41A6-9CD7-443CE6B1F11A} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AA98F41F-D832-43C6-8EBA-4906646D9437}

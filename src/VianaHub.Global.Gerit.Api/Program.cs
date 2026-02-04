@@ -173,6 +173,7 @@ public class Program
         app.MapAuthEndpoints();
         app.MapJobEndpoints();
         app.MapJwtKeyEndpoints();
+        app.MapFunctionEndpoints();
         app.MapEquipmentEndpoints();
         app.MapVehicleEndpoints();
 

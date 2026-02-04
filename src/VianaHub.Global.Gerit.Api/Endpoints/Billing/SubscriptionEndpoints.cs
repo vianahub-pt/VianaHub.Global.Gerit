@@ -166,5 +166,28 @@ public static class SubscriptionEndpoints
         .Produces(StatusCodes.Status204NoContent)
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
+
+        // Upload massivo de Functions via CSV
+        groupV1.MapPost("/bulk-upload", async (HttpRequest request, ISubscriptionAppService appService, INotify notify, CancellationToken ct) =>
+        {
+            if (!request.HasFormContentType || request.Form.Files.Count == 0)
+            {
+                // Utiliza chave de tradução para mensagem
+                notify.Add("Api.Upload.NoFileProvided", 400);
+                return notify.CustomResponse();
+            }
+
+            var file = request.Form.Files[0];
+            var success = await appService.BulkUploadAsync(file, ct);
+            return notify.CustomResponse(success);
+        })
+        .CustomAuthorize("Admin,BackOffice,Manager", "Subscriptions", "BulkUpload")
+        .WithName("BulkUploadSubscriptions")
+        .WithSummary("Swagger.Endpoint.Subscription.BulkUploadSubscriptions.Summary")
+        .DisableAntiforgery()
+        .Accepts<IFormFile>("multipart/form-data")
+        .Produces(StatusCodes.Status200OK)
+        .Produces<ErrorResponse>(StatusCodes.Status400BadRequest)
+        .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
     }
 }

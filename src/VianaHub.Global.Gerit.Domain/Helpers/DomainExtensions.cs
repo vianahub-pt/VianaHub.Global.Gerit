@@ -225,16 +225,63 @@ public static class DomainExtensions
         if (stream == null)
             throw new ArgumentNullException(nameof(stream));
 
-        // UTF-8 sem BOM, sem detecção automática de encoding
-        var encoding = new UTF8Encoding(encoderShouldEmitUTF8Identifier: false, throwOnInvalidBytes: true);
+        var encoding = new UTF8Encoding(
+            encoderShouldEmitUTF8Identifier: false,
+            throwOnInvalidBytes: true
+        );
 
         return new StreamReader(
             stream,
             encoding,
-            detectEncodingFromByteOrderMarks: false,
+            detectEncodingFromByteOrderMarks: true, // 🔥 ESSENCIAL
             bufferSize: 4096,
             leaveOpen: false
         );
+    }
+
+
+    /// <summary>
+    /// Valida se um stream de arquivo está em encoding UTF-8 válido.
+    /// </summary>
+    /// <param name="stream">Stream do arquivo a ser validado</param>
+    /// <returns>True se o arquivo está em UTF-8, False caso contrário</returns>
+    public static bool IsValidUtf8Encoding(this Stream stream)
+    {
+        if (stream == null)
+            return false;
+
+        try
+        {
+            // Salva a posição original do stream
+            long originalPosition = stream.Position;
+            stream.Position = 0;
+
+            // Tenta ler todo o stream como UTF-8 com validação rigorosa
+            var encoding = new UTF8Encoding(encoderShouldEmitUTF8Identifier: false, throwOnInvalidBytes: true);
+            
+            using (var reader = new StreamReader(stream, encoding, detectEncodingFromByteOrderMarks: true, bufferSize: 4096, leaveOpen: true))
+            {
+                // Lê todo o conteúdo para forçar a validação de encoding
+                _ = reader.ReadToEnd();
+            }
+
+            // Restaura a posição original do stream
+            stream.Position = originalPosition;
+            return true;
+        }
+        catch (DecoderFallbackException)
+        {
+            // Exceção lançada quando há bytes inválidos para UTF-8
+            // Restaura a posição original do stream antes de retornar
+            try { stream.Position = 0; } catch { }
+            return false;
+        }
+        catch
+        {
+            // Qualquer outro erro também indica problema com o encoding
+            try { stream.Position = 0; } catch { }
+            return false;
+        }
     }
 
     /// <summary>

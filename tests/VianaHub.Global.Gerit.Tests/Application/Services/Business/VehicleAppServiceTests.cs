@@ -6,6 +6,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Moq;
 using VianaHub.Global.Gerit.Application.Services.Business;
+using VianaHub.Global.Gerit.Application.Interfaces.Common;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Business.Vehicle;
 using VianaHub.Global.Gerit.Domain.Interfaces.Business;
 using VianaHub.Global.Gerit.Domain.Interfaces;
@@ -25,13 +26,16 @@ namespace VianaHub.Global.Gerit.Tests.Application.Services.Business
             var notifyMock = new Mock<INotify>();
             var localizationMock = new Mock<ILocalizationService>();
             var currentUserMock = new Mock<ICurrentUserService>();
+            var fileValidationMock = new Mock<IFileValidationService>();
 
-            var service = new VehicleAppService(repoMock.Object, domainMock.Object, mapperMock.Object, notifyMock.Object, localizationMock.Object, currentUserMock.Object);
+            fileValidationMock.Setup(f => f.ValidateFile(null)).Returns(false);
+
+            var service = new VehicleAppService(repoMock.Object, domainMock.Object, mapperMock.Object, notifyMock.Object, localizationMock.Object, currentUserMock.Object, fileValidationMock.Object);
 
             var result = await service.BulkUploadAsync(null, CancellationToken.None);
 
             Assert.False(result);
-            notifyMock.Verify(n => n.Add(It.IsAny<string>(), 400), Times.Once);
+            fileValidationMock.Verify(f => f.ValidateFile(null), Times.Once);
         }
 
         [Fact]
@@ -43,6 +47,7 @@ namespace VianaHub.Global.Gerit.Tests.Application.Services.Business
             var notifyMock = new Mock<INotify>();
             var localizationMock = new Mock<ILocalizationService>();
             var currentUserMock = new Mock<ICurrentUserService>();
+            var fileValidationMock = new Mock<IFileValidationService>();
 
             currentUserMock.Setup(c => c.GetTenantId()).Returns(1);
 
@@ -61,14 +66,16 @@ namespace VianaHub.Global.Gerit.Tests.Application.Services.Business
                 ContentType = "text/csv"
             };
 
+            fileValidationMock.Setup(f => f.ValidateFile(It.IsAny<IFormFile>())).Returns(true);
             repoMock.Setup(r => r.ExistsByPlateAsync(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<CancellationToken>())).ReturnsAsync(false);
             domainMock.Setup(d => d.CreateAsync(It.IsAny<Domain.Entities.Business.VehicleEntity>(), It.IsAny<CancellationToken>())).ReturnsAsync(true);
 
-            var service = new VehicleAppService(repoMock.Object, domainMock.Object, mapperMock.Object, notifyMock.Object, localizationMock.Object, currentUserMock.Object);
+            var service = new VehicleAppService(repoMock.Object, domainMock.Object, mapperMock.Object, notifyMock.Object, localizationMock.Object, currentUserMock.Object, fileValidationMock.Object);
 
             var result = await service.BulkUploadAsync(formFile, CancellationToken.None);
 
             Assert.True(result);
+            fileValidationMock.Verify(f => f.ValidateFile(It.IsAny<IFormFile>()), Times.Once);
             repoMock.Verify(r => r.ExistsByPlateAsync(1, "ABC-1234", It.IsAny<CancellationToken>()), Times.Once);
             repoMock.Verify(r => r.ExistsByPlateAsync(1, "XYZ-9876", It.IsAny<CancellationToken>()), Times.Once);
             domainMock.Verify(d => d.CreateAsync(It.IsAny<Domain.Entities.Business.VehicleEntity>(), It.IsAny<CancellationToken>()), Times.Exactly(2));

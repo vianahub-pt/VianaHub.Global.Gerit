@@ -1,0 +1,11 @@
+Name;Description;PricePerHour;PricePerDay;PricePerMonth;PricePerYear;Currency;MaxUsers;MaxPhotosPerInterventions
+Tryal;Teste a aplicação por 30 dias de forma gratuita;0.00;0.00;0.00;0.00;EUR;2;2
+Start;Plano inicial para pequenas equipas, ideal para começar a usar a aplicação com funcionalidades essenciais.;0.10;2.00;19.90;199.00;EUR;5;5
+Basic;Plano básico para profissionais individuais com maior capacidade operacional.;0.15;3.00;29.90;299.00;EUR;10;10
+Essential;Plano essencial para pequenas equipas em crescimento.;0.20;4.00;39.90;399.00;EUR;15;15
+Standard;Plano equilibrado para equipas operacionais médias.;0.30;6.00;59.90;599.00;EUR;25;25
+Business;Plano para empresas com uso intensivo da aplicação.;0.50;10.00;99.90;999.00;EUR;50;50
+Professional;Plano profissional para equipas maiores e maior volume de dados.;0.70;14.00;139.90;1399.00;EUR;100;100
+Advanced;Plano avançado com maior capacidade e prioridade de suporte.;0.90;18.00;179.90;1799.00;EUR;150;150
+Premium;Plano premium para empresas com operações críticas.;1.00;20.00;199.90;1999.00;EUR;200;200
+Unlimited;Plano ilimitado para uso sem restrições operacionais.;1.50;30.00;299.90;2999.00;EUR;999;999

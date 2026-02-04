@@ -325,6 +325,21 @@ GO
    (All domain tables MUST have TenantId)
    ========================= */
 
+CREATE TABLE dbo.Functions (
+	Id              INT IDENTITY(1,1)   NOT NULL,                                       -- Identificador da função, chave primária
+	TenantId        INT                 NOT NULL,                                       -- Tenant dono da função
+	Name            NVARCHAR(150)       NOT NULL,                                       -- Nome da função
+	Description     NVARCHAR(255)       NOT NULL,                                       -- Descrição da função
+    IsActive		BIT					NOT NULL DEFAULT 1,                             -- Flag de ativo
+    IsDeleted		BIT					NOT NULL DEFAULT 0,                             -- Soft delete
+    CreatedBy		INT         		NOT NULL,						                -- Usuário criador
+    CreatedAt		DATETIME2(7)		NOT NULL DEFAULT SYSDATETIME(),	                -- Data de criação
+    ModifiedBy	    INT         		    NULL,						                -- Usuário modificador
+    ModifiedAt		DATETIME2(7)			NULL,                                       -- Data de modificação
+    CONSTRAINT PK_Functions PRIMARY KEY CLUSTERED (Id),                                 -- PK
+    CONSTRAINT FK_Functions_Tenant FOREIGN KEY (TenantId) REFERENCES dbo.Tenants(Id)	-- FK para tenant    
+)
+
 CREATE TABLE dbo.Clients (
     Id				INT IDENTITY(1,1)	NOT NULL,						-- Clientes do tenant
     TenantId		INT					NOT NULL,						-- Tenant dono
@@ -411,6 +426,7 @@ GO
 CREATE TABLE dbo.TeamMembers (
     Id			INT IDENTITY(1,1)	NOT NULL,						-- Membros do time
     TenantId	INT					NOT NULL,						-- Tenant dono do endereço
+    FunctionId	INT					NOT NULL,						-- Função do membro do time
     Name		NVARCHAR(150)		NOT NULL,						-- Nome do membro do time
 	TaxNumber	NVARCHAR(20)			NULL,						-- Numero fiscal do membro do time
     IsActive	BIT					NOT NULL DEFAULT 1,				-- Flag de ativo
@@ -420,7 +436,8 @@ CREATE TABLE dbo.TeamMembers (
     ModifiedBy	INT         		    NULL,						-- Usuário modificador
     ModifiedAt	DATETIME2(7)			NULL,						-- Data de modificação
 	CONSTRAINT PK_TeamMembers PRIMARY KEY CLUSTERED (Id),
-    CONSTRAINT FK_TeamMembers_Tenant FOREIGN KEY (TenantId) REFERENCES dbo.Tenants(Id)
+    CONSTRAINT FK_TeamMembers_Tenant FOREIGN KEY (TenantId) REFERENCES dbo.Tenants(Id),
+    CONSTRAINT FK_TeamMembers_Function FOREIGN KEY (FunctionId) REFERENCES dbo.Functions(Id)
 );
 GO
 CREATE TABLE dbo.TeamMemberContacts (									-- Contatos do TeamMember
@@ -589,7 +606,7 @@ CREATE NONCLUSTERED INDEX IX_UserRoles_RoleId						ON dbo.UserRoles (RoleId) INC
 CREATE NONCLUSTERED INDEX IX_RolePermissions_RoleId					ON dbo.RolePermissions (RoleId) INCLUDE (TenantId, ResourceId, ActionId); 
 CREATE NONCLUSTERED INDEX IX_RolePermissions_ResourceId				ON dbo.RolePermissions (ResourceId) INCLUDE (TenantId, RoleId, ActionId);
 CREATE NONCLUSTERED INDEX IX_RolePermissions_ActionId				ON dbo.RolePermissions (ActionId) INCLUDE (TenantId, RoleId, ResourceId);
-CREATE NONCLUSTERED INDEX IX_Users_Login				ON dbo.Users (TenantId, Email) INCLUDE (Id, IsActive) WHERE IsDeleted = 0;
+CREATE NONCLUSTERED INDEX IX_Users_Login				            ON dbo.Users (TenantId, Email) INCLUDE (Id, IsActive) WHERE IsDeleted = 0;
 
 GO
 
@@ -628,17 +645,18 @@ ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.Subscriptions
 ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.TenantContacts,			-- Aplica RLS em TenantContacts
 ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.TenantAddresses,			-- Aplica RLS em TenantAddresses
 ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.TenantFiscalData,		-- Aplica RLS em TenantFiscalData
+ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.Functions,				-- Aplica RLS em Functions
 ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.Clients,					-- Aplica RLS em Clients
 ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.ClientContacts,			-- Aplica RLS em ClientContacts
 ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.ClientAddresses,			-- Aplica RLS em ClientAddresses
 ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.TeamMembers,				-- Aplica RLS em TeamMembers
-ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.TeamMemberContacts,		
-ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.TeamMemberAddresses,
-ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.InterventionContacts,
-ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.InterventionAddresses,
-ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.Interventions,   -- Aplica RLS em Interventions
-ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.Vehicles,        -- Aplica RLS em Vehicles
-ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.Equipments,      -- Aplica RLS em Equipments
+ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.TeamMemberContacts,		-- Aplica RLS em TeamMemberContacts
+ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.TeamMemberAddresses,     -- Aplica RLS em TeamMemberAddresses
+ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.InterventionContacts,    -- Aplica RLS em InterventionContacts
+ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.InterventionAddresses,   -- Aplica RLS em InterventionAddresses
+ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.Interventions,           -- Aplica RLS em Interventions
+ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.Vehicles,                -- Aplica RLS em Vehicles
+ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.Equipments,              -- Aplica RLS em Equipments
 
 ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.Users AFTER INSERT,	            -- Bloqueia INSERT fora do Tenant
 ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.Users AFTER UPDATE,	            -- Bloqueia UPDATE fora do Tenant
@@ -667,6 +685,9 @@ ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.TenantAddresse
 ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.TenantFiscalData AFTER INSERT,   -- Bloqueia INSERT fora do Tenant
 ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.TenantFiscalData AFTER UPDATE,   -- Bloqueia UPDATE fora do Tenant
 ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.TenantFiscalData BEFORE DELETE,  -- Bloqueia DELETE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.Functions AFTER INSERT,          -- Bloqueia INSERT fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.Functions AFTER UPDATE,          -- Bloqueia UPDATE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.Functions BEFORE DELETE,         -- Bloqueia DELETE fora do Tenant
 ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.Clients AFTER INSERT,            -- Bloqueia INSERT fora do Tenant
 ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.Clients AFTER UPDATE,            -- Bloqueia UPDATE fora do Tenant
 ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.Clients BEFORE DELETE,           -- Bloqueia DELETE fora do Tenant

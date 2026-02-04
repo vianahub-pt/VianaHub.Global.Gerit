@@ -1,9 +1,19 @@
 using AutoMapper;
+using CsvHelper;
+using CsvHelper.Configuration;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
+using System.Globalization;
 using VianaHub.Global.Gerit.Application.Dtos.Base;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Billing.Subscription;
+using VianaHub.Global.Gerit.Application.Dtos.Request.Business.Function;
 using VianaHub.Global.Gerit.Application.Dtos.Response.Billing.Subscription;
 using VianaHub.Global.Gerit.Application.Interfaces.Billing;
+using VianaHub.Global.Gerit.Application.Interfaces.Common;
+using VianaHub.Global.Gerit.Application.Services.Business;
 using VianaHub.Global.Gerit.Domain.Entities.Billing;
+using VianaHub.Global.Gerit.Domain.Entities.Business;
+using VianaHub.Global.Gerit.Domain.Helpers;
 using VianaHub.Global.Gerit.Domain.Interfaces;
 using VianaHub.Global.Gerit.Domain.Interfaces.Billing;
 using VianaHub.Global.Gerit.Domain.ReadModels;
@@ -13,24 +23,33 @@ namespace VianaHub.Global.Gerit.Application.Services.Billing;
 
 public class SubscriptionAppService : ISubscriptionAppService
 {
+    private readonly ISubscriptionDataRepository _repo;
     private readonly ISubscriptionDomainService _domain;
     private readonly ICurrentUserService _currentUser;
     private readonly INotify _notify;
     private readonly IMapper _mapper;
     private readonly ILocalizationService _localization;
+    private readonly ILogger<FunctionAppService> _logger;
+    private readonly IFileValidationService _fileValidation;
 
     public SubscriptionAppService(
+        ISubscriptionDataRepository repo,
         ISubscriptionDomainService domain,
         INotify notify,
         IMapper mapper,
         ICurrentUserService currentUser,
-        ILocalizationService localization)
+        ILocalizationService localization,
+        ILogger<FunctionAppService> logger,
+        IFileValidationService fileValidation)
     {
+        _repo = repo;
         _domain = domain;
         _notify = notify;
         _mapper = mapper;
         _currentUser = currentUser;
         _localization = localization;
+        _logger = logger;
+        _fileValidation = fileValidation;
     }
 
     public async Task<IEnumerable<SubscriptionResponse>> GetAllAsync(CancellationToken ct)
@@ -85,10 +104,10 @@ public class SubscriptionAppService : ISubscriptionAppService
             request.PlanId,
             request.CurrentPeriodStart,
             request.CurrentPeriodEnd,
-            _currentUser.GetUserId(),
             request.TrialStart,
             request.TrialEnd,
-            request.StripeCustomerId
+            request.StripeCustomerId,
+            _currentUser.GetUserId()
         );
 
         return await _domain.CreateAsync(entity, ct);
@@ -107,9 +126,9 @@ public class SubscriptionAppService : ISubscriptionAppService
             request.PlanId,
             request.CurrentPeriodStart,
             request.CurrentPeriodEnd,
-            _currentUser.GetUserId(),
             request.TrialStart,
-            request.TrialEnd
+            request.TrialEnd,
+            _currentUser.GetUserId()
         );
 
         return await _domain.UpdateAsync(entity, ct);
@@ -178,5 +197,170 @@ public class SubscriptionAppService : ISubscriptionAppService
 
         entity.Renew(request.NewPeriodEnd, _currentUser.GetUserId());
         return await _domain.RenewAsync(entity, ct);
+    }
+
+    public async Task<bool> BulkUploadAsync(IFormFile file, CancellationToken ct)
+    {
+        // Valida arquivo usando serviço centralizado
+        if (!_fileValidation.ValidateFile(file))
+            return false;
+
+        // Lê itens do CSV
+        var items = ReadCsvFile(file);
+        if (items == null)
+            return false;
+
+        if (!items.Any())
+        {
+            _notify.Add(_localization.GetMessage("Application.Service.Subscription.BulkUpload.EmptyFile"), 400);
+            return false;
+        }
+
+        // Processa cada item
+        return await ProcessBulkItemsAsync(items, ct);
+    }
+
+    private List<BulkUploadSubscriptionItem> ReadCsvFile(IFormFile file)
+    {
+        try
+        {
+            // Cria StreamReader com encoding UTF-8 forçado
+            using var reader = file.OpenReadStream().CreateUtf8StreamReader();
+
+            var config = new CsvConfiguration(CultureInfo.InvariantCulture)
+            {
+                HasHeaderRecord = true,
+                Delimiter = ";", // CSV usa ponto e vírgula como delimitador
+                MissingFieldFound = null,
+                HeaderValidated = null,
+                TrimOptions = TrimOptions.Trim,
+                BadDataFound = null // Ignora linhas mal formatadas ao invés de lançar exceção
+            };
+
+            using var csv = new CsvReader(reader, config);
+            var records = new List<BulkUploadSubscriptionItem>();
+
+            csv.Read();
+            csv.ReadHeader();
+
+            int rowCount = 0;
+            int maxRows = DomainExtensions.GetMaxCsvRows();
+
+            while (csv.Read() && rowCount < maxRows)
+            {
+                try
+                {
+                    var record = csv.GetRecord<BulkUploadSubscriptionItem>();
+                    if (record != null)
+                    {
+                        // Valida se os campos não contêm conteúdo perigoso
+                        if (record.TenantId <= 0 )
+                        {
+                            _notify.Add(_localization.GetMessage("Application.Service.Subscription.ReadCsvFile.TenantId.IsSafeCsvValue", rowCount + 2), 400);
+                            continue;
+                        }
+                        if (record.PlanId <= 0)
+                        {
+                            _notify.Add(_localization.GetMessage("Application.Service.Subscription.ReadCsvFile.PlanId.IsSafeCsvValue", rowCount + 2), 400);
+                            continue;
+                        }
+                        if (record.CurrentPeriodStart <= DateTime.MinValue)
+                        {
+                            _notify.Add(_localization.GetMessage("Application.Service.Subscription.ReadCsvFile.CurrentPeriodStart.IsSafeCsvValue", rowCount + 2), 400);
+                            continue;
+                        }
+                        if (record.CurrentPeriodEnd <= DateTime.MinValue)
+                        {
+                            _notify.Add(_localization.GetMessage("Application.Service.Subscription.ReadCsvFile.CurrentPeriodEnd.IsSafeCsvValue", rowCount + 2), 400);
+                            continue;
+                        }
+                        if (record.CurrentPeriodEnd < record.CurrentPeriodStart)
+                        {
+                            _notify.Add(_localization.GetMessage("Application.Service.Subscription.ReadCsvFile.CurrentPeriodEnd.CurrentPeriodStart.IsSafeCsvValue", rowCount + 2), 400);
+                            continue;
+                        }
+
+                        records.Add(record);
+                    }
+                    rowCount++;
+                }
+                catch (CsvHelperException ex)
+                {
+                    // Log linha com erro mas continua processamento
+                    _logger.LogWarning(ex, "Erro ao processar linha {RowNumber} do CSV de Subscriptions", rowCount + 2);
+                    _notify.Add(_localization.GetMessage("Application.Service.Subscription.ReadCsvFile.CsvHelperException", rowCount + 2), 400);
+                    rowCount++;
+                    continue;
+                }
+            }
+
+            if (rowCount >= maxRows)
+            {
+                _notify.Add(_localization.GetMessage("Application.Service.Subscription.ReadCsvFile.MaxRows", maxRows), 400);
+                return null;
+            }
+
+            return records;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Erro ao ler arquivo CSV de Subscriptions: {Message}", ex.Message);
+            _notify.Add(_localization.GetMessage("Application.Service.Subscription.ReadCsvFile.Exception"), 400);
+            return null;
+        }
+    }
+
+    private async Task<bool> ProcessBulkItemsAsync(List<BulkUploadSubscriptionItem> items, CancellationToken ct)
+    {
+        var hasErrors = false;
+        var tenantId = _currentUser.GetTenantId();
+
+        foreach (var item in items)
+        {
+            // Valida campos obrigatórios
+            if (!ValidateBulkItem(item))
+            {
+                hasErrors = true;
+                continue;
+            }
+
+            // Verifica duplicidade
+            var exists = await _repo.ExistsByTenantIdAsync(tenantId, ct);
+            if (exists)
+            {
+                _notify.Add(_localization.GetMessage("Application.Service.Subscription.ProcessBulkItems.ExistsByTenantId", item.TenantId), 400);
+                hasErrors = true;
+                continue;
+            }
+
+            // Cria a entidade
+            var entity = new SubscriptionEntity(tenantId, item.PlanId, item.CurrentPeriodStart, item.CurrentPeriodEnd, item.TrialStart, item.TrialEnd, item.StripeCustomerId, _currentUser.GetUserId());
+
+            // Tenta criar no domínio
+            var success = await _domain.CreateAsync(entity, ct);
+
+            if (!success)
+            {
+                _notify.Add(_localization.GetMessage("Application.Service.Subscription.ProcessBulkItems.FailedToCreate"), 400);
+                hasErrors = true;
+            }
+        }
+
+        return !hasErrors;
+    }
+
+    private bool ValidateBulkItem(BulkUploadSubscriptionItem item)
+    {
+        if (item.TenantId <= 0 )
+        {
+            _notify.Add(_localization.GetMessage("Application.Service.Subscription.ValidateBulkItem.TenantId", item.TenantId), 400);
+            return false;
+        }
+        if (item.PlanId <= 0)
+        {
+            _notify.Add(_localization.GetMessage("Application.Service.Subscription.ValidateBulkItem.PlanId", item.PlanId), 400);
+            return false;
+        }
+        return true;
     }
 }

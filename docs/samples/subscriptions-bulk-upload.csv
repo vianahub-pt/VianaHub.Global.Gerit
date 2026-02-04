@@ -1,0 +1,2 @@
+TenantId;PlanId;StripeId;CurrentPeriodStart;CurrentPeriodEnd;TrialStart;TrialEnd;CancelAtPeriodEnd;CanceledAt;CancellationReason;StripeCustomerId
+1;2;NULL;2026-01-01 00:00:00.0000000;2099-12-31 23:59:59.0000000;2026-01-01 00:00:00.0000000;2099-12-31 23:59:59.0000000;0;NULL;NULL;Teste

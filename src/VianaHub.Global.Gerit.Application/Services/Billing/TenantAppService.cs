@@ -7,6 +7,7 @@ using VianaHub.Global.Gerit.Application.Dtos.Base;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Billing.Tenant;
 using VianaHub.Global.Gerit.Application.Dtos.Response.Billing.Tenant;
 using VianaHub.Global.Gerit.Application.Interfaces.Billing;
+using VianaHub.Global.Gerit.Application.Interfaces.Common;
 using VianaHub.Global.Gerit.Domain.Entities.Billing;
 using VianaHub.Global.Gerit.Domain.Helpers;
 using VianaHub.Global.Gerit.Domain.Interfaces;
@@ -24,6 +25,7 @@ public class TenantAppService : ITenantAppService
     private readonly INotify _notify;
     private readonly IMapper _mapper;
     private readonly ILocalizationService _localization;
+    private readonly IFileValidationService _fileValidation;
 
     public TenantAppService(
         ITenantDataRepository repo,
@@ -31,7 +33,8 @@ public class TenantAppService : ITenantAppService
         INotify notify,
         IMapper mapper,
         ICurrentUserService currentUser,
-        ILocalizationService localization)
+        ILocalizationService localization,
+        IFileValidationService fileValidation)
     {
         _repo = repo;
         _domain = domain;
@@ -39,6 +42,7 @@ public class TenantAppService : ITenantAppService
         _mapper = mapper;
         _currentUser = currentUser;
         _localization = localization;
+        _fileValidation = fileValidation;
     }
 
     public async Task<IEnumerable<TenantResponse>> GetAllAsync(CancellationToken ct)
@@ -127,8 +131,8 @@ public class TenantAppService : ITenantAppService
     
     public async Task<bool> BulkUploadAsync(IFormFile file, CancellationToken ct)
     {
-        // Valida arquivo
-        if (!ValidateFile(file))
+        // Valida arquivo usando serviço centralizado
+        if (!_fileValidation.ValidateFile(file))
             return false;
 
         // Lê itens do CSV
@@ -146,38 +150,6 @@ public class TenantAppService : ITenantAppService
         return await ProcessBulkItemsAsync(items, ct);
     }
 
-    private bool ValidateFile(IFormFile file)
-    {
-        if (file == null || file.Length == 0)
-        {
-            _notify.Add(_localization.GetMessage("Application.Service.Tenant.ValidateFile.InvalidFile"), 400);
-            return false;
-        }
-
-        // Valida tamanho do arquivo
-        if (!file.Length.IsValidCsvFileSize())
-        {
-            _notify.Add(_localization.GetMessage("Application.Service.Tenant.ValidateFile.IsValidCsvFileSize"), 400);
-            return false;
-        }
-
-        // Valida nome do arquivo (previne path traversal)
-        if (!file.FileName.IsSafeCsvFileName())
-        {
-            _notify.Add(_localization.GetMessage("Application.Service.Tenant.ValidateFile.IsSafeCsvFileName"), 400);
-            return false;
-        }
-
-        // Valida extensão
-        if (!file.FileName.HasValidCsvExtension())
-        {
-            _notify.Add(_localization.GetMessage("Application.Service.Tenant.ValidateFile.OnlyCsvAllowed"), 400);
-            return false;
-        }
-
-        return true;
-    }
-    
     private List<BulkUploadTenantItem> ReadCsvFile(IFormFile file)
     {
         try
