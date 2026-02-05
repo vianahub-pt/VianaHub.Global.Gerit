@@ -84,5 +84,27 @@ public static class RolePermissionEndpoint
         .Produces(StatusCodes.Status204NoContent)
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
+
+        // Upload massivo de roles via CSV
+        groupV1.MapPost("/bulk-upload", async (HttpRequest request, IRolePermissionAppService appService, INotify notify, CancellationToken ct) =>
+        {
+            if (!request.HasFormContentType || request.Form.Files.Count == 0)
+            {
+                notify.Add("Nenhum arquivo foi enviado", 400);
+                return notify.CustomResponse();
+            }
+
+            var file = request.Form.Files[0];
+            var success = await appService.BulkUploadAsync(file, ct);
+            return notify.CustomResponse(success);
+        })
+        .CustomAuthorize("Admin,BackOffice,Manager", "Roles", "BulkUpload")
+        .WithName("BulkUploadRoles")
+        .WithSummary("Swagger.Endpoint.RolePermission.BulkUploadRoles.Summary")
+        .DisableAntiforgery()
+        .Accepts<IFormFile>("multipart/form-data")
+        .Produces(StatusCodes.Status200OK)
+        .Produces<ErrorResponse>(StatusCodes.Status400BadRequest)
+        .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
     }
 }

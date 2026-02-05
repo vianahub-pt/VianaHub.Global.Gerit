@@ -1,0 +1,27 @@
+Name;Description
+Actions;Mantem as ações que podem ser executadas nos recursos da aplicação
+ClientAddresses;Mantem endereço dos clientes
+ClientContacts;Mantem contatos dos clientes
+ClientFiscalData;Mantem dados fiscais dos clientes
+Clients;Mantem dados dos clientes
+Equipments;Mantem dados dos equipamentos
+InterventionAddresses;Mantem endereços de onde as intervenções serão realizadas
+InterventionContacts;Mantem contatos de onde as intervenções serão realizadas
+Interventions;Mantem dados das intervenções
+JwtKeys;Mantem dados de segurança da aplicação
+Resources;Mantem dados dos recursos da aplicação
+RolePermissions;Mantem dados das permissões que utilizadores pode fazer nas aplicações
+Roles;Mantem perfis dos utilizadores
+TeamMemberAddresses;Mantem endereço dos membros dos times
+TeamMemberContacts;Mantem contatos dos membros dos times
+TeamMembers;Mantem dados dos membros dos times
+TenantAddresses;Mantem endereço dos tenants
+TenantContacts;Mantem contatos dos tenants
+TenantFiscalData;Mantem dados fiscais dos tenants
+Tenants;Mantem dados dos tenants
+UserRoles;Associa perfil ao utilizador
+Users;Mantem dados dos utilizadores
+Vehicles;Mantem dados dos veículos
+Plans;Mantem dados dos planos
+Subscriptions;Mantem dados das assinaturas
+Functions;Mantem dados das funções/cargos dos times de equipas

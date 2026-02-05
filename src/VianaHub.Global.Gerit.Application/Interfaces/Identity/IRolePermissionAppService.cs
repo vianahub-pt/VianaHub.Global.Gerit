@@ -1,6 +1,4 @@
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Identity.RolePermission;
 using VianaHub.Global.Gerit.Application.Dtos.Response.Identity.RolePermission;
 
@@ -14,4 +12,5 @@ public interface IRolePermissionAppService
     Task<IList<RolePermissionResponse>> GetByRoleAsync(int roleId, CancellationToken ct);
     Task<IList<RolePermissionResponse>> GetByResourceAsync(int resourceId, CancellationToken ct);
     Task<IList<RolePermissionResponse>> GetAllAsync(CancellationToken ct);
+    Task<bool> BulkUploadAsync(IFormFile file, CancellationToken ct);
 }

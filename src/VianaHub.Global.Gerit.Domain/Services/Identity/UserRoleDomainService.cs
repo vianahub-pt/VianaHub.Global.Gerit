@@ -15,13 +15,13 @@ public class UserRoleDomainService : IUserRoleDomainService
         _validator = validator;
     }
 
-    public async Task<bool> CreateAsync(UserRoleEntity entity)
+    public async Task<bool> CreateAsync(UserRoleEntity entity, CancellationToken ct)
     {
         var validation = _validator.Validate(entity);
         if (!validation.IsValid)
             throw new ValidationException(validation.Errors);
 
-        await _repository.AddAsync(entity);
+        await _repository.AddAsync(entity, ct);
         return true;
     }
 }

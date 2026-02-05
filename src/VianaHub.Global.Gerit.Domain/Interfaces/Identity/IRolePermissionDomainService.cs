@@ -5,5 +5,5 @@ namespace VianaHub.Global.Gerit.Domain.Interfaces.Identity;
 
 public interface IRolePermissionDomainService
 {
-    Task<bool> CreateAsync(RolePermissionEntity entity);
+    Task<bool> CreateAsync(RolePermissionEntity entity, CancellationToken ct);
 }

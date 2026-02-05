@@ -23,10 +23,11 @@ public class UserRoleEntity : Entity
     /// <summary>
     /// Construtor para criação de uma nova relação User-Role
     /// </summary>
-    public UserRoleEntity(int tenantId, int userId, int roleId)
+    public UserRoleEntity(int tenantId, int userId, int roleId, int createdBy)
     {
         TenantId = tenantId;
         UserId = userId;
         RoleId = roleId;
+        CreatedBy = createdBy;
     }
 }

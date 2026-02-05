@@ -1,0 +1,15 @@
+Name;Description
+GetAll;Obtem todos
+GetBy;Obtem por
+GetPaged;Obtem paginado por filtro
+Create;Criar novo
+Update;Atualizar
+Activate;Ativar
+Deactivate;Desativar
+Delete;Deletar
+BulkUpload;Cadastro em massa
+Execute;Executar
+GetActivate;Obtem ativos
+GetExpiring;Obtem expirados
+Cancel;Cancelar
+Renew;Renovar

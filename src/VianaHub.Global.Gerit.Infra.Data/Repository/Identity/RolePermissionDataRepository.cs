@@ -14,65 +14,65 @@ public class RolePermissionDataRepository : IRolePermissionDataRepository
         _context = context;
     }
 
-    public async Task AddAsync(RolePermissionEntity entity)
+    public async Task AddAsync(RolePermissionEntity entity, CancellationToken ct)
     {
-        await _context.RolePermissions.AddAsync(entity);
-        await _context.SaveChangesAsync();
+        await _context.RolePermissions.AddAsync(entity, ct);
+        await _context.SaveChangesAsync(ct);
     }
 
-    public async Task<RolePermissionEntity> GetByIdAsync(int id, int tenantId)
+    public async Task<RolePermissionEntity> GetByIdAsync(int id, int tenantId, CancellationToken ct)
     {
         return await _context.RolePermissions
             .Include(x => x.Role)
             .Include(x => x.Resource)
             .Include(x => x.Action)
-            .FirstOrDefaultAsync(x => x.Id == id && x.TenantId == tenantId);
+            .FirstOrDefaultAsync(x => x.Id == id && x.TenantId == tenantId, ct);
     }
 
-    public async Task DeleteAsync(int id, int tenantId)
+    public async Task DeleteAsync(int id, int tenantId, CancellationToken ct)
     {
-        var entity = await _context.RolePermissions.FirstOrDefaultAsync(x => x.Id == id && x.TenantId == tenantId);
+        var entity = await _context.RolePermissions.FirstOrDefaultAsync(x => x.Id == id && x.TenantId == tenantId, ct);
         if (entity != null)
         {
             _context.RolePermissions.Remove(entity);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(ct);
         }
     }
 
-    public async Task<IList<RolePermissionEntity>> GetByRoleAsync(int roleId, int tenantId)
+    public async Task<IList<RolePermissionEntity>> GetByRoleAsync(int roleId, int tenantId, CancellationToken ct)
     {
         return await _context.RolePermissions
             .Include(x => x.Role)
             .Include(x => x.Resource)
             .Include(x => x.Action)
             .Where(x => x.RoleId == roleId && x.TenantId == tenantId)
-            .ToListAsync();
+            .ToListAsync(ct);
     }
 
-    public async Task<IList<RolePermissionEntity>> GetByResourceAsync(int resourceId, int tenantId)
+    public async Task<IList<RolePermissionEntity>> GetByResourceAsync(int resourceId, int tenantId, CancellationToken ct)
     {
         return await _context.RolePermissions
             .Include(x => x.Role)
             .Include(x => x.Action)
             .Include(x => x.Resource)
             .Where(x => x.ResourceId == resourceId && x.TenantId == tenantId)
-            .ToListAsync();
+            .ToListAsync(ct);
     }
 
-    public async Task<IList<RolePermissionEntity>> GetAllAsync(int tenantId)
+    public async Task<IList<RolePermissionEntity>> GetAllAsync(int tenantId, CancellationToken ct)
     {
         return await _context.RolePermissions
             .Include(x => x.Role)
             .Include(x => x.Resource)
             .Include(x => x.Action)
             .Where(x => x.TenantId == tenantId)
-            .ToListAsync();
+            .ToListAsync(ct);
     }
 
-    public async Task<bool> ExistsAsync(int tenantId, int roleId, int resourceId, int actionId)
+    public async Task<bool> ExistsAsync(int tenantId, int roleId, int resourceId, int actionId, CancellationToken ct)
     {
         return await _context.RolePermissions
             .AsNoTracking()
-            .AnyAsync(x => x.TenantId == tenantId && x.RoleId == roleId && x.ResourceId == resourceId && x.ActionId == actionId);
+            .AnyAsync(x => x.TenantId == tenantId && x.RoleId == roleId && x.ResourceId == resourceId && x.ActionId == actionId, ct);
     }
 }

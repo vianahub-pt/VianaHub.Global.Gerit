@@ -1,11 +1,18 @@
 using AutoMapper;
-using VianaHub.Global.Gerit.Domain.Tools.Notifications;
-using VianaHub.Global.Gerit.Domain.Interfaces;
-using VianaHub.Global.Gerit.Application.Interfaces.Identity;
-using VianaHub.Global.Gerit.Application.Dtos.Response.Identity.RolePermission;
+using CsvHelper;
+using CsvHelper.Configuration;
+using Microsoft.AspNetCore.Http;
+using System.Globalization;
+using VianaHub.Global.Gerit.Application.Dtos.Request.Identity.Role;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Identity.RolePermission;
-using VianaHub.Global.Gerit.Domain.Interfaces.Identity;
+using VianaHub.Global.Gerit.Application.Dtos.Response.Identity.RolePermission;
+using VianaHub.Global.Gerit.Application.Interfaces.Common;
+using VianaHub.Global.Gerit.Application.Interfaces.Identity;
 using VianaHub.Global.Gerit.Domain.Entities.Identity;
+using VianaHub.Global.Gerit.Domain.Helpers;
+using VianaHub.Global.Gerit.Domain.Interfaces;
+using VianaHub.Global.Gerit.Domain.Interfaces.Identity;
+using VianaHub.Global.Gerit.Domain.Tools.Notifications;
 
 namespace VianaHub.Global.Gerit.Application.Services.Identity;
 
@@ -20,6 +27,7 @@ public class RolePermissionAppService : IRolePermissionAppService
     private readonly INotify _notify;
     private readonly ILocalizationService _localization;
     private readonly ICurrentUserService _currentUser;
+    private readonly IFileValidationService _fileValidation;
 
     public RolePermissionAppService(
         IRolePermissionDomainService domain,
@@ -30,7 +38,8 @@ public class RolePermissionAppService : IRolePermissionAppService
         IMapper mapper,
         INotify notify,
         ILocalizationService localization,
-        ICurrentUserService currentUser)
+        ICurrentUserService currentUser,
+        IFileValidationService fileValidation)
     {
         _domain = domain;
         _repository = repository;
@@ -41,6 +50,7 @@ public class RolePermissionAppService : IRolePermissionAppService
         _notify = notify;
         _localization = localization;
         _currentUser = currentUser;
+        _fileValidation = fileValidation;
     }
 
     public async Task<RolePermissionResponse> CreateAsync(CreateRolePermissionRequest request, CancellationToken ct)
@@ -85,41 +95,202 @@ public class RolePermissionAppService : IRolePermissionAppService
     public async Task DeleteAsync(int id, CancellationToken ct)
     {
         var tenantId = _currentUser.GetTenantId();
-        var entity = await _repository.GetByIdAsync(id, tenantId);
+        var entity = await _repository.GetByIdAsync(id, tenantId, ct);
         if (entity == null)
         {
             _notify.Add(_localization.GetMessage("Application.Service.RolePermission.Delete.ResourceNotFound"), 410);
             return;
         }
 
-        await _repository.DeleteAsync(id, tenantId);
+        await _repository.DeleteAsync(id, tenantId, ct);
     }
 
     public async Task<RolePermissionResponse> GetByIdAsync(int id, CancellationToken ct)
     {
         var tenantId = _currentUser.GetTenantId();
-        var entity = await _repository.GetByIdAsync(id, tenantId);
+        var entity = await _repository.GetByIdAsync(id, tenantId, ct);
         return _mapper.Map<RolePermissionResponse>(entity);
     }
 
     public async Task<IList<RolePermissionResponse>> GetByRoleAsync(int roleId, CancellationToken ct)
     {
         var tenantId = _currentUser.GetTenantId();
-        var list = await _repository.GetByRoleAsync(roleId, tenantId);
+        var list = await _repository.GetByRoleAsync(roleId, tenantId, ct);
         return _mapper.Map<IList<RolePermissionResponse>>(list);
     }
 
     public async Task<IList<RolePermissionResponse>> GetByResourceAsync(int resourceId, CancellationToken ct)
     {
         var tenantId = _currentUser.GetTenantId();
-        var list = await _repository.GetByResourceAsync(resourceId, tenantId);
+        var list = await _repository.GetByResourceAsync(resourceId, tenantId, ct);
         return _mapper.Map<IList<RolePermissionResponse>>(list);
     }
 
     public async Task<IList<RolePermissionResponse>> GetAllAsync(CancellationToken ct)
     {
         var tenantId = _currentUser.GetTenantId();
-        var list = await _repository.GetAllAsync(tenantId);
+        var list = await _repository.GetAllAsync(tenantId, ct);
         return _mapper.Map<IList<RolePermissionResponse>>(list);
+    }
+
+    public async Task<bool> BulkUploadAsync(IFormFile file, CancellationToken ct)
+    {
+        // Valida arquivo usando serviço centralizado
+        if (!_fileValidation.ValidateFile(file))
+            return false;
+
+        // Lê itens do CSV
+        var items = ReadCsvFile(file);
+        if (items == null)
+            return false;
+
+        if (!items.Any())
+        {
+            _notify.Add(_localization.GetMessage("Application.Service.RolePermission.BulkUpload.EmptyFile"), 400);
+            return false;
+        }
+
+        // Processa cada item
+        return await ProcessBulkItemsAsync(items, ct);
+    }
+
+    private List<BulkUploadRolePermissionItem> ReadCsvFile(IFormFile file)
+    {
+        try
+        {
+            // Cria StreamReader com encoding UTF-8 forçado
+            using var reader = file.OpenReadStream().CreateUtf8StreamReader();
+
+            var config = new CsvConfiguration(CultureInfo.InvariantCulture)
+            {
+                HasHeaderRecord = true,
+                Delimiter = ";", // CSV usa ponto e vírgula como delimitador
+                MissingFieldFound = null,
+                HeaderValidated = null,
+                TrimOptions = TrimOptions.Trim,
+                BadDataFound = null // Ignora linhas mal formatadas ao invés de lançar exceção
+            };
+
+            using var csv = new CsvReader(reader, config);
+            var records = new List<BulkUploadRolePermissionItem>();
+
+            csv.Read();
+            csv.ReadHeader();
+
+            int rowCount = 0;
+            int maxRows = DomainExtensions.GetMaxCsvRows();
+
+            while (csv.Read() && rowCount < maxRows)
+            {
+                try
+                {
+                    var record = csv.GetRecord<BulkUploadRolePermissionItem>();
+                    if (record != null)
+                    {
+                        // Valida se os campos não contêm conteúdo perigoso
+                        if (record.RoleId <= 0)
+                        {
+                            _notify.Add(_localization.GetMessage("Application.Service.RolePermission.ReadCsvFile.RoleId.IsSafeCsvValue", rowCount + 2), 400);
+                            continue;
+                        }
+                        if (record.ResourceId <= 0)
+                        {
+                            _notify.Add(_localization.GetMessage("Application.Service.RolePermission.ReadCsvFile.ResourceId.IsSafeCsvValue", rowCount + 2), 400);
+                            continue;
+                        }
+                        if (record.ActionId <= 0)
+                        {
+                            _notify.Add(_localization.GetMessage("Application.Service.RolePermission.ReadCsvFile.ActionId.IsSafeCsvValue", rowCount + 2), 400);
+                            continue;
+                        }
+
+                        records.Add(record);
+                    }
+                    rowCount++;
+                }
+                catch (CsvHelperException ex)
+                {
+                    // Log linha com erro mas continua processamento
+                    _notify.Add(_localization.GetMessage("Application.Service.RolePermission.ReadCsvFile.CsvHelperException", rowCount + 2), 400);
+                    rowCount++;
+                    continue;
+                }
+            }
+
+            if (rowCount >= maxRows)
+            {
+                _notify.Add(_localization.GetMessage("Application.Service.RolePermission.ReadCsvFile.MaxRows", maxRows), 400);
+                return null;
+            }
+
+            return records;
+        }
+        catch (Exception ex)
+        {
+            _notify.Add(_localization.GetMessage("Application.Service.RolePermission.ReadCsvFile.Exception"), 400);
+            return null;
+        }
+    }
+
+    private async Task<bool> ProcessBulkItemsAsync(List<BulkUploadRolePermissionItem> items, CancellationToken ct)
+    {
+        var hasErrors = false;
+        var tenantId = _currentUser.GetTenantId();
+
+        foreach (var item in items)
+        {
+            // Valida campos obrigatórios
+            if (!ValidateBulkItem(item))
+            {
+                hasErrors = true;
+                continue;
+            }
+
+            // Verifica duplicidade
+            var exists = await _repository.ExistsAsync(tenantId, item.RoleId, item.ResourceId, item.ActionId, ct);
+            if (exists)
+            {
+                _notify.Add(_localization.GetMessage("Application.Service.RolePermission.ProcessBulkItems.ExistsByName"), 400);
+                hasErrors = true;
+                continue;
+            }
+
+            // Cria a entidade
+            var entity = new RolePermissionEntity(tenantId, item.RoleId, item.ResourceId, item.ActionId, _currentUser.GetUserId());
+
+            // Tenta criar no domínio
+            var success = await _domain.CreateAsync(entity, ct);
+
+            if (!success)
+            {
+                _notify.Add(_localization.GetMessage("Application.Service.RolePermission.ProcessBulkItems.FailedToCreate"), 400);
+                hasErrors = true;
+            }
+        }
+
+        return !hasErrors;
+    }
+
+    private bool ValidateBulkItem(BulkUploadRolePermissionItem item)
+    {
+        if (item.RoleId <= 0)
+        {
+            _notify.Add(_localization.GetMessage("Application.Service.RolePermission.ValidateBulkItem.RoleId", item.RoleId), 400);
+            return false;
+        }
+
+        if (item.ResourceId <= 0)
+        {
+            _notify.Add(_localization.GetMessage("Application.Service.RolePermission.ValidateBulkItem.ResourceId", item.ResourceId), 400);
+            return false;
+        }
+
+        if (item.ActionId <= 0)
+        {
+            _notify.Add(_localization.GetMessage("Application.Service.RolePermission.ValidateBulkItem.ActionId", item.ActionId), 400);
+            return false;
+        }
+
+        return true;
     }
 }

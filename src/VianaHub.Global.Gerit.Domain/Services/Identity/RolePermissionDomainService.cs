@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using FluentValidation;
 using VianaHub.Global.Gerit.Domain.Entities.Identity;
 using VianaHub.Global.Gerit.Domain.Interfaces.Identity;
@@ -16,13 +15,13 @@ public class RolePermissionDomainService : IRolePermissionDomainService
         _validator = validator;
     }
 
-    public async Task<bool> CreateAsync(RolePermissionEntity entity)
+    public async Task<bool> CreateAsync(RolePermissionEntity entity, CancellationToken ct)
     {
         var validation = _validator.Validate(entity);
         if (!validation.IsValid)
             throw new ValidationException(validation.Errors);
 
-        await _repository.AddAsync(entity);
+        await _repository.AddAsync(entity, ct);
         return true;
     }
 }

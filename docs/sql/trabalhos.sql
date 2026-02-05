@@ -23,28 +23,13 @@ FOR JSON AUTO;
 
 
 /*
+delete dbo.Plans where id != 2;
 
-FunctionsEntity
 
-ActivateFunctionValidator
-CreateFunctionValidator
-DeactivateFunctionValidator
-DeleteFunctionValidator
-FunctionValidator
-UpdateFunctionValidator
-FunctionMapping
-FunctionDataRepository
-IFunctionAppService
-BulkUploadFunctionItem
-CreateFunctionRequest
-UpdateFunctionRequest
-FunctionResponse
-FunctionMappingProfile
-FunctionAppService
-FunctionEndpoint
-CreateFunctionRouteValidator
-UpdateFunctionRouteValidator
-
+Subscriptions
+Subscription
+subscriptions
+subscription
 
 Update dbo.Actions Set name = 'PostDeactivate' where id = 7;
 delete dbo.Actions;

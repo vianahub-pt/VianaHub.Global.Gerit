@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using VianaHub.Global.Gerit.Domain.Entities.Identity;
 using VianaHub.Global.Gerit.Domain.Interfaces.Identity;
@@ -17,52 +14,55 @@ public class UserRoleDataRepository : IUserRoleDataRepository
         _context = context;
     }
 
-    public async Task AddAsync(UserRoleEntity entity)
-    {
-        await _context.UserRoles.AddAsync(entity);
-        await _context.SaveChangesAsync();
-    }
-
-    public async Task<UserRoleEntity> GetByIdAsync(int id, int tenantId)
+    public async Task<UserRoleEntity> GetByIdAsync(int tenantId, int id, CancellationToken ct)
     {
         return await _context.UserRoles
             .Include(x => x.User)
             .Include(x => x.Role)
-            .FirstOrDefaultAsync(x => x.Id == id && x.TenantId == tenantId);
+            .FirstOrDefaultAsync(x => x.TenantId == tenantId && x.Id == id, ct);
     }
-
-    public async Task DeleteAsync(int id, int tenantId)
-    {
-        var entity = await _context.UserRoles.FirstOrDefaultAsync(x => x.Id == id && x.TenantId == tenantId);
-        if (entity != null)
-        {
-            _context.UserRoles.Remove(entity);
-            await _context.SaveChangesAsync();
-        }
-    }
-
-    public async Task<IList<UserRoleEntity>> GetByUserAsync(int userId, int tenantId)
+    public async Task<IList<UserRoleEntity>> GetByUserAsync(int tenantId, int userId, CancellationToken ct)
     {
         return await _context.UserRoles
             .Include(x => x.Role)
-            .Where(x => x.UserId == userId && x.TenantId == tenantId)
-            .ToListAsync();
+            .Where(x => x.TenantId == tenantId && x.UserId == userId)
+            .ToListAsync(ct);
     }
 
-    public async Task<IList<UserRoleEntity>> GetByRoleAsync(int roleId, int tenantId)
+    public async Task<IList<UserRoleEntity>> GetByRoleAsync(int tenantId, int roleId, CancellationToken ct)
     {
         return await _context.UserRoles
             .Include(x => x.User)
-            .Where(x => x.RoleId == roleId && x.TenantId == tenantId)
-            .ToListAsync();
+            .Where(x => x.TenantId == tenantId && x.RoleId == roleId)
+            .ToListAsync(ct);
     }
 
-    public async Task<IList<UserRoleEntity>> GetAllAsync(int tenantId)
+    public async Task<IList<UserRoleEntity>> GetAllAsync(int tenantId, CancellationToken ct)
     {
         return await _context.UserRoles
             .Include(x => x.User)
             .Include(x => x.Role)
             .Where(x => x.TenantId == tenantId)
-            .ToListAsync();
+            .ToListAsync(ct);
+    }
+    public async Task<bool> ExistsAsync(int tenantId, int userId, int roleId, CancellationToken ct)
+    {
+        return await _context.UserRoles.AnyAsync(x => x.TenantId == tenantId && x.UserId == userId && x.RoleId == roleId, ct);
+    }
+
+    public async Task AddAsync(UserRoleEntity entity, CancellationToken ct)
+    {
+        await _context.UserRoles.AddAsync(entity, ct);
+        await _context.SaveChangesAsync(ct);
+    }
+
+    public async Task DeleteAsync(int tenantId, int id, CancellationToken ct)
+    {
+        var entity = await _context.UserRoles.FirstOrDefaultAsync(x => x.TenantId == tenantId && x.Id == id, ct);
+        if (entity != null)
+        {
+            _context.UserRoles.Remove(entity);
+            await _context.SaveChangesAsync(ct);
+        }
     }
 }

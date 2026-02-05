@@ -25,23 +25,12 @@ public class RolePermissionEntity : Entity
     /// <summary>
     /// Construtor para criação de uma nova permissão de Role
     /// </summary>
-    public RolePermissionEntity(int tenantId, int roleId, int resourceId, int actionId)
+    public RolePermissionEntity(int tenantId, int roleId, int resourceId, int actionId, int createdBy)
     {
-        if (tenantId <= 0)
-            throw new ArgumentException("TenantId inválido.", nameof(tenantId));
-
-        if (roleId <= 0)
-            throw new ArgumentException("RoleId inválido.", nameof(roleId));
-
-        if (resourceId <= 0)
-            throw new ArgumentException("ResourceId inválido.", nameof(resourceId));
-
-        if (actionId <= 0)
-            throw new ArgumentException("ActionId inválido.", nameof(actionId));
-
         TenantId = tenantId;
         RoleId = roleId;
         ResourceId = resourceId;
         ActionId = actionId;
+        CreatedBy = createdBy;
     }
 }

@@ -1,4 +1,6 @@
-LegalName;TradeName;Consent
-Empresa Exemplo Lda;Empresa Exemplo;true
-Empresa Teste SA;Teste Corp;true
-Empresa Demo Unipessoal Lda;Demo;false
+Name;Consent
+Empresa Exemplo Lda;TRUE
+Empresa Teste SA;TRUE
+Empresa Demo Unipessoal Lda;FALSE
+VianaHub Lda;TRUE
+Teste Lda;TRUE
