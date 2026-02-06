@@ -89,8 +89,7 @@ public class ResourceDomainService : IResourceDomainService
             }
             return false;
         }
-        
-        entity.Activate(entity.ModifiedBy);
+
         return await _repo.UpdateAsync(entity, ct);
     }
     
@@ -105,8 +104,7 @@ public class ResourceDomainService : IResourceDomainService
             }
             return false;
         }
-        
-        entity.Deactivate(entity.ModifiedBy);
+
         return await _repo.UpdateAsync(entity, ct);
     }
     
@@ -121,8 +119,7 @@ public class ResourceDomainService : IResourceDomainService
             }
             return false;
         }
-        
-        entity.Delete(entity.ModifiedBy);
+
         return await _repo.UpdateAsync(entity, ct);
     }
 }

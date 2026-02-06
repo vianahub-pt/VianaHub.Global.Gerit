@@ -26,72 +26,31 @@ public class TenantAddress : Entity
     /// <summary>
     /// Construtor para criação de um novo endereço do Tenant
     /// </summary>
-    public TenantAddress(int tenantId, string street, string city, string postalCode, 
-        string district = null, string countryCode = "PT", bool isPrimary = false)
+    public TenantAddress(int tenantId, string street, string city, string postalCode, string district, string countryCode, bool isPrimary, int createdBy)
     {
         TenantId = tenantId;
-        SetStreet(street);
-        SetCity(city);
-        SetPostalCode(postalCode);
+        Street = street;
+        City = city;
+        PostalCode = postalCode;
         District = district;
-        SetCountryCode(countryCode);
+        CountryCode = countryCode;
         IsPrimary = isPrimary;
         IsActive = true;
         IsDeleted = false;
+        CreatedBy = createdBy;
+        CreatedAt = DateTime.UtcNow;
     }
 
-    public void SetStreet(string street)
+    public void Update(string street, string city, string postalCode, string district, string countryCode, int modifiedBy)
     {
-        if (string.IsNullOrWhiteSpace(street))
-            throw new ArgumentException("Rua não pode ser vazia.", nameof(street));
-
-        if (street.Length > 200)
-            throw new ArgumentException("Rua não pode ter mais de 200 caracteres.", nameof(street));
-
         Street = street;
-    }
-
-    public void SetCity(string city)
-    {
-        if (string.IsNullOrWhiteSpace(city))
-            throw new ArgumentException("Cidade não pode ser vazia.", nameof(city));
-
-        if (city.Length > 100)
-            throw new ArgumentException("Cidade não pode ter mais de 100 caracteres.", nameof(city));
-
         City = city;
-    }
-
-    public void SetPostalCode(string postalCode)
-    {
-        if (string.IsNullOrWhiteSpace(postalCode))
-            throw new ArgumentException("Código postal não pode ser vazio.", nameof(postalCode));
-
-        if (postalCode.Length > 20)
-            throw new ArgumentException("Código postal não pode ter mais de 20 caracteres.", nameof(postalCode));
-
         PostalCode = postalCode;
-    }
-
-    public void SetDistrict(string district)
-    {
-        if (district?.Length > 100)
-            throw new ArgumentException("Distrito não pode ter mais de 100 caracteres.", nameof(district));
-
         District = district;
+        CountryCode = countryCode;
+        ModifiedBy = modifiedBy;
+        ModifiedAt = DateTime.UtcNow;
     }
-
-    public void SetCountryCode(string countryCode)
-    {
-        if (string.IsNullOrWhiteSpace(countryCode))
-            throw new ArgumentException("Código do país não pode ser vazio.", nameof(countryCode));
-
-        if (countryCode.Length != 2)
-            throw new ArgumentException("Código do país deve ter exatamente 2 caracteres.", nameof(countryCode));
-
-        CountryCode = countryCode.ToUpper();
-    }
-
     public void SetAsPrimary()
     {
         IsPrimary = true;

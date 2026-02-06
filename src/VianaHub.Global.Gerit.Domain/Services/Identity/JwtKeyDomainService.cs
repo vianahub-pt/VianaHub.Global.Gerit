@@ -16,6 +16,7 @@ public class JwtKeyDomainService : IJwtKeyDomainService
     private readonly INotify _notify;
     private readonly IEntityDomainValidator<JwtKeyEntity> _validator;
     private readonly ILocalizationService _localization;
+    private readonly ICurrentUserService _currentUser;
     private readonly ILogger<JwtKeyDomainService> _logger;
     private readonly ISecretProvider _secretProvider;
 
@@ -25,6 +26,7 @@ public class JwtKeyDomainService : IJwtKeyDomainService
         INotify notify,
         IEntityDomainValidator<JwtKeyEntity> validator,
         ILocalizationService localization,
+        ICurrentUserService currentUser,
         ILogger<JwtKeyDomainService> logger,
         ISecretProvider secretProvider)
     {
@@ -33,6 +35,7 @@ public class JwtKeyDomainService : IJwtKeyDomainService
         _notify = notify;
         _validator = validator;
         _localization = localization;
+        _currentUser = currentUser;
         _logger = logger;
         _secretProvider = secretProvider;
     }
@@ -130,14 +133,14 @@ public class JwtKeyDomainService : IJwtKeyDomainService
         if (activeKey != null && activeKey.Id != existing.Id)
         {
             // Desativar a chave anterior
-            activeKey.Deactivate(key.ModifiedBy ?? 0);
+            activeKey.Deactivate(_currentUser.GetUserId());
             await _repo.UpdateAsync(activeKey, ct);
 
             _logger.LogInformation("?? [ActivateAsync] Chave anterior desativada. Id={OldKeyId}, KeyId={OldKeyKeyId}",
                 activeKey.Id, activeKey.KeyId);
         }
 
-        existing.Activate(key.ModifiedBy ?? 0);
+        existing.Activate(_currentUser.GetUserId());
         var updated = await _repo.UpdateAsync(existing, ct);
 
         if (updated)
@@ -166,7 +169,7 @@ public class JwtKeyDomainService : IJwtKeyDomainService
             return false;
         }
 
-        existing.Deactivate(key.ModifiedBy ?? 0);
+        existing.Deactivate(_currentUser.GetUserId());
         var updated = await _repo.UpdateAsync(existing, ct);
 
         if (updated)
@@ -223,14 +226,14 @@ public class JwtKeyDomainService : IJwtKeyDomainService
                     existing.MaxTokenLifetimeMinutes);
 
                 await _repo.AddAsync(newKey, ct);
-                newKey.Activate(modifiedBy);
+                newKey.Activate(_currentUser.GetUserId());
                 await _repo.UpdateAsync(newKey, ct);
 
                 _logger.LogInformation("? [RevokeAsync] Nova chave gerada e ativada. Id={NewKeyId}, KeyId={NewKeyKeyId}", newKey.Id, newKey.KeyId);
             }
         }
 
-        existing.Revoke(reason, modifiedBy);
+        existing.Revoke(reason, _currentUser.GetUserId());
         var updated = await _repo.UpdateAsync(existing, ct);
 
         if (updated)
@@ -258,7 +261,7 @@ public class JwtKeyDomainService : IJwtKeyDomainService
             return false;
         }
 
-        existing.Delete(key.ModifiedBy ?? 0);
+        existing.Delete(_currentUser.GetUserId());
         return await _repo.UpdateAsync(existing, ct);
     }
 

@@ -26,7 +26,7 @@ public class EquipmentEntity : Entity
     /// <summary>
     /// Construtor para criação de um novo Equipamento
     /// </summary>
-    public EquipmentEntity(int tenantId, string name, TypeEquipament typeEquipament, string serialNumber = null)
+    public EquipmentEntity(int tenantId, string name, TypeEquipament typeEquipament, string serialNumber, int createdBy)
     {
         TenantId = tenantId;
         Name = name;
@@ -35,27 +35,37 @@ public class EquipmentEntity : Entity
         SerialNumber = serialNumber;
         IsActive = true;
         IsDeleted = false;
+        CreatedBy = createdBy;
+        CreatedAt = DateTime.UtcNow;
     }
 
-    public void Update(string name, TypeEquipament typeEquipament, string serialNumber = null)
+    public void Update(string name, TypeEquipament typeEquipament, string serialNumber, int modifiedBy)
     {
         Name = name;
         TypeEquipament = typeEquipament;
         SerialNumber = serialNumber;
+        ModifiedBy = modifiedBy;
+        ModifiedAt = DateTime.UtcNow;
     }
-    public void Activate()
+    public void Activate(int modifiedBy)
     {
         IsActive = true;
+        ModifiedBy = modifiedBy;
+        ModifiedAt = DateTime.UtcNow;
     }
 
-    public void Deactivate()
+    public void Deactivate(int modifiedBy)
     {
         IsActive = false;
+        ModifiedBy = modifiedBy;
+        ModifiedAt = DateTime.UtcNow;
     }
 
-    public void Delete()
+    public void Delete(int modifiedBy)
     {
         IsDeleted = true;
         IsActive = false;
+        ModifiedBy = modifiedBy;
+        ModifiedAt = DateTime.UtcNow;
     }
 }

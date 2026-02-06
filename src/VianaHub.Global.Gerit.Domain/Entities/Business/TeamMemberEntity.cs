@@ -10,6 +10,7 @@ namespace VianaHub.Global.Gerit.Domain.Entities.Business;
 public class TeamMemberEntity : Entity, IAggregateRoot
 {
     public int TenantId { get; private set; }
+    public int FunctionId { get; private set; }
     public string Name { get; private set; }
     public string TaxNumber { get; private set; }
     public bool IsActive { get; private set; }
@@ -17,6 +18,7 @@ public class TeamMemberEntity : Entity, IAggregateRoot
 
     // Navigation Properties
     public TenantEntity Tenant { get; private set; }
+    public FunctionEntity Function { get; private set; }
 
     private readonly List<TeamMemberContactEntity> _contacts = new();
     public IReadOnlyCollection<TeamMemberContactEntity> Contacts => _contacts.AsReadOnly();
@@ -30,48 +32,53 @@ public class TeamMemberEntity : Entity, IAggregateRoot
     /// <summary>
     /// Construtor para criação de um novo Membro da Equipe
     /// </summary>
-    public TeamMemberEntity(int tenantId, string name, string taxNumber = null)
+    public TeamMemberEntity(int tenantId, int functionId, string name, string taxNumber, int createdBy)
     {
         TenantId = tenantId;
-        SetName(name);
+        FunctionId = functionId;
+        Name = name;
         TaxNumber = taxNumber;
         IsActive = true;
         IsDeleted = false;
+        CreatedBy = createdBy;
+        CreatedAt = DateTime.UtcNow;
     }
 
-    public void SetName(string name)
+    public void Update(int functionId, string name, int modifiedBy)
     {
-        if (string.IsNullOrWhiteSpace(name))
-            throw new ArgumentException("Nome não pode ser vazio.", nameof(name));
-
-        if (name.Length > 150)
-            throw new ArgumentException("Nome não pode ter mais de 150 caracteres.", nameof(name));
-
+        FunctionId = functionId;
         Name = name;
+        ModifiedBy = modifiedBy;
+        ModifiedAt = DateTime.UtcNow;
     }
 
-    public void SetTaxNumber(string taxNumber)
+    public void UpdateTaxNumber(string taxNumber, int modifiedBy)
     {
-        if (taxNumber?.Length > 20)
-            throw new ArgumentException("Número fiscal não pode ter mais de 20 caracteres.", nameof(taxNumber));
-
         TaxNumber = taxNumber;
+        ModifiedBy = modifiedBy;
+        ModifiedAt = DateTime.UtcNow;
     }
 
-    public void Activate()
+    public void Activate(int modifiedBy)
     {
         IsActive = true;
+        ModifiedBy = modifiedBy;
+        ModifiedAt = DateTime.UtcNow;
     }
 
-    public void Deactivate()
+    public void Deactivate(int modifiedBy)
     {
         IsActive = false;
+        ModifiedBy = modifiedBy;
+        ModifiedAt = DateTime.UtcNow;
     }
 
-    public void Delete()
+    public void Delete(int modifiedBy)
     {
         IsDeleted = true;
         IsActive = false;
+        ModifiedBy = modifiedBy;
+        ModifiedAt = DateTime.UtcNow;
     }
 
     public void AddContact(TeamMemberContactEntity contact)

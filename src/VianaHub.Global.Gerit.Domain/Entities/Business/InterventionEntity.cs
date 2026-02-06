@@ -43,128 +43,88 @@ public class InterventionEntity : Entity, IAggregateRoot
     /// Construtor para criação de uma nova Intervenção
     /// </summary>
     public InterventionEntity(int tenantId, int clientId, int teamMemberId, int vehicleId,
-        string title, string description, DateTime startDateTime, decimal estimatedValue)
+        string title, string description, DateTime startDateTime, decimal estimatedValue, int modifiedBy)
     {
         TenantId = tenantId;
         ClientId = clientId;
         TeamMemberId = teamMemberId;
         VehicleId = vehicleId;
-        SetTitle(title);
-        SetDescription(description);
-        SetStartDateTime(startDateTime);
-        SetEstimatedValue(estimatedValue);
+        Title = title;
+        Description = description;
+        StartDateTime = startDateTime;
+        EstimatedValue = estimatedValue;
         Status = InterventionStatus.Pending;
         IsActive = true;
         IsDeleted = false;
+        ModifiedBy = modifiedBy;
+        ModifiedAt = DateTime.UtcNow;
     }
 
-    public void SetTitle(string title)
+    public void UpdateDetails(string title, string description, DateTime startDateTime, decimal estimatedValue, int modifiedBy)
     {
-        if (string.IsNullOrWhiteSpace(title))
-            throw new ArgumentException("Título não pode ser vazio.", nameof(title));
-
-        if (title.Length > 200)
-            throw new ArgumentException("Título não pode ter mais de 200 caracteres.", nameof(title));
-
         Title = title;
-    }
-
-    public void SetDescription(string description)
-    {
-        if (string.IsNullOrWhiteSpace(description))
-            throw new ArgumentException("Descrição não pode ser vazia.", nameof(description));
-
-        if (description.Length > 2000)
-            throw new ArgumentException("Descrição não pode ter mais de 2000 caracteres.", nameof(description));
-
         Description = description;
-    }
-
-    public void SetStartDateTime(DateTime startDateTime)
-    {
-        if (startDateTime == default)
-            throw new ArgumentException("Data de início inválida.", nameof(startDateTime));
-
         StartDateTime = startDateTime;
-    }
-
-    public void SetEndDateTime(DateTime? endDateTime)
-    {
-        if (endDateTime.HasValue && endDateTime.Value < StartDateTime)
-            throw new ArgumentException("Data de fim não pode ser anterior à data de início.", nameof(endDateTime));
-
-        EndDateTime = endDateTime;
-    }
-
-    public void SetEstimatedValue(decimal estimatedValue)
-    {
-        if (estimatedValue < 0)
-            throw new ArgumentException("Valor estimado não pode ser negativo.", nameof(estimatedValue));
-
         EstimatedValue = estimatedValue;
+        ModifiedBy = modifiedBy;
+        ModifiedAt = DateTime.UtcNow;
     }
 
-    public void SetRealValue(decimal? realValue)
-    {
-        if (realValue.HasValue && realValue.Value < 0)
-            throw new ArgumentException("Valor real não pode ser negativo.", nameof(realValue));
-
-        RealValue = realValue;
-    }
-
-    public void SetStatus(InterventionStatus status)
+    public void SetStatus(InterventionStatus status, int modifiedBy)
     {
         Status = status;
+        ModifiedBy = modifiedBy;
+        ModifiedAt = DateTime.UtcNow;
     }
 
-    public void Start()
+    public void Start(int modifiedBy)
     {
-        if (Status != InterventionStatus.Pending && Status != InterventionStatus.Paused)
-            throw new InvalidOperationException("Intervenção só pode ser iniciada se estiver pendente ou pausada.");
-
         Status = InterventionStatus.InProgress;
+        ModifiedBy = modifiedBy;
+        ModifiedAt = DateTime.UtcNow;
     }
 
-    public void Pause()
+    public void Pause(int modifiedBy)
     {
-        if (Status != InterventionStatus.InProgress)
-            throw new InvalidOperationException("Intervenção só pode ser pausada se estiver em progresso.");
-
         Status = InterventionStatus.Paused;
     }
 
-    public void Complete(decimal realValue)
+    public void Complete(decimal realValue, int modifiedBy)
     {
-        if (Status != InterventionStatus.InProgress)
-            throw new InvalidOperationException("Intervenção só pode ser concluída se estiver em progresso.");
-
-        SetRealValue(realValue);
+        RealValue = realValue;
         EndDateTime = DateTime.UtcNow;
         Status = InterventionStatus.Completed;
+        ModifiedBy = modifiedBy;
+        ModifiedAt = DateTime.UtcNow;
     }
 
-    public void Cancel()
+    public void Cancel(int modifiedBy)
     {
-        if (Status == InterventionStatus.Completed)
-            throw new InvalidOperationException("Intervenção já concluída não pode ser cancelada.");
-
         Status = InterventionStatus.Cancelled;
+        ModifiedBy = modifiedBy;
+        ModifiedAt = DateTime.UtcNow;
     }
 
-    public void Activate()
+    public void Activate(int modifiedBy)
     {
         IsActive = true;
+        ModifiedBy = modifiedBy;
+        ModifiedAt = DateTime.UtcNow;
     }
 
-    public void Deactivate()
+    public void Deactivate(int modifiedBy)
     {
         IsActive = false;
+        ModifiedBy = modifiedBy;
+        ModifiedAt = DateTime.UtcNow;
     }
 
-    public void Delete()
+    public void Delete(int modifiedBy)
     {
         IsDeleted = true;
         IsActive = false;
+        ModifiedBy = modifiedBy;
+        ModifiedAt = DateTime.UtcNow;
     }
 
     public void AddContact(InterventionContactEntity contact)

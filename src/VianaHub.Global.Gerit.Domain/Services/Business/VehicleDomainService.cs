@@ -1,9 +1,9 @@
 using VianaHub.Global.Gerit.Domain.Base;
-using VianaHub.Global.Gerit.Domain.Tools.Notifications;
-using VianaHub.Global.Gerit.Domain.Tools.Pagination;
-using VianaHub.Global.Gerit.Domain.ReadModels;
 using VianaHub.Global.Gerit.Domain.Entities.Business;
 using VianaHub.Global.Gerit.Domain.Interfaces.Business;
+using VianaHub.Global.Gerit.Domain.ReadModels;
+using VianaHub.Global.Gerit.Domain.Tools.Notifications;
+using VianaHub.Global.Gerit.Domain.Tools.Pagination;
 
 namespace VianaHub.Global.Gerit.Domain.Services.Business;
 
@@ -85,7 +85,6 @@ public class VehicleDomainService : IVehicleDomainService
             return false;
         }
 
-        entity.Activate();
         return await _repo.UpdateAsync(entity, ct);
     }
 
@@ -101,7 +100,6 @@ public class VehicleDomainService : IVehicleDomainService
             return false;
         }
 
-        entity.Deactivate();
         return await _repo.UpdateAsync(entity, ct);
     }
 
@@ -117,7 +115,6 @@ public class VehicleDomainService : IVehicleDomainService
             return false;
         }
 
-        entity.Delete();
         return await _repo.UpdateAsync(entity, ct);
     }
 }

@@ -33,4 +33,12 @@ public class RolePermissionEntity : Entity
         ActionId = actionId;
         CreatedBy = createdBy;
     }
+
+    public void Update(int resourceId, int actionId, int modifiedBy)
+    {
+        ResourceId = resourceId;
+        ActionId = actionId;
+        ModifiedBy = modifiedBy;
+        ModifiedAt = DateTime.UtcNow;
+    }
 }

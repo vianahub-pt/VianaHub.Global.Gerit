@@ -79,7 +79,7 @@ public class VehicleAppService : IVehicleAppService
             return false;
         }
 
-        var entity = new VehicleEntity(tenantId, request.Plate, request.Brand, request.Model, request.Year, request.Color, request.FuelType);
+        var entity = new VehicleEntity(tenantId, request.Plate, request.Brand, request.Model, request.Year, request.Color, request.FuelType, _currentUser.GetUserId());
         return await _domain.CreateAsync(entity, ct);
     }
 
@@ -92,7 +92,7 @@ public class VehicleAppService : IVehicleAppService
             return false;
         }
 
-        entity.Update(request.Plate, request.Brand, request.Model, request.Year, request.Color, request.FuelType);
+        entity.Update(request.Plate, request.Brand, request.Model, request.Year, request.Color, request.FuelType, _currentUser.GetUserId());
         return await _domain.UpdateAsync(entity, ct);
     }
 
@@ -105,7 +105,7 @@ public class VehicleAppService : IVehicleAppService
             return false;
         }
 
-        entity.Activate();
+        entity.Activate(_currentUser.GetUserId());
         return await _domain.ActivateAsync(entity, ct);
     }
 
@@ -118,7 +118,7 @@ public class VehicleAppService : IVehicleAppService
             return false;
         }
 
-        entity.Deactivate();
+        entity.Deactivate(_currentUser.GetUserId());
         return await _domain.DeactivateAsync(entity, ct);
     }
 
@@ -131,7 +131,7 @@ public class VehicleAppService : IVehicleAppService
             return false;
         }
 
-        entity.Delete();
+        entity.Delete(_currentUser.GetUserId());
         return await _domain.DeleteAsync(entity, ct);
     }
 
@@ -267,7 +267,7 @@ public class VehicleAppService : IVehicleAppService
             }
 
             // Cria a entidade
-            var entity = new VehicleEntity(tenantId, item.Plate, item.Brand, item.Model, item.Year, item.Color, item.FuelType);
+            var entity = new VehicleEntity(tenantId, item.Plate, item.Brand, item.Model, item.Year, item.Color, item.FuelType, _currentUser.GetUserId());
 
             // Tenta criar no domínio
             var success = await _domain.CreateAsync(entity, ct);

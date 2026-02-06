@@ -28,6 +28,10 @@ public class TeamMemberMapping : IEntityTypeConfiguration<TeamMemberEntity>
             .HasColumnName("TenantId")
             .IsRequired();
 
+        builder.Property(tm => tm.FunctionId)
+            .HasColumnName("FunctionId")
+            .IsRequired();
+
         builder.Property(tm => tm.Name)
             .HasColumnName("Name")
             .HasColumnType("NVARCHAR(150)")
@@ -54,8 +58,7 @@ public class TeamMemberMapping : IEntityTypeConfiguration<TeamMemberEntity>
 
         builder.Property(tm => tm.CreatedBy)
             .HasColumnName("CreatedBy")
-            .HasColumnType("NVARCHAR(50)")
-            .HasMaxLength(50)
+            .HasColumnType("INT")
             .IsRequired();
 
         builder.Property(tm => tm.CreatedAt)
@@ -66,8 +69,7 @@ public class TeamMemberMapping : IEntityTypeConfiguration<TeamMemberEntity>
 
         builder.Property(tm => tm.ModifiedBy)
             .HasColumnName("ModifiedBy")
-            .HasColumnType("NVARCHAR(50)")
-            .HasMaxLength(50)
+            .HasColumnType("INT")
             .IsRequired(false);
 
         builder.Property(tm => tm.ModifiedAt)
@@ -80,6 +82,12 @@ public class TeamMemberMapping : IEntityTypeConfiguration<TeamMemberEntity>
             .WithMany()
             .HasForeignKey(tm => tm.TenantId)
             .HasConstraintName("FK_TeamMembers_Tenant")
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasOne(tm => tm.Function)
+            .WithMany()
+            .HasForeignKey(tm => tm.FunctionId)
+            .HasConstraintName("FK_TeamMembers_Function")
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasMany(tm => tm.Contacts)

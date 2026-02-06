@@ -27,7 +27,7 @@ public class VehicleEntity : Entity
     /// <summary>
     /// Construtor para criação de um novo Veículo
     /// </summary>
-    public VehicleEntity(int tenantId, string plate, string brand, string model, int year, string color = null, string fuelType = null)
+    public VehicleEntity(int tenantId, string plate, string brand, string model, int year, string color, string fuelType, int createdBy)
     {
         TenantId = tenantId;
         Plate = plate;
@@ -38,9 +38,11 @@ public class VehicleEntity : Entity
         FuelType = fuelType;
         IsActive = true;
         IsDeleted = false;
+        CreatedBy = createdBy;
+        CreatedAt = DateTime.UtcNow;
     }
 
-    public void Update(string plate, string brand, string model, int year, string color = null, string fuelType = null)
+    public void Update(string plate, string brand, string model, int year, string color, string fuelType, int modifiedBy)
     {
         Plate = plate;
         Brand = brand;
@@ -48,20 +50,28 @@ public class VehicleEntity : Entity
         Year = year;
         Color = color;
         FuelType = fuelType;
+        ModifiedBy = modifiedBy;
+        ModifiedAt = DateTime.UtcNow;
     }
-    public void Activate()
+    public void Activate(int modifiedBy)
     {
         IsActive = true;
+        ModifiedBy = modifiedBy;
+        ModifiedAt = DateTime.UtcNow;
     }
 
-    public void Deactivate()
+    public void Deactivate(int modifiedBy)
     {
         IsActive = false;
+        ModifiedBy = modifiedBy;
+        ModifiedAt = DateTime.UtcNow;
     }
 
-    public void Delete()
+    public void Delete(int modifiedBy)
     {
         IsDeleted = true;
         IsActive = false;
+        ModifiedBy = modifiedBy;
+        ModifiedAt = DateTime.UtcNow;
     }
 }

@@ -7,7 +7,7 @@ select * from dbo.Actions order by id;
 select * from dbo.Resources;
 select * from dbo.Roles;
 select * from dbo.UserRoles;
-select * from dbo.RolePermissions;
+select * from dbo.RolePermissions order by ResourceId;
 select * from dbo.Clients;
 select * from dbo.JwtKeys;
 select * from dbo.RefreshTokens order by ExpiresAt desc;

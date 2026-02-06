@@ -23,7 +23,7 @@ public static class UserRoleEndpoint
         .CustomAuthorize("Admin,Manager", "UserRoles", "GetAll")
         .AllowAnonymous()
         .WithName("GetAllUserRoles")
-        .WithSummary("Swagger.Endpoint.UserRole.GetAllUserRoles.Summary")
+        .WithSummary("Swagger.Endpoint.UserRole.GetAll.Summary")
         .Produces<IEnumerable<UserRoleResponse>>(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
@@ -35,7 +35,7 @@ public static class UserRoleEndpoint
         .CustomAuthorize("Admin,Manager", "UserRoles", "GetBy")
         .AllowAnonymous()
         .WithName("GetUserRoleById")
-        .WithSummary("Swagger.Endpoint.UserRole.GetUserRoleById.Summary")
+        .WithSummary("Swagger.Endpoint.UserRole.GetById.Summary")
         .Produces<UserRoleResponse>(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
@@ -48,7 +48,7 @@ public static class UserRoleEndpoint
         .CustomAuthorize("Admin,Manager,User", "UserRoles", "GetBy")
         .AllowAnonymous()
         .WithName("GetUserRolesByUser")
-        .WithSummary("Swagger.Endpoint.UserRole.GetUserRolesByUser.Summary")
+        .WithSummary("Swagger.Endpoint.UserRole.GetByUser.Summary")
         .Produces<IEnumerable<UserRoleResponse>>(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
@@ -60,7 +60,7 @@ public static class UserRoleEndpoint
         .CustomAuthorize("Admin,Manager,User", "UserRoles", "GetBy")
         .AllowAnonymous()
         .WithName("GetUserRolesByRole")
-        .WithSummary("Swagger.Endpoint.UserRole.GetUserRolesByRole.Summary")
+        .WithSummary("Swagger.Endpoint.UserRole.GetByRole.Summary")
         .Produces<IEnumerable<UserRoleResponse>>(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
@@ -72,7 +72,7 @@ public static class UserRoleEndpoint
         .CustomAuthorize("Admin,Manager", "UserRoles", "Create")
         .AllowAnonymous()
         .WithName("CreateUserRole")
-        .WithSummary("Swagger.Endpoint.UserRole.CreateUserRole.Summary")
+        .WithSummary("Swagger.Endpoint.UserRole.Create.Summary")
         .Produces(StatusCodes.Status201Created)
         .Produces<ErrorResponse>(StatusCodes.Status400BadRequest)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError)
@@ -87,7 +87,7 @@ public static class UserRoleEndpoint
         .CustomAuthorize("Admin,Manager", "UserRoles", "Update")
         .AllowAnonymous()
         .WithName("UpdateUserRole")
-        .WithSummary("Swagger.Endpoint.UserRole.UpdateUserRole.Summary")
+        .WithSummary("Swagger.Endpoint.UserRole.Update.Summary")
         .Produces(StatusCodes.Status204NoContent)
         .Produces<ErrorResponse>(StatusCodes.Status400BadRequest)
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
@@ -102,7 +102,7 @@ public static class UserRoleEndpoint
         .CustomAuthorize("Admin,Manager", "UserRoles", "Delete")
         .AllowAnonymous()
         .WithName("DeleteUserRole")
-        .WithSummary("Swagger.Endpoint.UserRole.DeleteUserRole.Summary")
+        .WithSummary("Swagger.Endpoint.UserRole.Delete.Summary")
         .Produces(StatusCodes.Status204NoContent)
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
@@ -121,8 +121,8 @@ public static class UserRoleEndpoint
         })
         .CustomAuthorize("Admin,BackOffice", "UserRoles", "BulkUpload")
         .AllowAnonymous()
-        .WithName("BulkUploadUsers")
-        .WithSummary("Swagger.Endpoint.UserRole.BulkUploadUsers.Summary")
+        .WithName("BulkUploadUserRole")
+        .WithSummary("Swagger.Endpoint.UserRole.BulkUpload.Summary")
         .DisableAntiforgery()
         .Accepts<IFormFile>("multipart/form-data")
         .Produces(StatusCodes.Status200OK)

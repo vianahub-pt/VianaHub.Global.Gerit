@@ -21,7 +21,7 @@ public static class EquipmentEndpoint
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "Equipments", "GetAll")
         .WithName("GetEquipments")
-        .WithSummary("Swagger.Endpoint.Equipment.GetEquipments.Summary")
+        .WithSummary("Swagger.Endpoint.Equipment.GetAll.Summary")
         .Produces(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
@@ -126,7 +126,7 @@ public static class EquipmentEndpoint
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "Equipments", "BulkUpload")
         .WithName("BulkUploadEquipments")
-        .WithSummary("Swagger.Endpoint.Equipment.BulkUploadEquipments.Summary")
+        .WithSummary("Swagger.Endpoint.Equipment.BulkUpload.Summary")
         .DisableAntiforgery()
         .Accepts<IFormFile>("multipart/form-data")
         .Produces(StatusCodes.Status200OK)

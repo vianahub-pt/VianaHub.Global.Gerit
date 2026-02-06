@@ -79,7 +79,7 @@ public class EquipmentAppService : IEquipmentAppService
             return false;
         }
 
-        var entity = new EquipmentEntity(tenantId, request.Name, request.TypeEquipament, request.SerialNumber);
+        var entity = new EquipmentEntity(tenantId, request.Name, request.TypeEquipament, request.SerialNumber, _currentUser.GetUserId());
         return await _domain.CreateAsync(entity, ct);
     }
 
@@ -92,7 +92,7 @@ public class EquipmentAppService : IEquipmentAppService
             return false;
         }
 
-        entity.Update(request.Name, request.TypeEquipament, request.SerialNumber);
+        entity.Update(request.Name, request.TypeEquipament, request.SerialNumber, _currentUser.GetUserId());
 
         return await _domain.UpdateAsync(entity, ct);
     }
@@ -106,7 +106,7 @@ public class EquipmentAppService : IEquipmentAppService
             return false;
         }
 
-        entity.Activate();
+        entity.Activate(_currentUser.GetUserId());
         return await _domain.ActivateAsync(entity, ct);
     }
 
@@ -119,7 +119,7 @@ public class EquipmentAppService : IEquipmentAppService
             return false;
         }
 
-        entity.Deactivate();
+        entity.Deactivate(_currentUser.GetUserId());
         return await _domain.DeactivateAsync(entity, ct);
     }
 
@@ -132,7 +132,7 @@ public class EquipmentAppService : IEquipmentAppService
             return false;
         }
 
-        entity.Delete();
+        entity.Delete(_currentUser.GetUserId());
         return await _domain.DeleteAsync(entity, ct);
     }
 
@@ -262,7 +262,7 @@ public class EquipmentAppService : IEquipmentAppService
             var type = item.TypeEquipament ?? VianaHub.Global.Gerit.Domain.Enums.TypeEquipament.ManualTool;
 
             // Cria a entidade
-            var entity = new EquipmentEntity(tenantId, item.Name, type, item.SerialNumber);
+            var entity = new EquipmentEntity(tenantId, item.Name, type, item.SerialNumber, _currentUser.GetUserId());
 
             // Tenta criar no domínio
             var success = await _domain.CreateAsync(entity, ct);

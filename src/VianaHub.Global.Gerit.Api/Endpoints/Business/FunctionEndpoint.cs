@@ -20,7 +20,7 @@ public static class FunctionEndpoint
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "Functions", "GetAll")
         .WithName("GetFunctions")
-        .WithSummary("Swagger.Endpoint.Function.GetFunctions.Summary")
+        .WithSummary("Swagger.Endpoint.Function.GetAll.Summary")
         .Produces(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
@@ -125,7 +125,7 @@ public static class FunctionEndpoint
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "Functions", "BulkUpload")
         .WithName("BulkUploadFunctions")
-        .WithSummary("Swagger.Endpoint.Function.BulkUploadFunctions.Summary")
+        .WithSummary("Swagger.Endpoint.Function.BulkUpload.Summary")
         .DisableAntiforgery()
         .Accepts<IFormFile>("multipart/form-data")
         .Produces(StatusCodes.Status200OK)

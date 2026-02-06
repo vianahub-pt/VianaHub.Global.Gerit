@@ -90,7 +90,6 @@ public class RoleDomainService : IRoleDomainService
             return false;
         }
         
-        entity.Activate(entity.ModifiedBy);
         return await _repo.UpdateAsync(entity, ct);
     }
     
@@ -105,8 +104,7 @@ public class RoleDomainService : IRoleDomainService
             }
             return false;
         }
-        
-        entity.Deactivate(entity.ModifiedBy);
+
         return await _repo.UpdateAsync(entity, ct);
     }
     
@@ -121,8 +119,7 @@ public class RoleDomainService : IRoleDomainService
             }
             return false;
         }
-        
-        entity.Delete(entity.ModifiedBy);
+
         return await _repo.UpdateAsync(entity, ct);
     }
 }

@@ -22,7 +22,7 @@ public static class UserEndpoint
         .CustomAuthorize("Admin,BackOffice,Manager,Operator", "Users", "GetAll")
         .AllowAnonymous()
         .WithName("GetAllUsers")
-        .WithSummary("Swagger.Endpoint.User.GetAllUsers.Summary")
+        .WithSummary("Swagger.Endpoint.User.GetAll.Summary")
         .Produces(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
@@ -34,7 +34,7 @@ public static class UserEndpoint
         .CustomAuthorize("Admin,BackOffice,Manager,Operator", "Users", "GetBy")
         .AllowAnonymous()
         .WithName("GetUserById")
-        .WithSummary("Swagger.Endpoint.User.GetUserById.Summary")
+        .WithSummary("Swagger.Endpoint.User.GetById.Summary")
         .Produces(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
@@ -47,7 +47,7 @@ public static class UserEndpoint
         .CustomAuthorize("Admin,BackOffice,Manager,Operator", "Users", "GetPaged")
         .AllowAnonymous()
         .WithName("GetUsersPaged")
-        .WithSummary("Swagger.Endpoint.User.GetUsersPaged.Summary")
+        .WithSummary("Swagger.Endpoint.User.GetPaged.Summary")
         .Produces(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
@@ -59,7 +59,7 @@ public static class UserEndpoint
         .CustomAuthorize("Admin,BackOffice,Manager", "Users", "Create")
         .AllowAnonymous()
         .WithName("CreateUser")
-        .WithSummary("Swagger.Endpoint.User.CreateUser.Summary")
+        .WithSummary("Swagger.Endpoint.User.Create.Summary")
         .Produces(StatusCodes.Status201Created)
         .Produces<ErrorResponse>(StatusCodes.Status400BadRequest)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError)
@@ -73,7 +73,7 @@ public static class UserEndpoint
         .CustomAuthorize("Admin,BackOffice,Manager", "Users", "Update")
         .AllowAnonymous()
         .WithName("UpdateUser")
-        .WithSummary("Swagger.Endpoint.User.UpdateUser.Summary")
+        .WithSummary("Swagger.Endpoint.User.Update.Summary")
         .Produces(StatusCodes.Status204NoContent)
         .Produces<ErrorResponse>(StatusCodes.Status400BadRequest)
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
@@ -88,7 +88,7 @@ public static class UserEndpoint
         .CustomAuthorize("Admin,BackOffice,Manager,User", "Users", "Update")
         .AllowAnonymous()
         .WithName("UpdateUserPassword")
-        .WithSummary("Swagger.Endpoint.User.UpdateUserPassword.Summary")
+        .WithSummary("Swagger.Endpoint.User.UpdatePassword.Summary")
         .Produces(StatusCodes.Status204NoContent)
         .Produces<ErrorResponse>(StatusCodes.Status400BadRequest)
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
@@ -102,7 +102,7 @@ public static class UserEndpoint
         .CustomAuthorize("Admin,BackOffice,Manager", "Users", "Activate")
         .AllowAnonymous()
         .WithName("ActivateUser")
-        .WithSummary("Swagger.Endpoint.User.ActivateUser.Summary")
+        .WithSummary("Swagger.Endpoint.User.Activate.Summary")
         .Produces(StatusCodes.Status204NoContent)
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
@@ -115,7 +115,7 @@ public static class UserEndpoint
         .CustomAuthorize("Admin,BackOffice,Manager", "Users", "Deactivate")
         .AllowAnonymous()
         .WithName("DeactivateUser")
-        .WithSummary("Swagger.Endpoint.User.DeactivateUser.Summary")
+        .WithSummary("Swagger.Endpoint.User.Deactivate.Summary")
         .Produces(StatusCodes.Status204NoContent)
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
@@ -128,7 +128,7 @@ public static class UserEndpoint
         .CustomAuthorize("Admin,BackOffice", "Users", "Delete")
         .AllowAnonymous()
         .WithName("DeleteUser")
-        .WithSummary("Swagger.Endpoint.User.DeleteUser.Summary")
+        .WithSummary("Swagger.Endpoint.User.Delete.Summary")
         .Produces(StatusCodes.Status204NoContent)
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
@@ -148,7 +148,7 @@ public static class UserEndpoint
         .CustomAuthorize("Admin,BackOffice", "Users", "BulkUpload")
         .AllowAnonymous()
         .WithName("BulkUploadUsers")
-        .WithSummary("Swagger.Endpoint.User.BulkUploadUsers.Summary")
+        .WithSummary("Swagger.Endpoint.User.BulkUpload.Summary")
         .DisableAntiforgery()
         .Accepts<IFormFile>("multipart/form-data")
         .Produces(StatusCodes.Status200OK)

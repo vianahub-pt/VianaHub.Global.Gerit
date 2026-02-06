@@ -22,7 +22,7 @@ public static class RolePermissionEndpoint
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "RolePermissions", "GetAll")
         .WithName("GetAllRolePermissions")
-        .WithSummary("Swagger.Endpoint.RolePermission.GetAllRolePermissions.Summary")
+        .WithSummary("Swagger.Endpoint.RolePermission.GetAll.Summary")
         .Produces<IEnumerable<RolePermissionResponse>>(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
@@ -33,7 +33,7 @@ public static class RolePermissionEndpoint
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "RolePermissions", "GetBy")
         .WithName("GetRolePermissionById")
-        .WithSummary("Swagger.Endpoint.RolePermission.GetRolePermissionById.Summary")
+        .WithSummary("Swagger.Endpoint.RolePermission.GetById.Summary")
         .Produces<RolePermissionResponse>(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
@@ -45,7 +45,7 @@ public static class RolePermissionEndpoint
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "RolePermissions", "GetBy")
         .WithName("GetRolePermissionsByRole")
-        .WithSummary("Swagger.Endpoint.RolePermission.GetRolePermissionsByRole.Summary")
+        .WithSummary("Swagger.Endpoint.RolePermission.GetByRole.Summary")
         .Produces<IEnumerable<RolePermissionResponse>>(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
@@ -56,7 +56,7 @@ public static class RolePermissionEndpoint
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "RolePermissions", "GetBy")
         .WithName("GetRolePermissionsByResource")
-        .WithSummary("Swagger.Endpoint.RolePermission.GetRolePermissionsByResource.Summary")
+        .WithSummary("Swagger.Endpoint.RolePermission.GetByResource.Summary")
         .Produces<IEnumerable<RolePermissionResponse>>(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
@@ -68,7 +68,7 @@ public static class RolePermissionEndpoint
         //.CustomAuthorize("Admin,BackOffice,Manager", "RolePermissions", "Create")
         .AllowAnonymous()
         .WithName("CreateRolePermission")
-        .WithSummary("Swagger.Endpoint.RolePermission.CreateRolePermission.Summary")
+        .WithSummary("Swagger.Endpoint.RolePermission.Create.Summary")
         .Produces(StatusCodes.Status201Created)
         .Produces<ErrorResponse>(StatusCodes.Status400BadRequest)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
@@ -80,7 +80,7 @@ public static class RolePermissionEndpoint
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "RolePermissions", "Delete")
         .WithName("DeleteRolePermission")
-        .WithSummary("Swagger.Endpoint.RolePermission.DeleteRolePermission.Summary")
+        .WithSummary("Swagger.Endpoint.RolePermission.Delete.Summary")
         .Produces(StatusCodes.Status204NoContent)
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
@@ -98,9 +98,9 @@ public static class RolePermissionEndpoint
             var success = await appService.BulkUploadAsync(file, ct);
             return notify.CustomResponse(success);
         })
-        .CustomAuthorize("Admin,BackOffice,Manager", "Roles", "BulkUpload")
-        .WithName("BulkUploadRoles")
-        .WithSummary("Swagger.Endpoint.RolePermission.BulkUploadRoles.Summary")
+        .CustomAuthorize("Admin,BackOffice,Manager", "RolePermissions", "BulkUpload")
+        .WithName("BulkUploadRolePermission")
+        .WithSummary("Swagger.Endpoint.RolePermission.BulkUpload.Summary")
         .DisableAntiforgery()
         .Accepts<IFormFile>("multipart/form-data")
         .Produces(StatusCodes.Status200OK)

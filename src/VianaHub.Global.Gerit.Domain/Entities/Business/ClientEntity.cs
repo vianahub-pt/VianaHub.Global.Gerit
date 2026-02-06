@@ -35,69 +35,59 @@ public class ClientEntity : Entity, IAggregateRoot
     /// <summary>
     /// Construtor para criação de um novo Cliente
     /// </summary>
-    public ClientEntity(int tenantId, string name, string phone, string email = null, bool consent = true)
+    public ClientEntity(int tenantId, string name, string phone, string email, bool consent, int createdBy)
     {
         TenantId = tenantId;
-        SetName(name);
-        SetPhone(phone);
+        Name = name;
+        Phone = phone;
         Email = email;
         Consent = consent;
         IsActive = true;
         IsDeleted = false;
+        CreatedBy = createdBy;
+        CreatedAt = DateTime.UtcNow;
     }
 
-    public void SetName(string name)
+    public void Update(string name, string phone, string email, bool consent, int modifiedBy)
     {
-        if (string.IsNullOrWhiteSpace(name))
-            throw new ArgumentException("Nome não pode ser vazio.", nameof(name));
-
-        if (name.Length > 150)
-            throw new ArgumentException("Nome não pode ter mais de 150 caracteres.", nameof(name));
-
         Name = name;
-    }
-
-    public void SetEmail(string email)
-    {
-        if (email != null && email.Length > 255)
-            throw new ArgumentException("Email não pode ter mais de 255 caracteres.", nameof(email));
-
-        Email = email;
-    }
-
-    public void SetPhone(string phone)
-    {
-        if (string.IsNullOrWhiteSpace(phone))
-            throw new ArgumentException("Telefone não pode ser vazio.", nameof(phone));
-
-        if (phone.Length > 50)
-            throw new ArgumentException("Telefone não pode ter mais de 50 caracteres.", nameof(phone));
-
         Phone = phone;
+        Email = email;
+        Consent = consent;
+        ModifiedBy = modifiedBy;
+        ModifiedAt = DateTime.UtcNow;
     }
 
-    public void UpdateConsent(bool consent)
+    public void UpdateConsent(bool consent, int modifiedBy)
     {
         Consent = consent;
+        ModifiedBy = modifiedBy;
+        ModifiedAt = DateTime.UtcNow;
     }
 
-    public void Activate()
+    public void Activate(int modifiedBy)
     {
         IsActive = true;
+        ModifiedBy = modifiedBy;
+        ModifiedAt = DateTime.UtcNow;
     }
 
-    public void Deactivate()
+    public void Deactivate(int modifiedBy)
     {
         IsActive = false;
+        ModifiedBy = modifiedBy;
+        ModifiedAt = DateTime.UtcNow;
     }
 
-    public void Delete()
+    public void Delete(int modifiedBy)
     {
         IsDeleted = true;
         IsActive = false;
+        ModifiedBy = modifiedBy;
+        ModifiedAt = DateTime.UtcNow;
     }
 
-    public void AddContact(ClientContactEntity contact)
+    public void AddContact(ClientContactEntity contact, int createdBy)
     {
         if (contact == null)
             throw new ArgumentNullException(nameof(contact));
@@ -105,7 +95,7 @@ public class ClientEntity : Entity, IAggregateRoot
         _contacts.Add(contact);
     }
 
-    public void AddAddress(ClientAddressEntity address)
+    public void AddAddress(ClientAddressEntity address, int createdBy)
     {
         if (address == null)
             throw new ArgumentNullException(nameof(address));
@@ -113,7 +103,7 @@ public class ClientEntity : Entity, IAggregateRoot
         _addresses.Add(address);
     }
 
-    public void AddFiscalData(ClientFiscalDataEntity fiscalData)
+    public void AddFiscalData(ClientFiscalDataEntity fiscalData, int createdBy)
     {
         if (fiscalData == null)
             throw new ArgumentNullException(nameof(fiscalData));

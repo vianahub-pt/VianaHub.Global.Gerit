@@ -21,7 +21,7 @@ public static class VehicleEndpoint
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "Vehicles", "GetAll")
         .WithName("GetVehicles")
-        .WithSummary("Swagger.Endpoint.Vehicle.GetVehicles.Summary")
+        .WithSummary("Swagger.Endpoint.Vehicle.GetAll.Summary")
         .Produces(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
@@ -126,7 +126,7 @@ public static class VehicleEndpoint
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "Vehicles", "BulkUpload")
         .WithName("BulkUploadVehicles")
-        .WithSummary("Swagger.Endpoint.Vehicle.BulkUploadVehicles.Summary")
+        .WithSummary("Swagger.Endpoint.Vehicle.BulkUpload.Summary")
         .DisableAntiforgery()
         .Accepts<IFormFile>("multipart/form-data")
         .Produces(StatusCodes.Status200OK)

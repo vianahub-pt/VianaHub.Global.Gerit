@@ -1,5 +1,6 @@
 ﻿using VianaHub.Global.Gerit.Domain.Base;
 using VianaHub.Global.Gerit.Domain.Entities.Business;
+using VianaHub.Global.Gerit.Domain.Interfaces;
 using VianaHub.Global.Gerit.Domain.Interfaces.Business;
 using VianaHub.Global.Gerit.Domain.ReadModels;
 using VianaHub.Global.Gerit.Domain.Tools.Notifications;
@@ -85,7 +86,6 @@ public class FunctionDomainService : IFunctionDomainService
             return false;
         }
 
-        entity.Activate();
         return await _repo.UpdateAsync(entity, ct);
     }
 
@@ -101,7 +101,6 @@ public class FunctionDomainService : IFunctionDomainService
             return false;
         }
 
-        entity.Deactivate();
         return await _repo.UpdateAsync(entity, ct);
     }
 
@@ -117,7 +116,6 @@ public class FunctionDomainService : IFunctionDomainService
             return false;
         }
 
-        entity.Delete();
         return await _repo.UpdateAsync(entity, ct);
     }
 }

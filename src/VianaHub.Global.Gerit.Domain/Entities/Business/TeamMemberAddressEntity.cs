@@ -29,96 +29,67 @@ public class TeamMemberAddressEntity : Entity
     /// <summary>
     /// Construtor para criação de um novo endereço do Membro da Equipe
     /// </summary>
-    public TeamMemberAddressEntity(int tenantId, int teamMemberId, string street, string city, string postalCode,
-        string district = null, string countryCode = "PT", bool isPrimary = false)
+    public TeamMemberAddressEntity(int tenantId, int teamMemberId, string street, string city, string postalCode, string district, string countryCode, bool isPrimary, int createdBy)
     {
         TenantId = tenantId;
         TeamMemberId = teamMemberId;
-        SetStreet(street);
-        SetCity(city);
-        SetPostalCode(postalCode);
+        Street = street;
+        City = city;
+        PostalCode = postalCode;
         District = district;
-        SetCountryCode(countryCode);
+        CountryCode = countryCode.ToUpper();
         IsPrimary = isPrimary;
         IsActive = true;
         IsDeleted = false;
+        CreatedBy = createdBy;
+        CreatedAt = DateTime.UtcNow;
     }
 
-    public void SetStreet(string street)
+    public void UpdateAddressInfo(string street, string city, string postalCode, string district, string countryCode, int modifiedBy)
     {
-        if (string.IsNullOrWhiteSpace(street))
-            throw new ArgumentException("Rua não pode ser vazia.", nameof(street));
-
-        if (street.Length > 200)
-            throw new ArgumentException("Rua não pode ter mais de 200 caracteres.", nameof(street));
-
         Street = street;
-    }
-
-    public void SetCity(string city)
-    {
-        if (string.IsNullOrWhiteSpace(city))
-            throw new ArgumentException("Cidade não pode ser vazia.", nameof(city));
-
-        if (city.Length > 100)
-            throw new ArgumentException("Cidade não pode ter mais de 100 caracteres.", nameof(city));
-
         City = city;
-    }
-
-    public void SetPostalCode(string postalCode)
-    {
-        if (string.IsNullOrWhiteSpace(postalCode))
-            throw new ArgumentException("Código postal não pode ser vazio.", nameof(postalCode));
-
-        if (postalCode.Length > 20)
-            throw new ArgumentException("Código postal não pode ter mais de 20 caracteres.", nameof(postalCode));
-
         PostalCode = postalCode;
-    }
-
-    public void SetDistrict(string district)
-    {
-        if (district?.Length > 100)
-            throw new ArgumentException("Distrito não pode ter mais de 100 caracteres.", nameof(district));
-
         District = district;
-    }
-
-    public void SetCountryCode(string countryCode)
-    {
-        if (string.IsNullOrWhiteSpace(countryCode))
-            throw new ArgumentException("Código do país não pode ser vazio.", nameof(countryCode));
-
-        if (countryCode.Length != 2)
-            throw new ArgumentException("Código do país deve ter exatamente 2 caracteres.", nameof(countryCode));
-
         CountryCode = countryCode.ToUpper();
+        ModifiedBy = modifiedBy;
+        ModifiedAt = DateTime.UtcNow;
     }
 
-    public void SetAsPrimary()
+
+    public void SetAsPrimary(int modifiedBy)
     {
         IsPrimary = true;
+        ModifiedBy = modifiedBy;
+        ModifiedAt = DateTime.UtcNow;
     }
 
-    public void RemoveAsPrimary()
+    public void RemoveAsPrimary(int modifiedBy)
     {
         IsPrimary = false;
+        ModifiedBy = modifiedBy;
+        ModifiedAt = DateTime.UtcNow;
     }
 
-    public void Activate()
+    public void Activate(int modifiedBy)
     {
         IsActive = true;
+        ModifiedBy = modifiedBy;
+        ModifiedAt = DateTime.UtcNow;
     }
 
-    public void Deactivate()
+    public void Deactivate(int modifiedBy)
     {
         IsActive = false;
+        ModifiedBy = modifiedBy;
+        ModifiedAt = DateTime.UtcNow;
     }
 
-    public void Delete()
+    public void Delete(int modifiedBy)
     {
         IsDeleted = true;
         IsActive = false;
+        ModifiedBy = modifiedBy;
+        ModifiedAt = DateTime.UtcNow;
     }
 }

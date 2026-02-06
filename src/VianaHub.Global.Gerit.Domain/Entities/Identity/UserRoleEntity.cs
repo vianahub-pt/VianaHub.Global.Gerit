@@ -30,4 +30,11 @@ public class UserRoleEntity : Entity
         RoleId = roleId;
         CreatedBy = createdBy;
     }
+
+    public void Update(int roleId, int modifiedBy)
+    {
+        RoleId = roleId;
+        ModifiedBy = modifiedBy;
+        ModifiedAt = DateTime.UtcNow;
+    }
 }

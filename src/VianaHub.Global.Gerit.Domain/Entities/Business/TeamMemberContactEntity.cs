@@ -28,71 +28,62 @@ public class TeamMemberContactEntity : Entity
     /// Construtor para criação de um novo contato do Membro da Equipe
     /// </summary>
     public TeamMemberContactEntity(int tenantId, int teamMemberId, string name, string email, 
-        string phone = null, bool isPrimary = false)
+        string phone, bool isPrimary, int createdBy)
     {
         TenantId = tenantId;
         TeamMemberId = teamMemberId;
-        SetName(name);
-        SetEmail(email);
+        Name = name;
+        Email = email;
         Phone = phone;
         IsPrimary = isPrimary;
         IsActive = true;
         IsDeleted = false;
+        CreatedBy = createdBy;
+        CreatedAt = DateTime.UtcNow;
     }
 
-    public void SetName(string name)
+    public void UpdateContactInfo(string name, string email, string phone, int modifiedBy)
     {
-        if (string.IsNullOrWhiteSpace(name))
-            throw new ArgumentException("Nome não pode ser vazio.", nameof(name));
-
-        if (name.Length > 150)
-            throw new ArgumentException("Nome não pode ter mais de 150 caracteres.", nameof(name));
-
         Name = name;
-    }
-
-    public void SetEmail(string email)
-    {
-        if (string.IsNullOrWhiteSpace(email))
-            throw new ArgumentException("Email não pode ser vazio.", nameof(email));
-
-        if (email.Length > 255)
-            throw new ArgumentException("Email não pode ter mais de 255 caracteres.", nameof(email));
-
         Email = email;
-    }
-
-    public void SetPhone(string phone)
-    {
-        if (phone?.Length > 30)
-            throw new ArgumentException("Telefone não pode ter mais de 30 caracteres.", nameof(phone));
-
         Phone = phone;
+        ModifiedBy = modifiedBy;
+        ModifiedAt = DateTime.UtcNow;
     }
 
-    public void SetAsPrimary()
+    public void SetAsPrimary(int modifiedBy)
     {
         IsPrimary = true;
+        ModifiedBy = modifiedBy;
+        ModifiedAt = DateTime.UtcNow;
     }
 
-    public void RemoveAsPrimary()
+    public void RemoveAsPrimary(int modifiedBy)
     {
         IsPrimary = false;
+        ModifiedBy = modifiedBy;
+        ModifiedAt = DateTime.UtcNow;
     }
 
-    public void Activate()
+    public void Activate(int modifiedBy)
     {
         IsActive = true;
+        ModifiedBy = modifiedBy;
+        ModifiedAt = DateTime.UtcNow;
     }
 
-    public void Deactivate()
+    public void Deactivate(int modifiedBy)
     {
         IsActive = false;
+        ModifiedBy = modifiedBy;
+        ModifiedAt = DateTime.UtcNow;
     }
 
-    public void Delete()
+    public void Delete(int modifiedBy)
     {
         IsDeleted = true;
         IsActive = false;
+        ModifiedBy = modifiedBy;
+        ModifiedAt = DateTime.UtcNow;
     }
 }

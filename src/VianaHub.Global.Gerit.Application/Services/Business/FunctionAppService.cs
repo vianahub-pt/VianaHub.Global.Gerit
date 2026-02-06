@@ -83,7 +83,7 @@ public class FunctionAppService : IFunctionAppService
             return false;
         }
 
-        var entity = new FunctionEntity(tenantId, request.Name, request.Description);
+        var entity = new FunctionEntity(tenantId, request.Name, request.Description, _currentUser.GetUserId());
         return await _domain.CreateAsync(entity, ct);
     }
 
@@ -96,7 +96,7 @@ public class FunctionAppService : IFunctionAppService
             return false;
         }
 
-        entity.Update(request.Name, request.Description);
+        entity.Update(request.Name, request.Description, _currentUser.GetUserId());
 
         return await _domain.UpdateAsync(entity, ct);
     }
@@ -110,7 +110,7 @@ public class FunctionAppService : IFunctionAppService
             return false;
         }
 
-        entity.Activate();
+        entity.Activate(_currentUser.GetUserId());
         return await _domain.ActivateAsync(entity, ct);
     }
 
@@ -123,7 +123,7 @@ public class FunctionAppService : IFunctionAppService
             return false;
         }
 
-        entity.Deactivate();
+        entity.Deactivate(_currentUser.GetUserId());
         return await _domain.DeactivateAsync(entity, ct);
     }
 
@@ -136,7 +136,7 @@ public class FunctionAppService : IFunctionAppService
             return false;
         }
 
-        entity.Delete();
+        entity.Delete(_currentUser.GetUserId());
         return await _domain.DeleteAsync(entity, ct);
     }
 
@@ -265,7 +265,7 @@ public class FunctionAppService : IFunctionAppService
             }
 
             // Cria a entidade
-            var entity = new FunctionEntity(tenantId, item.Name, item.Description);
+            var entity = new FunctionEntity(tenantId, item.Name, item.Description, _currentUser.GetUserId());
 
             // Tenta criar no domínio
             var success = await _domain.CreateAsync(entity, ct);

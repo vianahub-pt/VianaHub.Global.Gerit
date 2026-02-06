@@ -40,22 +40,7 @@ public class TenantEntity : Entity, IAggregateRoot
         IsActive = true;
         IsDeleted = false;
         CreatedBy = createdBy;
-    }
-
-    /// <summary>
-    /// Construtor para criação de um novo Tenant (backward compatibility)
-    /// </summary>
-    public TenantEntity(string name, bool consent = true)
-    {
-        Name = name;
-        Consent = consent;
-        IsActive = true;
-        IsDeleted = false;
-    }
-
-    public void UpdateConsent(bool consent)
-    {
-        Consent = consent;
+        CreatedAt = DateTime.UtcNow;
     }
 
     public void Update(string name, bool consent, int modifiedBy)
@@ -64,6 +49,10 @@ public class TenantEntity : Entity, IAggregateRoot
         Consent = consent;
         ModifiedBy = modifiedBy;
         ModifiedAt = DateTime.UtcNow;
+    }
+    public void UpdateConsent(bool consent)
+    {
+        Consent = consent;
     }
 
     public void Activate(int? modifiedBy)
@@ -88,24 +77,7 @@ public class TenantEntity : Entity, IAggregateRoot
         ModifiedAt = DateTime.UtcNow;
     }
 
-    // Métodos legados mantidos para compatibilidade
-    public void Activate()
-    {
-        IsActive = true;
-    }
-
-    public void Deactivate()
-    {
-        IsActive = false;
-    }
-
-    public void Delete()
-    {
-        IsDeleted = true;
-        IsActive = false;
-    }
-
-    public void AddAddress(TenantAddress address)
+    public void AddAddress(TenantAddress address, int createdBy)
     {
         if (address == null)
             throw new ArgumentNullException(nameof(address));
@@ -113,7 +85,7 @@ public class TenantEntity : Entity, IAggregateRoot
         _addresses.Add(address);
     }
 
-    public void AddFiscalData(TenantFiscalDataEntity fiscalData)
+    public void AddFiscalData(TenantFiscalDataEntity fiscalData, int createdBy)
     {
         if (fiscalData == null)
             throw new ArgumentNullException(nameof(fiscalData));

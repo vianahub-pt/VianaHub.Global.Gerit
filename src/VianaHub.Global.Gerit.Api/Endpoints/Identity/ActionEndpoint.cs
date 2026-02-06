@@ -21,7 +21,7 @@ public static class ActionEndpoint
         })
         .CustomAuthorize("Admin,BackOffice,Manager,Operator", "Actions", "GetAll")
         .WithName("GetAllActions")
-        .WithSummary("Swagger.Endpoint.Action.GetAllActions.Summary")
+        .WithSummary("Swagger.Endpoint.Action.GetAll.Summary")
         .Produces(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
@@ -32,7 +32,7 @@ public static class ActionEndpoint
         })
         .CustomAuthorize("Admin,BackOffice,Manager,Operator", "Actions", "GetBy")
         .WithName("GetActionById")
-        .WithSummary("Swagger.Endpoint.Action.GetActionById.Summary")
+        .WithSummary("Swagger.Endpoint.Action.GetById.Summary")
         .Produces(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
@@ -44,7 +44,7 @@ public static class ActionEndpoint
         })
         .CustomAuthorize("Admin,BackOffice,Manager,Operator", "Actions", "GetPaged")
         .WithName("GetActionsPaged")
-        .WithSummary("Swagger.Endpoint.Action.GetActionsPaged.Summary")
+        .WithSummary("Swagger.Endpoint.Action.GetPaged.Summary")
         .Produces(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
@@ -56,7 +56,7 @@ public static class ActionEndpoint
         .CustomAuthorize("Admin,BackOffice", "Actions", "Create")
         .AllowAnonymous()
         .WithName("CreateAction")
-        .WithSummary("Swagger.Endpoint.Action.CreateAction.Summary")
+        .WithSummary("Swagger.Endpoint.Action.Create.Summary")
         .Produces(StatusCodes.Status201Created)
         .Produces<ErrorResponse>(StatusCodes.Status400BadRequest)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError)
@@ -69,7 +69,7 @@ public static class ActionEndpoint
         })
         .CustomAuthorize("Admin,BackOffice", "Actions", "Update")
         .WithName("UpdateAction")
-        .WithSummary("Swagger.Endpoint.Action.UpdateAction.Summary")
+        .WithSummary("Swagger.Endpoint.Action.Update.Summary")
         .Produces(StatusCodes.Status204NoContent)
         .Produces<ErrorResponse>(StatusCodes.Status400BadRequest)
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
@@ -83,7 +83,7 @@ public static class ActionEndpoint
         })
         .CustomAuthorize("Admin,BackOffice", "Actions", "Activate")
         .WithName("ActivateAction")
-        .WithSummary("Swagger.Endpoint.Action.ActivateAction.Summary")
+        .WithSummary("Swagger.Endpoint.Action.Activate.Summary")
         .Produces(StatusCodes.Status204NoContent)
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
@@ -95,7 +95,7 @@ public static class ActionEndpoint
         })
         .CustomAuthorize("Admin,BackOffice", "Actions", "Deactivate")
         .WithName("DeactivateAction")
-        .WithSummary("Swagger.Endpoint.Action.DeactivateAction.Summary")
+        .WithSummary("Swagger.Endpoint.Action.Deactivate.Summary")
         .Produces(StatusCodes.Status204NoContent)
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
@@ -107,7 +107,7 @@ public static class ActionEndpoint
         })
         .CustomAuthorize("Admin,BackOffice", "Actions", "Delete")
         .WithName("DeleteAction")
-        .WithSummary("Swagger.Endpoint.Action.DeleteAction.Summary")
+        .WithSummary("Swagger.Endpoint.Action.Delete.Summary")
         .Produces(StatusCodes.Status204NoContent)
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
@@ -128,7 +128,7 @@ public static class ActionEndpoint
         })
         .CustomAuthorize("Admin,BackOffice", "Actions", "BulkUpload")
         .WithName("BulkUploadActions")
-        .WithSummary("Swagger.Endpoint.Action.BulkUploadActions.Summary")
+        .WithSummary("Swagger.Endpoint.Action.BulkUpload.Summary")
         .DisableAntiforgery()
         .Accepts<IFormFile>("multipart/form-data")
         .Produces(StatusCodes.Status200OK)

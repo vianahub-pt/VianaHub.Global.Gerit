@@ -69,21 +69,4 @@ public class RoleEntity : Entity
         ModifiedAt = DateTime.UtcNow;
     }
 
-    public void AddPermission(RolePermissionEntity permission)
-    {
-        if (permission == null)
-            throw new ArgumentNullException(nameof(permission));
-
-        if (_permissions.Any(p => p.ResourceId == permission.ResourceId && p.ActionId == permission.ActionId))
-            throw new InvalidOperationException("Esta permissão já existe para esta role.");
-
-        _permissions.Add(permission);
-    }
-
-    public void RemovePermission(int resourceId, int actionId)
-    {
-        var permission = _permissions.FirstOrDefault(p => p.ResourceId == resourceId && p.ActionId == actionId);
-        if (permission != null)
-            _permissions.Remove(permission);
-    }
 }

@@ -1,4 +1,5 @@
 using VianaHub.Global.Gerit.Domain.Base;
+using VianaHub.Global.Gerit.Domain.Helpers;
 
 namespace VianaHub.Global.Gerit.Domain.Entities.Billing;
 
@@ -24,45 +25,26 @@ public class TenantContact : Entity
     /// <summary>
     /// Construtor para criação de um novo contato do Tenant
     /// </summary>
-    public TenantContact(int tenantId, string name, string email, string phone = null, bool isPrimary = false)
+    public TenantContact(int tenantId, string name, string email, string phone, bool isPrimary, int createdBy)
     {
         TenantId = tenantId;
-        SetName(name);
-        SetEmail(email);
+        Name = name;
+        Email = email;
         Phone = phone;
         IsPrimary = isPrimary;
         IsActive = true;
         IsDeleted = false;
+        CreatedBy = createdBy;
+        CreatedAt = DateTime.UtcNow;
     }
 
-    public void SetName(string name)
+    public void Update(string name, string email, string phone, int modifiedBy)
     {
-        if (string.IsNullOrWhiteSpace(name))
-            throw new ArgumentException("Nome não pode ser vazio.", nameof(name));
-
-        if (name.Length > 150)
-            throw new ArgumentException("Nome não pode ter mais de 150 caracteres.", nameof(name));
-
         Name = name;
-    }
-
-    public void SetEmail(string email)
-    {
-        if (string.IsNullOrWhiteSpace(email))
-            throw new ArgumentException("Email não pode ser vazio.", nameof(email));
-
-        if (email.Length > 255)
-            throw new ArgumentException("Email não pode ter mais de 255 caracteres.", nameof(email));
-
         Email = email;
-    }
-
-    public void SetPhone(string phone)
-    {
-        if (phone?.Length > 30)
-            throw new ArgumentException("Telefone não pode ter mais de 30 caracteres.", nameof(phone));
-
         Phone = phone;
+        ModifiedBy = modifiedBy;
+        ModifiedAt = DateTime.UtcNow;
     }
 
     public void SetAsPrimary()

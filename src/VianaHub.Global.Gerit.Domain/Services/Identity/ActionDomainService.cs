@@ -90,7 +90,6 @@ public class ActionDomainService : IActionDomainService
             return false;
         }
         
-        entity.Activate(entity.ModifiedBy);
         return await _repo.UpdateAsync(entity, ct);
     }
     
@@ -106,7 +105,6 @@ public class ActionDomainService : IActionDomainService
             return false;
         }
         
-        entity.Deactivate(entity.ModifiedBy);
         return await _repo.UpdateAsync(entity, ct);
     }
     
@@ -122,7 +120,6 @@ public class ActionDomainService : IActionDomainService
             return false;
         }
         
-        entity.Delete(entity.ModifiedBy);
         return await _repo.UpdateAsync(entity, ct);
     }
 }

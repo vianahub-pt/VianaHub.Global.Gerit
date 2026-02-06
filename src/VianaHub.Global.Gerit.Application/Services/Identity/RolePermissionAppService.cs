@@ -58,7 +58,7 @@ public class RolePermissionAppService : IRolePermissionAppService
         var tenantId = _currentUser.GetTenantId();
 
         // Valida duplicidade
-        var exists = await _repository.ExistsAsync(tenantId, request.RoleId, request.ResourceId, request.ActionId);
+        var exists = await _repository.ExistsAsync(tenantId, request.RoleId, request.ResourceId, request.ActionId, ct);
         if (exists)
         {
             _notify.Add(_localization.GetMessage("Application.Service.RolePermission.Create.ResourceAlreadyExists"), 400);
@@ -87,8 +87,8 @@ public class RolePermissionAppService : IRolePermissionAppService
             return null;
         }
 
-        var entity = new RolePermissionEntity(tenantId, request.RoleId, request.ResourceId, request.ActionId);
-        await _domain.CreateAsync(entity);
+        var entity = new RolePermissionEntity(tenantId, request.RoleId, request.ResourceId, request.ActionId, _currentUser.GetUserId());
+        await _domain.CreateAsync(entity, ct);
         return _mapper.Map<RolePermissionResponse>(entity);
     }
 

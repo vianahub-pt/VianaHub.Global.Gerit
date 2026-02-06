@@ -1,5 +1,6 @@
 using VianaHub.Global.Gerit.Domain.Base;
 using VianaHub.Global.Gerit.Domain.Entities.Billing;
+using VianaHub.Global.Gerit.Domain.Interfaces;
 using VianaHub.Global.Gerit.Domain.Interfaces.Billing;
 using VianaHub.Global.Gerit.Domain.ReadModels;
 using VianaHub.Global.Gerit.Domain.Tools.Notifications;
@@ -110,7 +111,6 @@ public class SubscriptionDomainService : ISubscriptionDomainService
             return false;
         }
 
-        entity.Activate(entity.ModifiedBy);
         return await _repo.UpdateAsync(entity, ct);
     }
 
@@ -126,7 +126,6 @@ public class SubscriptionDomainService : ISubscriptionDomainService
             return false;
         }
 
-        entity.Deactivate(entity.ModifiedBy);
         return await _repo.UpdateAsync(entity, ct);
     }
 
@@ -142,7 +141,6 @@ public class SubscriptionDomainService : ISubscriptionDomainService
             return false;
         }
 
-        entity.Delete(entity.ModifiedBy);
         return await _repo.UpdateAsync(entity, ct);
     }
 

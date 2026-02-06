@@ -21,7 +21,7 @@ public static class PlanEndpoint
         })
         .CustomAuthorize("Admin,BackOffice,Manager,Operator", "Plans", "GetAll")
         .WithName("GetAllPlans")
-        .WithSummary("Swagger.Endpoint.Plan.GetAllPlans.Summary")
+        .WithSummary("Swagger.Endpoint.Plan.GetAll.Summary")
         .Produces(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
@@ -32,7 +32,7 @@ public static class PlanEndpoint
         })
         .CustomAuthorize("Admin,BackOffice,Manager,Operator", "Plans", "GetBy")
         .WithName("GetPlanById")
-        .WithSummary("Swagger.Endpoint.Plan.GetPlanById.Summary")
+        .WithSummary("Swagger.Endpoint.Plan.GetById.Summary")
         .Produces(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
@@ -44,7 +44,7 @@ public static class PlanEndpoint
         })
         .CustomAuthorize("Admin,BackOffice,Manager,Operator", "Plans", "GetPaged")
         .WithName("GetPagedPlans")
-        .WithSummary("Swagger.Endpoint.Plan.GetPagedPlans.Summary")
+        .WithSummary("Swagger.Endpoint.Plan.GetPaged.Summary")
         .Produces(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
@@ -55,7 +55,7 @@ public static class PlanEndpoint
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "Plans", "Create")
         .WithName("CreatePlan")
-        .WithSummary("Swagger.Endpoint.Plan.CreatePlan.Summary")
+        .WithSummary("Swagger.Endpoint.Plan.Create.Summary")
         .Produces(StatusCodes.Status201Created)
         .Produces<ErrorResponse>(StatusCodes.Status400BadRequest)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError)
@@ -68,7 +68,7 @@ public static class PlanEndpoint
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "Plans", "Update")
         .WithName("UpdatePlan")
-        .WithSummary("Swagger.Endpoint.Plan.UpdatePlan.Summary")
+        .WithSummary("Swagger.Endpoint.Plan.Update.Summary")
         .Produces(StatusCodes.Status204NoContent)
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError)
@@ -81,7 +81,7 @@ public static class PlanEndpoint
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "Plans", "Activate")
         .WithName("ActivatePlan")
-        .WithSummary("Swagger.Endpoint.Plan.ActivatePlan.Summary")
+        .WithSummary("Swagger.Endpoint.Plan.Activate.Summary")
         .Produces(StatusCodes.Status204NoContent)
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
@@ -93,7 +93,7 @@ public static class PlanEndpoint
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "Plans", "Deactivate")
         .WithName("DeactivatePlan")
-        .WithSummary("Swagger.Endpoint.Plan.DeactivatePlan.Summary")
+        .WithSummary("Swagger.Endpoint.Plan.Deactivate.Summary")
         .Produces(StatusCodes.Status204NoContent)
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
@@ -105,7 +105,7 @@ public static class PlanEndpoint
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "Plans", "Delete")
         .WithName("DeletePlan")
-        .WithSummary("Swagger.Endpoint.Plan.DeletePlan.Summary")
+        .WithSummary("Swagger.Endpoint.Plan.Delete.Summary")
         .Produces(StatusCodes.Status204NoContent)
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
@@ -126,7 +126,7 @@ public static class PlanEndpoint
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "Plans", "BulkUpload")
         .WithName("BulkUploadPlans")
-        .WithSummary("Swagger.Endpoint.Plan.BulkUploadPlans.Summary")
+        .WithSummary("Swagger.Endpoint.Plan.BulkUpload.Summary")
         .DisableAntiforgery()
         .Accepts<IFormFile>("multipart/form-data")
         .Produces(StatusCodes.Status200OK)

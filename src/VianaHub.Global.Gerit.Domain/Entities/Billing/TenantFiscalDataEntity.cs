@@ -25,86 +25,64 @@ public class TenantFiscalDataEntity : Entity
     /// <summary>
     /// Construtor para criação de novos dados fiscais do Tenant
     /// </summary>
-    public TenantFiscalDataEntity(int tenantId, string nif, string vatNumber, string cae = null, 
-        string fiscalCountry = "PT", bool isVATRegistered = true)
+    public TenantFiscalDataEntity(int tenantId, string nif, string vatNumber, string cae, string fiscalCountry, bool isVATRegistered, int createdBy)
     {
         TenantId = tenantId;
-        SetNIF(nif);
-        SetVATNumber(vatNumber);
+        NIF = nif;
+        VATNumber = vatNumber;
         CAE = cae;
-        SetFiscalCountry(fiscalCountry);
+        FiscalCountry = fiscalCountry;
         IsVATRegistered = isVATRegistered;
         IsActive = true;
         IsDeleted = false;
+        CreatedBy = createdBy;
+        CreatedAt = DateTime.UtcNow;
     }
 
-    public void SetNIF(string nif)
+    public void UpdateFiscalData(string nif, string vatNumber, string cae, string fiscalCountry, bool isVATRegistered, int modifiedBy)
     {
-        if (string.IsNullOrWhiteSpace(nif))
-            throw new ArgumentException("NIF não pode ser vazio.", nameof(nif));
-
-        if (nif.Length != 9)
-            throw new ArgumentException("NIF deve ter exatamente 9 caracteres.", nameof(nif));
-
-        if (!nif.All(char.IsDigit))
-            throw new ArgumentException("NIF deve conter apenas dígitos.", nameof(nif));
-
         NIF = nif;
-    }
-
-    public void SetVATNumber(string vatNumber)
-    {
-        if (string.IsNullOrWhiteSpace(vatNumber))
-            throw new ArgumentException("Número VAT não pode ser vazio.", nameof(vatNumber));
-
-        if (vatNumber.Length > 20)
-            throw new ArgumentException("Número VAT não pode ter mais de 20 caracteres.", nameof(vatNumber));
-
         VATNumber = vatNumber;
-    }
-
-    public void SetCAE(string cae)
-    {
-        if (cae?.Length > 10)
-            throw new ArgumentException("CAE não pode ter mais de 10 caracteres.", nameof(cae));
-
         CAE = cae;
+        FiscalCountry = fiscalCountry;
+        IsVATRegistered = isVATRegistered;
+        ModifiedBy = modifiedBy;
+        ModifiedAt = DateTime.UtcNow;
     }
 
-    public void SetFiscalCountry(string fiscalCountry)
-    {
-        if (string.IsNullOrWhiteSpace(fiscalCountry))
-            throw new ArgumentException("País fiscal não pode ser vazio.", nameof(fiscalCountry));
-
-        if (fiscalCountry.Length != 2)
-            throw new ArgumentException("País fiscal deve ter exatamente 2 caracteres.", nameof(fiscalCountry));
-
-        FiscalCountry = fiscalCountry.ToUpper();
-    }
-
-    public void RegisterForVAT()
+    public void RegisterForVAT(int modifiedBy)
     {
         IsVATRegistered = true;
+        ModifiedBy = modifiedBy;
+        ModifiedAt = DateTime.UtcNow;
     }
 
-    public void UnregisterFromVAT()
+    public void UnregisterFromVAT(int modifiedBy)
     {
         IsVATRegistered = false;
+        ModifiedBy = modifiedBy;
+        ModifiedAt = DateTime.UtcNow;
     }
 
-    public void Activate()
+    public void Activate(int modifiedBy)
     {
         IsActive = true;
+        ModifiedBy = modifiedBy;
+        ModifiedAt = DateTime.UtcNow;
     }
 
-    public void Deactivate()
+    public void Deactivate(int modifiedBy)
     {
         IsActive = false;
+        ModifiedBy = modifiedBy;
+        ModifiedAt = DateTime.UtcNow;
     }
 
-    public void Delete()
+    public void Delete(int modifiedBy)
     {
         IsDeleted = true;
         IsActive = false;
+        ModifiedBy = modifiedBy;
+        ModifiedAt = DateTime.UtcNow;
     }
 }

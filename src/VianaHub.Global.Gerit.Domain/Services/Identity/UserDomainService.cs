@@ -1,9 +1,7 @@
+using VianaHub.Global.Gerit.Domain.Base;
 using VianaHub.Global.Gerit.Domain.Entities.Identity;
-using VianaHub.Global.Gerit.Domain.Interfaces;
 using VianaHub.Global.Gerit.Domain.Interfaces.Identity;
 using VianaHub.Global.Gerit.Domain.Tools.Notifications;
-using VianaHub.Global.Gerit.Domain.Validators.Identity.User;
-
 
 namespace VianaHub.Global.Gerit.Domain.Services.Identity;
 
@@ -14,25 +12,22 @@ namespace VianaHub.Global.Gerit.Domain.Services.Identity;
 public class UserDomainService : IUserDomainService
 {
     private readonly IUserDataRepository _repository;
+    private readonly IEntityDomainValidator<UserEntity> _validator;
     private readonly INotify _notify;
-    private readonly ILocalizationService _localization;
 
     public UserDomainService(
         IUserDataRepository repository,
         INotify notify,
-        ILocalizationService localization)
+        IEntityDomainValidator<UserEntity> validator)
     {
         _repository = repository;
         _notify = notify;
-        _localization = localization;
+        _validator = validator;
     }
 
     public async Task<bool> CreateAsync(UserEntity entity, CancellationToken ct)
     {
-        // Valida a entidade
-        var validator = new CreateUserValidator(_localization);
-        var validationResult = await validator.ValidateAsync(entity, ct);
-
+        var validationResult = await _validator.ValidateForCreateAsync(entity);
         if (!validationResult.IsValid)
         {
             foreach (var error in validationResult.Errors)
@@ -42,16 +37,12 @@ public class UserDomainService : IUserDomainService
             return false;
         }
 
-        // Persiste a entidade
         return await _repository.CreateAsync(entity, ct);
     }
 
     public async Task<bool> UpdateAsync(UserEntity entity, CancellationToken ct)
     {
-        // Valida a entidade
-        var validator = new UpdateUserValidator(_localization);
-        var validationResult = await validator.ValidateAsync(entity, ct);
-
+        var validationResult = await _validator.ValidateForUpdateAsync(entity);
         if (!validationResult.IsValid)
         {
             foreach (var error in validationResult.Errors)
@@ -61,16 +52,12 @@ public class UserDomainService : IUserDomainService
             return false;
         }
 
-        // Persiste a entidade
         return await _repository.UpdateAsync(entity, ct);
     }
 
     public async Task<bool> ActivateAsync(UserEntity entity, CancellationToken ct)
     {
-        // Valida a entidade
-        var validator = new ActivateUserValidator(_localization);
-        var validationResult = await validator.ValidateAsync(entity, ct);
-
+        var validationResult = await _validator.ValidateForActivateAsync(entity);
         if (!validationResult.IsValid)
         {
             foreach (var error in validationResult.Errors)
@@ -80,16 +67,12 @@ public class UserDomainService : IUserDomainService
             return false;
         }
 
-        // Persiste a entidade
         return await _repository.UpdateAsync(entity, ct);
     }
 
     public async Task<bool> DeactivateAsync(UserEntity entity, CancellationToken ct)
     {
-        // Valida a entidade
-        var validator = new DeactivateUserValidator(_localization);
-        var validationResult = await validator.ValidateAsync(entity, ct);
-
+        var validationResult = await _validator.ValidateForDeactivateAsync(entity);
         if (!validationResult.IsValid)
         {
             foreach (var error in validationResult.Errors)
@@ -99,16 +82,12 @@ public class UserDomainService : IUserDomainService
             return false;
         }
 
-        // Persiste a entidade
         return await _repository.UpdateAsync(entity, ct);
     }
 
     public async Task<bool> DeleteAsync(UserEntity entity, CancellationToken ct)
     {
-        // Valida a entidade
-        var validator = new DeleteUserValidator(_localization);
-        var validationResult = await validator.ValidateAsync(entity, ct);
-
+        var validationResult = await _validator.ValidateForDeleteAsync(entity);
         if (!validationResult.IsValid)
         {
             foreach (var error in validationResult.Errors)
@@ -118,7 +97,6 @@ public class UserDomainService : IUserDomainService
             return false;
         }
 
-        // Persiste a entidade
         return await _repository.UpdateAsync(entity, ct);
     }
 }

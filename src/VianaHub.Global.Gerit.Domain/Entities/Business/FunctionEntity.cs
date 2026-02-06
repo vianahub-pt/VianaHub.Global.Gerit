@@ -20,34 +20,44 @@ public class FunctionEntity : Entity
     /// <summary>
     /// Construtor para criação de um novo Equipamento
     /// </summary>
-    public FunctionEntity(int tenantId, string name, string description)
+    public FunctionEntity(int tenantId, string name, string description, int createdBy)
     {
         TenantId = tenantId;
         Name = name;
         Description = description;
         IsActive = true;
         IsDeleted = false;
+        CreatedBy = createdBy;
+        CreatedAt = DateTime.UtcNow;
     }
 
-    public void Update(string name, string description)
+    public void Update(string name, string description, int modifiedBy)
     {
         Name = name;
         Description = description;
+        ModifiedBy = modifiedBy;
+        ModifiedAt = DateTime.UtcNow;
     }
-    public void Activate()
+    public void Activate(int modifiedBy)
     {
         IsActive = true;
+        ModifiedBy = modifiedBy;
+        ModifiedAt = DateTime.UtcNow;
     }
 
-    public void Deactivate()
+    public void Deactivate(int modifiedBy)
     {
         IsActive = false;
+        ModifiedBy = modifiedBy;
+        ModifiedAt = DateTime.UtcNow;
     }
 
-    public void Delete()
+    public void Delete(int modifiedBy)
     {
         IsDeleted = true;
         IsActive = false;
+        ModifiedBy = modifiedBy;
+        ModifiedAt = DateTime.UtcNow;
     }
 }
 

@@ -103,21 +103,4 @@ public class UserEntity : Entity
         ModifiedAt = DateTime.UtcNow;
     }
 
-    public void AddRole(UserRoleEntity userRole)
-    {
-        if (userRole == null)
-            throw new ArgumentNullException(nameof(userRole));
-
-        if (_userRoles.Any(ur => ur.RoleId == userRole.RoleId))
-            throw new InvalidOperationException("Usuário já possui esta role.");
-
-        _userRoles.Add(userRole);
-    }
-
-    public void RemoveRole(int roleId)
-    {
-        var userRole = _userRoles.FirstOrDefault(ur => ur.RoleId == roleId);
-        if (userRole != null)
-            _userRoles.Remove(userRole);
-    }
 }
