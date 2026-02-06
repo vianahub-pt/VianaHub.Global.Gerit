@@ -15,105 +15,103 @@ public class InterventionAddressMapping : IEntityTypeConfiguration<InterventionA
         builder.ToTable("InterventionAddresses", "dbo");
 
         // Chave Primária
-        builder.HasKey(ia => ia.Id)
+        builder.HasKey(x => x.Id)
             .HasName("PK_InterventionAddresses");
 
-        builder.Property(ia => ia.Id)
+        builder.Property(x => x.Id)
             .HasColumnName("Id")
             .UseIdentityColumn(1, 1)
             .IsRequired();
 
         // Propriedades
-        builder.Property(ia => ia.TenantId)
+        builder.Property(x => x.TenantId)
             .HasColumnName("TenantId")
             .IsRequired();
 
-        builder.Property(ia => ia.InterventionId)
+        builder.Property(x => x.InterventionId)
             .HasColumnName("InterventionId")
             .IsRequired();
 
-        builder.Property(ia => ia.Street)
+        builder.Property(x => x.Street)
             .HasColumnName("Street")
             .HasColumnType("NVARCHAR(200)")
             .HasMaxLength(200)
             .IsRequired();
 
-        builder.Property(ia => ia.City)
+        builder.Property(x => x.City)
             .HasColumnName("City")
             .HasColumnType("NVARCHAR(100)")
             .HasMaxLength(100)
             .IsRequired();
 
-        builder.Property(ia => ia.PostalCode)
+        builder.Property(x => x.PostalCode)
             .HasColumnName("PostalCode")
             .HasColumnType("NVARCHAR(20)")
             .HasMaxLength(20)
             .IsRequired();
 
-        builder.Property(ia => ia.District)
+        builder.Property(x => x.District)
             .HasColumnName("District")
             .HasColumnType("NVARCHAR(100)")
             .HasMaxLength(100)
             .IsRequired(false);
 
-        builder.Property(ia => ia.CountryCode)
+        builder.Property(x => x.CountryCode)
             .HasColumnName("CountryCode")
             .HasColumnType("CHAR(2)")
             .HasMaxLength(2)
             .HasDefaultValue("PT")
             .IsRequired();
 
-        builder.Property(ia => ia.IsPrimary)
+        builder.Property(x => x.IsPrimary)
             .HasColumnName("IsPrimary")
             .HasColumnType("BIT")
             .HasDefaultValue(false)
             .IsRequired();
 
-        builder.Property(ia => ia.IsActive)
+        builder.Property(x => x.IsActive)
             .HasColumnName("IsActive")
             .HasColumnType("BIT")
             .HasDefaultValue(true)
             .IsRequired();
 
-        builder.Property(ia => ia.IsDeleted)
+        builder.Property(x => x.IsDeleted)
             .HasColumnName("IsDeleted")
             .HasColumnType("BIT")
             .HasDefaultValue(false)
             .IsRequired();
 
-        builder.Property(ia => ia.CreatedBy)
+        builder.Property(x => x.CreatedBy)
             .HasColumnName("CreatedBy")
-            .HasColumnType("NVARCHAR(50)")
-            .HasMaxLength(50)
+            .HasColumnType("INT")
             .IsRequired();
 
-        builder.Property(ia => ia.CreatedAt)
+        builder.Property(x => x.CreatedAt)
             .HasColumnName("CreatedAt")
             .HasColumnType("DATETIME2")
             .HasDefaultValueSql("SYSDATETIME()")
             .IsRequired();
 
-        builder.Property(ia => ia.ModifiedBy)
+        builder.Property(x => x.ModifiedBy)
             .HasColumnName("ModifiedBy")
-            .HasColumnType("NVARCHAR(50)")
-            .HasMaxLength(50)
+            .HasColumnType("INT")
             .IsRequired(false);
 
-        builder.Property(ia => ia.ModifiedAt)
+        builder.Property(x => x.ModifiedAt)
             .HasColumnName("ModifiedAt")
             .HasColumnType("DATETIME2")
             .IsRequired(false);
 
         // Índices
-        builder.HasIndex(ia => ia.InterventionId)
+        builder.HasIndex(x => x.InterventionId)
             .HasDatabaseName("IX_InterventionAddresses_InterventionId")
-            .IncludeProperties(ia => ia.TenantId)
+            .IncludeProperties(x => x.TenantId)
             .HasFilter("[IsDeleted] = 0");
 
         // Relacionamentos
-        builder.HasOne(ia => ia.Tenant)
+        builder.HasOne(x => x.Tenant)
             .WithMany()
-            .HasForeignKey(ia => ia.TenantId)
+            .HasForeignKey(x => x.TenantId)
             .HasConstraintName("FK_InterventionAddresses_Tenant")
             .OnDelete(DeleteBehavior.Restrict);
 

@@ -71,20 +71,24 @@ public class PlanEntityMapping : IEntityTypeConfiguration<PlanEntity>
             .HasDefaultValue(false);
 
         builder.Property(x => x.CreatedBy)
-            .HasColumnName("CreatedBy")
-            .IsRequired();
+              .HasColumnName("CreatedBy")
+              .HasColumnType("INT")
+              .IsRequired();
 
         builder.Property(x => x.CreatedAt)
             .HasColumnName("CreatedAt")
-            .IsRequired()
-            .HasDefaultValueSql("SYSDATETIME()");
+            .HasColumnType("DATETIME2")
+            .HasDefaultValueSql("SYSDATETIME()")
+            .IsRequired();
 
         builder.Property(x => x.ModifiedBy)
             .HasColumnName("ModifiedBy")
+            .HasColumnType("INT")
             .IsRequired(false);
 
         builder.Property(x => x.ModifiedAt)
             .HasColumnName("ModifiedAt")
+            .HasColumnType("DATETIME2")
             .IsRequired(false);
 
         // Constraint: Se IsDeleted = 1, então IsActive = 0

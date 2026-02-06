@@ -384,7 +384,7 @@ public class AuthAppService : IAuthAppService
             if (permissionsByResource.Any())
             {
                 // Converter HashSet<string> para List<string> para serialização previsível
-                var serializable = permissionsByResource.ToDictionary(k => k.Key, v => v.Value.OrderBy(x => x).ToList());
+                var serializable = permissionsByResource.ToDictionary(k => k.Key, x => x.Value.OrderBy(x => x).ToList());
                 permissionsJson = JsonSerializer.Serialize(serializable);
                 // Não adicionar como Claim string para evitar escape no payload
             }

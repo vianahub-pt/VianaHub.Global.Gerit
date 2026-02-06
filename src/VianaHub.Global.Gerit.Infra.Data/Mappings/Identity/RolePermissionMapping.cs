@@ -15,53 +15,53 @@ public class RolePermissionMapping : IEntityTypeConfiguration<RolePermissionEnti
         builder.ToTable("RolePermissions", "dbo");
 
         // Chave Primária
-        builder.HasKey(rp => rp.Id)
+        builder.HasKey(x => x.Id)
             .HasName("PK_RolePermissions");
 
-        builder.Property(rp => rp.Id)
+        builder.Property(x => x.Id)
             .HasColumnName("Id")
             .UseIdentityColumn(1, 1)
             .IsRequired();
 
         // Propriedades
-        builder.Property(rp => rp.TenantId)
+        builder.Property(x => x.TenantId)
             .HasColumnName("TenantId")
             .IsRequired();
 
-        builder.Property(rp => rp.RoleId)
+        builder.Property(x => x.RoleId)
             .HasColumnName("RoleId")
             .IsRequired();
 
-        builder.Property(rp => rp.ResourceId)
+        builder.Property(x => x.ResourceId)
             .HasColumnName("ResourceId")
             .IsRequired();
 
-        builder.Property(rp => rp.ActionId)
+        builder.Property(x => x.ActionId)
             .HasColumnName("ActionId")
             .IsRequired();
 
         // Constraints únicos
-        builder.HasIndex(rp => new { rp.TenantId, rp.RoleId, rp.ResourceId, rp.ActionId })
+        builder.HasIndex(x => new { x.TenantId, x.RoleId, x.ResourceId, x.ActionId })
             .IsUnique()
             .HasDatabaseName("UQ_RolePermissions");
 
         // Índices
-        builder.HasIndex(rp => rp.RoleId)
+        builder.HasIndex(x => x.RoleId)
             .HasDatabaseName("IX_RolePermissions_RoleId")
-            .IncludeProperties(rp => new { rp.TenantId, rp.ResourceId, rp.ActionId });
+            .IncludeProperties(x => new { x.TenantId, x.ResourceId, x.ActionId });
 
-        builder.HasIndex(rp => rp.ResourceId)
+        builder.HasIndex(x => x.ResourceId)
             .HasDatabaseName("IX_RolePermissions_ResourceId")
-            .IncludeProperties(rp => new { rp.TenantId, rp.RoleId, rp.ActionId });
+            .IncludeProperties(x => new { x.TenantId, x.RoleId, x.ActionId });
 
-        builder.HasIndex(rp => rp.ActionId)
+        builder.HasIndex(x => x.ActionId)
             .HasDatabaseName("IX_RolePermissions_ActionId")
-            .IncludeProperties(rp => new { rp.TenantId, rp.RoleId, rp.ResourceId });
+            .IncludeProperties(x => new { x.TenantId, x.RoleId, x.ResourceId });
 
         // Relacionamentos
-        builder.HasOne(rp => rp.Tenant)
+        builder.HasOne(x => x.Tenant)
             .WithMany()
-            .HasForeignKey(rp => rp.TenantId)
+            .HasForeignKey(x => x.TenantId)
             .HasConstraintName("FK_RolePermissions_Tenant")
             .OnDelete(DeleteBehavior.Restrict);
 

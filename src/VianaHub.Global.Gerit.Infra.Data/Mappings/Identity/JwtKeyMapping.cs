@@ -37,10 +37,26 @@ public class JwtKeyMapping : IEntityTypeConfiguration<JwtKeyEntity>
         // PlainPrivateKey não deve ser persistido no banco - é apenas um campo temporário
         builder.Ignore(x => x.PlainPrivateKey);
 
-        builder.Property(x => x.CreatedAt).IsRequired();
-        builder.Property(x => x.CreatedBy).IsRequired();
-        builder.Property(x => x.ModifiedBy).IsRequired();
-        builder.Property(x => x.ModifiedAt).IsRequired();
+        builder.Property(x => x.CreatedBy)
+              .HasColumnName("CreatedBy")
+              .HasColumnType("INT")
+              .IsRequired();
+
+        builder.Property(x => x.CreatedAt)
+            .HasColumnName("CreatedAt")
+            .HasColumnType("DATETIME2")
+            .HasDefaultValueSql("SYSDATETIME()")
+            .IsRequired();
+
+        builder.Property(x => x.ModifiedBy)
+            .HasColumnName("ModifiedBy")
+            .HasColumnType("INT")
+            .IsRequired(false);
+
+        builder.Property(x => x.ModifiedAt)
+            .HasColumnName("ModifiedAt")
+            .HasColumnType("DATETIME2")
+            .IsRequired(false);
 
         // Relacionamentos
         builder.HasOne<TenantEntity>()

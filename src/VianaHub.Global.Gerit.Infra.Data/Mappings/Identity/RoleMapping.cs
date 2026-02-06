@@ -15,81 +15,83 @@ public class RoleMapping : IEntityTypeConfiguration<RoleEntity>
         builder.ToTable("Roles", "dbo");
 
         // Chave Primária
-        builder.HasKey(r => r.Id)
+        builder.HasKey(x => x.Id)
             .HasName("PK_Roles");
 
-        builder.Property(r => r.Id)
+        builder.Property(x => x.Id)
             .HasColumnName("Id")
             .UseIdentityColumn(1, 1)
             .IsRequired();
 
         // Propriedades
-        builder.Property(r => r.TenantId)
+        builder.Property(x => x.TenantId)
             .HasColumnName("TenantId")
             .IsRequired();
 
-        builder.Property(r => r.Name)
+        builder.Property(x => x.Name)
             .HasColumnName("Name")
             .HasColumnType("NVARCHAR(100)")
             .HasMaxLength(100)
             .IsRequired();
 
-        builder.Property(r => r.Description)
+        builder.Property(x => x.Description)
             .HasColumnName("Description")
             .HasColumnType("NVARCHAR(255)")
             .HasMaxLength(255)
             .IsRequired();
 
-        builder.Property(r => r.IsActive)
+        builder.Property(x => x.IsActive)
             .HasColumnName("IsActive")
             .HasColumnType("BIT")
             .HasDefaultValue(true)
             .IsRequired();
 
-        builder.Property(r => r.IsDeleted)
+        builder.Property(x => x.IsDeleted)
             .HasColumnName("IsDeleted")
             .HasColumnType("BIT")
             .HasDefaultValue(false)
             .IsRequired();
 
-        builder.Property(r => r.CreatedBy)
-            .HasColumnName("CreatedBy")
-            .IsRequired();
+        builder.Property(x => x.CreatedBy)
+              .HasColumnName("CreatedBy")
+              .HasColumnType("INT")
+              .IsRequired();
 
-        builder.Property(r => r.CreatedAt)
+        builder.Property(x => x.CreatedAt)
             .HasColumnName("CreatedAt")
             .HasColumnType("DATETIME2")
             .HasDefaultValueSql("SYSDATETIME()")
             .IsRequired();
 
-        builder.Property(r => r.ModifiedBy)
+        builder.Property(x => x.ModifiedBy)
             .HasColumnName("ModifiedBy")
+            .HasColumnType("INT")
             .IsRequired(false);
 
-        builder.Property(r => r.ModifiedAt)
+        builder.Property(x => x.ModifiedAt)
             .HasColumnName("ModifiedAt")
             .HasColumnType("DATETIME2")
             .IsRequired(false);
 
         // Constraints únicos
-        builder.HasIndex(r => new { r.TenantId, r.Name })
+        builder.HasIndex(x => new { x.TenantId, x.Name })
             .IsUnique()
             .HasDatabaseName("UQ_Roles_Tenant_Name");
 
         // Relacionamentos
-        builder.HasOne(r => r.Tenant)
+        builder.HasOne(x => x.Tenant)
             .WithMany()
-            .HasForeignKey(r => r.TenantId)
+            .HasForeignKey(x => x.TenantId)
             .HasConstraintName("FK_Roles_Tenant")
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder.HasMany(r => r.Permissions)
+        builder.HasMany(x => x.Permissions)
             .WithOne(rp => rp.Role)
             .HasForeignKey(rp => rp.RoleId)
             .HasConstraintName("FK_RolePermissions_Role")
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder.HasMany(r => r.UserRoles)
+        builder.HasMany(x => x.UserRoles)
             .WithOne(ur => ur.Role)
             .HasForeignKey(ur => ur.RoleId)
             .HasConstraintName("FK_UserRoles_Role")

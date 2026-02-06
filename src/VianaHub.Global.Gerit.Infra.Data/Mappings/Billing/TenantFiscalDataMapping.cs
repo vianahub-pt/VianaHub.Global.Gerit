@@ -15,85 +15,85 @@ public class TenantFiscalDataMapping : IEntityTypeConfiguration<TenantFiscalData
         builder.ToTable("TenantFiscalData", "dbo");
 
         // Chave Primária
-        builder.HasKey(tfd => tfd.Id)
+        builder.HasKey(x => x.Id)
             .HasName("PK_TenantFiscalData");
 
-        builder.Property(tfd => tfd.Id)
+        builder.Property(x => x.Id)
             .HasColumnName("Id")
             .UseIdentityColumn(1, 1)
             .IsRequired();
 
         // Propriedades
-        builder.Property(tfd => tfd.TenantId)
+        builder.Property(x => x.TenantId)
             .HasColumnName("TenantId")
             .IsRequired();
 
-        builder.Property(tfd => tfd.NIF)
+        builder.Property(x => x.NIF)
             .HasColumnName("NIF")
             .HasColumnType("CHAR(9)")
             .HasMaxLength(9)
             .IsRequired();
 
-        builder.Property(tfd => tfd.VATNumber)
+        builder.Property(x => x.VATNumber)
             .HasColumnName("VATNumber")
             .HasColumnType("NVARCHAR(20)")
             .HasMaxLength(20)
             .IsRequired();
 
-        builder.Property(tfd => tfd.CAE)
+        builder.Property(x => x.CAE)
             .HasColumnName("CAE")
             .HasColumnType("NVARCHAR(10)")
             .HasMaxLength(10)
             .IsRequired(false);
 
-        builder.Property(tfd => tfd.FiscalCountry)
+        builder.Property(x => x.FiscalCountry)
             .HasColumnName("FiscalCountry")
             .HasColumnType("CHAR(2)")
             .HasMaxLength(2)
             .HasDefaultValue("PT")
             .IsRequired();
 
-        builder.Property(tfd => tfd.IsVATRegistered)
+        builder.Property(x => x.IsVATRegistered)
             .HasColumnName("IsVATRegistered")
             .HasColumnType("BIT")
             .HasDefaultValue(true)
             .IsRequired();
 
-        builder.Property(tfd => tfd.IsActive)
+        builder.Property(x => x.IsActive)
             .HasColumnName("IsActive")
             .HasColumnType("BIT")
             .HasDefaultValue(true)
             .IsRequired();
 
-        builder.Property(tfd => tfd.IsDeleted)
+        builder.Property(x => x.IsDeleted)
             .HasColumnName("IsDeleted")
             .HasColumnType("BIT")
             .HasDefaultValue(false)
             .IsRequired();
 
-        builder.Property(tfd => tfd.CreatedBy)
-            .HasColumnName("CreatedBy")
-            .HasColumnType("INT")
-            .IsRequired();
+        builder.Property(x => x.CreatedBy)
+              .HasColumnName("CreatedBy")
+              .HasColumnType("INT")
+              .IsRequired();
 
-        builder.Property(tfd => tfd.CreatedAt)
+        builder.Property(x => x.CreatedAt)
             .HasColumnName("CreatedAt")
             .HasColumnType("DATETIME2")
             .HasDefaultValueSql("SYSDATETIME()")
             .IsRequired();
 
-        builder.Property(tfd => tfd.ModifiedBy)
+        builder.Property(x => x.ModifiedBy)
             .HasColumnName("ModifiedBy")
             .HasColumnType("INT")
             .IsRequired(false);
 
-        builder.Property(tfd => tfd.ModifiedAt)
+        builder.Property(x => x.ModifiedAt)
             .HasColumnName("ModifiedAt")
             .HasColumnType("DATETIME2")
             .IsRequired(false);
 
         // Constraints únicos
-        builder.HasIndex(tfd => tfd.NIF)
+        builder.HasIndex(x => x.NIF)
             .IsUnique()
             .HasDatabaseName("UQ_TenantFiscalData_NIF");
 

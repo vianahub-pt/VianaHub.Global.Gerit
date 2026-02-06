@@ -15,111 +15,109 @@ public class ClientFiscalDataMapping : IEntityTypeConfiguration<ClientFiscalData
         builder.ToTable("ClientFiscalData", "dbo");
 
         // Chave Primária
-        builder.HasKey(cfd => cfd.Id)
+        builder.HasKey(x => x.Id)
             .HasName("PK_ClientFiscalData");
 
-        builder.Property(cfd => cfd.Id)
+        builder.Property(x => x.Id)
             .HasColumnName("Id")
             .UseIdentityColumn(1, 1)
             .IsRequired();
 
         // Propriedades
-        builder.Property(cfd => cfd.TenantId)
+        builder.Property(x => x.TenantId)
             .HasColumnName("TenantId")
             .IsRequired();
 
-        builder.Property(cfd => cfd.ClientId)
+        builder.Property(x => x.ClientId)
             .HasColumnName("ClientId")
             .IsRequired();
 
-        builder.Property(cfd => cfd.NIF)
+        builder.Property(x => x.NIF)
             .HasColumnName("NIF")
             .HasColumnType("CHAR(9)")
             .HasMaxLength(9)
             .IsRequired();
 
-        builder.Property(cfd => cfd.VATNumber)
+        builder.Property(x => x.VATNumber)
             .HasColumnName("VATNumber")
             .HasColumnType("NVARCHAR(20)")
             .HasMaxLength(20)
             .IsRequired();
 
-        builder.Property(cfd => cfd.CAE)
+        builder.Property(x => x.CAE)
             .HasColumnName("CAE")
             .HasColumnType("NVARCHAR(10)")
             .HasMaxLength(10)
             .IsRequired(false);
 
-        builder.Property(cfd => cfd.FiscalCountry)
+        builder.Property(x => x.FiscalCountry)
             .HasColumnName("FiscalCountry")
             .HasColumnType("CHAR(2)")
             .HasMaxLength(2)
             .HasDefaultValue("PT")
             .IsRequired();
 
-        builder.Property(cfd => cfd.IsVATRegistered)
+        builder.Property(x => x.IsVATRegistered)
             .HasColumnName("IsVATRegistered")
             .HasColumnType("BIT")
             .HasDefaultValue(true)
             .IsRequired();
 
-        builder.Property(cfd => cfd.IsActive)
+        builder.Property(x => x.IsActive)
             .HasColumnName("IsActive")
             .HasColumnType("BIT")
             .HasDefaultValue(true)
             .IsRequired();
 
-        builder.Property(cfd => cfd.IsDeleted)
+        builder.Property(x => x.IsDeleted)
             .HasColumnName("IsDeleted")
             .HasColumnType("BIT")
             .HasDefaultValue(false)
             .IsRequired();
 
-        builder.Property(cfd => cfd.CreatedBy)
-            .HasColumnName("CreatedBy")
-            .HasColumnType("NVARCHAR(50)")
-            .HasMaxLength(50)
-            .IsRequired();
+        builder.Property(x => x.CreatedBy)
+              .HasColumnName("CreatedBy")
+              .HasColumnType("INT")
+              .IsRequired();
 
-        builder.Property(cfd => cfd.CreatedAt)
+        builder.Property(x => x.CreatedAt)
             .HasColumnName("CreatedAt")
             .HasColumnType("DATETIME2")
             .HasDefaultValueSql("SYSDATETIME()")
             .IsRequired();
 
-        builder.Property(cfd => cfd.ModifiedBy)
+        builder.Property(x => x.ModifiedBy)
             .HasColumnName("ModifiedBy")
-            .HasColumnType("NVARCHAR(50)")
-            .HasMaxLength(50)
+            .HasColumnType("INT")
             .IsRequired(false);
 
-        builder.Property(cfd => cfd.ModifiedAt)
+        builder.Property(x => x.ModifiedAt)
             .HasColumnName("ModifiedAt")
             .HasColumnType("DATETIME2")
             .IsRequired(false);
 
         // Constraints únicos
-        builder.HasIndex(cfd => cfd.NIF)
+        builder.HasIndex(x => x.NIF)
             .IsUnique()
             .HasDatabaseName("UQ_ClientFiscalData_NIF");
 
         // Índices
-        builder.HasIndex(cfd => cfd.ClientId)
+        builder.HasIndex(x => x.ClientId)
             .HasDatabaseName("IX_ClientFiscalData_ClientId")
-            .IncludeProperties(cfd => cfd.TenantId)
+            .IncludeProperties(x => x.TenantId)
             .HasFilter("[IsDeleted] = 0");
 
         // Relacionamentos
-        builder.HasOne(cfd => cfd.Tenant)
+        builder.HasOne(x => x.Tenant)
             .WithMany()
-            .HasForeignKey(cfd => cfd.TenantId)
+            .HasForeignKey(x => x.TenantId)
             .HasConstraintName("FK_ClientFiscalData_Tenant")
             .OnDelete(DeleteBehavior.Restrict);
 
         // Relacionamento Many-to-One com Client (ClientFiscalData.Client -> Client.FiscalData)
-        builder.HasOne(cfd => cfd.Client)
+        builder.HasOne(x => x.Client)
             .WithMany(c => c.FiscalData)
-            .HasForeignKey(cfd => cfd.ClientId)
+            .HasForeignKey(x => x.ClientId)
             .HasConstraintName("FK_ClientFiscalData_Client")
             .OnDelete(DeleteBehavior.Restrict);
     }

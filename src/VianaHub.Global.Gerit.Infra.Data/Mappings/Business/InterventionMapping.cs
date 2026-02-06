@@ -15,101 +15,99 @@ public class InterventionMapping : IEntityTypeConfiguration<InterventionEntity>
         builder.ToTable("Interventions", "dbo");
 
         // Chave Primária
-        builder.HasKey(i => i.Id)
+        builder.HasKey(x => x.Id)
             .HasName("PK_Interventions");
 
-        builder.Property(i => i.Id)
+        builder.Property(x => x.Id)
             .HasColumnName("Id")
             .UseIdentityColumn(1, 1)
             .IsRequired();
 
         // Propriedades
-        builder.Property(i => i.TenantId)
+        builder.Property(x => x.TenantId)
             .HasColumnName("TenantId")
             .IsRequired();
 
-        builder.Property(i => i.ClientId)
+        builder.Property(x => x.ClientId)
             .HasColumnName("ClientId")
             .IsRequired();
 
-        builder.Property(i => i.TeamMemberId)
+        builder.Property(x => x.TeamMemberId)
             .HasColumnName("TeamMemberId")
             .IsRequired();
 
-        builder.Property(i => i.VehicleId)
+        builder.Property(x => x.VehicleId)
             .HasColumnName("VehicleId")
             .IsRequired();
 
-        builder.Property(i => i.Title)
+        builder.Property(x => x.Title)
             .HasColumnName("Title")
             .HasColumnType("NVARCHAR(200)")
             .HasMaxLength(200)
             .IsRequired();
 
-        builder.Property(i => i.Description)
+        builder.Property(x => x.Description)
             .HasColumnName("Description")
             .HasColumnType("NVARCHAR(2000)")
             .HasMaxLength(2000)
             .IsRequired();
 
-        builder.Property(i => i.StartDateTime)
+        builder.Property(x => x.StartDateTime)
             .HasColumnName("StartDateTime")
             .HasColumnType("DATETIME2")
             .IsRequired();
 
-        builder.Property(i => i.EndDateTime)
+        builder.Property(x => x.EndDateTime)
             .HasColumnName("EndDateTime")
             .HasColumnType("DATETIME2")
             .IsRequired(false);
 
-        builder.Property(i => i.EstimatedValue)
+        builder.Property(x => x.EstimatedValue)
             .HasColumnName("EstimatedValue")
             .HasColumnType("DECIMAL(10,2)")
             .HasPrecision(10, 2)
             .IsRequired();
 
-        builder.Property(i => i.RealValue)
+        builder.Property(x => x.RealValue)
             .HasColumnName("RealValue")
             .HasColumnType("DECIMAL(10,2)")
             .HasPrecision(10, 2)
             .IsRequired(false);
 
-        builder.Property(i => i.Status)
+        builder.Property(x => x.Status)
             .HasColumnName("Status")
             .HasColumnType("TINYINT")
             .IsRequired();
 
-        builder.Property(i => i.IsActive)
+        builder.Property(x => x.IsActive)
             .HasColumnName("IsActive")
             .HasColumnType("BIT")
             .HasDefaultValue(true)
             .IsRequired();
 
-        builder.Property(i => i.IsDeleted)
+        builder.Property(x => x.IsDeleted)
             .HasColumnName("IsDeleted")
             .HasColumnType("BIT")
             .HasDefaultValue(false)
             .IsRequired();
 
-        builder.Property(i => i.CreatedBy)
+        builder.Property(x => x.CreatedBy)
             .HasColumnName("CreatedBy")
-            .HasColumnType("NVARCHAR(50)")
-            .HasMaxLength(50)
+            .HasColumnType("INT")
             .IsRequired();
 
-        builder.Property(i => i.CreatedAt)
+        builder.Property(x => x.CreatedAt)
             .HasColumnName("CreatedAt")
             .HasColumnType("DATETIME2")
             .HasDefaultValueSql("SYSDATETIME()")
             .IsRequired();
 
-        builder.Property(i => i.ModifiedBy)
+        builder.Property(x => x.ModifiedBy)
             .HasColumnName("ModifiedBy")
-            .HasColumnType("NVARCHAR(50)")
-            .HasMaxLength(50)
+            .HasColumnType("INT")
             .IsRequired(false);
 
-        builder.Property(i => i.ModifiedAt)
+        builder.Property(x => x.ModifiedAt)
             .HasColumnName("ModifiedAt")
             .HasColumnType("DATETIME2")
             .IsRequired(false);
@@ -119,37 +117,37 @@ public class InterventionMapping : IEntityTypeConfiguration<InterventionEntity>
         builder.ToTable(t => t.HasCheckConstraint("CK_EstimatedValue", "[EstimatedValue] >= 0"));
 
         // Índices
-        builder.HasIndex(i => new { i.TenantId, i.StartDateTime })
+        builder.HasIndex(v => new { v.TenantId, v.StartDateTime })
             .HasDatabaseName("IX_Interventions_Tenant_Date")
-            .IncludeProperties(i => new { i.ClientId, i.TeamMemberId, i.Status })
+            .IncludeProperties(v => new { v.ClientId, v.TeamMemberId, v.Status })
             .HasFilter("[IsDeleted] = 0");
 
         // Relacionamentos
-        builder.HasOne(i => i.Tenant)
+        builder.HasOne(x => x.Tenant)
             .WithMany()
-            .HasForeignKey(i => i.TenantId)
+            .HasForeignKey(x => x.TenantId)
             .HasConstraintName("FK_Interventions_Tenants")
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder.HasOne(i => i.Client)
+        builder.HasOne(x => x.Client)
             .WithMany()
-            .HasForeignKey(i => i.ClientId)
+            .HasForeignKey(x => x.ClientId)
             .HasConstraintName("FK_Interventions_Clients")
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder.HasOne(i => i.TeamMember)
+        builder.HasOne(x => x.TeamMember)
             .WithMany()
-            .HasForeignKey(i => i.TeamMemberId)
+            .HasForeignKey(x => x.TeamMemberId)
             .HasConstraintName("FK_Interventions_TeamMembers")
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder.HasMany(i => i.Contacts)
+        builder.HasMany(x => x.Contacts)
             .WithOne(ic => ic.Intervention)
             .HasForeignKey(ic => ic.InterventionId)
             .HasConstraintName("FK_InterventionContacts_Intervention")
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder.HasMany(i => i.Addresses)
+        builder.HasMany(x => x.Addresses)
             .WithOne(ia => ia.Intervention)
             .HasForeignKey(ia => ia.InterventionId)
             .HasConstraintName("FK_InterventionAddresses_Intervention")

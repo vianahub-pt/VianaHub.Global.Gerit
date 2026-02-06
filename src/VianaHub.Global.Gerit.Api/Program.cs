@@ -176,6 +176,8 @@ public class Program
         app.MapFunctionEndpoints();
         app.MapEquipmentEndpoints();
         app.MapVehicleEndpoints();
+        app.MapTeamMemberEndpoints();
+        app.MapTeamMemberAddressEndpoints();
 
         // Minimal API Endpoints
         var localization = app.Services.GetService(typeof(ILocalizationService)) as ILocalizationService;

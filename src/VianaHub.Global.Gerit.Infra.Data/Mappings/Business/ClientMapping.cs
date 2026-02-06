@@ -15,109 +15,107 @@ public class ClientMapping : IEntityTypeConfiguration<ClientEntity>
         builder.ToTable("Clients", "dbo");
 
         // Chave Primária
-        builder.HasKey(c => c.Id)
+        builder.HasKey(x => x.Id)
             .HasName("PK_Clients");
 
-        builder.Property(c => c.Id)
+        builder.Property(x => x.Id)
             .HasColumnName("Id")
             .UseIdentityColumn(1, 1)
             .IsRequired();
 
         // Propriedades
-        builder.Property(c => c.TenantId)
+        builder.Property(x => x.TenantId)
             .HasColumnName("TenantId")
             .IsRequired();
 
-        builder.Property(c => c.Name)
+        builder.Property(x => x.Name)
             .HasColumnName("Name")
             .HasColumnType("NVARCHAR(150)")
             .HasMaxLength(150)
             .IsRequired();
 
-        builder.Property(c => c.Email)
+        builder.Property(x => x.Email)
             .HasColumnName("Email")
             .HasColumnType("NVARCHAR(255)")
             .HasMaxLength(255)
             .IsRequired(false);
 
-        builder.Property(c => c.Phone)
+        builder.Property(x => x.Phone)
             .HasColumnName("Phone")
             .HasColumnType("NVARCHAR(50)")
             .HasMaxLength(50)
             .IsRequired();
 
-        builder.Property(c => c.Consent)
+        builder.Property(x => x.Consent)
             .HasColumnName("Consent")
             .HasColumnType("BIT")
             .HasDefaultValue(true)
             .IsRequired();
 
-        builder.Property(c => c.IsActive)
+        builder.Property(x => x.IsActive)
             .HasColumnName("IsActive")
             .HasColumnType("BIT")
             .HasDefaultValue(true)
             .IsRequired();
 
-        builder.Property(c => c.IsDeleted)
+        builder.Property(x => x.IsDeleted)
             .HasColumnName("IsDeleted")
             .HasColumnType("BIT")
             .HasDefaultValue(false)
             .IsRequired();
 
-        builder.Property(c => c.CreatedBy)
-            .HasColumnName("CreatedBy")
-            .HasColumnType("NVARCHAR(50)")
-            .HasMaxLength(50)
-            .IsRequired();
+        builder.Property(x => x.CreatedBy)
+              .HasColumnName("CreatedBy")
+              .HasColumnType("INT")
+              .IsRequired();
 
-        builder.Property(c => c.CreatedAt)
+        builder.Property(x => x.CreatedAt)
             .HasColumnName("CreatedAt")
             .HasColumnType("DATETIME2")
             .HasDefaultValueSql("SYSDATETIME()")
             .IsRequired();
 
-        builder.Property(c => c.ModifiedBy)
+        builder.Property(x => x.ModifiedBy)
             .HasColumnName("ModifiedBy")
-            .HasColumnType("NVARCHAR(50)")
-            .HasMaxLength(50)
+            .HasColumnType("INT")
             .IsRequired(false);
 
-        builder.Property(c => c.ModifiedAt)
+        builder.Property(x => x.ModifiedAt)
             .HasColumnName("ModifiedAt")
             .HasColumnType("DATETIME2")
             .IsRequired(false);
 
         // Constraints únicos
-        builder.HasIndex(c => new { c.TenantId, c.Name })
+        builder.HasIndex(v => new { v.TenantId, v.Name })
             .IsUnique()
             .HasDatabaseName("UQ_Clients_Tenant_Name");
 
         // Índices únicos com filtro
-        builder.HasIndex(c => new { c.TenantId, c.Name })
+        builder.HasIndex(v => new { v.TenantId, v.Name })
             .IsUnique()
             .HasDatabaseName("UX_Clients_Tenant_Name_Active")
             .HasFilter("[IsDeleted] = 0");
 
         // Índices não clusterizados
-        builder.HasIndex(c => new { c.TenantId, c.Name })
+        builder.HasIndex(v => new { v.TenantId, v.Name })
             .HasDatabaseName("IX_Clients_Tenant_Active")
-            .IncludeProperties(c => new { c.Email, c.Phone })
+            .IncludeProperties(v => new { v.Email, v.Phone })
             .HasFilter("[IsDeleted] = 0");
 
         // Relacionamentos
-        builder.HasOne(c => c.Tenant)
+        builder.HasOne(x => x.Tenant)
             .WithMany()
-            .HasForeignKey(c => c.TenantId)
+            .HasForeignKey(x => x.TenantId)
             .HasConstraintName("FK_Clients_Tenant")
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder.HasMany(c => c.Contacts)
+        builder.HasMany(x => x.Contacts)
             .WithOne(cc => cc.Client)
             .HasForeignKey(cc => cc.ClientId)
             .HasConstraintName("FK_ClientContacts_Client")
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder.HasMany(c => c.Addresses)
+        builder.HasMany(x => x.Addresses)
             .WithOne(ca => ca.Client)
             .HasForeignKey(ca => ca.ClientId)
             .HasConstraintName("FK_ClientAddresses_Client")

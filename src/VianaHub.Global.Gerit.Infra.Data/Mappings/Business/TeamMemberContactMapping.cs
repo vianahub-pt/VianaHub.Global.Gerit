@@ -15,92 +15,90 @@ public class TeamMemberContactMapping : IEntityTypeConfiguration<TeamMemberConta
         builder.ToTable("TeamMemberContacts", "dbo");
 
         // Chave Primária
-        builder.HasKey(tmc => tmc.Id)
+        builder.HasKey(x => x.Id)
             .HasName("PK_TeamMemberContacts");
 
-        builder.Property(tmc => tmc.Id)
+        builder.Property(x => x.Id)
             .HasColumnName("Id")
             .UseIdentityColumn(1, 1)
             .IsRequired();
 
         // Propriedades
-        builder.Property(tmc => tmc.TenantId)
+        builder.Property(x => x.TenantId)
             .HasColumnName("TenantId")
             .IsRequired();
 
-        builder.Property(tmc => tmc.TeamMemberId)
+        builder.Property(x => x.TeamMemberId)
             .HasColumnName("TeamMemberId")
             .IsRequired();
 
-        builder.Property(tmc => tmc.Name)
+        builder.Property(x => x.Name)
             .HasColumnName("Name")
             .HasColumnType("NVARCHAR(150)")
             .HasMaxLength(150)
             .IsRequired();
 
-        builder.Property(tmc => tmc.Email)
+        builder.Property(x => x.Email)
             .HasColumnName("Email")
             .HasColumnType("NVARCHAR(255)")
             .HasMaxLength(255)
             .IsRequired();
 
-        builder.Property(tmc => tmc.Phone)
+        builder.Property(x => x.Phone)
             .HasColumnName("Phone")
             .HasColumnType("NVARCHAR(30)")
             .HasMaxLength(30)
             .IsRequired(false);
 
-        builder.Property(tmc => tmc.IsPrimary)
+        builder.Property(x => x.IsPrimary)
             .HasColumnName("IsPrimary")
             .HasColumnType("BIT")
             .HasDefaultValue(false)
             .IsRequired();
 
-        builder.Property(tmc => tmc.IsActive)
+        builder.Property(x => x.IsActive)
             .HasColumnName("IsActive")
             .HasColumnType("BIT")
             .HasDefaultValue(true)
             .IsRequired();
 
-        builder.Property(tmc => tmc.IsDeleted)
+        builder.Property(x => x.IsDeleted)
             .HasColumnName("IsDeleted")
             .HasColumnType("BIT")
             .HasDefaultValue(false)
             .IsRequired();
 
-        builder.Property(tmc => tmc.CreatedBy)
+        builder.Property(x => x.CreatedBy)
             .HasColumnName("CreatedBy")
-            .HasColumnType("NVARCHAR(50)")
-            .HasMaxLength(50)
+            .HasColumnType("INT")
             .IsRequired();
 
-        builder.Property(tmc => tmc.CreatedAt)
+        builder.Property(x => x.CreatedAt)
             .HasColumnName("CreatedAt")
             .HasColumnType("DATETIME2")
             .HasDefaultValueSql("SYSDATETIME()")
             .IsRequired();
 
-        builder.Property(tmc => tmc.ModifiedBy)
+        builder.Property(x => x.ModifiedBy)
             .HasColumnName("ModifiedBy")
-            .HasColumnType("NVARCHAR(50)")
-            .HasMaxLength(50)
+            .HasColumnType("INT")
             .IsRequired(false);
 
-        builder.Property(tmc => tmc.ModifiedAt)
+        builder.Property(x => x.ModifiedAt)
             .HasColumnName("ModifiedAt")
             .HasColumnType("DATETIME2")
             .IsRequired(false);
 
         // Índices
-        builder.HasIndex(tmc => tmc.TeamMemberId)
+        builder.HasIndex(x => x.TeamMemberId)
             .HasDatabaseName("IX_TeamMemberContacts_TeamMemberId")
-            .IncludeProperties(tmc => tmc.TenantId)
+            .IncludeProperties(x => x.TenantId)
             .HasFilter("[IsDeleted] = 0");
 
         // Relacionamentos
-        builder.HasOne(tmc => tmc.Tenant)
+        builder.HasOne(x => x.Tenant)
             .WithMany()
-            .HasForeignKey(tmc => tmc.TenantId)
+            .HasForeignKey(x => x.TenantId)
             .HasConstraintName("FK_TeamMemberContacts_Tenant")
             .OnDelete(DeleteBehavior.Restrict);
 

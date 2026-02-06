@@ -15,51 +15,51 @@ public class UserRoleMapping : IEntityTypeConfiguration<UserRoleEntity>
         builder.ToTable("UserRoles", "dbo");
 
         // Chave Primária
-        builder.HasKey(ur => ur.Id)
+        builder.HasKey(x => x.Id)
             .HasName("PK_UserRoles");
 
-        builder.Property(ur => ur.Id)
+        builder.Property(x => x.Id)
             .HasColumnName("Id")
             .UseIdentityColumn(1, 1)
             .IsRequired();
 
         // Propriedades
-        builder.Property(ur => ur.TenantId)
+        builder.Property(x => x.TenantId)
             .HasColumnName("TenantId")
             .IsRequired();
 
-        builder.Property(ur => ur.UserId)
+        builder.Property(x => x.UserId)
             .HasColumnName("UserId")
             .IsRequired();
 
-        builder.Property(ur => ur.RoleId)
+        builder.Property(x => x.RoleId)
             .HasColumnName("RoleId")
             .IsRequired();
 
         // Constraints únicos
-        builder.HasIndex(ur => new { ur.TenantId, ur.UserId, ur.RoleId })
+        builder.HasIndex(x => new { x.TenantId, x.UserId, x.RoleId })
             .IsUnique()
             .HasDatabaseName("UQ_UserRoles");
 
         // Índices
-        builder.HasIndex(ur => ur.UserId)
+        builder.HasIndex(x => x.UserId)
             .HasDatabaseName("IX_UserRoles_UserId")
-            .IncludeProperties(ur => new { ur.TenantId, ur.RoleId });
+            .IncludeProperties(x => new { x.TenantId, x.RoleId });
 
-        builder.HasIndex(ur => ur.RoleId)
+        builder.HasIndex(x => x.RoleId)
             .HasDatabaseName("IX_UserRoles_RoleId")
-            .IncludeProperties(ur => new { ur.TenantId, ur.UserId });
+            .IncludeProperties(x => new { x.TenantId, x.UserId });
 
         // Relacionamentos
-        builder.HasOne(ur => ur.Tenant)
+        builder.HasOne(x => x.Tenant)
             .WithMany()
-            .HasForeignKey(ur => ur.TenantId)
+            .HasForeignKey(x => x.TenantId)
             .HasConstraintName("FK_UserRoles_Tenant")
             .OnDelete(DeleteBehavior.Restrict);
 
         // NOTA: Relacionamentos com User e Role já estão configurados em:
-        // - UserMapping: HasMany(u => u.UserRoles).WithOne(ur => ur.User).HasForeignKey(ur => ur.UserId)
-        // - RoleMapping: HasMany(r => r.UserRoles).WithOne(ur => ur.Role).HasForeignKey(ur => ur.RoleId)
+        // - UserMapping: HasMany(u => u.UserRoles).WithOne(x => x.User).HasForeignKey(x => x.UserId)
+        // - RoleMapping: HasMany(r => r.UserRoles).WithOne(x => x.Role).HasForeignKey(x => x.RoleId)
         // Não configurar novamente aqui para evitar propriedades sombra (shadow properties)
     }
 }

@@ -15,105 +15,103 @@ public class TeamMemberAddressMapping : IEntityTypeConfiguration<TeamMemberAddre
         builder.ToTable("TeamMemberAddresses", "dbo");
 
         // Chave Primária
-        builder.HasKey(tma => tma.Id)
+        builder.HasKey(x => x.Id)
             .HasName("PK_TeamMemberAddresses");
 
-        builder.Property(tma => tma.Id)
+        builder.Property(x => x.Id)
             .HasColumnName("Id")
             .UseIdentityColumn(1, 1)
             .IsRequired();
 
         // Propriedades
-        builder.Property(tma => tma.TenantId)
+        builder.Property(x => x.TenantId)
             .HasColumnName("TenantId")
             .IsRequired();
 
-        builder.Property(tma => tma.TeamMemberId)
+        builder.Property(x => x.TeamMemberId)
             .HasColumnName("TeamMemberId")
             .IsRequired();
 
-        builder.Property(tma => tma.Street)
+        builder.Property(x => x.Street)
             .HasColumnName("Street")
             .HasColumnType("NVARCHAR(200)")
             .HasMaxLength(200)
             .IsRequired();
 
-        builder.Property(tma => tma.City)
+        builder.Property(x => x.City)
             .HasColumnName("City")
             .HasColumnType("NVARCHAR(100)")
             .HasMaxLength(100)
             .IsRequired();
 
-        builder.Property(tma => tma.PostalCode)
+        builder.Property(x => x.PostalCode)
             .HasColumnName("PostalCode")
             .HasColumnType("NVARCHAR(20)")
             .HasMaxLength(20)
             .IsRequired();
 
-        builder.Property(tma => tma.District)
+        builder.Property(x => x.District)
             .HasColumnName("District")
             .HasColumnType("NVARCHAR(100)")
             .HasMaxLength(100)
             .IsRequired(false);
 
-        builder.Property(tma => tma.CountryCode)
+        builder.Property(x => x.CountryCode)
             .HasColumnName("CountryCode")
             .HasColumnType("CHAR(2)")
             .HasMaxLength(2)
             .HasDefaultValue("PT")
             .IsRequired();
 
-        builder.Property(tma => tma.IsPrimary)
+        builder.Property(x => x.IsPrimary)
             .HasColumnName("IsPrimary")
             .HasColumnType("BIT")
             .HasDefaultValue(false)
             .IsRequired();
 
-        builder.Property(tma => tma.IsActive)
+        builder.Property(x => x.IsActive)
             .HasColumnName("IsActive")
             .HasColumnType("BIT")
             .HasDefaultValue(true)
             .IsRequired();
 
-        builder.Property(tma => tma.IsDeleted)
+        builder.Property(x => x.IsDeleted)
             .HasColumnName("IsDeleted")
             .HasColumnType("BIT")
             .HasDefaultValue(false)
             .IsRequired();
 
-        builder.Property(tma => tma.CreatedBy)
+        builder.Property(x => x.CreatedBy)
             .HasColumnName("CreatedBy")
-            .HasColumnType("NVARCHAR(50)")
-            .HasMaxLength(50)
+            .HasColumnType("INT")
             .IsRequired();
 
-        builder.Property(tma => tma.CreatedAt)
+        builder.Property(x => x.CreatedAt)
             .HasColumnName("CreatedAt")
             .HasColumnType("DATETIME2")
             .HasDefaultValueSql("SYSDATETIME()")
             .IsRequired();
 
-        builder.Property(tma => tma.ModifiedBy)
+        builder.Property(x => x.ModifiedBy)
             .HasColumnName("ModifiedBy")
-            .HasColumnType("NVARCHAR(50)")
-            .HasMaxLength(50)
+            .HasColumnType("INT")
             .IsRequired(false);
 
-        builder.Property(tma => tma.ModifiedAt)
+        builder.Property(x => x.ModifiedAt)
             .HasColumnName("ModifiedAt")
             .HasColumnType("DATETIME2")
             .IsRequired(false);
 
         // Índices
-        builder.HasIndex(tma => tma.TeamMemberId)
+        builder.HasIndex(x => x.TeamMemberId)
             .HasDatabaseName("IX_TeamMemberAddresses_TeamMemberId")
-            .IncludeProperties(tma => tma.TenantId)
+            .IncludeProperties(x => x.TenantId)
             .HasFilter("[IsDeleted] = 0");
 
         // Relacionamentos
-        builder.HasOne(tma => tma.Tenant)
+        builder.HasOne(x => x.Tenant)
             .WithMany()
-            .HasForeignKey(tma => tma.TenantId)
+            .HasForeignKey(x => x.TenantId)
             .HasConstraintName("FK_TeamMemberAddresses_Tenant")
             .OnDelete(DeleteBehavior.Restrict);
 

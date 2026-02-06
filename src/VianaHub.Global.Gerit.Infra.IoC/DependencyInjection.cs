@@ -46,6 +46,8 @@ using VianaHub.Global.Gerit.Domain.Validators.Identity.UserRole;
 using VianaHub.Global.Gerit.Domain.Validators.Business.Vehicle;
 using VianaHub.Global.Gerit.Domain.Validators.Business.Equipment;
 using VianaHub.Global.Gerit.Domain.Validators.Business.Function;
+using VianaHub.Global.Gerit.Domain.Validators.Business.TeamMember;
+using VianaHub.Global.Gerit.Domain.Validators.Business.TeamMemberAddress;
 using VianaHub.Global.Gerit.Infra.Data.Repository.Job;
 using VianaHub.Global.Gerit.Infra.Data.Repository.Business;
 using VianaHub.Global.Gerit.Infra.Data.Repository.Billing;
@@ -88,6 +90,10 @@ public static class DependencyInjection
         services.AddScoped<IEntityDomainValidator<EquipmentEntity>, EquipmentValidator>();
         // Function validators
         services.AddScoped<IEntityDomainValidator<FunctionEntity>, FunctionValidator>();
+        // TeamMember validators
+        services.AddScoped<IEntityDomainValidator<TeamMemberEntity>, TeamMemberValidator>();
+        // TeamMemberAddress validators
+        services.AddScoped<IEntityDomainValidator<TeamMemberAddressEntity>, TeamMemberAddressValidator>();
 
         // Application - Common Services
         services.AddScoped<IFileValidationService, FileValidationService>();
@@ -97,6 +103,8 @@ public static class DependencyInjection
         services.AddScoped<IFunctionAppService, FunctionAppService>();
         services.AddScoped<IVehicleAppService, VehicleAppService>();
         services.AddScoped<IEquipmentAppService, EquipmentAppService>();
+        services.AddScoped<ITeamMemberAppService, TeamMemberAppService>();
+        services.AddScoped<ITeamMemberAddressAppService, TeamMemberAddressAppService>();
         services.AddScoped<IResourceAppService, ResourceAppService>();
         services.AddScoped<IRoleAppService, RoleAppService>();
         services.AddScoped<IPlanAppService, PlanAppService>();
@@ -123,11 +131,15 @@ public static class DependencyInjection
         services.AddScoped<IFunctionDomainService, FunctionDomainService>();
         services.AddScoped<IVehicleDomainService, VehicleDomainService>();
         services.AddScoped<IEquipmentDomainService, EquipmentDomainService>();
+        services.AddScoped<ITeamMemberDomainService, TeamMemberDomainService>();
+        services.AddScoped<ITeamMemberAddressDomainService, TeamMemberAddressDomainService>();
 
         // Infra.Data - Repositories
         services.AddScoped<IFunctionDataRepository, FunctionDataRepository>();
         services.AddScoped<IVehicleDataRepository, VehicleDataRepository>();
         services.AddScoped<IEquipmentDataRepository, EquipmentDataRepository>();
+        services.AddScoped<ITeamMemberDataRepository, TeamMemberDataRepository>();
+        services.AddScoped<ITeamMemberAddressDataRepository, TeamMemberAddressDataRepository>();
         services.AddScoped<IActionDataRepository, ActionDataRepository>();
         services.AddScoped<IResourceDataRepository, ResourceDataRepository>();
         services.AddScoped<IRoleDataRepository, RoleDataRepository>();

@@ -15,114 +15,117 @@ public class ClientAddressMapping : IEntityTypeConfiguration<ClientAddressEntity
         builder.ToTable("ClientAddresses", "dbo");
 
         // Chave Primária
-        builder.HasKey(ca => ca.Id)
+        builder.HasKey(x => x.Id)
             .HasName("PK_ClientAddresses");
 
-        builder.Property(ca => ca.Id)
+        builder.Property(x => x.Id)
             .HasColumnName("Id")
             .UseIdentityColumn(1, 1)
             .IsRequired();
 
         // Propriedades
-        builder.Property(ca => ca.TenantId)
+        builder.Property(x => x.TenantId)
             .HasColumnName("TenantId")
             .IsRequired();
 
-        builder.Property(ca => ca.ClientId)
+        builder.Property(x => x.ClientId)
             .HasColumnName("ClientId")
             .IsRequired();
 
-        builder.Property(ca => ca.Street)
+        builder.Property(x => x.Street)
             .HasColumnName("Street")
             .HasColumnType("NVARCHAR(200)")
             .HasMaxLength(200)
             .IsRequired();
 
-        builder.Property(ca => ca.City)
+        builder.Property(x => x.City)
             .HasColumnName("City")
             .HasColumnType("NVARCHAR(100)")
             .HasMaxLength(100)
             .IsRequired();
 
-        builder.Property(ca => ca.PostalCode)
+        builder.Property(x => x.PostalCode)
             .HasColumnName("PostalCode")
             .HasColumnType("NVARCHAR(20)")
             .HasMaxLength(20)
             .IsRequired();
 
-        builder.Property(ca => ca.District)
+        builder.Property(x => x.District)
             .HasColumnName("District")
             .HasColumnType("NVARCHAR(100)")
             .HasMaxLength(100)
             .IsRequired(false);
 
-        builder.Property(ca => ca.CountryCode)
+        builder.Property(x => x.CountryCode)
             .HasColumnName("CountryCode")
             .HasColumnType("CHAR(2)")
             .HasMaxLength(2)
             .HasDefaultValue("PT")
             .IsRequired();
 
-        builder.Property(ca => ca.IsPrimary)
+        builder.Property(x => x.IsPrimary)
             .HasColumnName("IsPrimary")
             .HasColumnType("BIT")
             .HasDefaultValue(false)
             .IsRequired();
 
-        builder.Property(ca => ca.IsActive)
+        builder.Property(x => x.IsActive)
             .HasColumnName("IsActive")
             .HasColumnType("BIT")
             .HasDefaultValue(true)
             .IsRequired();
 
-        builder.Property(ca => ca.IsDeleted)
+        builder.Property(x => x.IsDeleted)
             .HasColumnName("IsDeleted")
             .HasColumnType("BIT")
             .HasDefaultValue(false)
             .IsRequired();
 
-        builder.Property(ca => ca.CreatedBy)
+        builder.Property(x => x.CreatedBy)
             .HasColumnName("CreatedBy")
-            .HasColumnType("NVARCHAR(50)")
-            .HasMaxLength(50)
+            .HasColumnType("INT")
             .IsRequired();
 
-        builder.Property(ca => ca.CreatedAt)
+        builder.Property(x => x.CreatedBy)
+              .HasColumnName("CreatedBy")
+              .HasColumnType("INT")
+              .IsRequired();
+
+        builder.Property(x => x.CreatedAt)
             .HasColumnName("CreatedAt")
             .HasColumnType("DATETIME2")
             .HasDefaultValueSql("SYSDATETIME()")
             .IsRequired();
 
-        builder.Property(ca => ca.ModifiedBy)
+        builder.Property(x => x.ModifiedBy)
             .HasColumnName("ModifiedBy")
-            .HasColumnType("NVARCHAR(50)")
-            .HasMaxLength(50)
+            .HasColumnType("INT")
             .IsRequired(false);
 
-        builder.Property(ca => ca.ModifiedAt)
+        builder.Property(x => x.ModifiedAt)
             .HasColumnName("ModifiedAt")
             .HasColumnType("DATETIME2")
             .IsRequired(false);
 
         // Índices únicos com filtro para endereço primário
-        builder.HasIndex(ca => ca.ClientId)
+        builder.HasIndex(x => x.ClientId)
             .IsUnique()
             .HasDatabaseName("UX_ClientAddresses_Primary")
             .HasFilter("[IsPrimary] = 1 AND [IsDeleted] = 0");
 
         // Índices não clusterizados
-        builder.HasIndex(ca => ca.ClientId)
+        builder.HasIndex(x => x.ClientId)
             .HasDatabaseName("IX_ClientAddresses_ClientId")
-            .IncludeProperties(ca => ca.TenantId)
+            .IncludeProperties(x => x.TenantId)
             .HasFilter("[IsDeleted] = 0");
 
         // Relacionamentos
-        builder.HasOne(ca => ca.Tenant)
+        builder.HasOne(x => x.Tenant)
             .WithMany()
-            .HasForeignKey(ca => ca.TenantId)
+            .HasForeignKey(x => x.TenantId)
             .HasConstraintName("FK_ClientAddresses_Tenant")
             .OnDelete(DeleteBehavior.Restrict);
 
-        // Relacionamento com Client configurado no ClientMapping
+        // Relacionamento com Client configurado no Clienvpping
     }
 }

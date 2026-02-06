@@ -56,23 +56,23 @@ public class TeamMemberMapping : IEntityTypeConfiguration<TeamMemberEntity>
             .HasDefaultValue(false)
             .IsRequired();
 
-        builder.Property(tm => tm.CreatedBy)
-            .HasColumnName("CreatedBy")
-            .HasColumnType("INT")
-            .IsRequired();
+        builder.Property(x => x.CreatedBy)
+              .HasColumnName("CreatedBy")
+              .HasColumnType("INT")
+              .IsRequired();
 
-        builder.Property(tm => tm.CreatedAt)
+        builder.Property(x => x.CreatedAt)
             .HasColumnName("CreatedAt")
             .HasColumnType("DATETIME2")
             .HasDefaultValueSql("SYSDATETIME()")
             .IsRequired();
 
-        builder.Property(tm => tm.ModifiedBy)
+        builder.Property(x => x.ModifiedBy)
             .HasColumnName("ModifiedBy")
             .HasColumnType("INT")
             .IsRequired(false);
 
-        builder.Property(tm => tm.ModifiedAt)
+        builder.Property(x => x.ModifiedAt)
             .HasColumnName("ModifiedAt")
             .HasColumnType("DATETIME2")
             .IsRequired(false);
@@ -97,8 +97,8 @@ public class TeamMemberMapping : IEntityTypeConfiguration<TeamMemberEntity>
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasMany(tm => tm.Addresses)
-            .WithOne(tma => tma.TeamMember)
-            .HasForeignKey(tma => tma.TeamMemberId)
+            .WithOne(x => x.TeamMember)
+            .HasForeignKey(x => x.TeamMemberId)
             .HasConstraintName("FK_TeamMemberAddresses_TeamMember")
             .OnDelete(DeleteBehavior.Restrict);
     }

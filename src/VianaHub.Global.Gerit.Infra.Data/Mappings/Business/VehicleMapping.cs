@@ -15,82 +15,82 @@ public class VehicleMapping : IEntityTypeConfiguration<VehicleEntity>
         builder.ToTable("Vehicles", "dbo");
 
         // Chave Primária
-        builder.HasKey(v => v.Id)
+        builder.HasKey(x => x.Id)
             .HasName("PK_Vehicles");
 
-        builder.Property(v => v.Id)
+        builder.Property(x => x.Id)
             .HasColumnName("Id")
             .UseIdentityColumn(1, 1)
             .IsRequired();
 
         // Propriedades
-        builder.Property(v => v.TenantId)
+        builder.Property(x => x.TenantId)
             .HasColumnName("TenantId")
             .IsRequired();
 
-        builder.Property(v => v.Plate)
+        builder.Property(x => x.Plate)
             .HasColumnName("Plate")
             .HasColumnType("NVARCHAR(20)")
             .HasMaxLength(20)
             .IsRequired();
 
-        builder.Property(v => v.Brand)
+        builder.Property(x => x.Brand)
             .HasColumnName("Brand")
             .HasColumnType("NVARCHAR(100)")
             .HasMaxLength(100)
             .IsRequired();
 
-        builder.Property(v => v.Model)
+        builder.Property(x => x.Model)
             .HasColumnName("Model")
             .HasColumnType("NVARCHAR(100)")
             .HasMaxLength(100)
             .IsRequired();
 
-        builder.Property(v => v.Year)
+        builder.Property(x => x.Year)
             .HasColumnName("Year")
             .IsRequired();
 
-        builder.Property(v => v.Color)
+        builder.Property(x => x.Color)
             .HasColumnName("Color")
             .HasColumnType("NVARCHAR(50)")
             .HasMaxLength(50)
             .IsRequired(false);
 
-        builder.Property(v => v.FuelType)
+        builder.Property(x => x.FuelType)
             .HasColumnName("FuelType")
             .HasColumnType("NVARCHAR(50)")
             .HasMaxLength(50)
             .IsRequired(false);
 
-        builder.Property(v => v.IsActive)
+        builder.Property(x => x.IsActive)
             .HasColumnName("IsActive")
             .HasColumnType("BIT")
             .HasDefaultValue(true)
             .IsRequired();
 
-        builder.Property(v => v.IsDeleted)
+        builder.Property(x => x.IsDeleted)
             .HasColumnName("IsDeleted")
             .HasColumnType("BIT")
             .HasDefaultValue(false)
             .IsRequired();
 
-        builder.Property(v => v.CreatedBy)
+        builder.Property(x => x.CreatedBy)
             .HasColumnName("CreatedBy")
             .HasColumnType("INT")
             .IsRequired();
 
-        builder.Property(v => v.CreatedAt)
+        builder.Property(x => x.CreatedAt)
             .HasColumnName("CreatedAt")
             .HasColumnType("DATETIME2")
             .HasDefaultValueSql("SYSDATETIME()")
             .IsRequired();
 
-        builder.Property(v => v.ModifiedBy)
+        builder.Property(x => x.ModifiedBy)
             .HasColumnName("ModifiedBy")
             .HasColumnType("INT")
             .IsRequired(false);
 
-        builder.Property(v => v.ModifiedAt)
+        builder.Property(x => x.ModifiedAt)
             .HasColumnName("ModifiedAt")
             .HasColumnType("DATETIME2")
             .IsRequired(false);
@@ -101,9 +101,9 @@ public class VehicleMapping : IEntityTypeConfiguration<VehicleEntity>
             .HasDatabaseName("UQ_Vehicles_Tenant_Plate");
 
         // Relacionamentos
-        builder.HasOne(v => v.Tenant)
+        builder.HasOne(x => x.Tenant)
             .WithMany()
-            .HasForeignKey(v => v.TenantId)
+            .HasForeignKey(x => x.TenantId)
             .HasConstraintName("FK_Vehicles_Tenants")
             .OnDelete(DeleteBehavior.Restrict);
     }

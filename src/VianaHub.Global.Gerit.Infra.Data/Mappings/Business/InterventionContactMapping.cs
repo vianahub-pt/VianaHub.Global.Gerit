@@ -15,92 +15,90 @@ public class InterventionContactMapping : IEntityTypeConfiguration<InterventionC
         builder.ToTable("InterventionContacts", "dbo");
 
         // Chave Primária
-        builder.HasKey(ic => ic.Id)
+        builder.HasKey(x => x.Id)
             .HasName("PK_InterventionContacts");
 
-        builder.Property(ic => ic.Id)
+        builder.Property(x => x.Id)
             .HasColumnName("Id")
             .UseIdentityColumn(1, 1)
             .IsRequired();
 
         // Propriedades
-        builder.Property(ic => ic.TenantId)
+        builder.Property(x => x.TenantId)
             .HasColumnName("TenantId")
             .IsRequired();
 
-        builder.Property(ic => ic.InterventionId)
+        builder.Property(x => x.InterventionId)
             .HasColumnName("InterventionId")
             .IsRequired();
 
-        builder.Property(ic => ic.Name)
+        builder.Property(x => x.Name)
             .HasColumnName("Name")
             .HasColumnType("NVARCHAR(150)")
             .HasMaxLength(150)
             .IsRequired();
 
-        builder.Property(ic => ic.Email)
+        builder.Property(x => x.Email)
             .HasColumnName("Email")
             .HasColumnType("NVARCHAR(255)")
             .HasMaxLength(255)
             .IsRequired();
 
-        builder.Property(ic => ic.Phone)
+        builder.Property(x => x.Phone)
             .HasColumnName("Phone")
             .HasColumnType("NVARCHAR(30)")
             .HasMaxLength(30)
             .IsRequired(false);
 
-        builder.Property(ic => ic.IsPrimary)
+        builder.Property(x => x.IsPrimary)
             .HasColumnName("IsPrimary")
             .HasColumnType("BIT")
             .HasDefaultValue(false)
             .IsRequired();
 
-        builder.Property(ic => ic.IsActive)
+        builder.Property(x => x.IsActive)
             .HasColumnName("IsActive")
             .HasColumnType("BIT")
             .HasDefaultValue(true)
             .IsRequired();
 
-        builder.Property(ic => ic.IsDeleted)
+        builder.Property(x => x.IsDeleted)
             .HasColumnName("IsDeleted")
             .HasColumnType("BIT")
             .HasDefaultValue(false)
             .IsRequired();
 
-        builder.Property(ic => ic.CreatedBy)
-            .HasColumnName("CreatedBy")
-            .HasColumnType("NVARCHAR(50)")
-            .HasMaxLength(50)
-            .IsRequired();
+        builder.Property(x => x.CreatedBy)
+              .HasColumnName("CreatedBy")
+              .HasColumnType("INT")
+              .IsRequired();
 
-        builder.Property(ic => ic.CreatedAt)
+        builder.Property(x => x.CreatedAt)
             .HasColumnName("CreatedAt")
             .HasColumnType("DATETIME2")
             .HasDefaultValueSql("SYSDATETIME()")
             .IsRequired();
 
-        builder.Property(ic => ic.ModifiedBy)
+        builder.Property(x => x.ModifiedBy)
             .HasColumnName("ModifiedBy")
-            .HasColumnType("NVARCHAR(50)")
-            .HasMaxLength(50)
+            .HasColumnType("INT")
             .IsRequired(false);
 
-        builder.Property(ic => ic.ModifiedAt)
+        builder.Property(x => x.ModifiedAt)
             .HasColumnName("ModifiedAt")
             .HasColumnType("DATETIME2")
             .IsRequired(false);
 
         // Índices
-        builder.HasIndex(ic => ic.InterventionId)
+        builder.HasIndex(x => x.InterventionId)
             .HasDatabaseName("IX_InterventionContacts_InterventionId")
-            .IncludeProperties(ic => ic.TenantId)
+            .IncludeProperties(x => x.TenantId)
             .HasFilter("[IsDeleted] = 0");
 
         // Relacionamentos
-        builder.HasOne(ic => ic.Tenant)
+        builder.HasOne(x => x.Tenant)
             .WithMany()
-            .HasForeignKey(ic => ic.TenantId)
+            .HasForeignKey(x => x.TenantId)
             .HasConstraintName("FK_InterventionContacts_Tenant")
             .OnDelete(DeleteBehavior.Restrict);
 

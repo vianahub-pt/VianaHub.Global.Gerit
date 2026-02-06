@@ -15,80 +15,79 @@ public class EquipmentMapping : IEntityTypeConfiguration<EquipmentEntity>
         builder.ToTable("Equipments", "dbo");
 
         // Chave Primária
-        builder.HasKey(e => e.Id)
+        builder.HasKey(x => x.Id)
             .HasName("PK_Equipments");
 
-        builder.Property(e => e.Id)
+        builder.Property(x => x.Id)
             .HasColumnName("Id")
             .UseIdentityColumn(1, 1)
             .IsRequired();
 
         // Propriedades
-        builder.Property(e => e.TenantId)
+        builder.Property(x => x.TenantId)
             .HasColumnName("TenantId")
             .IsRequired();
 
-        builder.Property(e => e.Name)
+        builder.Property(x => x.Name)
             .HasColumnName("Name")
             .HasColumnType("NVARCHAR(150)")
             .HasMaxLength(150)
             .IsRequired();
 
-        builder.Property(e => e.SerialNumber)
+        builder.Property(x => x.SerialNumber)
             .HasColumnName("SerialNumber")
             .HasColumnType("NVARCHAR(100)")
             .HasMaxLength(100)
             .IsRequired(false);
 
         // Use INT to match the existing DB schema (columns are INT) so EF can materialize into byte-backed enums
-        builder.Property(e => e.TypeEquipament)
+        builder.Property(x => x.TypeEquipament)
             .HasColumnName("TypeEquipament")
             .HasColumnType("INT")
             .IsRequired();
 
-        builder.Property(e => e.Status)
+        builder.Property(x => x.Status)
             .HasColumnName("Status")
             .HasColumnType("INT")
             .IsRequired();
 
-        builder.Property(e => e.IsActive)
+        builder.Property(x => x.IsActive)
             .HasColumnName("IsActive")
             .HasColumnType("BIT")
             .HasDefaultValue(true)
             .IsRequired();
 
-        builder.Property(e => e.IsDeleted)
+        builder.Property(x => x.IsDeleted)
             .HasColumnName("IsDeleted")
             .HasColumnType("BIT")
             .HasDefaultValue(false)
             .IsRequired();
 
-        // Audit fields: use INT for CreatedBy/ModifiedBy to match Domain.Entity and DB schema
-        builder.Property(e => e.CreatedBy)
-            .HasColumnName("CreatedBy")
-            .HasColumnType("INT")
-            .IsRequired();
+        builder.Property(x => x.CreatedBy)
+              .HasColumnName("CreatedBy")
+              .HasColumnType("INT")
+              .IsRequired();
 
-        builder.Property(e => e.CreatedAt)
+        builder.Property(x => x.CreatedAt)
             .HasColumnName("CreatedAt")
             .HasColumnType("DATETIME2")
             .HasDefaultValueSql("SYSDATETIME()")
             .IsRequired();
 
-        builder.Property(e => e.ModifiedBy)
+        builder.Property(x => x.ModifiedBy)
             .HasColumnName("ModifiedBy")
             .HasColumnType("INT")
             .IsRequired(false);
 
-        builder.Property(e => e.ModifiedAt)
+        builder.Property(x => x.ModifiedAt)
             .HasColumnName("ModifiedAt")
             .HasColumnType("DATETIME2")
             .IsRequired(false);
 
         // Relacionamentos
-        builder.HasOne(e => e.Tenant)
+        builder.HasOne(x => x.Tenant)
             .WithMany()
-            .HasForeignKey(e => e.TenantId)
+            .HasForeignKey(x => x.TenantId)
             .HasConstraintName("FK_Equipments_Tenant")
             .OnDelete(DeleteBehavior.Restrict);
     }
