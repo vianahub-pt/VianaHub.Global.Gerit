@@ -145,7 +145,7 @@ public static class UserEndpoint
             var success = await appService.BulkUploadAsync(file, ct);
             return notify.CustomResponse(success);
         })
-        .CustomAuthorize("Admin,BackOffice", "Users", "BulkUpload")
+        //.CustomAuthorize("Admin,BackOffice", "Users", "BulkUpload")
         .AllowAnonymous()
         .WithName("BulkUploadUsers")
         .WithSummary("Swagger.Endpoint.User.BulkUpload.Summary")

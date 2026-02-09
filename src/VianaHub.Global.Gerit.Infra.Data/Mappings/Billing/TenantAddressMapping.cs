@@ -26,6 +26,19 @@ public class TenantAddressMapping : IEntityTypeConfiguration<TenantAddress>
         // Propriedades
         builder.Property(x => x.TenantId)
             .HasColumnName("TenantId")
+            .HasColumnType("INT")
+            .IsRequired();
+
+        builder.Property(x => x.AddressTypeId)
+            .HasColumnName("AddressTypeId")
+            .HasColumnType("INT")
+            .IsRequired();
+
+        builder.Property(x => x.CountryCode)
+            .HasColumnName("CountryCode")
+            .HasColumnType("CHAR(2)")
+            .HasMaxLength(2)
+            .HasDefaultValue("PT")
             .IsRequired();
 
         builder.Property(x => x.Street)
@@ -34,16 +47,16 @@ public class TenantAddressMapping : IEntityTypeConfiguration<TenantAddress>
             .HasMaxLength(200)
             .IsRequired();
 
-        builder.Property(x => x.City)
-            .HasColumnName("City")
+        builder.Property(x => x.Neighborhood)
+            .HasColumnName("Neighborhood")
             .HasColumnType("NVARCHAR(100)")
             .HasMaxLength(100)
             .IsRequired();
 
-        builder.Property(x => x.PostalCode)
-            .HasColumnName("PostalCode")
-            .HasColumnType("NVARCHAR(20)")
-            .HasMaxLength(20)
+        builder.Property(x => x.City)
+            .HasColumnName("City")
+            .HasColumnType("NVARCHAR(100)")
+            .HasMaxLength(100)
             .IsRequired();
 
         builder.Property(x => x.District)
@@ -52,12 +65,39 @@ public class TenantAddressMapping : IEntityTypeConfiguration<TenantAddress>
             .HasMaxLength(100)
             .IsRequired(false);
 
-        builder.Property(x => x.CountryCode)
-            .HasColumnName("CountryCode")
-            .HasColumnType("CHAR(2)")
-            .HasMaxLength(2)
-            .HasDefaultValue("PT")
+        builder.Property(x => x.PostalCode)
+            .HasColumnName("PostalCode")
+            .HasColumnType("NVARCHAR(20)")
+            .HasMaxLength(20)
             .IsRequired();
+
+        builder.Property(x => x.StreetNumber)
+            .HasColumnName("StreetNumber")
+            .HasColumnType("NVARCHAR(20)")
+            .HasMaxLength(20)
+            .IsRequired(false);
+
+        builder.Property(x => x.Complement)
+            .HasColumnName("Complement")
+            .HasColumnType("NVARCHAR(100)")
+            .HasMaxLength(100)
+            .IsRequired(false);
+
+        builder.Property(x => x.Latitude)
+            .HasColumnName("Latitude")
+            .HasColumnType("DECIMAL(9,6)")
+            .IsRequired(false);
+
+        builder.Property(x => x.Longitude)
+            .HasColumnName("Longitude")
+            .HasColumnType("DECIMAL(9,6)")
+            .IsRequired(false);
+
+        builder.Property(x => x.Notes)
+            .HasColumnName("Notes")
+            .HasColumnType("NVARCHAR(500)")
+            .HasMaxLength(500)
+            .IsRequired(false);
 
         builder.Property(x => x.IsPrimary)
             .HasColumnName("IsPrimary")
@@ -98,6 +138,23 @@ public class TenantAddressMapping : IEntityTypeConfiguration<TenantAddress>
             .HasColumnType("DATETIME2")
             .IsRequired(false);
 
-        // Relacionamentos configurados no TenantMapping
+        // Relacionamentos
+        builder.HasOne(x => x.Tenant)
+            .WithMany(t => t.Addresses)
+            .HasForeignKey(x => x.TenantId)
+            .HasConstraintName("FK_TenantAddresses_Tenant")
+            .OnDelete(DeleteBehavior.NoAction);
+
+        builder.HasOne(x => x.AddressType)
+            .WithMany()
+            .HasForeignKey(x => new { x.AddressTypeId, x.TenantId })
+            .HasConstraintName("FK_TenantAddresses_AddressType")
+            .HasPrincipalKey(a => new { a.Id, a.TenantId })
+            .OnDelete(DeleteBehavior.NoAction);
+
+        // Constraint Única: Garantir que o Id é único dentro do tenant (para FKs compostas)
+        builder.HasIndex(x => new { x.Id, x.TenantId })
+            .IsUnique()
+            .HasDatabaseName("UQ_TenantAddresses_Id_Tenant");
     }
 }

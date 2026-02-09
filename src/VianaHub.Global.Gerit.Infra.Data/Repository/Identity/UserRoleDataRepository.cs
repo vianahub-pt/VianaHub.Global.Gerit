@@ -14,12 +14,15 @@ public class UserRoleDataRepository : IUserRoleDataRepository
         _context = context;
     }
 
-    public async Task<UserRoleEntity> GetByIdAsync(int tenantId, int id, CancellationToken ct)
+    public async Task<UserRoleEntity> GetByIdAsync(int tenantId, int userId, int roleId, CancellationToken ct)
     {
         return await _context.UserRoles
+            .Include(x => x.Tenant)
             .Include(x => x.User)
             .Include(x => x.Role)
-            .FirstOrDefaultAsync(x => x.TenantId == tenantId && x.Id == id, ct);
+            .FirstOrDefaultAsync(x => x.TenantId == tenantId && 
+                                      x.UserId == userId &&
+                                      x.RoleId == roleId, ct);
     }
     public async Task<IList<UserRoleEntity>> GetByUserAsync(int tenantId, int userId, CancellationToken ct)
     {
@@ -56,9 +59,11 @@ public class UserRoleDataRepository : IUserRoleDataRepository
         await _context.SaveChangesAsync(ct);
     }
 
-    public async Task DeleteAsync(int tenantId, int id, CancellationToken ct)
+    public async Task DeleteAsync(int tenantId, int userId, int roleId, CancellationToken ct)
     {
-        var entity = await _context.UserRoles.FirstOrDefaultAsync(x => x.TenantId == tenantId && x.Id == id, ct);
+        var entity = await _context.UserRoles.FirstOrDefaultAsync(x => x.TenantId == tenantId && 
+                                                                       x.UserId == userId &&
+                                                                       x.RoleId == roleId, ct);
         if (entity != null)
         {
             _context.UserRoles.Remove(entity);

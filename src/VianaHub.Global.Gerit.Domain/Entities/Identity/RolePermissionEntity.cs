@@ -6,7 +6,7 @@ namespace VianaHub.Global.Gerit.Domain.Entities.Identity;
 /// <summary>
 /// Entidade que representa a permissão de uma Role sobre um Resource com uma ActionEntity
 /// </summary>
-public class RolePermissionEntity : Entity
+public class RolePermissionEntity
 {
     public int TenantId { get; private set; }
     public int RoleId { get; private set; }
@@ -25,20 +25,11 @@ public class RolePermissionEntity : Entity
     /// <summary>
     /// Construtor para criação de uma nova permissão de Role
     /// </summary>
-    public RolePermissionEntity(int tenantId, int roleId, int resourceId, int actionId, int createdBy)
+    public RolePermissionEntity(int tenantId, int roleId, int resourceId, int actionId)
     {
         TenantId = tenantId;
         RoleId = roleId;
         ResourceId = resourceId;
         ActionId = actionId;
-        CreatedBy = createdBy;
-    }
-
-    public void Update(int resourceId, int actionId, int modifiedBy)
-    {
-        ResourceId = resourceId;
-        ActionId = actionId;
-        ModifiedBy = modifiedBy;
-        ModifiedAt = DateTime.UtcNow;
     }
 }

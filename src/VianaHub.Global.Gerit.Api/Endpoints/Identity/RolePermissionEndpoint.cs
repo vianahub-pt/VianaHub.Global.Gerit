@@ -26,9 +26,9 @@ public static class RolePermissionEndpoint
         .Produces<IEnumerable<RolePermissionResponse>>(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapGet("/{id}", async (int id, IRolePermissionAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapGet("/roles/{roleId}/resources/{resourceId}/actions/{actionId}", async (int roleId, int resourceId, int actionId, IRolePermissionAppService appService, INotify notify, CancellationToken ct) =>
         {
-            var result = await appService.GetByIdAsync(id, ct);
+            var result = await appService.GetByIdAsync(roleId, resourceId, actionId, ct);
             return notify.CustomResponse(result, result != null ? 200 : 404);
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "RolePermissions", "GetBy")
@@ -73,9 +73,9 @@ public static class RolePermissionEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status400BadRequest)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapDelete("/{id}", async (int id, IRolePermissionAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapDelete("/roles/{roleId}/resources/{resourceId}/actions/{actionId}", async (int roleId, int resourceId, int actionId, IRolePermissionAppService appService, INotify notify, CancellationToken ct) =>
         {
-            await appService.DeleteAsync(id, ct);
+            await appService.DeleteAsync(roleId, resourceId, actionId, ct);
             return notify.CustomResponse();
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "RolePermissions", "Delete")
@@ -98,7 +98,8 @@ public static class RolePermissionEndpoint
             var success = await appService.BulkUploadAsync(file, ct);
             return notify.CustomResponse(success);
         })
-        .CustomAuthorize("Admin,BackOffice,Manager", "RolePermissions", "BulkUpload")
+        //.CustomAuthorize("Admin,BackOffice,Manager", "RolePermissions", "BulkUpload")
+        .AllowAnonymous()
         .WithName("BulkUploadRolePermission")
         .WithSummary("Swagger.Endpoint.RolePermission.BulkUpload.Summary")
         .DisableAntiforgery()

@@ -1,0 +1,103 @@
+using VianaHub.Global.Gerit.Domain.Base;
+using VianaHub.Global.Gerit.Domain.Entities.Business;
+using VianaHub.Global.Gerit.Domain.Interfaces.Business;
+using VianaHub.Global.Gerit.Domain.Tools.Notifications;
+
+namespace VianaHub.Global.Gerit.Domain.Services.Business;
+
+public class AddressTypeDomainService : IAddressTypeDomainService
+{
+    private readonly IAddressTypeDataRepository _repo;
+    private readonly IEntityDomainValidator<AddressTypeEntity> _validator;
+    private readonly INotify _notify;
+
+    public AddressTypeDomainService(
+        IAddressTypeDataRepository repo,
+        IEntityDomainValidator<AddressTypeEntity> validator,
+        INotify notify)
+    {
+        _repo = repo;
+        _validator = validator;
+        _notify = notify;
+    }
+
+    public async Task<bool> CreateAsync(AddressTypeEntity entity, CancellationToken ct)
+    {
+        var validationResult = await _validator.ValidateForCreateAsync(entity);
+        if (!validationResult.IsValid)
+        {
+            foreach (var error in validationResult.Errors)
+            {
+                _notify.Add(error.ErrorMessage, 400);
+            }
+            return false;
+        }
+
+        await _repo.AddAsync(entity, ct);
+        return true;
+    }
+
+    public async Task<bool> UpdateAsync(AddressTypeEntity entity, CancellationToken ct)
+    {
+        var validationResult = await _validator.ValidateForUpdateAsync(entity);
+        if (!validationResult.IsValid)
+        {
+            foreach (var error in validationResult.Errors)
+            {
+                _notify.Add(error.ErrorMessage, 400);
+            }
+            return false;
+        }
+
+        await _repo.UpdateAsync(entity, ct);
+        return true;
+    }
+
+    public async Task<bool> ActivateAsync(AddressTypeEntity entity, CancellationToken ct)
+    {
+        var validationResult = await _validator.ValidateForActivateAsync(entity);
+        if (!validationResult.IsValid)
+        {
+            foreach (var error in validationResult.Errors)
+            {
+                _notify.Add(error.ErrorMessage, 400);
+            }
+            return false;
+        }
+
+        await _repo.UpdateAsync(entity, ct);
+        return true;
+    }
+
+    public async Task<bool> DeactivateAsync(AddressTypeEntity entity, CancellationToken ct)
+    {
+        var validationResult = await _validator.ValidateForDeactivateAsync(entity);
+        if (!validationResult.IsValid)
+        {
+            foreach (var error in validationResult.Errors)
+            {
+                _notify.Add(error.ErrorMessage, 400);
+            }
+            return false;
+        }
+
+        await _repo.UpdateAsync(entity, ct);
+        return true;
+    }
+
+    public async Task<bool> DeleteAsync(AddressTypeEntity entity, CancellationToken ct)
+    {
+        var validationResult = await _validator.ValidateForDeleteAsync(entity);
+        if (!validationResult.IsValid)
+        {
+            foreach (var error in validationResult.Errors)
+            {
+                _notify.Add(error.ErrorMessage, 400);
+            }
+            return false;
+        }
+
+        await _repo.UpdateAsync(entity, ct);
+        return true;
+    }
+}

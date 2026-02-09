@@ -26,10 +26,24 @@ public class ClientAddressMapping : IEntityTypeConfiguration<ClientAddressEntity
         // Propriedades
         builder.Property(x => x.TenantId)
             .HasColumnName("TenantId")
+            .HasColumnType("INT")
             .IsRequired();
 
         builder.Property(x => x.ClientId)
             .HasColumnName("ClientId")
+            .HasColumnType("INT")
+            .IsRequired();
+
+        builder.Property(x => x.AddressTypeId)
+            .HasColumnName("AddressTypeId")
+            .HasColumnType("INT")
+            .IsRequired();
+
+        builder.Property(x => x.CountryCode)
+            .HasColumnName("CountryCode")
+            .HasColumnType("CHAR(2)")
+            .HasMaxLength(2)
+            .HasDefaultValue("PT")
             .IsRequired();
 
         builder.Property(x => x.Street)
@@ -38,16 +52,16 @@ public class ClientAddressMapping : IEntityTypeConfiguration<ClientAddressEntity
             .HasMaxLength(200)
             .IsRequired();
 
-        builder.Property(x => x.City)
-            .HasColumnName("City")
+        builder.Property(x => x.Neighborhood)
+            .HasColumnName("Neighborhood")
             .HasColumnType("NVARCHAR(100)")
             .HasMaxLength(100)
             .IsRequired();
 
-        builder.Property(x => x.PostalCode)
-            .HasColumnName("PostalCode")
-            .HasColumnType("NVARCHAR(20)")
-            .HasMaxLength(20)
+        builder.Property(x => x.City)
+            .HasColumnName("City")
+            .HasColumnType("NVARCHAR(100)")
+            .HasMaxLength(100)
             .IsRequired();
 
         builder.Property(x => x.District)
@@ -56,12 +70,39 @@ public class ClientAddressMapping : IEntityTypeConfiguration<ClientAddressEntity
             .HasMaxLength(100)
             .IsRequired(false);
 
-        builder.Property(x => x.CountryCode)
-            .HasColumnName("CountryCode")
-            .HasColumnType("CHAR(2)")
-            .HasMaxLength(2)
-            .HasDefaultValue("PT")
+        builder.Property(x => x.PostalCode)
+            .HasColumnName("PostalCode")
+            .HasColumnType("NVARCHAR(20)")
+            .HasMaxLength(20)
             .IsRequired();
+
+        builder.Property(x => x.StreetNumber)
+            .HasColumnName("StreetNumber")
+            .HasColumnType("NVARCHAR(20)")
+            .HasMaxLength(20)
+            .IsRequired(false);
+
+        builder.Property(x => x.Complement)
+            .HasColumnName("Complement")
+            .HasColumnType("NVARCHAR(100)")
+            .HasMaxLength(100)
+            .IsRequired(false);
+
+        builder.Property(x => x.Latitude)
+            .HasColumnName("Latitude")
+            .HasColumnType("DECIMAL(9,6)")
+            .IsRequired(false);
+
+        builder.Property(x => x.Longitude)
+            .HasColumnName("Longitude")
+            .HasColumnType("DECIMAL(9,6)")
+            .IsRequired(false);
+
+        builder.Property(x => x.Notes)
+            .HasColumnName("Notes")
+            .HasColumnType("NVARCHAR(500)")
+            .HasMaxLength(500)
+            .IsRequired(false);
 
         builder.Property(x => x.IsPrimary)
             .HasColumnName("IsPrimary")
@@ -86,11 +127,6 @@ public class ClientAddressMapping : IEntityTypeConfiguration<ClientAddressEntity
             .HasColumnType("INT")
             .IsRequired();
 
-        builder.Property(x => x.CreatedBy)
-              .HasColumnName("CreatedBy")
-              .HasColumnType("INT")
-              .IsRequired();
-
         builder.Property(x => x.CreatedAt)
             .HasColumnName("CreatedAt")
             .HasColumnType("DATETIME2")
@@ -107,6 +143,26 @@ public class ClientAddressMapping : IEntityTypeConfiguration<ClientAddressEntity
             .HasColumnType("DATETIME2")
             .IsRequired(false);
 
+        // Relacionamentos
+        builder.HasOne(x => x.Tenant)
+            .WithMany()
+            .HasForeignKey(x => x.TenantId)
+            .HasConstraintName("FK_ClientAddresses_Tenant")
+            .OnDelete(DeleteBehavior.NoAction);
+
+        builder.HasOne(x => x.Client)
+            .WithMany(c => c.Addresses)
+            .HasForeignKey(x => x.ClientId)
+            .HasConstraintName("FK_ClientAddresses_Client")
+            .OnDelete(DeleteBehavior.NoAction);
+
+        builder.HasOne(x => x.AddressType)
+            .WithMany()
+            .HasForeignKey(x => new { x.AddressTypeId, x.TenantId })
+            .HasConstraintName("FK_ClientAddresses_AddressType")
+            .HasPrincipalKey(a => new { a.Id, a.TenantId })
+            .OnDelete(DeleteBehavior.NoAction);
+
         // Índices únicos com filtro para endereço primário
         builder.HasIndex(x => x.ClientId)
             .IsUnique()
@@ -118,14 +174,5 @@ public class ClientAddressMapping : IEntityTypeConfiguration<ClientAddressEntity
             .HasDatabaseName("IX_ClientAddresses_ClientId")
             .IncludeProperties(x => x.TenantId)
             .HasFilter("[IsDeleted] = 0");
-
-        // Relacionamentos
-        builder.HasOne(x => x.Tenant)
-            .WithMany()
-            .HasForeignKey(x => x.TenantId)
-            .HasConstraintName("FK_ClientAddresses_Tenant")
-            .OnDelete(DeleteBehavior.Restrict);
-
-        // Relacionamento com Client configurado no Clienvpping
     }
 }

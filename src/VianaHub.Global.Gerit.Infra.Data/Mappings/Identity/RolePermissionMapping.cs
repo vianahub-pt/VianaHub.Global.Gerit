@@ -15,13 +15,8 @@ public class RolePermissionMapping : IEntityTypeConfiguration<RolePermissionEnti
         builder.ToTable("RolePermissions", "dbo");
 
         // Chave Primária
-        builder.HasKey(x => x.Id)
+        builder.HasKey(x => new { x.TenantId, x.RoleId, x.ResourceId, x.ActionId })
             .HasName("PK_RolePermissions");
-
-        builder.Property(x => x.Id)
-            .HasColumnName("Id")
-            .UseIdentityColumn(1, 1)
-            .IsRequired();
 
         // Propriedades
         builder.Property(x => x.TenantId)

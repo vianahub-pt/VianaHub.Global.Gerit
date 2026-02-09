@@ -181,7 +181,8 @@ public static class SubscriptionEndpoints
             var success = await appService.BulkUploadAsync(file, ct);
             return notify.CustomResponse(success);
         })
-        .CustomAuthorize("Admin,BackOffice,Manager", "Subscriptions", "BulkUpload")
+        //.CustomAuthorize("Admin,BackOffice,Manager", "Subscriptions", "BulkUpload")
+        .AllowAnonymous()
         .WithName("BulkUploadSubscriptions")
         .WithSummary("Swagger.Endpoint.Subscription.BulkUpload.Summary")
         .DisableAntiforgery()

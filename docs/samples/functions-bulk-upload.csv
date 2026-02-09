@@ -1,12 +1,12 @@
-﻿Name;Description
+Name;Description
 Engenheiro Civil;Responsável pelo planejamento, execução e fiscalização de obras civis
 Mestre de Obras;Supervisiona e coordena as equipes de trabalho no canteiro de obras
 Pedreiro;Executa serviços de alvenaria, revestimentos e acabamentos em construções
 Servente de Obras;Auxilia nas atividades gerais do canteiro de obras e prepara materiais
 Carpinteiro;Confecciona e instala estruturas de madeira, formas e esquadrias
 Armador;Prepara e monta estruturas de ferro para concreto armado
-Eletricista Predial;Instala e mantém sistemas elétricos em edificações
-Encanador;Instala e mantém sistemas hidráulicos e sanitários
+Eletricista Predial;Instala e mantêm sistemas elétricos em edificações
+Encanador;Instala e mantêm sistemas hidráulicos e sanitários
 Pintor;Realiza serviços de pintura e acabamento em superfícies
 Azulejista;Aplica revestimentos cerâmicos em pisos e paredes
 Gesseiro;Executa trabalhos de revestimento e acabamento em gesso
@@ -25,7 +25,11 @@ Encarregado de Limpeza;Supervisiona equipes de limpeza e manutenção de fossas
 Operador de Hidrojateamento;Opera equipamentos de limpeza de alta pressão
 Técnico em Meio Ambiente;Garante descarte correto de resíduos conforme legislação
 Soldador;Executa serviços de soldagem em estruturas metálicas
-Telhadista;Instala e mantém sistemas de cobertura e telhados
+Telhadista;Instala e mantêm sistemas de cobertura e telhados
 Montador de Andaimes;Monta e desmonta estruturas de apoio para trabalho em altura
 Operador de Compactador;Opera equipamentos para compactação de solo e asfalto
 Fiscal de Obras;Acompanha execução de obras garantindo qualidade e prazos
+Gestor(a) Operacional;Gestor(a) Operacional
+Ajudante;Ajudante
+Técnico(a) Sênior;Técnico(a) Sênior
+Técnico(a) Especialista;Técnico(a) Especialista

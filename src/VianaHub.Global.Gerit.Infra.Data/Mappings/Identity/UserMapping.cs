@@ -113,6 +113,10 @@ public class UserMapping : IEntityTypeConfiguration<UserEntity>
             .IsUnique()
             .HasDatabaseName("UQ_Users_Tenant_Email");
 
+        builder.HasIndex(x => new { x.TenantId, x.NormalizedEmail })
+            .IsUnique()
+            .HasDatabaseName("UQ_Users_Tenant_NormalizedEmail");
+
         // Índices
         builder.HasIndex(x => new { x.TenantId, x.Email })
             .HasDatabaseName("IX_Users_Login")

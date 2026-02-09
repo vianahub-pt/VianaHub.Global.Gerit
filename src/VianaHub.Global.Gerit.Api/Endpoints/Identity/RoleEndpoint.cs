@@ -1,4 +1,5 @@
 using FluentValidation;
+using Microsoft.AspNetCore.Mvc;
 using VianaHub.Global.Gerit.Api.Helpers;
 using VianaHub.Global.Gerit.Application.Dtos.Base;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Identity.Role;
@@ -14,7 +15,7 @@ public static class RoleEndpoint
     {
         var groupV1 = app.MapGroup("/v1/roles").WithTags("Roles").WithGroupName("v1").RequireAuthorization();
 
-        groupV1.MapGet("/", async (IRoleAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapGet("/", async ([FromServices] IRoleAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var result = await appService.GetAllAsync(ct);
             return notify.CustomResponse(result);
@@ -26,7 +27,7 @@ public static class RoleEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status401Unauthorized)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapGet("/{id}", async (int id, IRoleAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapGet("/{id}", async (int id, [FromServices] IRoleAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var result = await appService.GetByIdAsync(id, ct);
             return notify.CustomResponse(result);
@@ -38,7 +39,7 @@ public static class RoleEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapGet("/paged", async ([AsParameters] PagedFilterRequest request, IRoleAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapGet("/paged", async ([AsParameters] PagedFilterRequest request, [FromServices] IRoleAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var result = await appService.GetPagedAsync(request, ct);
             return notify.CustomResponse(result);
@@ -51,7 +52,7 @@ public static class RoleEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
 
-        groupV1.MapPost("/", async (CreateRoleRequest request, IRoleAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapPost("/", async ([FromBody] CreateRoleRequest request, [FromServices] IRoleAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var created = await appService.CreateAsync(request, ct);
             return notify.CustomResponse(201);
@@ -64,7 +65,7 @@ public static class RoleEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError)
         .WithValidation<CreateRoleRequest>();
 
-        groupV1.MapPut("/{id}", async (int id, UpdateRoleRequest request, IRoleAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapPut("/{id}", async (int id, [FromBody] UpdateRoleRequest request, [FromServices] IRoleAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var ok = await appService.UpdateAsync(id, request, ct);
             return notify.CustomResponse();
@@ -77,7 +78,7 @@ public static class RoleEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError)
         .WithValidation<UpdateRoleRequest>();
 
-        groupV1.MapPatch("/{id}/activate", async (int id, IRoleAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapPatch("/{id}/activate", async (int id, [FromServices] IRoleAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var ok = await appService.ActivateAsync(id, ct);
             return notify.CustomResponse();
@@ -89,7 +90,7 @@ public static class RoleEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapPatch("/{id}/deactivate", async (int id, IRoleAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapPatch("/{id}/deactivate", async (int id, [FromServices] IRoleAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var ok = await appService.DeactivateAsync(id, ct);
             return notify.CustomResponse();
@@ -101,7 +102,7 @@ public static class RoleEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapDelete("/{id}", async (int id, IRoleAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapDelete("/{id}", async (int id, [FromServices] IRoleAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var ok = await appService.DeleteAsync(id, ct);
             return notify.CustomResponse();
@@ -114,11 +115,11 @@ public static class RoleEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
         // Upload massivo de roles via CSV
-        groupV1.MapPost("/bulk-upload", async (HttpRequest request, IRoleAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapPost("/bulk-upload", async (HttpRequest request, [FromServices] IRoleAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             if (!request.HasFormContentType || request.Form.Files.Count == 0)
             {
-                notify.Add("Nenhum arquivo foi enviado", 400);
+                notify.Add("Api.Upload.NoFileProvided", 400);
                 return notify.CustomResponse();
             }
 
@@ -126,7 +127,8 @@ public static class RoleEndpoint
             var success = await appService.BulkUploadAsync(file, ct);
             return notify.CustomResponse(success);
         })
-        .CustomAuthorize("Admin,BackOffice,Manager", "Roles", "BulkUpload")
+        //.CustomAuthorize("Admin,BackOffice,Manager", "Roles", "BulkUpload")
+        .AllowAnonymous()
         .WithName("BulkUploadRoles")
         .WithSummary("Swagger.Endpoint.Role.BulkUpload.Summary")
         .DisableAntiforgery()

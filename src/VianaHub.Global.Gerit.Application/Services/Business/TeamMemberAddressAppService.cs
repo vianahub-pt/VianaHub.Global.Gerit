@@ -82,11 +82,18 @@ public class TeamMemberAddressAppService : ITeamMemberAddressAppService
         var entity = new TeamMemberAddressEntity(
             tenantId,
             request.TeamMemberId,
-            request.Street,
-            request.City,
-            request.PostalCode,
-            request.District,
+            request.AddressTypeId,
             request.CountryCode,
+            request.Street,
+            request.StreetNumber,
+            request.Complement,
+            request.Neighborhood,
+            request.City,
+            request.District,
+            request.PostalCode,
+            request.Latitude,
+            request.Longitude,
+            request.Notes,
             request.IsPrimary,
             _currentUser.GetUserId());
 
@@ -103,11 +110,18 @@ public class TeamMemberAddressAppService : ITeamMemberAddressAppService
         }
 
         entity.UpdateAddressInfo(
-            request.Street,
-            request.City,
-            request.PostalCode,
-            request.District,
+            request.AddressTypeId,
             request.CountryCode,
+            request.Street,
+            request.StreetNumber,
+            request.Complement,
+            request.Neighborhood,
+            request.City,
+            request.District,
+            request.PostalCode,
+            request.Latitude,
+            request.Longitude,
+            request.Notes,
             _currentUser.GetUserId());
 
         return await _domain.UpdateAsync(entity, ct);
@@ -277,11 +291,18 @@ public class TeamMemberAddressAppService : ITeamMemberAddressAppService
             var entity = new TeamMemberAddressEntity(
                 tenantId,
                 item.TeamMemberId,
-                item.Street,
-                item.City,
-                item.PostalCode,
-                item.District,
+                item.AddressTypeId,
                 item.CountryCode,
+                item.Street,
+                item.StreetNumber,
+                item.Complement,
+                item.Neighborhood,
+                item.City,
+                item.District,
+                item.PostalCode,
+                item.Latitude,
+                item.Longitude,
+                item.Notes,
                 item.IsPrimary,
                 _currentUser.GetUserId());
 

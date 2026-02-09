@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using VianaHub.Global.Gerit.Api.Helpers;
 using VianaHub.Global.Gerit.Application.Dtos.Base;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Identity.Action;
+using VianaHub.Global.Gerit.Application.Interfaces.Billing;
 using VianaHub.Global.Gerit.Application.Interfaces.Identity;
 using VianaHub.Global.Gerit.Domain.Tools.Notifications;
 
@@ -14,7 +15,7 @@ public static class ActionEndpoint
     {
         var groupV1 = app.MapGroup("/v1/actions").WithTags("Actions").WithGroupName("v1").RequireAuthorization();
 
-        groupV1.MapGet("/", async (IActionAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapGet("/", async ([FromServices] IActionAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var response = await appService.GetAllAsync(ct);
             return notify.CustomResponse(response, 200);
@@ -25,7 +26,7 @@ public static class ActionEndpoint
         .Produces(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapGet("/{id}", async (int id, IActionAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapGet("/{id}", async (int id, [FromServices] IActionAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var response = await appService.GetByIdAsync(id, ct);
             return notify.CustomResponse(response, 200);
@@ -37,7 +38,7 @@ public static class ActionEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapGet("/paged", async ([AsParameters] PagedFilterRequest request, IActionAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapGet("/paged", async ([AsParameters] PagedFilterRequest request, [FromServices] IActionAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var response = await appService.GetPagedAsync(request, ct);
             return notify.CustomResponse(response, 200);
@@ -48,7 +49,7 @@ public static class ActionEndpoint
         .Produces(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapPost("/", async ([FromBody] CreateActionRequest request, IActionAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapPost("/", async ([FromBody] CreateActionRequest request, [FromServices] IActionAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var created = await appService.CreateAsync(request, ct);
             return notify.CustomResponse(201);
@@ -62,7 +63,7 @@ public static class ActionEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError)
         .WithValidation<CreateActionRequest>();
 
-        groupV1.MapPut("/{id}", async (int id, [FromBody] UpdateActionRequest request, IActionAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapPut("/{id}", async (int id, [FromBody] UpdateActionRequest request, [FromServices] IActionAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var updated = await appService.UpdateAsync(id, request, ct);
             return notify.CustomResponse(updated, 200);
@@ -76,7 +77,7 @@ public static class ActionEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError)
         .WithValidation<UpdateActionRequest>();
 
-        groupV1.MapPatch("/{id}/activate", async (int id, IActionAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapPatch("/{id}/activate", async (int id, [FromServices] IActionAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var ok = await appService.ActivateAsync(id, ct);
             return notify.CustomResponse();
@@ -88,7 +89,7 @@ public static class ActionEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapPatch("/{id}/deactivate", async (int id, IActionAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapPatch("/{id}/deactivate", async (int id, [FromServices] IActionAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var ok = await appService.DeactivateAsync(id, ct);
             return notify.CustomResponse();
@@ -100,7 +101,7 @@ public static class ActionEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapDelete("/{id}", async (int id, IActionAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapDelete("/{id}", async (int id, [FromServices] IActionAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var ok = await appService.DeleteAsync(id, ct);
             return notify.CustomResponse();
@@ -112,12 +113,12 @@ public static class ActionEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        // Upload massivo de actions via CSV
-        groupV1.MapPost("/bulk-upload", async (HttpRequest request, IActionAppService appService, INotify notify, CancellationToken ct) =>
+        // Upload massivo de Functions via CSV
+        groupV1.MapPost("/bulk-upload", async (HttpRequest request, [FromServices] IActionAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             if (!request.HasFormContentType || request.Form.Files.Count == 0)
             {
-                // Substitui mensagem hardcoded por chave de tradução
+                // Utiliza chave de tradução para mensagem
                 notify.Add("Api.Upload.NoFileProvided", 400);
                 return notify.CustomResponse();
             }
@@ -126,8 +127,9 @@ public static class ActionEndpoint
             var success = await appService.BulkUploadAsync(file, ct);
             return notify.CustomResponse(success);
         })
-        .CustomAuthorize("Admin,BackOffice", "Actions", "BulkUpload")
-        .WithName("BulkUploadActions")
+        //.CustomAuthorize("Admin,BackOffice,Manager", "Plans", "BulkUpload")
+        .AllowAnonymous()
+        .WithName("BulkUploadAction")
         .WithSummary("Swagger.Endpoint.Action.BulkUpload.Summary")
         .DisableAntiforgery()
         .Accepts<IFormFile>("multipart/form-data")

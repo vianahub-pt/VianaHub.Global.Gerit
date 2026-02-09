@@ -14,7 +14,7 @@ public static class VehicleEndpoint
     {
         var groupV1 = app.MapGroup("/v1/vehicles").WithTags("Vehicles").WithGroupName("v1").RequireAuthorization();
 
-        groupV1.MapGet("/", async (IVehicleAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapGet("/", async ([FromServices] IVehicleAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var response = await appService.GetAllAsync(ct);
             return notify.CustomResponse(response, 200);
@@ -25,7 +25,7 @@ public static class VehicleEndpoint
         .Produces(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapGet("/{id}", async (int id, IVehicleAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapGet("/{id}", async (int id, [FromServices] IVehicleAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var response = await appService.GetByIdAsync(id, ct);
             return notify.CustomResponse(response, 200);
@@ -37,7 +37,7 @@ public static class VehicleEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapGet("/paged", async ([AsParameters] PagedFilterRequest request, IVehicleAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapGet("/paged", async ([AsParameters] PagedFilterRequest request, [FromServices] IVehicleAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var response = await appService.GetPagedAsync(request, ct);
             return notify.CustomResponse(response, 200);
@@ -48,7 +48,7 @@ public static class VehicleEndpoint
         .Produces(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapPost("/", async ([FromBody] CreateVehicleRequest request, IVehicleAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapPost("/", async ([FromBody] CreateVehicleRequest request, [FromServices] IVehicleAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var created = await appService.CreateAsync(request, ct);
             return notify.CustomResponse(created, 201);
@@ -61,7 +61,7 @@ public static class VehicleEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError)
         .WithValidation<CreateVehicleRequest>();
 
-        groupV1.MapPut("/{id}", async (int id, [FromBody] UpdateVehicleRequest request, IVehicleAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapPut("/{id}", async (int id, [FromBody] UpdateVehicleRequest request, [FromServices] IVehicleAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var updated = await appService.UpdateAsync(id, request, ct);
             return notify.CustomResponse(updated, 200);
@@ -74,7 +74,7 @@ public static class VehicleEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError)
         .WithValidation<UpdateVehicleRequest>();
 
-        groupV1.MapPatch("/{id}/activate", async (int id, IVehicleAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapPatch("/{id}/activate", async (int id, [FromServices] IVehicleAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var ok = await appService.ActivateAsync(id, ct);
             return notify.CustomResponse();
@@ -86,7 +86,7 @@ public static class VehicleEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapPatch("/{id}/deactivate", async (int id, IVehicleAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapPatch("/{id}/deactivate", async (int id, [FromServices] IVehicleAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var ok = await appService.DeactivateAsync(id, ct);
             return notify.CustomResponse();
@@ -98,7 +98,7 @@ public static class VehicleEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapDelete("/{id}", async (int id, IVehicleAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapDelete("/{id}", async (int id, [FromServices] IVehicleAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var ok = await appService.DeleteAsync(id, ct);
             return notify.CustomResponse();
@@ -111,7 +111,7 @@ public static class VehicleEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
         // Upload massivo de vehicles via CSV
-        groupV1.MapPost("/bulk-upload", async (HttpRequest request, IVehicleAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapPost("/bulk-upload", async (HttpRequest request, [FromServices] IVehicleAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             if (!request.HasFormContentType || request.Form.Files.Count == 0)
             {

@@ -6,7 +6,7 @@ namespace VianaHub.Global.Gerit.Domain.Entities.Identity;
 /// <summary>
 /// Entidade que representa a relação entre User e Role
 /// </summary>
-public class UserRoleEntity : Entity
+public class UserRoleEntity
 {
     public int TenantId { get; private set; }
     public int UserId { get; private set; }
@@ -23,18 +23,10 @@ public class UserRoleEntity : Entity
     /// <summary>
     /// Construtor para criação de uma nova relação User-Role
     /// </summary>
-    public UserRoleEntity(int tenantId, int userId, int roleId, int createdBy)
+    public UserRoleEntity(int tenantId, int userId, int roleId)
     {
         TenantId = tenantId;
         UserId = userId;
         RoleId = roleId;
-        CreatedBy = createdBy;
-    }
-
-    public void Update(int roleId, int modifiedBy)
-    {
-        RoleId = roleId;
-        ModifiedBy = modifiedBy;
-        ModifiedAt = DateTime.UtcNow;
     }
 }

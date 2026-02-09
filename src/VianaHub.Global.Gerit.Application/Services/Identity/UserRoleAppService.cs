@@ -47,10 +47,10 @@ public class UserRoleAppService : IUserRoleAppService
         _fileValidation = fileValidation;
     }
 
-    public async Task<UserRoleResponse> GetByIdAsync(int id, CancellationToken ct)
+    public async Task<UserRoleResponse> GetByIdAsync(int userId, int roleId, CancellationToken ct)
     {
         var tenantId = _currentUser.GetTenantId();
-        var entity = await _repository.GetByIdAsync(tenantId, id, ct);
+        var entity = await _repository.GetByIdAsync(tenantId, userId, roleId, ct);
         return _mapper.Map<UserRoleResponse>(entity);
     }
 
@@ -98,25 +98,16 @@ public class UserRoleAppService : IUserRoleAppService
             return null;
         }
 
-        var entity = new UserRoleEntity(tenantId, request.UserId, request.RoleId, _currentUser.GetUserId());
+        var entity = new UserRoleEntity(tenantId, request.UserId, request.RoleId);
         await _domain.CreateAsync(entity, ct);
         return _mapper.Map<UserRoleResponse>(entity);
     }
 
-    public async Task<UserRoleResponse> UpdateAsync(UpdateUserRoleRequest request, CancellationToken ct)
+
+    public async Task DeleteAsync(int userId, int roleId, CancellationToken ct)
     {
         var tenantId = _currentUser.GetTenantId();
-        var entity = await _repository.GetByIdAsync(tenantId, request.Id, ct);
-        if (entity == null)
-            throw new KeyNotFoundException();
-
-        return _mapper.Map<UserRoleResponse>(entity);
-    }
-
-    public async Task DeleteAsync(int id, CancellationToken ct)
-    {
-        var tenantId = _currentUser.GetTenantId();
-        var entity = await _repository.GetByIdAsync(tenantId, id, ct);
+        var entity = await _repository.GetByIdAsync(tenantId, userId, roleId, ct);
         if (entity == null)
         {
             // Not found -> notify with 410 Gone
@@ -124,7 +115,7 @@ public class UserRoleAppService : IUserRoleAppService
             return;
         }
 
-        await _repository.DeleteAsync(tenantId, id, ct);
+        await _repository.DeleteAsync(tenantId, userId, roleId, ct);
     }
 
 
@@ -246,7 +237,7 @@ public class UserRoleAppService : IUserRoleAppService
                 continue;
             }
 
-            var entity = new UserRoleEntity(tenantId, item.UserId, item.RoleId, _currentUser.GetUserId());
+            var entity = new UserRoleEntity(tenantId, item.UserId, item.RoleId);
 
             // Tenta criar no domínio
             var success = await _domain.CreateAsync(entity, ct);

@@ -87,28 +87,28 @@ public class RolePermissionAppService : IRolePermissionAppService
             return null;
         }
 
-        var entity = new RolePermissionEntity(tenantId, request.RoleId, request.ResourceId, request.ActionId, _currentUser.GetUserId());
+        var entity = new RolePermissionEntity(tenantId, request.RoleId, request.ResourceId, request.ActionId);
         await _domain.CreateAsync(entity, ct);
         return _mapper.Map<RolePermissionResponse>(entity);
     }
 
-    public async Task DeleteAsync(int id, CancellationToken ct)
+    public async Task DeleteAsync(int roleId, int resourceId, int actionId, CancellationToken ct)
     {
         var tenantId = _currentUser.GetTenantId();
-        var entity = await _repository.GetByIdAsync(id, tenantId, ct);
+        var entity = await _repository.GetByIdAsync(tenantId, roleId, resourceId, actionId, ct);
         if (entity == null)
         {
             _notify.Add(_localization.GetMessage("Application.Service.RolePermission.Delete.ResourceNotFound"), 410);
             return;
         }
 
-        await _repository.DeleteAsync(id, tenantId, ct);
+        await _repository.DeleteAsync(tenantId, roleId, resourceId, actionId, ct);
     }
 
-    public async Task<RolePermissionResponse> GetByIdAsync(int id, CancellationToken ct)
+    public async Task<RolePermissionResponse> GetByIdAsync(int roleId, int resourceId, int actionId, CancellationToken ct)
     {
         var tenantId = _currentUser.GetTenantId();
-        var entity = await _repository.GetByIdAsync(id, tenantId, ct);
+        var entity = await _repository.GetByIdAsync(tenantId, roleId, resourceId, actionId, ct);
         return _mapper.Map<RolePermissionResponse>(entity);
     }
 
@@ -256,7 +256,7 @@ public class RolePermissionAppService : IRolePermissionAppService
             }
 
             // Cria a entidade
-            var entity = new RolePermissionEntity(tenantId, item.RoleId, item.ResourceId, item.ActionId, _currentUser.GetUserId());
+            var entity = new RolePermissionEntity(tenantId, item.RoleId, item.ResourceId, item.ActionId);
 
             // Tenta criar no domínio
             var success = await _domain.CreateAsync(entity, ct);

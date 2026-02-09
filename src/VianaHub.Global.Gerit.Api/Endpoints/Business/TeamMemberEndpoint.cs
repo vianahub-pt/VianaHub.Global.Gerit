@@ -13,7 +13,7 @@ public static class TeamMemberEndpoint
     {
         var groupV1 = app.MapGroup("/v1/team-members").WithTags("TeamMembers").WithGroupName("v1").RequireAuthorization();
 
-        groupV1.MapGet("/", async (ITeamMemberAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapGet("/", async ([FromServices] ITeamMemberAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var response = await appService.GetAllAsync(ct);
             return notify.CustomResponse(response, 200);
@@ -24,7 +24,7 @@ public static class TeamMemberEndpoint
         .Produces(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapGet("/{id}", async (int id, ITeamMemberAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapGet("/{id}", async (int id, [FromServices] ITeamMemberAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var response = await appService.GetByIdAsync(id, ct);
             return notify.CustomResponse(response, 200);
@@ -36,7 +36,7 @@ public static class TeamMemberEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapGet("/paged", async ([AsParameters] PagedFilterRequest request, ITeamMemberAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapGet("/paged", async ([AsParameters] PagedFilterRequest request, [FromServices] ITeamMemberAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var response = await appService.GetPagedAsync(request, ct);
             return notify.CustomResponse(response, 200);
@@ -47,7 +47,7 @@ public static class TeamMemberEndpoint
         .Produces(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapPost("/", async ([FromBody] CreateTeamMemberRequest request, ITeamMemberAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapPost("/", async ([FromBody] CreateTeamMemberRequest request, [FromServices] ITeamMemberAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var created = await appService.CreateAsync(request, ct);
             return notify.CustomResponse(created, 201);
@@ -60,7 +60,7 @@ public static class TeamMemberEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError)
         .WithValidation<CreateTeamMemberRequest>();
 
-        groupV1.MapPut("/{id}", async (int id, [FromBody] UpdateTeamMemberRequest request, ITeamMemberAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapPut("/{id}", async (int id, [FromBody] UpdateTeamMemberRequest request, [FromServices] ITeamMemberAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var updated = await appService.UpdateAsync(id, request, ct);
             return notify.CustomResponse(updated, 200);
@@ -73,7 +73,7 @@ public static class TeamMemberEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError)
         .WithValidation<UpdateTeamMemberRequest>();
 
-        groupV1.MapPatch("/{id}/activate", async (int id, ITeamMemberAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapPatch("/{id}/activate", async (int id, [FromServices] ITeamMemberAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var ok = await appService.ActivateAsync(id, ct);
             return notify.CustomResponse();
@@ -85,7 +85,7 @@ public static class TeamMemberEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapPatch("/{id}/deactivate", async (int id, ITeamMemberAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapPatch("/{id}/deactivate", async (int id, [FromServices] ITeamMemberAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var ok = await appService.DeactivateAsync(id, ct);
             return notify.CustomResponse();
@@ -97,7 +97,7 @@ public static class TeamMemberEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapDelete("/{id}", async (int id, ITeamMemberAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapDelete("/{id}", async (int id, [FromServices] ITeamMemberAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var ok = await appService.DeleteAsync(id, ct);
             return notify.CustomResponse();
@@ -109,7 +109,7 @@ public static class TeamMemberEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapPost("/bulk-upload", async (HttpRequest request, ITeamMemberAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapPost("/bulk-upload", async (HttpRequest request, [FromServices] ITeamMemberAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             if (!request.HasFormContentType || request.Form.Files.Count == 0)
             {

@@ -10,11 +10,18 @@ public class InterventionAddressEntity : Entity
 {
     public int TenantId { get; private set; }
     public int InterventionId { get; private set; }
-    public string Street { get; private set; }
-    public string City { get; private set; }
-    public string PostalCode { get; private set; }
-    public string District { get; private set; }
+    public int AddressTypeId { get; private set; }
     public string CountryCode { get; private set; }
+    public string Street { get; private set; }
+    public string Neighborhood { get; private set; }
+    public string City { get; private set; }
+    public string District { get; private set; }
+    public string PostalCode { get; private set; }
+    public string StreetNumber { get; private set; }
+    public string Complement { get; private set; }
+    public decimal? Latitude { get; private set; }
+    public decimal? Longitude { get; private set; }
+    public string Notes { get; private set; }
     public bool IsPrimary { get; private set; }
     public bool IsActive { get; private set; }
     public bool IsDeleted { get; private set; }
@@ -22,6 +29,7 @@ public class InterventionAddressEntity : Entity
     // Navigation Properties
     public TenantEntity Tenant { get; private set; }
     public InterventionEntity Intervention { get; private set; }
+    public AddressTypeEntity AddressType { get; private set; }
 
     // Construtor protegido para o EF Core
     protected InterventionAddressEntity() { }
@@ -29,24 +37,75 @@ public class InterventionAddressEntity : Entity
     /// <summary>
     /// Construtor para criação de um novo endereço da Intervenção
     /// </summary>
-    public InterventionAddressEntity(int tenantId, int interventionId, string street, string city, string postalCode,
-        string district, string countryCode, bool isPrimary, int modifiedBy)
+    public InterventionAddressEntity(
+        int tenantId,
+        int interventionId,
+        int addressTypeId,
+        string countryCode,
+        string street,
+        string neighborhood,
+        string city,
+        string district,
+        string postalCode,
+        string streetNumber,
+        string complement,
+        decimal? latitude,
+        decimal? longitude,
+        string notes,
+        bool isPrimary,
+        int createdBy)
     {
         TenantId = tenantId;
         InterventionId = interventionId;
+        AddressTypeId = addressTypeId;
+        CountryCode = countryCode ?? "PT";
         Street = street;
+        Neighborhood = neighborhood;
         City = city;
-        PostalCode = postalCode;
         District = district;
-        CountryCode = countryCode;
+        PostalCode = postalCode;
+        StreetNumber = streetNumber;
+        Complement = complement;
+        Latitude = latitude;
+        Longitude = longitude;
+        Notes = notes;
         IsPrimary = isPrimary;
         IsActive = true;
         IsDeleted = false;
+        CreatedBy = createdBy;
+        CreatedAt = DateTime.UtcNow;
+    }
+
+    public void UpdateAddressInfo(
+        int addressTypeId,
+        string countryCode,
+        string street,
+        string neighborhood,
+        string city,
+        string district,
+        string postalCode,
+        string streetNumber,
+        string complement,
+        decimal? latitude,
+        decimal? longitude,
+        string notes,
+        int modifiedBy)
+    {
+        AddressTypeId = addressTypeId;
+        CountryCode = countryCode ?? "PT";
+        Street = street;
+        Neighborhood = neighborhood;
+        City = city;
+        District = district;
+        PostalCode = postalCode;
+        StreetNumber = streetNumber;
+        Complement = complement;
+        Latitude = latitude;
+        Longitude = longitude;
+        Notes = notes;
         ModifiedBy = modifiedBy;
         ModifiedAt = DateTime.UtcNow;
     }
-
-
 
     public void SetAsPrimary(int modifiedBy)
     {

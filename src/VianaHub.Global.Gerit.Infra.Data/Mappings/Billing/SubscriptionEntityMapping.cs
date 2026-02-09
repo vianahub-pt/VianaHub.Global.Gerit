@@ -31,46 +31,56 @@ public class SubscriptionEntityMapping : IEntityTypeConfiguration<SubscriptionEn
 
         builder.Property(x => x.CurrentPeriodStart)
             .HasColumnName("CurrentPeriodStart")
+            .HasColumnType("DATETIME2")
             .IsRequired();
 
         builder.Property(x => x.CurrentPeriodEnd)
             .HasColumnName("CurrentPeriodEnd")
+            .HasColumnType("DATETIME2")
             .IsRequired();
 
         builder.Property(x => x.TrialStart)
             .HasColumnName("TrialStart")
+            .HasColumnType("DATETIME2")
             .IsRequired(false);
 
         builder.Property(x => x.TrialEnd)
             .HasColumnName("TrialEnd")
+            .HasColumnType("DATETIME2")
             .IsRequired(false);
 
         builder.Property(x => x.CancelAtPeriodEnd)
             .HasColumnName("CancelAtPeriodEnd")
+            .HasColumnType("BIT")
             .IsRequired()
             .HasDefaultValue(false);
 
         builder.Property(x => x.CanceledAt)
             .HasColumnName("CanceledAt")
+            .HasColumnType("DATETIME2")
             .IsRequired(false);
 
         builder.Property(x => x.CancellationReason)
             .HasColumnName("CancellationReason")
+            .HasColumnType("NVARCHAR(500)")
             .HasMaxLength(500)
             .IsRequired(false);
 
         builder.Property(x => x.StripeCustomerId)
             .HasColumnName("StripeCustomerId")
+            .HasColumnType("NVARCHAR(100)")
             .HasMaxLength(100)
             .IsRequired(false);
 
         builder.Property(x => x.IsActive)
             .HasColumnName("IsActive")
+            .HasColumnType("BIT")
             .IsRequired()
             .HasDefaultValue(true);
 
         builder.Property(x => x.IsDeleted)
             .HasColumnName("IsDeleted")
+            .HasColumnType("BIT")
             .IsRequired()
             .HasDefaultValue(false);
 
@@ -102,17 +112,28 @@ public class SubscriptionEntityMapping : IEntityTypeConfiguration<SubscriptionEn
         builder.HasOne(x => x.Tenant)
             .WithMany()
             .HasForeignKey(x => x.TenantId)
+            .HasConstraintName("FK_Subscriptions_Tenant")
             .OnDelete(DeleteBehavior.Restrict);
 
         // Navegação - Relacionamento com Plan
         builder.HasOne(x => x.Plan)
             .WithMany(p => p.Subscriptions)
             .HasForeignKey(x => x.PlanId)
+            .HasConstraintName("FK_Subscriptions_Plan")
             .OnDelete(DeleteBehavior.Restrict);
 
         // Chave alternativa (TenantId, Id)
         builder.HasIndex(x => new { x.TenantId, x.Id })
             .IsUnique()
-            .HasDatabaseName("AK_Subscriptions_TenantId_Id");
+            .HasDatabaseName("UQ_Subscriptions_TenantId_Id");
+
+        // Constraint Única: Garantir que só pode haver um registro ativo por tenant
+        builder.HasIndex(x => new { x.TenantId, x.IsActive })
+            .IsUnique()
+            .HasDatabaseName("UQ_Subscriptions_Tenant_Active");
+
+        // Índice para performance em consultas por PlanId
+        builder.HasIndex(x => x.PlanId)
+            .HasDatabaseName("IX_Subscriptions_PlanId");
     }
 }

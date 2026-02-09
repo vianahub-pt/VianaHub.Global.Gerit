@@ -47,7 +47,8 @@ public static class JwtKeyEndpoints
             if (!ok) return notify.CustomResponse();
             return notify.CustomResponse(StatusCodes.Status201Created);
         })
-        .CustomAuthorize("Admin,BackOffice", "JwtKeys", "Create")
+        //.CustomAuthorize("Admin,BackOffice", "JwtKeys", "Create")
+        .AllowAnonymous()
         .WithName("CreateInitialJwtKey")
         .WithSummary("Swagger.Endpoint.JwtKey.CreateInitialJwtKey.Summary")
         .Produces(StatusCodes.Status201Created)

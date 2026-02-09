@@ -27,9 +27,9 @@ public static class UserRoleEndpoint
         .Produces<IEnumerable<UserRoleResponse>>(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapGet("/{id}", async (int id, IUserRoleAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapGet("/users/{userId}/roles/{roleId}", async (int userId, int roleId, IUserRoleAppService appService, INotify notify, CancellationToken ct) =>
         {
-            var result = await appService.GetByIdAsync(id, ct);
+            var result = await appService.GetByIdAsync(userId, roleId, ct);
             return notify.CustomResponse(result, result != null ? 200 : 404);
         })
         .CustomAuthorize("Admin,Manager", "UserRoles", "GetBy")
@@ -78,25 +78,9 @@ public static class UserRoleEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError)
         .WithValidation<CreateUserRoleRequest>();
 
-        groupV1.MapPut("/{id}", async (int id, [FromBody] UpdateUserRoleRequest request, IUserRoleAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapDelete("/users/{userId}/roles/{roleId}", async (int userId, int roleId, IUserRoleAppService appService, INotify notify, CancellationToken ct) =>
         {
-            request.Id = id;
-            var updated = await appService.UpdateAsync(request, ct);
-            return notify.CustomResponse(204);
-        })
-        .CustomAuthorize("Admin,Manager", "UserRoles", "Update")
-        .AllowAnonymous()
-        .WithName("UpdateUserRole")
-        .WithSummary("Swagger.Endpoint.UserRole.Update.Summary")
-        .Produces(StatusCodes.Status204NoContent)
-        .Produces<ErrorResponse>(StatusCodes.Status400BadRequest)
-        .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
-        .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError)
-        .WithValidation<UpdateUserRoleRequest>();
-
-        groupV1.MapDelete("/{id}", async (int id, IUserRoleAppService appService, INotify notify, CancellationToken ct) =>
-        {
-            await appService.DeleteAsync(id, ct);
+            await appService.DeleteAsync(userId, roleId, ct);
             return notify.CustomResponse();
         })
         .CustomAuthorize("Admin,Manager", "UserRoles", "Delete")
@@ -109,17 +93,24 @@ public static class UserRoleEndpoint
 
         groupV1.MapPost("/bulk-upload", async (HttpRequest request, IUserRoleAppService appService, INotify notify, CancellationToken ct) =>
         {
-            if (!request.HasFormContentType || request.Form.Files.Count == 0)
+            if (!request.HasFormContentType)
             {
-                notify.Add("Nenhum arquivo foi enviado", 400);
+                notify.Add("Api.Upload.NoFileProvided", 400);
                 return notify.CustomResponse();
             }
 
-            var file = request.Form.Files[0];
+            var form = await request.ReadFormAsync(ct);
+            if (form.Files.Count == 0)
+            {
+                notify.Add("Api.Upload.NoFileProvided", 400);
+                return notify.CustomResponse();
+            }
+
+            var file = form.Files[0];
             var success = await appService.BulkUploadAsync(file, ct);
             return notify.CustomResponse(success);
         })
-        .CustomAuthorize("Admin,BackOffice", "UserRoles", "BulkUpload")
+        //.CustomAuthorize("Admin,BackOffice", "UserRoles", "BulkUpload")
         .AllowAnonymous()
         .WithName("BulkUploadUserRole")
         .WithSummary("Swagger.Endpoint.UserRole.BulkUpload.Summary")

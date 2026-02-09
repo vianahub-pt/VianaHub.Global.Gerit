@@ -14,7 +14,7 @@ public static class EquipmentEndpoint
     {
         var groupV1 = app.MapGroup("/v1/equipments").WithTags("Equipments").WithGroupName("v1").RequireAuthorization();
 
-        groupV1.MapGet("/", async (IEquipmentAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapGet("/", async ([FromServices] IEquipmentAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var response = await appService.GetAllAsync(ct);
             return notify.CustomResponse(response, 200);
@@ -25,7 +25,7 @@ public static class EquipmentEndpoint
         .Produces(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapGet("/{id}", async (int id, IEquipmentAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapGet("/{id}", async (int id, [FromServices] IEquipmentAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var response = await appService.GetByIdAsync(id, ct);
             return notify.CustomResponse(response, 200);
@@ -37,7 +37,7 @@ public static class EquipmentEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapGet("/paged", async ([AsParameters] PagedFilterRequest request, IEquipmentAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapGet("/paged", async ([AsParameters] PagedFilterRequest request, [FromServices] IEquipmentAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var response = await appService.GetPagedAsync(request, ct);
             return notify.CustomResponse(response, 200);
@@ -48,7 +48,7 @@ public static class EquipmentEndpoint
         .Produces(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapPost("/", async ([FromBody] CreateEquipmentRequest request, IEquipmentAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapPost("/", async ([FromBody] CreateEquipmentRequest request, [FromServices] IEquipmentAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var created = await appService.CreateAsync(request, ct);
             return notify.CustomResponse(created ? 201 : 400);
@@ -61,7 +61,7 @@ public static class EquipmentEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError)
         .WithValidation<CreateEquipmentRequest>();
 
-        groupV1.MapPut("/{id}", async (int id, [FromBody] UpdateEquipmentRequest request, IEquipmentAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapPut("/{id}", async (int id, [FromBody] UpdateEquipmentRequest request, [FromServices] IEquipmentAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var updated = await appService.UpdateAsync(id, request, ct);
             return notify.CustomResponse(updated ? 204 : 400);
@@ -74,7 +74,7 @@ public static class EquipmentEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError)
         .WithValidation<UpdateEquipmentRequest>();
 
-        groupV1.MapPatch("/{id}/activate", async (int id, IEquipmentAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapPatch("/{id}/activate", async (int id, [FromServices] IEquipmentAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var ok = await appService.ActivateAsync(id, ct);
             return notify.CustomResponse();
@@ -86,7 +86,7 @@ public static class EquipmentEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapPatch("/{id}/deactivate", async (int id, IEquipmentAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapPatch("/{id}/deactivate", async (int id, [FromServices] IEquipmentAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var ok = await appService.DeactivateAsync(id, ct);
             return notify.CustomResponse();
@@ -98,7 +98,7 @@ public static class EquipmentEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapDelete("/{id}", async (int id, IEquipmentAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapDelete("/{id}", async (int id, [FromServices] IEquipmentAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var ok = await appService.DeleteAsync(id, ct);
             return notify.CustomResponse();
@@ -111,16 +111,22 @@ public static class EquipmentEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
         // Upload massivo de equipments via CSV
-        groupV1.MapPost("/bulk-upload", async (HttpRequest request, IEquipmentAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapPost("/bulk-upload", async (HttpRequest request, [FromServices] IEquipmentAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
-            if (!request.HasFormContentType || request.Form.Files.Count == 0)
+            if (!request.HasFormContentType)
             {
-                // Utiliza chave de tradução para mensagem
                 notify.Add("Api.Upload.NoFileProvided", 400);
                 return notify.CustomResponse();
             }
 
-            var file = request.Form.Files[0];
+            var form = await request.ReadFormAsync(ct);
+            if (form.Files.Count == 0)
+            {
+                notify.Add("Api.Upload.NoFileProvided", 400);
+                return notify.CustomResponse();
+            }
+
+            var file = form.Files[0];
             var success = await appService.BulkUploadAsync(file, ct);
             return notify.CustomResponse(success);
         })

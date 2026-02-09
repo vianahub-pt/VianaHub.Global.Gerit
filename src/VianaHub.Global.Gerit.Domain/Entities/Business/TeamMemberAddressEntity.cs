@@ -10,11 +10,18 @@ public class TeamMemberAddressEntity : Entity
 {
     public int TenantId { get; private set; }
     public int TeamMemberId { get; private set; }
-    public string Street { get; private set; }
-    public string City { get; private set; }
-    public string PostalCode { get; private set; }
-    public string District { get; private set; }
+    public int AddressTypeId { get; private set; }
     public string CountryCode { get; private set; }
+    public string Street { get; private set; }
+    public string Neighborhood { get; private set; }
+    public string City { get; private set; }
+    public string District { get; private set; }
+    public string PostalCode { get; private set; }
+    public string StreetNumber { get; private set; }
+    public string Complement { get; private set; }
+    public decimal? Latitude { get; private set; }
+    public decimal? Longitude { get; private set; }
+    public string Notes { get; private set; }
     public bool IsPrimary { get; private set; }
     public bool IsActive { get; private set; }
     public bool IsDeleted { get; private set; }
@@ -22,6 +29,7 @@ public class TeamMemberAddressEntity : Entity
     // Navigation Properties
     public TenantEntity Tenant { get; private set; }
     public TeamMemberEntity TeamMember { get; private set; }
+    public AddressTypeEntity AddressType { get; private set; }
 
     // Construtor protegido para o EF Core
     protected TeamMemberAddressEntity() { }
@@ -29,15 +37,38 @@ public class TeamMemberAddressEntity : Entity
     /// <summary>
     /// Construtor para criação de um novo endereço do Membro da Equipe
     /// </summary>
-    public TeamMemberAddressEntity(int tenantId, int teamMemberId, string street, string city, string postalCode, string district, string countryCode, bool isPrimary, int createdBy)
+    public TeamMemberAddressEntity(
+        int tenantId, 
+        int teamMemberId, 
+        int addressTypeId,
+        string countryCode,
+        string street,
+        string streetNumber,
+        string complement,
+        string neighborhood,
+        string city, 
+        string district,
+        string postalCode,
+        decimal? latitude,
+        decimal? longitude,
+        string notes,
+        bool isPrimary, 
+        int createdBy)
     {
         TenantId = tenantId;
         TeamMemberId = teamMemberId;
+        AddressTypeId = addressTypeId;
+        CountryCode = countryCode ?? "PT";
         Street = street;
+        StreetNumber = streetNumber;
+        Complement = complement;
+        Neighborhood = neighborhood;
         City = city;
-        PostalCode = postalCode;
         District = district;
-        CountryCode = countryCode.ToUpper();
+        PostalCode = postalCode;
+        Latitude = latitude;
+        Longitude = longitude;
+        Notes = notes;
         IsPrimary = isPrimary;
         IsActive = true;
         IsDeleted = false;
@@ -45,17 +76,36 @@ public class TeamMemberAddressEntity : Entity
         CreatedAt = DateTime.UtcNow;
     }
 
-    public void UpdateAddressInfo(string street, string city, string postalCode, string district, string countryCode, int modifiedBy)
+    public void UpdateAddressInfo(
+        int addressTypeId,
+        string countryCode,
+        string street,
+        string streetNumber,
+        string complement,
+        string neighborhood,
+        string city,
+        string district,
+        string postalCode,
+        decimal? latitude,
+        decimal? longitude,
+        string notes,
+        int modifiedBy)
     {
+        AddressTypeId = addressTypeId;
+        CountryCode = countryCode ?? "PT";
         Street = street;
+        StreetNumber = streetNumber;
+        Complement = complement;
+        Neighborhood = neighborhood;
         City = city;
-        PostalCode = postalCode;
         District = district;
-        CountryCode = countryCode.ToUpper();
+        PostalCode = postalCode;
+        Latitude = latitude;
+        Longitude = longitude;
+        Notes = notes;
         ModifiedBy = modifiedBy;
         ModifiedAt = DateTime.UtcNow;
     }
-
 
     public void SetAsPrimary(int modifiedBy)
     {

@@ -2,6 +2,7 @@
 using CsvHelper;
 using CsvHelper.Configuration;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using System.Globalization;
 using VianaHub.Global.Gerit.Application.Dtos.Base;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Identity.Action;
@@ -25,6 +26,7 @@ public class ActionAppService : IActionAppService
     private readonly INotify _notify;
     private readonly IMapper _mapper;
     private readonly ILocalizationService _localization;
+    private readonly ILogger<ActionAppService> _logger;
     private readonly IFileValidationService _fileValidation;
 
     public ActionAppService(
@@ -34,6 +36,7 @@ public class ActionAppService : IActionAppService
         IMapper mapper,
         ICurrentUserService currentUser,
         ILocalizationService localization,
+        ILogger<ActionAppService> logger,
         IFileValidationService fileValidation)
     {
         _repo = repo;
@@ -42,6 +45,7 @@ public class ActionAppService : IActionAppService
         _mapper = mapper;
         _currentUser = currentUser;
         _localization = localization;
+        _logger = logger;
         _fileValidation = fileValidation;
     }
 
@@ -207,6 +211,7 @@ public class ActionAppService : IActionAppService
                 catch (CsvHelperException ex)
                 {
                     // Log linha com erro mas continua processamento
+                    _logger.LogWarning(ex, "Erro ao processar linha {RowNumber} do CSV de Actions", rowCount + 2);
                     _notify.Add(_localization.GetMessage("Application.Service.Action.ReadCsvFile.CsvHelperException", rowCount + 2), 400);
                     rowCount++;
                     continue;
@@ -223,6 +228,7 @@ public class ActionAppService : IActionAppService
         }
         catch (Exception ex)
         {
+            _logger.LogError(ex, "Erro ao ler arquivo CSV de Actions: {Message}", ex.Message);
             _notify.Add(_localization.GetMessage("Application.Service.Action.ReadCsvFile.Exception"), 400);
             return null;
         }

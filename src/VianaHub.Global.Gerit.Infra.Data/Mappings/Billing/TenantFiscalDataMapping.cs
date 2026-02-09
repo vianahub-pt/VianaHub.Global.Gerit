@@ -26,6 +26,7 @@ public class TenantFiscalDataMapping : IEntityTypeConfiguration<TenantFiscalData
         // Propriedades
         builder.Property(x => x.TenantId)
             .HasColumnName("TenantId")
+            .HasColumnType("INT")
             .IsRequired();
 
         builder.Property(x => x.NIF)
@@ -92,11 +93,21 @@ public class TenantFiscalDataMapping : IEntityTypeConfiguration<TenantFiscalData
             .HasColumnType("DATETIME2")
             .IsRequired(false);
 
-        // Constraints únicos
+        // Relacionamento
+        builder.HasOne(x => x.Tenant)
+            .WithMany(t => t.FiscalData)
+            .HasForeignKey(x => x.TenantId)
+            .HasConstraintName("FK_TenantFiscalData_Tenant")
+            .OnDelete(DeleteBehavior.NoAction);
+
+        // Constraint Única: NIF único
         builder.HasIndex(x => x.NIF)
             .IsUnique()
             .HasDatabaseName("UQ_TenantFiscalData_NIF");
 
-        // Relacionamentos configurados no TenantMapping
+        // Constraint Única: Garantir que só pode haver um registro ativo por tenant (soft delete)
+        builder.HasIndex(x => new { x.TenantId, x.IsActive })
+            .IsUnique()
+            .HasDatabaseName("UQ_TenantFiscalData_Tenant_Active");
     }
 }

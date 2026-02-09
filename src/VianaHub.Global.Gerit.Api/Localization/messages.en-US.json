@@ -331,6 +331,13 @@
   "Api.Validator.TeamMemberContact.Update.ContactValue": "Contact value is required",
   "Api.Validator.TeamMemberContact.Update.ContactValue.MaximumLength": "Contact value must be at most {0} characters long",
 
+  "Api.Validator.AddressType.Create.Name": "Name is required",
+  "Api.Validator.AddressType.Create.Name.MaximumLength": "Name must be at most {0} characters long",
+  "Api.Validator.AddressType.Update.Name": "Name is required",
+  "Api.Validator.AddressType.Update.Name.MaximumLength": "Name must be at most {0} characters long",
+
+  "Application.Service.Auth.Login.InvalidCredentials": "Invalid credentials",
+
   "Application.Service.UserRole.Create.ResourceAlreadyExists": "User-role link already exists for this tenant",
   "Application.Service.UserRole.Create.RoleNotFound": "Role not found",
   "Application.Service.UserRole.Create.UserNotFound": "User not found",

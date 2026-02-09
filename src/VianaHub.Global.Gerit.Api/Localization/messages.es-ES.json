@@ -331,6 +331,13 @@
   "Api.Validator.TeamMemberContact.Update.ContactValue": "El valor del contacto es obligatorio",
   "Api.Validator.TeamMemberContact.Update.ContactValue.MaximumLength": "El valor del contacto debe tener como máximo {0} caracteres",
 
+  "Api.Validator.AddressType.Create.Name": "El nombre es obligatorio",
+  "Api.Validator.AddressType.Create.Name.MaximumLength": "El nombre debe tener como máximo {0} caracteres",
+  "Api.Validator.AddressType.Update.Name": "El nombre es obligatorio",
+  "Api.Validator.AddressType.Update.Name.MaximumLength": "El nombre debe tener como máximo {0} caracteres",
+
+  "Application.Service.Auth.Login.InvalidCredentials": "Credenciales inválidas",
+
   "Application.Service.UserRole.Create.ResourceAlreadyExists": "Vínculo entre usuario y rol ya existe para este inquilino",
   "Application.Service.UserRole.Create.RoleNotFound": "Rol no encontrado",
   "Application.Service.UserRole.Create.UserNotFound": "Usuario no encontrado",
