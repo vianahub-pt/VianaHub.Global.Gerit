@@ -48,6 +48,7 @@ DROP TABLE IF EXISTS dbo.Users;
 
 -- Tenant related
 DROP TABLE IF EXISTS dbo.Subscriptions;
+DROP TABLE IF EXISTS dbo.AddressTypes;
 DROP TABLE IF EXISTS dbo.TenantFiscalData;
 DROP TABLE IF EXISTS dbo.TenantAddresses;
 DROP TABLE IF EXISTS dbo.TenantContacts;

@@ -11,6 +11,7 @@ select * from dbo.RolePermissions order by ResourceId, ActionId;		--
 select * from dbo.JwtKeys;
 ------------------------------
 select * from dbo.Vehicles;				--
+select * from dbo.EquipmentTypes;
 select * from dbo.Equipments;			--
 select * from dbo.Functions;			--
 select * from dbo.TeamMembers;
@@ -19,6 +20,8 @@ select * from dbo.TeamMemberContacts;
 select * from dbo.Clients;
 
 FOR JSON AUTO;
+
+
 
 --Tenants			- TenantId	= 4 - VianaHub Lda
 --Users				- UserId	= 4 - Dener Viana

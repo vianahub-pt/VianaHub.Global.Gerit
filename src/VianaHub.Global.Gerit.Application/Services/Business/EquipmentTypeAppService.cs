@@ -7,8 +7,8 @@ using VianaHub.Global.Gerit.Application.Dtos.Base;
 using VianaHub.Global.Gerit.Domain.ReadModels;
 using VianaHub.Global.Gerit.Domain.Tools.Notifications;
 using VianaHub.Global.Gerit.Domain.Interfaces;
-using VianaHub.Global.Gerit.Application.Dtos.Response.Business.Equipment;
-using VianaHub.Global.Gerit.Application.Dtos.Request.Business.Equipment;
+using VianaHub.Global.Gerit.Application.Dtos.Response.Business.EquipmentType;
+using VianaHub.Global.Gerit.Application.Dtos.Request.Business.EquipmentType;
 using VianaHub.Global.Gerit.Application.Interfaces.Business;
 using VianaHub.Global.Gerit.Application.Interfaces.Common;
 using VianaHub.Global.Gerit.Domain.Interfaces.Business;
@@ -17,19 +17,19 @@ using VianaHub.Global.Gerit.Domain.Helpers;
 
 namespace VianaHub.Global.Gerit.Application.Services.Business;
 
-public class EquipmentAppService : IEquipmentAppService
+public class EquipmentTypeAppService : IEquipmentTypeAppService
 {
-    private readonly IEquipmentDataRepository _repo;
-    private readonly IEquipmentDomainService _domain;
+    private readonly IEquipmentTypeDataRepository _repo;
+    private readonly IEquipmentTypeDomainService _domain;
     private readonly IMapper _mapper;
     private readonly INotify _notify;
     private readonly ILocalizationService _localization;
     private readonly ICurrentUserService _currentUser;
     private readonly IFileValidationService _fileValidation;
 
-    public EquipmentAppService(
-        IEquipmentDataRepository repo,
-        IEquipmentDomainService domain,
+    public EquipmentTypeAppService(
+        IEquipmentTypeDataRepository repo,
+        IEquipmentTypeDomainService domain,
         IMapper mapper,
         INotify notify,
         ILocalizationService localization,
@@ -45,54 +45,54 @@ public class EquipmentAppService : IEquipmentAppService
         _fileValidation = fileValidation;
     }
 
-    public async Task<IEnumerable<EquipmentResponse>> GetAllAsync(CancellationToken ct)
+    public async Task<IEnumerable<EquipmentTypeResponse>> GetAllAsync(CancellationToken ct)
     {
         var entities = await _repo.GetAllAsync(ct);
-        return _mapper.Map<IEnumerable<EquipmentResponse>>(entities);
+        return _mapper.Map<IEnumerable<EquipmentTypeResponse>>(entities);
     }
 
-    public async Task<EquipmentResponse> GetByIdAsync(int id, CancellationToken ct)
+    public async Task<EquipmentTypeResponse> GetByIdAsync(int id, CancellationToken ct)
     {
         var entity = await _repo.GetByIdAsync(id, ct);
         if (entity == null || entity.IsDeleted || !entity.IsActive)
         {
-            _notify.Add(_localization.GetMessage("Application.Service.Equipment.Update.ResourceNotFound"), 410);
+            _notify.Add(_localization.GetMessage("Application.Service.EquipmentType.GetById.ResourceNotFound"), 410);
             return null;
         }
-        return _mapper.Map<EquipmentResponse>(entity);
+        return _mapper.Map<EquipmentTypeResponse>(entity);
     }
 
-    public async Task<ListPageResponse<EquipmentResponse>> GetPagedAsync(PagedFilterRequest request, CancellationToken ct)
+    public async Task<ListPageResponse<EquipmentTypeResponse>> GetPagedAsync(PagedFilterRequest request, CancellationToken ct)
     {
         var filter = new PagedFilter(request.Search, request.PageNumber, request.PageSize, request.SortBy, request.SortDirection);
         var paged = await _repo.GetPagedAsync(filter, ct);
-        return _mapper.Map<ListPageResponse<EquipmentResponse>>(paged);
+        return _mapper.Map<ListPageResponse<EquipmentTypeResponse>>(paged);
     }
 
-    public async Task<bool> CreateAsync(CreateEquipmentRequest request, CancellationToken ct)
+    public async Task<bool> CreateAsync(CreateEquipmentTypeRequest request, CancellationToken ct)
     {
         var tenantId = _currentUser.GetTenantId();
         var exists = await _repo.ExistsByNameAsync(tenantId, request.Name, ct);
         if (exists)
         {
-            _notify.Add(_localization.GetMessage("Application.Service.Equipment.Create.ResourceAlreadyExists"), 400);
+            _notify.Add(_localization.GetMessage("Application.Service.EquipmentType.Create.ResourceAlreadyExists"), 400);
             return false;
         }
 
-        var entity = new EquipmentEntity(tenantId, request.Name, request.EquipamentType, request.SerialNumber, _currentUser.GetUserId());
+        var entity = new EquipmentTypeEntity(tenantId, request.Name, request.Description, _currentUser.GetUserId());
         return await _domain.CreateAsync(entity, ct);
     }
 
-    public async Task<bool> UpdateAsync(int id, UpdateEquipmentRequest request, CancellationToken ct)
+    public async Task<bool> UpdateAsync(int id, UpdateEquipmentTypeRequest request, CancellationToken ct)
     {
         var entity = await _repo.GetByIdAsync(id, ct);
         if (entity == null)
         {
-            _notify.Add(_localization.GetMessage("Application.Service.Equipment.Update.ResourceNotFound"), 410);
+            _notify.Add(_localization.GetMessage("Application.Service.EquipmentType.Update.ResourceNotFound"), 410);
             return false;
         }
 
-        entity.Update(request.Name, request.EquipamentType, request.SerialNumber, _currentUser.GetUserId());
+        entity.Update(request.Name, request.Description, _currentUser.GetUserId());
 
         return await _domain.UpdateAsync(entity, ct);
     }
@@ -102,7 +102,7 @@ public class EquipmentAppService : IEquipmentAppService
         var entity = await _repo.GetByIdAsync(id, ct);
         if (entity == null)
         {
-            _notify.Add(_localization.GetMessage("Application.Service.Equipment.Activate.ResourceNotFound"), 410);
+            _notify.Add(_localization.GetMessage("Application.Service.EquipmentType.Activate.ResourceNotFound"), 410);
             return false;
         }
 
@@ -115,7 +115,7 @@ public class EquipmentAppService : IEquipmentAppService
         var entity = await _repo.GetByIdAsync(id, ct);
         if (entity == null)
         {
-            _notify.Add(_localization.GetMessage("Application.Service.Equipment.Deactivate.ResourceNotFound"), 410);
+            _notify.Add(_localization.GetMessage("Application.Service.EquipmentType.Deactivate.ResourceNotFound"), 410);
             return false;
         }
 
@@ -128,7 +128,7 @@ public class EquipmentAppService : IEquipmentAppService
         var entity = await _repo.GetByIdAsync(id, ct);
         if (entity == null)
         {
-            _notify.Add(_localization.GetMessage("Application.Service.Equipment.Delete.ResourceNotFound"), 410);
+            _notify.Add(_localization.GetMessage("Application.Service.EquipmentType.Delete.ResourceNotFound"), 410);
             return false;
         }
 
@@ -149,7 +149,7 @@ public class EquipmentAppService : IEquipmentAppService
 
         if (!items.Any())
         {
-            _notify.Add(_localization.GetMessage("Application.Service.Equipment.BulkUpload.EmptyFile"), 400);
+            _notify.Add(_localization.GetMessage("Application.Service.EquipmentType.BulkUpload.EmptyFile"), 400);
             return false;
         }
 
@@ -157,7 +157,7 @@ public class EquipmentAppService : IEquipmentAppService
         return await ProcessBulkItemsAsync(items, ct);
     }
 
-    private List<BulkUploadEquipmentItem> ReadCsvFile(IFormFile file)
+    private List<BulkUploadEquipmentTypeItem> ReadCsvFile(IFormFile file)
     {
         try
         {
@@ -175,7 +175,7 @@ public class EquipmentAppService : IEquipmentAppService
             };
 
             using var csv = new CsvReader(reader, config);
-            var records = new List<BulkUploadEquipmentItem>();
+            var records = new List<BulkUploadEquipmentTypeItem>();
 
             csv.Read();
             csv.ReadHeader();
@@ -187,23 +187,23 @@ public class EquipmentAppService : IEquipmentAppService
             {
                 try
                 {
-                    var record = csv.GetRecord<BulkUploadEquipmentItem>();
+                    var record = csv.GetRecord<BulkUploadEquipmentTypeItem>();
                     if (record != null)
                     {
                         // Sanitiza e normaliza campos
                         record.Name = record.Name?.SanitizeCsvInput().NormalizeUtf8();
-                        record.SerialNumber = record.SerialNumber?.SanitizeCsvInput().NormalizeUtf8();
+                        record.Description = record.Description?.SanitizeCsvInput().NormalizeUtf8();
 
                         // Valida se os campos não contêm conteúdo perigoso
                         if (!string.IsNullOrEmpty(record.Name) && !record.Name.IsSafeCsvValue())
                         {
-                            _notify.Add(_localization.GetMessage("Application.Service.Equipment.ReadCsvFile.Name.IsSafeCsvValue", rowCount + 2), 400);
+                            _notify.Add(_localization.GetMessage("Application.Service.EquipmentType.ReadCsvFile.Name.IsSafeCsvValue", rowCount + 2), 400);
                             continue;
                         }
 
-                        if (!string.IsNullOrEmpty(record.SerialNumber) && !record.SerialNumber.IsSafeCsvValue())
+                        if (!string.IsNullOrEmpty(record.Description) && !record.Description.IsSafeCsvValue())
                         {
-                            _notify.Add(_localization.GetMessage("Application.Service.Equipment.ReadCsvFile.SerialNumber.IsSafeCsvValue", rowCount + 2), 400);
+                            _notify.Add(_localization.GetMessage("Application.Service.EquipmentType.ReadCsvFile.Description.IsSafeCsvValue", rowCount + 2), 400);
                             continue;
                         }
 
@@ -214,7 +214,7 @@ public class EquipmentAppService : IEquipmentAppService
                 catch (CsvHelperException ex)
                 {
                     // Log linha com erro mas continua processamento
-                    _notify.Add(_localization.GetMessage("Application.Service.Equipment.ReadCsvFile.CsvHelperException", rowCount + 2), 400);
+                    _notify.Add(_localization.GetMessage("Application.Service.EquipmentType.ReadCsvFile.CsvHelperException", rowCount + 2), 400);
                     rowCount++;
                     continue;
                 }
@@ -222,7 +222,7 @@ public class EquipmentAppService : IEquipmentAppService
 
             if (rowCount >= maxRows)
             {
-                _notify.Add(_localization.GetMessage("Application.Service.Equipment.ReadCsvFile.MaxRows", maxRows), 400);
+                _notify.Add(_localization.GetMessage("Application.Service.EquipmentType.ReadCsvFile.MaxRows", maxRows), 400);
                 return null;
             }
 
@@ -230,12 +230,12 @@ public class EquipmentAppService : IEquipmentAppService
         }
         catch (Exception ex)
         {
-            _notify.Add(_localization.GetMessage("Application.Service.Equipment.ReadCsvFile.Exception"), 400);
+            _notify.Add(_localization.GetMessage("Application.Service.EquipmentType.ReadCsvFile.Exception"), 400);
             return null;
         }
     }
 
-    private async Task<bool> ProcessBulkItemsAsync(List<BulkUploadEquipmentItem> items, CancellationToken ct)
+    private async Task<bool> ProcessBulkItemsAsync(List<BulkUploadEquipmentTypeItem> items, CancellationToken ct)
     {
         var hasErrors = false;
         var tenantId = _currentUser.GetTenantId();
@@ -253,23 +253,20 @@ public class EquipmentAppService : IEquipmentAppService
             var exists = await _repo.ExistsByNameAsync(tenantId, item.Name, ct);
             if (exists)
             {
-                _notify.Add(_localization.GetMessage("Application.Service.Equipment.ProcessBulkItems.ExistsByName", item.Name), 400);
+                _notify.Add(_localization.GetMessage("Application.Service.EquipmentType.ProcessBulkItems.ExistsByName", item.Name), 400);
                 hasErrors = true;
                 continue;
             }
 
-            // Define tipo do equipamento padrão se não fornecido
-            var type = item.EquipamentType ?? Domain.Enums.EquipamentType.ManualTool;
-
             // Cria a entidade
-            var entity = new EquipmentEntity(tenantId, item.Name, type, item.SerialNumber, _currentUser.GetUserId());
+            var entity = new EquipmentTypeEntity(tenantId, item.Name, item.Description, _currentUser.GetUserId());
 
             // Tenta criar no domínio
             var success = await _domain.CreateAsync(entity, ct);
 
             if (!success)
             {
-                _notify.Add(_localization.GetMessage("Application.Service.Equipment.ProcessBulkItems.FailedToCreate", item.Name), 400);
+                _notify.Add(_localization.GetMessage("Application.Service.EquipmentType.ProcessBulkItems.FailedToCreate", item.Name), 400);
                 hasErrors = true;
             }
         }
@@ -277,11 +274,11 @@ public class EquipmentAppService : IEquipmentAppService
         return !hasErrors;
     }
 
-    private bool ValidateBulkItem(BulkUploadEquipmentItem item)
+    private bool ValidateBulkItem(BulkUploadEquipmentTypeItem item)
     {
         if (string.IsNullOrWhiteSpace(item.Name))
         {
-            _notify.Add(_localization.GetMessage("Application.Service.Equipment.ValidateBulkItem.Name", item.Name), 400);
+            _notify.Add(_localization.GetMessage("Application.Service.EquipmentType.ValidateBulkItem.Name"), 400);
             return false;
         }
 

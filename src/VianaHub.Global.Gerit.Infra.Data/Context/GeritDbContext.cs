@@ -45,6 +45,7 @@ public class GeritDbContext : DbContext
     public DbSet<TeamMemberAddressEntity> TeamMemberAddresses { get; set; }
     public DbSet<FunctionEntity> Functions { get; set; }
     public DbSet<EquipmentEntity> Equipments { get; set; }
+    public DbSet<EquipmentTypeEntity> EquipmentTypes { get; set; }
     public DbSet<VehicleEntity> Vehicles { get; set; }
     public DbSet<InterventionEntity> Interventions { get; set; }
     public DbSet<InterventionContactEntity> InterventionContacts { get; set; }

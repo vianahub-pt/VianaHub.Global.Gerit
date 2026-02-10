@@ -6,7 +6,7 @@ public class EquipmentResponse
     public int TenantId { get; set; }
     public string Name { get; set; }
     public string SerialNumber { get; set; }
-    public byte TypeEquipament { get; set; }
-    public byte Status { get; set; }
+    public int EquipamentType { get; set; }
+    public int Status { get; set; }
     public bool IsActive { get; set; }
 }

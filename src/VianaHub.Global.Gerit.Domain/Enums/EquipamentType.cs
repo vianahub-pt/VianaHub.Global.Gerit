@@ -5,7 +5,7 @@ namespace VianaHub.Global.Gerit.Domain.Enums;
 /// <summary>
 /// Tipos de Equipamento
 /// </summary>
-public enum TypeEquipament : byte
+public enum EquipamentType : byte
 {
     [Description("Ferramenta Elétrica")]
     ElectricTool = 0,

@@ -1,0 +1,31 @@
+Name;Description
+Ferramenta Elétrica;Ferramentas acionadas por energia elétrica (ex.: furadeira, esmerilhadeira).
+Ferramenta Manual;Ferramentas operadas manualmente (ex.: chave de fenda, alicate).
+Medição;Equipamentos e instrumentos para medição (ex.: trena, paquímetro).
+Ferramenta Elétrica - Furadeiras;Categoria de ferramentas elétricas para perfuração.
+Ferramenta Elétrica - Parafusadeiras;Categoria de ferramentas elétricas para fixação e remoção de parafusos.
+Ferramenta Elétrica - Esmerilhadeiras;Categoria de ferramentas elétricas para corte e desbaste.
+Ferramenta Elétrica - Serras;Categoria de serras elétricas para corte de materiais diversos.
+Ferramenta Elétrica - Lixadeiras;Categoria de lixadeiras elétricas para acabamento superficial.
+Ferramenta Elétrica - Marteletes;Categoria de marteletes elétricos para demolição e perfuração pesada.
+Ferramenta Elétrica - Sopradores;Categoria de sopradores elétricos para limpeza e remoção de detritos.
+Ferramenta Elétrica - Pistolas de Calor;Categoria de pistolas de calor elétricas para aquecimento controlado.
+Ferramenta Manual - Chaves;Categoria de chaves manuais (fenda, Philips, combinadas).
+Ferramenta Manual - Alicates;Categoria de alicates manuais (universal, corte, bico).
+Ferramenta Manual - Martelos;Categoria de martelos e marretas manuais.
+Ferramenta Manual - Serras;Categoria de serras manuais para corte.
+Ferramenta Manual - Estiletes;Categoria de estiletes e lâminas para cortes leves.
+Ferramenta Manual - Torques;Categoria de ferramentas manuais para aplicação de torque (ex.: torquímetro).
+Ferramenta Manual - Formões;Categoria de formões e talhadeiras manuais.
+Ferramenta Manual - Limas;Categoria de limas manuais para desbaste e acabamento.
+Ferramenta Manual - Grampos;Categoria de grampos/sargentos para fixação de peças.
+Medição - Trenas;Instrumentos de medição linear do tipo trena.
+Medição - Paquímetros;Instrumentos de medição de diâmetros e espessuras (paquímetro).
+Medição - Micrômetros;Instrumentos de medição de alta precisão (micrômetro).
+Medição - Níveis;Instrumentos para verificação de nivelamento e prumo.
+Medição - Esquadros;Instrumentos para verificação de ângulos e esquadro.
+Medição - Multímetros;Instrumentos para medição elétrica (tensão, corrente, resistência).
+Medição - Alicates Amperímetros;Instrumentos para medição de corrente elétrica por alicate.
+Medição - Termômetros;Instrumentos para medição de temperatura.
+Medição - Manômetros;Instrumentos para medição de pressão.
+Medição - Luxímetros;Instrumentos para medição de iluminância (lux).

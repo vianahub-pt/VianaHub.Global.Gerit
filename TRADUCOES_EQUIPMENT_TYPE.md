@@ -1,0 +1,138 @@
+# Chaves de Tradução para EquipmentType
+
+Adicione as seguintes chaves aos arquivos de localização:
+
+## messages.pt-BR.json
+
+```json
+  "Swagger.Tag.EquipmentTypes": "Tipos de Equipamento",
+  
+  "Swagger.Endpoint.EquipmentType.GetAll.Summary": "Obter todos os tipos de equipamento",
+  "Swagger.Endpoint.EquipmentType.GetById.Summary": "Obter tipo de equipamento por ID",
+  "Swagger.Endpoint.EquipmentType.GetPaged.Summary": "Obter tipos de equipamento paginados",
+  "Swagger.Endpoint.EquipmentType.Create.Summary": "Criar novo tipo de equipamento",
+  "Swagger.Endpoint.EquipmentType.Update.Summary": "Atualizar tipo de equipamento",
+  "Swagger.Endpoint.EquipmentType.Activate.Summary": "Ativar tipo de equipamento",
+  "Swagger.Endpoint.EquipmentType.Deactivate.Summary": "Desativar tipo de equipamento",
+  "Swagger.Endpoint.EquipmentType.Delete.Summary": "Excluir tipo de equipamento",
+  "Swagger.Endpoint.EquipmentType.BulkUpload.Summary": "Upload em massa de tipos de equipamento via CSV",
+
+  "Api.EquipmentType.NameRequired": "Nome é obrigatório",
+  "Api.EquipmentType.NameMaxLength": "Nome deve ter no máximo {0} caracteres",
+  "Api.EquipmentType.DescriptionMaxLength": "Descrição deve ter no máximo {0} caracteres",
+
+  "Application.Service.EquipmentType.GetById.ResourceNotFound": "Tipo de equipamento não encontrado ou inativo",
+  "Application.Service.EquipmentType.Create.ResourceAlreadyExists": "Já existe um tipo de equipamento com este nome",
+  "Application.Service.EquipmentType.Update.ResourceNotFound": "Tipo de equipamento não encontrado",
+  "Application.Service.EquipmentType.Activate.ResourceNotFound": "Tipo de equipamento não encontrado",
+  "Application.Service.EquipmentType.Deactivate.ResourceNotFound": "Tipo de equipamento não encontrado",
+  "Application.Service.EquipmentType.Delete.ResourceNotFound": "Tipo de equipamento não encontrado",
+  "Application.Service.EquipmentType.BulkUpload.EmptyFile": "Arquivo CSV está vazio",
+  "Application.Service.EquipmentType.ReadCsvFile.Name.IsSafeCsvValue": "Nome na linha {0} contém conteúdo perigoso",
+  "Application.Service.EquipmentType.ReadCsvFile.Description.IsSafeCsvValue": "Descrição na linha {0} contém conteúdo perigoso",
+  "Application.Service.EquipmentType.ReadCsvFile.CsvHelperException": "Erro ao processar linha {0} do CSV",
+  "Application.Service.EquipmentType.ReadCsvFile.MaxRows": "Arquivo CSV excede o limite máximo de {0} linhas",
+  "Application.Service.EquipmentType.ReadCsvFile.Exception": "Erro ao ler arquivo CSV",
+  "Application.Service.EquipmentType.ProcessBulkItems.ExistsByName": "Tipo de equipamento '{0}' já existe",
+  "Application.Service.EquipmentType.ProcessBulkItems.FailedToCreate": "Falha ao criar tipo de equipamento '{0}'",
+  "Application.Service.EquipmentType.ValidateBulkItem.Name": "Nome é obrigatório no upload em massa",
+
+  "Domain.EquipmentType.IdRequired": "ID é obrigatório",
+  "Domain.EquipmentType.TenantIdRequired": "ID do inquilino é obrigatório",
+  "Domain.EquipmentType.NameRequired": "Nome é obrigatório",
+  "Domain.EquipmentType.NameMaxLength": "Nome deve ter no máximo {0} caracteres",
+  "Domain.EquipmentType.DescriptionMaxLength": "Descrição deve ter no máximo {0} caracteres",
+  "Domain.EquipmentType.CannotActivateDeleted": "Não é possível ativar um tipo de equipamento excluído",
+  "Domain.EquipmentType.CannotDeactivateDeleted": "Não é possível desativar um tipo de equipamento excluído",
+  "Domain.EquipmentType.AlreadyDeleted": "Tipo de equipamento já foi excluído"
+```
+
+## messages.en-US.json
+
+```json
+  "Swagger.Tag.EquipmentTypes": "Equipment Types",
+  
+  "Swagger.Endpoint.EquipmentType.GetAll.Summary": "Get all equipment types",
+  "Swagger.Endpoint.EquipmentType.GetById.Summary": "Get equipment type by ID",
+  "Swagger.Endpoint.EquipmentType.GetPaged.Summary": "Get paged equipment types",
+  "Swagger.Endpoint.EquipmentType.Create.Summary": "Create new equipment type",
+  "Swagger.Endpoint.EquipmentType.Update.Summary": "Update equipment type",
+  "Swagger.Endpoint.EquipmentType.Activate.Summary": "Activate equipment type",
+  "Swagger.Endpoint.EquipmentType.Deactivate.Summary": "Deactivate equipment type",
+  "Swagger.Endpoint.EquipmentType.Delete.Summary": "Delete equipment type",
+  "Swagger.Endpoint.EquipmentType.BulkUpload.Summary": "Bulk upload equipment types via CSV",
+
+  "Api.EquipmentType.NameRequired": "Name is required",
+  "Api.EquipmentType.NameMaxLength": "Name must be at most {0} characters",
+  "Api.EquipmentType.DescriptionMaxLength": "Description must be at most {0} characters",
+
+  "Application.Service.EquipmentType.GetById.ResourceNotFound": "Equipment type not found or inactive",
+  "Application.Service.EquipmentType.Create.ResourceAlreadyExists": "An equipment type with this name already exists",
+  "Application.Service.EquipmentType.Update.ResourceNotFound": "Equipment type not found",
+  "Application.Service.EquipmentType.Activate.ResourceNotFound": "Equipment type not found",
+  "Application.Service.EquipmentType.Deactivate.ResourceNotFound": "Equipment type not found",
+  "Application.Service.EquipmentType.Delete.ResourceNotFound": "Equipment type not found",
+  "Application.Service.EquipmentType.BulkUpload.EmptyFile": "CSV file is empty",
+  "Application.Service.EquipmentType.ReadCsvFile.Name.IsSafeCsvValue": "Name in row {0} contains dangerous content",
+  "Application.Service.EquipmentType.ReadCsvFile.Description.IsSafeCsvValue": "Description in row {0} contains dangerous content",
+  "Application.Service.EquipmentType.ReadCsvFile.CsvHelperException": "Error processing row {0} of CSV",
+  "Application.Service.EquipmentType.ReadCsvFile.MaxRows": "CSV file exceeds maximum limit of {0} rows",
+  "Application.Service.EquipmentType.ReadCsvFile.Exception": "Error reading CSV file",
+  "Application.Service.EquipmentType.ProcessBulkItems.ExistsByName": "Equipment type '{0}' already exists",
+  "Application.Service.EquipmentType.ProcessBulkItems.FailedToCreate": "Failed to create equipment type '{0}'",
+  "Application.Service.EquipmentType.ValidateBulkItem.Name": "Name is required in bulk upload",
+
+  "Domain.EquipmentType.IdRequired": "ID is required",
+  "Domain.EquipmentType.TenantIdRequired": "Tenant ID is required",
+  "Domain.EquipmentType.NameRequired": "Name is required",
+  "Domain.EquipmentType.NameMaxLength": "Name must be at most {0} characters",
+  "Domain.EquipmentType.DescriptionMaxLength": "Description must be at most {0} characters",
+  "Domain.EquipmentType.CannotActivateDeleted": "Cannot activate a deleted equipment type",
+  "Domain.EquipmentType.CannotDeactivateDeleted": "Cannot deactivate a deleted equipment type",
+  "Domain.EquipmentType.AlreadyDeleted": "Equipment type has already been deleted"
+```
+
+## messages.es-ES.json
+
+```json
+  "Swagger.Tag.EquipmentTypes": "Tipos de Equipo",
+  
+  "Swagger.Endpoint.EquipmentType.GetAll.Summary": "Obtener todos los tipos de equipo",
+  "Swagger.Endpoint.EquipmentType.GetById.Summary": "Obtener tipo de equipo por ID",
+  "Swagger.Endpoint.EquipmentType.GetPaged.Summary": "Obtener tipos de equipo paginados",
+  "Swagger.Endpoint.EquipmentType.Create.Summary": "Crear nuevo tipo de equipo",
+  "Swagger.Endpoint.EquipmentType.Update.Summary": "Actualizar tipo de equipo",
+  "Swagger.Endpoint.EquipmentType.Activate.Summary": "Activar tipo de equipo",
+  "Swagger.Endpoint.EquipmentType.Deactivate.Summary": "Desactivar tipo de equipo",
+  "Swagger.Endpoint.EquipmentType.Delete.Summary": "Eliminar tipo de equipo",
+  "Swagger.Endpoint.EquipmentType.BulkUpload.Summary": "Carga masiva de tipos de equipo vía CSV",
+
+  "Api.EquipmentType.NameRequired": "El nombre es obligatorio",
+  "Api.EquipmentType.NameMaxLength": "El nombre debe tener como máximo {0} caracteres",
+  "Api.EquipmentType.DescriptionMaxLength": "La descripción debe tener como máximo {0} caracteres",
+
+  "Application.Service.EquipmentType.GetById.ResourceNotFound": "Tipo de equipo no encontrado o inactivo",
+  "Application.Service.EquipmentType.Create.ResourceAlreadyExists": "Ya existe un tipo de equipo con este nombre",
+  "Application.Service.EquipmentType.Update.ResourceNotFound": "Tipo de equipo no encontrado",
+  "Application.Service.EquipmentType.Activate.ResourceNotFound": "Tipo de equipo no encontrado",
+  "Application.Service.EquipmentType.Deactivate.ResourceNotFound": "Tipo de equipo no encontrado",
+  "Application.Service.EquipmentType.Delete.ResourceNotFound": "Tipo de equipo no encontrado",
+  "Application.Service.EquipmentType.BulkUpload.EmptyFile": "El archivo CSV está vacío",
+  "Application.Service.EquipmentType.ReadCsvFile.Name.IsSafeCsvValue": "El nombre en la fila {0} contiene contenido peligroso",
+  "Application.Service.EquipmentType.ReadCsvFile.Description.IsSafeCsvValue": "La descripción en la fila {0} contiene contenido peligroso",
+  "Application.Service.EquipmentType.ReadCsvFile.CsvHelperException": "Error al procesar la fila {0} del CSV",
+  "Application.Service.EquipmentType.ReadCsvFile.MaxRows": "El archivo CSV excede el límite máximo de {0} filas",
+  "Application.Service.EquipmentType.ReadCsvFile.Exception": "Error al leer el archivo CSV",
+  "Application.Service.EquipmentType.ProcessBulkItems.ExistsByName": "El tipo de equipo '{0}' ya existe",
+  "Application.Service.EquipmentType.ProcessBulkItems.FailedToCreate": "Error al crear el tipo de equipo '{0}'",
+  "Application.Service.EquipmentType.ValidateBulkItem.Name": "El nombre es obligatorio en la carga masiva",
+
+  "Domain.EquipmentType.IdRequired": "El ID es obligatorio",
+  "Domain.EquipmentType.TenantIdRequired": "El ID del inquilino es obligatorio",
+  "Domain.EquipmentType.NameRequired": "El nombre es obligatorio",
+  "Domain.EquipmentType.NameMaxLength": "El nombre debe tener como máximo {0} caracteres",
+  "Domain.EquipmentType.DescriptionMaxLength": "La descripción debe tener como máximo {0} caracteres",
+  "Domain.EquipmentType.CannotActivateDeleted": "No se puede activar un tipo de equipo eliminado",
+  "Domain.EquipmentType.CannotDeactivateDeleted": "No se puede desactivar un tipo de equipo eliminado",
+  "Domain.EquipmentType.AlreadyDeleted": "El tipo de equipo ya ha sido eliminado"
+```

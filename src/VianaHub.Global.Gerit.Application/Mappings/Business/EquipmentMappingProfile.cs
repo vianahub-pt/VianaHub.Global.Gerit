@@ -15,8 +15,8 @@ public class EquipmentMappingProfile : Profile
             .ForMember(dest => dest.TenantId, opt => opt.MapFrom(src => src.TenantId))
             .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
             .ForMember(dest => dest.SerialNumber, opt => opt.MapFrom(src => src.SerialNumber))
-            .ForMember(dest => dest.TypeEquipament, opt => opt.MapFrom(src => (byte)src.TypeEquipament))
-            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => (byte)src.Status))
+            .ForMember(dest => dest.EquipamentType, opt => opt.MapFrom(src => src.EquipamentType))
+            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
             .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsActive));
 
         CreateMap<ListPage<EquipmentEntity>, ListPageResponse<EquipmentResponse>>();

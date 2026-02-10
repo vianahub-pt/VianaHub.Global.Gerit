@@ -1,19 +1,16 @@
 using VianaHub.Global.Gerit.Domain.Base;
 using VianaHub.Global.Gerit.Domain.Entities.Billing;
-using VianaHub.Global.Gerit.Domain.Enums;
 
 namespace VianaHub.Global.Gerit.Domain.Entities.Business;
 
 /// <summary>
-/// Entidade que representa um Equipamento
+/// Entidade que representa um Tipo de Equipamento
 /// </summary>
-public class EquipmentEntity : Entity
+public class EquipmentTypeEntity : Entity
 {
     public int TenantId { get; private set; }
     public string Name { get; private set; }
-    public string SerialNumber { get; private set; }
-    public EquipamentType EquipamentType { get; private set; }
-    public EquipmentStatus Status { get; private set; }
+    public string Description { get; private set; }
     public bool IsActive { get; private set; }
     public bool IsDeleted { get; private set; }
 
@@ -21,32 +18,30 @@ public class EquipmentEntity : Entity
     public TenantEntity Tenant { get; private set; }
 
     // Construtor protegido para o EF Core
-    protected EquipmentEntity() { }
+    protected EquipmentTypeEntity() { }
 
     /// <summary>
-    /// Construtor para criação de um novo Equipamento
+    /// Construtor para criação de um novo Tipo de Equipamento
     /// </summary>
-    public EquipmentEntity(int tenantId, string name, EquipamentType equipamentType, string serialNumber, int createdBy)
+    public EquipmentTypeEntity(int tenantId, string name, string description, int createdBy)
     {
         TenantId = tenantId;
         Name = name;
-        EquipamentType = equipamentType;
-        Status = EquipmentStatus.Available;
-        SerialNumber = serialNumber;
+        Description = description;
         IsActive = true;
         IsDeleted = false;
         CreatedBy = createdBy;
         CreatedAt = DateTime.UtcNow;
     }
 
-    public void Update(string name, EquipamentType equipamentType, string serialNumber, int modifiedBy)
+    public void Update(string name, string description, int modifiedBy)
     {
         Name = name;
-        EquipamentType = equipamentType;
-        SerialNumber = serialNumber;
+        Description = description;
         ModifiedBy = modifiedBy;
         ModifiedAt = DateTime.UtcNow;
     }
+
     public void Activate(int modifiedBy)
     {
         IsActive = true;

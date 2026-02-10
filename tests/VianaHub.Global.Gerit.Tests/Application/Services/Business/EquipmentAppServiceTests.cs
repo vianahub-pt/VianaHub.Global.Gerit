@@ -54,7 +54,7 @@ namespace VianaHub.Global.Gerit.Tests.Application.Services.Business
 
             // build CSV content
             var csv = new StringBuilder();
-            csv.AppendLine("Name;SerialNumber;TypeEquipament");
+            csv.AppendLine("Name;SerialNumber;EquipamentType");
             csv.AppendLine("Equip1;SN001;1");
             csv.AppendLine("Equip2;SN002;0");
 

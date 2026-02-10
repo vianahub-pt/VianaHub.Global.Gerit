@@ -41,8 +41,8 @@ public class EquipmentMapping : IEntityTypeConfiguration<EquipmentEntity>
             .IsRequired(false);
 
         // Use INT to match the existing DB schema (columns are INT) so EF can materialize into byte-backed enums
-        builder.Property(x => x.TypeEquipament)
-            .HasColumnName("TypeEquipament")
+        builder.Property(x => x.EquipamentType)
+            .HasColumnName("EquipamentType")
             .HasColumnType("INT")
             .IsRequired();
 

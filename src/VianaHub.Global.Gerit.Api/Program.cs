@@ -175,6 +175,7 @@ public class Program
         app.MapJwtKeyEndpoints();
         app.MapFunctionEndpoints();
         app.MapEquipmentEndpoints();
+        app.MapEquipmentTypeEndpoints();
         app.MapVehicleEndpoints();
         app.MapTeamMemberEndpoints();
         app.MapTeamMemberAddressEndpoints();
