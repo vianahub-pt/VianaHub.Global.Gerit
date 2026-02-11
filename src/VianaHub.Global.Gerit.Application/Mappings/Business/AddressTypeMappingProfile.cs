@@ -12,7 +12,9 @@ public class AddressTypeMappingProfile : Profile
     {
         CreateMap<AddressTypeEntity, AddressTypeResponse>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+            .ForMember(dest => dest.TenantId, opt => opt.MapFrom(src => src.TenantId))
             .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+            .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
             .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsActive));
 
         CreateMap<ListPage<AddressTypeEntity>, ListPageResponse<AddressTypeResponse>>();

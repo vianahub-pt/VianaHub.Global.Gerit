@@ -6,6 +6,6 @@ public class UpdateEquipmentRequest
 {
     public string Name { get; set; }
     public string SerialNumber { get; set; }
-    public EquipamentType EquipamentType { get; set; }
+    public int EquipmentTypeId { get; set; }
     public EquipmentStatus Status { get; set; }
 }

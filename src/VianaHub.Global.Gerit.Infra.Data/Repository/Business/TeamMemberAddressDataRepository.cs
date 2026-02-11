@@ -20,6 +20,8 @@ public class TeamMemberAddressDataRepository : ITeamMemberAddressDataRepository
     {
         return await _context.TeamMemberAddresses
             .AsNoTracking()
+            .Include(x => x.AddressType)
+            .Include(x => x.TeamMember)
             .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted, ct);
     }
 
@@ -27,6 +29,8 @@ public class TeamMemberAddressDataRepository : ITeamMemberAddressDataRepository
     {
         return await _context.TeamMemberAddresses
             .AsNoTracking()
+            .Include(x => x.AddressType)
+            .Include(x => x.TeamMember)
             .Where(x => !x.IsDeleted)
             .OrderBy(x => x.TeamMemberId)
             .ThenBy(x => x.City)
@@ -37,6 +41,8 @@ public class TeamMemberAddressDataRepository : ITeamMemberAddressDataRepository
     {
         var query = _context.TeamMemberAddresses
             .AsNoTracking()
+            .Include(x => x.AddressType)
+            .Include(x => x.TeamMember)
             .Where(x => !x.IsDeleted);
 
         if (!string.IsNullOrWhiteSpace(filter.Search))
@@ -46,7 +52,9 @@ public class TeamMemberAddressDataRepository : ITeamMemberAddressDataRepository
                 EF.Functions.Like(x.Street.ToLower(), $"%{searchLower}%") ||
                 EF.Functions.Like(x.City.ToLower(), $"%{searchLower}%") ||
                 EF.Functions.Like(x.PostalCode.ToLower(), $"%{searchLower}%") ||
-                EF.Functions.Like(x.District.ToLower(), $"%{searchLower}%"));
+                EF.Functions.Like(x.District.ToLower(), $"%{searchLower}%") ||
+                EF.Functions.Like(x.AddressType.Name.ToLower(), $"%{searchLower}%") ||
+                EF.Functions.Like(x.TeamMember.Name.ToLower(), $"%{searchLower}%"));
         }
 
         var count = await query.CountAsync(ct);
@@ -92,6 +100,8 @@ public class TeamMemberAddressDataRepository : ITeamMemberAddressDataRepository
     {
         return await _context.TeamMemberAddresses
             .AsNoTracking()
+            .Include(x => x.AddressType)
+            .Include(x => x.TeamMember)
             .FirstOrDefaultAsync(x => x.TeamMemberId == teamMemberId && x.IsPrimary && !x.IsDeleted, ct);
     }
 

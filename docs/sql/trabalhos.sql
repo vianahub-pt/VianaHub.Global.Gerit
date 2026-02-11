@@ -10,11 +10,12 @@ select * from dbo.UserRoles;			--
 select * from dbo.RolePermissions order by ResourceId, ActionId;		--
 select * from dbo.JwtKeys;
 ------------------------------
+select * from dbo.AddressTypes;			--
 select * from dbo.Vehicles;				--
-select * from dbo.EquipmentTypes;
+select * from dbo.EquipmentTypes;		--
 select * from dbo.Equipments;			--
 select * from dbo.Functions;			--
-select * from dbo.TeamMembers;
+select * from dbo.TeamMembers;			--
 select * from dbo.TeamMemberAddresses;
 select * from dbo.TeamMemberContacts;
 select * from dbo.Clients;

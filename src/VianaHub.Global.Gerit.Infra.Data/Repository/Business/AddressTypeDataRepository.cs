@@ -41,7 +41,10 @@ public class AddressTypeDataRepository : IAddressTypeDataRepository
         if (!string.IsNullOrWhiteSpace(request.Search))
         {
             var search = request.Search.Trim().ToLower();
-            query = query.Where(x => EF.Functions.Like(x.Name.ToLower(), $"%{search}%"));
+            query = query.Where(x => 
+                EF.Functions.Like(x.Name.ToLower(), $"%{search}%") ||
+                EF.Functions.Like(x.Description.ToLower(), $"%{search}%")
+            );
         }
 
         var count = await query.CountAsync(ct);
@@ -71,29 +74,29 @@ public class AddressTypeDataRepository : IAddressTypeDataRepository
             .AnyAsync(x => x.Id == id && !x.IsDeleted, ct);
     }
 
-    public async Task<bool> ExistsByNameAsync(string name, CancellationToken ct)
+    public async Task<bool> ExistsByNameAndTenantAsync(string name, int tenantId, CancellationToken ct)
     {
         return await _context.Set<AddressTypeEntity>()
             .AsNoTracking()
-            .AnyAsync(x => x.Name == name && !x.IsDeleted, ct);
+            .AnyAsync(x => x.Name == name && x.TenantId == tenantId && !x.IsDeleted, ct);
     }
 
-    public async Task<bool> ExistsByNameAsync(string name, int excludeId, CancellationToken ct)
+    public async Task<bool> ExistsByNameAndTenantAsync(string name, int tenantId, int excludeId, CancellationToken ct)
     {
         return await _context.Set<AddressTypeEntity>()
             .AsNoTracking()
-            .AnyAsync(x => x.Name == name && x.Id != excludeId && !x.IsDeleted, ct);
+            .AnyAsync(x => x.Name == name && x.TenantId == tenantId && x.Id != excludeId && !x.IsDeleted, ct);
     }
 
-    public async Task AddAsync(AddressTypeEntity entity, CancellationToken ct)
+    public async Task<bool> AddAsync(AddressTypeEntity entity, CancellationToken ct)
     {
         await _context.Set<AddressTypeEntity>().AddAsync(entity, ct);
-        await _context.SaveChangesAsync(ct);
+        return await _context.SaveChangesAsync(ct) > 0;
     }
 
-    public async Task UpdateAsync(AddressTypeEntity entity, CancellationToken ct)
+    public async Task<bool> UpdateAsync(AddressTypeEntity entity, CancellationToken ct)
     {
         _context.Set<AddressTypeEntity>().Update(entity);
-        await _context.SaveChangesAsync(ct);
+        return await _context.SaveChangesAsync(ct) > 0;
     }
 }

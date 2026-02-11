@@ -4,9 +4,10 @@ public class EquipmentResponse
 {
     public int Id { get; set; }
     public int TenantId { get; set; }
+    public int EquipmentTypeId { get; set; }
+    public string EquipmentType { get; set; }
     public string Name { get; set; }
     public string SerialNumber { get; set; }
-    public int EquipamentType { get; set; }
     public int Status { get; set; }
     public bool IsActive { get; set; }
 }

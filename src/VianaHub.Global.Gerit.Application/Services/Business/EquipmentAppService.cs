@@ -19,6 +19,7 @@ namespace VianaHub.Global.Gerit.Application.Services.Business;
 
 public class EquipmentAppService : IEquipmentAppService
 {
+    private readonly IEquipmentTypeDataRepository _equipmentTypeRepo;
     private readonly IEquipmentDataRepository _repo;
     private readonly IEquipmentDomainService _domain;
     private readonly IMapper _mapper;
@@ -28,6 +29,7 @@ public class EquipmentAppService : IEquipmentAppService
     private readonly IFileValidationService _fileValidation;
 
     public EquipmentAppService(
+        IEquipmentTypeDataRepository equipmentTypeRepo,
         IEquipmentDataRepository repo,
         IEquipmentDomainService domain,
         IMapper mapper,
@@ -36,6 +38,7 @@ public class EquipmentAppService : IEquipmentAppService
         ICurrentUserService currentUser,
         IFileValidationService fileValidation)
     {
+        _equipmentTypeRepo = equipmentTypeRepo;
         _repo = repo;
         _domain = domain;
         _mapper = mapper;
@@ -79,7 +82,7 @@ public class EquipmentAppService : IEquipmentAppService
             return false;
         }
 
-        var entity = new EquipmentEntity(tenantId, request.Name, request.EquipamentType, request.SerialNumber, _currentUser.GetUserId());
+        var entity = new EquipmentEntity(tenantId, request.EquipmentTypeId, request.Name, request.SerialNumber, _currentUser.GetUserId());
         return await _domain.CreateAsync(entity, ct);
     }
 
@@ -92,7 +95,7 @@ public class EquipmentAppService : IEquipmentAppService
             return false;
         }
 
-        entity.Update(request.Name, request.EquipamentType, request.SerialNumber, _currentUser.GetUserId());
+        entity.Update(request.EquipmentTypeId, request.Name, request.SerialNumber, _currentUser.GetUserId());
 
         return await _domain.UpdateAsync(entity, ct);
     }
@@ -191,6 +194,7 @@ public class EquipmentAppService : IEquipmentAppService
                     if (record != null)
                     {
                         // Sanitiza e normaliza campos
+                        record.EquipmentTypeId = record.EquipmentTypeId;
                         record.Name = record.Name?.SanitizeCsvInput().NormalizeUtf8();
                         record.SerialNumber = record.SerialNumber?.SanitizeCsvInput().NormalizeUtf8();
 
@@ -258,11 +262,8 @@ public class EquipmentAppService : IEquipmentAppService
                 continue;
             }
 
-            // Define tipo do equipamento padrão se não fornecido
-            var type = item.EquipamentType ?? Domain.Enums.EquipamentType.ManualTool;
-
             // Cria a entidade
-            var entity = new EquipmentEntity(tenantId, item.Name, type, item.SerialNumber, _currentUser.GetUserId());
+            var entity = new EquipmentEntity(tenantId, item.EquipmentTypeId, item.Name, item.SerialNumber, _currentUser.GetUserId());
 
             // Tenta criar no domínio
             var success = await _domain.CreateAsync(entity, ct);

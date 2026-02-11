@@ -8,8 +8,15 @@ public class CreateAddressTypeRequestValidator : AbstractValidator<CreateAddress
 {
     public CreateAddressTypeRequestValidator(ILocalizationService localization)
     {
+        RuleFor(x => x.TenantId)
+            .GreaterThan(0).WithMessage(localization.GetMessage("Api.Validator.AddressType.Create.TenantId"));
+
         RuleFor(x => x.Name)
             .NotEmpty().WithMessage(localization.GetMessage("Api.Validator.AddressType.Create.Name"))
-            .MaximumLength(200).WithMessage(localization.GetMessage("Api.Validator.AddressType.Create.Name.MaximumLength", 200));
+            .MaximumLength(100).WithMessage(localization.GetMessage("Api.Validator.AddressType.Create.Name.MaximumLength", 100));
+
+        RuleFor(x => x.Description)
+            .NotEmpty().WithMessage(localization.GetMessage("Api.Validator.AddressType.Create.Description"))
+            .MaximumLength(255).WithMessage(localization.GetMessage("Api.Validator.AddressType.Create.Description.MaximumLength", 255));
     }
 }

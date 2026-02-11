@@ -19,6 +19,7 @@ using VianaHub.Global.Gerit.Application.Mappings.Identity;
 using VianaHub.Global.Gerit.Api.Endpoints.Billing;
 using VianaHub.Global.Gerit.Api.Endpoints.Business;
 using VianaHub.Global.Gerit.Api.Endpoints.Job;
+using VianaHub.Global.Gerit.Api.Middleware;
 
 namespace VianaHub.Global.Gerit.Api;
 
@@ -129,11 +130,12 @@ public class Program
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {
-            // Show developer exception page in development to capture any startup/runtime errors
-            app.UseDeveloperExceptionPage();
-
             app.UseSwaggerConfiguration();
         }
+
+        // IMPORTANTE: Middleware de tratamento global de exceções DEVE vir antes de outros middlewares
+        // para capturar qualquer exceção não tratada
+        app.UseMiddleware<GlobalExceptionMiddleware>();
 
         app.UseHttpsRedirection();
 

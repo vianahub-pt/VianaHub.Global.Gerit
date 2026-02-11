@@ -21,6 +21,7 @@ public class TeamMemberAppService : ITeamMemberAppService
 {
     private readonly ITeamMemberDataRepository _repo;
     private readonly ITeamMemberDomainService _domain;
+    private readonly IFunctionDataRepository _functionRepo;
     private readonly IMapper _mapper;
     private readonly INotify _notify;
     private readonly ILocalizationService _localization;
@@ -30,6 +31,7 @@ public class TeamMemberAppService : ITeamMemberAppService
     public TeamMemberAppService(
         ITeamMemberDataRepository repo,
         ITeamMemberDomainService domain,
+        IFunctionDataRepository functionRepo,
         IMapper mapper,
         INotify notify,
         ILocalizationService localization,
@@ -38,6 +40,7 @@ public class TeamMemberAppService : ITeamMemberAppService
     {
         _repo = repo;
         _domain = domain;
+        _functionRepo = functionRepo;
         _mapper = mapper;
         _notify = notify;
         _localization = localization;
@@ -236,6 +239,15 @@ public class TeamMemberAppService : ITeamMemberAppService
         {
             if (!ValidateBulkItem(item))
             {
+                hasErrors = true;
+                continue;
+            }
+
+            // Valida se a função existe
+            var functionExists = await _functionRepo.ExistsByIdAsync(item.FunctionId, ct);
+            if (!functionExists)
+            {
+                _notify.Add(_localization.GetMessage("Application.Service.TeamMember.ProcessBulkItems.FunctionNotFound", item.FunctionId, item.Name), 400);
                 hasErrors = true;
                 continue;
             }

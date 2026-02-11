@@ -13,12 +13,18 @@ public class EquipmentMappingProfile : Profile
         CreateMap<EquipmentEntity, EquipmentResponse>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
             .ForMember(dest => dest.TenantId, opt => opt.MapFrom(src => src.TenantId))
+            .ForMember(dest => dest.EquipmentTypeId, opt => opt.MapFrom(src => src.EquipmentTypeId))
+            .ForMember(dest => dest.EquipmentType, opt => opt.MapFrom(src => src.EquipmentType != null ? src.EquipmentType.Name : string.Empty))
             .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
             .ForMember(dest => dest.SerialNumber, opt => opt.MapFrom(src => src.SerialNumber))
-            .ForMember(dest => dest.EquipamentType, opt => opt.MapFrom(src => src.EquipamentType))
-            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
+            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => (int)src.Status))
             .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsActive));
 
-        CreateMap<ListPage<EquipmentEntity>, ListPageResponse<EquipmentResponse>>();
+        CreateMap<ListPage<EquipmentEntity>, ListPageResponse<EquipmentResponse>>()
+            .ForMember(dest => dest.Data, opt => opt.MapFrom(src => src.Data))
+            .ForMember(dest => dest.PageNumber, opt => opt.MapFrom(src => src.PageNumber))
+            .ForMember(dest => dest.PageSize, opt => opt.MapFrom(src => src.PageSize))
+            .ForMember(dest => dest.TotalItems, opt => opt.MapFrom(src => src.TotalItems))
+            .ForMember(dest => dest.TotalPages, opt => opt.MapFrom(src => src.TotalPages));
     }
 }

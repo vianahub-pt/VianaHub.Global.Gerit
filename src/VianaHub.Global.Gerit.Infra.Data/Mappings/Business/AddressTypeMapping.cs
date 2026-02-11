@@ -32,8 +32,14 @@ public class AddressTypeMapping : IEntityTypeConfiguration<AddressTypeEntity>
         // Propriedades
         builder.Property(x => x.Name)
             .HasColumnName("Name")
-            .HasColumnType("NVARCHAR(200)")
-            .HasMaxLength(200)
+            .HasColumnType("NVARCHAR(100)")
+            .HasMaxLength(100)
+            .IsRequired();
+
+        builder.Property(x => x.Description)
+            .HasColumnName("Description")
+            .HasColumnType("NVARCHAR(255)")
+            .HasMaxLength(255)
             .IsRequired();
 
         builder.Property(x => x.IsActive)
@@ -73,17 +79,12 @@ public class AddressTypeMapping : IEntityTypeConfiguration<AddressTypeEntity>
         builder.HasOne(x => x.Tenant)
             .WithMany()
             .HasForeignKey(x => x.TenantId)
-            .HasConstraintName("FK_AddressesType_Tenant")
-            .OnDelete(DeleteBehavior.NoAction);
-
-        // Constraint Única: Garantir que o Id é único dentro do tenant (para FKs compostas)
-        builder.HasIndex(x => new { x.Id, x.TenantId })
-            .IsUnique()
-            .HasDatabaseName("UQ_AddressesType_Id_Tenant");
+            .HasConstraintName("FK_AddressTypes_Tenant")
+            .OnDelete(DeleteBehavior.Restrict);
 
         // Constraint Única: Tipo de endereço único por tenant
         builder.HasIndex(x => new { x.TenantId, x.Name })
             .IsUnique()
-            .HasDatabaseName("UQ_AddressesType_Tenant_Name");
+            .HasDatabaseName("UQ_AddressTypes_TenantId_Name");
     }
 }

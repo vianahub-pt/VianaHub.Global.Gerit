@@ -56,7 +56,7 @@ CREATE TABLE dbo.TenantContacts (									    -- Contatos do tenant
         
 );
 GO
-CREATE TABLE dbo.AddressTypes (									                        -- Tipos de endereço (residencial, comercial, etc)
+CREATE TABLE dbo.AddressTypes (									                            -- Tipos de endereço (residencial, comercial, etc)
     Id			INT IDENTITY(1,1)	NOT NULL,						                        -- Identificador único do tenant, chave primária
     TenantId	INT					NOT NULL,						                        -- Tenant dono do contato
     Name	    NVARCHAR(200)		NOT NULL,						                        -- Nome do tipo de endereço

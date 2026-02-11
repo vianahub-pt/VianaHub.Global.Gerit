@@ -18,23 +18,33 @@ public class TeamMemberDataRepository : ITeamMemberDataRepository
 
     public async Task<TeamMemberEntity> GetByIdAsync(int id, CancellationToken ct)
     {
-        return await _context.Set<TeamMemberEntity>().AsNoTracking().FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted, ct);
+        return await _context.Set<TeamMemberEntity>()
+            .AsNoTracking()
+            .Include(x => x.Function)
+            .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted, ct);
     }
 
     public async Task<IEnumerable<TeamMemberEntity>> GetAllAsync(CancellationToken ct)
     {
-        return await _context.Set<TeamMemberEntity>().AsNoTracking().Where(x => !x.IsDeleted).OrderBy(x => x.Name).ToListAsync(ct);
+        return await _context.Set<TeamMemberEntity>()
+            .AsNoTracking()
+            .Include(x => x.Function)
+            .Where(x => !x.IsDeleted).OrderBy(x => x.Name).ToListAsync(ct);
     }
 
     public async Task<ListPage<TeamMemberEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct)
     {
-        var query = _context.Set<TeamMemberEntity>().AsNoTracking().Where(x => !x.IsDeleted);
+        var query = _context.Set<TeamMemberEntity>()
+            .AsNoTracking()
+            .Include(x => x.Function)
+            .Where(x => !x.IsDeleted);
 
         if (!string.IsNullOrWhiteSpace(request.Search))
         {
             var search = request.Search.Trim().ToLower();
             query = query.Where(x => EF.Functions.Like(x.Name.ToLower(), $"%{search}%") || 
-                                     EF.Functions.Like(x.TaxNumber.ToLower(), $"%{search}%"));
+                                     EF.Functions.Like(x.TaxNumber.ToLower(), $"%{search}%") ||
+                                     EF.Functions.Like(x.Function.Name.ToLower(), $"%{search}%"));
         }
 
         var count = await query.CountAsync(ct);

@@ -14,6 +14,7 @@ public class TeamMemberMappingProfile : Profile
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
             .ForMember(dest => dest.TenantId, opt => opt.MapFrom(src => src.TenantId))
             .ForMember(dest => dest.FunctionId, opt => opt.MapFrom(src => src.FunctionId))
+            .ForMember(dest => dest.Function, opt => opt.MapFrom(src => src.Function.Name))
             .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
             .ForMember(dest => dest.TaxNumber, opt => opt.MapFrom(src => src.TaxNumber))
             .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsActive));

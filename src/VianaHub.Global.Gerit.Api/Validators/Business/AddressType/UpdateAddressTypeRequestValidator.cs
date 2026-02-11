@@ -10,6 +10,10 @@ public class UpdateAddressTypeRequestValidator : AbstractValidator<UpdateAddress
     {
         RuleFor(x => x.Name)
             .NotEmpty().WithMessage(localization.GetMessage("Api.Validator.AddressType.Update.Name"))
-            .MaximumLength(200).WithMessage(localization.GetMessage("Api.Validator.AddressType.Update.Name.MaximumLength", 200));
+            .MaximumLength(100).WithMessage(localization.GetMessage("Api.Validator.AddressType.Update.Name.MaximumLength", 100));
+
+        RuleFor(x => x.Description)
+            .NotEmpty().WithMessage(localization.GetMessage("Api.Validator.AddressType.Update.Description"))
+            .MaximumLength(255).WithMessage(localization.GetMessage("Api.Validator.AddressType.Update.Description.MaximumLength", 255));
     }
 }

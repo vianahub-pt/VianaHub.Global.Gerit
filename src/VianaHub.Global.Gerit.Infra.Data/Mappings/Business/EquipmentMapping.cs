@@ -28,6 +28,11 @@ public class EquipmentMapping : IEntityTypeConfiguration<EquipmentEntity>
             .HasColumnName("TenantId")
             .IsRequired();
 
+        builder.Property(x => x.EquipmentTypeId)
+            .HasColumnName("EquipmentTypeId")
+            .HasColumnType("INT")
+            .IsRequired();
+
         builder.Property(x => x.Name)
             .HasColumnName("Name")
             .HasColumnType("NVARCHAR(150)")
@@ -39,12 +44,6 @@ public class EquipmentMapping : IEntityTypeConfiguration<EquipmentEntity>
             .HasColumnType("NVARCHAR(100)")
             .HasMaxLength(100)
             .IsRequired(false);
-
-        // Use INT to match the existing DB schema (columns are INT) so EF can materialize into byte-backed enums
-        builder.Property(x => x.EquipamentType)
-            .HasColumnName("EquipamentType")
-            .HasColumnType("INT")
-            .IsRequired();
 
         builder.Property(x => x.Status)
             .HasColumnName("Status")
@@ -89,6 +88,12 @@ public class EquipmentMapping : IEntityTypeConfiguration<EquipmentEntity>
             .WithMany()
             .HasForeignKey(x => x.TenantId)
             .HasConstraintName("FK_Equipments_Tenant")
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasOne(x => x.EquipmentType)
+            .WithMany()
+            .HasForeignKey(x => x.EquipmentTypeId)
+            .HasConstraintName("FK_Equipments_EquipamentType")
             .OnDelete(DeleteBehavior.Restrict);
     }
 }

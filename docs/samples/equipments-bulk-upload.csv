@@ -1,31 +1,51 @@
-Name;SerialNumber;EquipamentType
-Excavator ZX-200;SN0001;0
-Bulldozer D6;SN0002;0
-Wheel Loader L220;SN0003;0
-Backhoe Loader B90;SN0004;0
-Mobile Crane 25t;SN0005;0
-Concrete Mixer Truck CMX400;SN0006;0
-Asphalt Paver AP500;SN0007;0
-Plate Compactor PC75;SN0008;0
-Motor Grader MG12;SN0009;0
-Forklift FL30;SN0010;0
-Jackhammer JH-300;SN0011;1
-Rotary Hammer RH26;SN0012;1
-Demolition Hammer DH50;SN0013;1
-Electric Drill ED20;SN0014;1
-Circular Saw CS-180;SN0015;1
-Angle Grinder AG-125;SN0016;1
-Impact Wrench IW-350;SN0017;1
-Concrete Vibrator CV-60;SN0018;1
-Rebar Cutter RC-40;SN0019;1
-Plate Compactor Small PC20;SN0020;1
-Theodolite TD-1000;SN0021;2
-Laser Level LL-200;SN0022;2
-Measuring Wheel MW-01;SN0023;2
-Ultrasonic Distance UD-15;SN0024;2
-GPS Survey Receiver GPS-RTK1;SN0025;2
-Total Station TS-500;SN0026;2
-Concrete Test Hammer CTH-50;SN0027;2
-Soil Penetrometer SP-100;SN0028;2
-Vibration Meter VM-60;SN0029;2
-Sound Level Meter SLM-10;SN0030;2
+Name;SerialNumber;EquipmentTypeId
+Furadeira Bosch GSB 13 RE;FUR-001-2024;5
+Furadeira Makita HP1640;FUR-002-2024;5
+Furadeira DeWalt DWD502;FUR-003-2024;5
+Parafusadeira Bosch GSR 12V;PAR-001-2024;6
+Parafusadeira Makita DF330D;PAR-002-2024;6
+Parafusadeira Black+Decker CS1250;PAR-003-2024;6
+Esmerilhadeira Bosch GWS 22-180;ESM-001-2024;7
+Esmerilhadeira Makita GA5030;ESM-002-2024;7
+Esmerilhadeira DeWalt DWE4120;ESM-003-2024;7
+Serra Circular Bosch GKS 190;SER-001-2024;8
+Serra Tico-Tico Makita 4329K;SER-002-2024;8
+Serra Mármore Makita 4100NH;SER-003-2024;8
+Lixadeira Orbital Bosch GSS 140;LIX-001-2024;9
+Lixadeira de Cinta Makita 9403;LIX-002-2024;9
+Lixadeira Roto-Orbital DeWalt DWE6423;LIX-003-2024;9
+Martelete Bosch GBH 2-26 DFR;MAR-001-2024;10
+Martelete Makita HR2470;MAR-002-2024;10
+Martelete DeWalt D25123K;MAR-003-2024;10
+Soprador Bosch GBL 800 E;SOP-001-2024;11
+Soprador DeWalt DCE100B;SOP-002-2024;11
+Pistola de Calor Bosch GHG 630 DCE;PIS-001-2024;12
+Pistola de Calor Black+Decker HG1500;PIS-002-2024;12
+Jogo de Chaves Combinadas 12 Peças;CHA-001-2024;13
+Jogo de Chaves Allen Metric;CHA-002-2024;13
+Chave Inglesa 12 Polegadas;CHA-003-2024;13
+Alicate Universal 8 Polegadas;ALI-001-2024;14
+Alicate de Corte 7 Polegadas;ALI-002-2024;14
+Alicate Bomba d'água 10 Polegadas;ALI-003-2024;14
+Martelo Carpinteiro 500g;MAT-001-2024;15
+Martelo de Borracha 350g;MAT-002-2024;15
+Marreta 3kg com Cabo Fibra;MAT-003-2024;15
+Serrote Carpinteiro 22 Polegadas;SEI-001-2024;16
+Arco de Serra Manual;SEI-002-2024;16
+Estilete Profissional Retrátil;EST-001-2024;17
+Estilete de Segurança;EST-002-2024;17
+Torquímetro 40-200 Nm;TOR-001-2024;18
+Chave Torque Click 10-50 Nm;TOR-002-2024;18
+Formão 1/2 Polegada;FOR-001-2024;19
+Formão 1 Polegada;FOR-002-2024;19
+Lima Meia-Cana 10 Polegadas;LIM-001-2024;20
+Lima Triangular 8 Polegadas;LIM-002-2024;20
+Grampo Sargento 12 Polegadas;GRA-001-2024;21
+Grampo Tipo C 6 Polegadas;GRA-002-2024;21
+Trena 5 Metros Stanley;TRE-001-2024;22
+Trena 8 Metros Profissional;TRE-002-2024;22
+Paquímetro Digital 150mm;PAQ-001-2024;23
+Micrômetro Externo 0-25mm;MIC-001-2024;24
+Nível Laser Bosch GLL 3-80;NIV-001-2024;25
+Nível de Bolha 60cm;NIV-002-2024;25
+Multímetro Digital Fluke 115;MUL-001-2024;27

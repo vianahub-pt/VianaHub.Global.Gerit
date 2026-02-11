@@ -2,6 +2,7 @@ using AutoMapper;
 using CsvHelper;
 using CsvHelper.Configuration;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using System.Globalization;
 using VianaHub.Global.Gerit.Application.Dtos.Base;
 using VianaHub.Global.Gerit.Domain.ReadModels;
@@ -26,6 +27,7 @@ public class AddressTypeAppService : IAddressTypeAppService
     private readonly ILocalizationService _localization;
     private readonly ICurrentUserService _currentUser;
     private readonly IFileValidationService _fileValidation;
+    private readonly ILogger<AddressTypeAppService> _logger;
 
     public AddressTypeAppService(
         IAddressTypeDataRepository repo,
@@ -34,7 +36,8 @@ public class AddressTypeAppService : IAddressTypeAppService
         INotify notify,
         ILocalizationService localization,
         ICurrentUserService currentUser,
-        IFileValidationService fileValidation)
+        IFileValidationService fileValidation,
+        ILogger<AddressTypeAppService> logger)
     {
         _repo = repo;
         _domain = domain;
@@ -43,6 +46,7 @@ public class AddressTypeAppService : IAddressTypeAppService
         _localization = localization;
         _currentUser = currentUser;
         _fileValidation = fileValidation;
+        _logger = logger;
     }
 
     public async Task<IEnumerable<AddressTypeResponse>> GetAllAsync(CancellationToken ct)
@@ -71,42 +75,42 @@ public class AddressTypeAppService : IAddressTypeAppService
 
     public async Task<bool> CreateAsync(CreateAddressTypeRequest request, CancellationToken ct)
     {
-        var exists = await _repo.ExistsByNameAsync(request.Name, ct);
+        var exists = await _repo.ExistsByNameAndTenantAsync(request.Name, request.TenantId, ct);
         if (exists)
         {
             _notify.Add(_localization.GetMessage("Application.Service.AddressType.Create.ResourceAlreadyExists"), 409);
             return false;
         }
 
-        var entity = new AddressTypeEntity(request.TenantId, request.Name, _currentUser.GetUserId());
+        var entity = new AddressTypeEntity(request.TenantId, request.Name, request.Description, _currentUser.GetUserId());
         return await _domain.CreateAsync(entity, ct);
     }
 
     public async Task<bool> UpdateAsync(int id, UpdateAddressTypeRequest request, CancellationToken ct)
     {
         var entity = await _repo.GetByIdAsync(id, ct);
-        if (entity == null)
+        if (entity == null || entity.IsDeleted || !entity.IsActive)
         {
             _notify.Add(_localization.GetMessage("Application.Service.AddressType.Update.ResourceNotFound"), 410);
             return false;
         }
 
-        // Verifica se já existe outro com o mesmo nome
-        var exists = await _repo.ExistsByNameAsync(request.Name, id, ct);
+        // Verifica se já existe outro com o mesmo nome no mesmo tenant
+        var exists = await _repo.ExistsByNameAndTenantAsync(request.Name, entity.TenantId, id, ct);
         if (exists)
         {
             _notify.Add(_localization.GetMessage("Application.Service.AddressType.Update.ResourceAlreadyExists"), 409);
             return false;
         }
 
-        entity.Update(request.Name, _currentUser.GetUserId());
+        entity.Update(request.Name, request.Description, _currentUser.GetUserId());
         return await _domain.UpdateAsync(entity, ct);
     }
 
     public async Task<bool> ActivateAsync(int id, CancellationToken ct)
     {
         var entity = await _repo.GetByIdAsync(id, ct);
-        if (entity == null)
+        if (entity == null || entity.IsDeleted)
         {
             _notify.Add(_localization.GetMessage("Application.Service.AddressType.Activate.ResourceNotFound"), 410);
             return false;
@@ -119,7 +123,7 @@ public class AddressTypeAppService : IAddressTypeAppService
     public async Task<bool> DeactivateAsync(int id, CancellationToken ct)
     {
         var entity = await _repo.GetByIdAsync(id, ct);
-        if (entity == null)
+        if (entity == null || entity.IsDeleted || !entity.IsActive)
         {
             _notify.Add(_localization.GetMessage("Application.Service.AddressType.Deactivate.ResourceNotFound"), 410);
             return false;
@@ -132,7 +136,7 @@ public class AddressTypeAppService : IAddressTypeAppService
     public async Task<bool> DeleteAsync(int id, CancellationToken ct)
     {
         var entity = await _repo.GetByIdAsync(id, ct);
-        if (entity == null)
+        if (entity == null || entity.IsDeleted)
         {
             _notify.Add(_localization.GetMessage("Application.Service.AddressType.Delete.ResourceNotFound"), 410);
             return false;
@@ -198,11 +202,18 @@ public class AddressTypeAppService : IAddressTypeAppService
                     {
                         // Sanitiza e normaliza campos
                         record.Name = record.Name?.SanitizeCsvInput().NormalizeUtf8();
+                        record.Description = record.Description?.SanitizeCsvInput().NormalizeUtf8();
 
-                        // Valida se os campos não contém conteúdo perigoso
+                        // Valida se os campos não contêm conteúdo perigoso
                         if (!string.IsNullOrEmpty(record.Name) && !record.Name.IsSafeCsvValue())
                         {
                             _notify.Add(_localization.GetMessage("Application.Service.AddressType.ReadCsvFile.Name.IsSafeCsvValue", rowCount + 2), 400);
+                            continue;
+                        }
+
+                        if (!string.IsNullOrEmpty(record.Description) && !record.Description.IsSafeCsvValue())
+                        {
+                            _notify.Add(_localization.GetMessage("Application.Service.AddressType.ReadCsvFile.Description.IsSafeCsvValue", rowCount + 2), 400);
                             continue;
                         }
 
@@ -210,9 +221,10 @@ public class AddressTypeAppService : IAddressTypeAppService
                     }
                     rowCount++;
                 }
-                catch (CsvHelperException)
+                catch (CsvHelperException ex)
                 {
                     // Log linha com erro mas continua processamento
+                    _logger.LogWarning(ex, "Erro ao processar linha {RowNumber} do CSV de AddressTypes", rowCount + 2);
                     _notify.Add(_localization.GetMessage("Application.Service.AddressType.ReadCsvFile.CsvHelperException", rowCount + 2), 400);
                     rowCount++;
                     continue;
@@ -227,8 +239,9 @@ public class AddressTypeAppService : IAddressTypeAppService
 
             return records;
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            _logger.LogError(ex, "Erro ao ler arquivo CSV de AddressTypes: {Message}", ex.Message);
             _notify.Add(_localization.GetMessage("Application.Service.AddressType.ReadCsvFile.Exception"), 400);
             return null;
         }
@@ -237,6 +250,7 @@ public class AddressTypeAppService : IAddressTypeAppService
     private async Task<bool> ProcessBulkItemsAsync(List<BulkUploadAddressTypeItem> items, CancellationToken ct)
     {
         var hasErrors = false;
+        var tenantId = _currentUser.GetTenantId();
 
         foreach (var item in items)
         {
@@ -248,7 +262,7 @@ public class AddressTypeAppService : IAddressTypeAppService
             }
 
             // Verifica duplicidade
-            var exists = await _repo.ExistsByNameAsync(item.Name, ct);
+            var exists = await _repo.ExistsByNameAndTenantAsync(item.Name, tenantId, ct);
             if (exists)
             {
                 _notify.Add(_localization.GetMessage("Application.Service.AddressType.ProcessBulkItems.ExistsByName", item.Name), 400);
@@ -257,7 +271,7 @@ public class AddressTypeAppService : IAddressTypeAppService
             }
 
             // Cria a entidade
-            var entity = new AddressTypeEntity(item.TenantId, item.Name, _currentUser.GetUserId());
+            var entity = new AddressTypeEntity(tenantId, item.Name, item.Description, _currentUser.GetUserId());
 
             // Tenta criar no domínio
             var success = await _domain.CreateAsync(entity, ct);
@@ -277,6 +291,12 @@ public class AddressTypeAppService : IAddressTypeAppService
         if (string.IsNullOrWhiteSpace(item.Name))
         {
             _notify.Add(_localization.GetMessage("Application.Service.AddressType.ValidateBulkItem.Name", item.Name ?? "N/A"), 400);
+            return false;
+        }
+
+        if (string.IsNullOrWhiteSpace(item.Description))
+        {
+            _notify.Add(_localization.GetMessage("Application.Service.AddressType.ValidateBulkItem.Description", item.Name ?? "N/A"), 400);
             return false;
         }
 

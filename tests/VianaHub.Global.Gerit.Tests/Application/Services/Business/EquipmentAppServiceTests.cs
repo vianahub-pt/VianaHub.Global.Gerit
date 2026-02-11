@@ -21,6 +21,7 @@ namespace VianaHub.Global.Gerit.Tests.Application.Services.Business
         [Fact]
         public async Task BulkUploadAsync_ShouldReturnFalse_WhenNoFile()
         {
+            var equipmentTypeRepoMock = new Mock<IEquipmentTypeDataRepository>();
             var repoMock = new Mock<IEquipmentDataRepository>();
             var domainMock = new Mock<IEquipmentDomainService>();
             var mapperMock = new Mock<IMapper>();
@@ -31,7 +32,15 @@ namespace VianaHub.Global.Gerit.Tests.Application.Services.Business
 
             fileValidationMock.Setup(f => f.ValidateFile(null)).Returns(false);
 
-            var service = new EquipmentAppService(repoMock.Object, domainMock.Object, mapperMock.Object, notifyMock.Object, localizationMock.Object, currentUserMock.Object, fileValidationMock.Object);
+            var service = new EquipmentAppService(
+                equipmentTypeRepoMock.Object,
+                repoMock.Object,
+                domainMock.Object,
+                mapperMock.Object,
+                notifyMock.Object,
+                localizationMock.Object,
+                currentUserMock.Object,
+                fileValidationMock.Object);
 
             var result = await service.BulkUploadAsync(null, CancellationToken.None);
 
@@ -42,6 +51,7 @@ namespace VianaHub.Global.Gerit.Tests.Application.Services.Business
         [Fact]
         public async Task BulkUploadAsync_ShouldProcessValidCsv()
         {
+            var equipmentTypeRepoMock = new Mock<IEquipmentTypeDataRepository>();
             var repoMock = new Mock<IEquipmentDataRepository>();
             var domainMock = new Mock<IEquipmentDomainService>();
             var mapperMock = new Mock<IMapper>();
@@ -71,7 +81,15 @@ namespace VianaHub.Global.Gerit.Tests.Application.Services.Business
             repoMock.Setup(r => r.ExistsByNameAsync(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<CancellationToken>())).ReturnsAsync(false);
             domainMock.Setup(d => d.CreateAsync(It.IsAny<Domain.Entities.Business.EquipmentEntity>(), It.IsAny<CancellationToken>())).ReturnsAsync(true);
 
-            var service = new EquipmentAppService(repoMock.Object, domainMock.Object, mapperMock.Object, notifyMock.Object, localizationMock.Object, currentUserMock.Object, fileValidationMock.Object);
+            var service = new EquipmentAppService(
+                equipmentTypeRepoMock.Object,
+                repoMock.Object,
+                domainMock.Object,
+                mapperMock.Object,
+                notifyMock.Object,
+                localizationMock.Object,
+                currentUserMock.Object,
+                fileValidationMock.Object);
 
             var result = await service.BulkUploadAsync(formFile, CancellationToken.None);
 

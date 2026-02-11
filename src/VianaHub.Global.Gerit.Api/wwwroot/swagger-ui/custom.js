@@ -49,11 +49,11 @@
         // Try to detect from browser
         const browserLang = navigator.language || navigator.userLanguage;
         if (browserLang.startsWith('pt')) {
-            return 'pt-BR';
+            return 'pt-PT';
         }
 
         // Default to Portuguese
-        return 'pt-BR';
+        return 'pt-PT';
     }
 
     function initSwitchers() {
@@ -87,7 +87,8 @@
             const switchersHtml = `
                 <div id="lang-switcher" class="lang-switcher">
                     <select id="lang-select" class="lang-select" aria-label="Language selector">
-                        <option value="pt-BR" ${currentLang === 'pt-BR' ? 'selected' : ''}>Portugu&ecirc;s</option>
+                        <option value="pt-PT" ${currentLang === 'pt-PT' ? 'selected' : ''}>Portugu&ecirc;s PT</option>
+                        <option value="pt-BR" ${currentLang === 'pt-BR' ? 'selected' : ''}>Portugu&ecirc;s BR</option>
                         <option value="en-US" ${currentLang === 'en-US' ? 'selected' : ''}>English</option>
                         <option value="es-ES" ${currentLang === 'es-ES' ? 'selected' : ''}>Espa&ntilde;ol</option>
                     </select>

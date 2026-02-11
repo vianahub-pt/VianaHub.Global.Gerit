@@ -8,6 +8,9 @@ public class TeamMemberAddressResponse
     public int Id { get; set; }
     public int TenantId { get; set; }
     public int TeamMemberId { get; set; }
+    public string TeamMember { get; set; }
+    public int AddressTypeId { get; set; }
+    public string AddressType { get; set; }
     public string Street { get; set; }
     public string City { get; set; }
     public string PostalCode { get; set; }

@@ -1,5 +1,36 @@
-FunctionId;Name;TaxNumber
-61;Ana Pereira;658608848
-53;Carlos Santos;897472068
-62;João Silva;828538967
-63;Maria Costa;123434142
+TeamMemberId;AddressTypeId;CountryCode;Street;StreetNumber;Complement;Neighborhood;City;District;PostalCode;Latitude;Longitude;Notes;IsPrimary
+2;1;PT;Rua das Flores;25;Apt 3B;Centro;Lisboa;Lisboa;1200-195;38.7223;-9.1393;Endereço residencial;true
+3;1;PT;Avenida da Liberdade;156;2º Esq;Baixa;Lisboa;Lisboa;1250-146;38.7223;-9.1393;Endereço residencial;true
+4;1;PT;Rua de Santa Catarina;320;4º Dto;Cedofeita;Porto;Porto;4000-442;41.1579;-8.6291;Endereço residencial;true
+5;1;PT;Praça da República;89;1º Andar;Centro;Braga;Braga;4710-229;41.5454;-8.4265;Endereço residencial;true
+6;1;PT;Rua Direita;42;;São João;Coimbra;Coimbra;3000-343;40.2033;-8.4103;Endereço residencial;true
+7;1;PT;Avenida dos Aliados;78;5º Esq;Sé;Porto;Porto;4000-065;41.1579;-8.6291;Endereço residencial;true
+8;1;PT;Rua Augusta;145;3º Dto;Baixa;Lisboa;Lisboa;1100-053;38.7223;-9.1393;Endereço residencial;true
+9;1;PT;Rua do Comércio;67;2º Centro;Ribeira;Porto;Porto;4050-168;41.1579;-8.6291;Endereço residencial;true
+10;1;PT;Largo da Sé;12;;Sé;Braga;Braga;4700-424;41.5454;-8.4265;Endereço residencial;true
+11;1;PT;Rua Ferreira Borges;201;6º Andar;Centro;Coimbra;Coimbra;3000-180;40.2033;-8.4103;Endereço residencial;true
+12;1;PT;Avenida Fontes Pereira de Melo;33;1º Dto;Arroios;Lisboa;Lisboa;1050-121;38.7223;-9.1393;Endereço residencial;true
+13;1;PT;Rua da Boavista;523;4º Esq;Lordelo do Ouro;Porto;Porto;4050-110;41.1579;-8.6291;Endereço residencial;true
+14;1;PT;Rua do Raio;98;3º Centro;Centro;Braga;Braga;4710-924;41.5454;-8.4265;Endereço residencial;true
+15;1;PT;Rua da Sofia;156;2º Dto;Baixa;Coimbra;Coimbra;3004-504;40.2033;-8.4103;Endereço residencial;true
+16;1;PT;Rua Garrett;72;5º Andar;Chiado;Lisboa;Lisboa;1200-203;38.7223;-9.1393;Endereço residencial;true
+17;1;PT;Rua de Cedofeita;412;1º Esq;Cedofeita;Porto;Porto;4050-175;41.1579;-8.6291;Endereço residencial;true
+18;1;PT;Avenida Central;234;;Centro;Braga;Braga;4710-228;41.5454;-8.4265;Endereço residencial;true
+19;1;PT;Praça do Comércio;87;2º Dto;Baixa;Coimbra;Coimbra;3000-123;40.2033;-8.4103;Endereço residencial;true
+20;1;PT;Rua do Ouro;134;4º Centro;Baixa;Lisboa;Lisboa;1100-060;38.7223;-9.1393;Endereço residencial;true
+21;1;PT;Rua de Passos Manuel;299;3º Esq;Santo Ildefonso;Porto;Porto;4000-385;41.1579;-8.6291;Endereço residencial;true
+22;1;PT;Rua dos Capelistas;56;1º Dto;Centro;Braga;Braga;4700-307;41.5454;-8.4265;Endereço residencial;true
+23;1;PT;Avenida Sá da Bandeira;178;6º Esq;Centro;Coimbra;Coimbra;3000-353;40.2033;-8.4103;Endereço residencial;true
+24;1;PT;Rua da Prata;92;2º Andar;Baixa;Lisboa;Lisboa;1100-420;38.7223;-9.1393;Endereço residencial;true
+25;1;PT;Rua de Sá da Bandeira;445;5º Dto;Bonfim;Porto;Porto;4000-427;41.1579;-8.6291;Endereço residencial;true
+26;1;PT;Rua Dom Afonso Henriques;67;3º Centro;Centro;Braga;Braga;4700-030;41.5454;-8.4265;Endereço residencial;true
+27;1;PT;Rua Visconde da Luz;123;;Baixa;Coimbra;Coimbra;3000-395;40.2033;-8.4103;Endereço residencial;true
+28;1;PT;Avenida Almirante Reis;456;4º Esq;Anjos;Lisboa;Lisboa;1150-019;38.7223;-9.1393;Endereço residencial;true
+29;1;PT;Rua de Santo António;189;1º Centro;Cedofeita;Porto;Porto;4050-521;41.1579;-8.6291;Endereço residencial;true
+30;1;PT;Rua Dom Pedro V;34;2º Dto;Centro;Braga;Braga;4700-312;41.5454;-8.4265;Endereço residencial;true
+31;1;PT;Rua Antero de Quental;256;5º Andar;Centro;Coimbra;Coimbra;3000-032;40.2033;-8.4103;Endereço residencial;true
+32;1;PT;Rua dos Fanqueiros;167;3º Esq;Baixa;Lisboa;Lisboa;1100-231;38.7223;-9.1393;Endereço residencial;true
+33;1;PT;Rua de Santa Catarina;789;6º Dto;Cedofeita;Porto;Porto;4000-447;41.1579;-8.6291;Endereço residencial;true
+34;1;PT;Avenida João XXI;112;1º Esq;Centro;Braga;Braga;4715-034;41.5454;-8.4265;Endereço residencial;true
+35;1;PT;Rua Alexandre Herculano;98;4º Centro;Centro;Coimbra;Coimbra;3000-019;40.2033;-8.4103;Endereço residencial;true
+36;1;PT;Rua de São Bento;345;2º Andar;Estrela;Lisboa;Lisboa;1250-219;38.7223;-9.1393;Endereço residencial;true

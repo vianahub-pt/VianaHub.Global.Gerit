@@ -1,0 +1,11 @@
+Name;Description
+Morada residencial;Morada para habitação (moradia ou apartamento), usada como endereço principal de pessoas.
+Morada comercial;Morada de um negócio/estabelecimento (loja, escritório) para atividade comercial e atendimento.
+Morada industrial;Morada associada a atividade industrial (fábrica, unidade industrial, armazém/galpão).
+Morada rural;Morada em área rural (quinta, herdade, sítio/fazenda) ligada a atividade agrícola ou residência isolada.
+Morada de serviços públicos;Morada de entidades públicas (Câmara Municipal, Junta de Freguesia, Conservatória, repartições).
+Morada de educação;Morada de instituições de ensino (escola, universidade, creche/jardim de infância).
+Morada de saúde;Morada de serviços de saúde (hospital, centro de saúde, clínica, laboratório, farmácia).
+Morada de alojamento/turismo;Morada de unidades de alojamento (hotel, hostel, turismo rural, AL – Alojamento Local).
+Morada logística/distribuição;Morada dedicada a logística (centro de distribuição, plataforma logística, entreposto, armazém).
+Morada postal alternativa;Morada para receção de correspondência/entregas fora do domicílio (Apartado CTT, ponto CTT/Pickup, portaria).
