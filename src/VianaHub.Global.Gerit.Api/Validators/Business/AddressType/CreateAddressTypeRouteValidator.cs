@@ -4,9 +4,9 @@ using VianaHub.Global.Gerit.Domain.Interfaces;
 
 namespace VianaHub.Global.Gerit.Api.Validators.Business.AddressType;
 
-public class CreateAddressTypeRequestValidator : AbstractValidator<CreateAddressTypeRequest>
+public class CreateAddressTypeRouteValidator : AbstractValidator<CreateAddressTypeRequest>
 {
-    public CreateAddressTypeRequestValidator(ILocalizationService localization)
+    public CreateAddressTypeRouteValidator(ILocalizationService localization)
     {
         RuleFor(x => x.TenantId)
             .GreaterThan(0).WithMessage(localization.GetMessage("Api.Validator.AddressType.Create.TenantId"));

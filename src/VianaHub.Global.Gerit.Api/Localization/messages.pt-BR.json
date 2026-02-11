@@ -35,6 +35,7 @@
   "Swagger.Tag.TeamMemberContacts": "Contatos dos Membros da Equipe",
   "Swagger.Tag.Auth": "Autenticação",
   "Swagger.Tag.AddressTypes": "Tipos de Endereço",
+  "Swagger.Tag.Clients": "Clientes",
 
   "Swagger.Endpoint.HealthCheck.Summary": "Verificação de Saúde",
   "Swagger.Endpoint.HealthCheck.Description": "Verifica se a API está funcionando corretamente",
@@ -62,6 +63,16 @@
   "Swagger.Endpoint.Resource.Activate.Summary": "Ativar recurso",
   "Swagger.Endpoint.Resource.Deactivate.Summary": "Desativar recurso",
   "Swagger.Endpoint.Resource.BulkUpload.Summary": "Upload em massa de recursos",
+
+  "Swagger.Endpoint.Client.GetAll.Summary": "Obter todos os clientes",
+  "Swagger.Endpoint.Client.GetPaged.Summary": "Obter clientes paginados",
+  "Swagger.Endpoint.Client.GetById.Summary": "Obter cliente por ID",
+  "Swagger.Endpoint.Client.Create.Summary": "Criar novo cliente",
+  "Swagger.Endpoint.Client.Update.Summary": "Atualizar cliente",
+  "Swagger.Endpoint.Client.Delete.Summary": "Excluir cliente",
+  "Swagger.Endpoint.Client.Activate.Summary": "Ativar cliente",
+  "Swagger.Endpoint.Client.Deactivate.Summary": "Desativar cliente",
+  "Swagger.Endpoint.Client.BulkUpload.Summary": "Upload em massa de clientes",
 
   "Swagger.Endpoint.Function.GetAll.Summary": "Obter todas as funções",
   "Swagger.Endpoint.Function.GetById.Summary": "Obter função por ID",
@@ -363,21 +374,36 @@
   "Api.Validator.TeamMemberContact.Update.Email": "E-mail é obrigatório",
   "Api.Validator.TeamMemberContact.Update.Email.MaximumLength": "E-mail deve ter no máximo {0} caracteres",
   "Api.Validator.TeamMemberContact.Update.Email.Invalid": "E-mail inválido",
+  "Api.Validator.TeamMemberContact.Update.Phone": "Telefone é obrigatório",
   "Api.Validator.TeamMemberContact.Update.Phone.MaximumLength": "Telefone deve ter no máximo {0} caracteres",
 
-  "Application.Service.Auth.Login.InvalidCredentials": "Credenciais inválidas",
+  "Api.Validator.Client.Create.TenantId": "ID do inquilino é obrigatório",
+  "Api.Validator.Client.Create.Name": "Nome é obrigatório",
+  "Api.Validator.Client.Create.Name.MaximumLength": "Nome deve ter no máximo {0} caracteres",
+  "Api.Validator.Client.Create.Email": "E-mail é obrigatório",
+  "Api.Validator.Client.Create.Email.MaximumLength": "E-mail deve ter no máximo {0} caracteres",
+  "Api.Validator.Client.Create.Email.Invalid": "E-mail inválido",
+  "Api.Validator.Client.Create.Phone": "Telefone é obrigatório",
+  "Api.Validator.Client.Create.Phone.MaximumLength": "Telefone deve ter no máximo {0} caracteres",
+  "Api.Validator.Client.Update.TenantId": "ID do inquilino é obrigatório",
+  "Api.Validator.Client.Update.Name": "Nome é obrigatório",
+  "Api.Validator.Client.Update.Name.MaximumLength": "Nome deve ter no máximo {0} caracteres",
+  "Api.Validator.Client.Update.Email": "E-mail é obrigatório",
+  "Api.Validator.Client.Update.Email.MaximumLength": "E-mail deve ter no máximo {0} caracteres",
+  "Api.Validator.Client.Update.Email.Invalid": "E-mail inválido",
+  "Api.Validator.Client.Update.Phone": "Telefone é obrigatório",
+  "Api.Validator.Client.Update.Phone.MaximumLength": "Telefone deve ter no máximo {0} caracteres",
 
+  "Application.Service.Auth.Login.InvalidCredentials": "Credenciais inválidas",
   "Application.Service.UserRole.Create.ResourceAlreadyExists": "Vínculo usuário-papel já existe para este inquilino",
   "Application.Service.UserRole.Create.RoleNotFound": "Papel não encontrado",
   "Application.Service.UserRole.Create.UserNotFound": "Usuário não encontrado",
   "Application.Service.UserRole.Delete.ResourceNotFound": "Associação usuário-papel não encontrada",
-
   "Application.Service.RolePermission.Create.ResourceAlreadyExists": "Permissão já existe para este papel / recurso / ação",
   "Application.Service.RolePermission.Create.RoleNotFound": "Papel não encontrado",
   "Application.Service.RolePermission.Create.ResourceNotFound": "Recurso não encontrado",
   "Application.Service.RolePermission.Create.ActionNotFound": "Ação não encontrada",
   "Application.Service.RolePermission.Delete.ResourceNotFound": "Permissão não encontrada",
-
   "Application.Service.Action.Update.ResourceNotFound": "Ação não encontrada",
   "Application.Service.Action.Create.ResourceAlreadyExists": "Ação já existe",
   "Application.Service.Action.Activate.ResourceNotFound": "Ação não encontrada",
@@ -393,7 +419,6 @@
   "Application.Service.Action.ProcessBulkItems.FailedToCreate": "Falha ao criar ação '{0}'",
   "Application.Service.Action.ValidateBulkItem.Name": "Nome é obrigatório",
   "Application.Service.Action.ValidateBulkItem.Description": "Descrição é obrigatória",
-
   "Application.Service.User.Update.ResourceNotFound": "Usuário não encontrado",
   "Application.Service.User.Update.EmailAlreadyExists": "E-mail já está em uso",
   "Application.Service.User.UpdatePassword.ResourceNotFound": "Usuário não encontrado",
@@ -412,7 +437,6 @@
   "Application.Service.User.ValidateBulkItem.Name": "Nome é obrigatório",
   "Application.Service.User.ValidateBulkItem.Email": "E-mail é obrigatório",
   "Application.Service.User.ValidateBulkItem.Password": "Senha é obrigatória",
-
   "Application.Service.Role.Update.ResourceNotFound": "Papel não encontrado",
   "Application.Service.Role.Create.ResourceAlreadyExists": "Papel já existe",
   "Application.Service.Role.Activate.ResourceNotFound": "Papel não encontrado",
@@ -428,7 +452,6 @@
   "Application.Service.Role.ProcessBulkItems.FailedToCreate": "Falha ao criar papel '{0}'",
   "Application.Service.Role.ValidateBulkItem.Name": "Nome é obrigatório",
   "Application.Service.Role.ValidateBulkItem.Description": "Descrição é obrigatória",
-
   "Application.Service.UserRole.BulkUpload.EmptyFile": "Arquivo vazio",
   "Application.Service.UserRole.ReadCsvFile.UserId.IsSafeCsvValue": "ID do usuário contém caracteres inválidos na linha {0}",
   "Application.Service.UserRole.ReadCsvFile.RoleId.IsSafeCsvValue": "ID do papel contém caracteres inválidos na linha {0}",
@@ -437,7 +460,6 @@
   "Application.Service.UserRole.ReadCsvFile.Exception": "Erro ao ler arquivo CSV",
   "Application.Service.UserRole.ProcessBulkItems.ExistsByEmail": "Um usuário com e-mail '{0}' já existe",
   "Application.Service.UserRole.ProcessBulkItems.FailedToCreate": "Falha ao criar associação usuário-papel '{0}'",
-
   "Application.Service.RolePermission.BulkUpload.EmptyFile": "Arquivo vazio",
   "Application.Service.RolePermission.ReadCsvFile.RoleId.IsSafeCsvValue": "ID do papel contém caracteres inválidos na linha {0}",
   "Application.Service.RolePermission.ReadCsvFile.ResourceId.IsSafeCsvValue": "ID do recurso contém caracteres inválidos na linha {0}",
@@ -448,7 +470,6 @@
   "Application.Service.RolePermission.ValidateBulkItem.RoleId": "ID do papel é obrigatório",
   "Application.Service.RolePermission.ValidateBulkItem.ResourceId": "ID do recurso é obrigatório",
   "Application.Service.RolePermission.ValidateBulkItem.ActionId": "ID da ação é obrigatório",
-
   "Application.Service.Resource.Update.ResourceNotFound": "Recurso não encontrado",
   "Application.Service.Resource.Create.ResourceAlreadyExists": "Recurso já existe",
   "Application.Service.Resource.Activate.ResourceNotFound": "Recurso não encontrado",
@@ -463,8 +484,6 @@
   "Application.Service.Resource.ProcessBulkItems.ExistsByName": "Recurso '{0}' já existe",
   "Application.Service.Resource.ProcessBulkItems.FailedToCreate": "Falha ao criar recurso '{0}'",
   "Application.Service.Resource.ValidateBulkItem.Name": "Nome é obrigatório",
-  "Application.Service.Resource.ValidateBulkItem.Description": "Descrição é obrigatória",
-
   "Application.Service.Plan.Create.ResourceAlreadyExists": "Plano já existe",
   "Application.Service.Plan.Update.ResourceNotFound": "Plano não encontrado",
   "Application.Service.Plan.Activate.ResourceNotFound": "Plano não encontrado",
@@ -479,7 +498,6 @@
   "Application.Service.Plan.ProcessBulkItems.ExistsByName": "Plano '{0}' já existe",
   "Application.Service.Plan.ProcessBulkItems.FailedToCreate": "Falha ao criar plano '{0}'",
   "Application.Service.Plan.ValidateBulkItem.Name": "Nome é obrigatório",
-
   "Application.Service.Tenant.Update.ResourceNotFound": "Inquilino não encontrado",
   "Application.Service.Tenant.Create.ResourceAlreadyExists": "Inquilino já existe",
   "Application.Service.Tenant.Activate.ResourceNotFound": "Inquilino não encontrado",
@@ -493,7 +511,6 @@
   "Application.Service.Tenant.ProcessBulkItems.ExistsBylName": "Inquilino '{0}' já existe",
   "Application.Service.Tenant.ProcessBulkItems.FailedToCreate": "Falha ao criar inquilino '{0}'",
   "Application.Service.Tenant.ValidateBulkItem.Name": "Nome é obrigatório",
-
   "Application.Service.Subscription.Update.ResourceNotFound": "Assinatura não encontrada",
   "Application.Service.Subscription.Activate.ResourceNotFound": "Assinatura não encontrada",
   "Application.Service.Subscription.Deactivate.ResourceNotFound": "Assinatura não encontrada",
@@ -514,7 +531,6 @@
   "Application.Service.Subscription.ProcessBulkItems.FailedToCreate": "Falha ao criar a assinatura.",
   "Application.Service.Subscription.ValidateBulkItem.TenantId": "O ID do inquilino deve ser um valor seguro.",
   "Application.Service.Subscription.ValidateBulkItem.PlanId": "O ID do plano deve ser um valor seguro.",
-
   "Application.Service.Job.Execute.FailedToEnqueue": "Falha ao enfileirar job",
   "Application.Service.Job.Get.ResourceNotFound": "Job não encontrado",
   "Application.Service.Job.Create.ResourceAlreadyExists": "Job '{0}' já existe",
@@ -571,7 +587,6 @@
   "Application.Service.Function.ProcessBulkItems.FailedToCreate": "Falha ao criar função '{0}'",
   "Application.Service.Function.ValidateBulkItem.Name": "Nome é obrigatório",
   "Application.Service.Function.ValidateBulkItem.Description": "Descrição é obrigatória",
-
   "Application.Service.Vehicle.Create.ResourceAlreadyExists": "Veículo com esta placa já existe para este inquilino",
   "Application.Service.Vehicle.Update.ResourceNotFound": "Veículo não encontrado",
   "Application.Service.Vehicle.Activate.ResourceNotFound": "Veículo não encontrado",
@@ -589,7 +604,6 @@
   "Application.Service.Vehicle.ValidateBulkItem.Plate": "Placa é obrigatória",
   "Application.Service.Vehicle.ValidateBulkItem.Brand": "Marca é obrigatória",
   "Application.Service.Vehicle.ValidateBulkItem.Model": "Modelo é obrigatório",
-
   "Application.Service.TeamMember.GetById.ResourceNotFound": "Membro da equipe não encontrado",
   "Application.Service.TeamMember.Create.ResourceAlreadyExists": "Um membro da equipe com este número fiscal já existe para este inquilino",
   "Application.Service.TeamMember.Update.ResourceNotFound": "Membro da equipe não encontrado",
@@ -607,7 +621,6 @@
   "Application.Service.TeamMember.ValidateBulkItem.Name": "Nome é obrigatório para o membro da equipe '{0}'",
   "Application.Service.TeamMember.ValidateBulkItem.TaxNumber": "Número fiscal é obrigatório para o membro da equipe '{0}'",
   "Application.Service.TeamMember.ValidateBulkItem.FunctionId": "ID da função é obrigatório para o membro da equipe '{0}'",
-
   "Application.Service.TeamMemberAddress.GetById.ResourceNotFound": "Endereço do membro da equipe não encontrado",
   "Application.Service.TeamMemberAddress.Create.ResourceAlreadyExists": "Endereço do membro da equipe já existe",
   "Application.Service.TeamMemberAddress.Update.ResourceNotFound": "Endereço do membro da equipe não encontrado",
@@ -628,7 +641,6 @@
   "Application.Service.TeamMemberAddress.ValidateBulkItem.PostalCode": "Código postal é obrigatório para o membro da equipe {0}",
   "Application.Service.TeamMemberAddress.ValidateBulkItem.CountryCode": "Código do país é obrigatório para o membro da equipe {0}",
   "Application.Service.TeamMemberAddress.ValidateBulkItem.TeamMemberId": "ID do membro da equipe é obrigatório para o membro da equipe {0}",
-
   "Application.Service.TeamMemberContact.GetById.ResourceNotFound": "Contato do membro da equipe não encontrado",
   "Application.Service.TeamMemberContact.Create.ResourceAlreadyExists": "Contato do membro da equipe já existe",
   "Application.Service.TeamMemberContact.Update.ResourceNotFound": "Contato do membro da equipe não encontrado",
@@ -648,6 +660,26 @@
   "Application.Service.TeamMemberContact.ValidateBulkItem.Name": "Nome é obrigatório para o membro da equipe {0}",
   "Application.Service.TeamMemberContact.ValidateBulkItem.Email": "E-mail é obrigatório para o membro da equipe {0}",
   "Application.Service.TeamMemberContact.ValidateBulkItem.TeamMemberId": "ID do membro da equipe é obrigatório para o membro da equipe {0}",
+
+  "Application.Service.Client.GetById.ResourceNotFound": "Cliente não encontrado ou inativo",
+  "Application.Service.Client.Create.ResourceAlreadyExists": "Cliente com este e-mail já existe para este inquilino",
+  "Application.Service.Client.Update.ResourceNotFound": "Cliente não encontrado",
+  "Application.Service.Client.Update.EmailAlreadyExists": "E-mail já está sendo usado por outro cliente",
+  "Application.Service.Client.Activate.ResourceNotFound": "Cliente não encontrado",
+  "Application.Service.Client.Deactivate.ResourceNotFound": "Cliente não encontrado",
+  "Application.Service.Client.Delete.ResourceNotFound": "Cliente não encontrado",
+  "Application.Service.Client.BulkUpload.EmptyFile": "Arquivo vazio",
+  "Application.Service.Client.ReadCsvFile.Name.IsSafeCsvValue": "Nome contém caracteres inválidos na linha {0}",
+  "Application.Service.Client.ReadCsvFile.Email.IsSafeCsvValue": "E-mail contém caracteres inválidos na linha {0}",
+  "Application.Service.Client.ReadCsvFile.Phone.IsSafeCsvValue": "Telefone contém caracteres inválidos na linha {0}",
+  "Application.Service.Client.ReadCsvFile.CsvHelperException": "Erro ao processar linha {0} do CSV",
+  "Application.Service.Client.ReadCsvFile.MaxRows": "Número máximo de linhas ({0}) excedido",
+  "Application.Service.Client.ReadCsvFile.Exception": "Erro ao ler arquivo CSV",
+  "Application.Service.Client.ProcessBulkItems.ExistsByEmail": "Cliente com e-mail '{0}' já existe",
+  "Application.Service.Client.ProcessBulkItems.FailedToCreate": "Falha ao criar cliente '{0}'",
+  "Application.Service.Client.ValidateBulkItem.Name": "Nome é obrigatório",
+  "Application.Service.Client.ValidateBulkItem.Email": "E-mail é obrigatório",
+  "Application.Service.Client.ValidateBulkItem.Phone": "Telefone é obrigatório",
 
   "Domain.Action.NameRequired": "Nome da ação é obrigatório",
   "Domain.Action.NameMaxLength": "Nome da ação deve ter no máximo {0} caracteres",
@@ -806,6 +838,20 @@
   "Domain.TeamMemberContact.CannotDeactivateDeleted": "Não é possível desativar contato excluído",
   "Domain.TeamMemberContact.AlreadyDeleted": "Contato já foi excluído",
 
+  "Domain.Client.TenantIdRequired": "ID do inquilino é obrigatório para o cliente",
+  "Domain.Client.NameRequired": "Nome do cliente é obrigatório",
+  "Domain.Client.NameMaxLength": "Nome do cliente deve ter no máximo {0} caracteres",
+  "Domain.Client.EmailRequired": "E-mail do cliente é obrigatório",
+  "Domain.Client.EmailMaxLength": "E-mail do cliente deve ter no máximo {0} caracteres",
+  "Domain.Client.EmailInvalid": "E-mail do cliente é inválido",
+  "Domain.Client.PhoneRequired": "Telefone do cliente é obrigatório",
+  "Domain.Client.PhoneMaxLength": "Telefone do cliente deve ter no máximo {0} caracteres",
+  "Domain.Client.InvalidId": "ID do cliente inválido",
+  "Domain.Client.CannotUpdateDeleted": "Não é possível atualizar cliente excluído",
+  "Domain.Client.CannotActivateDeleted": "Não é possível ativar cliente excluído",
+  "Domain.Client.CannotDeactivateDeleted": "Não é possível desativar cliente excluído",
+  "Domain.Client.AlreadyDeleted": "Cliente já foi excluído",
+
   "Api.Middleware.GlobalException.Notification.FieldLabel.Error": "Erro",
 
   "Api.Middleware.GlobalException.StatusCode.Error.InvalidRequest": "Requisição Inválida",
@@ -890,17 +936,5 @@
   "Application.Service.AddressType.ProcessBulkItems.ExistsByName": "Tipo de endereço '{0}' já existe",
   "Application.Service.AddressType.ProcessBulkItems.FailedToCreate": "Falha ao criar tipo de endereço '{0}'",
   "Application.Service.AddressType.ValidateBulkItem.Name": "O campo Nome é obrigatório para o item '{0}'",
-  "Application.Service.AddressType.ValidateBulkItem.Description": "O campo Descrição é obrigatório para o item '{0}'",
-
-  "Domain.AddressType.TenantIdRequired": "O ID do tenant é obrigatório",
-  "Domain.AddressType.IdRequired": "O ID é obrigatório",
-  "Domain.AddressType.NameRequired": "O nome é obrigatório",
-  "Domain.AddressType.NameMaxLength": "O nome deve ter no máximo {0} caracteres",
-  "Domain.AddressType.DescriptionRequired": "A descrição é obrigatória",
-  "Domain.AddressType.DescriptionMaxLength": "A descrição deve ter no máximo {0} caracteres",
-  "Domain.AddressType.CreatedByRequired": "O campo CreatedBy é obrigatório",
-  "Domain.AddressType.ModifiedByRequired": "O campo ModifiedBy é obrigatório",
-  "Domain.AddressType.CannotActivateDeleted": "Não é possível ativar um tipo de endereço excluído",
-  "Domain.AddressType.CannotDeactivateDeleted": "Não é possível desativar um tipo de endereço excluído",
-  "Domain.AddressType.CannotDeleteTwice": "Este tipo de endereço já foi excluído"
+  "Application.Service.AddressType.ValidateBulkItem.Description": "O campo Descrição é obrigatório para o item '{0}'"
 }

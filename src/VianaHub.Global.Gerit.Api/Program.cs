@@ -183,6 +183,7 @@ public class Program
         app.MapTeamMemberAddressEndpoints();
         app.MapTeamMemberContactEndpoints();
         app.MapAddressTypeEndpoints();
+        app.MapClientEndpoints();
 
         // Minimal API Endpoints
         var localization = app.Services.GetService(typeof(ILocalizationService)) as ILocalizationService;

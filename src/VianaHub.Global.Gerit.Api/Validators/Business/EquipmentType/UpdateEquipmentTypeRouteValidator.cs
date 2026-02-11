@@ -4,9 +4,9 @@ using VianaHub.Global.Gerit.Domain.Interfaces;
 
 namespace VianaHub.Global.Gerit.Api.Validators.Business.EquipmentType;
 
-public class CreateEquipmentTypeRequestValidator : AbstractValidator<CreateEquipmentTypeRequest>
+public class UpdateEquipmentTypeRouteValidator : AbstractValidator<UpdateEquipmentTypeRequest>
 {
-    public CreateEquipmentTypeRequestValidator(ILocalizationService localization)
+    public UpdateEquipmentTypeRouteValidator(ILocalizationService localization)
     {
         RuleFor(x => x.Name)
             .NotEmpty()

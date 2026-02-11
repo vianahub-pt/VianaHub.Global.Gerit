@@ -19,6 +19,9 @@ select * from dbo.TeamMembers;			--
 select * from dbo.TeamMemberAddresses;	--
 select * from dbo.TeamMemberContacts;	--
 select * from dbo.Clients;
+select * from dbo.ClientAddresses;
+select * from dbo.ClientContacts;
+select * from dbo.ClientFiscalData;
 
 FOR JSON AUTO;
 

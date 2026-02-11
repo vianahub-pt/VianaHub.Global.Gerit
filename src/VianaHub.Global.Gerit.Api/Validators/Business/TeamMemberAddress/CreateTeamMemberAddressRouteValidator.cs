@@ -4,11 +4,11 @@ using VianaHub.Global.Gerit.Domain.Interfaces;
 
 namespace VianaHub.Global.Gerit.Api.Validators.Business.TeamMemberAddress;
 
-public class CreateTeamMemberAddressRequestValidator : AbstractValidator<CreateTeamMemberAddressRequest>
+public class CreateTeamMemberAddressRouteValidator : AbstractValidator<CreateTeamMemberAddressRequest>
 {
     private readonly ILocalizationService _localization;
 
-    public CreateTeamMemberAddressRequestValidator(ILocalizationService localization)
+    public CreateTeamMemberAddressRouteValidator(ILocalizationService localization)
     {
         _localization = localization;
 

@@ -4,9 +4,9 @@ using VianaHub.Global.Gerit.Domain.Interfaces;
 
 namespace VianaHub.Global.Gerit.Api.Validators.Business.AddressType;
 
-public class UpdateAddressTypeRequestValidator : AbstractValidator<UpdateAddressTypeRequest>
+public class UpdateAddressTypeRouteValidator : AbstractValidator<UpdateAddressTypeRequest>
 {
-    public UpdateAddressTypeRequestValidator(ILocalizationService localization)
+    public UpdateAddressTypeRouteValidator(ILocalizationService localization)
     {
         RuleFor(x => x.Name)
             .NotEmpty().WithMessage(localization.GetMessage("Api.Validator.AddressType.Update.Name"))

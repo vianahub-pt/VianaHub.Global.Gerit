@@ -35,6 +35,7 @@
   "Swagger.Tag.TeamMemberContacts": "Team Member Contacts",
   "Swagger.Tag.Auth": "Authentication",
   "Swagger.Tag.AddressTypes": "Address Types",
+  "Swagger.Tag.Clients": "Clients",
 
   "Swagger.Endpoint.HealthCheck.Summary": "Health Check",
   "Swagger.Endpoint.HealthCheck.Description": "Checks if the API is working correctly",
@@ -61,7 +62,7 @@
   "Swagger.Endpoint.Resource.Delete.Summary": "Delete resource",
   "Swagger.Endpoint.Resource.Activate.Summary": "Activate resource",
   "Swagger.Endpoint.Resource.Deactivate.Summary": "Deactivate resource",
-  "Swagger.Endpoint.Resource.BulkUpload.Summary": "Bulk upload resources",
+  "Swagger.Endpoint.Resource.BulkUpload.Summary": "Bulk upload resources",`n  "Swagger.Endpoint.Client.GetAll.Summary": "Get all clients",`n  "Swagger.Endpoint.Client.GetPaged.Summary": "Get paged clients",`n  "Swagger.Endpoint.Client.GetById.Summary": "Get client by ID",`n  "Swagger.Endpoint.Client.Create.Summary": "Create new client",`n  "Swagger.Endpoint.Client.Update.Summary": "Update client",`n  "Swagger.Endpoint.Client.Delete.Summary": "Delete client",`n  "Swagger.Endpoint.Client.Activate.Summary": "Activate client",`n  "Swagger.Endpoint.Client.Deactivate.Summary": "Deactivate client",`n  "Swagger.Endpoint.Client.BulkUpload.Summary": "Bulk upload clients",`n
 
   "Swagger.Endpoint.Function.GetAll.Summary": "Get all functions",
   "Swagger.Endpoint.Function.GetById.Summary": "Get function by id",

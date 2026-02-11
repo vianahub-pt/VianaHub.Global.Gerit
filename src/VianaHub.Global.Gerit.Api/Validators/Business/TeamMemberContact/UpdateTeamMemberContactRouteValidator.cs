@@ -4,9 +4,9 @@ using VianaHub.Global.Gerit.Domain.Interfaces;
 
 namespace VianaHub.Global.Gerit.Api.Validators.Business.TeamMemberContact;
 
-public class UpdateTeamMemberContactRequestValidator : AbstractValidator<UpdateTeamMemberContactRequest>
+public class UpdateTeamMemberContactRouteValidator : AbstractValidator<UpdateTeamMemberContactRequest>
 {
-    public UpdateTeamMemberContactRequestValidator(ILocalizationService localization)
+    public UpdateTeamMemberContactRouteValidator(ILocalizationService localization)
     {
         RuleFor(x => x.Name)
             .NotEmpty().WithMessage(localization.GetMessage("Api.Validator.TeamMemberContact.Update.Name"))
