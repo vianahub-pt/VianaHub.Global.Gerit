@@ -16,8 +16,8 @@ select * from dbo.EquipmentTypes;		--
 select * from dbo.Equipments;			--
 select * from dbo.Functions;			--
 select * from dbo.TeamMembers;			--
-select * from dbo.TeamMemberAddresses;
-select * from dbo.TeamMemberContacts;
+select * from dbo.TeamMemberAddresses;	--
+select * from dbo.TeamMemberContacts;	--
 select * from dbo.Clients;
 
 FOR JSON AUTO;

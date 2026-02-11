@@ -34,6 +34,7 @@
   "Swagger.Tag.TeamMemberAddresses": "Endereços dos Membros da Equipa",
   "Swagger.Tag.TeamMemberContacts": "Contactos dos Membros da Equipa",
   "Swagger.Tag.Auth": "Autenticação",
+  "Swagger.Tag.AddressTypes": "Tipos de Endereço",
 
   "Swagger.Endpoint.HealthCheck.Summary": "Verificação de Estado",
   "Swagger.Endpoint.HealthCheck.Description": "Verifica se a API está a funcionar corretamente",

@@ -14,6 +14,7 @@ public class TeamMemberContactMappingProfile : Profile
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
             .ForMember(dest => dest.TenantId, opt => opt.MapFrom(src => src.TenantId))
             .ForMember(dest => dest.TeamMemberId, opt => opt.MapFrom(src => src.TeamMemberId))
+            .ForMember(dest => dest.TeamMember, opt => opt.MapFrom(src => src.TeamMember.Name))
             .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
             .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
             .ForMember(dest => dest.Phone, opt => opt.MapFrom(src => src.Phone))

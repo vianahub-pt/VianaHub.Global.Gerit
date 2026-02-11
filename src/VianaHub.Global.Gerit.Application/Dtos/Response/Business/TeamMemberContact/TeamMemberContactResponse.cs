@@ -8,6 +8,7 @@ public class TeamMemberContactResponse
     public int Id { get; set; }
     public int TenantId { get; set; }
     public int TeamMemberId { get; set; }
+    public string TeamMember { get; set; }
     public string Name { get; set; }
     public string Email { get; set; }
     public string Phone { get; set; }

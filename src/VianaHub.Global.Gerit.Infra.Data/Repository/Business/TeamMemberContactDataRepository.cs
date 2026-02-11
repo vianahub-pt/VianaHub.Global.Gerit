@@ -18,23 +18,34 @@ public class TeamMemberContactDataRepository : ITeamMemberContactDataRepository
 
     public async Task<TeamMemberContactEntity> GetByIdAsync(int id, CancellationToken ct)
     {
-        return await _context.Set<TeamMemberContactEntity>().AsNoTracking().FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted, ct);
+        return await _context.Set<TeamMemberContactEntity>()
+            .AsNoTracking()
+            .Include(x => x.TeamMember)
+            .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted, ct);
     }
 
     public async Task<IEnumerable<TeamMemberContactEntity>> GetAllAsync(CancellationToken ct)
     {
-        return await _context.Set<TeamMemberContactEntity>().AsNoTracking().Where(x => !x.IsDeleted).OrderBy(x => x.Name).ToListAsync(ct);
+        return await _context.Set<TeamMemberContactEntity>()
+            .AsNoTracking()
+            .Include(x => x.TeamMember)
+            .Where(x => !x.IsDeleted).OrderBy(x => x.Name).ToListAsync(ct);
     }
 
     public async Task<ListPage<TeamMemberContactEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct)
     {
-        var query = _context.Set<TeamMemberContactEntity>().AsNoTracking().Where(x => !x.IsDeleted);
+        var query = _context.Set<TeamMemberContactEntity>()
+            .AsNoTracking()
+            .Include(x => x.TeamMember)
+            .Where(x => !x.IsDeleted);
 
         if (!string.IsNullOrWhiteSpace(request.Search))
         {
             var search = request.Search.Trim().ToLower();
             query = query.Where(x => EF.Functions.Like(x.Name.ToLower(), $"%{search}%") || 
-                                     EF.Functions.Like(x.Email.ToLower(), $"%{search}%"));
+                                     EF.Functions.Like(x.Email.ToLower(), $"%{search}%") ||
+                                     EF.Functions.Like(x.Phone.ToLower(), $"%{search}%") ||
+                                     EF.Functions.Like(x.TeamMember.Name.ToLower(), $"%{search}%"));
         }
 
         var count = await query.CountAsync(ct);
