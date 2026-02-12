@@ -7,6 +7,7 @@ using VianaHub.Global.Gerit.Domain.Tools.Notifications;
 
 namespace VianaHub.Global.Gerit.Api.Endpoints.Business;
 
+[EndpointMapper]
 public static class TeamMemberAddressEndpoint
 {
     public static void MapTeamMemberAddressEndpoints(this IEndpointRouteBuilder app)

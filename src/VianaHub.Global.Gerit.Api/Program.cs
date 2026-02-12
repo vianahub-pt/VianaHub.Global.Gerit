@@ -11,14 +11,9 @@ using VianaHub.Global.Gerit.Infra.Data.Interceptors;
 using VianaHub.Global.Gerit.Infra.IoC;
 using Hangfire;
 using Hangfire.SqlServer;
-using VianaHub.Global.Gerit.Infra.Job.Services;
 using VianaHub.Global.Gerit.Api.Security;
 using VianaHub.Global.Gerit.Infra.Data.Tools;
-using VianaHub.Global.Gerit.Api.Endpoints.Identity;
 using VianaHub.Global.Gerit.Application.Mappings.Identity;
-using VianaHub.Global.Gerit.Api.Endpoints.Billing;
-using VianaHub.Global.Gerit.Api.Endpoints.Business;
-using VianaHub.Global.Gerit.Api.Endpoints.Job;
 using VianaHub.Global.Gerit.Api.Middleware;
 
 namespace VianaHub.Global.Gerit.Api;
@@ -163,28 +158,8 @@ public class Program
             Authorization = new[] { new HangfireDashboardAuthorizationFilter() }
         });
 
-        app.MapActionEndpoints();
-        app.MapResourceEndpoints();
-        app.MapRoleEndpoints();
-        app.MapPlanEndpoints();
-        app.MapTenantEndpoints();
-        app.MapSubscriptionEndpoints();
-        app.MapUserEndpoints();
-        app.MapUserRoleEndpoints();
-        app.MapRolePermissionEndpoints();
-        app.MapAuthEndpoints();
-        app.MapJobEndpoints();
-        app.MapJwtKeyEndpoints();
-        app.MapFunctionEndpoints();
-        app.MapEquipmentEndpoints();
-        app.MapEquipmentTypeEndpoints();
-        app.MapVehicleEndpoints();
-        app.MapTeamMemberEndpoints();
-        app.MapTeamMemberAddressEndpoints();
-        app.MapTeamMemberContactEndpoints();
-        app.MapAddressTypeEndpoints();
-        app.MapClientEndpoints();
-        app.MapClientAddressEndpoints();
+        // Registro automático de todos os endpoints via reflexão
+        app.MapEndpointsFromAssembly();
 
         // Minimal API Endpoints
         var localization = app.Services.GetService(typeof(ILocalizationService)) as ILocalizationService;

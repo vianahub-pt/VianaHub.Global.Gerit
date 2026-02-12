@@ -1,6 +1,5 @@
 ﻿using Microsoft.OpenApi.Models;
 using VianaHub.Global.Gerit.Domain.Interfaces;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace VianaHub.Global.Gerit.Api.Configuration.Swagger;
 
@@ -111,8 +110,8 @@ public static class SwaggerSetup
         if (app.Environment.IsDevelopment())
         {
             // ✅ Adiciona o middleware de localização do Swagger ANTES do UseSwagger
-            app.UseMiddleware<VianaHub.Global.Gerit.Api.Middleware.SwaggerLocalizationMiddleware>(
-                new List<string> { "en-US", "pt-BR", "es-ES" }
+            app.UseMiddleware<Middleware.SwaggerLocalizationMiddleware>(
+                new List<string> { "pt-PT", "pt-BR", "en-US", "es-ES" }
             );
 
             app.UseSwagger(c =>

@@ -9,6 +9,7 @@ using VianaHub.Global.Gerit.Domain.Tools.Notifications;
 
 namespace VianaHub.Global.Gerit.Api.Endpoints.Identity;
 
+[EndpointMapper]
 public static class RoleEndpoint
 {
     public static void MapRoleEndpoints(this IEndpointRouteBuilder app)

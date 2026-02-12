@@ -9,6 +9,7 @@ using VianaHub.Global.Gerit.Application.Dtos.Request.Identity.RolePermission;
 
 namespace VianaHub.Global.Gerit.Api.Endpoints.Identity;
 
+[EndpointMapper]
 public static class RolePermissionEndpoint
 {
     public static void MapRolePermissionEndpoints(this IEndpointRouteBuilder app)

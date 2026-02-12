@@ -7,6 +7,7 @@ using VianaHub.Global.Gerit.Application.Interfaces.Business;
 
 namespace VianaHub.Global.Gerit.Api.Endpoints.Business;
 
+[EndpointMapper]
 public static class AddressTypeEndpoint
 {
     public static void MapAddressTypeEndpoints(this IEndpointRouteBuilder app)
@@ -59,7 +60,6 @@ public static class AddressTypeEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status400BadRequest)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError)
         .WithValidation<CreateAddressTypeRequest>();
-
         groupV1.MapPut("/{id}", async (int id, [FromBody] UpdateAddressTypeRequest request, [FromServices] IAddressTypeAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var updated = await appService.UpdateAsync(id, request, ct);

@@ -8,6 +8,7 @@ using VianaHub.Global.Gerit.Application.Interfaces.Business;
 
 namespace VianaHub.Global.Gerit.Api.Endpoints.Business;
 
+[EndpointMapper]
 public static class VehicleEndpoint
 {
     public static void MapVehicleEndpoints(this IEndpointRouteBuilder app)

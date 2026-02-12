@@ -8,6 +8,7 @@ using VianaHub.Global.Gerit.Domain.Tools.Notifications;
 
 namespace VianaHub.Global.Gerit.Api.Endpoints.Billing;
 
+[EndpointMapper]
 public static class TenantEndpoint
 {
     public static void MapTenantEndpoints(this IEndpointRouteBuilder app)

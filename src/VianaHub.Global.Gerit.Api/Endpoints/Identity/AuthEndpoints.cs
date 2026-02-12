@@ -6,6 +6,7 @@ using VianaHub.Global.Gerit.Application.Dtos.Request.Identity.Auth;
 
 namespace VianaHub.Global.Gerit.Api.Endpoints.Identity;
 
+[EndpointMapper]
 public static class AuthEndpoints
 {
     public static void MapAuthEndpoints(this WebApplication app)

@@ -10,6 +10,7 @@ namespace VianaHub.Global.Gerit.Api.Endpoints.Business;
 /// <summary>
 /// Endpoints para ClientAddress
 /// </summary>
+[EndpointMapper]
 public static class ClientAddressEndpoint
 {
     public static void MapClientAddressEndpoints(this IEndpointRouteBuilder app)

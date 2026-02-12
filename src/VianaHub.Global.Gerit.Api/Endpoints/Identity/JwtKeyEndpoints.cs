@@ -8,6 +8,7 @@ using VianaHub.Global.Gerit.Application.Dtos.Request.Identity.Auth;
 
 namespace VianaHub.Global.Gerit.Api.Endpoints.Identity;
 
+[EndpointMapper]
 public static class JwtKeyEndpoints
 {
     public static void MapJwtKeyEndpoints(this IEndpointRouteBuilder app)

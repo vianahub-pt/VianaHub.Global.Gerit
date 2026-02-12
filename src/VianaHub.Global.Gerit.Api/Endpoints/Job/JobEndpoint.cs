@@ -8,6 +8,7 @@ using VianaHub.Global.Gerit.Domain.Tools.Notifications;
 
 namespace VianaHub.Global.Gerit.Api.Endpoints.Job;
 
+[EndpointMapper]
 public static class JobEndpoint
 {
     public static void MapJobEndpoints(this IEndpointRouteBuilder app)
