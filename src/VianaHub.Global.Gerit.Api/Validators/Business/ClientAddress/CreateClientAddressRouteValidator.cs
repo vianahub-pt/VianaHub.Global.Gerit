@@ -1,0 +1,71 @@
+using FluentValidation;
+using VianaHub.Global.Gerit.Application.Dtos.Request.Business.ClientAddress;
+using VianaHub.Global.Gerit.Domain.Interfaces;
+
+namespace VianaHub.Global.Gerit.Api.Validators.Business.ClientAddress;
+
+/// <summary>
+/// Validador de rota para criação de ClientAddress
+/// </summary>
+public class CreateClientAddressRouteValidator : AbstractValidator<CreateClientAddressRequest>
+{
+    public CreateClientAddressRouteValidator(ILocalizationService localization)
+    {
+        RuleFor(x => x.ClientId)
+            .GreaterThan(0)
+            .WithMessage(localization.GetMessage("Api.Validator.ClientAddress.Create.ClientId"));
+
+        RuleFor(x => x.AddressTypeId)
+            .GreaterThan(0)
+            .WithMessage(localization.GetMessage("Api.Validator.ClientAddress.Create.AddressTypeId"));
+
+        RuleFor(x => x.Street)
+            .NotEmpty()
+            .WithMessage(localization.GetMessage("Api.Validator.ClientAddress.Create.Street"))
+            .MaximumLength(200)
+            .WithMessage(localization.GetMessage("Api.Validator.ClientAddress.Create.Street.MaximumLength", 200));
+
+        RuleFor(x => x.City)
+            .NotEmpty()
+            .WithMessage(localization.GetMessage("Api.Validator.ClientAddress.Create.City"))
+            .MaximumLength(100)
+            .WithMessage(localization.GetMessage("Api.Validator.ClientAddress.Create.City.MaximumLength", 100));
+
+        RuleFor(x => x.PostalCode)
+            .NotEmpty()
+            .WithMessage(localization.GetMessage("Api.Validator.ClientAddress.Create.PostalCode"))
+            .MaximumLength(20)
+            .WithMessage(localization.GetMessage("Api.Validator.ClientAddress.Create.PostalCode.MaximumLength", 20));
+
+        RuleFor(x => x.District)
+            .MaximumLength(100)
+            .When(x => !string.IsNullOrEmpty(x.District))
+            .WithMessage(localization.GetMessage("Api.Validator.ClientAddress.Create.District.MaximumLength", 100));
+
+        RuleFor(x => x.Neighborhood)
+            .MaximumLength(100)
+            .When(x => !string.IsNullOrEmpty(x.Neighborhood))
+            .WithMessage(localization.GetMessage("Api.Validator.ClientAddress.Create.Neighborhood.MaximumLength", 100));
+
+        RuleFor(x => x.StreetNumber)
+            .MaximumLength(20)
+            .When(x => !string.IsNullOrEmpty(x.StreetNumber))
+            .WithMessage(localization.GetMessage("Api.Validator.ClientAddress.Create.StreetNumber.MaximumLength", 20));
+
+        RuleFor(x => x.Complement)
+            .MaximumLength(200)
+            .When(x => !string.IsNullOrEmpty(x.Complement))
+            .WithMessage(localization.GetMessage("Api.Validator.ClientAddress.Create.Complement.MaximumLength", 200));
+
+        RuleFor(x => x.Notes)
+            .MaximumLength(500)
+            .When(x => !string.IsNullOrEmpty(x.Notes))
+            .WithMessage(localization.GetMessage("Api.Validator.ClientAddress.Create.Notes.MaximumLength", 500));
+
+        RuleFor(x => x.CountryCode)
+            .NotEmpty()
+            .WithMessage(localization.GetMessage("Api.Validator.ClientAddress.Create.CountryCode"))
+            .Length(2)
+            .WithMessage(localization.GetMessage("Api.Validator.ClientAddress.Create.CountryCode.Length"));
+    }
+}
