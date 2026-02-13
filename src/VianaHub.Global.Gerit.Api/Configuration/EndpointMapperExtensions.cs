@@ -1,5 +1,6 @@
 using System.Reflection;
 using Serilog;
+using VianaHub.Global.Gerit.Api.Endpoints;
 
 namespace VianaHub.Global.Gerit.Api.Configuration;
 
@@ -21,19 +22,47 @@ public static class EndpointMapperExtensions
         // Busca todos os tipos que possuem o atributo [EndpointMapper]
         var endpointMapperTypes = assembly.GetTypes()
             .Where(t => t.IsClass && t.IsAbstract && t.IsSealed && // Classes estáticas são abstract sealed
-                        t.GetCustomAttribute<Endpoints.EndpointMapperAttribute>() != null)
+                        t.GetCustomAttribute<EndpointMapperAttribute>() != null)
             .ToList();
 
         Log.Information("Descobertos {Count} endpoints para registro automático", endpointMapperTypes.Count);
 
         foreach (var endpointType in endpointMapperTypes)
         {
-            var attribute = endpointType.GetCustomAttribute<Endpoints.EndpointMapperAttribute>();
+            var attribute = endpointType.GetCustomAttribute<EndpointMapperAttribute>();
             
-            // Procura por método de extensão que corresponda ao padrão Map{TypeName}
-            // Ex: ActionEndpoint -> MapActionEndpoints
-            var expectedMethodName = attribute?.MethodName ?? 
-                $"Map{endpointType.Name.Replace("Endpoint", "").Replace("Endpoints", "")}Endpoints";
+            // Lógica de geração do nome do método:
+            // - Se MethodName está definido no atributo, usa ele
+            // - Caso contrário, converte o nome da classe para o padrão do método
+            // Exemplos:
+            //   ActionEndpoint   -> MapActionEndpoints   (singular -> plural)
+            //   AuthEndpoint     -> MapAuthEndpoints     (singular -> plural)
+            //   JwtKeyEndpoint   -> MapJwtKeyEndpoints   (singular -> plural)
+            string expectedMethodName;
+            if (!string.IsNullOrEmpty(attribute?.MethodName))
+            {
+                expectedMethodName = attribute.MethodName;
+            }
+            else
+            {
+                var className = endpointType.Name;
+                
+                // Se já termina com "Endpoints" (plural), apenas adiciona prefixo "Map"
+                if (className.EndsWith("Endpoints"))
+                {
+                    expectedMethodName = $"Map{className}";
+                }
+                // Se termina com "Endpoint" (singular), adiciona "s" e prefixo "Map"
+                else if (className.EndsWith("Endpoint"))
+                {
+                    expectedMethodName = $"Map{className}s";
+                }
+                // Fallback: adiciona "Endpoints" ao final
+                else
+                {
+                    expectedMethodName = $"Map{className}Endpoints";
+                }
+            }
             
             var mapMethod = endpointType.GetMethods(BindingFlags.Public | BindingFlags.Static)
                 .FirstOrDefault(m => 

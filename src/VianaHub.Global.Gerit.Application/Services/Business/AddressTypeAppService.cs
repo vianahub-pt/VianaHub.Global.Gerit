@@ -75,14 +75,15 @@ public class AddressTypeAppService : IAddressTypeAppService
 
     public async Task<bool> CreateAsync(CreateAddressTypeRequest request, CancellationToken ct)
     {
-        var exists = await _repo.ExistsByNameAndTenantAsync(request.Name, request.TenantId, ct);
+        var tenantId = _currentUser.GetTenantId();
+        var exists = await _repo.ExistsByNameAndTenantAsync(request.Name, tenantId, ct);
         if (exists)
         {
             _notify.Add(_localization.GetMessage("Application.Service.AddressType.Create.ResourceAlreadyExists"), 409);
             return false;
         }
 
-        var entity = new AddressTypeEntity(request.TenantId, request.Name, request.Description, _currentUser.GetUserId());
+        var entity = new AddressTypeEntity(tenantId, request.Name, request.Description, _currentUser.GetUserId());
         return await _domain.CreateAsync(entity, ct);
     }
 

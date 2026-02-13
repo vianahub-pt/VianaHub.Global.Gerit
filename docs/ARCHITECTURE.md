@@ -8,7 +8,6 @@
 
 ## Princípios Gerais
 
-
 - Separação de responsabilidades: cada camada (API, Application, Domain, Infra) tem responsabilidades bem definidas.
 - Código expressivo e testável: priorizar composição, injeção de dependência e interfaces para facilitar testes.
 - Tratamento centralizado de erros: o pipeline HTTP contém um middleware responsável por capturar exceções não tratadas e retornar respostas amigáveis.
@@ -21,6 +20,45 @@
 - Application: orquestração de casos de uso, mapeamento de DTOs, chamadas para serviços de domínio e retorno de modelos para a API.
 - Domain: regras de negócio, entidades ricas, validações e serviços de domínio. Deve conter pouca ou nenhuma dependência de infra-estrutura.
 - Infra: implementações de repositórios, acesso a banco, mapeamentos ORM, integrações externas.
+
+## Convenções de Nomenclatura de Endpoints
+
+### Arquivos de Endpoint
+- **Nome do arquivo**: Deve ser singular terminando com `Endpoint`
+  - ✅ Correto: `ActionEndpoint.cs`, `UserEndpoint.cs`, `AuthEndpoint.cs`
+  - ❌ Incorreto: `ActionsEndpoint.cs`, `ActionEndpoints.cs`
+
+### Classes de Endpoint
+- **Nome da classe**: Deve corresponder ao nome do arquivo (singular + `Endpoint`)
+  - ✅ Correto: `public static class ActionEndpoint`
+  - ❌ Incorreto: `public static class ActionEndpoints`
+
+### Métodos de Mapeamento
+- **Nome do método**: Deve ser plural terminando com `Endpoints`
+  - ✅ Correto: `MapActionEndpoints`, `MapUserEndpoints`, `MapAuthEndpoints`
+  - ❌ Incorreto: `MapActionEndpoint`, `MapAction`
+
+### Exemplo Completo
+```csharp
+// Arquivo: ActionEndpoint.cs
+namespace VianaHub.Global.Gerit.Api.Endpoints.Identity;
+
+[EndpointMapper]
+public static class ActionEndpoint
+{
+    public static void MapActionEndpoints(this IEndpointRouteBuilder app)
+    {
+        // Mapeamento dos endpoints
+    }
+}
+```
+
+### Justificativa
+Esta convenção segue o padrão do ASP.NET Core:
+- A **classe** representa um mapeador único (singular)
+- O **método** mapeia múltiplos endpoints (plural)
+- Facilita a descoberta automática via reflexão
+- Mantém consistência em toda a aplicação
 
 ## Tratamento de Exceções
 

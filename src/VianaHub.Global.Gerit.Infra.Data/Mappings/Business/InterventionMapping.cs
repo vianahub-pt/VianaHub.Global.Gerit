@@ -40,6 +40,10 @@ public class InterventionMapping : IEntityTypeConfiguration<InterventionEntity>
             .HasColumnName("VehicleId")
             .IsRequired();
 
+        builder.Property(x => x.InterventionStatusId)
+            .HasColumnName("InterventionStatusId")
+            .IsRequired();
+
         builder.Property(x => x.Title)
             .HasColumnName("Title")
             .HasColumnType("NVARCHAR(200)")
@@ -73,11 +77,6 @@ public class InterventionMapping : IEntityTypeConfiguration<InterventionEntity>
             .HasColumnType("DECIMAL(10,2)")
             .HasPrecision(10, 2)
             .IsRequired(false);
-
-        builder.Property(x => x.Status)
-            .HasColumnName("Status")
-            .HasColumnType("TINYINT")
-            .IsRequired();
 
         builder.Property(x => x.IsActive)
             .HasColumnName("IsActive")
@@ -114,13 +113,16 @@ public class InterventionMapping : IEntityTypeConfiguration<InterventionEntity>
 
         // Constraints de check
         builder.ToTable(t => t.HasCheckConstraint("CK_Interventions_EndDateTime", "[EndDateTime] IS NULL OR [EndDateTime] >= [StartDateTime]"));
-        builder.ToTable(t => t.HasCheckConstraint("CK_EstimatedValue", "[EstimatedValue] >= 0"));
 
         // Índices
-        builder.HasIndex(v => new { v.TenantId, v.StartDateTime })
+        builder.HasIndex(v => new { v.TenantId, v.StartDateTime, v.InterventionStatusId })
             .HasDatabaseName("IX_Interventions_Tenant_Date")
-            .IncludeProperties(v => new { v.ClientId, v.TeamMemberId, v.Status })
+            .IncludeProperties(v => new { v.ClientId, v.TeamMemberId })
             .HasFilter("[IsDeleted] = 0");
+
+        builder.HasIndex(v => new { v.Id, v.TenantId })
+            .HasDatabaseName("UQ_Interventions_Id_Tenant")
+            .IsUnique();
 
         // Relacionamentos
         builder.HasOne(x => x.Tenant)
@@ -131,14 +133,30 @@ public class InterventionMapping : IEntityTypeConfiguration<InterventionEntity>
 
         builder.HasOne(x => x.Client)
             .WithMany()
-            .HasForeignKey(x => x.ClientId)
+            .HasForeignKey(x => new { x.ClientId, x.TenantId })
+            .HasPrincipalKey(c => new { c.Id, c.TenantId })
             .HasConstraintName("FK_Interventions_Clients")
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(x => x.TeamMember)
             .WithMany()
-            .HasForeignKey(x => x.TeamMemberId)
+            .HasForeignKey(x => new { x.TeamMemberId, x.TenantId })
+            .HasPrincipalKey(tm => new { tm.Id, tm.TenantId })
             .HasConstraintName("FK_Interventions_TeamMembers")
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasOne(x => x.Vehicle)
+            .WithMany()
+            .HasForeignKey(x => new { x.VehicleId, x.TenantId })
+            .HasPrincipalKey(v => new { v.Id, v.TenantId })
+            .HasConstraintName("FK_Interventions_Vehicles")
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasOne(x => x.InterventionStatus)
+            .WithMany()
+            .HasForeignKey(x => new { x.InterventionStatusId, x.TenantId })
+            .HasPrincipalKey(s => new { s.Id, s.TenantId })
+            .HasConstraintName("FK_Interventions_Status")
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasMany(x => x.Contacts)

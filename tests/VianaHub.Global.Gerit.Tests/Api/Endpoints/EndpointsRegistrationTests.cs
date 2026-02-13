@@ -97,7 +97,7 @@ namespace VianaHub.Global.Gerit.Tests.Api.Endpoints
         public void MapSubscriptionEndpoints_DoesNotThrow()
         {
             var routeBuilder = CreateRouteBuilder();
-            var ex = Record.Exception(() => SubscriptionEndpoints.MapSubscriptionEndpoints(routeBuilder));
+            var ex = Record.Exception(() => SubscriptionEndpoint.MapSubscriptionEndpoints(routeBuilder));
             Assert.Null(ex);
         }
 
@@ -169,7 +169,7 @@ namespace VianaHub.Global.Gerit.Tests.Api.Endpoints
         public void MapJwtKeyEndpoints_DoesNotThrow()
         {
             var routeBuilder = CreateRouteBuilder();
-            var ex = Record.Exception(() => JwtKeyEndpoints.MapJwtKeyEndpoints(routeBuilder));
+            var ex = Record.Exception(() => JwtKeyEndpoint.MapJwtKeyEndpoints(routeBuilder));
             Assert.Null(ex);
         }
 
@@ -177,8 +177,8 @@ namespace VianaHub.Global.Gerit.Tests.Api.Endpoints
         [Trait("Layer", "Api")]
         public void MapAuthEndpoints_DoesNotThrow()
         {
-            var app = CreateWebApplication();
-            var ex = Record.Exception(() => AuthEndpoints.MapAuthEndpoints(app));
+            var routeBuilder = CreateRouteBuilder();
+            var ex = Record.Exception(() => AuthEndpoint.MapAuthEndpoints(routeBuilder));
             Assert.Null(ex);
         }
     }

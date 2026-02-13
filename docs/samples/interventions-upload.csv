@@ -1,0 +1,21 @@
+ClientId;TeamMemberId;VehicleId;InterventionStatusId;Title;Description;StartDateTime;EstimatedValue
+1;1;1;1;Inspeção Técnica Inicial;Visita técnica para avaliação de sistema de fossa;2026-03-01 08:00:00;150.00
+2;2;2;2;Desentupimento Urgente;Atendimento emergencial para desentupimento;2026-03-02 09:00:00;320.00
+3;3;3;3;Limpeza Preventiva;Serviço preventivo de limpeza de tubagens;2026-03-03 10:00:00;280.00
+4;4;4;4;Manutenção Programada;Manutenção periódica contratada;2026-03-04 08:30:00;400.00
+5;5;5;5;Revisão Sistema Hidráulico;Revisão completa do sistema hidráulico;2026-03-05 11:00:00;520.00
+6;6;6;6;Preparação de Equipamento;Preparação técnica antes de intervenção maior;2026-03-06 07:45:00;180.00
+7;7;7;7;Ajuste Técnico;Ajuste em sistema com falha operacional;2026-03-07 09:15:00;260.00
+8;8;8;8;Verificação Veicular;Inspeção associada a sistema externo;2026-03-08 14:00:00;210.00
+9;9;9;9;Atendimento no Local;Execução de serviço técnico presencial;2026-03-09 08:00:00;450.00
+10;10;10;10;Chegada Técnica;Início formal da intervenção no cliente;2026-03-10 08:30:00;300.00
+11;11;11;11;Execução Principal;Execução completa da intervenção contratada;2026-03-11 09:00:00;680.00
+12;12;12;12;Pausa Técnica;Intervenção pausada para ajustes;2026-03-12 10:00:00;190.00
+13;13;13;13;Reposição de Peças;Substituição de componentes danificados;2026-03-13 08:15:00;750.00
+14;14;14;14;Aprovação de Orçamento;Aguardando confirmação financeira;2026-03-14 09:30:00;120.00
+15;15;15;15;Contato Cliente;Intervenção aguardando retorno do cliente;2026-03-15 11:45:00;90.00
+16;16;16;16;Reagendamento Serviço;Serviço reagendado por solicitação;2026-03-16 13:00:00;200.00
+17;17;17;17;Finalização Técnica;Serviço finalizado conforme escopo;2026-03-17 15:00:00;980.00
+18;18;18;18;Finalização com Ajustes;Encerramento com pequenas pendências;2026-03-18 16:30:00;870.00
+19;19;19;19;Faturamento Serviço;Intervenção concluída e faturada;2026-03-19 09:00:00;1200.00
+20;20;20;20;Cancelamento Operacional;Intervenção cancelada por decisão estratégica;2026-03-20 10:30:00;0.00

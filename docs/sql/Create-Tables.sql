@@ -60,6 +60,7 @@ CREATE TABLE dbo.AddressTypes (									                            -- Tipos de 
     Id			INT IDENTITY(1,1)	NOT NULL,						                        -- Identificador único do tenant, chave primária
     TenantId	INT					NOT NULL,						                        -- Tenant dono do contato
     Name	    NVARCHAR(200)		NOT NULL,						                        -- Nome do tipo de endereço
+    Description NVARCHAR(500)       NOT NULL,                                               -- Descrição do tipo de endereço
     IsActive	BIT					NOT NULL DEFAULT 1,                                     -- Flag de ativo
     IsDeleted	BIT					NOT NULL DEFAULT 0,                                     -- Soft delete
     CreatedBy	INT         		NOT NULL,						                        -- Usuário criador
@@ -115,7 +116,6 @@ CREATE TABLE dbo.TenantFiscalData (										                    -- Dados fiscai
     ModifiedBy	    INT         		    NULL,						                    -- Usuário modificador
     ModifiedAt		DATETIME2(7)			NULL,						                    -- Data de modificação
 	CONSTRAINT PK_TenantFiscalData PRIMARY KEY CLUSTERED (Id),			                    -- PK   
-    CONSTRAINT UQ_TenantFiscalData_Tenant_Active UNIQUE (TenantId, IsActive),               -- Garantir que só pode haver um registro ativo por tenant (soft delete)
     CONSTRAINT FK_TenantFiscalData_Tenant FOREIGN KEY (TenantId) REFERENCES dbo.Tenants(Id) -- FK para tenant    
 );
 GO
@@ -142,7 +142,6 @@ CREATE TABLE dbo.Subscriptions (                                                
     CONSTRAINT FK_Subscriptions_Tenant FOREIGN KEY (TenantId) REFERENCES dbo.Tenants(Id),       -- Tenant-safe
     CONSTRAINT FK_Subscriptions_Plan FOREIGN KEY (PlanId) REFERENCES dbo.Plans(Id),             -- Global plan
     CONSTRAINT UQ_Subscriptions_TenantId_Id UNIQUE (TenantId, Id),                              -- Chave alternativa (TenantId, Id) p/ FKs compostas
-    CONSTRAINT UQ_Subscriptions_Tenant_Active UNIQUE (TenantId, IsActive),                      -- Garantir que só pode haver um registro ativo por tenant (soft delete)
     CONSTRAINT CK_Subscriptions_DeletedImpliesInactive CHECK (IsDeleted = 0 OR IsActive = 0)    -- Se está deletado, não pode estar ativo
         
 );
@@ -319,7 +318,7 @@ CREATE TABLE dbo.JobDefinitions (
     IsActive                BIT					NOT NULL DEFAULT 1,                    -- Indica se o job está ativo
     IsDeleted               BIT					NOT NULL DEFAULT 0,                    -- Indica se foi excluído (soft delete)
     CreatedBy               INT					NOT NULL,                              -- Quem criou o job
-    CreatedAt               DATETIME2(7)		NOT NULL DEFAULT GETDATE(),            -- Data de criação
+    CreatedAt               DATETIME2(7)		NOT NULL DEFAULT SYSDATETIME(),        -- Data de criação
     UpdatedBy               INT					    NULL,                              -- Quem fez a última alteração
     UpdatedAt               DATETIME2(7)		    NULL,                              -- Data da última alteração
     CONSTRAINT UQ_Job_JobName UNIQUE (JobName),
@@ -400,7 +399,7 @@ CREATE TABLE dbo.ClientContacts (															-- Contatos do client
 	CONSTRAINT PK_ClientContacts PRIMARY KEY CLUSTERED (Id),                                -- PK
     CONSTRAINT UQ_ClientContacts_Client_Email UNIQUE (TenantId, ClientId, Email),			-- Email único por client
     CONSTRAINT FK_ClientContacts_Tenant FOREIGN KEY (TenantId) REFERENCES dbo.Tenants(Id),	-- FK para tenant
-    CONSTRAINT FK_ClientContacts_Client FOREIGN KEY (ClientId) REFERENCES dbo.Clients(Id)	-- FK para client
+    CONSTRAINT FK_ClientContacts_Client FOREIGN KEY (ClientId, TenantId) REFERENCES dbo.Clients(Id, TenantId)	-- FK para client
 );
 GO
 CREATE TABLE dbo.ClientAddresses (															-- Endereços do client
@@ -428,7 +427,7 @@ CREATE TABLE dbo.ClientAddresses (															-- Endereços do client
     ModifiedAt		DATETIME2(7)			NULL,						                    -- Data de modificação
 	CONSTRAINT PK_ClientAddresses PRIMARY KEY CLUSTERED (Id),		                        -- PK
     CONSTRAINT FK_ClientAddresses_Tenant FOREIGN KEY (TenantId) REFERENCES dbo.Tenants(Id),	-- FK para tenant
-    CONSTRAINT FK_ClientAddresses_Client FOREIGN KEY (ClientId) REFERENCES dbo.Clients(Id),	-- FK para client
+    CONSTRAINT FK_ClientAddresses_Client FOREIGN KEY (ClientId, TenantId) REFERENCES dbo.Clients(Id, TenantId),	-- FK para client
     CONSTRAINT FK_ClientAddresses_AddressType FOREIGN KEY (AddressTypeId, TenantId) REFERENCES dbo.AddressTypes(Id, TenantId)	-- FK para tipo de endereço
 );
 GO
@@ -449,7 +448,24 @@ CREATE TABLE dbo.ClientFiscalData (										                    -- Dados fiscai
     ModifiedAt		DATETIME2(7)			NULL,						                    -- Data de modificação
 	CONSTRAINT PK_ClientFiscalData PRIMARY KEY CLUSTERED (Id),                              -- PK			
     CONSTRAINT FK_ClientFiscalData_Tenant FOREIGN KEY (TenantId) REFERENCES dbo.Tenants(Id),-- FK para tenant    
-	CONSTRAINT FK_ClientFiscalData_Client FOREIGN KEY (ClientId) REFERENCES dbo.Clients(Id) -- FK para client
+	CONSTRAINT FK_ClientFiscalData_Client FOREIGN KEY (ClientId, TenantId) REFERENCES dbo.Clients(Id, TenantId) -- FK para client
+);
+GO
+CREATE TABLE dbo.Teams (                                                                    -- Times de trabalho, projetos, squads, etc.
+    Id              INT IDENTITY(1,1)   NOT NULL,                                           -- Identificador do time, chave primária
+    TenantId        INT                 NOT NULL,                                           -- Tenant dono do time
+    Name            NVARCHAR(150)       NOT NULL,                                           -- Nome do time
+    Description     NVARCHAR(500)       NOT NULL,                                           -- Descrição do time
+    IsActive		BIT					NOT NULL DEFAULT 1,				                    -- Flag de ativo
+    IsDeleted		BIT					NOT NULL DEFAULT 0,				                    -- Soft delete
+    CreatedBy		INT         		NOT NULL,						                    -- Usuário criador
+    CreatedAt		DATETIME2(7)		NOT NULL DEFAULT SYSDATETIME(),	                    -- Data de criação
+    ModifiedBy	    INT         		    NULL,						                    -- Usuário modificador
+    ModifiedAt		DATETIME2(7)			NULL,						                    -- Data de modificação
+    CONSTRAINT PK_Teams PRIMARY KEY CLUSTERED (Id),                                         -- PK			
+    CONSTRAINT UQ_Teams_Id_Tenant UNIQUE (Id, TenantId),                                    -- Garantir que o Id é único dentro do tenant (para FKs compostas)
+    CONSTRAINT UQ_Teams_Name_Tenant UNIQUE (Name, TenantId),                                -- Nome único por tenant
+    CONSTRAINT FK_Teams_Tenant FOREIGN KEY (TenantId) REFERENCES dbo.Tenants(Id)            -- FK para tenant
 );
 GO
 CREATE TABLE dbo.TeamMembers (
@@ -518,6 +534,23 @@ CREATE TABLE dbo.TeamMemberAddresses (									                    -- Endereços 
     CONSTRAINT FK_TeamMemberAddresses_AddressType FOREIGN KEY (AddressTypeId, TenantId) REFERENCES dbo.AddressTypes(Id, TenantId)	-- FK para tipo de endereço
 );
 GO
+CREATE TABLE dbo.TeamMembersTeams (                                                         -- Associação N:N entre membros e times (um membro pode estar em vários times e um time pode ter vários membros)
+    Id              INT IDENTITY(1,1)   NOT NULL,                                           -- Identificador, chave primária
+    TenantId        INT                 NOT NULL,                                           -- Tenant dono
+    TeamId          INT                 NOT NULL,                                           -- Time ao qual o membro pertence
+    TeamMemberId    INT                 NOT NULL,                                           -- Membro do time
+    IsLeader        BIT                 NOT NULL DEFAULT 0,                                 -- Indica se o membro é líder do time
+    IsActive		BIT					NOT NULL DEFAULT 1,				                    -- Flag de ativo
+    IsDeleted		BIT					NOT NULL DEFAULT 0,				                    -- Soft delete
+    CreatedBy		INT         		NOT NULL,						                    -- Usuário criador
+    CreatedAt		DATETIME2(7)		NOT NULL DEFAULT SYSDATETIME(),	                    -- Data de criação
+    ModifiedBy	    INT         		    NULL,						                    -- Usuário modificador
+    ModifiedAt		DATETIME2(7)			NULL,						                    -- Data de modificação
+    CONSTRAINT PK_TeamMembersTeams PRIMARY KEY CLUSTERED (Id),                              -- PK
+    CONSTRAINT FK_TeamMembersTeams_Team FOREIGN KEY (TeamId, TenantId) REFERENCES dbo.Teams(Id, TenantId),              -- FK para time
+    CONSTRAINT FK_TeamMembersTeams_Member FOREIGN KEY (TeamMemberId, TenantId) REFERENCES dbo.TeamMembers(Id, TenantId) -- FK para membro do time (tenant-safe
+);
+GO
 CREATE TABLE dbo.EquipmentTypes (									                        -- Tipos de equipamentos do tenant
     Id			INT IDENTITY(1,1)	NOT NULL,						                        -- Identificador único do tenant, chave primária
     TenantId	INT					NOT NULL,						                        -- Tenant dono do contato
@@ -529,9 +562,9 @@ CREATE TABLE dbo.EquipmentTypes (									                        -- Tipos de eq
     CreatedAt	DATETIME2(7)		NOT NULL DEFAULT SYSDATETIME(),	                        -- Data de criação
     ModifiedBy	INT         		NULL,							                        -- Usuário modificador
     ModifiedAt	DATETIME2(7)		NULL,							                        -- Data de modificação
-	CONSTRAINT PK_EquipmentTypes PRIMARY KEY CLUSTERED (Id),                               -- PK
-    CONSTRAINT UQ_EquipmentTypes_Id_Tenant UNIQUE (Id, TenantId),                          -- Garantir que o Id é único dentro do tenant (para FKs compostas)
-    CONSTRAINT UQ_EquipmentTypes_Tenant_Name UNIQUE (TenantId, Name),                      -- Tipo de endereço único por tenant
+	CONSTRAINT PK_EquipmentTypes PRIMARY KEY CLUSTERED (Id),                                -- PK
+    CONSTRAINT UQ_EquipmentTypes_Id_Tenant UNIQUE (Id, TenantId),                           -- Garantir que o Id é único dentro do tenant (para FKs compostas)
+    CONSTRAINT UQ_EquipmentTypes_Tenant_Name UNIQUE (TenantId, Name),                       -- Tipo de endereço único por tenant
     CONSTRAINT FK_EquipmentTypes_Tenant FOREIGN KEY (TenantId) REFERENCES dbo.Tenants(Id)	-- FK para tenant
 );
 GO
@@ -549,6 +582,7 @@ CREATE TABLE dbo.Equipments (
     ModifiedBy	        INT         		    NULL,						            -- Usuário modificador
     ModifiedAt		    DATETIME2(7)			NULL,						            -- Data de modificação
 	CONSTRAINT PK_Equipments PRIMARY KEY CLUSTERED (Id),                                -- PK
+    CONSTRAINT UQ_Equipments_Id_Tenant UNIQUE (Id, TenantId),							-- Garantir que o Id é único dentro do tenant (para FKs compostas)
     CONSTRAINT FK_Equipments_Tenant FOREIGN KEY (TenantId) REFERENCES dbo.Tenants(Id),  -- FK para tenant
     CONSTRAINT FK_Equipments_EquipamentType FOREIGN KEY (EquipmentTypeId, TenantId) REFERENCES dbo.EquipmentTypes(Id, TenantId)	                                -- FK para tipo de equipamento (tenant-safe)
 );
@@ -575,36 +609,52 @@ CREATE TABLE dbo.Vehicles (                                                     
 	CONSTRAINT FK_Vehicles_Tenants FOREIGN KEY (TenantId) REFERENCES dbo.Tenants(Id)        -- FK para tenant
 );
 GO
-CREATE TABLE dbo.Interventions (                                                                                            -- Intervenções agendadas
-    Id				INT IDENTITY(1,1)	NOT NULL,                                                                           -- Identificador da intervenção, chave primária
-	TenantId        INT					NOT NULL,                                                                           -- Tenant dono da intervenção
-    ClientId		INT					NOT NULL,                                                                           -- Cliente associado à intervenção
-	TeamMemberId	INT					NOT NULL,										                                    -- Endereço do membro do time
-    VehicleId		INT					NOT NULL,                                                                           -- Veículo associado à intervenção
-	Title			NVARCHAR(200)		NOT NULL,                                                                           -- Título da intervenção
-    Description		NVARCHAR(2000)		NOT NULL,                                                                           -- Descrição detalhada da intervenção
-    StartDateTime	DATETIME2(7)		NOT NULL,                                                                           -- Data e hora de início da intervenção
-    EndDateTime		DATETIME2(7)			NULL,                                                                           -- Data e hora de término (pode ser atualizado após conclusão)
-    EstimatedValue	DECIMAL(10,2)		NOT NULL CHECK (EstimatedValue >= 0),                                               -- Valor estimado da intervenção
-	RealValue		DECIMAL(10,2)			NULL,                                                                           -- Valor real da intervenção (pode ser atualizado após conclusão)
-    Status			TINYINT				NOT NULL,                                                                           -- Status da intervenção (0=Agendada, 1=Em andamento, 2=Concluída, 3=Cancelada)
-    IsActive		BIT					NOT NULL DEFAULT 1,								                                    -- Flag de ativo
-    IsDeleted		BIT					NOT NULL DEFAULT 0,								                                    -- Soft delete
-    CreatedBy		INT         		NOT NULL,										                                    -- Usuário criador
-    CreatedAt		DATETIME2(7)		NOT NULL DEFAULT SYSDATETIME(),					                                    -- Data de criação
-    ModifiedBy	    INT         		    NULL,										                                    -- Usuário modificador
-    ModifiedAt		DATETIME2(7)			NULL,										                                    -- Data de modificação
-	CONSTRAINT PK_Interventions PRIMARY KEY CLUSTERED (Id),                                                                 -- PK
-    CONSTRAINT UQ_Interventions_Id_Tenant UNIQUE (Id, TenantId),                                                            -- Garantir que o Id é único dentro do tenant (para FKs compostas)
-    CONSTRAINT UQ_Interventions_Tenant_Title UNIQUE (TenantId, Title),			                                            -- Título único por tenant
-	CONSTRAINT FK_Interventions_Tenants FOREIGN KEY (TenantId) REFERENCES dbo.Tenants(Id),                                  -- FK para tenant
-	CONSTRAINT FK_Interventions_Clients FOREIGN KEY (ClientId, TenantId) REFERENCES dbo.Clients(Id, TenantId),              -- FK para client
-	CONSTRAINT FK_Interventions_TeamMembers FOREIGN KEY (TeamMemberId, TenantId) REFERENCES dbo.TeamMembers(Id, TenantId),  -- FK para membro do time
-	CONSTRAINT FK_Interventions_Vehicles FOREIGN KEY (VehicleId, TenantId) REFERENCES dbo.Vehicles(Id, TenantId),           -- FK para veículo
-	CONSTRAINT CK_Interventions_EndDateTime	CHECK ( EndDateTime IS NULL OR EndDateTime >= StartDateTime)                    -- Garantir que a data de término seja posterior à data de início (ou nula)
+CREATE TABLE dbo.InterventionStatus (                                                           -- Status das intervenções
+    Id			INT IDENTITY(1,1)	NOT NULL,                                                   -- Identificador, chave primária
+    TenantId	INT					NOT NULL,                                                   -- Tenant dono
+    Name	    NVARCHAR(200)		NOT NULL,                                                   -- Nome do status (Agendada, Em andamento, Concluída, Cancelada)
+    Description NVARCHAR(500)		NOT NULL,                                                   -- Descrição do status
+    IsActive	BIT					NOT NULL DEFAULT 1,                                         -- Flag de ativo
+    IsDeleted	BIT					NOT NULL DEFAULT 0,                                         -- Soft delete
+    CreatedBy	INT         		NOT NULL,						                            -- Usuário criador
+    CreatedAt	DATETIME2(7)		NOT NULL DEFAULT SYSDATETIME(),	                            -- Data de criação
+    ModifiedBy	INT         		NULL,							                            -- Usuário modificador
+    ModifiedAt	DATETIME2(7)		NULL,							                            -- Data de modificação
+	CONSTRAINT PK_InterventionStatus PRIMARY KEY CLUSTERED (Id),                                -- PK
+    CONSTRAINT UQ_InterventionStatus_Id_Tenant UNIQUE (Id, TenantId),                           -- Garantir que o Id é único dentro do tenant (para FKs compostas)
+    CONSTRAINT UQ_InterventionStatus_Tenant_Name UNIQUE (TenantId, Name),                       -- Tipo de endereço único por tenant
+    CONSTRAINT FK_InterventionStatus_Tenant FOREIGN KEY (TenantId) REFERENCES dbo.Tenants(Id)   -- FK para tenant
 );
 GO
-
+CREATE TABLE dbo.Interventions (                                                                                                    -- Intervenções agendadas
+    Id				        INT IDENTITY(1,1)	NOT NULL,                                                                           -- Identificador da intervenção, chave primária
+	TenantId                INT					NOT NULL,                                                                           -- Tenant dono da intervenção
+    ClientId		        INT					NOT NULL,                                                                           -- Cliente associado à intervenção
+	TeamMemberId	        INT					NOT NULL,                                                                           -- Endereço do membro do time
+    VehicleId		        INT					NOT NULL,                                                                           -- Veículo associado à intervenção
+    InterventionStatusId    INT				    NOT NULL,                                                                           -- Status da intervenção
+	Title			        NVARCHAR(200)		NOT NULL,                                                                           -- Título da intervenção
+    Description		        NVARCHAR(2000)		NOT NULL,                                                                           -- Descrição detalhada da intervenção
+    StartDateTime	        DATETIME2(7)		NOT NULL,                                                                           -- Data e hora de início da intervenção
+    EndDateTime		        DATETIME2(7)			NULL,                                                                           -- Data e hora de término (pode ser atualizado após conclusão)
+    EstimatedValue	        DECIMAL(10,2)		NOT NULL CHECK (EstimatedValue >= 0),                                               -- Valor estimado da intervenção
+	RealValue		        DECIMAL(10,2)			NULL,                                                                           -- Valor real da intervenção (pode ser atualizado após conclusão)
+    IsActive		        BIT					NOT NULL DEFAULT 1,								                                    -- Flag de ativo
+    IsDeleted		        BIT					NOT NULL DEFAULT 0,								                                    -- Soft delete
+    CreatedBy		        INT         		NOT NULL,										                                    -- Usuário criador
+    CreatedAt		        DATETIME2(7)		NOT NULL DEFAULT SYSDATETIME(),					                                    -- Data de criação
+    ModifiedBy	            INT         		    NULL,										                                    -- Usuário modificador
+    ModifiedAt		        DATETIME2(7)			NULL,										                                    -- Data de modificação
+	CONSTRAINT PK_Interventions PRIMARY KEY CLUSTERED (Id),                                                                         -- PK
+    CONSTRAINT UQ_Interventions_Id_Tenant UNIQUE (Id, TenantId),                                                                    -- Garantir que o Id é único dentro do tenant (para FKs compostas)
+	CONSTRAINT FK_Interventions_Tenants FOREIGN KEY (TenantId) REFERENCES dbo.Tenants(Id),                                          -- FK para tenant
+	CONSTRAINT FK_Interventions_Clients FOREIGN KEY (ClientId, TenantId) REFERENCES dbo.Clients(Id, TenantId),                      -- FK para client
+	CONSTRAINT FK_Interventions_TeamMembers FOREIGN KEY (TeamMemberId, TenantId) REFERENCES dbo.TeamMembers(Id, TenantId),          -- FK para membro do time
+	CONSTRAINT FK_Interventions_Vehicles FOREIGN KEY (VehicleId, TenantId) REFERENCES dbo.Vehicles(Id, TenantId),                   -- FK para veículo
+    CONSTRAINT FK_Interventions_Status FOREIGN KEY (InterventionStatusId, TenantId) REFERENCES dbo.InterventionStatus(Id, TenantId),-- FK para status da intervenção
+	CONSTRAINT CK_Interventions_EndDateTime	CHECK ( EndDateTime IS NULL OR EndDateTime >= StartDateTime)                            -- Garantir que a data de término seja posterior à data de início (ou nula)
+);
+GO
 CREATE TABLE dbo.InterventionContacts (									-- Contatos do TeamMember
     Id				INT IDENTITY(1,1)	NOT NULL,						-- Identificador do contato, chave primária
     TenantId		INT					NOT NULL,						-- Tenant dono do contato
@@ -653,6 +703,55 @@ CREATE TABLE dbo.InterventionAddresses (								                                
     CONSTRAINT FK_InterventionAddresses_AddressType FOREIGN KEY (AddressTypeId, TenantId) REFERENCES dbo.AddressTypes(Id, TenantId)	-- FK para tipo de endereço
 );
 GO
+CREATE TABLE dbo.InterventionTeams (
+    Id              INT IDENTITY(1,1)   NOT NULL,                                                                   -- Identificador, chave primária
+    TenantId        INT                 NOT NULL,                                                                   -- Tenant dono
+    InterventionId  INT                 NOT NULL,                                                                   -- Intervenção associada
+    TeamId          INT                 NOT NULL,                                                                   -- Time associado à intervenção
+    IsActive		BIT					NOT NULL DEFAULT 1,				                                            -- Flag de ativo
+    IsDeleted		BIT					NOT NULL DEFAULT 0,				                                            -- Soft delete
+    CreatedBy		INT         		NOT NULL,						                                            -- Usuário criador
+    CreatedAt		DATETIME2(7)		NOT NULL DEFAULT SYSDATETIME(),	                                            -- Data de criação
+    ModifiedBy	    INT         		    NULL,						                                            -- Usuário modificador
+    ModifiedAt		DATETIME2(7)			NULL,						                                            -- Data de modificação
+    CONSTRAINT PK_InterventionTeams PRIMARY KEY CLUSTERED (Id),		                                                -- PK
+    CONSTRAINT UQ_InterventionTeams_Id_Tenant UNIQUE (Id, TenantId),                                                -- Garantir que o Id é único dentro do tenant (para FKs compostas)
+    CONSTRAINT FK_InterventionTeams_Intervention FOREIGN KEY (InterventionId, TenantId) REFERENCES dbo.Interventions(Id, TenantId),
+    CONSTRAINT FK_InterventionTeams_Team FOREIGN KEY (TeamId, TenantId) REFERENCES dbo.Teams(Id, TenantId)
+);
+GO
+CREATE TABLE dbo.InterventionTeamVehicles (                                                                             -- Associação entre equipes de intervenção e veículos utilizados (uma equipe pode usar vários veículos e um veículo pode ser usado por várias equipes em intervenções diferentes)
+    Id                  INT IDENTITY(1,1)   NOT NULL,                                                                   -- Identificador, chave primária
+    TenantId            INT                 NOT NULL,                                                                   -- Tenant dono
+    InterventionTeamId  INT                 NOT NULL,                                                                   -- Equipe associada à intervenção
+    VehicleId           INT                 NOT NULL,                                                                   -- Veículo associado à intervenção
+    IsActive		    BIT					NOT NULL DEFAULT 1,				                                            -- Flag de ativo
+    IsDeleted		    BIT					NOT NULL DEFAULT 0,				                                            -- Soft delete
+    CreatedBy		    INT         		NOT NULL,						                                            -- Usuário criador
+    CreatedAt		    DATETIME2(7)		NOT NULL DEFAULT SYSDATETIME(),	                                            -- Data de criação
+    ModifiedBy	        INT         		    NULL,						                                            -- Usuário modificador
+    ModifiedAt		    DATETIME2(7)			NULL,						                                            -- Data de modificação
+    CONSTRAINT PK_InterventionTeamVehicles PRIMARY KEY CLUSTERED (Id),                                                  -- PK
+    CONSTRAINT FK_InterventionTeamVehicles_InterventionTeam FOREIGN KEY (InterventionTeamId) REFERENCES dbo.InterventionTeams(Id),  -- FK para equipe de intervenção
+    CONSTRAINT FK_InterventionTeamVehicles_Vehicle FOREIGN KEY (VehicleId, TenantId) REFERENCES dbo.Vehicles(Id, TenantId)          -- FK para veículo (tenant-safe
+);
+GO
+CREATE TABLE dbo.InterventionTeamEquipments (                                                                           -- Associação entre equipes de intervenção e equipamentos utilizados (uma equipe pode usar vários equipamentos e um equipamento pode ser usado por várias equipes em intervenções diferentes)
+    Id                  INT IDENTITY(1,1)   NOT NULL,                                                                   -- Identificador, chave primária
+    TenantId            INT                 NOT NULL,                                                                   -- Tenant dono
+    InterventionTeamId  INT                 NOT NULL,                                                                   -- Equipe associada à intervenção
+    EquipmentId         INT                 NOT NULL,                                                                   -- Equipamento associado à intervenção
+    IsActive		    BIT					NOT NULL DEFAULT 1,				                                            -- Flag de ativo
+    IsDeleted		    BIT					NOT NULL DEFAULT 0,				                                            -- Soft delete
+    CreatedBy		    INT         		NOT NULL,						                                            -- Usuário criador
+    CreatedAt		    DATETIME2(7)		NOT NULL DEFAULT SYSDATETIME(),	                                            -- Data de criação
+    ModifiedBy	        INT         		    NULL,						                                            -- Usuário modificador
+    ModifiedAt		    DATETIME2(7)			NULL,						                                            -- Data de modificação
+    CONSTRAINT PK_InterventionTeamEquipments PRIMARY KEY CLUSTERED (Id),                                                -- PK
+    CONSTRAINT FK_InterventionTeamEquipments_InterventionTeam FOREIGN KEY (InterventionTeamId) REFERENCES dbo.InterventionTeams(Id),    -- FK para equipe de intervenção
+    CONSTRAINT FK_InterventionTeamEquipments_Equipment FOREIGN KEY (EquipmentId, TenantId) REFERENCES dbo.Equipments(Id, TenantId)      -- FK para equipamento (tenant-safe
+);
+
 
 CREATE UNIQUE INDEX UX_Clients_Tenant_Name_Active					ON dbo.Clients (TenantId, Name) WHERE IsDeleted = 0;
 CREATE UNIQUE INDEX UX_ClientAddresses_Primary						ON dbo.ClientAddresses (ClientId) WHERE IsPrimary = 1 AND IsDeleted = 0;
@@ -660,8 +759,8 @@ CREATE UNIQUE INDEX UX_ClientFiscalData_Client_Active               ON dbo.Clien
 CREATE UNIQUE INDEX UX_TeamMembers_Tenant_TaxNumber                 ON dbo.TeamMembers (TenantId, TaxNumber) WHERE TaxNumber IS NOT NULL AND IsDeleted = 0;
 CREATE UNIQUE INDEX UX_TenantFiscalData_NIF_Active                  ON dbo.TenantFiscalData (NIF) WHERE IsDeleted = 0;
 CREATE UNIQUE INDEX UX_ClientFiscalData_TaxNumber_Active            ON dbo.ClientFiscalData (TaxNumber) WHERE IsDeleted = 0;
-
-
+CREATE UNIQUE INDEX UX_TenantFiscalData_Active                      ON dbo.TenantFiscalData(TenantId) WHERE IsActive = 1 AND IsDeleted = 0;
+CREATE UNIQUE INDEX UX_Subscriptions_Active                         ON dbo.Subscriptions(TenantId) WHERE IsActive = 1 AND IsDeleted = 0;
 
 
 CREATE NONCLUSTERED INDEX IX_TenantContacts_TenantId				ON dbo.TenantContacts (TenantId) WHERE IsDeleted = 0;
@@ -673,9 +772,10 @@ CREATE NONCLUSTERED INDEX IX_TeamMembers_FunctionId                 ON dbo.TeamM
 CREATE NONCLUSTERED INDEX IX_TeamMembers_Tenant_TaxNumber           ON dbo.TeamMembers (TenantId, TaxNumber) WHERE TaxNumber IS NOT NULL AND IsDeleted = 0;
 CREATE NONCLUSTERED INDEX IX_TeamMemberContacts_TeamMemberId		ON dbo.TeamMemberContacts (TeamMemberId) INCLUDE (TenantId) WHERE IsDeleted = 0;
 CREATE NONCLUSTERED INDEX IX_TeamMemberAddresses_TeamMemberId		ON dbo.TeamMemberAddresses (TeamMemberId) INCLUDE (TenantId) WHERE IsDeleted = 0;
-CREATE NONCLUSTERED INDEX IX_Interventions_Tenant_Date				ON dbo.Interventions (TenantId, StartDateTime, Status) INCLUDE (ClientId, TeamMemberId) WHERE IsDeleted = 0;
+CREATE NONCLUSTERED INDEX IX_Interventions_Tenant_Date              ON dbo.Interventions (TenantId, StartDateTime, InterventionStatusId) INCLUDE (ClientId, TeamMemberId) WHERE IsDeleted = 0;
 CREATE NONCLUSTERED INDEX IX_InterventionContacts_InterventionId	ON dbo.InterventionContacts (InterventionId) INCLUDE (TenantId) WHERE IsDeleted = 0;
 CREATE NONCLUSTERED INDEX IX_InterventionAddresses_InterventionId	ON dbo.InterventionAddresses (InterventionId) INCLUDE (TenantId) WHERE IsDeleted = 0;
+CREATE NONCLUSTERED INDEX IX_InterventionStatus_Tenant              ON dbo.InterventionStatus(TenantId) WHERE IsDeleted = 0;
 CREATE NONCLUSTERED INDEX IX_UserRoles_UserId						ON dbo.UserRoles (UserId) INCLUDE (TenantId, RoleId); 
 CREATE NONCLUSTERED INDEX IX_UserRoles_RoleId						ON dbo.UserRoles (RoleId) INCLUDE (TenantId, UserId); 
 CREATE NONCLUSTERED INDEX IX_RolePermissions_RoleId					ON dbo.RolePermissions (RoleId) INCLUDE (TenantId, ResourceId, ActionId); 
@@ -701,7 +801,7 @@ RETURN
     SELECT 1 AS fn_access
     WHERE 
         -- SuperAdmin tem acesso a tudo (bypass RLS)
-        CAST(SESSION_CONTEXT(N'IsSuperAdmin') AS INT) = 1
+        ISNULL(CAST(SESSION_CONTEXT(N'IsSuperAdmin') AS INT), 0) = 1
         OR
         -- Tenant ID deve corresponder
         -- SESSION_CONTEXT retorna VARBINARY, então convertemos de volta para INT
@@ -711,99 +811,128 @@ RETURN
         );
 GO
 
-CREATE SECURITY POLICY dbo.TenantSecurityPolicy												            -- Criação da policy de RLS
-ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.Users,					            -- Filtro por TenantId, aplica RLS em Users
-ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.Roles,					            -- Aplica RLS em Roles
-ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.UserRoles,				            -- Aplica RLS em UserRoles
-ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.RolePermissions,			            -- Aplica RLS em RolePermissions
-ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.JwtKeys,					            -- Aplica RLS em JwtKeys
-ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.Subscriptions,			            -- Aplica RLS em Subscriptions
-ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.TenantContacts,			            -- Aplica RLS em TenantContacts
-ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.AddressTypes,			            -- Aplica RLS em AddressTypes
-ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.TenantAddresses,			            -- Aplica RLS em TenantAddresses
-ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.TenantFiscalData,		            -- Aplica RLS em TenantFiscalData
-ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.Functions,				            -- Aplica RLS em Functions
-ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.Clients,					            -- Aplica RLS em Clients
-ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.ClientContacts,			            -- Aplica RLS em ClientContacts
-ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.ClientAddresses,			            -- Aplica RLS em ClientAddresses
-ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.TeamMembers,				            -- Aplica RLS em TeamMembers
-ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.TeamMemberContacts,		            -- Aplica RLS em TeamMemberContacts
-ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.TeamMemberAddresses,                 -- Aplica RLS em TeamMemberAddresses
-ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.InterventionContacts,                -- Aplica RLS em InterventionContacts
-ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.InterventionAddresses,               -- Aplica RLS em InterventionAddresses
-ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.Interventions,                       -- Aplica RLS em Interventions
-ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.Vehicles,                            -- Aplica RLS em Vehicles
-ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.EquipmentTypes,                      -- Aplica RLS em EquipmentTypes
-ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.Equipments,                          -- Aplica RLS em Equipments
+CREATE SECURITY POLICY dbo.TenantSecurityPolicy												                -- Criação da policy de RLS
+ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.Users,					                -- Filtro por TenantId, aplica RLS em Users
+ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.Roles,					                -- Aplica RLS em Roles
+ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.UserRoles,				                -- Aplica RLS em UserRoles
+ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.RolePermissions,			                -- Aplica RLS em RolePermissions
+ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.JwtKeys,					                -- Aplica RLS em JwtKeys
+ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.Subscriptions,			                -- Aplica RLS em Subscriptions
+ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.TenantContacts,			                -- Aplica RLS em TenantContacts
+ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.AddressTypes,			                -- Aplica RLS em AddressTypes
+ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.TenantAddresses,			                -- Aplica RLS em TenantAddresses
+ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.TenantFiscalData,		                -- Aplica RLS em TenantFiscalData
+ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.Functions,				                -- Aplica RLS em Functions
+ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.Clients,					                -- Aplica RLS em Clients
+ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.ClientContacts,			                -- Aplica RLS em ClientContacts
+ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.ClientAddresses,			                -- Aplica RLS em ClientAddresses
+ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.TeamMembers,				                -- Aplica RLS em TeamMembers
+ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.TeamMemberContacts,		                -- Aplica RLS em TeamMemberContacts
+ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.TeamMemberAddresses,                     -- Aplica RLS em TeamMemberAddresses
+ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.InterventionContacts,                    -- Aplica RLS em InterventionContacts
+ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.InterventionAddresses,                   -- Aplica RLS em InterventionAddresses
+ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.InterventionStatus,                      -- Aplica RLS em InterventionStatus
+ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.Interventions,                           -- Aplica RLS em Interventions
+ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.Vehicles,                                -- Aplica RLS em Vehicles
+ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.EquipmentTypes,                          -- Aplica RLS em EquipmentTypes
+ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.Equipments,                              -- Aplica RLS em Equipments
+ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.RefreshTokens,                           -- Aplica RLS em RefreshTokens
+ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.Teams,                                   -- Aplica RLS em Teams
+ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.TeamMembersTeams,                        -- Aplica RLS em TeamMembersTeams
+ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.InterventionTeams,                       -- Aplica RLS em InterventionTeams
+ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.InterventionTeamVehicles,                -- Aplica RLS em InterventionTeamVehicles
+ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.InterventionTeamEquipments,              -- Aplica RLS em InterventionTeamEquipments
 
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.Users AFTER INSERT,	                -- Bloqueia INSERT fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.Users AFTER UPDATE,	                -- Bloqueia UPDATE fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.Users BEFORE DELETE,                 -- Bloqueia DELETE fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.Roles AFTER INSERT,                  -- Bloqueia INSERT fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.Roles AFTER UPDATE,                  -- Bloqueia UPDATE fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.Roles BEFORE DELETE,                 -- Bloqueia DELETE fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.UserRoles AFTER INSERT,              -- Bloqueia INSERT fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.UserRoles AFTER UPDATE,              -- Bloqueia UPDATE fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.UserRoles BEFORE DELETE,             -- Bloqueia DELETE fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.RolePermissions AFTER INSERT,        -- Bloqueia INSERT fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.RolePermissions AFTER UPDATE,        -- Bloqueia UPDATE fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.RolePermissions BEFORE DELETE,       -- Bloqueia DELETE fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.JwtKeys AFTER INSERT,                -- Bloqueia INSERT fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.JwtKeys AFTER UPDATE,                -- Bloqueia UPDATE fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.JwtKeys BEFORE DELETE,               -- Bloqueia DELETE fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.Subscriptions AFTER INSERT,          -- Bloqueia INSERT fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.Subscriptions AFTER UPDATE,          -- Bloqueia UPDATE fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.Subscriptions BEFORE DELETE,         -- Bloqueia DELETE fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.TenantContacts AFTER INSERT,         -- Bloqueia INSERT fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.TenantContacts AFTER UPDATE,         -- Bloqueia UPDATE fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.TenantContacts BEFORE DELETE,        -- Bloqueia DELETE fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.AddressTypes AFTER INSERT,           -- Bloqueia INSERT fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.AddressTypes AFTER UPDATE,           -- Bloqueia UPDATE fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.AddressTypes BEFORE DELETE,          -- Bloqueia DELETE fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.TenantAddresses AFTER INSERT,        -- Bloqueia INSERT fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.TenantAddresses AFTER UPDATE,        -- Bloqueia UPDATE fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.TenantAddresses BEFORE DELETE,       -- Bloqueia DELETE fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.TenantFiscalData AFTER INSERT,       -- Bloqueia INSERT fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.TenantFiscalData AFTER UPDATE,       -- Bloqueia UPDATE fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.TenantFiscalData BEFORE DELETE,      -- Bloqueia DELETE fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.Functions AFTER INSERT,              -- Bloqueia INSERT fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.Functions AFTER UPDATE,              -- Bloqueia UPDATE fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.Functions BEFORE DELETE,             -- Bloqueia DELETE fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.Clients AFTER INSERT,                -- Bloqueia INSERT fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.Clients AFTER UPDATE,                -- Bloqueia UPDATE fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.Clients BEFORE DELETE,               -- Bloqueia DELETE fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.ClientContacts AFTER INSERT,         -- Bloqueia INSERT fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.ClientContacts AFTER UPDATE,         -- Bloqueia UPDATE fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.ClientContacts BEFORE DELETE,        -- Bloqueia DELETE fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.ClientAddresses AFTER INSERT,        -- Bloqueia INSERT fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.ClientAddresses AFTER UPDATE,        -- Bloqueia UPDATE fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.ClientAddresses BEFORE DELETE,       -- Bloqueia DELETE fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.TeamMembers AFTER INSERT,            -- Bloqueia INSERT fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.TeamMembers AFTER UPDATE,            -- Bloqueia UPDATE fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.TeamMembers BEFORE DELETE,           -- Bloqueia DELETE fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.TeamMemberContacts AFTER INSERT,     -- Bloqueia INSERT fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.TeamMemberContacts AFTER UPDATE,     -- Bloqueia UPDATE fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.TeamMemberContacts BEFORE DELETE,    -- Bloqueia DELETE fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.TeamMemberAddresses AFTER INSERT,    -- Bloqueia INSERT fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.TeamMemberAddresses AFTER UPDATE,    -- Bloqueia UPDATE fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.TeamMemberAddresses BEFORE DELETE,   -- Bloqueia DELETE fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.InterventionContacts AFTER INSERT,   -- Bloqueia INSERT fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.InterventionContacts AFTER UPDATE,   -- Bloqueia UPDATE fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.InterventionContacts BEFORE DELETE,  -- Bloqueia DELETE fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.InterventionAddresses AFTER INSERT,  -- Bloqueia INSERT fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.InterventionAddresses AFTER UPDATE,  -- Bloqueia UPDATE fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.InterventionAddresses BEFORE DELETE, -- Bloqueia DELETE fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.Interventions AFTER INSERT,          -- Bloqueia INSERT fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.Interventions AFTER UPDATE,          -- Bloqueia UPDATE fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.Interventions BEFORE DELETE,         -- Bloqueia DELETE fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.Vehicles AFTER INSERT,               -- Bloqueia INSERT fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.Vehicles AFTER UPDATE,               -- Bloqueia UPDATE fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.Vehicles BEFORE DELETE,              -- Bloqueia DELETE fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.EquipmentTypes AFTER INSERT,         -- Bloqueia INSERT fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.EquipmentTypes AFTER UPDATE,         -- Bloqueia UPDATE fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.EquipmentTypes BEFORE DELETE,        -- Bloqueia DELETE fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.Equipments AFTER INSERT,             -- Bloqueia INSERT fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.Equipments AFTER UPDATE,             -- Bloqueia UPDATE fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.Equipments BEFORE DELETE             -- Bloqueia DELETE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.Users AFTER INSERT,	                    -- Bloqueia INSERT fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.Users AFTER UPDATE,	                    -- Bloqueia UPDATE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.Users BEFORE DELETE,                     -- Bloqueia DELETE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.Roles AFTER INSERT,                      -- Bloqueia INSERT fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.Roles AFTER UPDATE,                      -- Bloqueia UPDATE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.Roles BEFORE DELETE,                     -- Bloqueia DELETE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.UserRoles AFTER INSERT,                  -- Bloqueia INSERT fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.UserRoles AFTER UPDATE,                  -- Bloqueia UPDATE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.UserRoles BEFORE DELETE,                 -- Bloqueia DELETE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.RolePermissions AFTER INSERT,            -- Bloqueia INSERT fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.RolePermissions AFTER UPDATE,            -- Bloqueia UPDATE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.RolePermissions BEFORE DELETE,           -- Bloqueia DELETE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.JwtKeys AFTER INSERT,                    -- Bloqueia INSERT fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.JwtKeys AFTER UPDATE,                    -- Bloqueia UPDATE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.JwtKeys BEFORE DELETE,                   -- Bloqueia DELETE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.Subscriptions AFTER INSERT,              -- Bloqueia INSERT fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.Subscriptions AFTER UPDATE,              -- Bloqueia UPDATE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.Subscriptions BEFORE DELETE,             -- Bloqueia DELETE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.TenantContacts AFTER INSERT,             -- Bloqueia INSERT fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.TenantContacts AFTER UPDATE,             -- Bloqueia UPDATE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.TenantContacts BEFORE DELETE,            -- Bloqueia DELETE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.AddressTypes AFTER INSERT,               -- Bloqueia INSERT fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.AddressTypes AFTER UPDATE,               -- Bloqueia UPDATE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.AddressTypes BEFORE DELETE,              -- Bloqueia DELETE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.TenantAddresses AFTER INSERT,            -- Bloqueia INSERT fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.TenantAddresses AFTER UPDATE,            -- Bloqueia UPDATE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.TenantAddresses BEFORE DELETE,           -- Bloqueia DELETE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.TenantFiscalData AFTER INSERT,           -- Bloqueia INSERT fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.TenantFiscalData AFTER UPDATE,           -- Bloqueia UPDATE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.TenantFiscalData BEFORE DELETE,          -- Bloqueia DELETE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.Functions AFTER INSERT,                  -- Bloqueia INSERT fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.Functions AFTER UPDATE,                  -- Bloqueia UPDATE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.Functions BEFORE DELETE,                 -- Bloqueia DELETE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.Clients AFTER INSERT,                    -- Bloqueia INSERT fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.Clients AFTER UPDATE,                    -- Bloqueia UPDATE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.Clients BEFORE DELETE,                   -- Bloqueia DELETE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.ClientContacts AFTER INSERT,             -- Bloqueia INSERT fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.ClientContacts AFTER UPDATE,             -- Bloqueia UPDATE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.ClientContacts BEFORE DELETE,            -- Bloqueia DELETE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.ClientAddresses AFTER INSERT,            -- Bloqueia INSERT fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.ClientAddresses AFTER UPDATE,            -- Bloqueia UPDATE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.ClientAddresses BEFORE DELETE,           -- Bloqueia DELETE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.TeamMembers AFTER INSERT,                -- Bloqueia INSERT fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.TeamMembers AFTER UPDATE,                -- Bloqueia UPDATE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.TeamMembers BEFORE DELETE,               -- Bloqueia DELETE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.TeamMemberContacts AFTER INSERT,         -- Bloqueia INSERT fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.TeamMemberContacts AFTER UPDATE,         -- Bloqueia UPDATE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.TeamMemberContacts BEFORE DELETE,        -- Bloqueia DELETE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.TeamMemberAddresses AFTER INSERT,        -- Bloqueia INSERT fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.TeamMemberAddresses AFTER UPDATE,        -- Bloqueia UPDATE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.TeamMemberAddresses BEFORE DELETE,       -- Bloqueia DELETE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.InterventionContacts AFTER INSERT,       -- Bloqueia INSERT fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.InterventionContacts AFTER UPDATE,       -- Bloqueia UPDATE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.InterventionContacts BEFORE DELETE,      -- Bloqueia DELETE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.InterventionAddresses AFTER INSERT,      -- Bloqueia INSERT fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.InterventionAddresses AFTER UPDATE,      -- Bloqueia UPDATE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.InterventionAddresses BEFORE DELETE,     -- Bloqueia DELETE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.InterventionStatus AFTER INSERT,         -- Bloqueia INSERT fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.InterventionStatus AFTER UPDATE,         -- Bloqueia UPDATE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.InterventionStatus BEFORE DELETE,        -- Bloqueia DELETE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.Interventions AFTER INSERT,              -- Bloqueia INSERT fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.Interventions AFTER UPDATE,              -- Bloqueia UPDATE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.Interventions BEFORE DELETE,             -- Bloqueia DELETE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.Vehicles AFTER INSERT,                   -- Bloqueia INSERT fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.Vehicles AFTER UPDATE,                   -- Bloqueia UPDATE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.Vehicles BEFORE DELETE,                  -- Bloqueia DELETE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.EquipmentTypes AFTER INSERT,             -- Bloqueia INSERT fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.EquipmentTypes AFTER UPDATE,             -- Bloqueia UPDATE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.EquipmentTypes BEFORE DELETE,            -- Bloqueia DELETE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.Equipments AFTER INSERT,                 -- Bloqueia INSERT fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.Equipments AFTER UPDATE,                 -- Bloqueia UPDATE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.Equipments BEFORE DELETE,                -- Bloqueia DELETE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.Teams AFTER INSERT,                      -- Bloqueia INSERT fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.Teams AFTER UPDATE,                      -- Bloqueia UPDATE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.Teams BEFORE DELETE,                     -- Bloqueia DELETE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.TeamMembersTeams AFTER INSERT,           -- Bloqueia INSERT fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.TeamMembersTeams AFTER UPDATE,           -- Bloqueia UPDATE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.TeamMembersTeams BEFORE DELETE,          -- Bloqueia DELETE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.InterventionTeams AFTER INSERT,          -- Bloqueia INSERT fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.InterventionTeams AFTER UPDATE,          -- Bloqueia UPDATE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.InterventionTeams BEFORE DELETE,         -- Bloqueia DELETE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.InterventionTeamVehicles AFTER INSERT,   -- Bloqueia INSERT fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.InterventionTeamVehicles AFTER UPDATE,   -- Bloqueia UPDATE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.InterventionTeamVehicles BEFORE DELETE,  -- Bloqueia DELETE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.InterventionTeamEquipments AFTER INSERT, -- Bloqueia INSERT fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.InterventionTeamEquipments AFTER UPDATE, -- Bloqueia UPDATE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.InterventionTeamEquipments BEFORE DELETE,-- Bloqueia DELETE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.RefreshTokens AFTER INSERT,               -- Bloqueia INSERT fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.RefreshTokens AFTER UPDATE,               -- Bloqueia UPDATE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.RefreshTokens BEFORE DELETE               -- Bloqueia DELETE fora do Tenant
+
 WITH (STATE = ON);																		                -- Ativa a policy
 GO

@@ -19,14 +19,14 @@ public class UpdateAddressTypeValidator : AbstractValidator<AddressTypeEntity>
         RuleFor(x => x.Name)
             .NotEmpty()
             .WithMessage(localization.GetMessage("Domain.AddressType.NameRequired"))
-            .MaximumLength(100)
-            .WithMessage(localization.GetMessage("Domain.AddressType.NameMaxLength", 100));
+            .MaximumLength(200)
+            .WithMessage(localization.GetMessage("Domain.AddressType.NameMaxLength", 200));
 
         RuleFor(x => x.Description)
             .NotEmpty()
             .WithMessage(localization.GetMessage("Domain.AddressType.DescriptionRequired"))
-            .MaximumLength(255)
-            .WithMessage(localization.GetMessage("Domain.AddressType.DescriptionMaxLength", 255));
+            .MaximumLength(500)
+            .WithMessage(localization.GetMessage("Domain.AddressType.DescriptionMaxLength", 500));
 
         RuleFor(x => x.ModifiedBy)
             .NotNull()

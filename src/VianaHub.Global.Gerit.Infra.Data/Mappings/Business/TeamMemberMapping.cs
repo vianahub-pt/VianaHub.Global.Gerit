@@ -23,6 +23,10 @@ public class TeamMemberMapping : IEntityTypeConfiguration<TeamMemberEntity>
             .UseIdentityColumn(1, 1)
             .IsRequired();
 
+        // Chave alternativa para suportar FKs compostas com TenantId
+        builder.HasAlternateKey(tm => new { tm.Id, tm.TenantId })
+            .HasName("UQ_TeamMembers_Id_Tenant");
+
         // Propriedades
         builder.Property(tm => tm.TenantId)
             .HasColumnName("TenantId")
@@ -86,7 +90,8 @@ public class TeamMemberMapping : IEntityTypeConfiguration<TeamMemberEntity>
 
         builder.HasOne(tm => tm.Function)
             .WithMany()
-            .HasForeignKey(tm => tm.FunctionId)
+            .HasForeignKey(tm => new { tm.FunctionId, tm.TenantId })
+            .HasPrincipalKey(f => new { f.Id, f.TenantId })
             .HasConstraintName("FK_TeamMembers_Function")
             .OnDelete(DeleteBehavior.Restrict);
 

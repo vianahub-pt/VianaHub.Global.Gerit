@@ -8,7 +8,9 @@ public class ClientAddressResponse
     public int Id { get; set; }
     public int TenantId { get; set; }
     public int ClientId { get; set; }
+    public string Client { get; set; }
     public int AddressTypeId { get; set; }
+    public string AddressType { get; set; }
     public string CountryCode { get; set; }
     public string Street { get; set; }
     public string StreetNumber { get; set; }
@@ -22,8 +24,4 @@ public class ClientAddressResponse
     public string Notes { get; set; }
     public bool IsPrimary { get; set; }
     public bool IsActive { get; set; }
-    public DateTime CreatedAt { get; set; }
-    public int CreatedBy { get; set; }
-    public DateTime? ModifiedAt { get; set; }
-    public int? ModifiedBy { get; set; }
 }

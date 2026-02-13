@@ -23,6 +23,8 @@ public class ClientAddressDataRepository : IClientAddressDataRepository
     {
         return await _context.ClientAddresses
             .AsNoTracking()
+            .Include(x => x.Client)
+            .Include(x => x.AddressType)
             .Where(x => x.Id == id && !x.IsDeleted)
             .FirstOrDefaultAsync(ct);
     }
@@ -31,6 +33,8 @@ public class ClientAddressDataRepository : IClientAddressDataRepository
     {
         return await _context.ClientAddresses
             .AsNoTracking()
+            .Include(x => x.Client)
+            .Include(x => x.AddressType)
             .Where(x => !x.IsDeleted)
             .OrderBy(x => x.ClientId)
             .ThenBy(x => x.IsPrimary ? 0 : 1)
@@ -42,6 +46,8 @@ public class ClientAddressDataRepository : IClientAddressDataRepository
     {
         var query = _context.ClientAddresses
             .AsNoTracking()
+            .Include(x => x.Client)
+            .Include(x => x.AddressType)
             .Where(x => !x.IsDeleted);
 
         // Aplicar busca
@@ -52,8 +58,10 @@ public class ClientAddressDataRepository : IClientAddressDataRepository
                 EF.Functions.Like(x.Street.ToLower(), $"%{search}%") ||
                 EF.Functions.Like(x.City.ToLower(), $"%{search}%") ||
                 EF.Functions.Like(x.PostalCode.ToLower(), $"%{search}%") ||
-                (x.District != null && EF.Functions.Like(x.District.ToLower(), $"%{search}%")) ||
-                (x.Neighborhood != null && EF.Functions.Like(x.Neighborhood.ToLower(), $"%{search}%")));
+                EF.Functions.Like(x.District.ToLower(), $"%{search}%") ||
+                EF.Functions.Like(x.Neighborhood.ToLower(), $"%{search}%") ||
+                EF.Functions.Like(x.Client.Name.ToLower(), $"%{search}%") ||
+                EF.Functions.Like(x.AddressType.Name.ToLower(), $"%{search}%"));
         }
 
         // Total de registros

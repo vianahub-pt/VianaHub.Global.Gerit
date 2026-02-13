@@ -13,7 +13,9 @@ public class ClientAddressMappingProfile : Profile
 {
     public ClientAddressMappingProfile()
     {
-        CreateMap<ClientAddressEntity, ClientAddressResponse>();
+        CreateMap<ClientAddressEntity, ClientAddressResponse>()
+            .ForMember(dest => dest.Client, opt => opt.MapFrom(src => src.Client.Name))
+            .ForMember(dest => dest.AddressType, opt => opt.MapFrom(src => src.AddressType.Name));
         
         CreateMap<ListPage<ClientAddressEntity>, ListPageResponse<ClientAddressResponse>>();
     }

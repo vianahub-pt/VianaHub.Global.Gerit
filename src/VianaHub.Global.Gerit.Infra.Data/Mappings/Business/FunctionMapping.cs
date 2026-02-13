@@ -19,6 +19,10 @@ public class FunctionMapping : IEntityTypeConfiguration<FunctionEntity>
             .UseIdentityColumn(1, 1)
             .IsRequired();
 
+        // Chave alternativa para suportar FKs compostas com TenantId
+        builder.HasAlternateKey(x => new { x.Id, x.TenantId })
+            .HasName("UQ_Functions_Id_Tenant");
+
         // Propriedades
         builder.Property(x => x.TenantId)
             .HasColumnName("TenantId")

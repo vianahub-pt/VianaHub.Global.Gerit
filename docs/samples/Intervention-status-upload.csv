@@ -1,0 +1,21 @@
+Name;Description;IsActive;IsDeleted;CreatedBy
+Rascunho;Intervenção criada mas ainda não finalizada para agendamento;1;0;1
+Solicitada;Intervenção solicitada pelo cliente e aguardando análise;1;0;1
+Aguardando Agendamento;Intervenção aprovada aguardando definição de data;1;0;1
+Agendada;Intervenção agendada com data e hora definidas;1;0;1
+Confirmada;Intervenção confirmada com o cliente;1;0;1
+Em Preparação;Equipe e recursos sendo organizados antes da execução;1;0;1
+Aguardando Equipe;Aguardando disponibilidade de membro do time;1;0;1
+Aguardando Veículo;Aguardando disponibilidade de veículo;1;0;1
+Em Deslocamento;Equipe em deslocamento para o local;1;0;1
+No Local;Equipe chegou ao local da intervenção;1;0;1
+Em Andamento;Intervenção em execução;1;0;1
+Pausada;Execução temporariamente interrompida;1;0;1
+Aguardando Peças;Intervenção pausada aguardando peças ou materiais;1;0;1
+Aguardando Aprovação;Aguardando aprovação de orçamento ou decisão do cliente;1;0;1
+Aguardando Cliente;Aguardando retorno ou ação do cliente;1;0;1
+Reagendada;Intervenção teve data alterada;1;0;1
+Concluída;Intervenção finalizada com sucesso;1;0;1
+Concluída com Pendência;Intervenção finalizada com ajustes pendentes;1;0;1
+Faturada;Intervenção concluída e faturamento realizado;1;0;1
+Cancelada;Intervenção cancelada antes da conclusão;1;0;1

@@ -1,0 +1,21 @@
+ClientId;AddressTypeId;CountryCode;Street;StreetNumber;Complement;Neighborhood;City;District;PostalCode;Latitude;Longitude;Notes;IsPrimary
+1;2;PT;Avenida da Liberdade;110;;Santo António;Lisboa;Lisboa;1269-046;38.7209;-9.1457;Sede administrativa Lisboa;true
+2;2;PT;Rua de Santa Catarina;312;;Baixa;Porto;Porto;4000-446;41.1496;-8.6110;Loja comercial Porto centro;true
+3;2;PT;Avenida 5 de Outubro;18;;Centro;Faro;Faro;8000-076;37.0194;-7.9304;Escritório Algarve;true
+4;2;PT;Rua da Sofia;67;;Sé Nova;Coimbra;Coimbra;3000-390;40.2111;-8.4291;Unidade Coimbra;true
+5;2;PT;Avenida Almirante Reis;45;;Arroios;Lisboa;Lisboa;1150-010;38.7242;-9.1353;Filial Lisboa;true
+6;2;PT;Rua do Souto;15;;Sé;Braga;Braga;4700-306;41.5518;-8.4229;Sede Minho;true
+7;2;PT;Rua João Mendonça;12;;Glória;Aveiro;Aveiro;3800-200;40.6405;-8.6538;Unidade Aveiro;true
+8;2;PT;Avenida da Boavista;1588;;Boavista;Porto;Porto;4100-115;41.1606;-8.6305;Showroom Norte;true
+9;2;PT;Praça do Comércio;1;;Baixa;Lisboa;Lisboa;1100-148;38.7078;-9.1366;Escritório comercial Lisboa;true
+10;2;PT;Avenida Luísa Todi;55;;Centro;Setúbal;Setúbal;2900-461;38.5225;-8.8926;Sede Setúbal;true
+11;2;PT;Avenida da Liberdade;690;;São Vicente;Braga;Braga;4710-249;41.5454;-8.4265;Unidade Braga;true
+12;2;PT;Rua de António Feijó;24;;Faro Centro;Faro;Faro;8000-257;37.0161;-7.9350;Delegação Sul;true
+13;2;PT;Rua Direita;92;;Centro Histórico;Viseu;Viseu;3500-115;40.6566;-7.9125;Escritório Viseu;true
+14;2;PT;Rua do Aljube;12;;Sé;Funchal;Madeira;9000-067;32.6486;-16.9097;Unidade Madeira;true
+15;2;PT;Rua Hintze Ribeiro;45;;Centro;Ponta Delgada;Açores;9500-049;37.7412;-25.6756;Sede Açores;true
+16;2;PT;Rua Actor Taborda;38;;Arroios;Lisboa;Lisboa;1000-007;38.7322;-9.1414;Escritório Lisboa Norte;true
+17;2;PT;Avenida 25 de Abril;850;;Centro;Cascais;Lisboa;2750-511;38.6979;-9.4215;Unidade Cascais;true
+18;2;PT;Rua de Santa Catarina;830;;Baixa;Porto;Porto;4000-446;41.1532;-8.6089;Delegação Douro;true
+19;2;PT;Avenida Marginal;7000;;Carcavelos;Cascais;Lisboa;2775-604;38.6767;-9.3300;Unidade Linha;true
+20;2;PT;Avenida Heróis de Angola;15;;Centro;Leiria;Leiria;2400-153;39.7436;-8.8071;Sede Leiria;true

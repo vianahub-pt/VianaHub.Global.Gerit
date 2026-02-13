@@ -75,14 +75,15 @@ public class ClientAppService : IClientAppService
 
     public async Task<bool> CreateAsync(CreateClientRequest request, CancellationToken ct)
     {
-        var exists = await _repo.ExistsByEmailAsync(request.TenantId, request.Email, ct);
+        var tenantId = _currentUser.GetTenantId();
+        var exists = await _repo.ExistsByEmailAsync(tenantId, request.Email, ct);
         if (exists)
         {
             _notify.Add(_localization.GetMessage("Application.Service.Client.Create.ResourceAlreadyExists"), 409);
             return false;
         }
 
-        var entity = new ClientEntity(request.TenantId, request.Name, request.Phone, request.Email, request.Consent, _currentUser.GetUserId());
+        var entity = new ClientEntity(tenantId, request.Name, request.Phone, request.Email, request.Consent, _currentUser.GetUserId());
         return await _domain.CreateAsync(entity, ct);
     }
 

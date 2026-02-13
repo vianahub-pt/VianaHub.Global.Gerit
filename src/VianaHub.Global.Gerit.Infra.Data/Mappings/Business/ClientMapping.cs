@@ -23,6 +23,10 @@ public class ClientMapping : IEntityTypeConfiguration<ClientEntity>
             .UseIdentityColumn(1, 1)
             .IsRequired();
 
+        // Chave alternativa para suportar FKs compostas com TenantId
+        builder.HasAlternateKey(x => new { x.Id, x.TenantId })
+            .HasName("UQ_Clients_Id_Tenant");
+
         // Propriedades
         builder.Property(x => x.TenantId)
             .HasColumnName("TenantId")

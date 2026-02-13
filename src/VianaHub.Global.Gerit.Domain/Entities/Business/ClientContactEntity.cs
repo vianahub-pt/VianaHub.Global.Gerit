@@ -41,25 +41,12 @@ public class ClientContactEntity : Entity
         CreatedAt = DateTime.UtcNow;
     }
 
-    public void UpdateContactInfo(string name, string email, string phone, int modifiedBy)
+    public void Update(string name, string email, string phone, bool isPrimary, int modifiedBy)
     {
         Name = name;
         Email = email;
         Phone = phone;
-        ModifiedBy = modifiedBy;
-        ModifiedAt = DateTime.UtcNow;
-    }
-
-    public void SetAsPrimary(int modifiedBy)
-    {
-        IsPrimary = true;
-        ModifiedBy = modifiedBy;
-        ModifiedAt = DateTime.UtcNow;
-    }
-
-    public void RemoveAsPrimary(int modifiedBy)
-    {
-        IsPrimary = false;
+        IsPrimary = isPrimary;
         ModifiedBy = modifiedBy;
         ModifiedAt = DateTime.UtcNow;
     }

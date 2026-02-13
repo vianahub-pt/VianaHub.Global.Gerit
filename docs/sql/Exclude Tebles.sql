@@ -18,15 +18,24 @@ GO
    2. REMOVER TABELAS (ORDEM INVERSA DE DEPENDÊNCIA)
    ========================================================= */
 
+-- N:N e dependências finais
+DROP TABLE IF EXISTS dbo.InterventionTeamEquipments;
+DROP TABLE IF EXISTS dbo.InterventionTeamVehicles;
+DROP TABLE IF EXISTS dbo.InterventionTeams;
+DROP TABLE IF EXISTS dbo.TeamMembersTeams;
+
 -- Interventions
 DROP TABLE IF EXISTS dbo.InterventionAddresses;
 DROP TABLE IF EXISTS dbo.InterventionContacts;
 DROP TABLE IF EXISTS dbo.Interventions;
+DROP TABLE IF EXISTS dbo.InterventionStatus;
 
 -- Team Members
 DROP TABLE IF EXISTS dbo.TeamMemberAddresses;
 DROP TABLE IF EXISTS dbo.TeamMemberContacts;
 DROP TABLE IF EXISTS dbo.TeamMembers;
+
+DROP TABLE IF EXISTS dbo.Teams;
 
 -- Clients
 DROP TABLE IF EXISTS dbo.ClientAddresses;
@@ -48,16 +57,16 @@ DROP TABLE IF EXISTS dbo.Users;
 
 -- Tenant related
 DROP TABLE IF EXISTS dbo.Subscriptions;
-DROP TABLE IF EXISTS dbo.AddressTypes;
 DROP TABLE IF EXISTS dbo.TenantFiscalData;
 DROP TABLE IF EXISTS dbo.TenantAddresses;
 DROP TABLE IF EXISTS dbo.TenantContacts;
+DROP TABLE IF EXISTS dbo.AddressTypes;
 
 -- Supporting / Catalog
-DROP TABLE IF EXISTS dbo.AddressesType;
 DROP TABLE IF EXISTS dbo.Functions;
 DROP TABLE IF EXISTS dbo.Vehicles;
 DROP TABLE IF EXISTS dbo.Equipments;
+DROP TABLE IF EXISTS dbo.EquipmentTypes;
 
 -- Jobs
 DROP TABLE IF EXISTS dbo.JobDefinitions;

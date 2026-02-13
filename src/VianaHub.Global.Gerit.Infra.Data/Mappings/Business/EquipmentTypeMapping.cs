@@ -17,6 +17,10 @@ public class EquipmentTypeMapping : IEntityTypeConfiguration<EquipmentTypeEntity
             .UseIdentityColumn()
             .IsRequired();
 
+        // Chave alternativa para suportar FKs compostas com TenantId
+        builder.HasAlternateKey(x => new { x.Id, x.TenantId })
+            .HasName("UQ_EquipmentTypes_Id_Tenant");
+
         builder.Property(x => x.TenantId)
             .HasColumnType("INT")
             .IsRequired();
@@ -27,7 +31,7 @@ public class EquipmentTypeMapping : IEntityTypeConfiguration<EquipmentTypeEntity
 
         builder.Property(x => x.Description)
             .HasColumnType("NVARCHAR(500)")
-            .IsRequired(false);
+            .IsRequired();
 
         builder.Property(x => x.IsActive)
             .HasColumnType("BIT")

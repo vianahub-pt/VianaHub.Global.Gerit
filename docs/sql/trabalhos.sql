@@ -7,21 +7,30 @@ select * from dbo.Actions;				--
 select * from dbo.Resources;			--
 select * from dbo.Roles;				--
 select * from dbo.UserRoles;			--
-select * from dbo.RolePermissions order by ResourceId, ActionId;		--
+select * from dbo.RolePermissions;		--
 select * from dbo.JwtKeys;
 ------------------------------
 select * from dbo.AddressTypes;			--
-select * from dbo.Vehicles;				--
+select * from dbo.Clients;				--
+select * from dbo.ClientAddresses;		--
+select * from dbo.ClientContacts;		--
 select * from dbo.EquipmentTypes;		--
 select * from dbo.Equipments;			--
 select * from dbo.Functions;			--
 select * from dbo.TeamMembers;			--
 select * from dbo.TeamMemberAddresses;	--
 select * from dbo.TeamMemberContacts;	--
-select * from dbo.Clients;
-select * from dbo.ClientAddresses;
-select * from dbo.ClientContacts;
-select * from dbo.ClientFiscalData;
+select * from dbo.InterventionStatus;	--
+select * from dbo.Interventions;		--
+select * from dbo.InterventionAddresses;
+select * from dbo.InterventionContacts;
+select * from dbo.Vehicles;				--
+
+select * from dbo.Teams;
+select * from dbo.TeamMembersTeams;
+select * from dbo.InterventionTeams;
+select * from dbo.InterventionTeamVehicles;
+select * from dbo.InterventionTeamEquipments;
 
 FOR JSON AUTO;
 
@@ -42,6 +51,9 @@ ActivateTeamMemberValidator
 CreateTeamMemberValidator
 DeactivateTeamMemberValidator
 
-
+InterventionAddresses
+InterventionContacts
+InterventionStatus
+Interventions
 
 */
