@@ -13,7 +13,7 @@ public class InterventionEntity : Entity, IAggregateRoot
     public int ClientId { get; private set; }
     public int TeamMemberId { get; private set; }
     public int VehicleId { get; private set; }
-    public int InterventionStatusId { get; private set; }
+    public int StatusId { get; private set; }
     public string Title { get; private set; }
     public string Description { get; private set; }
     public DateTime StartDateTime { get; private set; }
@@ -28,7 +28,7 @@ public class InterventionEntity : Entity, IAggregateRoot
     public ClientEntity Client { get; private set; }
     public TeamMemberEntity TeamMember { get; private set; }
     public VehicleEntity Vehicle { get; private set; }
-    public InterventionStatusEntity InterventionStatus { get; private set; }
+    public StatusEntity Status { get; private set; }
 
     private readonly List<InterventionContactEntity> _contacts = new();
     public IReadOnlyCollection<InterventionContactEntity> Contacts => _contacts.AsReadOnly();
@@ -43,14 +43,14 @@ public class InterventionEntity : Entity, IAggregateRoot
     /// Construtor para criação de uma nova Intervenção
     /// </summary>
     public InterventionEntity(int tenantId, int clientId, int teamMemberId, int vehicleId,
-        int interventionStatusId, string title, string description, DateTime startDateTime, 
+        int StatusId, string title, string description, DateTime startDateTime, 
         decimal estimatedValue, int modifiedBy)
     {
         TenantId = tenantId;
         ClientId = clientId;
         TeamMemberId = teamMemberId;
         VehicleId = vehicleId;
-        InterventionStatusId = interventionStatusId;
+        StatusId = StatusId;
         Title = title;
         Description = description;
         StartDateTime = startDateTime;
@@ -63,14 +63,14 @@ public class InterventionEntity : Entity, IAggregateRoot
         ModifiedAt = DateTime.UtcNow;
     }
 
-    public void UpdateDetails(int clientId, int teamMemberId, int vehicleId, int interventionStatusId,
+    public void UpdateDetails(int clientId, int teamMemberId, int vehicleId, int StatusId,
         string title, string description, DateTime startDateTime, DateTime? endDateTime, 
         decimal estimatedValue, decimal? realValue, int modifiedBy)
     {
         ClientId = clientId;
         TeamMemberId = teamMemberId;
         VehicleId = vehicleId;
-        InterventionStatusId = interventionStatusId;
+        StatusId = StatusId;
         Title = title;
         Description = description;
         StartDateTime = startDateTime;
@@ -81,9 +81,9 @@ public class InterventionEntity : Entity, IAggregateRoot
         ModifiedAt = DateTime.UtcNow;
     }
 
-    public void SetStatus(int interventionStatusId, int modifiedBy)
+    public void SetStatus(int StatusId, int modifiedBy)
     {
-        InterventionStatusId = interventionStatusId;
+        StatusId = StatusId;
         ModifiedBy = modifiedBy;
         ModifiedAt = DateTime.UtcNow;
     }

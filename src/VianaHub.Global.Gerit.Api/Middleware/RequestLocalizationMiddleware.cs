@@ -8,7 +8,7 @@ namespace VianaHub.Global.Gerit.Api.Middleware;
 
 /// <summary>
 /// Middleware que define a cultura da aplicação com base no header Accept-Language.
-/// Faz fallback para pt-BR quando não houver match (padrão do Gerit).
+/// Faz fallback para pt-PT quando não houver match (padrão do Gerit).
 /// </summary>
 public class RequestLocalizationMiddleware
 {
@@ -23,7 +23,7 @@ public class RequestLocalizationMiddleware
         var list = supportedCultures?.ToList();
         if (list == null || list.Count == 0)
         {
-            list = new List<string> { "pt-BR", "en-US", "es-ES" };
+            list = new List<string> { "pt-PT", "en-US", "es-ES" };
         }
 
         _supported = list.Select(c => new CultureInfo(c)).ToList();
@@ -38,8 +38,8 @@ public class RequestLocalizationMiddleware
         }
         catch (Exception ex)
         {
-            culture = new CultureInfo("pt-BR");
-            Log.Warning(ex, "⚠️ [Gerit:RequestLocalization] Error determining culture, using fallback: pt-BR");
+            culture = new CultureInfo("pt-PT");
+            Log.Warning(ex, "⚠️ [Gerit:RequestLocalization] Error determining culture, using fallback: pt-PT");
         }
 
         // Set culture for the current thread and async context
@@ -58,7 +58,7 @@ public class RequestLocalizationMiddleware
             var accepted = values.ToString();
 
             // Parse comma separated list with optional quality values
-            // e.g. "pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7"
+            // e.g. "pt-PT,pt;q=0.9,en-US;q=0.8,en;q=0.7"
             var parts = accepted.Split(',').Select(p => p.Trim()).Where(p => !string.IsNullOrEmpty(p));
             foreach (var part in parts)
             {
@@ -75,6 +75,6 @@ public class RequestLocalizationMiddleware
                     return neutral;
             }
         }
-        return new CultureInfo("pt-BR");
+        return new CultureInfo("pt-PT");
     }
 }

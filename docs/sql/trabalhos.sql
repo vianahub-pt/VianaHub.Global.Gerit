@@ -7,7 +7,7 @@ select * from dbo.Actions;				--
 select * from dbo.Resources;			--
 select * from dbo.Roles;				--
 select * from dbo.UserRoles;			--
-select * from dbo.RolePermissions;		--
+select * from dbo.RolePermissions order by ResourceId;		--
 select * from dbo.JwtKeys;
 ------------------------------
 select * from dbo.AddressTypes;			--
@@ -20,11 +20,13 @@ select * from dbo.Functions;			--
 select * from dbo.TeamMembers;			--
 select * from dbo.TeamMemberAddresses;	--
 select * from dbo.TeamMemberContacts;	--
-select * from dbo.InterventionStatus;	--
 select * from dbo.Interventions;		--
 select * from dbo.InterventionAddresses;
 select * from dbo.InterventionContacts;
 select * from dbo.Vehicles;				--
+
+select * from dbo.StatusTypes;			--
+select * from dbo.Status;				
 
 select * from dbo.Teams;
 select * from dbo.TeamMembersTeams;
@@ -36,14 +38,9 @@ FOR JSON AUTO;
 
 
 
---Tenants			- TenantId	= 4 - VianaHub Lda
---Users				- UserId	= 4 - Dener Viana
---Roles				- RoleId	= 2 - BackOffice
---UserRoles			- TenantId=4 | UserId=4 | RoleId=2
---RolePermissions	- TenanrId=4 | RoleId=2 | 
+Tipos de status (Intervention, Equipment, Vehicle)
 
-
-
+InterventionStatus
 /*
 TeamMembers
 TeamMember

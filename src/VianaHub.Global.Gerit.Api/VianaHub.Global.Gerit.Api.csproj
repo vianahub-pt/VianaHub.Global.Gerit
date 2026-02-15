@@ -52,4 +52,11 @@
     <ProjectReference Include="..\VianaHub.Global.Gerit.Domain\VianaHub.Global.Gerit.Domain.csproj" />
     <ProjectReference Include="..\VianaHub.Global.Gerit.Infra.Job\VianaHub.Global.Gerit.Infra.Job.csproj" />
   </ItemGroup>
+
+  <!-- Atualiza os itens implícitos Content para os ficheiros de localização para copiar para a saída -->
+  <ItemGroup>
+    <Content Update="Localization\**\*.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 </Project>

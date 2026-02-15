@@ -94,7 +94,7 @@ public class InterventionAppService : IInterventionAppService
             request.ClientId,
             request.TeamMemberId,
             request.VehicleId,
-            request.InterventionStatusId,
+            request.StatusId,
             request.Title,
             request.Description,
             request.StartDateTime,
@@ -128,7 +128,7 @@ public class InterventionAppService : IInterventionAppService
             request.ClientId,
             request.TeamMemberId,
             request.VehicleId,
-            request.InterventionStatusId,
+            request.StatusId,
             request.Title,
             request.Description,
             request.StartDateTime,
@@ -304,7 +304,7 @@ public class InterventionAppService : IInterventionAppService
                 item.ClientId,
                 item.TeamMemberId,
                 item.VehicleId,
-                item.InterventionStatusId,
+                item.StatusId,
                 item.Title,
                 item.Description,
                 item.StartDateTime,
@@ -343,9 +343,9 @@ public class InterventionAppService : IInterventionAppService
             return false;
         }
 
-        if (item.InterventionStatusId <= 0)
+        if (item.StatusId <= 0)
         {
-            _notify.Add(_localization.GetMessage("Application.Service.Intervention.ValidateBulkItem.InterventionStatusId"), 400);
+            _notify.Add(_localization.GetMessage("Application.Service.Intervention.ValidateBulkItem.StatusId"), 400);
             return false;
         }
 

@@ -28,7 +28,6 @@ DROP TABLE IF EXISTS dbo.TeamMembersTeams;
 DROP TABLE IF EXISTS dbo.InterventionAddresses;
 DROP TABLE IF EXISTS dbo.InterventionContacts;
 DROP TABLE IF EXISTS dbo.Interventions;
-DROP TABLE IF EXISTS dbo.InterventionStatus;
 
 -- Team Members
 DROP TABLE IF EXISTS dbo.TeamMemberAddresses;
@@ -63,10 +62,12 @@ DROP TABLE IF EXISTS dbo.TenantContacts;
 DROP TABLE IF EXISTS dbo.AddressTypes;
 
 -- Supporting / Catalog
-DROP TABLE IF EXISTS dbo.Functions;
-DROP TABLE IF EXISTS dbo.Vehicles;
 DROP TABLE IF EXISTS dbo.Equipments;
+DROP TABLE IF EXISTS dbo.Vehicles;
+DROP TABLE IF EXISTS dbo.Status;
+DROP TABLE IF EXISTS dbo.StatusTypes;       
 DROP TABLE IF EXISTS dbo.EquipmentTypes;
+DROP TABLE IF EXISTS dbo.Functions;
 
 -- Jobs
 DROP TABLE IF EXISTS dbo.JobDefinitions;

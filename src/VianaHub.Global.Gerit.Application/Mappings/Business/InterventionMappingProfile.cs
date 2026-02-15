@@ -17,7 +17,7 @@ public class InterventionMappingProfile : Profile
             .ForMember(dest => dest.Client, opt => opt.MapFrom(src => src.Client.Name))
             .ForMember(dest => dest.TeamMember, opt => opt.MapFrom(src => src.TeamMember.Name))
             .ForMember(dest => dest.Plate, opt => opt.MapFrom(src => src.Vehicle.Plate))
-            .ForMember(dest => dest.InterventionStatus, opt => opt.MapFrom(src => src.InterventionStatus.Name));
+            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.Name));
 
         CreateMap<ListPage<InterventionEntity>, ListPageResponse<InterventionResponse>>();
     }

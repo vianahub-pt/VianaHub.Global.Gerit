@@ -7,7 +7,7 @@ namespace VianaHub.Global.Gerit.Api.Middleware;
 
 /// <summary>
 /// Middleware que captura a cultura da query string para tradução do Swagger.
-/// Exemplo: /swagger/v1/swagger.json?lang=pt-BR
+/// Exemplo: /swagger/v1/swagger.json?lang=pt-PT
 /// </summary>
 public class SwaggerLocalizationMiddleware
 {
@@ -23,7 +23,7 @@ public class SwaggerLocalizationMiddleware
         var list = supportedCultures?.ToList();
         if (list == null || list.Count == 0)
         {
-            list = new List<string> { "en-US", "pt-BR", "es-ES" };
+            list = new List<string> { "pt-PT", "en-US", "es-ES" };
         }
 
         _supportedCultures = list;
@@ -61,7 +61,7 @@ public class SwaggerLocalizationMiddleware
 
     private string GetCultureFromRequest(HttpContext context)
     {
-        // 1. Tenta pegar da query string (?lang=pt-BR)
+        // 1. Tenta pegar da query string (?lang=pt-PT)
         if (context.Request.Query.TryGetValue("lang", out var langQuery))
         {
             var lang = langQuery.ToString();
@@ -79,22 +79,15 @@ public class SwaggerLocalizationMiddleware
             {
                 return lang;
             }
-
-            // Caso o cookie contenha apenas linguagem neutra (ex: 'en' ou 'pt'), tentar mapear para supported cultures
-            if (!string.IsNullOrWhiteSpace(lang) && lang.Length == 2)
-            {
-                var match = _supportedCultures.FirstOrDefault(c => c.StartsWith(lang, StringComparison.OrdinalIgnoreCase));
-                if (match != null) return match;
-            }
         }
 
         // 2. Tenta pegar do header Accept-Language
         if (context.Request.Headers.TryGetValue("Accept-Language", out var acceptLanguage))
         {
-            var langs = acceptLanguage.ToString().Split(',');
-            foreach (var l in langs)
+            var languages = acceptLanguage.ToString().Split(',');
+            foreach (var language in languages)
             {
-                var lang = l.Split(';')[0].Trim();
+                var lang = language.Split(';')[0].Trim();
                 if (_supportedCultures.Contains(lang, StringComparer.OrdinalIgnoreCase))
                 {
                     return lang;
@@ -102,6 +95,7 @@ public class SwaggerLocalizationMiddleware
             }
         }
 
-        return string.Empty;
+        // 3. Fallback para pt-PT
+        return "pt-PT";
     }
 }

@@ -40,8 +40,8 @@ public class InterventionMapping : IEntityTypeConfiguration<InterventionEntity>
             .HasColumnName("VehicleId")
             .IsRequired();
 
-        builder.Property(x => x.InterventionStatusId)
-            .HasColumnName("InterventionStatusId")
+        builder.Property(x => x.StatusId)
+            .HasColumnName("StatusId")
             .IsRequired();
 
         builder.Property(x => x.Title)
@@ -115,7 +115,7 @@ public class InterventionMapping : IEntityTypeConfiguration<InterventionEntity>
         builder.ToTable(t => t.HasCheckConstraint("CK_Interventions_EndDateTime", "[EndDateTime] IS NULL OR [EndDateTime] >= [StartDateTime]"));
 
         // Índices
-        builder.HasIndex(v => new { v.TenantId, v.StartDateTime, v.InterventionStatusId })
+        builder.HasIndex(v => new { v.TenantId, v.StartDateTime, v.StatusId })
             .HasDatabaseName("IX_Interventions_Tenant_Date")
             .IncludeProperties(v => new { v.ClientId, v.TeamMemberId })
             .HasFilter("[IsDeleted] = 0");
@@ -152,9 +152,9 @@ public class InterventionMapping : IEntityTypeConfiguration<InterventionEntity>
             .HasConstraintName("FK_Interventions_Vehicles")
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder.HasOne(x => x.InterventionStatus)
+        builder.HasOne(x => x.Status)
             .WithMany()
-            .HasForeignKey(x => new { x.InterventionStatusId, x.TenantId })
+            .HasForeignKey(x => new { x.StatusId, x.TenantId })
             .HasPrincipalKey(s => new { s.Id, s.TenantId })
             .HasConstraintName("FK_Interventions_Status")
             .OnDelete(DeleteBehavior.Restrict);

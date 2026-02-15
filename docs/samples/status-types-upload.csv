@@ -1,0 +1,6 @@
+Name;Description
+Intervention;Status relacionados ao ciclo de vida das intervenções
+Equipment;Status relacionados ao estado operacional dos equipamentos
+Vehicle;Status relacionados ao estado dos veículos
+Subscription;Status relacionados ao ciclo de vida das assinaturas
+User;Status relacionados ao estado dos usuários do sistema

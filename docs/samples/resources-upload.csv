@@ -27,4 +27,5 @@ Subscriptions;Mantem dados das assinaturas
 Functions;Mantem dados das funções/cargos dos times de equipas
 AddressTypes;Mantem dados das de tipos de endereços
 EquipmentTypes;Mantem dados das de tipos de equipamentos
-InterventionStatus;Mantem dados dos estados das intervenções
+Status;Mantem dados dos estados
+StatusTypes;Mantem dados dos tipos de status

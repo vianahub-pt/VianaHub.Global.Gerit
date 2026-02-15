@@ -111,7 +111,7 @@ public static class SwaggerSetup
         {
             // ✅ Adiciona o middleware de localização do Swagger ANTES do UseSwagger
             app.UseMiddleware<Middleware.SwaggerLocalizationMiddleware>(
-                new List<string> { "pt-PT", "pt-BR", "en-US", "es-ES" }
+                new List<string> { "pt-PT", "en-US", "es-ES" }
             );
 
             app.UseSwagger(c =>

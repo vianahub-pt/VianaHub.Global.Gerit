@@ -28,10 +28,10 @@ public class LocalizationService : ILocalizationService
         if (messages.TryGetValue(key, out var value))
             return value;
 
-        // Fallback para pt-BR
-        if (culture != "pt-BR")
+        // Fallback para pt-PT
+        if (culture != "pt-PT")
         {
-            var fallbackMessages = GetMessages("pt-BR");
+            var fallbackMessages = GetMessages("pt-PT");
             if (fallbackMessages.TryGetValue(key, out var fallbackValue))
                 return fallbackValue;
         }
@@ -77,38 +77,92 @@ public class LocalizationService : ILocalizationService
             if (_cache.TryGetValue(culture, out cached))
                 return cached;
 
-            var filePath = Path.Combine(
+            var localizationPath = Path.Combine(
                 Directory.GetCurrentDirectory(),
-                "Localization",
-                $"messages.{culture}.json"
+                "Localization"
             );
 
-            // Se não encontrar o arquivo, tenta fallback para pt-BR
-            if (!File.Exists(filePath))
+            if (!Directory.Exists(localizationPath))
             {
-                Log.Warning("⚠️ [Gerit:LocalizationService] File not found: {FilePath}, trying pt-BR fallback", filePath);
-                filePath = Path.Combine(
-                    Directory.GetCurrentDirectory(),
-                    "Localization",
-                    "messages.pt-BR.json"
-                );
-            }
-
-            if (!File.Exists(filePath))
-            {
-                Log.Error("❌ [Gerit:LocalizationService] Fallback file not found: {FilePath}", filePath);
-                // Cria dicionário vazio se não encontrar arquivo algum
+                Log.Error("❌ [Gerit:LocalizationService] Localization folder not found: {Path}", localizationPath);
                 _cache[culture] = new Dictionary<string, string>();
                 return _cache[culture];
             }
 
-            var json = File.ReadAllText(filePath);
-            var messages = JsonSerializer.Deserialize<Dictionary<string, string>>(json)
-                ?? new Dictionary<string, string>();
+            // Carregar todos os arquivos JSON recursivamente que correspondem ao culture
+            var mergedMessages = new Dictionary<string, string>();
+            var duplicateKeys = new List<string>();
 
-            _cache[culture] = messages;
-            Log.Debug("✅ [Gerit:LocalizationService] Loaded {Count} messages for {Culture}", messages.Count, culture);
-            return messages;
+            // Padrão: {folder}/{folder}.{culture}.json
+            // Ex: api/api.en-US.json, application/application.en-US.json, etc.
+            var jsonFiles = Directory.GetFiles(localizationPath, $"*.{culture}.json", SearchOption.AllDirectories);
+
+            if (jsonFiles.Length == 0)
+            {
+                Log.Warning("⚠️ [Gerit:LocalizationService] No JSON files found for culture {Culture} in {Path}", culture, localizationPath);
+                
+                // Tentar fallback para pt-PT
+                if (culture != "pt-PT")
+                {
+                    Log.Warning("⚠️ [Gerit:LocalizationService] Trying pt-PT fallback");
+                    jsonFiles = Directory.GetFiles(localizationPath, "*.pt-PT.json", SearchOption.AllDirectories);
+                }
+
+                if (jsonFiles.Length == 0)
+                {
+                    Log.Error("❌ [Gerit:LocalizationService] No fallback files found for culture {Culture}", culture);
+                    _cache[culture] = new Dictionary<string, string>();
+                    return _cache[culture];
+                }
+            }
+
+            Log.Debug("🔍 [Gerit:LocalizationService] Found {Count} JSON files for culture {Culture}", jsonFiles.Length, culture);
+
+            foreach (var filePath in jsonFiles)
+            {
+                try
+                {
+                    var json = File.ReadAllText(filePath);
+                    var fileMessages = JsonSerializer.Deserialize<Dictionary<string, string>>(json);
+
+                    if (fileMessages == null || fileMessages.Count == 0)
+                    {
+                        Log.Warning("⚠️ [Gerit:LocalizationService] File {File} is empty or invalid", Path.GetFileName(filePath));
+                        continue;
+                    }
+
+                    foreach (var kvp in fileMessages)
+                    {
+                        if (mergedMessages.ContainsKey(kvp.Key))
+                        {
+                            duplicateKeys.Add(kvp.Key);
+                            Log.Error("🔴 [Gerit:LocalizationService] DUPLICATE KEY DETECTED: '{Key}' in file {File}", kvp.Key, Path.GetFileName(filePath));
+                        }
+                        else
+                        {
+                            mergedMessages[kvp.Key] = kvp.Value;
+                        }
+                    }
+
+                    Log.Debug("✅ [Gerit:LocalizationService] Loaded {Count} messages from {File}", fileMessages.Count, Path.GetFileName(filePath));
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex, "❌ [Gerit:LocalizationService] Error loading file {File}", Path.GetFileName(filePath));
+                }
+            }
+
+            if (duplicateKeys.Count > 0)
+            {
+                Log.Error("🔴 [Gerit:LocalizationService] Found {Count} duplicate keys for culture {Culture}: {Keys}", 
+                    duplicateKeys.Count, culture, string.Join(", ", duplicateKeys.Distinct()));
+            }
+
+            _cache[culture] = mergedMessages;
+            Log.Information("✅ [Gerit:LocalizationService] Successfully loaded {Count} total messages for culture {Culture} from {FileCount} files",
+                mergedMessages.Count, culture, jsonFiles.Length);
+
+            return mergedMessages;
         }
     }
 }

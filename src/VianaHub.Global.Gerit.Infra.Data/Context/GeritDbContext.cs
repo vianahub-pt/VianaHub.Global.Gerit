@@ -40,6 +40,7 @@ public class GeritDbContext : DbContext
     public DbSet<ClientContactEntity> ClientContacts { get; set; }
     public DbSet<ClientAddressEntity> ClientAddresses { get; set; }
     public DbSet<ClientFiscalDataEntity> ClientFiscalData { get; set; }
+    public DbSet<TeamEntity> Teams { get; set; }
     public DbSet<TeamMemberEntity> TeamMembers { get; set; }
     public DbSet<TeamMemberContactEntity> TeamMemberContacts { get; set; }
     public DbSet<TeamMemberAddressEntity> TeamMemberAddresses { get; set; }
@@ -47,7 +48,8 @@ public class GeritDbContext : DbContext
     public DbSet<EquipmentEntity> Equipments { get; set; }
     public DbSet<EquipmentTypeEntity> EquipmentTypes { get; set; }
     public DbSet<VehicleEntity> Vehicles { get; set; }
-    public DbSet<InterventionStatusEntity> InterventionStatus { get; set; }
+    public DbSet<StatusTypeEntity> StatusTypes { get; set; }
+    public DbSet<StatusEntity> Status { get; set; }
     public DbSet<InterventionEntity> Interventions { get; set; }
     public DbSet<InterventionContactEntity> InterventionContacts { get; set; }
     public DbSet<InterventionAddressEntity> InterventionAddresses { get; set; }

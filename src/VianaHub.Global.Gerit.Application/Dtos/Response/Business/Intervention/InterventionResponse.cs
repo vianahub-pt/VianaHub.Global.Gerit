@@ -10,8 +10,8 @@ public class InterventionResponse
     public string TeamMember { get; set; }
     public int VehicleId { get; set; }
     public string Plate { get; set; }
-    public int InterventionStatusId { get; set; }
-    public string InterventionStatus { get; set; }
+    public int StatusId { get; set; }
+    public string Status { get; set; }
     public string Title { get; set; }
     public string Description { get; set; }
     public DateTime StartDateTime { get; set; }

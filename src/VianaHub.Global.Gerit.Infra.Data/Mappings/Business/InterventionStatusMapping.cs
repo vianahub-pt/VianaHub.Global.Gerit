@@ -5,18 +5,18 @@ using VianaHub.Global.Gerit.Domain.Entities.Business;
 namespace VianaHub.Global.Gerit.Infra.Data.Mappings.Business;
 
 /// <summary>
-/// Mapeamento da entidade InterventionStatus
+/// Mapeamento da entidade Status
 /// Status das intervenções com suporte a Row Level Security
 /// </summary>
-public class InterventionStatusMapping : IEntityTypeConfiguration<InterventionStatusEntity>
+public class StatusMapping : IEntityTypeConfiguration<StatusEntity>
 {
-    public void Configure(EntityTypeBuilder<InterventionStatusEntity> builder)
+    public void Configure(EntityTypeBuilder<StatusEntity> builder)
     {
-        builder.ToTable("InterventionStatus", "dbo");
+        builder.ToTable("Status", "dbo");
 
         // Chave Primária
         builder.HasKey(x => x.Id)
-            .HasName("PK_InterventionStatus");
+            .HasName("PK_Status");
 
         builder.Property(x => x.Id)
             .HasColumnName("Id")
@@ -26,7 +26,7 @@ public class InterventionStatusMapping : IEntityTypeConfiguration<InterventionSt
 
         // Chave alternativa para suportar FKs compostas com TenantId
         builder.HasAlternateKey(x => new { x.Id, x.TenantId })
-            .HasName("UQ_InterventionStatus_Id_Tenant");
+            .HasName("UQ_Status_Id_Tenant");
 
         // Propriedades
         builder.Property(x => x.TenantId)
@@ -82,13 +82,13 @@ public class InterventionStatusMapping : IEntityTypeConfiguration<InterventionSt
         // Índice único por TenantId e Name
         builder.HasIndex(x => new { x.TenantId, x.Name })
             .IsUnique()
-            .HasDatabaseName("UQ_InterventionStatus_Tenant_Name");
+            .HasDatabaseName("UQ_Status_Tenant_Name");
 
         // Relacionamentos
         builder.HasOne(x => x.Tenant)
             .WithMany()
             .HasForeignKey(x => x.TenantId)
-            .HasConstraintName("FK_InterventionStatus_Tenant")
+            .HasConstraintName("FK_Status_Tenant")
             .OnDelete(DeleteBehavior.Restrict);
     }
 }

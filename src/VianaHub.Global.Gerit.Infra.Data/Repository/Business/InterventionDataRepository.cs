@@ -23,7 +23,7 @@ public class InterventionDataRepository : IInterventionDataRepository
             .Include(x => x.Client)
             .Include(x => x.TeamMember)
             .Include(x => x.Vehicle)
-            .Include(x => x.InterventionStatus)
+            .Include(x => x.Status)
             .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted, ct);
     }
 
@@ -34,7 +34,7 @@ public class InterventionDataRepository : IInterventionDataRepository
             .Include(x => x.Client)
             .Include(x => x.TeamMember)
             .Include(x => x.Vehicle)
-            .Include(x => x.InterventionStatus)
+            .Include(x => x.Status)
             .Where(x => !x.IsDeleted)
             .OrderByDescending(x => x.StartDateTime)
             .ToListAsync(ct);
@@ -47,7 +47,7 @@ public class InterventionDataRepository : IInterventionDataRepository
             .Include(x => x.Client)
             .Include(x => x.TeamMember)
             .Include(x => x.Vehicle)
-            .Include(x => x.InterventionStatus)
+            .Include(x => x.Status)
             .Where(x => !x.IsDeleted);
 
         if (!string.IsNullOrWhiteSpace(request.Search))

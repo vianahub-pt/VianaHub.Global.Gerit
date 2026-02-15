@@ -46,19 +46,22 @@ using VianaHub.Global.Gerit.Domain.Validators.Identity.UserRole;
 using VianaHub.Global.Gerit.Domain.Validators.Business.Vehicle;
 using VianaHub.Global.Gerit.Domain.Validators.Business.Equipment;
 using VianaHub.Global.Gerit.Domain.Validators.Business.Function;
+using VianaHub.Global.Gerit.Domain.Validators.Business.Team;
 using VianaHub.Global.Gerit.Domain.Validators.Business.TeamMember;
 using VianaHub.Global.Gerit.Domain.Validators.Business.TeamMemberAddress;
 using VianaHub.Global.Gerit.Domain.Validators.Business.TeamMemberContact;
 using VianaHub.Global.Gerit.Domain.Validators.Business.Client;
 using VianaHub.Global.Gerit.Domain.Validators.Business.ClientAddress;
 using VianaHub.Global.Gerit.Domain.Validators.Business.ClientContact;
-using VianaHub.Global.Gerit.Domain.Validators.Business.InterventionStatus;
+using VianaHub.Global.Gerit.Domain.Validators.Business.Status;
 using VianaHub.Global.Gerit.Domain.Validators.Business.Intervention;
 using VianaHub.Global.Gerit.Infra.Data.Repository.Job;
 using VianaHub.Global.Gerit.Infra.Data.Repository.Business;
 using VianaHub.Global.Gerit.Infra.Data.Repository.Billing;
 using VianaHub.Global.Gerit.Domain.Validators.Business.AddressType;
 using VianaHub.Global.Gerit.Domain.Validators.Business.EquipmentType;
+using VianaHub.Global.Gerit.Domain.Validators.Business.StatusType;
+using VianaHub.Global.Gerit.Domain.Validators.Business;
 
 namespace VianaHub.Global.Gerit.Infra.IoC;
 
@@ -100,6 +103,8 @@ public static class DependencyInjection
         services.AddScoped<IEntityDomainValidator<EquipmentTypeEntity>, EquipmentTypeValidator>();
         // Function validators
         services.AddScoped<IEntityDomainValidator<FunctionEntity>, FunctionValidator>();
+        // Team validators
+        services.AddScoped<IEntityDomainValidator<TeamEntity>, TeamValidator>();
         // TeamMember validators
         services.AddScoped<IEntityDomainValidator<TeamMemberEntity>, TeamMemberValidator>();
         // TeamMemberAddress validators
@@ -114,10 +119,12 @@ public static class DependencyInjection
         services.AddScoped<IEntityDomainValidator<ClientAddressEntity>, ClientAddressValidator>();
         // ClientContact validators
         services.AddScoped<IEntityDomainValidator<ClientContactEntity>, ClientContactValidator>();
-        // InterventionStatus validators
-        services.AddScoped<IEntityDomainValidator<InterventionStatusEntity>, InterventionStatusValidator>();
+        // Status validators
+        services.AddScoped<IEntityDomainValidator<StatusEntity>, StatusValidator>();
         // Intervention validators
         services.AddScoped<IEntityDomainValidator<InterventionEntity>, InterventionValidator>();
+        // StatusType validators
+        services.AddScoped<IEntityDomainValidator<StatusTypeEntity>, StatusTypeValidator>();
 
         // Application - Common Services
         services.AddScoped<IFileValidationService, FileValidationService>();
@@ -125,6 +132,7 @@ public static class DependencyInjection
         // Application - App Services
         services.AddScoped<IAddressTypeAppService, AddressTypeAppService>();
         services.AddScoped<IFunctionAppService, FunctionAppService>();
+        services.AddScoped<ITeamAppService, TeamAppService>();
         services.AddScoped<IVehicleAppService, VehicleAppService>();
         services.AddScoped<IEquipmentAppService, EquipmentAppService>();
         services.AddScoped<IEquipmentTypeAppService, EquipmentTypeAppService>();
@@ -134,8 +142,9 @@ public static class DependencyInjection
         services.AddScoped<IClientAppService, ClientAppService>();
         services.AddScoped<IClientAddressAppService, ClientAddressAppService>();
         services.AddScoped<IClientContactAppService, ClientContactAppService>();
-        services.AddScoped<IInterventionStatusAppService, InterventionStatusAppService>();
+        services.AddScoped<IStatusAppService, StatusAppService>();
         services.AddScoped<IInterventionAppService, InterventionAppService>();
+        services.AddScoped<IStatusTypeAppService, StatusTypeAppService>();
         services.AddScoped<IActionAppService, ActionAppService>();
         services.AddScoped<IResourceAppService, ResourceAppService>();
         services.AddScoped<IRoleAppService, RoleAppService>();
@@ -162,6 +171,7 @@ public static class DependencyInjection
         services.AddScoped<IRolePermissionDomainService, RolePermissionDomainService>();
         services.AddScoped<IJwtKeyDomainService, JwtKeyDomainService>();
         services.AddScoped<IFunctionDomainService, FunctionDomainService>();
+        services.AddScoped<ITeamDomainService, TeamDomainService>();
         services.AddScoped<IVehicleDomainService, VehicleDomainService>();
         services.AddScoped<IEquipmentDomainService, EquipmentDomainService>();
         services.AddScoped<IEquipmentTypeDomainService, EquipmentTypeDomainService>();
@@ -171,12 +181,14 @@ public static class DependencyInjection
         services.AddScoped<IClientDomainService, ClientDomainService>();
         services.AddScoped<IClientAddressDomainService, ClientAddressDomainService>();
         services.AddScoped<IClientContactDomainService, ClientContactDomainService>();
-        services.AddScoped<IInterventionStatusDomainService, InterventionStatusDomainService>();
+        services.AddScoped<IStatusDomainService, StatusDomainService>();
         services.AddScoped<IInterventionDomainService, InterventionDomainService>();
+        services.AddScoped<IStatusTypeDomainService, StatusTypeDomainService>();
 
         // Infra.Data - Repositories
         services.AddScoped<IAddressTypeDataRepository, AddressTypeDataRepository>();
         services.AddScoped<IFunctionDataRepository, FunctionDataRepository>();
+        services.AddScoped<ITeamDataRepository, TeamDataRepository>();
         services.AddScoped<IVehicleDataRepository, VehicleDataRepository>();
         services.AddScoped<IEquipmentDataRepository, EquipmentDataRepository>();
         services.AddScoped<IEquipmentTypeDataRepository, EquipmentTypeDataRepository>();
@@ -186,8 +198,9 @@ public static class DependencyInjection
         services.AddScoped<IClientDataRepository, ClientDataRepository>();
         services.AddScoped<IClientAddressDataRepository, ClientAddressDataRepository>();
         services.AddScoped<IClientContactDataRepository, ClientContactDataRepository>();
-        services.AddScoped<IInterventionStatusDataRepository, InterventionStatusDataRepository>();
+        services.AddScoped<IStatusDataRepository, StatusDataRepository>();
         services.AddScoped<IInterventionDataRepository, InterventionDataRepository>();
+        services.AddScoped<IStatusTypeDataRepository, StatusTypeDataRepository>();
         services.AddScoped<IActionDataRepository, ActionDataRepository>();
         services.AddScoped<IResourceDataRepository, ResourceDataRepository>();
         services.AddScoped<IRoleDataRepository, RoleDataRepository>();

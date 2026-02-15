@@ -9,7 +9,7 @@
         const urlParams = new URLSearchParams(window.location.search);
         const currentLang = urlParams.get('lang');
 
-        // If no lang parameter exists, redirect with pt-BR
+        // If no lang parameter exists, redirect with pt-PT
         if (!currentLang) {
             const defaultLang = getDefaultLanguage();
             console.log('No lang parameter found, redirecting to:', defaultLang);
@@ -52,7 +52,7 @@
             return 'pt-PT';
         }
 
-        // Default to Portuguese
+        // Default to Portuguese PT
         return 'pt-PT';
     }
 
@@ -88,7 +88,6 @@
                 <div id="lang-switcher" class="lang-switcher">
                     <select id="lang-select" class="lang-select" aria-label="Language selector">
                         <option value="pt-PT" ${currentLang === 'pt-PT' ? 'selected' : ''}>Portugu&ecirc;s PT</option>
-                        <option value="pt-BR" ${currentLang === 'pt-BR' ? 'selected' : ''}>Portugu&ecirc;s BR</option>
                         <option value="en-US" ${currentLang === 'en-US' ? 'selected' : ''}>English</option>
                         <option value="es-ES" ${currentLang === 'es-ES' ? 'selected' : ''}>Espa&ntilde;ol</option>
                     </select>
@@ -165,11 +164,11 @@
         // Try to detect from browser (third priority)
         const browserLang = navigator.language || navigator.userLanguage;
         if (browserLang.startsWith('pt')) {
-            return 'pt-BR';
+            return 'pt-PT';
         }
 
-        // DEFAULT CHANGED: Portuguese as default instead of English
-        return 'pt-BR';
+        // Default to Portuguese PT
+        return 'pt-PT';
     }
 
     function switchLanguage(lang) {
