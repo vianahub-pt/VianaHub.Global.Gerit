@@ -92,8 +92,6 @@ public class InterventionAppService : IInterventionAppService
         var entity = new InterventionEntity(
             tenantId,
             request.ClientId,
-            request.TeamMemberId,
-            request.VehicleId,
             request.StatusId,
             request.Title,
             request.Description,
@@ -126,8 +124,6 @@ public class InterventionAppService : IInterventionAppService
 
         entity.UpdateDetails(
             request.ClientId,
-            request.TeamMemberId,
-            request.VehicleId,
             request.StatusId,
             request.Title,
             request.Description,
@@ -302,8 +298,6 @@ public class InterventionAppService : IInterventionAppService
             var entity = new InterventionEntity(
                 tenantId,
                 item.ClientId,
-                item.TeamMemberId,
-                item.VehicleId,
                 item.StatusId,
                 item.Title,
                 item.Description,
@@ -328,18 +322,6 @@ public class InterventionAppService : IInterventionAppService
         if (item.ClientId <= 0)
         {
             _notify.Add(_localization.GetMessage("Application.Service.Intervention.ValidateBulkItem.ClientId"), 400);
-            return false;
-        }
-
-        if (item.TeamMemberId <= 0)
-        {
-            _notify.Add(_localization.GetMessage("Application.Service.Intervention.ValidateBulkItem.TeamMemberId"), 400);
-            return false;
-        }
-
-        if (item.VehicleId <= 0)
-        {
-            _notify.Add(_localization.GetMessage("Application.Service.Intervention.ValidateBulkItem.VehicleId"), 400);
             return false;
         }
 

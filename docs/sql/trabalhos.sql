@@ -10,13 +10,15 @@ select * from dbo.UserRoles;			--
 select * from dbo.RolePermissions order by ResourceId;		--
 select * from dbo.JwtKeys;
 ------------------------------
+select * from dbo.StatusTypes;			--
+select * from dbo.Status;				
 select * from dbo.AddressTypes;			--
 select * from dbo.Clients;				--
 select * from dbo.ClientAddresses;		--
 select * from dbo.ClientContacts;		--
+select * from dbo.Functions;			--
 select * from dbo.EquipmentTypes;		--
 select * from dbo.Equipments;			--
-select * from dbo.Functions;			--
 select * from dbo.TeamMembers;			--
 select * from dbo.TeamMemberAddresses;	--
 select * from dbo.TeamMemberContacts;	--
@@ -25,8 +27,7 @@ select * from dbo.InterventionAddresses;
 select * from dbo.InterventionContacts;
 select * from dbo.Vehicles;				--
 
-select * from dbo.StatusTypes;			--
-select * from dbo.Status;				
+
 
 select * from dbo.Teams;
 select * from dbo.TeamMembersTeams;
@@ -38,10 +39,14 @@ FOR JSON AUTO;
 
 
 
-Tipos de status (Intervention, Equipment, Vehicle)
 
-InterventionStatus
+
 /*
+Estado do equipamento	1 - Disponível, Em uso, Em manutenção
+Estado da intervenção	2 - Aberto, Pendente, Fechado, 
+Estado do veículo		3 - Novo, Usado, Em Manutenção
+
+
 TeamMembers
 TeamMember
 ActivateTeamMemberValidator

@@ -21,6 +21,7 @@ public class EquipmentDataRepository : IEquipmentDataRepository
         return await _context.Set<EquipmentEntity>()
             .AsNoTracking()
             .Include(x => x.EquipmentType)
+            .Include(x => x.Status)
             .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted, ct);
     }
 
@@ -29,6 +30,7 @@ public class EquipmentDataRepository : IEquipmentDataRepository
         return await _context.Set<EquipmentEntity>()
             .AsNoTracking()
             .Include(x => x.EquipmentType)
+            .Include(x => x.Status)
             .Where(x => !x.IsDeleted).OrderBy(x => x.Name).ToListAsync(ct);
     }
 
@@ -37,6 +39,7 @@ public class EquipmentDataRepository : IEquipmentDataRepository
         var query = _context.Set<EquipmentEntity>()
             .AsNoTracking()
             .Include(x => x.EquipmentType)
+            .Include(x => x.Status)
             .Where(x => !x.IsDeleted);
 
         if (!string.IsNullOrWhiteSpace(request.Search))
@@ -44,7 +47,8 @@ public class EquipmentDataRepository : IEquipmentDataRepository
             var search = request.Search.Trim().ToLower();
             query = query.Where(x => EF.Functions.Like(x.Name.ToLower(), $"%{search}%") || 
                                      EF.Functions.Like(x.SerialNumber.ToLower(), $"%{search}%") ||
-                                     EF.Functions.Like(x.EquipmentType.Name.ToLower(), $"%{search}%"));
+                                     EF.Functions.Like(x.EquipmentType.Name.ToLower(), $"%{search}%") ||
+                                     EF.Functions.Like(x.Status.Name.ToLower(), $"%{search}%"));
         }
 
         var count = await query.CountAsync(ct);

@@ -11,6 +11,10 @@ public class UpdateStatusRouteValidator : AbstractValidator<UpdateStatusRequest>
 {
     public UpdateStatusRouteValidator(ILocalizationService localization)
     {
+        RuleFor(x => x.StatusTypeId)
+            .GreaterThan(0)
+            .WithMessage(localization.GetMessage("Api.Validator.Status.Update.StatusTypeId"));
+
         RuleFor(x => x.Name)
             .NotEmpty()
             .WithMessage(localization.GetMessage("Api.Validator.Status.Update.Name"))

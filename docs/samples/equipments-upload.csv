@@ -1,51 +1,51 @@
-Name;SerialNumber;EquipmentTypeId
-Furadeira Bosch GSB 13 RE;FUR-001-2024;5
-Furadeira Makita HP1640;FUR-002-2024;5
-Furadeira DeWalt DWD502;FUR-003-2024;5
-Parafusadeira Bosch GSR 12V;PAR-001-2024;6
-Parafusadeira Makita DF330D;PAR-002-2024;6
-Parafusadeira Black+Decker CS1250;PAR-003-2024;6
-Esmerilhadeira Bosch GWS 22-180;ESM-001-2024;7
-Esmerilhadeira Makita GA5030;ESM-002-2024;7
-Esmerilhadeira DeWalt DWE4120;ESM-003-2024;7
-Serra Circular Bosch GKS 190;SER-001-2024;8
-Serra Tico-Tico Makita 4329K;SER-002-2024;8
-Serra Mármore Makita 4100NH;SER-003-2024;8
-Lixadeira Orbital Bosch GSS 140;LIX-001-2024;9
-Lixadeira de Cinta Makita 9403;LIX-002-2024;9
-Lixadeira Roto-Orbital DeWalt DWE6423;LIX-003-2024;9
-Martelete Bosch GBH 2-26 DFR;MAR-001-2024;10
-Martelete Makita HR2470;MAR-002-2024;10
-Martelete DeWalt D25123K;MAR-003-2024;10
-Soprador Bosch GBL 800 E;SOP-001-2024;11
-Soprador DeWalt DCE100B;SOP-002-2024;11
-Pistola de Calor Bosch GHG 630 DCE;PIS-001-2024;12
-Pistola de Calor Black+Decker HG1500;PIS-002-2024;12
-Jogo de Chaves Combinadas 12 Peças;CHA-001-2024;13
-Jogo de Chaves Allen Metric;CHA-002-2024;13
-Chave Inglesa 12 Polegadas;CHA-003-2024;13
-Alicate Universal 8 Polegadas;ALI-001-2024;14
-Alicate de Corte 7 Polegadas;ALI-002-2024;14
-Alicate Bomba d'água 10 Polegadas;ALI-003-2024;14
-Martelo Carpinteiro 500g;MAT-001-2024;15
-Martelo de Borracha 350g;MAT-002-2024;15
-Marreta 3kg com Cabo Fibra;MAT-003-2024;15
-Serrote Carpinteiro 22 Polegadas;SEI-001-2024;16
-Arco de Serra Manual;SEI-002-2024;16
-Estilete Profissional Retrátil;EST-001-2024;17
-Estilete de Segurança;EST-002-2024;17
-Torquímetro 40-200 Nm;TOR-001-2024;18
-Chave Torque Click 10-50 Nm;TOR-002-2024;18
-Formão 1/2 Polegada;FOR-001-2024;19
-Formão 1 Polegada;FOR-002-2024;19
-Lima Meia-Cana 10 Polegadas;LIM-001-2024;20
-Lima Triangular 8 Polegadas;LIM-002-2024;20
-Grampo Sargento 12 Polegadas;GRA-001-2024;21
-Grampo Tipo C 6 Polegadas;GRA-002-2024;21
-Trena 5 Metros Stanley;TRE-001-2024;22
-Trena 8 Metros Profissional;TRE-002-2024;22
-Paquímetro Digital 150mm;PAQ-001-2024;23
-Micrômetro Externo 0-25mm;MIC-001-2024;24
-Nível Laser Bosch GLL 3-80;NIV-001-2024;25
-Nível de Bolha 60cm;NIV-002-2024;25
-Multímetro Digital Fluke 115;MUL-001-2024;27
+Name;SerialNumber;EquipmentTypeId;StatusId
+Furadeira Bosch GSB 13 RE;FUR-001-2024;5;12
+Furadeira Makita HP1640;FUR-002-2024;5;12
+Furadeira DeWalt DWD502;FUR-003-2024;5;12
+Parafusadeira Bosch GSR 12V;PAR-001-2024;6;12
+Parafusadeira Makita DF330D;PAR-002-2024;6;12
+Parafusadeira Black+Decker CS1250;PAR-003-2024;6;12
+Esmerilhadeira Bosch GWS 22-180;ESM-001-2024;7;12
+Esmerilhadeira Makita GA5030;ESM-002-2024;7;12
+Esmerilhadeira DeWalt DWE4120;ESM-003-2024;7;12
+Serra Circular Bosch GKS 190;SER-001-2024;8;12
+Serra Tico-Tico Makita 4329K;SER-002-2024;8;12
+Serra Mármore Makita 4100NH;SER-003-2024;8;12
+Lixadeira Orbital Bosch GSS 140;LIX-001-2024;9;12
+Lixadeira de Cinta Makita 9403;LIX-002-2024;9;12
+Lixadeira Roto-Orbital DeWalt DWE6423;LIX-003-2024;9;12
+Martelete Bosch GBH 2-26 DFR;MAR-001-2024;10;12
+Martelete Makita HR2470;MAR-002-2024;10;12
+Martelete DeWalt D25123K;MAR-003-2024;10;12
+Soprador Bosch GBL 800 E;SOP-001-2024;11;12
+Soprador DeWalt DCE100B;SOP-002-2024;11;12
+Pistola de Calor Bosch GHG 630 DCE;PIS-001-2024;12;12
+Pistola de Calor Black+Decker HG1500;PIS-002-2024;12;12
+Jogo de Chaves Combinadas 12 Peças;CHA-001-2024;13;12
+Jogo de Chaves Allen Metric;CHA-002-2024;13;12
+Chave Inglesa 12 Polegadas;CHA-003-2024;13;12
+Alicate Universal 8 Polegadas;ALI-001-2024;14;12
+Alicate de Corte 7 Polegadas;ALI-002-2024;14;12
+Alicate Bomba d'água 10 Polegadas;ALI-003-2024;14;12
+Martelo Carpinteiro 500g;MAT-001-2024;15;12
+Martelo de Borracha 350g;MAT-002-2024;15;12
+Marreta 3kg com Cabo Fibra;MAT-003-2024;15;12
+Serrote Carpinteiro 22 Polegadas;SEI-001-2024;16;12
+Arco de Serra Manual;SEI-002-2024;16;12
+Estilete Profissional Retrátil;EST-001-2024;17;12
+Estilete de Segurança;EST-002-2024;17;12
+Torquímetro 40-200 Nm;TOR-001-2024;18;12
+Chave Torque Click 10-50 Nm;TOR-002-2024;18;12
+Formão 1/2 Polegada;FOR-001-2024;19;12
+Formão 1 Polegada;FOR-002-2024;19;12
+Lima Meia-Cana 10 Polegadas;LIM-001-2024;20;12
+Lima Triangular 8 Polegadas;LIM-002-2024;20;12
+Grampo Sargento 12 Polegadas;GRA-001-2024;21;12
+Grampo Tipo C 6 Polegadas;GRA-002-2024;21;12
+Trena 5 Metros Stanley;TRE-001-2024;22;12
+Trena 8 Metros Profissional;TRE-002-2024;22;12
+Paquímetro Digital 150mm;PAQ-001-2024;23;12
+Micrômetro Externo 0-25mm;MIC-001-2024;24;12
+Nível Laser Bosch GLL 3-80;NIV-001-2024;25;12
+Nível de Bolha 60cm;NIV-002-2024;25;12
+Multímetro Digital Fluke 115;MUL-001-2024;27;12

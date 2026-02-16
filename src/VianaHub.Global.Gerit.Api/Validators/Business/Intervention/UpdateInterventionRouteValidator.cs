@@ -15,14 +15,6 @@ public class UpdateInterventionRouteValidator : AbstractValidator<UpdateInterven
             .GreaterThan(0)
             .WithMessage(localization.GetMessage("Api.Validator.Intervention.Update.ClientId"));
 
-        RuleFor(x => x.TeamMemberId)
-            .GreaterThan(0)
-            .WithMessage(localization.GetMessage("Api.Validator.Intervention.Update.TeamMemberId"));
-
-        RuleFor(x => x.VehicleId)
-            .GreaterThan(0)
-            .WithMessage(localization.GetMessage("Api.Validator.Intervention.Update.VehicleId"));
-
         RuleFor(x => x.Title)
             .NotEmpty()
             .WithMessage(localization.GetMessage("Api.Validator.Intervention.Update.Title"))

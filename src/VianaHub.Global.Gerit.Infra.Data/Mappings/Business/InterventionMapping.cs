@@ -32,14 +32,6 @@ public class InterventionMapping : IEntityTypeConfiguration<InterventionEntity>
             .HasColumnName("ClientId")
             .IsRequired();
 
-        builder.Property(x => x.TeamMemberId)
-            .HasColumnName("TeamMemberId")
-            .IsRequired();
-
-        builder.Property(x => x.VehicleId)
-            .HasColumnName("VehicleId")
-            .IsRequired();
-
         builder.Property(x => x.StatusId)
             .HasColumnName("StatusId")
             .IsRequired();
@@ -114,11 +106,6 @@ public class InterventionMapping : IEntityTypeConfiguration<InterventionEntity>
         // Constraints de check
         builder.ToTable(t => t.HasCheckConstraint("CK_Interventions_EndDateTime", "[EndDateTime] IS NULL OR [EndDateTime] >= [StartDateTime]"));
 
-        // Índices
-        builder.HasIndex(v => new { v.TenantId, v.StartDateTime, v.StatusId })
-            .HasDatabaseName("IX_Interventions_Tenant_Date")
-            .IncludeProperties(v => new { v.ClientId, v.TeamMemberId })
-            .HasFilter("[IsDeleted] = 0");
 
         builder.HasIndex(v => new { v.Id, v.TenantId })
             .HasDatabaseName("UQ_Interventions_Id_Tenant")
@@ -136,20 +123,6 @@ public class InterventionMapping : IEntityTypeConfiguration<InterventionEntity>
             .HasForeignKey(x => new { x.ClientId, x.TenantId })
             .HasPrincipalKey(c => new { c.Id, c.TenantId })
             .HasConstraintName("FK_Interventions_Clients")
-            .OnDelete(DeleteBehavior.Restrict);
-
-        builder.HasOne(x => x.TeamMember)
-            .WithMany()
-            .HasForeignKey(x => new { x.TeamMemberId, x.TenantId })
-            .HasPrincipalKey(tm => new { tm.Id, tm.TenantId })
-            .HasConstraintName("FK_Interventions_TeamMembers")
-            .OnDelete(DeleteBehavior.Restrict);
-
-        builder.HasOne(x => x.Vehicle)
-            .WithMany()
-            .HasForeignKey(x => new { x.VehicleId, x.TenantId })
-            .HasPrincipalKey(v => new { v.Id, v.TenantId })
-            .HasConstraintName("FK_Interventions_Vehicles")
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(x => x.Status)

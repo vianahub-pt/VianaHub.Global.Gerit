@@ -15,14 +15,6 @@ public class CreateInterventionRouteValidator : AbstractValidator<CreateInterven
             .GreaterThan(0)
             .WithMessage(localization.GetMessage("Api.Validator.Intervention.Create.ClientId"));
 
-        RuleFor(x => x.TeamMemberId)
-            .GreaterThan(0)
-            .WithMessage(localization.GetMessage("Api.Validator.Intervention.Create.TeamMemberId"));
-
-        RuleFor(x => x.VehicleId)
-            .GreaterThan(0)
-            .WithMessage(localization.GetMessage("Api.Validator.Intervention.Create.VehicleId"));
-
         RuleFor(x => x.Title)
             .NotEmpty()
             .WithMessage(localization.GetMessage("Api.Validator.Intervention.Create.Title"))

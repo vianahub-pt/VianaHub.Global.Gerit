@@ -10,6 +10,7 @@ namespace VianaHub.Global.Gerit.Domain.Entities.Business;
 public class StatusEntity : Entity, IAggregateRoot
 {
     public int TenantId { get; private set; }
+    public int StatusTypeId { get; private set; }
     public string Name { get; private set; }
     public string Description { get; private set; }
     public bool IsActive { get; private set; }
@@ -24,9 +25,10 @@ public class StatusEntity : Entity, IAggregateRoot
     /// <summary>
     /// Construtor para criação de um novo Status de Intervenção
     /// </summary>
-    public StatusEntity(int tenantId, string name, string description, int createdBy)
+    public StatusEntity(int tenantId, int statusTypeId, string name, string description, int createdBy)
     {
         TenantId = tenantId;
+        StatusTypeId = statusTypeId;
         Name = name;
         Description = description;
         IsActive = true;
@@ -35,8 +37,9 @@ public class StatusEntity : Entity, IAggregateRoot
         CreatedAt = DateTime.UtcNow;
     }
 
-    public void Update(string name, string description, int modifiedBy)
+    public void Update(int statusTypeId, string name, string description, int modifiedBy)
     {
+        StatusTypeId = statusTypeId;
         Name = name;
         Description = description;
         ModifiedBy = modifiedBy;

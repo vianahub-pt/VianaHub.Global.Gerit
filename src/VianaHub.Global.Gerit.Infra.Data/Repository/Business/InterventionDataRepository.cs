@@ -21,8 +21,6 @@ public class InterventionDataRepository : IInterventionDataRepository
         return await _context.Set<InterventionEntity>()
             .AsNoTracking()
             .Include(x => x.Client)
-            .Include(x => x.TeamMember)
-            .Include(x => x.Vehicle)
             .Include(x => x.Status)
             .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted, ct);
     }
@@ -32,8 +30,6 @@ public class InterventionDataRepository : IInterventionDataRepository
         return await _context.Set<InterventionEntity>()
             .AsNoTracking()
             .Include(x => x.Client)
-            .Include(x => x.TeamMember)
-            .Include(x => x.Vehicle)
             .Include(x => x.Status)
             .Where(x => !x.IsDeleted)
             .OrderByDescending(x => x.StartDateTime)
@@ -45,8 +41,6 @@ public class InterventionDataRepository : IInterventionDataRepository
         var query = _context.Set<InterventionEntity>()
             .AsNoTracking()
             .Include(x => x.Client)
-            .Include(x => x.TeamMember)
-            .Include(x => x.Vehicle)
             .Include(x => x.Status)
             .Where(x => !x.IsDeleted);
 

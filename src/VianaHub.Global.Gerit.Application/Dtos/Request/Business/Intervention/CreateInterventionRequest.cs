@@ -3,8 +3,6 @@ namespace VianaHub.Global.Gerit.Application.Dtos.Request.Business.Intervention;
 public class CreateInterventionRequest
 {
     public int ClientId { get; set; }
-    public int TeamMemberId { get; set; }
-    public int VehicleId { get; set; }
     public int StatusId { get; set; }
     public string Title { get; set; }
     public string Description { get; set; }

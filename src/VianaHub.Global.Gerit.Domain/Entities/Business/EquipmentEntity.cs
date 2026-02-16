@@ -1,6 +1,5 @@
 using VianaHub.Global.Gerit.Domain.Base;
 using VianaHub.Global.Gerit.Domain.Entities.Billing;
-using VianaHub.Global.Gerit.Domain.Enums;
 
 namespace VianaHub.Global.Gerit.Domain.Entities.Business;
 
@@ -11,15 +10,16 @@ public class EquipmentEntity : Entity
 {
     public int TenantId { get; private set; }
     public int EquipmentTypeId { get; set; }
+    public int StatusId { get; set; }
     public string Name { get; private set; }
     public string SerialNumber { get; private set; }
-    public EquipmentStatus Status { get; private set; }
     public bool IsActive { get; private set; }
     public bool IsDeleted { get; private set; }
 
     // Navigation Properties
     public TenantEntity Tenant { get; private set; }
     public EquipmentTypeEntity EquipmentType { get; private set; }
+    public StatusEntity Status { get; private set; }
 
     // Construtor protegido para o EF Core
     protected EquipmentEntity() { }
@@ -27,12 +27,12 @@ public class EquipmentEntity : Entity
     /// <summary>
     /// Construtor para criação de um novo Equipamento
     /// </summary>
-    public EquipmentEntity(int tenantId, int equipmentTypeId, string name, string serialNumber, int createdBy)
+    public EquipmentEntity(int tenantId, int equipmentTypeId, int statusId, string name, string serialNumber, int createdBy)
     {
         TenantId = tenantId;
         EquipmentTypeId = equipmentTypeId;
+        StatusId = statusId;
         Name = name;
-        Status = EquipmentStatus.Available;
         SerialNumber = serialNumber;
         IsActive = true;
         IsDeleted = false;
@@ -40,9 +40,10 @@ public class EquipmentEntity : Entity
         CreatedAt = DateTime.UtcNow;
     }
 
-    public void Update(int equipmentTypeId, string name, string serialNumber, int modifiedBy)
+    public void Update(int equipmentTypeId, int statusId, string name, string serialNumber, int modifiedBy)
     {
         EquipmentTypeId = equipmentTypeId;
+        StatusId = statusId;
         Name = name;
         SerialNumber = serialNumber;
         ModifiedBy = modifiedBy;

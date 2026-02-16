@@ -167,7 +167,6 @@ CREATE TABLE dbo.Subscriptions (                                                
     Id                      INT IDENTITY(1,1)   NOT NULL,                                       -- Identificador da assinatura, chave primária
     TenantId                INT                 NOT NULL,                                       -- FK para tenant
     PlanId                  INT                 NOT NULL,                                       -- FK para plano global
-    StatusId		        INT					NOT NULL,						                -- Status da Subscriptions
     StripeId                NVARCHAR(100)           NULL,                                       -- Id do subscription no Stripe
     CurrentPeriodStart      DATETIME2(7)        NOT NULL,                                       -- Início do período faturado
     CurrentPeriodEnd        DATETIME2(7)        NOT NULL,                                       -- Fim do período faturado
@@ -187,7 +186,6 @@ CREATE TABLE dbo.Subscriptions (                                                
     CONSTRAINT CK_Subscriptions_Active_Deleted CHECK (NOT (IsActive = 1 AND IsDeleted = 1)),
     CONSTRAINT FK_Subscriptions_Tenant FOREIGN KEY (TenantId) REFERENCES dbo.Tenants(Id),       -- Tenant-safe
     CONSTRAINT FK_Subscriptions_Plan FOREIGN KEY (PlanId) REFERENCES dbo.Plans(Id),             -- Global plan
-    CONSTRAINT FK_Subscriptions_Status FOREIGN KEY (StatusId, TenantId) REFERENCES dbo.Status(Id, TenantId),    -- FK para status (tenant-safe)
     CONSTRAINT UQ_Subscriptions_TenantId_Id UNIQUE (TenantId, Id)                                              -- Chave alternativa (TenantId, Id) p/ FKs compostas
         
 );
@@ -195,7 +193,6 @@ GO
 CREATE TABLE dbo.Users (                                                            -- Usuários do sistema
     Id				        INT IDENTITY(1,1)	NOT NULL,                           -- Identificador do usuário, chave primária
     TenantId		        INT					NOT NULL,                           -- Tenant do usuário
-    StatusId		        INT					NOT NULL,                           -- Status do usuário
     Name		            NVARCHAR(150)		NOT NULL,                           -- Nome completo
     Email                   NVARCHAR(256)       NOT NULL,                           -- Email original
     NormalizedEmail         NVARCHAR(256)       NOT NULL,                           -- Email normalizado (case-insensitive)
@@ -215,8 +212,7 @@ CREATE TABLE dbo.Users (                                                        
     CONSTRAINT UQ_Users_Id_Tenant UNIQUE (Id, TenantId),
     CONSTRAINT UQ_Users_Tenant_Email UNIQUE (TenantId, Email),			            -- Nome único por tenant
     CONSTRAINT UQ_Users_Tenant_NormalizedEmail UNIQUE (TenantId, NormalizedEmail),	-- Email único por tenant
-    CONSTRAINT FK_Users_Tenant FOREIGN KEY (TenantId) REFERENCES dbo.Tenants(Id),	-- FK para tenant
-    CONSTRAINT FK_Users_Status FOREIGN KEY (StatusId, TenantId) REFERENCES dbo.Status(Id, TenantId),   -- FK para status (tenant-safe)
+    CONSTRAINT FK_Users_Tenant FOREIGN KEY (TenantId) REFERENCES dbo.Tenants(Id)	-- FK para tenant
 );
 GO
 /* =========================

@@ -1,0 +1,31 @@
+StatusTypeId;Name;Description
+1;Draft;Intervenção criada mas ainda não confirmada
+1;Scheduled;Intervenção agendada
+1;Confirmed;Intervenção confirmada com cliente
+1;InProgress;Intervenção em execução
+1;Paused;Intervenção temporariamente pausada
+1;WaitingParts;Aguardando peças ou materiais
+1;WaitingApproval;Aguardando aprovação do cliente
+1;Completed;Intervenção concluída
+1;Cancelled;Intervenção cancelada
+1;Closed;Intervenção finalizada administrativamente
+2;Available;Equipamento disponível para uso
+2;Reserved;Equipamento reservado
+2;InUse;Equipamento em utilização
+2;UnderMaintenance;Equipamento em manutenção
+2;MaintenanceScheduled;Manutenção agendada
+2;OutOfService;Equipamento fora de serviço
+2;Lost;Equipamento perdido
+2;Damaged;Equipamento danificado
+2;Retired;Equipamento desativado permanentemente
+2;Disposed;Equipamento descartado
+3;Available;Veículo disponível
+3;Reserved;Veículo reservado
+3;InUse;Veículo em uso
+3;UnderMaintenance;Veículo em manutenção
+3;InspectionDue;Inspeção obrigatória pendente
+3;OutOfService;Veículo fora de serviço
+3;Accident;Veículo envolvido em acidente
+3;Retired;Veículo desativado permanentemente
+3;Sold;Veículo vendido
+3;Decommissioned;Veículo retirado da frota

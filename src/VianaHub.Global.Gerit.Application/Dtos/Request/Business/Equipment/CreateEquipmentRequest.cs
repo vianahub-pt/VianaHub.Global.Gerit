@@ -4,7 +4,8 @@ namespace VianaHub.Global.Gerit.Application.Dtos.Request.Business.Equipment;
 
 public class CreateEquipmentRequest
 {
+    public int EquipmentTypeId { get; set; }
+    public int StatusId { get; set; }
     public string Name { get; set; }
     public string SerialNumber { get; set; }
-    public int EquipmentTypeId { get; set; }
 }

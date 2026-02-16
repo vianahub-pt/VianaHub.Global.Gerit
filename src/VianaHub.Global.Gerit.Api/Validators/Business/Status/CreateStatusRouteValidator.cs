@@ -11,6 +11,10 @@ public class CreateStatusRouteValidator : AbstractValidator<CreateStatusRequest>
 {
     public CreateStatusRouteValidator(ILocalizationService localization)
     {
+        RuleFor(x => x.StatusTypeId)
+            .GreaterThan(0)
+            .WithMessage(localization.GetMessage("Api.Validator.Status.Create.StatusTypeId"));
+
         RuleFor(x => x.Name)
             .NotEmpty()
             .WithMessage(localization.GetMessage("Api.Validator.Status.Create.Name"))

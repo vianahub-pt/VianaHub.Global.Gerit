@@ -12,6 +12,14 @@ public class CreateEquipmentValidator : AbstractValidator<EquipmentEntity>
             .GreaterThan(0)
             .WithMessage(localization.GetMessage("Domain.Equipment.TenantIdRequired"));
 
+        RuleFor(x => x.EquipmentTypeId)
+            .GreaterThan(0)
+            .WithMessage(localization.GetMessage("Domain.Equipment.EquipmentTypeIdRequired"));
+
+        RuleFor(x => x.StatusId)
+            .GreaterThan(0)
+            .WithMessage(localization.GetMessage("Domain.Equipment.StatusIdRequired"));
+
         RuleFor(x => x.Name)
             .NotEmpty()
             .WithMessage(localization.GetMessage("Domain.Equipment.NameRequired"))

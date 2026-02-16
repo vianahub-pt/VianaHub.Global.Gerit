@@ -5,6 +5,7 @@ namespace VianaHub.Global.Gerit.Application.Dtos.Request.Business.Status;
 /// </summary>
 public class BulkUploadStatusItem
 {
+    public int StatusTypeId { get; set; }
     public string Name { get; set; }
     public string Description { get; set; }
 }

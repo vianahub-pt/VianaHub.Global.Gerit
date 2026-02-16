@@ -34,6 +34,11 @@ public class StatusMapping : IEntityTypeConfiguration<StatusEntity>
             .HasColumnType("INT")
             .IsRequired();
 
+        builder.Property(x => x.StatusTypeId)
+            .HasColumnName("StatusTypeId")
+            .HasColumnType("INT")
+            .IsRequired();
+
         builder.Property(x => x.Name)
             .HasColumnName("Name")
             .HasColumnType("NVARCHAR(200)")
@@ -89,6 +94,12 @@ public class StatusMapping : IEntityTypeConfiguration<StatusEntity>
             .WithMany()
             .HasForeignKey(x => x.TenantId)
             .HasConstraintName("FK_Status_Tenant")
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasOne(x => x.Tenant)
+            .WithMany()
+            .HasForeignKey(x => x.StatusTypeId)
+            .HasConstraintName("FK_Status_StatusType")
             .OnDelete(DeleteBehavior.Restrict);
     }
 }

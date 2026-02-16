@@ -16,14 +16,6 @@ public class CreateInterventionValidator : AbstractValidator<InterventionEntity>
             .GreaterThan(0)
             .WithMessage(localization.GetMessage("Domain.Intervention.ClientIdRequired"));
 
-        RuleFor(x => x.TeamMemberId)
-            .GreaterThan(0)
-            .WithMessage(localization.GetMessage("Domain.Intervention.TeamMemberIdRequired"));
-
-        RuleFor(x => x.VehicleId)
-            .GreaterThan(0)
-            .WithMessage(localization.GetMessage("Domain.Intervention.VehicleIdRequired"));
-
         RuleFor(x => x.Title)
             .NotEmpty()
             .WithMessage(localization.GetMessage("Domain.Intervention.TitleRequired"))

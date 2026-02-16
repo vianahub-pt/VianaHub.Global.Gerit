@@ -33,6 +33,11 @@ public class EquipmentMapping : IEntityTypeConfiguration<EquipmentEntity>
             .HasColumnType("INT")
             .IsRequired();
 
+        builder.Property(x => x.StatusId)
+            .HasColumnName("StatusId")
+            .HasColumnType("INT")
+            .IsRequired();
+
         builder.Property(x => x.Name)
             .HasColumnName("Name")
             .HasColumnType("NVARCHAR(150)")
@@ -44,11 +49,6 @@ public class EquipmentMapping : IEntityTypeConfiguration<EquipmentEntity>
             .HasColumnType("NVARCHAR(100)")
             .HasMaxLength(100)
             .IsRequired(false);
-
-        builder.Property(x => x.Status)
-            .HasColumnName("Status")
-            .HasColumnType("INT")
-            .IsRequired();
 
         builder.Property(x => x.IsActive)
             .HasColumnName("IsActive")
@@ -95,6 +95,13 @@ public class EquipmentMapping : IEntityTypeConfiguration<EquipmentEntity>
             .HasForeignKey(x => new { x.EquipmentTypeId, x.TenantId })
             .HasPrincipalKey(x => new { x.Id, x.TenantId })
             .HasConstraintName("FK_Equipments_EquipamentType")
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasOne(x => x.Status)
+            .WithMany()
+            .HasForeignKey(x => new { x.StatusId, x.TenantId })
+            .HasPrincipalKey(x => new { x.Id, x.TenantId })
+            .HasConstraintName("FK_Equipments_Status")
             .OnDelete(DeleteBehavior.Restrict);
     }
 }

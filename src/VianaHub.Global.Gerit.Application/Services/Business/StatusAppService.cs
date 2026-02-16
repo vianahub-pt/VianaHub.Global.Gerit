@@ -86,7 +86,7 @@ public class StatusAppService : IStatusAppService
             return false;
         }
 
-        var entity = new StatusEntity(tenantId, request.Name, request.Description, _currentUser.GetUserId());
+        var entity = new StatusEntity(tenantId, request.StatusTypeId, request.Name, request.Description, _currentUser.GetUserId());
         return await _domain.CreateAsync(entity, ct);
     }
 
@@ -107,7 +107,7 @@ public class StatusAppService : IStatusAppService
             return false;
         }
 
-        entity.Update(request.Name, request.Description, _currentUser.GetUserId());
+        entity.Update(request.StatusTypeId, request.Name, request.Description, _currentUser.GetUserId());
         return await _domain.UpdateAsync(entity, ct);
     }
 
@@ -275,7 +275,7 @@ public class StatusAppService : IStatusAppService
             }
 
             // Cria a entidade
-            var entity = new StatusEntity(tenantId, item.Name, item.Description, _currentUser.GetUserId());
+            var entity = new StatusEntity(tenantId, item.StatusTypeId, item.Name, item.Description, _currentUser.GetUserId());
 
             // Tenta criar no domínio
             var success = await _domain.CreateAsync(entity, ct);

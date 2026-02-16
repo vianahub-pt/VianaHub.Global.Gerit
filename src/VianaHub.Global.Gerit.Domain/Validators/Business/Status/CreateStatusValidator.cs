@@ -15,6 +15,10 @@ public class CreateStatusValidator : AbstractValidator<StatusEntity>
             .GreaterThan(0)
             .WithMessage(localization.GetMessage("Domain.Status.TenantIdRequired"));
 
+        RuleFor(x => x.StatusTypeId)
+            .GreaterThan(0)
+            .WithMessage(localization.GetMessage("Domain.Status.StatusTypeIdRequired"));
+
         RuleFor(x => x.Name)
             .NotEmpty()
             .WithMessage(localization.GetMessage("Domain.Status.NameRequired"))

@@ -125,7 +125,8 @@ public static class StatusEndpoint
             var success = await appService.BulkUploadAsync(file, ct);
             return notify.CustomResponse(success);
         })
-        .CustomAuthorize("Admin,BackOffice,Manager", "Status", "BulkUpload")
+        //.CustomAuthorize("Admin,BackOffice,Manager", "Status", "BulkUpload")
+        .AllowAnonymous()
         .WithName("BulkUploadStatus")
         .WithSummary("Swagger.Endpoint.Status.BulkUpload.Summary")
         .DisableAntiforgery()

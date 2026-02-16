@@ -6,10 +6,6 @@ public class InterventionResponse
     public int TenantId { get; set; }
     public int ClientId { get; set; }
     public string Client { get; set; }
-    public int TeamMemberId { get; set; }
-    public string TeamMember { get; set; }
-    public int VehicleId { get; set; }
-    public string Plate { get; set; }
     public int StatusId { get; set; }
     public string Status { get; set; }
     public string Title { get; set; }
