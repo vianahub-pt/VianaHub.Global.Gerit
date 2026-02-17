@@ -55,13 +55,15 @@ using VianaHub.Global.Gerit.Domain.Validators.Business.ClientAddress;
 using VianaHub.Global.Gerit.Domain.Validators.Business.ClientContact;
 using VianaHub.Global.Gerit.Domain.Validators.Business.Status;
 using VianaHub.Global.Gerit.Domain.Validators.Business.Intervention;
-using VianaHub.Global.Gerit.Infra.Data.Repository.Job;
+using VianaHub.Global.Gerit.Domain.Validators.Business;
+using VianaHub.Global.Gerit.Domain.Validators.Business.InterventionContact;
+using VianaHub.Global.Gerit.Domain.Validators.Business.EquipmentType;
+using VianaHub.Global.Gerit.Domain.Validators.Business.AddressType;
 using VianaHub.Global.Gerit.Infra.Data.Repository.Business;
 using VianaHub.Global.Gerit.Infra.Data.Repository.Billing;
-using VianaHub.Global.Gerit.Domain.Validators.Business.AddressType;
-using VianaHub.Global.Gerit.Domain.Validators.Business.EquipmentType;
-using VianaHub.Global.Gerit.Domain.Validators.Business.StatusType;
-using VianaHub.Global.Gerit.Domain.Validators.Business;
+using VianaHub.Global.Gerit.Infra.Data.Repository.Job;
+using VianaHub.Global.Gerit.Infra.Job.Jobs.Maintenance;
+using VianaHub.Global.Gerit.Infra.Job.Jobs.Security;
 
 namespace VianaHub.Global.Gerit.Infra.IoC;
 
@@ -119,6 +121,8 @@ public static class DependencyInjection
         services.AddScoped<IEntityDomainValidator<ClientAddressEntity>, ClientAddressValidator>();
         // ClientContact validators
         services.AddScoped<IEntityDomainValidator<ClientContactEntity>, ClientContactValidator>();
+        // InterventionContact validators
+        services.AddScoped<IEntityDomainValidator<InterventionContactEntity>, InterventionContactValidator>();
         // Status validators
         services.AddScoped<IEntityDomainValidator<StatusEntity>, StatusValidator>();
         // Intervention validators
@@ -142,6 +146,7 @@ public static class DependencyInjection
         services.AddScoped<IClientAppService, ClientAppService>();
         services.AddScoped<IClientAddressAppService, ClientAddressAppService>();
         services.AddScoped<IClientContactAppService, ClientContactAppService>();
+        services.AddScoped<IInterventionContactAppService, InterventionContactAppService>();
         services.AddScoped<IStatusAppService, StatusAppService>();
         services.AddScoped<IInterventionAppService, InterventionAppService>();
         services.AddScoped<IStatusTypeAppService, StatusTypeAppService>();
@@ -181,6 +186,7 @@ public static class DependencyInjection
         services.AddScoped<IClientDomainService, ClientDomainService>();
         services.AddScoped<IClientAddressDomainService, ClientAddressDomainService>();
         services.AddScoped<IClientContactDomainService, ClientContactDomainService>();
+        services.AddScoped<IInterventionContactDomainService, InterventionContactDomainService>();
         services.AddScoped<IStatusDomainService, StatusDomainService>();
         services.AddScoped<IInterventionDomainService, InterventionDomainService>();
         services.AddScoped<IStatusTypeDomainService, StatusTypeDomainService>();
@@ -198,6 +204,7 @@ public static class DependencyInjection
         services.AddScoped<IClientDataRepository, ClientDataRepository>();
         services.AddScoped<IClientAddressDataRepository, ClientAddressDataRepository>();
         services.AddScoped<IClientContactDataRepository, ClientContactDataRepository>();
+        services.AddScoped<IInterventionContactDataRepository, InterventionContactDataRepository>();
         services.AddScoped<IStatusDataRepository, StatusDataRepository>();
         services.AddScoped<IInterventionDataRepository, InterventionDataRepository>();
         services.AddScoped<IStatusTypeDataRepository, StatusTypeDataRepository>();
@@ -221,8 +228,8 @@ public static class DependencyInjection
         services.AddScoped<IJobSchedulerService, HangfireJobService>();
         services.AddScoped<IJobExecutor, HangfireJobExecutor>();
         services.AddScoped<IJobSyncService, JobSyncService>();
-        services.AddScoped<Job.Jobs.Maintenance.ScheduledSyncJobDefinitionsJob>();
-        services.AddScoped<Job.Jobs.Security.JwtKeyRotationJob>();
+        services.AddScoped<ScheduledSyncJobDefinitionsJob>();
+        services.AddScoped<JwtKeyRotationJob>();
         services.AddHostedService<JobSyncHostedService>();
 
         // Data Context

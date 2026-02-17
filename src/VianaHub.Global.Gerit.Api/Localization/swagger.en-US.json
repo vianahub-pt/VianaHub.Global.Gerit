@@ -41,6 +41,8 @@
   "Swagger.Tag.ClientContacts": "Client Contacts",
   "Swagger.Tag.Interventions": "Interventions",
   "Swagger.Tag.StatusTypes": "Status Types",
+  "Swagger.Tag.InterventionAddresses": "Intervention Addresses",
+  "Swagger.Tag.InterventionContacts": "Intervention Contacts",
 
   "Swagger.Endpoint.HealthCheck.Summary": "Health Check",
   "Swagger.Endpoint.HealthCheck.Description": "Checks if the API is working correctly",
@@ -297,6 +299,16 @@
   "Swagger.Endpoint.Intervention.Deactivate.Summary": "Deactivate intervention",
   "Swagger.Endpoint.Intervention.BulkUpload.Summary": "Bulk upload interventions",
 
+  "Swagger.Endpoint.InterventionAddress.GetAll.Summary": "Get all intervention addresses",
+  "Swagger.Endpoint.InterventionAddress.GetPaged.Summary": "Get intervention addresses paged",
+  "Swagger.Endpoint.InterventionAddress.GetById.Summary": "Get intervention address by ID",
+  "Swagger.Endpoint.InterventionAddress.Create.Summary": "Create new intervention address",
+  "Swagger.Endpoint.InterventionAddress.Update.Summary": "Update intervention address",
+  "Swagger.Endpoint.InterventionAddress.Activate.Summary": "Activate intervention address",
+  "Swagger.Endpoint.InterventionAddress.Deactivate.Summary": "Deactivate intervention address",
+  "Swagger.Endpoint.InterventionAddress.Delete.Summary": "Delete intervention address",
+  "Swagger.Endpoint.InterventionAddress.BulkUpload.Summary": "Bulk upload intervention addresses",
+
   "Swagger.Endpoint.Status.GetAll.Summary": "Get all intervention statuses",
   "Swagger.Endpoint.Status.GetPaged.Summary": "Get intervention statuses paged",
   "Swagger.Endpoint.Status.GetById.Summary": "Get intervention status by ID",
@@ -315,5 +327,15 @@
   "Swagger.Endpoint.StatusType.Delete.Summary": "Delete status type",
   "Swagger.Endpoint.StatusType.Activate.Summary": "Activate status type",
   "Swagger.Endpoint.StatusType.Deactivate.Summary": "Deactivate status type",
-  "Swagger.Endpoint.StatusType.BulkUpload.Summary": "Bulk upload status types"
+  "Swagger.Endpoint.StatusType.BulkUpload.Summary": "Bulk upload status types",
+
+  "Swagger.Endpoint.InterventionContact.GetAll.Summary": "Get all intervention contacts",
+  "Swagger.Endpoint.InterventionContact.GetPaged.Summary": "Get intervention contacts paged",
+  "Swagger.Endpoint.InterventionContact.GetById.Summary": "Get intervention contact by ID",
+  "Swagger.Endpoint.InterventionContact.Create.Summary": "Create new intervention contact",
+  "Swagger.Endpoint.InterventionContact.Update.Summary": "Update intervention contact",
+  "Swagger.Endpoint.InterventionContact.Activate.Summary": "Activate intervention contact",
+  "Swagger.Endpoint.InterventionContact.Deactivate.Summary": "Deactivate intervention contact",
+  "Swagger.Endpoint.InterventionContact.Delete.Summary": "Delete intervention contact",
+  "Swagger.Endpoint.InterventionContact.BulkUpload.Summary": "Bulk upload intervention contacts"
 }

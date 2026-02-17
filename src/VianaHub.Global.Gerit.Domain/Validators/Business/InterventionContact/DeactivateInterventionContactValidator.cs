@@ -1,0 +1,26 @@
+using FluentValidation;
+using VianaHub.Global.Gerit.Domain.Entities.Business;
+using VianaHub.Global.Gerit.Domain.Interfaces;
+
+namespace VianaHub.Global.Gerit.Domain.Validators.Business.InterventionContact;
+
+/// <summary>
+/// Validador para desativação de InterventionContact
+/// </summary>
+public class DeactivateInterventionContactValidator : AbstractValidator<InterventionContactEntity>
+{
+    public DeactivateInterventionContactValidator(ILocalizationService localization)
+    {
+        RuleFor(x => x.Id)
+            .GreaterThan(0)
+            .WithMessage(localization.GetMessage("Domain.InterventionContact.IdRequired"));
+
+        RuleFor(x => x.ModifiedBy)
+            .GreaterThan(0)
+            .WithMessage(localization.GetMessage("Domain.InterventionContact.ModifiedByRequired"));
+
+        RuleFor(x => x.IsDeleted)
+            .Equal(false)
+            .WithMessage(localization.GetMessage("Domain.InterventionContact.IsDeleted"));
+    }
+}

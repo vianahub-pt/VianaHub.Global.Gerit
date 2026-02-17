@@ -122,6 +122,17 @@
   "Domain.TeamMember.CannotDeactivateDeleted": "No se puede desactivar un miembro del equipo eliminado",
   "Domain.TeamMember.AlreadyDeleted": "El miembro del equipo ya fue eliminado",
 
+  "Domain.Team.IdRequired": "El ID del equipo es obligatorio",
+  "Domain.Team.TenantIdRequired": "El ID del inquilino es obligatorio para el equipo",
+  "Domain.Team.NameRequired": "El nombre del equipo es obligatorio",
+  "Domain.Team.NameMaxLength": "El nombre del equipo debe tener como máximo {0} caracteres",
+  "Domain.Team.DescriptionRequired": "La descripción del equipo es obligatoria",
+  "Domain.Team.DescriptionMaxLength": "La descripción del equipo debe tener como máximo {0} caracteres",
+  "Domain.Team.CannotUpdateDeleted": "No se puede actualizar un equipo eliminado",
+  "Domain.Team.CannotActivateDeleted": "No se puede activar un equipo eliminado",
+  "Domain.Team.CannotDeactivateDeleted": "No se puede desactivar un equipo eliminado",
+  "Domain.Team.AlreadyDeleted": "El equipo ya fue eliminado",
+
   "Domain.TeamMemberAddress.TenantIdRequired": "El ID del inquilino es obligatorio",
   "Domain.TeamMemberAddress.TeamMemberIdRequired": "El ID del miembro del equipo es obligatorio",
   "Domain.TeamMemberAddress.StreetRequired": "La calle es obligatoria",
@@ -205,5 +216,21 @@
   "Domain.StatusType.CannotActivateDeleted": "No se puede activar un tipo de estado eliminado",
   "Domain.StatusType.CannotDeactivateDeleted": "No se puede desactivar un tipo de estado eliminado",
   "Domain.StatusType.AlreadyDeleted": "El tipo de estado ya fue eliminado",
-  "Domain.StatusType.CannotUpdateDeleted": "No se puede actualizar un tipo de estado eliminado"
+  "Domain.StatusType.CannotUpdateDeleted": "No se puede actualizar un tipo de estado eliminado",
+
+  "Domain.InterventionContact.TenantIdRequired": "El ID del inquilino es obligatorio",
+  "Domain.InterventionContact.InterventionIdRequired": "El ID de la intervención es obligatorio",
+  "Domain.InterventionContact.NameRequired": "El nombre es obligatorio",
+  "Domain.InterventionContact.NameMaxLength": "El nombre debe tener como máximo 150 caracteres",
+  "Domain.InterventionContact.EmailRequired": "El correo electrónico es obligatorio",
+  "Domain.InterventionContact.EmailMaxLength": "El correo electrónico debe tener como máximo 255 caracteres",
+  "Domain.InterventionContact.EmailInvalid": "Correo electrónico inválido",
+  "Domain.InterventionContact.PhoneMaxLength": "El teléfono debe tener como máximo 30 caracteres",
+  "Domain.InterventionContact.CreatedByRequired": "El ID del creador es obligatorio",
+  "Domain.InterventionContact.ModifiedByRequired": "El ID del modificador es obligatorio",
+  "Domain.InterventionContact.IdRequired": "El ID del contacto es obligatorio",
+  "Domain.InterventionContact.CannotUpdateDeleted": "No se puede actualizar un contacto eliminado",
+  "Domain.InterventionContact.CannotActivateDeleted": "No se puede activar un contacto eliminado",
+  "Domain.InterventionContact.CannotDeactivateDeleted": "No se puede desactivar un contacto eliminado",
+  "Domain.InterventionContact.AlreadyDeleted": "El contacto ya fue eliminado"
 }

@@ -23,7 +23,7 @@ select * from dbo.TeamMembers;			--
 select * from dbo.TeamMemberAddresses;	--
 select * from dbo.TeamMemberContacts;	--
 select * from dbo.Interventions;		--
-select * from dbo.InterventionAddresses;
+select * from dbo.InterventionAddresses;--
 select * from dbo.InterventionContacts;
 select * from dbo.Vehicles;				--
 
