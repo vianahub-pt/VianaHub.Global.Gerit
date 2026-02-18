@@ -65,6 +65,7 @@ using VianaHub.Global.Gerit.Infra.Job.Jobs.Maintenance;
 using VianaHub.Global.Gerit.Infra.Job.Jobs.Security;
 using VianaHub.Global.Gerit.Domain.Validators.Business.InterventionAddress;
 using VianaHub.Global.Gerit.Domain.Validators.Business.StatusType;
+using VianaHub.Global.Gerit.Domain.Validators.Business.TeamMembersTeam;
 
 namespace VianaHub.Global.Gerit.Infra.IoC;
 
@@ -132,6 +133,8 @@ public static class DependencyInjection
         services.AddScoped<IEntityDomainValidator<StatusTypeEntity>, StatusTypeValidator>();
         // InterventionAddress validators
         services.AddScoped<IEntityDomainValidator<InterventionAddressEntity>, InterventionAddressValidator>();
+        // TeamMembersTeam validators
+        services.AddScoped<IEntityDomainValidator<TeamMembersTeamEntity>, TeamMembersTeamValidator>();
 
         // Application - Common Services
         services.AddScoped<IFileValidationService, FileValidationService>();
@@ -142,7 +145,9 @@ public static class DependencyInjection
         services.AddScoped<ITeamAppService, TeamAppService>();
         services.AddScoped<IVehicleAppService, VehicleAppService>();
         services.AddScoped<IEquipmentAppService, EquipmentAppService>();
-        services.AddScoped<IEquipmentTypeAppService, EquipmentTypeAppService>();
+        services.AddScoped<ITeamMembersTeamsAppService, TeamMembersTeamAppService>();
+        services.AddScoped<ITeamMembersTeamDomainService, TeamMembersTeamDomainService>();
+        services.AddScoped<ITeamMembersTeamDataRepository, TeamMembersTeamDataRepository>();
         services.AddScoped<ITeamMemberAppService, TeamMemberAppService>();
         services.AddScoped<ITeamMemberAddressAppService, TeamMemberAddressAppService>();
         services.AddScoped<ITeamMemberContactAppService, TeamMemberContactAppService>();

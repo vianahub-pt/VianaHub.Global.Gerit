@@ -43,6 +43,7 @@
   "Swagger.Tag.StatusTypes": "Tipos de Estado",
   "Swagger.Tag.InterventionAddresses": "Moradas de Intervenções",
   "Swagger.Tag.InterventionContacts": "Contactos de Intervenções",
+  "Swagger.Tag.TeamMembersTeams": "Associações Equipa-Membro",
 
   "Swagger.Endpoint.HealthCheck.Summary": "Verificação de Saúde",
   "Swagger.Endpoint.HealthCheck.Description": "Verifica se a API está a funcionar corretamente",
@@ -329,8 +330,6 @@
   "Swagger.Endpoint.StatusType.Deactivate.Summary": "Desativar tipo de estado",
   "Swagger.Endpoint.StatusType.BulkUpload.Summary": "Carregamento em massa de tipos de estado",
 
-  "Swagger.Tag.InterventionContacts": "Contactos de Intervenções",
-
   "Swagger.Endpoint.InterventionContact.GetAll.Summary": "Obter todos os contactos de intervenções",
   "Swagger.Endpoint.InterventionContact.GetPaged.Summary": "Obter contactos de intervenções paginados",
   "Swagger.Endpoint.InterventionContact.GetById.Summary": "Obter contacto de intervenção por ID",
@@ -339,5 +338,17 @@
   "Swagger.Endpoint.InterventionContact.Activate.Summary": "Ativar contacto de intervenção",
   "Swagger.Endpoint.InterventionContact.Deactivate.Summary": "Desativar contacto de intervenção",
   "Swagger.Endpoint.InterventionContact.Delete.Summary": "Eliminar contacto de intervenção",
-  "Swagger.Endpoint.InterventionContact.BulkUpload.Summary": "Carregamento em massa de contactos de intervenções"
+  "Swagger.Endpoint.InterventionContact.BulkUpload.Summary": "Carregamento em massa de contactos de intervenções",
+
+  "Swagger.Tag.TeamMembersTeams": "Associações Equipa-Membro",
+
+  "Swagger.Endpoint.TeamMembersTeams.GetAll.Summary": "Obter todas as associações equipa-membro",
+  "Swagger.Endpoint.TeamMembersTeams.GetById.Summary": "Obter associação equipa-membro por ID",
+  "Swagger.Endpoint.TeamMembersTeams.Create.Summary": "Criar nova associação equipa-membro",
+  "Swagger.Endpoint.TeamMembersTeams.Update.Summary": "Atualizar associação equipa-membro",
+  "Swagger.Endpoint.TeamMembersTeams.Delete.Summary": "Eliminar associação equipa-membro",
+  "Swagger.Endpoint.TeamMembersTeams.GetPaged.Summary": "Obter associações equipa-membro paginadas",
+  "Swagger.Endpoint.TeamMembersTeams.Activate.Summary": "Ativar associação equipa-membro",
+  "Swagger.Endpoint.TeamMembersTeams.Deactivate.Summary": "Desativar associação equipa-membro",
+  "Swagger.Endpoint.TeamMembersTeams.BulkUpload.Summary": "Carregamento em massa de associações equipa-membro"
 }

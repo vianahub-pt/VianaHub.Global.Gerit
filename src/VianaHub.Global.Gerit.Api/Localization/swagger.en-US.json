@@ -337,5 +337,16 @@
   "Swagger.Endpoint.InterventionContact.Activate.Summary": "Activate intervention contact",
   "Swagger.Endpoint.InterventionContact.Deactivate.Summary": "Deactivate intervention contact",
   "Swagger.Endpoint.InterventionContact.Delete.Summary": "Delete intervention contact",
-  "Swagger.Endpoint.InterventionContact.BulkUpload.Summary": "Bulk upload intervention contacts"
+  "Swagger.Endpoint.InterventionContact.BulkUpload.Summary": "Bulk upload intervention contacts",
+
+  "Swagger.Tag.TeamMembersTeams": "Team-Member Associations",
+  "Swagger.Endpoint.TeamMembersTeams.GetAll.Summary": "Get all team-member associations",
+  "Swagger.Endpoint.TeamMembersTeams.GetById.Summary": "Get team-member association by ID",
+  "Swagger.Endpoint.TeamMembersTeams.Create.Summary": "Create new team-member association",
+  "Swagger.Endpoint.TeamMembersTeams.Update.Summary": "Update team-member association",
+  "Swagger.Endpoint.TeamMembersTeams.Delete.Summary": "Delete team-member association",
+  "Swagger.Endpoint.TeamMembersTeams.GetPaged.Summary": "Get team-member associations paged",
+  "Swagger.Endpoint.TeamMembersTeams.Activate.Summary": "Activate team-member association",
+  "Swagger.Endpoint.TeamMembersTeams.Deactivate.Summary": "Deactivate team-member association",
+  "Swagger.Endpoint.TeamMembersTeams.BulkUpload.Summary": "Bulk upload team-member associations"
 }

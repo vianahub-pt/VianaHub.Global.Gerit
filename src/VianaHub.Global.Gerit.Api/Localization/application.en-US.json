@@ -76,6 +76,21 @@
   "Application.Service.Team.ProcessBulkItems.FailedToCreate": "Failed to create team '{0}'",
   "Application.Service.Team.ValidateBulkItem.Name": "Name is required",
 
+  "Application.Service.TeamMembersTeam.GetById.ResourceNotFound": "Team-members-team association not found or inactive",
+  "Application.Service.TeamMembersTeam.Create.ResourceAlreadyExists": "Association between team {0} and team member {1} already exists",
+  "Application.Service.TeamMembersTeam.Update.ResourceNotFound": "Team-members-team association not found",
+  "Application.Service.TeamMembersTeam.Activate.ResourceNotFound": "Team-members-team association not found",
+  "Application.Service.TeamMembersTeam.Deactivate.ResourceNotFound": "Team-members-team association not found",
+  "Application.Service.TeamMembersTeam.Delete.ResourceNotFound": "Team-members-team association not found",
+  "Application.Service.TeamMembersTeam.BulkUpload.EmptyFile": "Empty file",
+  "Application.Service.TeamMembersTeam.ReadCsvFile.CsvHelperException": "Error processing CSV line {0}",
+  "Application.Service.TeamMembersTeam.ReadCsvFile.MaxRows": "Maximum number of lines ({0}) exceeded",
+  "Application.Service.TeamMembersTeam.ReadCsvFile.Exception": "Error reading CSV file",
+  "Application.Service.TeamMembersTeam.ProcessBulkItems.ExistsByTeamAndMember": "Association between team {0} and member {1} already exists",
+  "Application.Service.TeamMembersTeam.ProcessBulkItems.FailedToCreate": "Failed to create association for team {0} and member {1}",
+  "Application.Service.TeamMembersTeam.ValidateBulkItem.TeamId": "Team ID is required for line {0}",
+  "Application.Service.TeamMembersTeam.ValidateBulkItem.TeamMemberId": "Team member ID is required for line {0}",
+
   "Application.Service.StatusType.GetById.ResourceNotFound": "Status type not found or inactive",
   "Application.Service.StatusType.Create.ResourceAlreadyExists": "Status type with this name already exists",
   "Application.Service.StatusType.Update.ResourceNotFound": "Status type not found",
@@ -134,4 +149,4 @@
   "Application.Service.InterventionContact.ValidateBulkItem.Name": "Name is required for intervention {0}",
   "Application.Service.InterventionContact.ValidateBulkItem.Email": "Email is required for intervention {0}",
   "Application.Service.InterventionContact.ValidateBulkItem.InterventionId": "Intervention ID is required for intervention {0}"
-}
+}}

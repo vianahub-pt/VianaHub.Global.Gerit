@@ -24,6 +24,10 @@ using VianaHub.Global.Gerit.Application.Dtos.Request.Identity.Resource;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Identity.Role;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Identity.User;
 
+// TeamMembersTeams DTOs & Validators
+using VianaHub.Global.Gerit.Application.Dtos.Request.Business.TeamMembersTeams;
+using VianaHub.Global.Gerit.Api.Validators.Business.TeamMembersTeams;
+
 namespace VianaHub.Global.Gerit.Api.Configuration;
 
 /// <summary>
@@ -85,6 +89,10 @@ public static class RouteValidatorSetup
         // Equipment Route Validators
         services.AddScoped<IValidator<CreateEquipmentRequest>, CreateEquipmentRouteValidator>();
         services.AddScoped<IValidator<UpdateEquipmentRequest>, UpdateEquipmentRouteValidator>();
+
+        // TeamMembersTeams Route Validators
+        services.AddScoped<IValidator<CreateTeamMembersTeamRequest>, CreateTeamMembersTeamRouteValidator>();
+        services.AddScoped<IValidator<UpdateTeamMembersTeamRequest>, UpdateTeamMembersTeamRouteValidator>();
 
         return services;
     }

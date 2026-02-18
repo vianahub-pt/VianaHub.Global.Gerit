@@ -133,5 +133,21 @@
   "Application.Service.InterventionContact.ProcessBulkItems.FailedToCreate": "Falha ao criar o contacto '{0}'",
   "Application.Service.InterventionContact.ValidateBulkItem.Name": "O nome é obrigatório para a intervenção {0}",
   "Application.Service.InterventionContact.ValidateBulkItem.Email": "O e-mail é obrigatório para a intervenção {0}",
-  "Application.Service.InterventionContact.ValidateBulkItem.InterventionId": "O ID da intervenção é obrigatório para a intervenção {0}"
+  "Application.Service.InterventionContact.ValidateBulkItem.InterventionId": "O ID da intervenção é obrigatório para a intervenção {0}",
+
+  // TeamMembersTeam application service keys
+  "Application.Service.TeamMembersTeam.GetById.ResourceNotFound": "Associação equipa-membro não encontrada ou inativa",
+  "Application.Service.TeamMembersTeam.Create.ResourceAlreadyExists": "Associação entre a equipa {0} e o membro {1} já existe",
+  "Application.Service.TeamMembersTeam.Update.ResourceNotFound": "Associação equipa-membro não encontrada",
+  "Application.Service.TeamMembersTeam.Activate.ResourceNotFound": "Associação equipa-membro não encontrada",
+  "Application.Service.TeamMembersTeam.Deactivate.ResourceNotFound": "Associação equipa-membro não encontrada",
+  "Application.Service.TeamMembersTeam.Delete.ResourceNotFound": "Associação equipa-membro não encontrada",
+  "Application.Service.TeamMembersTeam.BulkUpload.EmptyFile": "Ficheiro vazio",
+  "Application.Service.TeamMembersTeam.ReadCsvFile.CsvHelperException": "Erro ao processar a linha CSV {0}",
+  "Application.Service.TeamMembersTeam.ReadCsvFile.MaxRows": "Número máximo de linhas ({0}) excedido",
+  "Application.Service.TeamMembersTeam.ReadCsvFile.Exception": "Erro ao ler ficheiro CSV",
+  "Application.Service.TeamMembersTeam.ProcessBulkItems.ExistsByTeamAndMember": "Associação entre a equipa {0} e o membro {1} já existe",
+  "Application.Service.TeamMembersTeam.ProcessBulkItems.FailedToCreate": "Falha ao criar a associação para a equipa {0} e o membro {1}",
+  "Application.Service.TeamMembersTeam.ValidateBulkItem.TeamId": "O ID da equipa é obrigatório na linha {0}",
+  "Application.Service.TeamMembersTeam.ValidateBulkItem.TeamMemberId": "O ID do membro da equipa é obrigatório na linha {0}"
 }

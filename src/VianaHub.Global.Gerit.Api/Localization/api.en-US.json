@@ -72,6 +72,12 @@
   "Api.Validator.TeamMember.Update.Name": "Name is required",
   "Api.Validator.TeamMember.Update.Name.MaximumLength": "Name must be at most {0} characters long",
 
+  "Api.Validator.TeamMembersTeam.Create.TeamId": "Team ID is required",
+  "Api.Validator.TeamMembersTeam.Create.TeamMemberId": "Team member ID is required",
+  "Api.Validator.TeamMembersTeam.Update.TeamId": "Team ID is required",
+  "Api.Validator.TeamMembersTeam.Update.TeamMemberId": "Team member ID is required",
+  "Api.Validator.TeamMembersTeam.BulkUpload.FileRequired": "File is required for bulk upload",
+
   "Api.Validator.TeamMemberAddress.Create.Street": "Street is required",
   "Api.Validator.TeamMemberAddress.Create.Street.MaximumLength": "Street must be at most {0} characters long",
   "Api.Validator.TeamMemberAddress.Create.City": "City is required",

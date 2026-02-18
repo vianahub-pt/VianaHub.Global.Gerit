@@ -1,6 +1,6 @@
 {
   "Swagger.UI.EndpointName": "Gerit v1",
-  "Swagger.UI.DocumentTitle": "API de Gerit",
+  "Swagger.UI.DocumentTitle": "API Gerit",
   "Swagger.Api.Title": "API de Gerit",
   "Swagger.Api.Title.Development": "API de Gerit - Desarrollo",
   "Swagger.Api.Title.Staging": "API de Gerit - Preproducción",
@@ -339,5 +339,16 @@
   "Swagger.Endpoint.InterventionContact.Activate.Summary": "Activar contacto de intervención",
   "Swagger.Endpoint.InterventionContact.Deactivate.Summary": "Desactivar contacto de intervención",
   "Swagger.Endpoint.InterventionContact.Delete.Summary": "Eliminar contacto de intervención",
-  "Swagger.Endpoint.InterventionContact.BulkUpload.Summary": "Carga masiva de contactos de intervenciones"
+  "Swagger.Endpoint.InterventionContact.BulkUpload.Summary": "Carga masiva de contactos de intervenciones",
+
+  "Swagger.Tag.TeamMembersTeams": "Asociaciones Equipo-Miembro",
+  "Swagger.Endpoint.TeamMembersTeams.GetAll.Summary": "Obtener todas las asociaciones equipo-miembro",
+  "Swagger.Endpoint.TeamMembersTeams.GetById.Summary": "Obtener asociación equipo-miembro por ID",
+  "Swagger.Endpoint.TeamMembersTeams.Create.Summary": "Crear nueva asociación equipo-miembro",
+  "Swagger.Endpoint.TeamMembersTeams.Update.Summary": "Actualizar asociación equipo-miembro",
+  "Swagger.Endpoint.TeamMembersTeams.Delete.Summary": "Eliminar asociación equipo-miembro",
+  "Swagger.Endpoint.TeamMembersTeams.GetPaged.Summary": "Obtener asociaciones equipo-miembro paginadas",
+  "Swagger.Endpoint.TeamMembersTeams.Activate.Summary": "Activar asociación equipo-miembro",
+  "Swagger.Endpoint.TeamMembersTeams.Deactivate.Summary": "Desactivar asociación equipo-miembro",
+  "Swagger.Endpoint.TeamMembersTeams.BulkUpload.Summary": "Carga masiva de asociaciones equipo-miembro"
 }

@@ -26,10 +26,8 @@ select * from dbo.Interventions;		--
 select * from dbo.InterventionAddresses;--
 select * from dbo.InterventionContacts;	--
 select * from dbo.Vehicles;				--
-
-
 select * from dbo.Teams;				--
-select * from dbo.TeamMembersTeams;
+select * from dbo.TeamMembersTeams;		--
 select * from dbo.InterventionTeams;
 select * from dbo.InterventionTeamVehicles;
 select * from dbo.InterventionTeamEquipments;

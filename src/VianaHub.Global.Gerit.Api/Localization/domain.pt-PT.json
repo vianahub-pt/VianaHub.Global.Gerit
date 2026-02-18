@@ -122,6 +122,9 @@
   "Domain.TeamMember.CannotDeactivateDeleted": "Não é possível desativar um membro da equipa eliminada",
   "Domain.TeamMember.AlreadyDeleted": "O membro da equipa já foi eliminado",
 
+  "Domain.TeamMembersTeam.TeamIdGreaterThanZero": "O ID da equipa deve ser maior que zero",
+  "Domain.TeamMembersTeam.TeamMemberIdGreaterThanZero": "O ID do membro da equipa deve ser maior que zero",
+
   "Domain.Team.IdRequired": "O ID da equipa é obrigatório",
   "Domain.Team.TenantIdRequired": "O ID do inquilino é obrigatório para a equipa",
   "Domain.Team.NameRequired": "O nome da equipa é obrigatório",

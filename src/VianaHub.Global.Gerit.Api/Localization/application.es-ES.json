@@ -115,7 +115,7 @@
   "Application.Service.InterventionAddress.ValidateBulkItem.CountryCode": "El código de país es obligatorio para la intervención {0}",
   "Application.Service.InterventionAddress.ValidateBulkItem.InterventionId": "El ID de la intervención es obligatorio para la intervención {0}",
 
-  "Application.Service.InterventionContact.GetById.ResourceNotFound": "Contacto de la intervención no encontrado o inactivo",
+  "Application.Service.InterventionContact.GetById.ResourceNotFound": "Contacto de la intervención no encontrado o inactiva",
   "Application.Service.InterventionContact.Create.ResourceAlreadyExists": "Ya existe un contacto con este correo electrónico para esta intervención",
   "Application.Service.InterventionContact.Update.ResourceNotFound": "Contacto de la intervención no encontrado",
   "Application.Service.InterventionContact.Update.ResourceAlreadyExists": "Ya existe otro contacto con este correo electrónico para esta intervención",
@@ -133,5 +133,21 @@
   "Application.Service.InterventionContact.ProcessBulkItems.FailedToCreate": "Error al crear el contacto '{0}'",
   "Application.Service.InterventionContact.ValidateBulkItem.Name": "El nombre es obligatorio para la intervención {0}",
   "Application.Service.InterventionContact.ValidateBulkItem.Email": "El correo electrónico es obligatorio para la intervención {0}",
-  "Application.Service.InterventionContact.ValidateBulkItem.InterventionId": "El ID de la intervención es obligatorio para la intervención {0}"
+  "Application.Service.InterventionContact.ValidateBulkItem.InterventionId": "Se requiere ID de intervención para la intervención {0}",
+
+  // TeamMembersTeam application service keys
+  "Application.Service.TeamMembersTeam.GetById.ResourceNotFound": "Asociación equipo-miembro no encontrada o inactiva",
+  "Application.Service.TeamMembersTeam.Create.ResourceAlreadyExists": "La asociación entre el equipo {0} y el miembro {1} ya existe",
+  "Application.Service.TeamMembersTeam.Update.ResourceNotFound": "Asociación equipo-miembro no encontrada",
+  "Application.Service.TeamMembersTeam.Activate.ResourceNotFound": "Asociación equipo-miembro no encontrada",
+  "Application.Service.TeamMembersTeam.Deactivate.ResourceNotFound": "Asociación equipo-miembro no encontrada",
+  "Application.Service.TeamMembersTeam.Delete.ResourceNotFound": "Asociación equipo-miembro no encontrada",
+  "Application.Service.TeamMembersTeam.BulkUpload.EmptyFile": "Archivo vacío",
+  "Application.Service.TeamMembersTeam.ReadCsvFile.CsvHelperException": "Error procesando la línea CSV {0}",
+  "Application.Service.TeamMembersTeam.ReadCsvFile.MaxRows": "Se excedió el número máximo de líneas ({0})",
+  "Application.Service.TeamMembersTeam.ReadCsvFile.Exception": "Error leyendo archivo CSV",
+  "Application.Service.TeamMembersTeam.ProcessBulkItems.ExistsByTeamAndMember": "La asociación entre el equipo {0} y el miembro {1} ya existe",
+  "Application.Service.TeamMembersTeam.ProcessBulkItems.FailedToCreate": "Error al crear la asociación para el equipo {0} y el miembro {1}",
+  "Application.Service.TeamMembersTeam.ValidateBulkItem.TeamId": "Se requiere ID de equipo para la línea {0}",
+  "Application.Service.TeamMembersTeam.ValidateBulkItem.TeamMemberId": "Se requiere ID de miembro del equipo para la línea {0}"
 }
