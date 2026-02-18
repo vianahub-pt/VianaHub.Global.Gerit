@@ -8,6 +8,10 @@ public class UpdateVehicleRouteValidator : AbstractValidator<UpdateVehicleReques
 {
     public UpdateVehicleRouteValidator(ILocalizationService localization)
     {
+        RuleFor(x => x.StatusId)
+            .GreaterThan(0)
+            .WithMessage(localization.GetMessage("Api.Validator.Vehicle.Update.StatusIdRequired"));
+
         RuleFor(x => x.Plate)
             .NotEmpty().WithMessage(localization.GetMessage("Api.Validator.Vehicle.Update.Plate"))
             .MaximumLength(20).WithMessage(localization.GetMessage("Api.Validator.Vehicle.Update.Plate.MaximumLength", 20));

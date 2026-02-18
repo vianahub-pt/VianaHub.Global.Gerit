@@ -12,6 +12,10 @@ public class CreateVehicleValidator : AbstractValidator<VehicleEntity>
             .GreaterThan(0)
             .WithMessage(localization.GetMessage("Domain.Vehicle.TenantIdRequired"));
 
+        RuleFor(x => x.StatusId)
+            .GreaterThan(0)
+            .WithMessage(localization.GetMessage("Domain.Vehicle.StatusIdRequired"));
+
         RuleFor(x => x.Plate)
             .NotEmpty()
             .WithMessage(localization.GetMessage("Domain.Vehicle.PlateRequired"))

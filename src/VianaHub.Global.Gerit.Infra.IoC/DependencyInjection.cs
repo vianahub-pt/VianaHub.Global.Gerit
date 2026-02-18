@@ -55,7 +55,6 @@ using VianaHub.Global.Gerit.Domain.Validators.Business.ClientAddress;
 using VianaHub.Global.Gerit.Domain.Validators.Business.ClientContact;
 using VianaHub.Global.Gerit.Domain.Validators.Business.Status;
 using VianaHub.Global.Gerit.Domain.Validators.Business.Intervention;
-using VianaHub.Global.Gerit.Domain.Validators.Business;
 using VianaHub.Global.Gerit.Domain.Validators.Business.InterventionContact;
 using VianaHub.Global.Gerit.Domain.Validators.Business.EquipmentType;
 using VianaHub.Global.Gerit.Domain.Validators.Business.AddressType;
@@ -64,6 +63,8 @@ using VianaHub.Global.Gerit.Infra.Data.Repository.Billing;
 using VianaHub.Global.Gerit.Infra.Data.Repository.Job;
 using VianaHub.Global.Gerit.Infra.Job.Jobs.Maintenance;
 using VianaHub.Global.Gerit.Infra.Job.Jobs.Security;
+using VianaHub.Global.Gerit.Domain.Validators.Business.InterventionAddress;
+using VianaHub.Global.Gerit.Domain.Validators.Business.StatusType;
 
 namespace VianaHub.Global.Gerit.Infra.IoC;
 
@@ -129,6 +130,8 @@ public static class DependencyInjection
         services.AddScoped<IEntityDomainValidator<InterventionEntity>, InterventionValidator>();
         // StatusType validators
         services.AddScoped<IEntityDomainValidator<StatusTypeEntity>, StatusTypeValidator>();
+        // InterventionAddress validators
+        services.AddScoped<IEntityDomainValidator<InterventionAddressEntity>, InterventionAddressValidator>();
 
         // Application - Common Services
         services.AddScoped<IFileValidationService, FileValidationService>();
@@ -147,6 +150,7 @@ public static class DependencyInjection
         services.AddScoped<IClientAddressAppService, ClientAddressAppService>();
         services.AddScoped<IClientContactAppService, ClientContactAppService>();
         services.AddScoped<IInterventionContactAppService, InterventionContactAppService>();
+        services.AddScoped<IInterventionAddressAppService, InterventionAddressAppService>();
         services.AddScoped<IStatusAppService, StatusAppService>();
         services.AddScoped<IInterventionAppService, InterventionAppService>();
         services.AddScoped<IStatusTypeAppService, StatusTypeAppService>();
@@ -187,6 +191,7 @@ public static class DependencyInjection
         services.AddScoped<IClientAddressDomainService, ClientAddressDomainService>();
         services.AddScoped<IClientContactDomainService, ClientContactDomainService>();
         services.AddScoped<IInterventionContactDomainService, InterventionContactDomainService>();
+        services.AddScoped<IInterventionAddressDomainService, InterventionAddressDomainService>();
         services.AddScoped<IStatusDomainService, StatusDomainService>();
         services.AddScoped<IInterventionDomainService, InterventionDomainService>();
         services.AddScoped<IStatusTypeDomainService, StatusTypeDomainService>();
@@ -205,6 +210,7 @@ public static class DependencyInjection
         services.AddScoped<IClientAddressDataRepository, ClientAddressDataRepository>();
         services.AddScoped<IClientContactDataRepository, ClientContactDataRepository>();
         services.AddScoped<IInterventionContactDataRepository, InterventionContactDataRepository>();
+        services.AddScoped<IInterventionAddressDataRepository, InterventionAddressDataRepository>();
         services.AddScoped<IStatusDataRepository, StatusDataRepository>();
         services.AddScoped<IInterventionDataRepository, InterventionDataRepository>();
         services.AddScoped<IStatusTypeDataRepository, StatusTypeDataRepository>();

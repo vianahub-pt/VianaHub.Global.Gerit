@@ -10,7 +10,8 @@ public class InterventionAddressMappingProfile : Profile
 {
     public InterventionAddressMappingProfile()
     {
-        CreateMap<InterventionAddressEntity, InterventionAddressResponse>();
+        CreateMap<InterventionAddressEntity, InterventionAddressResponse>()
+            .ForMember(dest => dest.Intervention, opt => opt.MapFrom(src => src.Intervention.Title)); 
         CreateMap<ListPage<InterventionAddressEntity>, ListPageResponse<InterventionAddressResponse>>();
     }
 }

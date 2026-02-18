@@ -4,6 +4,8 @@ public class VehicleResponse
 {
     public int Id { get; set; }
     public int TenantId { get; set; }
+    public int StatusId { get; set; }
+    public string Status { get; set; }
     public string Plate { get; set; }
     public string Brand { get; set; }
     public string Model { get; set; }

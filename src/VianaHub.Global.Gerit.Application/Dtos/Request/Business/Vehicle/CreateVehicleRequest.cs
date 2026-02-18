@@ -2,6 +2,7 @@ namespace VianaHub.Global.Gerit.Application.Dtos.Request.Business.Vehicle;
 
 public class CreateVehicleRequest
 {
+    public int StatusId { get; set; }
     public string Plate { get; set; }
     public string Brand { get; set; }
     public string Model { get; set; }

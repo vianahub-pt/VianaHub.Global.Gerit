@@ -13,7 +13,8 @@ public class InterventionContactMappingProfile : Profile
 {
     public InterventionContactMappingProfile()
     {
-        CreateMap<InterventionContactEntity, InterventionContactResponse>();
+        CreateMap<InterventionContactEntity, InterventionContactResponse>()
+            .ForMember(dest => dest.Intervention, opt => opt.MapFrom(src => src.Intervention.Title)); 
         CreateMap<ListPage<InterventionContactEntity>, ListPageResponse<InterventionContactResponse>>();
     }
 }

@@ -18,22 +18,52 @@ public class VehicleDataRepository : IVehicleDataRepository
 
     public async Task<VehicleEntity> GetByIdAsync(int id, CancellationToken ct)
     {
-        return await _context.Set<VehicleEntity>().AsNoTracking().FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted, ct);
+        return await _context.Set<VehicleEntity>()
+            .AsNoTracking()
+            .Include(x => x.Status)
+            .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted, ct);
     }
 
     public async Task<IEnumerable<VehicleEntity>> GetAllAsync(CancellationToken ct)
     {
-        return await _context.Set<VehicleEntity>().AsNoTracking().Where(x => !x.IsDeleted).OrderBy(x => x.Plate).ToListAsync(ct);
+        return await _context.Set<VehicleEntity>()
+            .AsNoTracking()
+            .Include(x => x.Status)
+            .Where(x => !x.IsDeleted).OrderBy(x => x.Plate).ToListAsync(ct);
     }
 
     public async Task<ListPage<VehicleEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct)
     {
-        var query = _context.Set<VehicleEntity>().AsNoTracking().Where(x => !x.IsDeleted);
+        var query = _context.Set<VehicleEntity>()
+            .AsNoTracking()
+            .Include(x => x.Status)
+            .Where(x => !x.IsDeleted);
 
         if (!string.IsNullOrWhiteSpace(request.Search))
         {
-            var search = request.Search.Trim().ToLower();
-            query = query.Where(x => EF.Functions.Like(x.Plate.ToLower(), $"%{search}%") || EF.Functions.Like(x.Model.ToLower(), $"%{search}%"));
+            var rawSearch = request.Search.Trim();
+            var searchLower = rawSearch.ToLower();
+
+            // Se for um número válido, permite busca exata por ano
+            if (int.TryParse(rawSearch, out var searchYear))
+            {
+                query = query.Where(x => EF.Functions.Like(x.Plate.ToLower(), $"%{searchLower}%") ||
+                                         EF.Functions.Like(x.Brand.ToLower(), $"%{searchLower}%") ||
+                                         x.Year == searchYear ||
+                                         EF.Functions.Like(x.Model.ToLower(), $"%{searchLower}%") ||
+                                         EF.Functions.Like(x.Color.ToLower(), $"%{searchLower}%") ||
+                                         EF.Functions.Like(x.FuelType.ToLower(), $"%{searchLower}%") ||
+                                         EF.Functions.Like(x.Status.Name.ToLower(), $"%{searchLower}%"));
+            }
+            else
+            {
+                query = query.Where(x => EF.Functions.Like(x.Plate.ToLower(), $"%{searchLower}%") ||
+                                         EF.Functions.Like(x.Brand.ToLower(), $"%{searchLower}%") ||
+                                         EF.Functions.Like(x.Model.ToLower(), $"%{searchLower}%") ||
+                                         EF.Functions.Like(x.Color.ToLower(), $"%{searchLower}%") ||
+                                         EF.Functions.Like(x.FuelType.ToLower(), $"%{searchLower}%") ||
+                                         EF.Functions.Like(x.Status.Name.ToLower(), $"%{searchLower}%"));
+            }
         }
 
         var count = await query.CountAsync(ct);

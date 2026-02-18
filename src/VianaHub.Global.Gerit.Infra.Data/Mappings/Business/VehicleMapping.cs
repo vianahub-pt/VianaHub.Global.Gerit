@@ -32,6 +32,10 @@ public class VehicleMapping : IEntityTypeConfiguration<VehicleEntity>
             .HasColumnName("TenantId")
             .IsRequired();
 
+        builder.Property(x => x.StatusId)
+            .HasColumnName("StatusId")
+            .IsRequired();
+
         builder.Property(x => x.Plate)
             .HasColumnName("Plate")
             .HasColumnType("NVARCHAR(20)")
@@ -109,6 +113,12 @@ public class VehicleMapping : IEntityTypeConfiguration<VehicleEntity>
             .WithMany()
             .HasForeignKey(x => x.TenantId)
             .HasConstraintName("FK_Vehicles_Tenants")
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasOne(x => x.Status)
+            .WithMany()
+            .HasForeignKey(x => x.StatusId)
+            .HasConstraintName("FK_Vehicles_Status")
             .OnDelete(DeleteBehavior.Restrict);
     }
 }

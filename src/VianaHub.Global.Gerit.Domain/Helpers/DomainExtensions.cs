@@ -519,6 +519,10 @@ public static class DomainExtensions
     {
         return await Task.Run(() => double.TryParse(input, out _));
     }
+    public static async Task<bool> IsInt(this string input)
+    {
+        return await Task.Run(() => int.TryParse(input, out _));
+    }
 
     public static async Task<bool> IsGuid(this string input)
     {

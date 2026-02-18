@@ -9,6 +9,7 @@ namespace VianaHub.Global.Gerit.Domain.Entities.Business;
 public class VehicleEntity : Entity
 {
     public int TenantId { get; private set; }
+    public int StatusId { get; private set; }
     public string Plate { get; private set; }
     public string Brand { get; private set; }
     public string Model { get; private set; }
@@ -20,6 +21,7 @@ public class VehicleEntity : Entity
 
     // Navigation Property
     public TenantEntity Tenant { get; private set; }
+    public StatusEntity Status { get; private set; }
 
     // Construtor protegido para o EF Core
     protected VehicleEntity() { }
@@ -27,9 +29,10 @@ public class VehicleEntity : Entity
     /// <summary>
     /// Construtor para criação de um novo Veículo
     /// </summary>
-    public VehicleEntity(int tenantId, string plate, string brand, string model, int year, string color, string fuelType, int createdBy)
+    public VehicleEntity(int tenantId, int statusId, string plate, string brand, string model, int year, string color, string fuelType, int createdBy)
     {
         TenantId = tenantId;
+        StatusId = statusId;
         Plate = plate;
         Brand = brand;
         Model = model;
@@ -42,8 +45,9 @@ public class VehicleEntity : Entity
         CreatedAt = DateTime.UtcNow;
     }
 
-    public void Update(string plate, string brand, string model, int year, string color, string fuelType, int modifiedBy)
+    public void Update(int statusId, string plate, string brand, string model, int year, string color, string fuelType, int modifiedBy)
     {
+        StatusId = statusId;
         Plate = plate;
         Brand = brand;
         Model = model;

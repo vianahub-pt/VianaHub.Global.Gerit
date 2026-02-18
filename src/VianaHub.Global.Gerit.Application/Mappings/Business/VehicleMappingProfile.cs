@@ -11,15 +11,7 @@ public class VehicleMappingProfile : Profile
     public VehicleMappingProfile()
     {
         CreateMap<VehicleEntity, VehicleResponse>()
-            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
-            .ForMember(dest => dest.TenantId, opt => opt.MapFrom(src => src.TenantId))
-            .ForMember(dest => dest.Plate, opt => opt.MapFrom(src => src.Plate))
-            .ForMember(dest => dest.Brand, opt => opt.MapFrom(src => src.Brand))
-            .ForMember(dest => dest.Model, opt => opt.MapFrom(src => src.Model))
-            .ForMember(dest => dest.Year, opt => opt.MapFrom(src => src.Year))
-            .ForMember(dest => dest.Color, opt => opt.MapFrom(src => src.Color))
-            .ForMember(dest => dest.FuelType, opt => opt.MapFrom(src => src.FuelType))
-            .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsActive));
+            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.Name));
 
         CreateMap<ListPage<VehicleEntity>, ListPageResponse<VehicleResponse>>();
     }

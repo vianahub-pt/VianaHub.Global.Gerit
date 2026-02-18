@@ -8,6 +8,7 @@ public class InterventionContactResponse
     public int Id { get; set; }
     public int TenantId { get; set; }
     public int InterventionId { get; set; }
+    public string Intervention { get; set; }
     public string Name { get; set; }
     public string Email { get; set; }
     public string Phone { get; set; }

@@ -51,6 +51,9 @@ public class InterventionAddressAppService : IInterventionAddressAppService
     public async Task<IEnumerable<InterventionAddressResponse>> GetAllAsync(CancellationToken ct)
     {
         var entities = await _repo.GetAllAsync(ct);
+        if (entities == null)
+            return Enumerable.Empty<InterventionAddressResponse>();
+        
         return _mapper.Map<IEnumerable<InterventionAddressResponse>>(entities);
     }
 

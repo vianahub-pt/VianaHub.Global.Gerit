@@ -13,12 +13,12 @@ public class InterventionAddressEntity : Entity
     public int AddressTypeId { get; private set; }
     public string CountryCode { get; private set; }
     public string Street { get; private set; }
+    public string StreetNumber { get; private set; }
+    public string Complement { get; private set; }
     public string Neighborhood { get; private set; }
     public string City { get; private set; }
     public string District { get; private set; }
     public string PostalCode { get; private set; }
-    public string StreetNumber { get; private set; }
-    public string Complement { get; private set; }
     public decimal? Latitude { get; private set; }
     public decimal? Longitude { get; private set; }
     public string Notes { get; private set; }
@@ -43,12 +43,12 @@ public class InterventionAddressEntity : Entity
         int addressTypeId,
         string countryCode,
         string street,
+        string streetNumber,
+        string complement,
         string neighborhood,
         string city,
         string district,
         string postalCode,
-        string streetNumber,
-        string complement,
         decimal? latitude,
         decimal? longitude,
         string notes,
@@ -60,12 +60,12 @@ public class InterventionAddressEntity : Entity
         AddressTypeId = addressTypeId;
         CountryCode = countryCode ?? "PT";
         Street = street;
+        StreetNumber = streetNumber;
         Neighborhood = neighborhood;
+        Complement = complement;
         City = city;
         District = district;
         PostalCode = postalCode;
-        StreetNumber = streetNumber;
-        Complement = complement;
         Latitude = latitude;
         Longitude = longitude;
         Notes = notes;
@@ -80,12 +80,12 @@ public class InterventionAddressEntity : Entity
         int addressTypeId,
         string countryCode,
         string street,
+        string streetNumber,
+        string complement,
         string neighborhood,
         string city,
         string district,
         string postalCode,
-        string streetNumber,
-        string complement,
         decimal? latitude,
         decimal? longitude,
         string notes,
@@ -94,12 +94,12 @@ public class InterventionAddressEntity : Entity
         AddressTypeId = addressTypeId;
         CountryCode = countryCode ?? "PT";
         Street = street;
+        StreetNumber = streetNumber;
+        Complement = complement;
         Neighborhood = neighborhood;
         City = city;
         District = district;
         PostalCode = postalCode;
-        StreetNumber = streetNumber;
-        Complement = complement;
         Latitude = latitude;
         Longitude = longitude;
         Notes = notes;

@@ -2,9 +2,8 @@ using FluentValidation.Results;
 using VianaHub.Global.Gerit.Domain.Base;
 using VianaHub.Global.Gerit.Domain.Entities.Business;
 using VianaHub.Global.Gerit.Domain.Interfaces;
-using VianaHub.Global.Gerit.Domain.Validators.Business.StatusType;
 
-namespace VianaHub.Global.Gerit.Domain.Validators.Business;
+namespace VianaHub.Global.Gerit.Domain.Validators.Business.StatusType;
 
 public class StatusTypeValidator : BaseEntityValidator<StatusTypeEntity>
 {

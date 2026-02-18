@@ -79,7 +79,7 @@ public class VehicleAppService : IVehicleAppService
             return false;
         }
 
-        var entity = new VehicleEntity(tenantId, request.Plate, request.Brand, request.Model, request.Year, request.Color, request.FuelType, _currentUser.GetUserId());
+        var entity = new VehicleEntity(tenantId, request.StatusId, request.Plate, request.Brand, request.Model, request.Year, request.Color, request.FuelType, _currentUser.GetUserId());
         return await _domain.CreateAsync(entity, ct);
     }
 
@@ -92,7 +92,7 @@ public class VehicleAppService : IVehicleAppService
             return false;
         }
 
-        entity.Update(request.Plate, request.Brand, request.Model, request.Year, request.Color, request.FuelType, _currentUser.GetUserId());
+        entity.Update(request.StatusId, request.Plate, request.Brand, request.Model, request.Year, request.Color, request.FuelType, _currentUser.GetUserId());
         return await _domain.UpdateAsync(entity, ct);
     }
 
@@ -267,7 +267,7 @@ public class VehicleAppService : IVehicleAppService
             }
 
             // Cria a entidade
-            var entity = new VehicleEntity(tenantId, item.Plate, item.Brand, item.Model, item.Year, item.Color, item.FuelType, _currentUser.GetUserId());
+            var entity = new VehicleEntity(tenantId, item.StatusId, item.Plate, item.Brand, item.Model, item.Year, item.Color, item.FuelType, _currentUser.GetUserId());
 
             // Tenta criar no domínio
             var success = await _domain.CreateAsync(entity, ct);

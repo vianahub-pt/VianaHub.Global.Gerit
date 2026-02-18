@@ -1,21 +1,21 @@
-ClientId;StatusId;Title;Description;StartDateTime;EstimatedValue
-1;3;Inspeção Técnica Inicial;Visita técnica para avaliação de sistema de fossa;2026-03-01 08:00:00;150.00
-2;3;Desentupimento Urgente;Atendimento emergencial para desentupimento;2026-03-02 09:00:00;320.00
-3;3;Limpeza Preventiva;Serviço preventivo de limpeza de tubagens;2026-03-03 10:00:00;280.00
-4;4;Manutenção Programada;Manutenção periódica contratada;2026-03-04 08:30:00;400.00
-5;5;Revisão Sistema Hidráulico;Revisão completa do sistema hidráulico;2026-03-05 11:00:00;520.00
-6;6;Preparação de Equipamento;Preparação técnica antes de intervenção maior;2026-03-06 07:45:00;180.00
-7;7;Ajuste Técnico;Ajuste em sistema com falha operacional;2026-03-07 09:15:00;260.00
-8;8;Verificação Veicular;Inspeção associada a sistema externo;2026-03-08 14:00:00;210.00
-9;9;Atendimento no Local;Execução de serviço técnico presencial;2026-03-09 08:00:00;450.00
-10;10;Chegada Técnica;Início formal da intervenção no cliente;2026-03-10 08:30:00;300.00
-11;11;Execução Principal;Execução completa da intervenção contratada;2026-03-11 09:00:00;680.00
-12;9;Pausa Técnica;Intervenção pausada para ajustes;2026-03-12 10:00:00;190.00
-13;9;Reposição de Peças;Substituição de componentes danificados;2026-03-13 08:15:00;750.00
-14;9;Aprovação de Orçamento;Aguardando confirmação financeira;2026-03-14 09:30:00;120.00
-15;9;Contato Cliente;Intervenção aguardando retorno do cliente;2026-03-15 11:45:00;90.00
-16;10;Reagendamento Serviço;Serviço reagendado por solicitação;2026-03-16 13:00:00;200.00
-17;10;Finalização Técnica;Serviço finalizado conforme escopo;2026-03-17 15:00:00;980.00
-18;11;Finalização com Ajustes;Encerramento com pequenas pendências;2026-03-18 16:30:00;870.00
-19;11;Faturamento Serviço;Intervenção concluída e faturada;2026-03-19 09:00:00;1200.00
-20;11;Cancelamento Operacional;Intervenção cancelada por decisão estratégica;2026-03-20 10:30:00;0.00
+InterventionId;AddressTypeId;CountryCode;Street;StreetNumber;Complement;Neighborhood;City;District;PostalCode;Latitude;Longitude;Notes;IsPrimary
+1;1;PT;Avenida da Liberdade;125;;Santo António;Lisboa;Lisboa;1250-140;38.7219;-9.1451;Morada residencial do cliente para a Inspeção Técnica Inicial (avaliação de sistema de fossa);true
+2;2;PT;Rua de Santa Catarina;312;;Santo Ildefonso;Porto;Porto;4000-443;41.1496;-8.6110;Morada comercial para atendimento de Desentupimento Urgente;true
+3;3;PT;Avenida dos Aliados;151;;Santo Ildefonso;Porto;Porto;4000-067;41.1495;-8.6108;Morada industrial (edifício/instalação) para Limpeza Preventiva de tubagens;true
+4;4;PT;Rua Augusta;187;;Santa Maria Maior;Lisboa;Lisboa;1100-053;38.7104;-9.1392;Morada rural/apoio (referência do cliente) para Manutenção Programada;true
+5;5;PT;Terreiro do Paço;1;;Santa Maria Maior;Lisboa;Lisboa;1100-148;38.7079;-9.1366;Morada de serviços públicos para Revisão do Sistema Hidráulico (ponto de contacto institucional);true
+6;6;PT;Alameda da Universidade;1;;Alvalade;Lisboa;Lisboa;1649-004;38.7527;-9.1567;Morada de educação para Preparação de Equipamento (acesso e coordenação no local);true
+7;7;PT;Campo Grande;245;;Alvalade;Lisboa;Lisboa;1749-016;38.7574;-9.1566;Morada de saúde para Ajuste Técnico (intervenção com sensibilidade operacional);true
+8;8;PT;Rua do Alecrim;12;;Misericórdia;Lisboa;Lisboa;1200-017;38.7067;-9.1446;Morada de alojamento/turismo para Verificação Veicular (apoio a serviço no local);true
+9;9;PT;Avenida Dom João II;41;;Parque das Nações;Lisboa;Lisboa;1990-084;38.7672;-9.0997;Morada logística/distribuição para Atendimento no Local (entrada/receção de equipamentos);true
+10;10;PT;Apartado;1000;;Santa Maria Maior;Lisboa;Lisboa;1001-001;38.7139;-9.1394;Morada postal alternativa para Chegada Técnica (referência de correspondência/entregas);true
+11;1;PT;Avenida da Boavista;1277;;Lordelo do Ouro e Massarelos;Porto;Porto;4100-130;41.1613;-8.6565;Morada residencial do cliente para Execução Principal (intervenção contratada);true
+12;2;PT;Rua Ferreira Borges;85;;Santa Cruz;Coimbra;Coimbra;3000-180;40.2099;-8.4292;Morada comercial para Pausa Técnica (ajustes e replaneamento no local);true
+13;3;PT;Avenida 5 de Outubro;55;;Sé e São Pedro;Faro;Faro;8000-076;37.0191;-7.9309;Morada industrial para Reposição de Peças (acesso a área técnica);true
+14;4;PT;Rua de São João;10;;São Vicente;Braga;Braga;4700-034;41.5518;-8.4266;Morada rural/apoio para Aprovação de Orçamento (ponto de decisão do cliente);true
+15;5;PT;Praça do Município;1;;São Julião;Setúbal;Setúbal;2900-312;38.5244;-8.8892;Morada de serviços públicos para Contato com o Cliente (local de referência/atendimento);true
+16;6;PT;Cidade Universitária;1;;Santo António dos Olivais;Coimbra;Coimbra;3004-531;40.1937;-8.4110;Morada de educação para Reagendamento do Serviço (coordenação de acesso e horários);true
+17;7;PT;Avenida Professor Egas Moniz;164;;Alvalade;Lisboa;Lisboa;1649-035;38.7489;-9.1607;Morada de saúde para Finalização Técnica (encerramento conforme escopo);true
+18;8;PT;Avenida Infante Santo;1;;Sé;Funchal;Madeira;9000-015;32.6476;-16.9157;Morada de alojamento/turismo para Finalização com Ajustes (pendências pequenas no check-out/entrega);true
+19;9;PT;Avenida Europa;471;;Esgueira;Aveiro;Aveiro;3800-228;40.6512;-8.6297;Morada logística/distribuição para Faturamento do Serviço (confirmação de entrega e documentação);true
+20;10;PT;Apartado;2000;;Cedofeita, Santo Ildefonso, Sé, Miragaia, São Nicolau e Vitória;Porto;Porto;4002-001;41.1496;-8.6109;Morada postal alternativa para Cancelamento Operacional (comunicação formal e registo);true
