@@ -16,13 +16,6 @@ public class AddressTypeDataRepository : IAddressTypeDataRepository
         _context = context;
     }
 
-    public async Task<AddressTypeEntity> GetByIdAsync(int id, CancellationToken ct)
-    {
-        return await _context.Set<AddressTypeEntity>()
-            .AsNoTracking()
-            .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted, ct);
-    }
-
     public async Task<IEnumerable<AddressTypeEntity>> GetAllAsync(CancellationToken ct)
     {
         return await _context.Set<AddressTypeEntity>()
@@ -31,7 +24,12 @@ public class AddressTypeDataRepository : IAddressTypeDataRepository
             .OrderBy(x => x.Name)
             .ToListAsync(ct);
     }
-
+    public async Task<AddressTypeEntity> GetByIdAsync(int id, CancellationToken ct)
+    {
+        return await _context.Set<AddressTypeEntity>()
+            .AsNoTracking()
+            .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted, ct);
+    }
     public async Task<ListPage<AddressTypeEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct)
     {
         var query = _context.Set<AddressTypeEntity>()
@@ -66,26 +64,17 @@ public class AddressTypeDataRepository : IAddressTypeDataRepository
             TotalPages = (int)Math.Ceiling((double)count / pageSize)
         };
     }
-
     public async Task<bool> ExistsByIdAsync(int id, CancellationToken ct)
     {
         return await _context.Set<AddressTypeEntity>()
             .AsNoTracking()
             .AnyAsync(x => x.Id == id && !x.IsDeleted, ct);
     }
-
-    public async Task<bool> ExistsByNameAndTenantAsync(string name, int tenantId, CancellationToken ct)
+    public async Task<bool> ExistsByNameAsync(int tenantId, string name, CancellationToken ct)
     {
         return await _context.Set<AddressTypeEntity>()
             .AsNoTracking()
-            .AnyAsync(x => x.Name == name && x.TenantId == tenantId && !x.IsDeleted, ct);
-    }
-
-    public async Task<bool> ExistsByNameAndTenantAsync(string name, int tenantId, int excludeId, CancellationToken ct)
-    {
-        return await _context.Set<AddressTypeEntity>()
-            .AsNoTracking()
-            .AnyAsync(x => x.Name == name && x.TenantId == tenantId && x.Id != excludeId && !x.IsDeleted, ct);
+            .AnyAsync(x => x.TenantId == tenantId && x.Name == name && !x.IsDeleted, ct);
     }
 
     public async Task<bool> AddAsync(AddressTypeEntity entity, CancellationToken ct)
@@ -93,7 +82,6 @@ public class AddressTypeDataRepository : IAddressTypeDataRepository
         await _context.Set<AddressTypeEntity>().AddAsync(entity, ct);
         return await _context.SaveChangesAsync(ct) > 0;
     }
-
     public async Task<bool> UpdateAsync(AddressTypeEntity entity, CancellationToken ct)
     {
         _context.Set<AddressTypeEntity>().Update(entity);

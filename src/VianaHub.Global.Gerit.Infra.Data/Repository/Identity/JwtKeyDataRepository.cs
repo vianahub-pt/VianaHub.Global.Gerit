@@ -122,7 +122,7 @@ public class JwtKeyDataRepository : IJwtKeyDataRepository
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "?? [AddAsync] Add JwtKeyEntity | falha ao criar chave JwtKey");
+            _logger.LogError(ex, "?? [CreateAsync] Add JwtKeyEntity | falha ao criar chave JwtKey");
             throw new Exception("Falha ao criar chave JwtKey", ex);
         }
     }

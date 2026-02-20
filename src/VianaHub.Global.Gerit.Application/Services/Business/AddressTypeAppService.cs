@@ -76,7 +76,7 @@ public class AddressTypeAppService : IAddressTypeAppService
     public async Task<bool> CreateAsync(CreateAddressTypeRequest request, CancellationToken ct)
     {
         var tenantId = _currentUser.GetTenantId();
-        var exists = await _repo.ExistsByNameAndTenantAsync(request.Name, tenantId, ct);
+        var exists = await _repo.ExistsByNameAsync(tenantId, request.Name, ct);
         if (exists)
         {
             _notify.Add(_localization.GetMessage("Application.Service.AddressType.Create.ResourceAlreadyExists"), 409);
@@ -97,7 +97,7 @@ public class AddressTypeAppService : IAddressTypeAppService
         }
 
         // Verifica se já existe outro com o mesmo nome no mesmo tenant
-        var exists = await _repo.ExistsByNameAndTenantAsync(request.Name, entity.TenantId, id, ct);
+        var exists = await _repo.ExistsByNameAsync(entity.TenantId, request.Name, ct);
         if (exists)
         {
             _notify.Add(_localization.GetMessage("Application.Service.AddressType.Update.ResourceAlreadyExists"), 409);
@@ -263,7 +263,7 @@ public class AddressTypeAppService : IAddressTypeAppService
             }
 
             // Verifica duplicidade
-            var exists = await _repo.ExistsByNameAndTenantAsync(item.Name, tenantId, ct);
+            var exists = await _repo.ExistsByNameAsync(tenantId, item.Name, ct);
             if (exists)
             {
                 _notify.Add(_localization.GetMessage("Application.Service.AddressType.ProcessBulkItems.ExistsByName", item.Name), 400);

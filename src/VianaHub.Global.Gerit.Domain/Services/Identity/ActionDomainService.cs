@@ -27,22 +27,18 @@ public class ActionDomainService : IActionDomainService
     {
         return await _repo.GetByIdAsync(id, ct);
     }
-    
     public async Task<IEnumerable<ActionEntity>> GetAllAsync(CancellationToken ct)
     {
         return await _repo.GetAllAsync(ct);
     }
-    
     public async Task<ListPage<ActionEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct)
     {
         return await _repo.GetPagedAsync(request, ct);
     }
-    
     public async Task<bool> ExistsByIdAsync(int id, CancellationToken ct)
     {
         return await _repo.ExistsByIdAsync(id, ct);
     }
-    
     public async Task<bool> ExistsByNameAsync(string name, CancellationToken ct)
     {
         return await _repo.ExistsByNameAsync(name, ct);
@@ -62,7 +58,6 @@ public class ActionDomainService : IActionDomainService
         
         return await _repo.AddAsync(entity, ct);
     }
-    
     public async Task<bool> UpdateAsync(ActionEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForUpdateAsync(entity);
@@ -77,7 +72,6 @@ public class ActionDomainService : IActionDomainService
         
         return await _repo.UpdateAsync(entity, ct);
     }
-    
     public async Task<bool> ActivateAsync(ActionEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForActivateAsync(entity);
@@ -92,7 +86,6 @@ public class ActionDomainService : IActionDomainService
         
         return await _repo.UpdateAsync(entity, ct);
     }
-    
     public async Task<bool> DeactivateAsync(ActionEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForDeactivateAsync(entity);
@@ -107,7 +100,6 @@ public class ActionDomainService : IActionDomainService
         
         return await _repo.UpdateAsync(entity, ct);
     }
-    
     public async Task<bool> DeleteAsync(ActionEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForDeleteAsync(entity);

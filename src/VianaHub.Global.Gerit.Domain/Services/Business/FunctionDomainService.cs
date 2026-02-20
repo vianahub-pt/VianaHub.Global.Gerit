@@ -28,17 +28,14 @@ public class FunctionDomainService : IFunctionDomainService
     {
         return await _repo.GetByIdAsync(id, ct);
     }
-
     public async Task<IEnumerable<FunctionEntity>> GetAllAsync(CancellationToken ct)
     {
         return await _repo.GetAllAsync(ct);
     }
-
     public async Task<ListPage<FunctionEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct)
     {
         return await _repo.GetPagedAsync(request, ct);
     }
-
     public async Task<bool> ExistsByIdAsync(int id, CancellationToken ct)
     {
         return await _repo.ExistsByIdAsync(id, ct);
@@ -58,7 +55,6 @@ public class FunctionDomainService : IFunctionDomainService
 
         return await _repo.AddAsync(entity, ct);
     }
-
     public async Task<bool> UpdateAsync(FunctionEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForUpdateAsync(entity);
@@ -73,7 +69,6 @@ public class FunctionDomainService : IFunctionDomainService
 
         return await _repo.UpdateAsync(entity, ct);
     }
-
     public async Task<bool> ActivateAsync(FunctionEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForActivateAsync(entity);
@@ -88,7 +83,6 @@ public class FunctionDomainService : IFunctionDomainService
 
         return await _repo.UpdateAsync(entity, ct);
     }
-
     public async Task<bool> DeactivateAsync(FunctionEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForDeactivateAsync(entity);
@@ -103,7 +97,6 @@ public class FunctionDomainService : IFunctionDomainService
 
         return await _repo.UpdateAsync(entity, ct);
     }
-
     public async Task<bool> DeleteAsync(FunctionEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForDeleteAsync(entity);

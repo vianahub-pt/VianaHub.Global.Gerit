@@ -27,17 +27,14 @@ public class EquipmentTypeDomainService : IEquipmentTypeDomainService
     {
         return await _repo.GetByIdAsync(id, ct);
     }
-
     public async Task<IEnumerable<EquipmentTypeEntity>> GetAllAsync(CancellationToken ct)
     {
         return await _repo.GetAllAsync(ct);
     }
-
     public async Task<ListPage<EquipmentTypeEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct)
     {
         return await _repo.GetPagedAsync(request, ct);
     }
-
     public async Task<bool> ExistsByIdAsync(int id, CancellationToken ct)
     {
         return await _repo.ExistsByIdAsync(id, ct);
@@ -57,7 +54,6 @@ public class EquipmentTypeDomainService : IEquipmentTypeDomainService
 
         return await _repo.AddAsync(entity, ct);
     }
-
     public async Task<bool> UpdateAsync(EquipmentTypeEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForUpdateAsync(entity);
@@ -72,7 +68,6 @@ public class EquipmentTypeDomainService : IEquipmentTypeDomainService
 
         return await _repo.UpdateAsync(entity, ct);
     }
-
     public async Task<bool> ActivateAsync(EquipmentTypeEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForActivateAsync(entity);
@@ -87,7 +82,6 @@ public class EquipmentTypeDomainService : IEquipmentTypeDomainService
 
         return await _repo.UpdateAsync(entity, ct);
     }
-
     public async Task<bool> DeactivateAsync(EquipmentTypeEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForDeactivateAsync(entity);
@@ -102,7 +96,6 @@ public class EquipmentTypeDomainService : IEquipmentTypeDomainService
 
         return await _repo.UpdateAsync(entity, ct);
     }
-
     public async Task<bool> DeleteAsync(EquipmentTypeEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForDeleteAsync(entity);

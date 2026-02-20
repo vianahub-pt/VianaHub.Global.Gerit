@@ -3,7 +3,9 @@ using System.Threading.Tasks;
 using VianaHub.Global.Gerit.Domain.Base;
 using VianaHub.Global.Gerit.Domain.Entities.Business;
 using VianaHub.Global.Gerit.Domain.Interfaces.Business;
+using VianaHub.Global.Gerit.Domain.ReadModels;
 using VianaHub.Global.Gerit.Domain.Tools.Notifications;
+using VianaHub.Global.Gerit.Domain.Tools.Pagination;
 
 namespace VianaHub.Global.Gerit.Domain.Services.Business;
 
@@ -26,6 +28,23 @@ public class InterventionAddressDomainService : IInterventionAddressDomainServic
         _notify = notify;
     }
 
+    public async Task<InterventionAddressEntity> GetByIdAsync(int id, CancellationToken ct)
+    {
+        return await _repo.GetByIdAsync(id, ct);
+    }
+    public async Task<IEnumerable<InterventionAddressEntity>> GetAllAsync(CancellationToken ct)
+    {
+        return await _repo.GetAllAsync(ct);
+    }
+    public async Task<ListPage<InterventionAddressEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct)
+    {
+        return await _repo.GetPagedAsync(request, ct);
+    }
+    public async Task<bool> ExistsByIdAsync(int id, CancellationToken ct)
+    {
+        return await _repo.ExistsByIdAsync(id, ct);
+    }
+
     public async Task<bool> CreateAsync(InterventionAddressEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForCreateAsync(entity);
@@ -38,7 +57,6 @@ public class InterventionAddressDomainService : IInterventionAddressDomainServic
 
         return await _repo.AddAsync(entity, ct);
     }
-
     public async Task<bool> UpdateAsync(InterventionAddressEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForUpdateAsync(entity);
@@ -51,7 +69,6 @@ public class InterventionAddressDomainService : IInterventionAddressDomainServic
 
         return await _repo.UpdateAsync(entity, ct);
     }
-
     public async Task<bool> ActivateAsync(InterventionAddressEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForActivateAsync(entity);
@@ -64,7 +81,6 @@ public class InterventionAddressDomainService : IInterventionAddressDomainServic
 
         return await _repo.UpdateAsync(entity, ct);
     }
-
     public async Task<bool> DeactivateAsync(InterventionAddressEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForDeactivateAsync(entity);
@@ -77,7 +93,6 @@ public class InterventionAddressDomainService : IInterventionAddressDomainServic
 
         return await _repo.UpdateAsync(entity, ct);
     }
-
     public async Task<bool> DeleteAsync(InterventionAddressEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForDeleteAsync(entity);

@@ -32,8 +32,12 @@ select * from dbo.InterventionTeams;
 select * from dbo.InterventionTeamVehicles;
 select * from dbo.InterventionTeamEquipments;
 
-FOR JSON AUTO;
+select * from dbo.FileTypes;
+select * from dbo.PlanFileRules;
+select * from dbo.AttachmentCategories;
+select * from dbo.InterventionAttachments;
 
+FOR JSON AUTO;
 
 
 

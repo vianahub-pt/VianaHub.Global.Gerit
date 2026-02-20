@@ -28,42 +28,34 @@ public class SubscriptionDomainService : ISubscriptionDomainService
     {
         return await _repo.GetByIdAsync(id, ct);
     }
-
     public async Task<IEnumerable<SubscriptionEntity>> GetAllAsync(CancellationToken ct)
     {
         return await _repo.GetAllAsync(ct);
     }
-
     public async Task<ListPage<SubscriptionEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct)
     {
         return await _repo.GetPagedAsync(request, ct);
     }
-
     public async Task<bool> ExistsByIdAsync(int id, CancellationToken ct)
     {
         return await _repo.ExistsByIdAsync(id, ct);
     }
-
     public async Task<bool> ExistsByTenantIdAsync(int tenantId, CancellationToken ct)
     {
         return await _repo.ExistsByTenantIdAsync(tenantId, ct);
     }
-
     public async Task<SubscriptionEntity> GetByTenantIdAsync(int tenantId, CancellationToken ct)
     {
         return await _repo.GetByTenantIdAsync(tenantId, ct);
     }
-
     public async Task<IEnumerable<SubscriptionEntity>> GetByPlanIdAsync(int planId, CancellationToken ct)
     {
         return await _repo.GetByPlanIdAsync(planId, ct);
     }
-
     public async Task<IEnumerable<SubscriptionEntity>> GetActiveSubscriptionsAsync(CancellationToken ct)
     {
         return await _repo.GetActiveSubscriptionsAsync(ct);
     }
-
     public async Task<IEnumerable<SubscriptionEntity>> GetExpiringSubscriptionsAsync(int daysBeforeExpiration, CancellationToken ct)
     {
         return await _repo.GetExpiringSubscriptionsAsync(daysBeforeExpiration, ct);
@@ -83,7 +75,6 @@ public class SubscriptionDomainService : ISubscriptionDomainService
 
         return await _repo.AddAsync(entity, ct);
     }
-
     public async Task<bool> UpdateAsync(SubscriptionEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForUpdateAsync(entity);
@@ -98,7 +89,6 @@ public class SubscriptionDomainService : ISubscriptionDomainService
 
         return await _repo.UpdateAsync(entity, ct);
     }
-
     public async Task<bool> ActivateAsync(SubscriptionEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForActivateAsync(entity);
@@ -113,7 +103,6 @@ public class SubscriptionDomainService : ISubscriptionDomainService
 
         return await _repo.UpdateAsync(entity, ct);
     }
-
     public async Task<bool> DeactivateAsync(SubscriptionEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForDeactivateAsync(entity);
@@ -128,7 +117,6 @@ public class SubscriptionDomainService : ISubscriptionDomainService
 
         return await _repo.UpdateAsync(entity, ct);
     }
-
     public async Task<bool> DeleteAsync(SubscriptionEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForDeleteAsync(entity);
@@ -143,17 +131,14 @@ public class SubscriptionDomainService : ISubscriptionDomainService
 
         return await _repo.UpdateAsync(entity, ct);
     }
-
     public async Task<bool> CancelAsync(SubscriptionEntity entity, CancellationToken ct)
     {
         return await _repo.UpdateAsync(entity, ct);
     }
-
     public async Task<bool> RenewAsync(SubscriptionEntity entity, CancellationToken ct)
     {
         return await _repo.UpdateAsync(entity, ct);
     }
-
     public async Task<bool> IsTrialAsync(int tenantId, CancellationToken ct)
     {
         return await _repo.IsTrialAsync(tenantId, ct);

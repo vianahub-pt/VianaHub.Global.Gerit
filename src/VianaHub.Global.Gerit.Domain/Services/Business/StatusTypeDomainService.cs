@@ -1,24 +1,43 @@
 using VianaHub.Global.Gerit.Domain.Base;
 using VianaHub.Global.Gerit.Domain.Entities.Business;
 using VianaHub.Global.Gerit.Domain.Interfaces.Business;
+using VianaHub.Global.Gerit.Domain.ReadModels;
 using VianaHub.Global.Gerit.Domain.Tools.Notifications;
+using VianaHub.Global.Gerit.Domain.Tools.Pagination;
 
 namespace VianaHub.Global.Gerit.Domain.Services.Business;
 
 public class StatusTypeDomainService : IStatusTypeDomainService
 {
-    private readonly IStatusTypeDataRepository _repository;
+    private readonly IStatusTypeDataRepository _repo;
     private readonly IEntityDomainValidator<StatusTypeEntity> _validator;
     private readonly INotify _notify;
 
     public StatusTypeDomainService(
-        IStatusTypeDataRepository repository,
+        IStatusTypeDataRepository repo,
         IEntityDomainValidator<StatusTypeEntity> validator,
         INotify notify)
     {
-        _repository = repository;
+        _repo = repo;
         _validator = validator;
         _notify = notify;
+    }
+
+    public async Task<StatusTypeEntity> GetByIdAsync(int id, CancellationToken ct)
+    {
+        return await _repo.GetByIdAsync(id, ct);
+    }
+    public async Task<IEnumerable<StatusTypeEntity>> GetAllAsync(CancellationToken ct)
+    {
+        return await _repo.GetAllAsync(ct);
+    }
+    public async Task<ListPage<StatusTypeEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct)
+    {
+        return await _repo.GetPagedAsync(request, ct);
+    }
+    public async Task<bool> ExistsByIdAsync(int id, CancellationToken ct)
+    {
+        return await _repo.ExistsByIdAsync(id, ct);
     }
 
     public async Task<bool> CreateAsync(StatusTypeEntity entity, CancellationToken ct)
@@ -33,9 +52,8 @@ public class StatusTypeDomainService : IStatusTypeDomainService
             return false;
         }
 
-        return await _repository.AddAsync(entity, ct);
+        return await _repo.AddAsync(entity, ct);
     }
-
     public async Task<bool> UpdateAsync(StatusTypeEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForUpdateAsync(entity);
@@ -48,9 +66,8 @@ public class StatusTypeDomainService : IStatusTypeDomainService
             return false;
         }
 
-        return await _repository.UpdateAsync(entity, ct);
+        return await _repo.UpdateAsync(entity, ct);
     }
-
     public async Task<bool> ActivateAsync(StatusTypeEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForActivateAsync(entity);
@@ -63,9 +80,8 @@ public class StatusTypeDomainService : IStatusTypeDomainService
             return false;
         }
 
-        return await _repository.UpdateAsync(entity, ct);
+        return await _repo.UpdateAsync(entity, ct);
     }
-
     public async Task<bool> DeactivateAsync(StatusTypeEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForDeactivateAsync(entity);
@@ -78,9 +94,8 @@ public class StatusTypeDomainService : IStatusTypeDomainService
             return false;
         }
 
-        return await _repository.UpdateAsync(entity, ct);
+        return await _repo.UpdateAsync(entity, ct);
     }
-
     public async Task<bool> DeleteAsync(StatusTypeEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForDeleteAsync(entity);
@@ -93,6 +108,6 @@ public class StatusTypeDomainService : IStatusTypeDomainService
             return false;
         }
 
-        return await _repository.UpdateAsync(entity, ct);
+        return await _repo.UpdateAsync(entity, ct);
     }
 }

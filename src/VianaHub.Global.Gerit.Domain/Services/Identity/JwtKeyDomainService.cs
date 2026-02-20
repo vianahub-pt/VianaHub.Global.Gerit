@@ -44,22 +44,18 @@ public class JwtKeyDomainService : IJwtKeyDomainService
     {
         return await _repo.GetByIdAsync(id, ct);
     }
-
     public async Task<JwtKeyEntity> GetByKeyIdAsync(Guid keyId, CancellationToken ct)
     {
         return await _repo.GetByKeyIdAsync(keyId, ct);
     }
-
     public async Task<JwtKeyEntity> GetActiveKeyAsync(int tenantId, CancellationToken ct)
     {
         return await _repo.GetActiveKeyAsync(tenantId, ct);
     }
-
     public async Task<IEnumerable<JwtKeyEntity>> GetAllAsync(CancellationToken ct)
     {
         return await _repo.GetAllAsync(ct);
     }
-
     public async Task<IEnumerable<JwtKeyEntity>> GetByTenantAsync(int tenantId, CancellationToken ct)
     {
         return await _repo.GetByTenantAsync(tenantId, ct);
@@ -110,7 +106,6 @@ public class JwtKeyDomainService : IJwtKeyDomainService
 
         return entity;
     }
-
     public async Task<bool> ActivateAsync(JwtKeyEntity key, CancellationToken ct)
     {
         var existing = await _repo.GetByIdAsync(key.Id, ct);
@@ -151,7 +146,6 @@ public class JwtKeyDomainService : IJwtKeyDomainService
 
         return updated;
     }
-
     public async Task<bool> DeactivateAsync(JwtKeyEntity key, CancellationToken ct)
     {
         var existing = await _repo.GetByIdAsync(key.Id, ct);
@@ -180,7 +174,6 @@ public class JwtKeyDomainService : IJwtKeyDomainService
 
         return updated;
     }
-
     public async Task<bool> RevokeAsync(int id, string reason, int modifiedBy, CancellationToken ct)
     {
         var existing = await _repo.GetByIdAsync(id, ct);
@@ -243,7 +236,6 @@ public class JwtKeyDomainService : IJwtKeyDomainService
 
         return updated;
     }
-
     public async Task<bool> DeleteAsync(JwtKeyEntity key, CancellationToken ct)
     {
         var existing = await _repo.GetByIdAsync(key.Id, ct);
@@ -264,7 +256,6 @@ public class JwtKeyDomainService : IJwtKeyDomainService
         existing.Delete(_currentUser.GetUserId());
         return await _repo.UpdateAsync(existing, ct);
     }
-
     public async Task<bool> UpdateRotationPolicyAsync(int id, int rotationPolicyDays, int overlapPeriodDays, int modifiedBy, CancellationToken ct)
     {
         var existing = await _repo.GetByIdAsync(id, ct);
@@ -295,7 +286,6 @@ public class JwtKeyDomainService : IJwtKeyDomainService
         existing.UpdateRotationSchedule(rotationPolicyDays, overlapPeriodDays, modifiedBy);
         return await _repo.UpdateAsync(existing, ct);
     }
-
     public async Task<(string PublicKey, string PrivateKeyEncrypted)> GenerateKeyPairAsync(string algorithm, int keySize, CancellationToken ct)
     {
         await Task.CompletedTask; // Para evitar warning de async sem await
@@ -330,7 +320,6 @@ public class JwtKeyDomainService : IJwtKeyDomainService
             throw;
         }
     }
-
     public async Task<string> DecryptPrivateKeyAsync(string encryptedPrivateKey, CancellationToken ct)
     {
         await Task.CompletedTask; // Para evitar warning de async sem await
@@ -354,7 +343,6 @@ public class JwtKeyDomainService : IJwtKeyDomainService
             throw;
         }
     }
-
     public async Task<int> RotateKeysAsync(CancellationToken ct)
     {
         _logger.LogInformation("?? [RotateKeysAsync] Iniciando rotação de chaves");
@@ -421,7 +409,6 @@ public class JwtKeyDomainService : IJwtKeyDomainService
 
         return rotatedCount;
     }
-
     public async Task<int> CleanupExpiredKeysAsync(int retentionDays, CancellationToken ct)
     {
         _logger.LogInformation("?? [CleanupExpiredKeysAsync] Iniciando limpeza de chaves expiradas. RetentionDays={RetentionDays}", retentionDays);
@@ -445,7 +432,6 @@ public class JwtKeyDomainService : IJwtKeyDomainService
 
         return deletedCount;
     }
-
     public async Task<JwtKeyEntity> EnsureKeyExistsAsync(int tenantId, int createdBy, CancellationToken ct)
     {
         _logger.LogInformation("?? [EnsureKeyExistsAsync] Verificando existência de chave JWT. TenantId={TenantId}", tenantId);

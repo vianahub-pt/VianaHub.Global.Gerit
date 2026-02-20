@@ -1,7 +1,9 @@
 using VianaHub.Global.Gerit.Domain.Base;
 using VianaHub.Global.Gerit.Domain.Entities.Business;
 using VianaHub.Global.Gerit.Domain.Interfaces.Business;
+using VianaHub.Global.Gerit.Domain.ReadModels;
 using VianaHub.Global.Gerit.Domain.Tools.Notifications;
+using VianaHub.Global.Gerit.Domain.Tools.Pagination;
 
 namespace VianaHub.Global.Gerit.Domain.Services.Business;
 
@@ -10,18 +12,35 @@ namespace VianaHub.Global.Gerit.Domain.Services.Business;
 /// </summary>
 public class InterventionContactDomainService : IInterventionContactDomainService
 {
-    private readonly IInterventionContactDataRepository _repository;
+    private readonly IInterventionContactDataRepository _repo;
     private readonly IEntityDomainValidator<InterventionContactEntity> _validator;
     private readonly INotify _notify;
 
     public InterventionContactDomainService(
-        IInterventionContactDataRepository repository,
+        IInterventionContactDataRepository repo,
         IEntityDomainValidator<InterventionContactEntity> validator,
         INotify notify)
     {
-        _repository = repository;
+        _repo = repo;
         _validator = validator;
         _notify = notify;
+    }
+
+    public async Task<InterventionContactEntity> GetByIdAsync(int id, CancellationToken ct)
+    {
+        return await _repo.GetByIdAsync(id, ct);
+    }
+    public async Task<IEnumerable<InterventionContactEntity>> GetAllAsync(CancellationToken ct)
+    {
+        return await _repo.GetAllAsync(ct);
+    }
+    public async Task<ListPage<InterventionContactEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct)
+    {
+        return await _repo.GetPagedAsync(request, ct);
+    }
+    public async Task<bool> ExistsByIdAsync(int id, CancellationToken ct)
+    {
+        return await _repo.ExistsByIdAsync(id, ct);
     }
 
     public async Task<bool> CreateAsync(InterventionContactEntity entity, CancellationToken ct)
@@ -36,9 +55,8 @@ public class InterventionContactDomainService : IInterventionContactDomainServic
             return false;
         }
 
-        return await _repository.AddAsync(entity, ct);
+        return await _repo.AddAsync(entity, ct);
     }
-
     public async Task<bool> UpdateAsync(InterventionContactEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForUpdateAsync(entity);
@@ -51,9 +69,8 @@ public class InterventionContactDomainService : IInterventionContactDomainServic
             return false;
         }
 
-        return await _repository.UpdateAsync(entity, ct);
+        return await _repo.UpdateAsync(entity, ct);
     }
-
     public async Task<bool> ActivateAsync(InterventionContactEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForActivateAsync(entity);
@@ -66,9 +83,8 @@ public class InterventionContactDomainService : IInterventionContactDomainServic
             return false;
         }
 
-        return await _repository.UpdateAsync(entity, ct);
+        return await _repo.UpdateAsync(entity, ct);
     }
-
     public async Task<bool> DeactivateAsync(InterventionContactEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForDeactivateAsync(entity);
@@ -81,9 +97,8 @@ public class InterventionContactDomainService : IInterventionContactDomainServic
             return false;
         }
 
-        return await _repository.UpdateAsync(entity, ct);
+        return await _repo.UpdateAsync(entity, ct);
     }
-
     public async Task<bool> DeleteAsync(InterventionContactEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForDeleteAsync(entity);
@@ -96,6 +111,6 @@ public class InterventionContactDomainService : IInterventionContactDomainServic
             return false;
         }
 
-        return await _repository.UpdateAsync(entity, ct);
+        return await _repo.UpdateAsync(entity, ct);
     }
 }

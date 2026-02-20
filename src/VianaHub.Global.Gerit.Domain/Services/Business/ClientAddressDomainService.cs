@@ -1,7 +1,9 @@
 using VianaHub.Global.Gerit.Domain.Base;
 using VianaHub.Global.Gerit.Domain.Entities.Business;
 using VianaHub.Global.Gerit.Domain.Interfaces.Business;
+using VianaHub.Global.Gerit.Domain.ReadModels;
 using VianaHub.Global.Gerit.Domain.Tools.Notifications;
+using VianaHub.Global.Gerit.Domain.Tools.Pagination;
 
 namespace VianaHub.Global.Gerit.Domain.Services.Business;
 
@@ -10,18 +12,35 @@ namespace VianaHub.Global.Gerit.Domain.Services.Business;
 /// </summary>
 public class ClientAddressDomainService : IClientAddressDomainService
 {
-    private readonly IClientAddressDataRepository _repository;
+    private readonly IClientAddressDataRepository _repo;
     private readonly IEntityDomainValidator<ClientAddressEntity> _validator;
     private readonly INotify _notify;
 
     public ClientAddressDomainService(
-        IClientAddressDataRepository repository,
+        IClientAddressDataRepository repo,
         IEntityDomainValidator<ClientAddressEntity> validator,
         INotify notify)
     {
-        _repository = repository;
+        _repo = repo;
         _validator = validator;
         _notify = notify;
+    }
+
+    public async Task<ClientAddressEntity> GetByIdAsync(int id, CancellationToken ct)
+    {
+        return await _repo.GetByIdAsync(id, ct);
+    }
+    public async Task<IEnumerable<ClientAddressEntity>> GetAllAsync(CancellationToken ct)
+    {
+        return await _repo.GetAllAsync(ct);
+    }
+    public async Task<ListPage<ClientAddressEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct)
+    {
+        return await _repo.GetPagedAsync(request, ct);
+    }
+    public async Task<bool> ExistsByIdAsync(int id, CancellationToken ct)
+    {
+        return await _repo.ExistsByIdAsync(id, ct);
     }
 
     public async Task<bool> CreateAsync(ClientAddressEntity entity, CancellationToken ct)
@@ -36,9 +55,8 @@ public class ClientAddressDomainService : IClientAddressDomainService
             return false;
         }
 
-        return await _repository.AddAsync(entity, ct);
+        return await _repo.AddAsync(entity, ct);
     }
-
     public async Task<bool> UpdateAsync(ClientAddressEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForUpdateAsync(entity);
@@ -51,9 +69,8 @@ public class ClientAddressDomainService : IClientAddressDomainService
             return false;
         }
 
-        return await _repository.UpdateAsync(entity, ct);
+        return await _repo.UpdateAsync(entity, ct);
     }
-
     public async Task<bool> ActivateAsync(ClientAddressEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForActivateAsync(entity);
@@ -66,9 +83,8 @@ public class ClientAddressDomainService : IClientAddressDomainService
             return false;
         }
 
-        return await _repository.UpdateAsync(entity, ct);
+        return await _repo.UpdateAsync(entity, ct);
     }
-
     public async Task<bool> DeactivateAsync(ClientAddressEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForDeactivateAsync(entity);
@@ -81,9 +97,8 @@ public class ClientAddressDomainService : IClientAddressDomainService
             return false;
         }
 
-        return await _repository.UpdateAsync(entity, ct);
+        return await _repo.UpdateAsync(entity, ct);
     }
-
     public async Task<bool> DeleteAsync(ClientAddressEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForDeleteAsync(entity);
@@ -96,6 +111,6 @@ public class ClientAddressDomainService : IClientAddressDomainService
             return false;
         }
 
-        return await _repository.UpdateAsync(entity, ct);
+        return await _repo.UpdateAsync(entity, ct);
     }
 }

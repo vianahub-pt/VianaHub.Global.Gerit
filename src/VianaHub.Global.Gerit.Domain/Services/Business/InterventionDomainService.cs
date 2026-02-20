@@ -27,17 +27,14 @@ public class InterventionDomainService : IInterventionDomainService
     {
         return await _repo.GetByIdAsync(id, ct);
     }
-
     public async Task<IEnumerable<InterventionEntity>> GetAllAsync(CancellationToken ct)
     {
         return await _repo.GetAllAsync(ct);
     }
-
     public async Task<ListPage<InterventionEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct)
     {
         return await _repo.GetPagedAsync(request, ct);
     }
-
     public async Task<bool> ExistsByIdAsync(int id, CancellationToken ct)
     {
         return await _repo.ExistsByIdAsync(id, ct);
@@ -57,7 +54,6 @@ public class InterventionDomainService : IInterventionDomainService
 
         return await _repo.AddAsync(entity, ct);
     }
-
     public async Task<bool> UpdateAsync(InterventionEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForUpdateAsync(entity);
@@ -72,7 +68,6 @@ public class InterventionDomainService : IInterventionDomainService
 
         return await _repo.UpdateAsync(entity, ct);
     }
-
     public async Task<bool> ActivateAsync(InterventionEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForActivateAsync(entity);
@@ -87,7 +82,6 @@ public class InterventionDomainService : IInterventionDomainService
 
         return await _repo.UpdateAsync(entity, ct);
     }
-
     public async Task<bool> DeactivateAsync(InterventionEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForDeactivateAsync(entity);
@@ -102,7 +96,6 @@ public class InterventionDomainService : IInterventionDomainService
 
         return await _repo.UpdateAsync(entity, ct);
     }
-
     public async Task<bool> DeleteAsync(InterventionEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForDeleteAsync(entity);

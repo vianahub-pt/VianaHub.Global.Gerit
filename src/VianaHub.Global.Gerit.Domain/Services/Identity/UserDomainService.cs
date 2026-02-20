@@ -1,7 +1,9 @@
 using VianaHub.Global.Gerit.Domain.Base;
 using VianaHub.Global.Gerit.Domain.Entities.Identity;
 using VianaHub.Global.Gerit.Domain.Interfaces.Identity;
+using VianaHub.Global.Gerit.Domain.ReadModels;
 using VianaHub.Global.Gerit.Domain.Tools.Notifications;
+using VianaHub.Global.Gerit.Domain.Tools.Pagination;
 
 namespace VianaHub.Global.Gerit.Domain.Services.Identity;
 
@@ -11,18 +13,35 @@ namespace VianaHub.Global.Gerit.Domain.Services.Identity;
 /// </summary>
 public class UserDomainService : IUserDomainService
 {
-    private readonly IUserDataRepository _repository;
+    private readonly IUserDataRepository _repo;
     private readonly IEntityDomainValidator<UserEntity> _validator;
     private readonly INotify _notify;
 
     public UserDomainService(
-        IUserDataRepository repository,
+        IUserDataRepository repo,
         INotify notify,
         IEntityDomainValidator<UserEntity> validator)
     {
-        _repository = repository;
+        _repo = repo;
         _notify = notify;
         _validator = validator;
+    }
+
+    public async Task<UserEntity> GetByIdAsync(int id, CancellationToken ct)
+    {
+        return await _repo.GetByIdAsync(id, ct);
+    }
+    public async Task<IEnumerable<UserEntity>> GetAllAsync(CancellationToken ct)
+    {
+        return await _repo.GetAllAsync(ct);
+    }
+    public async Task<ListPage<UserEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct)
+    {
+        return await _repo.GetPagedAsync(request, ct);
+    }
+    public async Task<bool> ExistsByIdAsync(int id, CancellationToken ct)
+    {
+        return await _repo.ExistsByIdAsync(id, ct);
     }
 
     public async Task<bool> CreateAsync(UserEntity entity, CancellationToken ct)
@@ -37,9 +56,8 @@ public class UserDomainService : IUserDomainService
             return false;
         }
 
-        return await _repository.CreateAsync(entity, ct);
+        return await _repo.CreateAsync(entity, ct);
     }
-
     public async Task<bool> UpdateAsync(UserEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForUpdateAsync(entity);
@@ -52,9 +70,8 @@ public class UserDomainService : IUserDomainService
             return false;
         }
 
-        return await _repository.UpdateAsync(entity, ct);
+        return await _repo.UpdateAsync(entity, ct);
     }
-
     public async Task<bool> ActivateAsync(UserEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForActivateAsync(entity);
@@ -67,9 +84,8 @@ public class UserDomainService : IUserDomainService
             return false;
         }
 
-        return await _repository.UpdateAsync(entity, ct);
+        return await _repo.UpdateAsync(entity, ct);
     }
-
     public async Task<bool> DeactivateAsync(UserEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForDeactivateAsync(entity);
@@ -82,9 +98,8 @@ public class UserDomainService : IUserDomainService
             return false;
         }
 
-        return await _repository.UpdateAsync(entity, ct);
+        return await _repo.UpdateAsync(entity, ct);
     }
-
     public async Task<bool> DeleteAsync(UserEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForDeleteAsync(entity);
@@ -97,6 +112,6 @@ public class UserDomainService : IUserDomainService
             return false;
         }
 
-        return await _repository.UpdateAsync(entity, ct);
+        return await _repo.UpdateAsync(entity, ct);
     }
 }

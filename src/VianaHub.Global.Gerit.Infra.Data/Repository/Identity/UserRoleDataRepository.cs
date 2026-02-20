@@ -14,13 +14,21 @@ public class UserRoleDataRepository : IUserRoleDataRepository
         _context = context;
     }
 
+    public async Task<IList<UserRoleEntity>> GetAllAsync(int tenantId, CancellationToken ct)
+    {
+        return await _context.UserRoles
+            .Include(x => x.User)
+            .Include(x => x.Role)
+            .Where(x => x.TenantId == tenantId)
+            .ToListAsync(ct);
+    }
     public async Task<UserRoleEntity> GetByIdAsync(int tenantId, int userId, int roleId, CancellationToken ct)
     {
         return await _context.UserRoles
             .Include(x => x.Tenant)
             .Include(x => x.User)
             .Include(x => x.Role)
-            .FirstOrDefaultAsync(x => x.TenantId == tenantId && 
+            .FirstOrDefaultAsync(x => x.TenantId == tenantId &&
                                       x.UserId == userId &&
                                       x.RoleId == roleId, ct);
     }
@@ -31,7 +39,6 @@ public class UserRoleDataRepository : IUserRoleDataRepository
             .Where(x => x.TenantId == tenantId && x.UserId == userId)
             .ToListAsync(ct);
     }
-
     public async Task<IList<UserRoleEntity>> GetByRoleAsync(int tenantId, int roleId, CancellationToken ct)
     {
         return await _context.UserRoles
@@ -39,35 +46,22 @@ public class UserRoleDataRepository : IUserRoleDataRepository
             .Where(x => x.TenantId == tenantId && x.RoleId == roleId)
             .ToListAsync(ct);
     }
-
-    public async Task<IList<UserRoleEntity>> GetAllAsync(int tenantId, CancellationToken ct)
-    {
-        return await _context.UserRoles
-            .Include(x => x.User)
-            .Include(x => x.Role)
-            .Where(x => x.TenantId == tenantId)
-            .ToListAsync(ct);
-    }
     public async Task<bool> ExistsAsync(int tenantId, int userId, int roleId, CancellationToken ct)
     {
         return await _context.UserRoles.AnyAsync(x => x.TenantId == tenantId && x.UserId == userId && x.RoleId == roleId, ct);
     }
 
-    public async Task AddAsync(UserRoleEntity entity, CancellationToken ct)
+    public async Task<bool> CreateAsync(UserRoleEntity entity, CancellationToken ct)
     {
         await _context.UserRoles.AddAsync(entity, ct);
-        await _context.SaveChangesAsync(ct);
+        return await _context.SaveChangesAsync(ct) > 0;
     }
-
-    public async Task DeleteAsync(int tenantId, int userId, int roleId, CancellationToken ct)
+    public async Task<bool> DeleteAsync(int tenantId, int userId, int roleId, CancellationToken ct)
     {
-        var entity = await _context.UserRoles.FirstOrDefaultAsync(x => x.TenantId == tenantId && 
+        var entity = await _context.UserRoles.FirstOrDefaultAsync(x => x.TenantId == tenantId &&
                                                                        x.UserId == userId &&
                                                                        x.RoleId == roleId, ct);
-        if (entity != null)
-        {
-            _context.UserRoles.Remove(entity);
-            await _context.SaveChangesAsync(ct);
-        }
+        _context.UserRoles.Remove(entity);
+        return await _context.SaveChangesAsync(ct) > 0;
     }
 }

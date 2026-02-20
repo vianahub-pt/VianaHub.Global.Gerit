@@ -1,7 +1,10 @@
 using VianaHub.Global.Gerit.Domain.Base;
+using VianaHub.Global.Gerit.Domain.Entities.Billing;
 using VianaHub.Global.Gerit.Domain.Entities.Business;
 using VianaHub.Global.Gerit.Domain.Interfaces.Business;
+using VianaHub.Global.Gerit.Domain.ReadModels;
 using VianaHub.Global.Gerit.Domain.Tools.Notifications;
+using VianaHub.Global.Gerit.Domain.Tools.Pagination;
 
 namespace VianaHub.Global.Gerit.Domain.Services.Business;
 
@@ -21,6 +24,23 @@ public class AddressTypeDomainService : IAddressTypeDomainService
         _notify = notify;
     }
 
+    public async Task<AddressTypeEntity> GetByIdAsync(int id, CancellationToken ct)
+    {
+        return await _repo.GetByIdAsync(id, ct);
+    }
+    public async Task<IEnumerable<AddressTypeEntity>> GetAllAsync(CancellationToken ct)
+    {
+        return await _repo.GetAllAsync(ct);
+    }
+    public async Task<ListPage<AddressTypeEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct)
+    {
+        return await _repo.GetPagedAsync(request, ct);
+    }
+    public async Task<bool> ExistsByIdAsync(int id, CancellationToken ct)
+    {
+        return await _repo.ExistsByIdAsync(id, ct);
+    }
+
     public async Task<bool> CreateAsync(AddressTypeEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForCreateAsync(entity);
@@ -36,7 +56,6 @@ public class AddressTypeDomainService : IAddressTypeDomainService
         await _repo.AddAsync(entity, ct);
         return true;
     }
-
     public async Task<bool> UpdateAsync(AddressTypeEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForUpdateAsync(entity);
@@ -52,7 +71,6 @@ public class AddressTypeDomainService : IAddressTypeDomainService
         await _repo.UpdateAsync(entity, ct);
         return true;
     }
-
     public async Task<bool> ActivateAsync(AddressTypeEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForActivateAsync(entity);
@@ -68,7 +86,6 @@ public class AddressTypeDomainService : IAddressTypeDomainService
         await _repo.UpdateAsync(entity, ct);
         return true;
     }
-
     public async Task<bool> DeactivateAsync(AddressTypeEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForDeactivateAsync(entity);
@@ -84,7 +101,6 @@ public class AddressTypeDomainService : IAddressTypeDomainService
         await _repo.UpdateAsync(entity, ct);
         return true;
     }
-
     public async Task<bool> DeleteAsync(AddressTypeEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForDeleteAsync(entity);

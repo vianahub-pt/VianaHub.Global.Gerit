@@ -1,6 +1,19 @@
 /* =========================
-   CORE MULTI-TENANT TABLES
+   (GLOBAL)
    ========================= */
+
+CREATE TABLE dbo.FileTypes (                                                            -- Catálogo global de tipos de arquivo
+    Id                          INT IDENTITY(1,1)   NOT NULL,                           -- Identificador do tipo de arquivo, chave primária
+    MimeType                    NVARCHAR(100)       NOT NULL,                           -- Tipo MIME do arquivo (image/jpeg, application/pdf, etc.)
+    Extension                   NVARCHAR(20)        NOT NULL,                           -- Extensão do arquivo (jpg, png, pdf, docx, etc.)
+    IsActive                    BIT                 NOT NULL DEFAULT 1,                 -- Flag de ativo
+    IsDeleted                   BIT                 NOT NULL DEFAULT 0,                 -- Soft delete
+    CreatedAt                   DATETIME2(7)        NOT NULL DEFAULT SYSDATETIME(),     -- Data de criação
+    CONSTRAINT PK_FileTypes PRIMARY KEY CLUSTERED (Id),                                 -- PK
+    CONSTRAINT UQ_FileTypes_Mime UNIQUE (MimeType),                                     -- Garantir que cada MIME type é único
+    CONSTRAINT CK_FileTypes_Active_Deleted CHECK (NOT (IsActive = 1 AND IsDeleted = 1)) -- Garantir que um tipo de arquivo não pode ser ativo e deletado ao mesmo tempo
+);
+GO
 
 CREATE TABLE dbo.Plans (                                                            -- Catálogo global de planos (licenciamento)
     Id                          INT IDENTITY(1,1)   NOT NULL,                       -- PK interna
@@ -17,12 +30,38 @@ CREATE TABLE dbo.Plans (                                                        
     IsDeleted	                BIT					NOT NULL DEFAULT 0,             -- Soft delete
     CreatedBy	                INT         		NOT NULL,						-- Usuário criador
     CreatedAt	                DATETIME2(7)		NOT NULL DEFAULT SYSDATETIME(),	-- Data de criação
-    ModifiedBy	                INT         		NULL,							-- Usuário modificador
-    ModifiedAt	                DATETIME2(7)		NULL,							-- Data de modificação
+    ModifiedBy	                INT         		    NULL,						-- Usuário modificador
+    ModifiedAt	                DATETIME2(7)		    NULL,						-- Data de modificação
     CONSTRAINT PK_Plans PRIMARY KEY CLUSTERED (Id),                                 -- PK
-    CONSTRAINT CK_Plans_Active_Deleted CHECK (NOT (IsActive = 1 AND IsDeleted = 1))
+    CONSTRAINT CK_Plans_Active_Deleted CHECK (NOT (IsActive = 1 AND IsDeleted = 1)) -- Garantir que um plano não pode ser ativo e deletado ao mesmo tempo
 );
 GO
+/* =========================
+   PLAN FILE RULES
+   ========================= */
+
+CREATE TABLE dbo.PlanFileRules (                                                                -- Regras de arquivo por plano (limites de upload, etc.)
+    Id                          INT IDENTITY(1,1)   NOT NULL,                                   -- PK interna
+    PlanId                      INT                 NOT NULL,                                   -- FK para plano global
+    FileTypeId                  INT                 NOT NULL,                                   -- FK para tipo de arquivo
+    MaxFileSizeMB               INT                 NOT NULL CHECK (MaxFileSizeMB > 0),         -- Tamanho máximo do arquivo em MB
+    IsActive                    BIT                 NOT NULL DEFAULT 1,                         -- Flag de ativo
+    IsDeleted                   BIT                 NOT NULL DEFAULT 0,                         -- Soft delete
+    CreatedBy                   INT                 NOT NULL,                                   -- Usuário criador
+    CreatedAt                   DATETIME2(7)        NOT NULL DEFAULT SYSDATETIME(),             -- Data de criação
+    ModifiedBy                  INT                     NULL,                                   -- Usuário modificador
+    ModifiedAt                  DATETIME2(7)            NULL,                                   -- Data de modificação
+    CONSTRAINT PK_PlanFileRules PRIMARY KEY CLUSTERED (Id),                                     -- PK
+    CONSTRAINT UQ_PlanFileRules UNIQUE (PlanId, FileTypeId),                                    -- Garantir que só pode haver uma regra por tipo de arquivo para cada plano
+    CONSTRAINT CK_PlanFileRules_Active_Deleted CHECK (NOT (IsActive = 1 AND IsDeleted = 1)),    -- Garantir que uma regra não pode ser ativa e deletada ao mesmo tempo
+    CONSTRAINT FK_PlanFileRules_Plan FOREIGN KEY (PlanId) REFERENCES dbo.Plans(Id),             -- FK para plano global
+    CONSTRAINT FK_PlanFileRules_FileType FOREIGN KEY (FileTypeId) REFERENCES dbo.FileTypes(Id)  -- FK para tipo de arquivo
+);
+GO
+
+/* =========================
+   CORE MULTI-TENANT TABLES
+   ========================= */
 
 CREATE TABLE dbo.Tenants (											-- Tabela principal de tenants
     Id			INT IDENTITY(1,1)	NOT NULL,						-- Identificador único do tenant, chave primária
@@ -631,7 +670,7 @@ CREATE TABLE dbo.Equipments (
     CONSTRAINT UQ_Equipments_Id_Tenant UNIQUE (Id, TenantId),							-- Garantir que o Id é único dentro do tenant (para FKs compostas)
     CONSTRAINT FK_Equipments_Tenant FOREIGN KEY (TenantId) REFERENCES dbo.Tenants(Id),  -- FK para tenant
     CONSTRAINT FK_Equipments_Status FOREIGN KEY (StatusId, TenantId) REFERENCES dbo.Status(Id, TenantId),   -- FK para status (tenant-safe)
-    CONSTRAINT FK_Equipments_EquipamentType FOREIGN KEY (EquipmentTypeId, TenantId) REFERENCES dbo.EquipmentTypes(Id, TenantId)	                                -- FK para tipo de equipamento (tenant-safe)
+    CONSTRAINT FK_Equipments_EquipmentType FOREIGN KEY (EquipmentTypeId, TenantId) REFERENCES dbo.EquipmentTypes(Id, TenantId)	                                -- FK para tipo de equipamento (tenant-safe)
 );
 GO
 CREATE TABLE dbo.Vehicles (                                                                 -- Veículos do tenant
@@ -767,9 +806,9 @@ CREATE TABLE dbo.InterventionTeamVehicles (                                     
     ModifiedBy	        INT         		    NULL,						                                            -- Usuário modificador
     ModifiedAt		    DATETIME2(7)			NULL,						                                            -- Data de modificação
     CONSTRAINT PK_InterventionTeamVehicles PRIMARY KEY CLUSTERED (Id),                                                  -- PK
-    CONSTRAINT CK_InterventionTeamVehicles_Active_Deleted CHECK (NOT (IsActive = 1 AND IsDeleted = 1)),
+    CONSTRAINT CK_InterventionTeamVehicles_Active_Deleted CHECK (NOT (IsActive = 1 AND IsDeleted = 1)),                 -- Garantir que um registro não pode ser ativo e deletado ao mesmo tempo
     CONSTRAINT FK_InterventionTeamVehicles_InterventionTeam FOREIGN KEY (InterventionTeamId, TenantId) REFERENCES dbo.InterventionTeams(Id, TenantId),  -- FK para equipe de intervenção
-    CONSTRAINT FK_InterventionTeamVehicles_Vehicle FOREIGN KEY (VehicleId, TenantId) REFERENCES dbo.Vehicles(Id, TenantId)          -- FK para veículo (tenant-safe
+    CONSTRAINT FK_InterventionTeamVehicles_Vehicle FOREIGN KEY (VehicleId, TenantId) REFERENCES dbo.Vehicles(Id, TenantId)                              -- FK para veículo (tenant-safe)
 );
 GO
 CREATE TABLE dbo.InterventionTeamEquipments (                                                                           -- Associação entre equipes de intervenção e equipamentos utilizados (uma equipe pode usar vários equipamentos e um equipamento pode ser usado por várias equipes em intervenções diferentes)
@@ -788,6 +827,53 @@ CREATE TABLE dbo.InterventionTeamEquipments (                                   
     CONSTRAINT FK_InterventionTeamEquipments_InterventionTeam FOREIGN KEY (InterventionTeamId, TenantId) REFERENCES dbo.InterventionTeams(Id, TenantId),    -- FK para equipe de intervenção
     CONSTRAINT FK_InterventionTeamEquipments_Equipment FOREIGN KEY (EquipmentId, TenantId) REFERENCES dbo.Equipments(Id, TenantId)      -- FK para equipamento (tenant-safe
 );
+GO
+CREATE TABLE dbo.AttachmentCategories (                                                             -- Categorias para anexos (fotos, documentos, etc.) relacionados a clientes, intervenções, equipamentos, etc. Permite organizar os anexos em categorias definidas pelo tenant.
+    Id                  INT IDENTITY(1,1)   NOT NULL,                                               -- Identificador da categoria de anexo, chave primária
+    TenantId            INT                 NOT NULL,                                               -- Tenant dono da categoria de anexo
+    Name                NVARCHAR(100)       NOT NULL,                                               -- Nome da categoria de anexo
+    Description         NVARCHAR(300)           NULL,                                               -- Descrição da categoria de anexo
+    DisplayOrder        INT                 NOT NULL DEFAULT 0,                                     -- Ordem de exibição para categorizar os anexos (pode ser usado para ordenar as categorias na UI)
+    IsSystem            BIT                 NOT NULL DEFAULT 0,                                     -- Indica se a categoria é do sistema (não pode ser deletada ou desativada)
+    IsActive            BIT                 NOT NULL DEFAULT 1,                                     -- Flag de ativo
+    IsDeleted           BIT                 NOT NULL DEFAULT 0,                                     -- Soft delete
+    CreatedBy           INT                 NOT NULL,                                               -- Usuário criador
+    CreatedAt           DATETIME2(7)        NOT NULL DEFAULT SYSDATETIME(),                         -- Data de criação
+    ModifiedBy          INT                     NULL,                                               -- Usuário modificador
+    ModifiedAt          DATETIME2(7)            NULL,                                               -- Data de modificação
+    CONSTRAINT PK_AttachmentCategories PRIMARY KEY CLUSTERED (Id),                                  -- PK
+    CONSTRAINT UQ_AttachmentCategories_Id_Tenant UNIQUE (Id, TenantId),                             -- Garantir que o Id é único dentro do tenant (para FKs compostas)
+    CONSTRAINT UQ_AttachmentCategories_Name_Tenant UNIQUE (TenantId, Name),                         -- Nome único por tenant
+    CONSTRAINT FK_AttachmentCategories_Tenant FOREIGN KEY (TenantId) REFERENCES dbo.Tenants(Id),    -- FK para tenant
+    CONSTRAINT CK_AttachmentCategories_Active_Deleted CHECK (NOT (IsActive = 1 AND IsDeleted = 1))  -- Garantir que um registro não pode ser ativo e deletado ao mesmo tempo
+);
+GO
+CREATE TABLE dbo.InterventionAttachments (                                                                  -- Anexos relacionados a intervenções (fotos, documentos, etc.) Permite associar arquivos diretamente a uma intervenção específica e organizá-los em categorias definidas pelo tenant.
+    Id                      INT IDENTITY(1,1)   NOT NULL,                                                   -- Identificador do anexo, chave primária
+    TenantId                INT                 NOT NULL,                                                   -- Tenant dono do anexo
+    FileTypeId              INT                 NOT NULL,                                                   -- Tipo do arquivo (FK para FileTypes, permite classificar os anexos por tipo de arquivo, ex: "Imagem", "Documento", "PDF", etc.)                    
+    InterventionId          INT                 NOT NULL,                                                   -- Intervenção associada ao anexo (FK para Interventions, permite associar fotos, documentos, etc. diretamente a uma intervenção específica)
+    AttachmentCategoryId    INT                 NOT NULL,                                                   -- Categoria do anexo (FK para AttachmentCategories, permite organizar os anexos em categorias definidas pelo tenant, ex: "Fotos", "Documentos", "Relatórios", etc.)
+    PublicId                UNIQUEIDENTIFIER    NOT NULL DEFAULT NEWID(),                                   -- Identificador público do anexo (pode ser usado para acessar o anexo sem expor o Id interno, ex: em URLs de download)
+    S3Key                   NVARCHAR(500)       NOT NULL,                                                   -- Chave do arquivo no S3 (pode ser usado para acessar o arquivo no bucket, ex: "tenantid/interventionid/filename.jpg")
+    FileName                NVARCHAR(255)       NOT NULL,                                                   -- Nome original do arquivo (pode ser usado para exibir o nome do arquivo na UI ou para download)
+    FileSizeBytes           BIGINT              NOT NULL CHECK (FileSizeBytes > 0),                         -- Tamanho do arquivo em bytes (deve ser maior que 0)
+    DisplayOrder            INT                 NOT NULL DEFAULT 0,                                         -- Ordem de exibição dos anexos dentro da intervenção (pode ser usado para ordenar os anexos na UI)
+    IsPrimary               BIT                 NOT NULL DEFAULT 0,                                         -- Indica se é o anexo principal (ex: foto principal da intervenção)
+    IsActive                BIT                 NOT NULL DEFAULT 1,                                         -- Flag de ativo
+    IsDeleted               BIT                 NOT NULL DEFAULT 0,                                         -- Soft delete
+    CreatedBy               INT                 NOT NULL,                                                   -- Usuário criador
+    CreatedAt               DATETIME2(7)        NOT NULL DEFAULT SYSDATETIME(),                             -- Data de criação
+    ModifiedBy              INT                     NULL,                                                   -- Usuário modificador
+    ModifiedAt              DATETIME2(7)            NULL,                                                   -- Data de modificação
+    CONSTRAINT PK_InterventionAttachments PRIMARY KEY CLUSTERED (Id),                                       -- PK
+    CONSTRAINT UQ_InterventionAttachments_Id_Tenant UNIQUE (Id, TenantId),                                  -- Garantir que o Id é único dentro do tenant (para FKs compostas)
+    CONSTRAINT CK_InterventionAttachments_Active_Deleted CHECK (NOT (IsActive = 1 AND IsDeleted = 1)),      -- Garantir que um registro não pode ser ativo e deletado ao mesmo tempo
+    CONSTRAINT FK_InterventionAttachments_Tenant FOREIGN KEY (TenantId) REFERENCES dbo.Tenants(Id),         -- FK para tenant
+    CONSTRAINT FK_InterventionAttachments_FileType FOREIGN KEY (FileTypeId) REFERENCES dbo.FileTypes(Id),   -- FK para tipo de arquivo (pode ser global, sem TenantId, se os tipos de arquivo forem compartilhados entre tenants)
+    CONSTRAINT FK_InterventionAttachments_Intervention FOREIGN KEY (InterventionId, TenantId) REFERENCES dbo.Interventions(Id, TenantId),           -- FK para intervenção (tenant-safe)
+    CONSTRAINT FK_InterventionAttachments_Category FOREIGN KEY (AttachmentCategoryId, TenantId) REFERENCES dbo.AttachmentCategories(Id, TenantId)   -- FK para categoria de anexo (tenant-safe) 
+);
 
 CREATE UNIQUE INDEX UX_Clients_Tenant_Name_Active					ON dbo.Clients (TenantId, Name) WHERE IsDeleted = 0;
 CREATE UNIQUE INDEX UX_ClientAddresses_Primary						ON dbo.ClientAddresses (ClientId, TenantId) WHERE IsPrimary = 1 AND IsDeleted = 0;
@@ -797,39 +883,48 @@ CREATE UNIQUE INDEX UX_TenantFiscalData_Active                      ON dbo.Tenan
 CREATE UNIQUE INDEX UX_Subscriptions_Active                         ON dbo.Subscriptions(TenantId) WHERE IsActive = 1 AND IsDeleted = 0;
 CREATE UNIQUE INDEX UX_Clients_Email_Active                         ON dbo.Clients (TenantId, Email) WHERE Email IS NOT NULL AND IsDeleted = 0;
 CREATE UNIQUE INDEX UX_TenantContacts_Primary                       ON dbo.TenantContacts (TenantId) WHERE IsPrimary = 1 AND IsDeleted = 0;
-
-
+CREATE UNIQUE INDEX UX_InterventionAttachments_Primary              ON dbo.InterventionAttachments (TenantId, InterventionId) WHERE IsPrimary = 1 AND IsDeleted = 0 AND IsActive = 1;
+CREATE UNIQUE INDEX UX_InterventionAttachments_PublicId             ON dbo.InterventionAttachments (TenantId, PublicId);
+CREATE UNIQUE INDEX UX_InterventionAddresses_Primary                ON dbo.InterventionAddresses (TenantId, InterventionId) WHERE IsPrimary = 1 AND IsDeleted = 0;
+CREATE UNIQUE INDEX UX_InterventionTeamEquipments_Unique            ON dbo.InterventionTeamEquipments (TenantId, InterventionTeamId, EquipmentId) WHERE IsDeleted = 0;
+CREATE UNIQUE INDEX UX_InterventionTeamVehicles_Unique              ON dbo.InterventionTeamVehicles (TenantId, InterventionTeamId, VehicleId) WHERE IsDeleted = 0;
+CREATE UNIQUE INDEX UX_InterventionAttachments_S3Key                ON dbo.InterventionAttachments (TenantId, S3Key) WHERE IsDeleted = 0;
+CREATE UNIQUE INDEX UX_JwtKeys_Active                               ON dbo.JwtKeys (TenantId) WHERE IsActive = 1 AND IsDeleted = 0;
 
 
 CREATE NONCLUSTERED INDEX IX_TenantContacts_TenantId				        ON dbo.TenantContacts (TenantId) WHERE IsDeleted = 0;
 CREATE NONCLUSTERED INDEX IX_Clients_Tenant_Active					        ON dbo.Clients (TenantId, Name) INCLUDE (Email, Phone) WHERE IsDeleted = 0;
-CREATE NONCLUSTERED INDEX IX_ClientContacts_ClientId				        ON dbo.ClientContacts (ClientId) INCLUDE (TenantId) WHERE IsDeleted = 0;
-CREATE NONCLUSTERED INDEX IX_ClientAddresses_ClientId				        ON dbo.ClientAddresses (ClientId) INCLUDE (TenantId) WHERE IsDeleted = 0;
-CREATE NONCLUSTERED INDEX IX_TeamMembers_FunctionId                         ON dbo.TeamMembers(FunctionId);
+CREATE NONCLUSTERED INDEX IX_ClientContacts_ClientId				        ON dbo.ClientContacts (TenantId, ClientId) WHERE IsDeleted = 0;
+CREATE NONCLUSTERED INDEX IX_ClientAddresses_ClientId				        ON dbo.ClientAddresses (TenantId, ClientId) WHERE IsDeleted = 0;
+CREATE NONCLUSTERED INDEX IX_TeamMembers_FunctionId                         ON dbo.TeamMembers(TenantId, FunctionId)  WHERE IsDeleted = 0;
 CREATE NONCLUSTERED INDEX IX_TeamMembers_Tenant_TaxNumber                   ON dbo.TeamMembers (TenantId, TaxNumber) WHERE TaxNumber IS NOT NULL AND IsDeleted = 0;
-CREATE NONCLUSTERED INDEX IX_TeamMemberContacts_TeamMemberId		        ON dbo.TeamMemberContacts (TeamMemberId) INCLUDE (TenantId) WHERE IsDeleted = 0;
-CREATE NONCLUSTERED INDEX IX_TeamMemberAddresses_TeamMemberId		        ON dbo.TeamMemberAddresses (TeamMemberId) INCLUDE (TenantId) WHERE IsDeleted = 0;
-CREATE NONCLUSTERED INDEX IX_InterventionContacts_InterventionId	        ON dbo.InterventionContacts (InterventionId) INCLUDE (TenantId) WHERE IsDeleted = 0;
+CREATE NONCLUSTERED INDEX IX_TeamMemberContacts_TeamMemberId		        ON dbo.TeamMemberContacts (TenantId, TeamMemberId) WHERE IsDeleted = 0;
+CREATE NONCLUSTERED INDEX IX_TeamMemberAddresses_TeamMemberId		        ON dbo.TeamMemberAddresses (TenantId, TeamMemberId) WHERE IsDeleted = 0;
+CREATE NONCLUSTERED INDEX IX_InterventionContacts_InterventionId	        ON dbo.InterventionContacts (TenantId, InterventionId) WHERE IsDeleted = 0;
 CREATE NONCLUSTERED INDEX IX_Interventions_Tenant_Date                      ON dbo.Interventions (TenantId, StartDateTime) WHERE IsDeleted = 0;
-CREATE NONCLUSTERED INDEX IX_InterventionAddresses_InterventionId	        ON dbo.InterventionAddresses (InterventionId) INCLUDE (TenantId) WHERE IsDeleted = 0;
-CREATE NONCLUSTERED INDEX IX_Interventions_ClientId                         ON dbo.Interventions (ClientId) INCLUDE (TenantId) WHERE IsDeleted = 0;
+CREATE NONCLUSTERED INDEX IX_InterventionAddresses_InterventionId	        ON dbo.InterventionAddresses (TenantId, InterventionId) WHERE IsDeleted = 0;
+CREATE NONCLUSTERED INDEX IX_Interventions_ClientId                         ON dbo.Interventions (TenantId, ClientId) WHERE IsDeleted = 0;
 CREATE NONCLUSTERED INDEX IX_StatusTypes_Tenant						        ON dbo.StatusTypes(TenantId) WHERE IsDeleted = 0;
 CREATE NONCLUSTERED INDEX IX_Status_Tenant                                  ON dbo.Status(TenantId) WHERE IsDeleted = 0;
-CREATE NONCLUSTERED INDEX IX_UserRoles_UserId						        ON dbo.UserRoles (UserId) INCLUDE (TenantId, RoleId); 
-CREATE NONCLUSTERED INDEX IX_UserRoles_RoleId						        ON dbo.UserRoles (RoleId) INCLUDE (TenantId, UserId); 
-CREATE NONCLUSTERED INDEX IX_RolePermissions_RoleId					        ON dbo.RolePermissions (RoleId) INCLUDE (TenantId, ResourceId, ActionId); 
-CREATE NONCLUSTERED INDEX IX_RolePermissions_ResourceId				        ON dbo.RolePermissions (ResourceId) INCLUDE (TenantId, RoleId, ActionId);
-CREATE NONCLUSTERED INDEX IX_RolePermissions_ActionId				        ON dbo.RolePermissions (ActionId) INCLUDE (TenantId, RoleId, ResourceId);
+CREATE NONCLUSTERED INDEX IX_UserRoles_UserId						        ON dbo.UserRoles (TenantId, UserId) INCLUDE (RoleId);
+CREATE NONCLUSTERED INDEX IX_UserRoles_RoleId						        ON dbo.UserRoles (TenantId, RoleId) INCLUDE (UserId);
+CREATE NONCLUSTERED INDEX IX_RolePermissions_RoleId					        ON dbo.RolePermissions (TenantId, RoleId) INCLUDE (ResourceId, ActionId); 
+CREATE NONCLUSTERED INDEX IX_RolePermissions_ResourceId				        ON dbo.RolePermissions (TenantId, ResourceId) INCLUDE (RoleId, ActionId);
+CREATE NONCLUSTERED INDEX IX_RolePermissions_ActionId				        ON dbo.RolePermissions (TenantId, ActionId) INCLUDE (RoleId, ResourceId);
 CREATE NONCLUSTERED INDEX IX_Users_Login				                    ON dbo.Users (TenantId, NormalizedEmail) INCLUDE (Id, IsActive) WHERE IsDeleted = 0;
-CREATE NONCLUSTERED INDEX IX_Subscriptions_PlanId                           ON dbo.Subscriptions(PlanId);
-CREATE NONCLUSTERED INDEX IX_RefreshTokens_User_Active                      ON dbo.RefreshTokens(UserId, TenantId) WHERE RevokedAt IS NULL;
+CREATE NONCLUSTERED INDEX IX_Subscriptions_PlanId                           ON dbo.Subscriptions(TenantId, PlanId)  WHERE IsDeleted = 0;
+CREATE NONCLUSTERED INDEX IX_RefreshTokens_User_Active                      ON dbo.RefreshTokens (TenantId, UserId) WHERE RevokedAt IS NULL;
 CREATE NONCLUSTERED INDEX IX_Interventions_Dashboard                        ON dbo.Interventions (TenantId, StatusId, StartDateTime) INCLUDE (ClientId, EstimatedValue) WHERE IsDeleted = 0;
-CREATE NONCLUSTERED INDEX IX_RefreshTokens_ExpiresAt                        ON dbo.RefreshTokens (ExpiresAt) WHERE RevokedAt IS NULL;
-CREATE NONCLUSTERED INDEX IX_InterventionTeams_InterventionId               ON dbo.InterventionTeams (InterventionId) INCLUDE (TenantId) WHERE IsDeleted = 0;
-CREATE NONCLUSTERED INDEX IX_InterventionTeamVehicles_InterventionTeamId    ON dbo.InterventionTeamVehicles (InterventionTeamId) INCLUDE (TenantId) WHERE IsDeleted = 0;
-CREATE NONCLUSTERED INDEX IX_InterventionTeamEquipments_InterventionTeamId  ON dbo.InterventionTeamEquipments (InterventionTeamId) INCLUDE (TenantId) WHERE IsDeleted = 0;
-
-
+CREATE NONCLUSTERED INDEX IX_RefreshTokens_ExpiresAt                        ON dbo.RefreshTokens (TenantId, ExpiresAt) WHERE RevokedAt IS NULL;
+CREATE NONCLUSTERED INDEX IX_InterventionTeams_InterventionId               ON dbo.InterventionTeams (TenantId, InterventionId) WHERE IsDeleted = 0;
+CREATE NONCLUSTERED INDEX IX_InterventionTeamVehicles_InterventionTeamId    ON dbo.InterventionTeamVehicles (TenantId, InterventionTeamId) WHERE IsDeleted = 0;
+CREATE NONCLUSTERED INDEX IX_InterventionTeamEquipments_InterventionTeamId  ON dbo.InterventionTeamEquipments (TenantId, InterventionTeamId) WHERE IsDeleted = 0;
+CREATE NONCLUSTERED INDEX IX_AttachmentCategories_Tenant_Display            ON dbo.AttachmentCategories (TenantId, DisplayOrder) WHERE IsDeleted = 0;
+CREATE NONCLUSTERED INDEX IX_AttachmentCategories_Tenant_Active             ON dbo.AttachmentCategories (TenantId) WHERE IsDeleted = 0 AND IsActive = 1;
+CREATE NONCLUSTERED INDEX IX_InterventionAttachments_Tenant_Intervention    ON dbo.InterventionAttachments (TenantId, InterventionId) INCLUDE (AttachmentCategoryId, DisplayOrder, IsPrimary, FileTypeId) WHERE IsDeleted = 0;
+CREATE NONCLUSTERED INDEX IX_InterventionAttachments_FileTypeId             ON dbo.InterventionAttachments (TenantId, FileTypeId) WHERE IsDeleted = 0;
+CREATE NONCLUSTERED INDEX IX_PlanFileRules_Plan                             ON dbo.PlanFileRules (PlanId) INCLUDE (FileTypeId, MaxFileSizeMB) WHERE IsDeleted = 0;
+CREATE NONCLUSTERED INDEX IX_PlanFileRules_FileType                         ON dbo.PlanFileRules (FileTypeId) INCLUDE (PlanId, MaxFileSizeMB) WHERE IsDeleted = 0;
 
 GO
 
@@ -890,6 +985,9 @@ ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.TeamMembersTe
 ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.InterventionTeams,                       -- Aplica RLS em InterventionTeams
 ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.InterventionTeamVehicles,                -- Aplica RLS em InterventionTeamVehicles
 ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.InterventionTeamEquipments,              -- Aplica RLS em InterventionTeamEquipments
+ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.AttachmentCategories,                    -- Aplica RLS em AttachmentCategories
+ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.InterventionAttachments,                 -- Aplica RLS em InterventionAttachments
+
 
 ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.Users AFTER INSERT,	                    -- Bloqueia INSERT fora do Tenant
 ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.Users AFTER UPDATE,	                    -- Bloqueia UPDATE fora do Tenant
@@ -948,9 +1046,9 @@ ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.InterventionCo
 ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.InterventionAddresses AFTER INSERT,      -- Bloqueia INSERT fora do Tenant
 ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.InterventionAddresses AFTER UPDATE,      -- Bloqueia UPDATE fora do Tenant
 ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.InterventionAddresses BEFORE DELETE,     -- Bloqueia DELETE fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.StatusTypes AFTER INSERT,                     -- Bloqueia INSERT fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.StatusTypes AFTER UPDATE,                     -- Bloqueia UPDATE fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.StatusTypes BEFORE DELETE,                    -- Bloqueia DELETE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.StatusTypes AFTER INSERT,                -- Bloqueia INSERT fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.StatusTypes AFTER UPDATE,                -- Bloqueia UPDATE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.StatusTypes BEFORE DELETE,               -- Bloqueia DELETE fora do Tenant
 ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.Status AFTER INSERT,                     -- Bloqueia INSERT fora do Tenant
 ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.Status AFTER UPDATE,                     -- Bloqueia UPDATE fora do Tenant
 ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.Status BEFORE DELETE,                    -- Bloqueia DELETE fora do Tenant
@@ -981,9 +1079,15 @@ ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.InterventionTe
 ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.InterventionTeamEquipments AFTER INSERT, -- Bloqueia INSERT fora do Tenant
 ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.InterventionTeamEquipments AFTER UPDATE, -- Bloqueia UPDATE fora do Tenant
 ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.InterventionTeamEquipments BEFORE DELETE,-- Bloqueia DELETE fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)  ON dbo.RefreshTokens AFTER INSERT,               -- Bloqueia INSERT fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)  ON dbo.RefreshTokens AFTER UPDATE,               -- Bloqueia UPDATE fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)  ON dbo.RefreshTokens BEFORE DELETE               -- Bloqueia DELETE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)  ON dbo.RefreshTokens AFTER INSERT,              -- Bloqueia INSERT fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)  ON dbo.RefreshTokens AFTER UPDATE,              -- Bloqueia UPDATE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)  ON dbo.RefreshTokens BEFORE DELETE,             -- Bloqueia DELETE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)  ON dbo.AttachmentCategories AFTER INSERT,       -- Bloqueia INSERT fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)  ON dbo.AttachmentCategories AFTER UPDATE,       -- Bloqueia UPDATE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)  ON dbo.AttachmentCategories BEFORE DELETE,      -- Bloqueia DELETE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)  ON dbo.InterventionAttachments AFTER INSERT,    -- Bloqueia INSERT fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)  ON dbo.InterventionAttachments AFTER UPDATE,    -- Bloqueia UPDATE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)  ON dbo.InterventionAttachments BEFORE DELETE    -- Bloqueia DELETE fora do Tenant
 
 WITH (STATE = ON);																		                -- Ativa a policy
 GO
