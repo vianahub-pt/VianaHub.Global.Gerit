@@ -176,6 +176,13 @@ public class InterventionTeamAppService : IInterventionTeamsAppService
             csv.Read();
             csv.ReadHeader();
 
+            // If header was read as a single column that contains commas, the delimiter is likely incorrect
+            if (csv.HeaderRecord != null && csv.HeaderRecord.Length == 1 && csv.HeaderRecord[0].Contains(','))
+            {
+                _notify.Add(_localization.GetMessage("Application.Service.InterventionTeam.ReadCsvFile.InvalidDelimiter"), 400);
+                return null;
+            }
+
             int rowCount = 0;
             int maxRows = DomainExtensions.GetMaxCsvRows();
 

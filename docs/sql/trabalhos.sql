@@ -11,7 +11,7 @@ select * from dbo.RolePermissions order by ResourceId;		--
 select * from dbo.JwtKeys;
 ------------------------------
 select * from dbo.StatusTypes;			--
-select * from dbo.Status;				
+select * from dbo.Status;				--
 select * from dbo.AddressTypes;			--
 select * from dbo.Clients;				--
 select * from dbo.ClientAddresses;		--
@@ -28,7 +28,7 @@ select * from dbo.InterventionContacts;	--
 select * from dbo.Vehicles;				--
 select * from dbo.Teams;				--
 select * from dbo.TeamMembersTeams;		--
-select * from dbo.InterventionTeams;
+select * from dbo.InterventionTeams;	--
 select * from dbo.InterventionTeamVehicles;
 select * from dbo.InterventionTeamEquipments;
 

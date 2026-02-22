@@ -123,7 +123,12 @@ public class LocalizationService : ILocalizationService
                 try
                 {
                     var json = File.ReadAllText(filePath);
-                    var fileMessages = JsonSerializer.Deserialize<Dictionary<string, string>>(json);
+                    // Allow JSON files to contain comments (// ...) and still be parsed
+                    var options = new JsonSerializerOptions
+                    {
+                        ReadCommentHandling = JsonCommentHandling.Skip
+                    };
+                    var fileMessages = JsonSerializer.Deserialize<Dictionary<string, string>>(json, options);
 
                     if (fileMessages == null || fileMessages.Count == 0)
                     {

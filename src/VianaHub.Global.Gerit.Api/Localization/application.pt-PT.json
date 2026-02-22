@@ -149,5 +149,6 @@
   "Application.Service.TeamMembersTeam.ProcessBulkItems.ExistsByTeamAndMember": "Associação entre a equipa {0} e o membro {1} já existe",
   "Application.Service.TeamMembersTeam.ProcessBulkItems.FailedToCreate": "Falha ao criar a associação para a equipa {0} e o membro {1}",
   "Application.Service.TeamMembersTeam.ValidateBulkItem.TeamId": "O ID da equipa é obrigatório na linha {0}",
-  "Application.Service.TeamMembersTeam.ValidateBulkItem.TeamMemberId": "O ID do membro da equipa é obrigatório na linha {0}"
+  "Application.Service.TeamMembersTeam.ValidateBulkItem.TeamMemberId": "O ID do membro da equipa é obrigatório na linha {0}",
+  "Application.Service.InterventionTeam.ReadCsvFile.InvalidDelimiter": "O delimitador do ficheiro CSV deve ser ;"
 }

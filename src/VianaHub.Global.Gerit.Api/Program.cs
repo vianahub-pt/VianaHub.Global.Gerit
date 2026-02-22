@@ -128,6 +128,9 @@ public class Program
             app.UseSwaggerConfiguration();
         }
 
+        // Register RequestLocalizationMiddleware early so RequestCulture is always set
+        app.UseMiddleware<RequestLocalizationMiddleware>();
+
         // IMPORTANTE: Middleware de tratamento global de exceções DEVE vir antes de outros middlewares
         // para capturar qualquer exceção não tratada
         app.UseMiddleware<GlobalExceptionMiddleware>();

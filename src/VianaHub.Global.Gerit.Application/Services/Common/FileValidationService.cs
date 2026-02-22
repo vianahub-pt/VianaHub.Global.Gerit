@@ -32,28 +32,28 @@ public class FileValidationService : IFileValidationService
         // Valida se o arquivo existe e não está vazio
         if (file == null || file.Length == 0)
         {
-            _notify.Add(_localization.GetMessage($"Application.Service.File.ValidateFile.InvalidFile"), 400);
+            _notify.Add(_localization.GetMessage("Application.Service.File.ValidateFile.InvalidFile"), 400);
             return false;
         }
 
         // Valida tamanho do arquivo
         if (!file.Length.IsValidCsvFileSize())
         {
-            _notify.Add(_localization.GetMessage($"Application.Service.File.ValidateFile.IsValidCsvFileSize"), 400);
+            _notify.Add(_localization.GetMessage("Application.Service.File.ValidateFile.IsValidCsvFileSize"), 400);
             return false;
         }
 
         // Valida nome do arquivo (previne path traversal)
         if (!file.FileName.IsSafeCsvFileName())
         {
-            _notify.Add(_localization.GetMessage($"Application.Service.File.ValidateFile.IsSafeCsvFileName"), 400);
+            _notify.Add(_localization.GetMessage("Application.Service.File.ValidateFile.IsSafeCsvFileName"), 400);
             return false;
         }
 
         // Valida extensão
         if (!file.FileName.HasValidCsvExtension())
         {
-            _notify.Add(_localization.GetMessage($"Application.Service.File.ValidateFile.OnlyCsvAllowed"), 400);
+            _notify.Add(_localization.GetMessage("Application.Service.File.ValidateFile.OnlyCsvAllowed"), 400);
             return false;
         }
 
@@ -62,7 +62,7 @@ public class FileValidationService : IFileValidationService
         {
             if (!stream.IsValidUtf8Encoding())
             {
-                _notify.Add(_localization.GetMessage($"Application.Service.File.ValidateFile.InvalidEncoding"), 400);
+                _notify.Add(_localization.GetMessage("Application.Service.File.ValidateFile.InvalidEncoding"), 400);
                 return false;
             }
         }

@@ -163,5 +163,6 @@
   "Application.Service.InterventionTeam.ProcessBulkItems.ExistsByInterventionAndTeam": "Association between intervention {0} and team {1} already exists",
   "Application.Service.InterventionTeam.ProcessBulkItems.FailedToCreate": "Failed to create association for intervention {0} and team {1}",
   "Application.Service.InterventionTeam.ValidateBulkItem.InterventionId": "Intervention ID is required for line {0}",
-  "Application.Service.InterventionTeam.ValidateBulkItem.TeamId": "Team ID is required for line {0}"
+  "Application.Service.InterventionTeam.ValidateBulkItem.TeamId": "Team ID is required for line {0}",
+  "Application.Service.InterventionTeam.ReadCsvFile.InvalidDelimiter": "The CSV file delimiter must be ';'"
 }
