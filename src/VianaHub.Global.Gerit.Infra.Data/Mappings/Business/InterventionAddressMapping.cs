@@ -29,6 +29,7 @@ public class InterventionAddressMapping : IEntityTypeConfiguration<InterventionA
             .HasColumnType("INT")
             .IsRequired();
 
+        // Corrigido: coluna correta é InterventionId
         builder.Property(x => x.InterventionId)
             .HasColumnName("InterventionId")
             .HasColumnType("INT")

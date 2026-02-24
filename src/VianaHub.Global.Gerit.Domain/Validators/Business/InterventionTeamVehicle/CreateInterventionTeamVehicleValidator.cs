@@ -8,7 +8,7 @@ public class CreateInterventionTeamVehicleValidator : AbstractValidator<Interven
 {
     public CreateInterventionTeamVehicleValidator(ILocalizationService localization)
     {
-        RuleFor(x => x.InterventionId).GreaterThan(0).WithMessage(localization.GetMessage("Domain.InterventionTeamVehicle.InterventionIdGreaterThanZero"));
+        RuleFor(x => x.InterventionTeamId).GreaterThan(0).WithMessage(localization.GetMessage("Domain.InterventionTeamVehicle.InterventionTeamIdGreaterThanZero"));
         RuleFor(x => x.VehicleId).GreaterThan(0).WithMessage(localization.GetMessage("Domain.InterventionTeamVehicle.VehicleIdGreaterThanZero"));
     }
 }

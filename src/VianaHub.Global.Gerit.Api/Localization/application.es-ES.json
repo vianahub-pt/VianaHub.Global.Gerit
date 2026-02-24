@@ -165,5 +165,6 @@
   "Application.Service.InterventionTeamVehicle.ProcessBulkItems.ExistsByInterventionAndVehicle": "La asociación entre la intervención {0} y el vehículo {1} ya existe",
   "Application.Service.InterventionTeamVehicle.ProcessBulkItems.FailedToCreate": "Error al crear la asociación para la intervención {0} y el vehículo {1}",
   "Application.Service.InterventionTeamVehicle.ValidateBulkItem.InterventionId": "El ID de la intervención es obligatorio para la intervención {0}",
-  "Application.Service.InterventionTeamVehicle.ValidateBulkItem.VehicleId": "El ID del vehículo es obligatorio para el vehículo {0}"
+  "Application.Service.InterventionTeamVehicle.ValidateBulkItem.VehicleId": "El ID del vehículo es obligatorio para el vehículo {0}",
+  "Application.Service.InterventionTeamVehicle.ValidateBulkItem.InterventionTeamId": "El ID del equipo de intervención es obligatorio para la intervención {0}"
 }

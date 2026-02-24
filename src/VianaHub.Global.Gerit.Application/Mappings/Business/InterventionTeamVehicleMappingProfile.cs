@@ -10,7 +10,9 @@ public class InterventionTeamVehicleMappingProfile : Profile
 {
     public InterventionTeamVehicleMappingProfile()
     {
-        CreateMap<InterventionTeamVehicleEntity, InterventionTeamVehicleResponse>();
+        CreateMap<InterventionTeamVehicleEntity, InterventionTeamVehicleResponse>()
+            .ForMember(dest => dest.InterventionTeam, opt => opt.MapFrom(src => src.InterventionTeam.Intervention.Title))
+            .ForMember(dest => dest.Vehicle, opt => opt.MapFrom(src => src.Vehicle.Plate));
         CreateMap<ListPage<InterventionTeamVehicleEntity>, ListPageResponse<InterventionTeamVehicleResponse>>();
     }
 }

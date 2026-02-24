@@ -2,6 +2,6 @@ namespace VianaHub.Global.Gerit.Application.Dtos.Request.Business.InterventionTe
 
 public class BulkUploadInterventionTeamVehicleItem
 {
-    public int InterventionId { get; set; }
+    public int InterventionTeamId { get; set; }
     public int VehicleId { get; set; }
 }

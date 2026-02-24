@@ -319,7 +319,7 @@ public class InterventionContactAppService : IInterventionContactAppService
     {
         if (item.InterventionId <= 0)
         {
-            _notify.Add(_localization.GetMessage("Application.Service.InterventionContact.ValidateBulkItem.InterventionId"), 400);
+            _notify.Add(_localization.GetMessage("Application.Service.InterventionContact.ValidateBulkItem.InterventionTeamId"), 400);
             return false;
         }
 

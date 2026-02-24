@@ -13,7 +13,7 @@ public class InterventionTeamVehicleMapping : IEntityTypeConfiguration<Intervent
         builder.Property(x => x.Id).ValueGeneratedOnAdd();
 
         builder.Property(x => x.TenantId).IsRequired();
-        builder.Property(x => x.InterventionId).IsRequired();
+        builder.Property(x => x.InterventionTeamId).IsRequired();
         builder.Property(x => x.VehicleId).IsRequired();
         builder.Property(x => x.IsActive).HasColumnType("BIT").HasDefaultValue(true);
         builder.Property(x => x.IsDeleted).HasColumnType("BIT").HasDefaultValue(false);
@@ -21,9 +21,9 @@ public class InterventionTeamVehicleMapping : IEntityTypeConfiguration<Intervent
         builder.Property(x => x.CreatedAt).HasColumnType("DATETIME2").HasDefaultValueSql("SYSDATETIME()");
         builder.Property(x => x.ModifiedAt).HasColumnType("DATETIME2");
 
-        builder.HasIndex(x => new { x.TenantId, x.InterventionId, x.VehicleId }).IsUnique();
+        builder.HasIndex(x => new { x.TenantId, x.InterventionTeamId, x.VehicleId }).IsUnique();
 
         builder.HasOne(x => x.Vehicle).WithMany().HasForeignKey("VehicleId").OnDelete(DeleteBehavior.Restrict);
-        builder.HasOne(x => x.Intervention).WithMany().HasForeignKey("InterventionId").OnDelete(DeleteBehavior.Restrict);
+        builder.HasOne(x => x.InterventionTeam).WithMany().HasForeignKey("InterventionTeamId").OnDelete(DeleteBehavior.Restrict);
     }
 }

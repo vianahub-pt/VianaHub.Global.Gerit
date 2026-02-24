@@ -9,7 +9,7 @@ public class CreateInterventionTeamRouteValidator : AbstractValidator<CreateInte
     public CreateInterventionTeamRouteValidator(ILocalizationService localization)
     {
         RuleFor(x => x.InterventionId)
-            .GreaterThan(0).WithMessage(localization.GetMessage("Api.Validator.InterventionTeam.Create.InterventionId"));
+            .GreaterThan(0).WithMessage(localization.GetMessage("Api.Validator.InterventionTeam.Create.InterventionTeamId"));
 
         RuleFor(x => x.TeamId)
             .GreaterThan(0).WithMessage(localization.GetMessage("Api.Validator.InterventionTeam.Create.TeamId"));

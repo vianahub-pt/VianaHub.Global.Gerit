@@ -353,7 +353,7 @@ public class InterventionAddressAppService : IInterventionAddressAppService
 
         if (item.InterventionId <= 0)
         {
-            _notify.Add(_localization.GetMessage("Application.Service.InterventionAddress.ValidateBulkItem.InterventionId", item.InterventionId), 400);
+            _notify.Add(_localization.GetMessage("Application.Service.InterventionAddress.ValidateBulkItem.InterventionTeamId", item.InterventionId), 400);
             return false;
         }
 

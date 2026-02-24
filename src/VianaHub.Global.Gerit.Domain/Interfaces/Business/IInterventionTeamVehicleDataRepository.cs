@@ -9,7 +9,7 @@ public interface IInterventionTeamVehicleDataRepository
     Task<IEnumerable<InterventionTeamVehicleEntity>> GetAllAsync(CancellationToken ct);
     Task<InterventionTeamVehicleEntity> GetByIdAsync(int id, CancellationToken ct);
     Task<ListPage<InterventionTeamVehicleEntity>> GetPagedAsync(PagedFilter filter, CancellationToken ct);
-    Task<bool> ExistsByIdAsync(int tenantId, int interventionId, int vehicleId, CancellationToken ct);
+    Task<bool> ExistsByIdAsync(int tenantId, int interventionTeamId, int vehicleId, CancellationToken ct);
     Task<bool> AddAsync(InterventionTeamVehicleEntity entity, CancellationToken ct);
     Task<bool> UpdateAsync(InterventionTeamVehicleEntity entity, CancellationToken ct);
 }

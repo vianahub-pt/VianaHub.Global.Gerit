@@ -72,15 +72,15 @@ public class InterventionTeamVehicleAppService : IInterventionTeamVehiclesAppSer
     public async Task<bool> CreateAsync(CreateInterventionTeamVehicleRequest request, CancellationToken ct)
     {
         var tenantId = _currentUser.GetTenantId();
-        var exists = await _repo.ExistsByIdAsync(tenantId, request.InterventionId, request.VehicleId, ct);
+        var exists = await _repo.ExistsByIdAsync(tenantId, request.InterventionTeamId, request.VehicleId, ct);
         if (exists)
         {
-            _notify.Add(_localization.GetMessage("Application.Service.InterventionTeamVehicle.Create.ResourceAlreadyExists", request.InterventionId, request.VehicleId), 409);
+            _notify.Add(_localization.GetMessage("Application.Service.InterventionTeamVehicle.Create.ResourceAlreadyExists", request.InterventionTeamId, request.VehicleId), 409);
             return false;
         }
 
-        var entity = new InterventionTeamVehicleEntity(tenantId, request.InterventionId, request.VehicleId, _currentUser.GetUserId());
-        entity.Update(request.InterventionId, request.VehicleId, _currentUser.GetUserId());
+        var entity = new InterventionTeamVehicleEntity(tenantId, request.InterventionTeamId, request.VehicleId, _currentUser.GetUserId());
+        entity.Update(request.InterventionTeamId, request.VehicleId, _currentUser.GetUserId());
         return await _domain.CreateAsync(entity, ct);
     }
 
@@ -93,7 +93,7 @@ public class InterventionTeamVehicleAppService : IInterventionTeamVehiclesAppSer
             return false;
         }
 
-        entity.Update(request.InterventionId, request.VehicleId, _currentUser.GetUserId());
+        entity.Update(request.InterventionTeamId, request.VehicleId, _currentUser.GetUserId());
         return await _domain.UpdateAsync(entity, ct);
     }
 
@@ -232,22 +232,22 @@ public class InterventionTeamVehicleAppService : IInterventionTeamVehiclesAppSer
                 continue;
             }
 
-            var exists = await _repo.ExistsByIdAsync(tenantId, item.InterventionId, item.VehicleId, ct);
+            var exists = await _repo.ExistsByIdAsync(tenantId, item.InterventionTeamId, item.VehicleId, ct);
             if (exists)
             {
-                _notify.Add(_localization.GetMessage("Application.Service.InterventionTeamVehicle.ProcessBulkItems.ExistsByInterventionAndVehicle", item.InterventionId, item.VehicleId), 400);
+                _notify.Add(_localization.GetMessage("Application.Service.InterventionTeamVehicle.ProcessBulkItems.ExistsByInterventionAndVehicle", item.InterventionTeamId, item.VehicleId), 400);
                 hasErrors = true;
                 continue;
             }
 
-            var entity = new InterventionTeamVehicleEntity(tenantId, item.InterventionId, item.VehicleId, _currentUser.GetUserId());
-            entity.Update(item.InterventionId, item.VehicleId, _currentUser.GetUserId());
+            var entity = new InterventionTeamVehicleEntity(tenantId, item.InterventionTeamId, item.VehicleId, _currentUser.GetUserId());
+            entity.Update(item.InterventionTeamId, item.VehicleId, _currentUser.GetUserId());
 
             var success = await _domain.CreateAsync(entity, ct);
 
             if (!success)
             {
-                _notify.Add(_localization.GetMessage("Application.Service.InterventionTeamVehicle.ProcessBulkItems.FailedToCreate", item.InterventionId, item.VehicleId), 400);
+                _notify.Add(_localization.GetMessage("Application.Service.InterventionTeamVehicle.ProcessBulkItems.FailedToCreate", item.InterventionTeamId, item.VehicleId), 400);
                 hasErrors = true;
             }
         }
@@ -257,9 +257,9 @@ public class InterventionTeamVehicleAppService : IInterventionTeamVehiclesAppSer
 
     private bool ValidateBulkItem(BulkUploadInterventionTeamVehicleItem item)
     {
-        if (item.InterventionId <= 0)
+        if (item.InterventionTeamId <= 0)
         {
-            _notify.Add(_localization.GetMessage("Application.Service.InterventionTeamVehicle.ValidateBulkItem.InterventionId", item.InterventionId), 400);
+            _notify.Add(_localization.GetMessage("Application.Service.InterventionTeamVehicle.ValidateBulkItem.InterventionTeamId", item.InterventionTeamId), 400);
             return false;
         }
 

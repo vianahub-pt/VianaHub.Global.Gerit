@@ -23,7 +23,7 @@ public class InterventionTeamMapping : IEntityTypeConfiguration<InterventionTeam
 
         builder.HasIndex(x => new { x.TenantId, x.InterventionId, x.TeamId }).IsUnique();
 
-        builder.HasOne(x => x.Team).WithMany().HasForeignKey("TeamId").OnDelete(DeleteBehavior.Restrict);
-        builder.HasOne(x => x.Intervention).WithMany().HasForeignKey("InterventionId").OnDelete(DeleteBehavior.Restrict);
+        builder.HasOne(x => x.Team).WithMany().HasForeignKey(x => x.TeamId).OnDelete(DeleteBehavior.Restrict);
+        builder.HasOne(x => x.Intervention).WithMany().HasForeignKey(x => x.InterventionId).OnDelete(DeleteBehavior.Restrict);
     }
 }

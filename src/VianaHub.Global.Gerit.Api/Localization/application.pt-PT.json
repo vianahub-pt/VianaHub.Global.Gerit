@@ -171,5 +171,7 @@
   "Application.Service.InterventionTeamVehicle.ProcessBulkItems.ExistsByName": "A intervenção veículo '{0}' já existe",
   "Application.Service.InterventionTeamVehicle.ProcessBulkItems.FailedToCreate": "Falha ao criar a intervenção veículo '{0}'",
   "Application.Service.InterventionTeamVehicle.ValidateBulkItem.Name": "O nome é obrigatório",
-  "Application.Service.InterventionTeamVehicle.ValidateBulkItem.Description": "A descrição é obrigatória"
+  "Application.Service.InterventionTeamVehicle.ValidateBulkItem.Description": "A descrição é obrigatória",
+  "Application.Service.InterventionTeamVehicle.GetById.ResourceNotFound": "Associação intervenção-vehículo não encontrada ou inactiva",
+  "Application.Service.InterventionTeamVehicle.ValidateBulkItem.InterventionTeamId": "O ID da intervenção é obrigatório para a intervenção veículo {0}"
 }

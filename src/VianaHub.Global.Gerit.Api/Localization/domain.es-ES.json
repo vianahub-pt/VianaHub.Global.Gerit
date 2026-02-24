@@ -239,7 +239,7 @@
 
   "Domain.InterventionTeamVehicle.IdRequired": "Se requiere el ID de la asociación intervención-vehículo",
   "Domain.InterventionTeamVehicle.ModifiedByRequired": "Se requiere el ID del modificador",
-  "Domain.InterventionTeamVehicle.InterventionIdGreaterThanZero": "El ID de la intervención debe ser mayor que cero",
+  "Domain.InterventionTeamVehicle.InterventionTeamIdGreaterThanZero": "El ID de la intervención debe ser mayor que cero",
   "Domain.InterventionTeamVehicle.VehicleIdGreaterThanZero": "El ID del vehículo debe ser mayor que cero",
   "Domain.InterventionTeamVehicle.IsDeleted": "El recurso ya ha sido eliminado"
 }

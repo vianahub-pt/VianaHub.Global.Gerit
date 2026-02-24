@@ -22,7 +22,8 @@ public class InterventionTeamVehicleDataRepository : IInterventionTeamVehicleDat
         return await _context.Set<InterventionTeamVehicleEntity>()
             .AsNoTracking()
             .Include(x => x.Vehicle)
-            .Include(x => x.Intervention)
+            .Include(x => x.InterventionTeam)
+            .Include(x => x.InterventionTeam.Intervention)
             .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted, ct);
     }
 
@@ -31,7 +32,8 @@ public class InterventionTeamVehicleDataRepository : IInterventionTeamVehicleDat
         return await _context.Set<InterventionTeamVehicleEntity>()
             .AsNoTracking()
             .Include(x => x.Vehicle)
-            .Include(x => x.Intervention)
+            .Include(x => x.InterventionTeam)
+            .Include(x => x.InterventionTeam.Intervention)
             .Where(x => !x.IsDeleted)
             .OrderBy(x => x.Id)
             .ToListAsync(ct);
@@ -42,7 +44,8 @@ public class InterventionTeamVehicleDataRepository : IInterventionTeamVehicleDat
         var query = _context.Set<InterventionTeamVehicleEntity>()
             .AsNoTracking()
             .Include(x => x.Vehicle)
-            .Include(x => x.Intervention)
+            .Include(x => x.InterventionTeam)
+            .Include(x => x.InterventionTeam.Intervention)
             .Where(x => !x.IsDeleted);
 
         if (!string.IsNullOrWhiteSpace(request.Search))
@@ -50,7 +53,7 @@ public class InterventionTeamVehicleDataRepository : IInterventionTeamVehicleDat
             var search = request.Search.Trim().ToLower();
             query = query.Where(x => 
                 EF.Functions.Like(x.Vehicle.Plate.ToLower(), $"%{search}%") ||
-                EF.Functions.Like(x.Intervention.Title.ToLower(), $"%{search}%"));
+                EF.Functions.Like(x.InterventionTeam.Intervention.Title.ToLower(), $"%{search}%"));
         }
 
         var count = await query.CountAsync(ct);
@@ -70,11 +73,11 @@ public class InterventionTeamVehicleDataRepository : IInterventionTeamVehicleDat
         };
     }
 
-    public async Task<bool> ExistsByIdAsync(int tenantId, int interventionId, int vehicleId, CancellationToken ct)
+    public async Task<bool> ExistsByIdAsync(int tenantId, int interventionTeamId, int vehicleId, CancellationToken ct)
     {
         return await _context.Set<InterventionTeamVehicleEntity>()
             .AsNoTracking()
-            .AnyAsync(x => x.TenantId == tenantId && x.InterventionId == interventionId && x.VehicleId == vehicleId &&  !x.IsDeleted, ct);
+            .AnyAsync(x => x.TenantId == tenantId && x.InterventionTeamId == interventionTeamId && x.VehicleId == vehicleId &&  !x.IsDeleted, ct);
     }
 
     public async Task<bool> AddAsync(InterventionTeamVehicleEntity entity, CancellationToken ct)

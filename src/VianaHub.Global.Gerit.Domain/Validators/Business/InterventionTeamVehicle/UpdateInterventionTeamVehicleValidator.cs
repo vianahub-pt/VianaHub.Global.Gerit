@@ -9,7 +9,7 @@ public class UpdateInterventionTeamVehicleValidator : AbstractValidator<Interven
     public UpdateInterventionTeamVehicleValidator(ILocalizationService localization)
     {
         RuleFor(x => x.Id).GreaterThan(0).WithMessage(localization.GetMessage("Domain.InterventionTeamVehicle.IdRequired"));
-        RuleFor(x => x.InterventionId).GreaterThan(0).WithMessage(localization.GetMessage("Domain.InterventionTeamVehicle.InterventionIdGreaterThanZero"));
+        RuleFor(x => x.InterventionTeamId).GreaterThan(0).WithMessage(localization.GetMessage("Domain.InterventionTeamVehicle.InterventionTeamIdGreaterThanZero"));
         RuleFor(x => x.VehicleId).GreaterThan(0).WithMessage(localization.GetMessage("Domain.InterventionTeamVehicle.VehicleIdGreaterThanZero"));
         RuleFor(x => x.ModifiedBy).GreaterThan(0).WithMessage(localization.GetMessage("Domain.InterventionTeamVehicle.ModifiedByRequired"));
     }

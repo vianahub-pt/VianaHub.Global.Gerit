@@ -13,7 +13,7 @@ public class CreateInterventionAddressRouteValidator : AbstractValidator<CreateI
     {
         RuleFor(x => x.InterventionId)
             .GreaterThan(0)
-            .WithMessage(localization.GetMessage("Api.Validator.InterventionAddress.Create.InterventionId"));
+            .WithMessage(localization.GetMessage("Api.Validator.InterventionAddress.Create.InterventionTeamId"));
 
         RuleFor(x => x.AddressTypeId)
             .GreaterThan(0)

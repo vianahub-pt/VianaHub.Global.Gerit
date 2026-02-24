@@ -260,7 +260,7 @@ public class InterventionTeamAppService : IInterventionTeamsAppService
     {
         if (item.InterventionId <= 0)
         {
-            _notify.Add(_localization.GetMessage("Application.Service.InterventionTeam.ValidateBulkItem.InterventionId", item.InterventionId), 400);
+            _notify.Add(_localization.GetMessage("Application.Service.InterventionTeam.ValidateBulkItem.InterventionTeamId", item.InterventionId), 400);
             return false;
         }
 

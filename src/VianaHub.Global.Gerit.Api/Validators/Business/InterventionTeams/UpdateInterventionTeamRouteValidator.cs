@@ -9,7 +9,7 @@ public class UpdateInterventionTeamRouteValidator : AbstractValidator<UpdateInte
     public UpdateInterventionTeamRouteValidator(ILocalizationService localization)
     {
         RuleFor(x => x.InterventionId)
-            .GreaterThan(0).WithMessage(localization.GetMessage("Api.Validator.InterventionTeam.Update.InterventionId"));
+            .GreaterThan(0).WithMessage(localization.GetMessage("Api.Validator.InterventionTeam.Update.InterventionTeamId"));
 
         RuleFor(x => x.TeamId)
             .GreaterThan(0).WithMessage(localization.GetMessage("Api.Validator.InterventionTeam.Update.TeamId"));
