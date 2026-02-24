@@ -1,5 +1,5 @@
 using Microsoft.Extensions.Logging;
-using VianaHub.Global.Gerit.Domain.Interfaces;
+using VianaHub.Global.Gerit.Domain.Interfaces.Base;
 
 namespace VianaHub.Global.Gerit.Infra.Integration.Messaging;
 

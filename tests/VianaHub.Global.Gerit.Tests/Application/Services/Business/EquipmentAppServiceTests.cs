@@ -10,9 +10,9 @@ using VianaHub.Global.Gerit.Application.Services.Business;
 using VianaHub.Global.Gerit.Application.Interfaces.Common;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Business.Equipment;
 using VianaHub.Global.Gerit.Domain.Interfaces.Business;
-using VianaHub.Global.Gerit.Domain.Interfaces;
 using VianaHub.Global.Gerit.Domain.Tools.Notifications;
 using Xunit;
+using VianaHub.Global.Gerit.Domain.Interfaces.Base;
 
 namespace VianaHub.Global.Gerit.Tests.Application.Services.Business
 {

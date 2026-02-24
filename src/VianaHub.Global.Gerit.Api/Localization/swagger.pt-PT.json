@@ -44,6 +44,7 @@
   "Swagger.Tag.InterventionAddresses": "Moradas de Intervenções",
   "Swagger.Tag.InterventionContacts": "Contactos de Intervenções",
   "Swagger.Tag.TeamMembersTeams": "Associações Equipa-Membro",
+  "Swagger.Tag.InterventionTeamVehicles": "Associações Intervenção-Veículo",
 
   "Swagger.Endpoint.HealthCheck.Summary": "Verificação de Saúde",
   "Swagger.Endpoint.HealthCheck.Description": "Verifica se a API está a funcionar corretamente",
@@ -350,5 +351,15 @@
   "Swagger.Endpoint.TeamMembersTeams.GetPaged.Summary": "Obter associações equipa-membro paginadas",
   "Swagger.Endpoint.TeamMembersTeams.Activate.Summary": "Ativar associação equipa-membro",
   "Swagger.Endpoint.TeamMembersTeams.Deactivate.Summary": "Desativar associação equipa-membro",
-  "Swagger.Endpoint.TeamMembersTeams.BulkUpload.Summary": "Carregamento em massa de associações equipa-membro"
+  "Swagger.Endpoint.TeamMembersTeams.BulkUpload.Summary": "Carregamento em massa de associações equipa-membro",
+
+  "Swagger.Endpoint.InterventionTeamVehicle.GetAll.Summary": "Obter todas as associações intervenção-veículo",
+  "Swagger.Endpoint.InterventionTeamVehicle.GetPaged.Summary": "Obter associações intervenção-veículo paginadas",
+  "Swagger.Endpoint.InterventionTeamVehicle.GetById.Summary": "Obter associação intervenção-veículo por ID",
+  "Swagger.Endpoint.InterventionTeamVehicle.Create.Summary": "Criar nova associação intervenção-veículo",
+  "Swagger.Endpoint.InterventionTeamVehicle.Update.Summary": "Atualizar associação intervenção-veículo",
+  "Swagger.Endpoint.InterventionTeamVehicle.Delete.Summary": "Eliminar associação intervenção-veículo",
+  "Swagger.Endpoint.InterventionTeamVehicle.Activate.Summary": "Ativar associação intervenção-veículo",
+  "Swagger.Endpoint.InterventionTeamVehicle.Deactivate.Summary": "Desativar associação intervenção-veículo",
+  "Swagger.Endpoint.InterventionTeamVehicle.BulkUpload.Summary": "Carregamento em massa de associações intervenção-veículo"
 }

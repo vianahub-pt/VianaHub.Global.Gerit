@@ -164,5 +164,21 @@
   "Application.Service.InterventionTeam.ProcessBulkItems.FailedToCreate": "Failed to create association for intervention {0} and team {1}",
   "Application.Service.InterventionTeam.ValidateBulkItem.InterventionId": "Intervention ID is required for line {0}",
   "Application.Service.InterventionTeam.ValidateBulkItem.TeamId": "Team ID is required for line {0}",
-  "Application.Service.InterventionTeam.ReadCsvFile.InvalidDelimiter": "The CSV file delimiter must be ';'"
+  "Application.Service.InterventionTeam.ReadCsvFile.InvalidDelimiter": "The CSV file delimiter must be ';'",
+
+  "Application.Service.InterventionTeamVehicle.GetById.ResourceNotFound": "Intervention-team-vehicle association not found or inactive",
+  "Application.Service.InterventionTeamVehicle.Create.ResourceAlreadyExists": "Association between intervention {0} and vehicle {1} already exists",
+  "Application.Service.InterventionTeamVehicle.Update.ResourceNotFound": "Intervention-team-vehicle association not found",
+  "Application.Service.InterventionTeamVehicle.Activate.ResourceNotFound": "Intervention-team-vehicle association not found",
+  "Application.Service.InterventionTeamVehicle.Deactivate.ResourceNotFound": "Intervention-team-vehicle association not found",
+  "Application.Service.InterventionTeamVehicle.Delete.ResourceNotFound": "Intervention-team-vehicle association not found",
+  "Application.Service.InterventionTeamVehicle.BulkUpload.EmptyFile": "Empty file",
+  "Application.Service.InterventionTeamVehicle.ReadCsvFile.InvalidDelimiter": "The CSV file delimiter must be ';'",
+  "Application.Service.InterventionTeamVehicle.ReadCsvFile.CsvHelperException": "Error processing CSV line {0}",
+  "Application.Service.InterventionTeamVehicle.ReadCsvFile.MaxRows": "Maximum number of lines ({0}) exceeded",
+  "Application.Service.InterventionTeamVehicle.ReadCsvFile.Exception": "Error reading CSV file",
+  "Application.Service.InterventionTeamVehicle.ProcessBulkItems.ExistsByInterventionAndVehicle": "Association between intervention {0} and vehicle {1} already exists",
+  "Application.Service.InterventionTeamVehicle.ProcessBulkItems.FailedToCreate": "Failed to create association for intervention {0} and vehicle {1}",
+  "Application.Service.InterventionTeamVehicle.ValidateBulkItem.InterventionId": "Intervention ID is required for intervention {0}",
+  "Application.Service.InterventionTeamVehicle.ValidateBulkItem.VehicleId": "Vehicle ID is required for vehicle {0}"
 }

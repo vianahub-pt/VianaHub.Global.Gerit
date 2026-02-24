@@ -1,5 +1,5 @@
 ﻿using VianaHub.Global.Gerit.Api.Filters;
-using VianaHub.Global.Gerit.Domain.Interfaces;
+using VianaHub.Global.Gerit.Domain.Interfaces.Base;
 
 namespace VianaHub.Global.Gerit.Api.Helpers;
 

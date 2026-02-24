@@ -6,7 +6,6 @@ using System.Globalization;
 using VianaHub.Global.Gerit.Application.Dtos.Base;
 using VianaHub.Global.Gerit.Domain.ReadModels;
 using VianaHub.Global.Gerit.Domain.Tools.Notifications;
-using VianaHub.Global.Gerit.Domain.Interfaces;
 using VianaHub.Global.Gerit.Application.Dtos.Response.Business.Vehicle;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Business.Vehicle;
 using VianaHub.Global.Gerit.Application.Interfaces.Business;
@@ -14,6 +13,7 @@ using VianaHub.Global.Gerit.Application.Interfaces.Common;
 using VianaHub.Global.Gerit.Domain.Interfaces.Business;
 using VianaHub.Global.Gerit.Domain.Entities.Business;
 using VianaHub.Global.Gerit.Domain.Helpers;
+using VianaHub.Global.Gerit.Domain.Interfaces.Base;
 
 namespace VianaHub.Global.Gerit.Application.Services.Business;
 

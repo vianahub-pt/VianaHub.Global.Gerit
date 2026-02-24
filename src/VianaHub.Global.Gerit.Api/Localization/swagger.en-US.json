@@ -43,6 +43,7 @@
   "Swagger.Tag.StatusTypes": "Status Types",
   "Swagger.Tag.InterventionAddresses": "Intervention Addresses",
   "Swagger.Tag.InterventionContacts": "Intervention Contacts",
+  "Swagger.Tag.InterventionTeamVehicles": "Intervention Team Vehicles",
 
   "Swagger.Endpoint.HealthCheck.Summary": "Health Check",
   "Swagger.Endpoint.HealthCheck.Description": "Checks if the API is working correctly",
@@ -348,5 +349,15 @@
   "Swagger.Endpoint.TeamMembersTeams.GetPaged.Summary": "Get team-member associations paged",
   "Swagger.Endpoint.TeamMembersTeams.Activate.Summary": "Activate team-member association",
   "Swagger.Endpoint.TeamMembersTeams.Deactivate.Summary": "Deactivate team-member association",
-  "Swagger.Endpoint.TeamMembersTeams.BulkUpload.Summary": "Bulk upload team-member associations"
+  "Swagger.Endpoint.TeamMembersTeams.BulkUpload.Summary": "Bulk upload team-member associations",
+
+  "Swagger.Endpoint.InterventionTeamVehicle.GetAll.Summary": "Get all intervention team vehicles",
+  "Swagger.Endpoint.InterventionTeamVehicle.GetPaged.Summary": "Get intervention team vehicles paged",
+  "Swagger.Endpoint.InterventionTeamVehicle.GetById.Summary": "Get intervention team vehicle by ID",
+  "Swagger.Endpoint.InterventionTeamVehicle.Create.Summary": "Create new intervention team vehicle association",
+  "Swagger.Endpoint.InterventionTeamVehicle.Update.Summary": "Update intervention team vehicle association",
+  "Swagger.Endpoint.InterventionTeamVehicle.Delete.Summary": "Delete intervention team vehicle association",
+  "Swagger.Endpoint.InterventionTeamVehicle.Activate.Summary": "Activate intervention team vehicle association",
+  "Swagger.Endpoint.InterventionTeamVehicle.Deactivate.Summary": "Deactivate intervention team vehicle association",
+  "Swagger.Endpoint.InterventionTeamVehicle.BulkUpload.Summary": "Bulk upload intervention team vehicle associations"
 }

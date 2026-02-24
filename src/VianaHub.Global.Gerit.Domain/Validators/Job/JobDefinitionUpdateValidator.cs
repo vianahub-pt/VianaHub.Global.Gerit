@@ -1,7 +1,7 @@
 using FluentValidation;
-using VianaHub.Global.Gerit.Domain.Interfaces;
 using Cronos;
 using VianaHub.Global.Gerit.Domain.Entities.Job;
+using VianaHub.Global.Gerit.Domain.Interfaces.Base;
 
 namespace VianaHub.Global.Gerit.Domain.Validators.Job;
 

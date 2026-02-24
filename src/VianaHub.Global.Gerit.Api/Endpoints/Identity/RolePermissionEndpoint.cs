@@ -6,6 +6,7 @@ using VianaHub.Global.Gerit.Application.Dtos.Base;
 using VianaHub.Global.Gerit.Application.Interfaces.Identity;
 using VianaHub.Global.Gerit.Application.Dtos.Response.Identity.RolePermission;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Identity.RolePermission;
+using VianaHub.Global.Gerit.Api.Endpoints.Base;
 
 namespace VianaHub.Global.Gerit.Api.Endpoints.Identity;
 

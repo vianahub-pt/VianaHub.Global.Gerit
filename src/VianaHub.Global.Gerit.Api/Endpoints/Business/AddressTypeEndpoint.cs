@@ -4,6 +4,7 @@ using VianaHub.Global.Gerit.Application.Dtos.Base;
 using VianaHub.Global.Gerit.Domain.Tools.Notifications;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Business.AddressType;
 using VianaHub.Global.Gerit.Application.Interfaces.Business;
+using VianaHub.Global.Gerit.Api.Endpoints.Base;
 
 namespace VianaHub.Global.Gerit.Api.Endpoints.Business;
 

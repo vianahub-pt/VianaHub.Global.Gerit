@@ -1,4 +1,4 @@
-namespace VianaHub.Global.Gerit.Domain.Interfaces;
+namespace VianaHub.Global.Gerit.Domain.Interfaces.Base;
 
 public interface ISecretProvider
 {
@@ -7,5 +7,5 @@ public interface ISecretProvider
     /// Deve ser gerenciada externamente (Key Vault, KMS, variável de ambiente, etc.).
     /// </summary>
     /// <returns>Chave mestra em texto simples ou null se não disponível.</returns>
-    string? GetMasterKey();
+    string GetMasterKey();
 }

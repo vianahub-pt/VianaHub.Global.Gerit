@@ -5,11 +5,11 @@ using VianaHub.Global.Gerit.Api.Endpoints.Identity;
 using Moq;
 using VianaHub.Global.Gerit.Application.Interfaces.Identity;
 using VianaHub.Global.Gerit.Domain.Tools.Notifications;
-using VianaHub.Global.Gerit.Domain.Interfaces;
 using VianaHub.Global.Gerit.Api.Endpoints.Billing;
 using VianaHub.Global.Gerit.Application.Interfaces.Billing;
 using VianaHub.Global.Gerit.Application.Interfaces.Job;
 using VianaHub.Global.Gerit.Api.Endpoints.Job;
+using VianaHub.Global.Gerit.Domain.Interfaces.Base;
 
 namespace VianaHub.Global.Gerit.Tests.Api.Endpoints
 {

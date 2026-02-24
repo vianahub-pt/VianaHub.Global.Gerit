@@ -1,4 +1,4 @@
-namespace VianaHub.Global.Gerit.Api.Endpoints;
+namespace VianaHub.Global.Gerit.Api.Endpoints.Base;
 
 /// <summary>
 /// Atributo marcador para descoberta automática de endpoints via reflexão.
@@ -12,5 +12,5 @@ public sealed class EndpointMapperAttribute : Attribute
     /// Nome do método de mapeamento. Se não especificado, será inferido
     /// automaticamente baseado no nome da classe.
     /// </summary>
-    public string? MethodName { get; set; }
+    public string MethodName { get; set; }
 }

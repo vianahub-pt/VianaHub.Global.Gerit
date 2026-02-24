@@ -3,7 +3,6 @@ using FluentValidation;
 using VianaHub.Global.Gerit.Domain.Base;
 using VianaHub.Global.Gerit.Domain.Tools.Notifications;
 using VianaHub.Global.Gerit.Domain.Validators.Job;
-using VianaHub.Global.Gerit.Domain.Interfaces;
 using VianaHub.Global.Gerit.Infra.Integration.Messaging;
 using VianaHub.Global.Gerit.Infra.Data.Context;
 using VianaHub.Global.Gerit.Infra.Data.Security;
@@ -67,6 +66,8 @@ using VianaHub.Global.Gerit.Domain.Validators.Business.InterventionAddress;
 using VianaHub.Global.Gerit.Domain.Validators.Business.StatusType;
 using VianaHub.Global.Gerit.Domain.Validators.Business.TeamMembersTeam;
 using VianaHub.Global.Gerit.Domain.Validators.Business.InterventionTeam;
+using VianaHub.Global.Gerit.Domain.Interfaces.Base;
+using VianaHub.Global.Gerit.Domain.Validators.Business.InterventionTeamVehicle;
 
 namespace VianaHub.Global.Gerit.Infra.IoC;
 
@@ -84,6 +85,9 @@ public static class DependencyInjection
         services.AddScoped<INotify, Notify>();
 
         // Validators (Scoped)
+        services.AddScoped<IValidator<UserRoleEntity>, UserRoleValidator>();
+        services.AddScoped<IValidator<RolePermissionEntity>, RolePermissionValidator>();
+
         services.AddScoped<IEntityDomainValidator<ActionEntity>, ActionValidator>();
         services.AddScoped<IEntityDomainValidator<ResourceEntity>, ResourceValidator>();
         services.AddScoped<IEntityDomainValidator<RoleEntity>, RoleValidator>();
@@ -91,53 +95,28 @@ public static class DependencyInjection
         services.AddScoped<IEntityDomainValidator<TenantEntity>, TenantValidator>();
         services.AddScoped<IEntityDomainValidator<SubscriptionEntity>, SubscriptionValidator>();
         services.AddScoped<IEntityDomainValidator<UserEntity>, UserValidator>();
-        services.AddScoped<IValidator<UserRoleEntity>, UserRoleValidator>();
-        services.AddScoped<IValidator<RolePermissionEntity>, RolePermissionValidator>();
-
-        // Register JobDefinition validator
         services.AddScoped<IEntityDomainValidator<JobDefinitionEntity>, JobDefinitionValidator>();
-
-        // Register JwtKey validator
         services.AddScoped<IEntityDomainValidator<JwtKeyEntity>, JwtKeyValidator>();
-
-        // Vehicle validators
         services.AddScoped<IEntityDomainValidator<VehicleEntity>, VehicleValidator>();
-        // Equipment validators
         services.AddScoped<IEntityDomainValidator<EquipmentEntity>, EquipmentValidator>();
-        // EquipmentType validators
         services.AddScoped<IEntityDomainValidator<EquipmentTypeEntity>, EquipmentTypeValidator>();
-        // Function validators
         services.AddScoped<IEntityDomainValidator<FunctionEntity>, FunctionValidator>();
-        // Team validators
         services.AddScoped<IEntityDomainValidator<TeamEntity>, TeamValidator>();
-        // TeamMember validators
         services.AddScoped<IEntityDomainValidator<TeamMemberEntity>, TeamMemberValidator>();
-        // TeamMemberAddress validators
         services.AddScoped<IEntityDomainValidator<TeamMemberAddressEntity>, TeamMemberAddressValidator>();
-        // TeamMemberContact validators
         services.AddScoped<IEntityDomainValidator<TeamMemberContactEntity>, TeamMemberContactValidator>();
-        // AddressType validators
         services.AddScoped<IEntityDomainValidator<AddressTypeEntity>, AddressTypeValidator>();
-        // Client validators
         services.AddScoped<IEntityDomainValidator<ClientEntity>, ClientValidator>();
-        // ClientAddress validators
         services.AddScoped<IEntityDomainValidator<ClientAddressEntity>, ClientAddressValidator>();
-        // ClientContact validators
         services.AddScoped<IEntityDomainValidator<ClientContactEntity>, ClientContactValidator>();
-        // InterventionContact validators
         services.AddScoped<IEntityDomainValidator<InterventionContactEntity>, InterventionContactValidator>();
-        // Status validators
         services.AddScoped<IEntityDomainValidator<StatusEntity>, StatusValidator>();
-        // Intervention validators
         services.AddScoped<IEntityDomainValidator<InterventionEntity>, InterventionValidator>();
-        // StatusType validators
         services.AddScoped<IEntityDomainValidator<StatusTypeEntity>, StatusTypeValidator>();
-        // InterventionAddress validators
         services.AddScoped<IEntityDomainValidator<InterventionAddressEntity>, InterventionAddressValidator>();
-        // TeamMembersTeam validators
         services.AddScoped<IEntityDomainValidator<TeamMembersTeamEntity>, TeamMembersTeamValidator>();
-        // InterventionTeam validators
         services.AddScoped<IEntityDomainValidator<InterventionTeamEntity>, InterventionTeamValidator>();
+        services.AddScoped<IEntityDomainValidator<InterventionTeamVehicleEntity>, InterventionTeamVehicleValidator>();
 
         // Application - Common Services
         services.AddScoped<IFileValidationService, FileValidationService>();
@@ -149,11 +128,8 @@ public static class DependencyInjection
         services.AddScoped<IVehicleAppService, VehicleAppService>();
         services.AddScoped<IEquipmentAppService, EquipmentAppService>();
         services.AddScoped<ITeamMembersTeamsAppService, TeamMembersTeamAppService>();
-        services.AddScoped<ITeamMembersTeamDomainService, TeamMembersTeamDomainService>();
         services.AddScoped<ITeamMembersTeamDataRepository, TeamMembersTeamDataRepository>();
-        // InterventionTeam registrations
         services.AddScoped<IInterventionTeamsAppService, InterventionTeamAppService>();
-        services.AddScoped<IInterventionTeamDomainService, InterventionTeamDomainService>();
         services.AddScoped<IInterventionTeamDataRepository, InterventionTeamDataRepository>();
         services.AddScoped<IClientAppService, ClientAppService>();
         services.AddScoped<IClientAddressAppService, ClientAddressAppService>();
@@ -171,14 +147,17 @@ public static class DependencyInjection
         services.AddScoped<ISubscriptionAppService, SubscriptionAppService>();
         services.AddScoped<IUserAppService, UserAppService>();
         services.AddScoped<IUserRoleAppService, UserRoleAppService>();
-        services.AddScoped<IUserRoleDomainService, UserRoleDomainService>();
         services.AddScoped<IRolePermissionAppService, RolePermissionAppService>();
         services.AddScoped<IAuthAppService, AuthAppService>();
         services.AddScoped<IJobAppService, JobAppService>();
         services.AddScoped<IJwtKeyAppService, JwtKeyAppService>();
+        services.AddScoped<IInterventionTeamVehiclesAppService, InterventionTeamVehicleAppService>();
 
         // Domain
+        services.AddScoped<IUserRoleDomainService, UserRoleDomainService>();
+        services.AddScoped<IInterventionTeamDomainService, InterventionTeamDomainService>();
         services.AddScoped<IActionDomainService, ActionDomainService>();
+        services.AddScoped<ITeamMembersTeamDomainService, TeamMembersTeamDomainService>();
         services.AddScoped<IResourceDomainService, ResourceDomainService>();
         services.AddScoped<IAddressTypeDomainService, AddressTypeDomainService>();
         services.AddScoped<IRoleDomainService, RoleDomainService>();
@@ -204,6 +183,7 @@ public static class DependencyInjection
         services.AddScoped<IStatusDomainService, StatusDomainService>();
         services.AddScoped<IInterventionDomainService, InterventionDomainService>();
         services.AddScoped<IStatusTypeDomainService, StatusTypeDomainService>();
+        services.AddScoped<IInterventionTeamVehicleDomainService, InterventionTeamVehicleDomainService>();
 
         // Infra.Data - Repositories
         services.AddScoped<IAddressTypeDataRepository, AddressTypeDataRepository>();
@@ -236,6 +216,7 @@ public static class DependencyInjection
         services.AddScoped<IRefreshTokenDataRepository, RefreshTokenDataRepository>();
         services.AddScoped<IJobDefinitionDataRepository, JobDefinitionDataRepository>();
         services.AddScoped<IInterventionTeamDataRepository, InterventionTeamDataRepository>();
+        services.AddScoped<IInterventionTeamVehicleDataRepository, InterventionTeamVehicleDataRepository>();
 
         // Infra.Messaging (Email sender no-op por enquanto)
         services.AddScoped<IEmailSender, NoOpEmailSender>();

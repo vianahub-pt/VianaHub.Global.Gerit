@@ -2,6 +2,7 @@ using VianaHub.Global.Gerit.Api.Helpers;
 using VianaHub.Global.Gerit.Domain.Tools.Notifications;
 using VianaHub.Global.Gerit.Application.Interfaces.Identity;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Identity.Auth;
+using VianaHub.Global.Gerit.Api.Endpoints.Base;
 
 namespace VianaHub.Global.Gerit.Api.Endpoints.Identity;
 

@@ -7,7 +7,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using VianaHub.Global.Gerit.Application.Configuration;
 using VianaHub.Global.Gerit.Domain.Helpers;
-using VianaHub.Global.Gerit.Domain.Interfaces;
 using VianaHub.Global.Gerit.Domain.Tools.Notifications;
 using VianaHub.Global.Gerit.Domain.Tools.Cryptography;
 using VianaHub.Global.Gerit.Infra.Data.Context;
@@ -18,6 +17,7 @@ using VianaHub.Global.Gerit.Application.Dtos.Request.Identity.Auth;
 using VianaHub.Global.Gerit.Domain.Entities.Identity;
 using VianaHub.Global.Gerit.Domain.Interfaces.Billing;
 using VianaHub.Global.Gerit.Domain.Interfaces.Identity;
+using VianaHub.Global.Gerit.Domain.Interfaces.Base;
 
 namespace VianaHub.Global.Gerit.Application.Services.Identity;
 

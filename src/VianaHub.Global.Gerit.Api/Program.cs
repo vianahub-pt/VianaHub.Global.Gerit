@@ -5,7 +5,6 @@ using VianaHub.Global.Gerit.Api.Configuration;
 using VianaHub.Global.Gerit.Api.Configuration.Swagger;
 using VianaHub.Global.Gerit.Api.Helpers;
 using VianaHub.Global.Gerit.Api.Services;
-using VianaHub.Global.Gerit.Domain.Interfaces;
 using VianaHub.Global.Gerit.Infra.Data.Context;
 using VianaHub.Global.Gerit.Infra.Data.Interceptors;
 using VianaHub.Global.Gerit.Infra.IoC;
@@ -15,6 +14,7 @@ using VianaHub.Global.Gerit.Api.Security;
 using VianaHub.Global.Gerit.Infra.Data.Tools;
 using VianaHub.Global.Gerit.Application.Mappings.Identity;
 using VianaHub.Global.Gerit.Api.Middleware;
+using VianaHub.Global.Gerit.Domain.Interfaces.Base;
 
 namespace VianaHub.Global.Gerit.Api;
 

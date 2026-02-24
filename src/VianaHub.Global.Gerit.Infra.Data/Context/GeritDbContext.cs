@@ -51,8 +51,10 @@ public class GeritDbContext : DbContext
     public DbSet<StatusTypeEntity> StatusTypes { get; set; }
     public DbSet<StatusEntity> Status { get; set; }
     public DbSet<InterventionEntity> Interventions { get; set; }
+    public DbSet<InterventionTeamEntity> InterventionTeams { get; set; }
     public DbSet<InterventionContactEntity> InterventionContacts { get; set; }
     public DbSet<InterventionAddressEntity> InterventionAddresses { get; set; }
+    public DbSet<InterventionTeamVehicleEntity> InterventionTeamVehicles { get; set; }
     public DbSet<RefreshTokenEntity> RefreshTokens { get; set; }
     #endregion
 
@@ -67,6 +69,9 @@ public class GeritDbContext : DbContext
         // - Todas as constraints (PK, FK, UQ, CHECK)
         // - Configurações de Row Level Security (aplicadas via migrations)
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(GeritDbContext).Assembly);
+
+        // Ensure InterventionTeamVehicle mapping is applied via assembly scan
+        //modelBuilder.ApplyConfigurationsFromAssembly(typeof(GeritDbContext).Assembly);
 
         // Configura o schema padrão
         modelBuilder.HasDefaultSchema("dbo");

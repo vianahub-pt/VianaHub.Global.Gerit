@@ -32,6 +32,10 @@ using VianaHub.Global.Gerit.Api.Validators.Business.TeamMembersTeams;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Business.InterventionTeams;
 using VianaHub.Global.Gerit.Api.Validators.Business.InterventionTeams;
 
+// InterventionTeamVehicles DTOs & Validators
+using VianaHub.Global.Gerit.Application.Dtos.Request.Business.InterventionTeamVehicles;
+using VianaHub.Global.Gerit.Api.Validators.Business.InterventionTeamVehicles;
+
 namespace VianaHub.Global.Gerit.Api.Configuration;
 
 /// <summary>
@@ -102,6 +106,11 @@ public static class RouteValidatorSetup
         services.AddScoped<IValidator<CreateInterventionTeamRequest>, CreateInterventionTeamRouteValidator>();
         services.AddScoped<IValidator<UpdateInterventionTeamRequest>, UpdateInterventionTeamRouteValidator>();
         services.AddScoped<IValidator<IFormFile>, BulkUploadInterventionTeamsRouteValidator>();
+
+        // InterventionTeamVehicles Route Validators
+        services.AddScoped<IValidator<CreateInterventionTeamVehicleRequest>, CreateInterventionTeamVehicleRouteValidator>();
+        services.AddScoped<IValidator<UpdateInterventionTeamVehicleRequest>, UpdateInterventionTeamVehicleRouteValidator>();
+        services.AddScoped<IValidator<IFormFile>, BulkUploadInterventionTeamVehiclesRouteValidator>();
 
         return services;
     }

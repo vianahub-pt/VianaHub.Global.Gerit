@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using VianaHub.Global.Gerit.Api.Endpoints.Base;
 using VianaHub.Global.Gerit.Api.Helpers;
 using VianaHub.Global.Gerit.Application.Dtos.Base;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Business.InterventionTeams;
@@ -8,7 +9,7 @@ using VianaHub.Global.Gerit.Domain.Tools.Notifications;
 namespace VianaHub.Global.Gerit.Api.Endpoints.Business;
 
 [EndpointMapper]
-public static class InterventionTeamsEndpoint
+public static class InterventionTeamEndpoint
 {
     public static void MapInterventionTeamsEndpoints(this IEndpointRouteBuilder app)
     {

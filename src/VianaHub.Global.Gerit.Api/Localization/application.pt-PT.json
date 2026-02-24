@@ -150,5 +150,26 @@
   "Application.Service.TeamMembersTeam.ProcessBulkItems.FailedToCreate": "Falha ao criar a associação para a equipa {0} e o membro {1}",
   "Application.Service.TeamMembersTeam.ValidateBulkItem.TeamId": "O ID da equipa é obrigatório na linha {0}",
   "Application.Service.TeamMembersTeam.ValidateBulkItem.TeamMemberId": "O ID do membro da equipa é obrigatório na linha {0}",
-  "Application.Service.InterventionTeam.ReadCsvFile.InvalidDelimiter": "O delimitador do ficheiro CSV deve ser ;"
+  "Application.Service.InterventionTeam.ReadCsvFile.InvalidDelimiter": "O delimitador do ficheiro CSV deve ser ;",
+
+  "Application.Service.InterventionTeam.BulkUpload.EmptyFile": "Ficheiro vazio",
+  "Application.Service.InterventionTeam.ReadCsvFile.Name.IsSafeCsvValue": "O nome contém caracteres inválidos na linha {0}",
+  "Application.Service.InterventionTeam.ReadCsvFile.Description.IsSafeCsvValue": "A descrição contém caracteres inválidos na linha {0}",
+  "Application.Service.InterventionTeam.ReadCsvFile.CsvHelperException": "Erro ao processar a linha {0} do CSV",
+  "Application.Service.InterventionTeam.ReadCsvFile.MaxRows": "Número máximo de linhas ({0}) excedido",
+  "Application.Service.InterventionTeam.ReadCsvFile.Exception": "Erro ao ler o ficheiro CSV",
+  "Application.Service.InterventionTeam.ProcessBulkItems.ExistsByName": "A intervenção '{0}' já existe",
+  "Application.Service.InterventionTeam.ProcessBulkItems.FailedToCreate": "Falha ao criar a intervenção '{0}'",
+  "Application.Service.InterventionTeam.ValidateBulkItem.Name": "O nome é obrigatório",
+
+  "Application.Service.InterventionTeamVehicle.BulkUpload.EmptyFile": "Ficheiro vazio",
+  "Application.Service.InterventionTeamVehicle.ReadCsvFile.Name.IsSafeCsvValue": "O nome contém caracteres inválidos na linha {0}",
+  "Application.Service.InterventionTeamVehicle.ReadCsvFile.Description.IsSafeCsvValue": "A descrição contém caracteres inválidos na linha {0}",
+  "Application.Service.InterventionTeamVehicle.ReadCsvFile.CsvHelperException": "Erro ao processar a linha {0} do CSV",
+  "Application.Service.InterventionTeamVehicle.ReadCsvFile.MaxRows": "Número máximo de linhas ({0}) excedido",
+  "Application.Service.InterventionTeamVehicle.ReadCsvFile.Exception": "Erro ao ler o ficheiro CSV",
+  "Application.Service.InterventionTeamVehicle.ProcessBulkItems.ExistsByName": "A intervenção veículo '{0}' já existe",
+  "Application.Service.InterventionTeamVehicle.ProcessBulkItems.FailedToCreate": "Falha ao criar a intervenção veículo '{0}'",
+  "Application.Service.InterventionTeamVehicle.ValidateBulkItem.Name": "O nome é obrigatório",
+  "Application.Service.InterventionTeamVehicle.ValidateBulkItem.Description": "A descrição é obrigatória"
 }

@@ -1,4 +1,4 @@
-﻿namespace VianaHub.Global.Gerit.Domain.Interfaces;
+﻿namespace VianaHub.Global.Gerit.Domain.Interfaces.Base;
 
 /// <summary>
 /// Serviço de localização para mensagens de validação e erro

@@ -5,6 +5,7 @@ using VianaHub.Global.Gerit.Domain.Tools.Notifications;
 using FluentValidation;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Business.Equipment;
 using VianaHub.Global.Gerit.Application.Interfaces.Business;
+using VianaHub.Global.Gerit.Api.Endpoints.Base;
 
 namespace VianaHub.Global.Gerit.Api.Endpoints.Business;
 

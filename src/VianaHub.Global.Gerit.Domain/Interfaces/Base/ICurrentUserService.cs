@@ -1,6 +1,6 @@
 ﻿using VianaHub.Global.Gerit.Domain.ReadModels;
 
-namespace VianaHub.Global.Gerit.Domain.Interfaces;
+namespace VianaHub.Global.Gerit.Domain.Interfaces.Base;
 
 /// <summary>
 /// Serviço para obter informações do usuário logado a partir do token JWT ou headers da requisição.

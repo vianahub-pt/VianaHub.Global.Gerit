@@ -1,10 +1,10 @@
 using AutoMapper;
 using VianaHub.Global.Gerit.Domain.Entities;
 using VianaHub.Global.Gerit.Domain.Tools.Notifications;
-using VianaHub.Global.Gerit.Domain.Interfaces;
 using VianaHub.Global.Gerit.Application.Interfaces.Identity;
 using VianaHub.Global.Gerit.Application.Dtos.Response.Identity.Jwt;
 using VianaHub.Global.Gerit.Domain.Interfaces.Identity;
+using VianaHub.Global.Gerit.Domain.Interfaces.Base;
 
 namespace VianaHub.Global.Gerit.Application.Services.Identity;
 

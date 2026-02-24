@@ -1,5 +1,5 @@
 ﻿using VianaHub.Global.Gerit.Application.Dtos.Base;
-using VianaHub.Global.Gerit.Domain.Interfaces;
+using VianaHub.Global.Gerit.Domain.Interfaces.Base;
 using VianaHub.Global.Gerit.Domain.Tools.Notifications;
 
 namespace VianaHub.Global.Gerit.Api.Helpers;

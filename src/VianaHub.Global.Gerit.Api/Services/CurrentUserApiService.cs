@@ -1,5 +1,5 @@
 ﻿using System.Security.Claims;
-using VianaHub.Global.Gerit.Domain.Interfaces;
+using VianaHub.Global.Gerit.Domain.Interfaces.Base;
 using VianaHub.Global.Gerit.Domain.ReadModels;
 
 namespace VianaHub.Global.Gerit.Api.Services;

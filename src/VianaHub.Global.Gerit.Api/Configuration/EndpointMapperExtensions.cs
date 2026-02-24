@@ -1,6 +1,6 @@
 using System.Reflection;
 using Serilog;
-using VianaHub.Global.Gerit.Api.Endpoints;
+using VianaHub.Global.Gerit.Api.Endpoints.Base;
 
 namespace VianaHub.Global.Gerit.Api.Configuration;
 
