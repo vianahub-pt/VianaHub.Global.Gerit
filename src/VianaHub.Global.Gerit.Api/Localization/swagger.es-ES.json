@@ -44,6 +44,7 @@
   "Swagger.Tag.InterventionAddresses": "Direcciones de Intervenciones",
   "Swagger.Tag.InterventionContacts": "Contactos de Intervenciones",
   "Swagger.Tag.InterventionTeamVehicles": "Intervención-Vehículos",
+  "Swagger.Tag.InterventionTeamEquipments": "Intervención-Equipos",
 
   "Swagger.Endpoint.HealthCheck.Summary": "Verificación de Salud",
   "Swagger.Endpoint.HealthCheck.Description": "Comprueba si la API está funcionando correctamente",
@@ -330,8 +331,6 @@
   "Swagger.Endpoint.StatusType.Deactivate.Summary": "Desactivar tipo de estado",
   "Swagger.Endpoint.StatusType.BulkUpload.Summary": "Carga masiva de tipos de estado",
 
-  "Swagger.Tag.InterventionContacts": "Contactos de Intervenciones",
-
   "Swagger.Endpoint.InterventionContact.GetAll.Summary": "Obtener todos los contactos de intervenciones",
   "Swagger.Endpoint.InterventionContact.GetPaged.Summary": "Obtener contactos de intervenciones paginados",
   "Swagger.Endpoint.InterventionContact.GetById.Summary": "Obtener contacto de intervención por ID",
@@ -361,5 +360,15 @@
   "Swagger.Endpoint.InterventionTeamVehicle.Delete.Summary": "Eliminar asociación intervención-vehículo",
   "Swagger.Endpoint.InterventionTeamVehicle.Activate.Summary": "Activar asociación intervención-vehículo",
   "Swagger.Endpoint.InterventionTeamVehicle.Deactivate.Summary": "Desactivar asociación intervención-vehículo",
-  "Swagger.Endpoint.InterventionTeamVehicle.BulkUpload.Summary": "Carga masiva de asociaciones intervención-vehículo"
+  "Swagger.Endpoint.InterventionTeamVehicle.BulkUpload.Summary": "Carga masiva de asociaciones intervención-vehículo",
+
+  "Swagger.Endpoint.InterventionTeamEquipment.GetAll.Summary": "Obtener todas las asociaciones intervención-equipo",
+  "Swagger.Endpoint.InterventionTeamEquipment.GetPaged.Summary": "Obtener asociaciones intervención-equipo paginadas",
+  "Swagger.Endpoint.InterventionTeamEquipment.GetById.Summary": "Obtener asociación intervención-equipo por ID",
+  "Swagger.Endpoint.InterventionTeamEquipment.Create.Summary": "Crear nueva asociación intervención-equipo",
+  "Swagger.Endpoint.InterventionTeamEquipment.Update.Summary": "Actualizar asociación intervención-equipo",
+  "Swagger.Endpoint.InterventionTeamEquipment.Delete.Summary": "Eliminar asociación intervención-equipo",
+  "Swagger.Endpoint.InterventionTeamEquipment.Activate.Summary": "Activar asociación intervención-equipo",
+  "Swagger.Endpoint.InterventionTeamEquipment.Deactivate.Summary": "Desactivar asociación intervención-equipo",
+  "Swagger.Endpoint.InterventionTeamEquipment.BulkUpload.Summary": "Carga masiva de asociaciones intervención-equipo"
 }

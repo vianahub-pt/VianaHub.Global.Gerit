@@ -32,6 +32,7 @@
   "Swagger.Tag.Vehicles": "Vehicles",
   "Swagger.Tag.Teams": "Teams",
   "Swagger.Tag.TeamMembers": "Team Members",
+  "Swagger.Tag.TeamMembersTeams": "Team-Member Associations",
   "Swagger.Tag.TeamMemberAddresses": "Team Member Addresses",
   "Swagger.Tag.TeamMemberContacts": "Team Member Contacts",
   "Swagger.Tag.Auth": "Authentication",
@@ -44,6 +45,8 @@
   "Swagger.Tag.InterventionAddresses": "Intervention Addresses",
   "Swagger.Tag.InterventionContacts": "Intervention Contacts",
   "Swagger.Tag.InterventionTeamVehicles": "Intervention Team Vehicles",
+  "Swagger.Tag.InterventionTeamEquipments": "Intervention Team Equipments",
+  "Swagger.Tag.InterventionTeamEquipment": "Intervention Team Equipment",
 
   "Swagger.Endpoint.HealthCheck.Summary": "Health Check",
   "Swagger.Endpoint.HealthCheck.Description": "Checks if the API is working correctly",
@@ -340,7 +343,6 @@
   "Swagger.Endpoint.InterventionContact.Delete.Summary": "Delete intervention contact",
   "Swagger.Endpoint.InterventionContact.BulkUpload.Summary": "Bulk upload intervention contacts",
 
-  "Swagger.Tag.TeamMembersTeams": "Team-Member Associations",
   "Swagger.Endpoint.TeamMembersTeams.GetAll.Summary": "Get all team-member associations",
   "Swagger.Endpoint.TeamMembersTeams.GetById.Summary": "Get team-member association by ID",
   "Swagger.Endpoint.TeamMembersTeams.Create.Summary": "Create new team-member association",
@@ -359,5 +361,15 @@
   "Swagger.Endpoint.InterventionTeamVehicle.Delete.Summary": "Delete intervention team vehicle association",
   "Swagger.Endpoint.InterventionTeamVehicle.Activate.Summary": "Activate intervention team vehicle association",
   "Swagger.Endpoint.InterventionTeamVehicle.Deactivate.Summary": "Deactivate intervention team vehicle association",
-  "Swagger.Endpoint.InterventionTeamVehicle.BulkUpload.Summary": "Bulk upload intervention team vehicle associations"
+  "Swagger.Endpoint.InterventionTeamVehicle.BulkUpload.Summary": "Bulk upload intervention team vehicle associations",
+
+  "Swagger.Endpoint.InterventionTeamEquipment.GetAll.Summary": "Get all intervention team equipments",
+  "Swagger.Endpoint.InterventionTeamEquipment.GetPaged.Summary": "Get intervention team equipments paged",
+  "Swagger.Endpoint.InterventionTeamEquipment.GetById.Summary": "Get intervention team equipment by ID",
+  "Swagger.Endpoint.InterventionTeamEquipment.Create.Summary": "Create new intervention team equipment association",
+  "Swagger.Endpoint.InterventionTeamEquipment.Update.Summary": "Update intervention team equipment association",
+  "Swagger.Endpoint.InterventionTeamEquipment.Delete.Summary": "Delete intervention team equipment association",
+  "Swagger.Endpoint.InterventionTeamEquipment.Activate.Summary": "Activate intervention team equipment association",
+  "Swagger.Endpoint.InterventionTeamEquipment.Deactivate.Summary": "Deactivate intervention team equipment association",
+  "Swagger.Endpoint.InterventionTeamEquipment.BulkUpload.Summary": "Bulk upload intervention team equipment associations"
 }

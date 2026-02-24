@@ -68,6 +68,7 @@ using VianaHub.Global.Gerit.Domain.Validators.Business.TeamMembersTeam;
 using VianaHub.Global.Gerit.Domain.Validators.Business.InterventionTeam;
 using VianaHub.Global.Gerit.Domain.Interfaces.Base;
 using VianaHub.Global.Gerit.Domain.Validators.Business.InterventionTeamVehicle;
+using VianaHub.Global.Gerit.Domain.Validators.Business.InterventionTeamEquipment;
 
 namespace VianaHub.Global.Gerit.Infra.IoC;
 
@@ -117,6 +118,7 @@ public static class DependencyInjection
         services.AddScoped<IEntityDomainValidator<TeamMembersTeamEntity>, TeamMembersTeamValidator>();
         services.AddScoped<IEntityDomainValidator<InterventionTeamEntity>, InterventionTeamValidator>();
         services.AddScoped<IEntityDomainValidator<InterventionTeamVehicleEntity>, InterventionTeamVehicleValidator>();
+        services.AddScoped<IEntityDomainValidator<InterventionTeamEquipmentEntity>, InterventionTeamEquipmentValidator>();
 
         // Application - Common Services
         services.AddScoped<IFileValidationService, FileValidationService>();
@@ -152,6 +154,7 @@ public static class DependencyInjection
         services.AddScoped<IJobAppService, JobAppService>();
         services.AddScoped<IJwtKeyAppService, JwtKeyAppService>();
         services.AddScoped<IInterventionTeamVehiclesAppService, InterventionTeamVehicleAppService>();
+        services.AddScoped<IInterventionTeamEquipmentsAppService, InterventionTeamEquipmentAppService>();
 
         // Domain
         services.AddScoped<IUserRoleDomainService, UserRoleDomainService>();
@@ -184,6 +187,7 @@ public static class DependencyInjection
         services.AddScoped<IInterventionDomainService, InterventionDomainService>();
         services.AddScoped<IStatusTypeDomainService, StatusTypeDomainService>();
         services.AddScoped<IInterventionTeamVehicleDomainService, InterventionTeamVehicleDomainService>();
+        services.AddScoped<IInterventionTeamEquipmentDomainService, InterventionTeamEquipmentDomainService>();
 
         // Infra.Data - Repositories
         services.AddScoped<IAddressTypeDataRepository, AddressTypeDataRepository>();
@@ -217,6 +221,7 @@ public static class DependencyInjection
         services.AddScoped<IJobDefinitionDataRepository, JobDefinitionDataRepository>();
         services.AddScoped<IInterventionTeamDataRepository, InterventionTeamDataRepository>();
         services.AddScoped<IInterventionTeamVehicleDataRepository, InterventionTeamVehicleDataRepository>();
+        services.AddScoped<IInterventionTeamEquipmentDataRepository, InterventionTeamEquipmentDataRepository>();
 
         // Infra.Messaging (Email sender no-op por enquanto)
         services.AddScoped<IEmailSender, NoOpEmailSender>();

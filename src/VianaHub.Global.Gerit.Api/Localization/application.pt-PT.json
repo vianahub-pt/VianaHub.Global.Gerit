@@ -173,5 +173,23 @@
   "Application.Service.InterventionTeamVehicle.ValidateBulkItem.Name": "O nome é obrigatório",
   "Application.Service.InterventionTeamVehicle.ValidateBulkItem.Description": "A descrição é obrigatória",
   "Application.Service.InterventionTeamVehicle.GetById.ResourceNotFound": "Associação intervenção-vehículo não encontrada ou inactiva",
-  "Application.Service.InterventionTeamVehicle.ValidateBulkItem.InterventionTeamId": "O ID da intervenção é obrigatório para a intervenção veículo {0}"
+  "Application.Service.InterventionTeamVehicle.ValidateBulkItem.InterventionTeamId": "O ID da intervenção é obrigatório para a intervenção {0}",
+  "Application.Service.InterventionTeamVehicle.ValidateBulkItem.VehicleId": "O ID do veículo é obrigatório para o veículo {0}",
+
+  // Add InterventionTeamEquipment keys
+  "Application.Service.InterventionTeamEquipment.GetById.ResourceNotFound": "Associação intervenção-veículo não encontrada ou inativa",
+  "Application.Service.InterventionTeamEquipment.Create.ResourceAlreadyExists": "Associação entre a intervenção {0} e o equipamento {1} já existe",
+  "Application.Service.InterventionTeamEquipment.Update.ResourceNotFound": "Associação intervenção-equipment não encontrada",
+  "Application.Service.InterventionTeamEquipment.Activate.ResourceNotFound": "Associação intervenção-equipment não encontrada",
+  "Application.Service.InterventionTeamEquipment.Deactivate.ResourceNotFound": "Associação intervenção-equipment não encontrada",
+  "Application.Service.InterventionTeamEquipment.Delete.ResourceNotFound": "Associação intervenção-equipment não encontrada",
+  "Application.Service.InterventionTeamEquipment.BulkUpload.EmptyFile": "Ficheiro vazio",
+  "Application.Service.InterventionTeamEquipment.ReadCsvFile.InvalidDelimiter": "O delimitador do ficheiro CSV deve ser ;",
+  "Application.Service.InterventionTeamEquipment.ReadCsvFile.CsvHelperException": "Erro ao processar a linha {0} do CSV",
+  "Application.Service.InterventionTeamEquipment.ReadCsvFile.MaxRows": "Número máximo de linhas ({0}) excedido",
+  "Application.Service.InterventionTeamEquipment.ReadCsvFile.Exception": "Erro ao ler o ficheiro CSV",
+  "Application.Service.InterventionTeamEquipment.ProcessBulkItems.ExistsByInterventionAndEquipment": "Associação entre a intervenção {0} e o equipamento {1} já existe",
+  "Application.Service.InterventionTeamEquipment.ProcessBulkItems.FailedToCreate": "Falha ao criar a associação para a intervenção {0} e o equipamento {1}",
+  "Application.Service.InterventionTeamEquipment.ValidateBulkItem.InterventionTeamId": "O ID da intervenção é obrigatório para a intervenção {0}",
+  "Application.Service.InterventionTeamEquipment.ValidateBulkItem.EquipmentId": "O ID do equipamento é obrigatório para o equipamento {0}"
 }

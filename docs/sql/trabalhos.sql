@@ -19,18 +19,18 @@ select * from dbo.ClientContacts;			--
 select * from dbo.Functions;				--
 select * from dbo.EquipmentTypes;			--
 select * from dbo.Equipments;				--
+select * from dbo.Teams;					--
 select * from dbo.TeamMembers;				--
+select * from dbo.TeamMembersTeams;			--
 select * from dbo.TeamMemberAddresses;		--
 select * from dbo.TeamMemberContacts;		--
 select * from dbo.Interventions;			--
 select * from dbo.InterventionAddresses;	--
 select * from dbo.InterventionContacts;		--
-select * from dbo.Vehicles;					--
-select * from dbo.Teams;					--
-select * from dbo.TeamMembersTeams;			--
 select * from dbo.InterventionTeams;		--
 select * from dbo.InterventionTeamVehicles;	--
-select * from dbo.InterventionTeamEquipments;
+select * from dbo.InterventionTeamEquipments;--
+select * from dbo.Vehicles;					--
 
 select * from dbo.FileTypes;
 select * from dbo.PlanFileRules;
