@@ -202,6 +202,17 @@ public class AuthAppService : IAuthAppService
             return null;
         }
 
+        // Atualizar LastAccessAt do usuário (não bloquear login em caso de falha)
+        try
+        {
+            user.UpdateLastAccess();
+            await _userRepo.UpdateAsync(user, ct);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Falha ao atualizar LastAccessAt para o usuário {UserId}", user.Id);
+        }
+
         var refreshTokenValue = GenerateRefreshTokenValue();
 
         var refreshTokenEntity = new RefreshTokenEntity(user.TenantId, user.Id, refreshTokenValue, DateTime.UtcNow.AddDays(_jwtSettings.RefreshTokenExpirationDays), user.Id);
