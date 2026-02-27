@@ -107,46 +107,43 @@ public static class SwaggerSetup
     /// </summary>
     public static void UseSwaggerConfiguration(this WebApplication app)
     {
-        if (app.Environment.IsDevelopment())
+        // ✅ Adiciona o middleware de localização do Swagger ANTES do UseSwagger
+        app.UseMiddleware<Middleware.SwaggerLocalizationMiddleware>(
+            new List<string> { "pt-PT", "en-US", "es-ES" }
+        );
+
+        app.UseSwagger(c =>
         {
-            // ✅ Adiciona o middleware de localização do Swagger ANTES do UseSwagger
-            app.UseMiddleware<Middleware.SwaggerLocalizationMiddleware>(
-                new List<string> { "pt-PT", "en-US", "es-ES" }
-            );
-
-            app.UseSwagger(c =>
+            // Desabilita autenticação para o endpoint do Swagger em desenvolvimento
+            c.PreSerializeFilters.Add((swaggerDoc, httpReq) =>
             {
-                // Desabilita autenticação para o endpoint do Swagger em desenvolvimento
-                c.PreSerializeFilters.Add((swaggerDoc, httpReq) =>
+                // Remove autenticação do próprio Swagger para evitar erro de chaves JWT
+                if (httpReq.Path.StartsWithSegments("/swagger"))
                 {
-                    // Remove autenticação do próprio Swagger para evitar erro de chaves JWT
-                    if (httpReq.Path.StartsWithSegments("/swagger"))
-                    {
-                        swaggerDoc.SecurityRequirements.Clear();
-                    }
-                });
+                    swaggerDoc.SecurityRequirements.Clear();
+                }
             });
-            app.UseSwaggerUI(options =>
-            {
-                // Tenta obter o serviço de localização do provider da aplicação
-                var localization = app.Services.GetService<ILocalizationService>();
+        });
+        app.UseSwaggerUI(options =>
+        {
+            // Tenta obter o serviço de localização do provider da aplicação
+            var localization = app.Services.GetService<ILocalizationService>();
 
-                // Endpoint name (exibido no seletor) via tradução
-                var endpointName = localization?.GetMessage("Swagger.UI.EndpointName", "v1") ?? "Swagger.UI.EndpointName";
-                options.SwaggerEndpoint("/swagger/v1/swagger.json", endpointName);
-                options.RoutePrefix = "swagger";
+            // Endpoint name (exibido no seletor) via tradução
+            var endpointName = localization?.GetMessage("Swagger.UI.EndpointName", "v1") ?? "Swagger.UI.EndpointName";
+            options.SwaggerEndpoint("/swagger/v1/swagger.json", endpointName);
+            options.RoutePrefix = "swagger";
 
-                options.DocumentTitle = localization?.GetMessage("Swagger.UI.DocumentTitle") ?? "Swagger.UI.DocumentTitle";
-                options.DisplayRequestDuration();
-                options.EnableDeepLinking();
-                options.EnableFilter();
-                options.ShowExtensions();
-                options.EnableValidator();
+            options.DocumentTitle = localization?.GetMessage("Swagger.UI.DocumentTitle") ?? "Swagger.UI.DocumentTitle";
+            options.DisplayRequestDuration();
+            options.EnableDeepLinking();
+            options.EnableFilter();
+            options.ShowExtensions();
+            options.EnableValidator();
 
-                // ✅ Injeta os arquivos CSS e JS customizados para o seletor de idiomas
-                options.InjectStylesheet("/swagger-ui/custom.css");
-                options.InjectJavascript("/swagger-ui/custom.js");
-            });
-        }
+            // ✅ Injeta os arquivos CSS e JS customizados para o seletor de idiomas
+            options.InjectStylesheet("/swagger-ui/custom.css");
+            options.InjectJavascript("/swagger-ui/custom.js");
+        });
     }
 }
