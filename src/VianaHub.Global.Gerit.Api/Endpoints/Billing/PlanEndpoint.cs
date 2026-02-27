@@ -132,6 +132,7 @@ public static class PlanEndpoint
         .WithSummary("Swagger.Endpoint.Plan.BulkUpload.Summary")
         .DisableAntiforgery()
         .Accepts<IFormFile>("multipart/form-data")
+        .Accepts<IFormFile>("multipart/form-data")
         .Produces(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status400BadRequest)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);

@@ -194,6 +194,8 @@
   "Api.Middleware.GlobalException.JsonException.Error.JsonTooManyLevels": "JSON has too many nesting levels",
   "Api.Middleware.GlobalException.JsonException.Error.JsonInvalidPropertyName": "JSON contains an invalid property name",
   "Api.Middleware.GlobalException.JsonException.Error.JsonIncomplete": "JSON is incomplete",
+  "Api.Middleware.GlobalException.JsonException.Error.JsonGeneric": "JSON is invalid",
+
 
   "Api.Validator.InterventionAddress.Create.InterventionId": "Intervention ID is required",
   "Api.Validator.InterventionAddress.Create.AddressTypeId": "Address type ID is required",
