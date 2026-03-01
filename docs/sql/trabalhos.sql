@@ -9,6 +9,7 @@ select * from dbo.Roles;				--
 select * from dbo.UserRoles;			--
 select * from dbo.RolePermissions order by ResourceId;		--
 select * from dbo.JwtKeys;
+select * from dbo.JobDefinitions;
 ------------------------------
 select * from dbo.StatusTypes;				--
 select * from dbo.Status;					--

@@ -70,31 +70,42 @@ public class TenantSessionConnectionInterceptor : DbConnectionInterceptor
         }
 
         // Em Development, se não há usuário authenticated, habilita IsSuperAdmin automaticamente
-        if (_environment.IsDevelopment() && (user?.Identity is not { IsAuthenticated: true }))
+        //if (_environment.IsDevelopment() && (user?.Identity is not { IsAuthenticated: true }))
+        //{
+        //    // Antes de setar o SuperAdmin automático, verificar se há cabeçalhos de fallback (apenas em Development)
+        //    var headers = httpContext.Request.Headers;
+        //    if (headers != null && (headers.ContainsKey("x-tenant-id") || headers.ContainsKey("x-super-admin")))
+        //    {
+        //        // Use header values se presentes
+        //        int tenantFromHeader = 0;
+        //        bool superAdminFromHeader = false;
+
+        //        if (headers.TryGetValue("x-tenant-id", out var headerTenant))
+        //            int.TryParse(headerTenant.ToString(), out tenantFromHeader);
+
+        //        if (headers.TryGetValue("x-super-admin", out var headerSuper))
+        //            bool.TryParse(headerSuper.ToString(), out superAdminFromHeader);
+
+        //        _logger.LogInformation("?? [RLS] Development mode with header fallback. Using x-tenant-id={Tenant}, x-super-admin={Super}", tenantFromHeader, superAdminFromHeader);
+
+        //        await SetSessionContextFromValuesAsync(connection, tenantFromHeader, superAdminFromHeader, cancellationToken);
+        //        return;
+        //    }
+
+        //    _logger.LogInformation("?? [RLS] Development mode without authentication. Setting SuperAdmin context for local debugging.");
+        //    await SetDevelopmentSuperAdminContextAsync(connection, cancellationToken);
+        //    return;
+        //}
+
+        if (user?.Identity is not { IsAuthenticated: true })
         {
-            // Antes de setar o SuperAdmin automático, verificar se há cabeçalhos de fallback (apenas em Development)
             var headers = httpContext.Request.Headers;
-            if (headers != null && (headers.ContainsKey("x-tenant-id") || headers.ContainsKey("x-super-admin")))
+            if (headers.TryGetValue("x-tenant-id", out var headerTenant))
             {
-                // Use header values se presentes
-                int tenantFromHeader = 0;
-                bool superAdminFromHeader = false;
-
-                if (headers.TryGetValue("x-tenant-id", out var headerTenant))
-                    int.TryParse(headerTenant.ToString(), out tenantFromHeader);
-
-                if (headers.TryGetValue("x-super-admin", out var headerSuper))
-                    bool.TryParse(headerSuper.ToString(), out superAdminFromHeader);
-
-                _logger.LogInformation("?? [RLS] Development mode with header fallback. Using x-tenant-id={Tenant}, x-super-admin={Super}", tenantFromHeader, superAdminFromHeader);
-
-                await SetSessionContextFromValuesAsync(connection, tenantFromHeader, superAdminFromHeader, cancellationToken);
+                int.TryParse(headerTenant.ToString(), out var tenantFromHeader);
+                await SetSessionContextFromValuesAsync(connection, tenantFromHeader, false, cancellationToken);
                 return;
             }
-
-            _logger.LogInformation("?? [RLS] Development mode without authentication. Setting SuperAdmin context for local debugging.");
-            await SetDevelopmentSuperAdminContextAsync(connection, cancellationToken);
-            return;
         }
 
         if (user?.Identity is not { IsAuthenticated: true })
