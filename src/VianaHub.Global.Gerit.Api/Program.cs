@@ -42,7 +42,6 @@ public class Program
         builder.Host.UseSerilog();
         builder.Services.AddHttpContextAccessor();
         builder.Services.AddScoped<TenantSessionConnectionInterceptor>();
-        builder.Services.AddScoped<TenantSessionCommandInterceptor>();
         builder.Services.AddScoped<TelemetryInterceptor>();
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwagger(builder.Configuration, builder.Environment);
@@ -51,10 +50,14 @@ public class Program
         builder.Services.AddDbContext<GeritDbContext>((serviceProvider, options) =>
         {
             options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+
             var tenantInterceptor = serviceProvider.GetRequiredService<TenantSessionConnectionInterceptor>();
-            var tenantCommandInterceptor = serviceProvider.GetRequiredService<TenantSessionCommandInterceptor>();
             var telemetryInterceptor = serviceProvider.GetRequiredService<TelemetryInterceptor>();
-            options.AddInterceptors(tenantInterceptor, tenantCommandInterceptor, telemetryInterceptor);
+
+            options.AddInterceptors(
+                tenantInterceptor,
+                telemetryInterceptor
+            );
         });
         builder.Services.AddJwt(builder.Configuration);
         builder.Services.AddRouteValidatorSetup();
