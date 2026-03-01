@@ -42,12 +42,9 @@ public class TenantSessionConnectionInterceptor : DbConnectionInterceptor
         // ??? SEGURANÇA: Se não há HttpContext E não é um job em background, algo está errado
         if (_httpContextAccessor.HttpContext == null)
         {
-            _logger.LogWarning(
-                "?? [RLS] Connection opened without HttpContext and outside background job context. " +
-                "This may indicate a migration, test, or console app. RLS will NOT be bypassed for security.");
+            _logger.LogInformation("[RLS] No HttpContext. Assuming background job. Enabling SuperAdmin session context.");
 
-            // NÃO configura SuperAdmin - deixa o RLS bloquear por segurança
-            // Se for uma migração/seed legítima, deve configurar o contexto manualmente
+            await SetDevelopmentSuperAdminContextAsync(connection, cancellationToken);
             return;
         }
 
