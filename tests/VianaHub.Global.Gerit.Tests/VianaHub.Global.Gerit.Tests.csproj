@@ -10,6 +10,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Infra\Caching\**" />
+    <Compile Remove="Infra\Messaging\**" />
+    <Compile Remove="Validators\**" />
+    <EmbeddedResource Remove="Infra\Caching\**" />
+    <EmbeddedResource Remove="Infra\Messaging\**" />
+    <EmbeddedResource Remove="Validators\**" />
+    <None Remove="Infra\Caching\**" />
+    <None Remove="Infra\Messaging\**" />
+    <None Remove="Validators\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="coverlet.collector" Version="6.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
     <PackageReference Include="xunit" Version="2.9.3" />
@@ -25,7 +37,7 @@
     <Using Include="Xunit" />
   </ItemGroup>
 
-  <ItemGroup> <Folder Include="Domain\" /> <Folder Include="Infra\" /> <Folder Include="Infra\\Caching\" /> <Folder Include="Infra\\Data\" /> <Folder Include="Infra\\Integration\" /> <Folder Include="Infra\\Messaging\" /> <Folder Include="Validators\" /> </ItemGroup>
+  <ItemGroup> <Folder Include="Api\Validators\" /> <Folder Include="Domain\" />  <Folder Include="Infra\Data\" /> <Folder Include="Infra\Integration\" /> <Folder Include="Infra\Job\" /> <Folder Include="Infra\\Data\" /> <Folder Include="Infra\\Integration\" />  <Folder Include="Domain\" /> </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\VianaHub.Global.Gerit.Api\VianaHub.Global.Gerit.Api.csproj" />

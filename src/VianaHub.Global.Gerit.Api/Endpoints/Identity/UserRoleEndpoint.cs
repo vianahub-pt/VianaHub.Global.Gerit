@@ -17,7 +17,7 @@ public static class UserRoleEndpoint
     {
         var groupV1 = app.MapGroup("/v1/userroles").WithTags("UserRoles").WithGroupName("v1").RequireAuthorization();
 
-        groupV1.MapGet("/all", async (IUserRoleAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapGet("/", async (IUserRoleAppService appService, INotify notify, CancellationToken ct) =>
         {
             var result = await appService.GetAllAsync(ct);
             return notify.CustomResponse(result, 200);
