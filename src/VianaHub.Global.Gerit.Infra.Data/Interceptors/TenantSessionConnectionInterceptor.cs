@@ -49,6 +49,15 @@ public class TenantSessionConnectionInterceptor : DbConnectionInterceptor
         }
 
         var httpContext = _httpContextAccessor.HttpContext;
+
+        if (httpContext != null &&
+            httpContext.Request.Path.StartsWithSegments("/hangfire"))
+        {
+            _logger.LogInformation("[RLS] Hangfire dashboard detected. Forcing SuperAdmin session context.");
+            await SetSessionContextFromValuesAsync(connection, 0, true, cancellationToken);
+            return;
+        }
+
         var user = httpContext.User;
 
         // ?? LOG DETALHADO PARA DEBUG
