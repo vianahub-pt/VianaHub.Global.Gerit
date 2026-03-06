@@ -85,6 +85,10 @@ public static class DependencyInjection
         // Notificações (Scoped para manter estado durante a requisição)
         services.AddScoped<INotify, Notify>();
 
+        // Contexto de Tenant para requests não autenticados (ex: login, register)
+        // Scoped: vive durante o ciclo de vida do request HTTP
+        services.AddScoped<IRequestTenantContext, RequestTenantContext>();
+
         // Validators (Scoped)
         services.AddScoped<IValidator<UserRoleEntity>, UserRoleValidator>();
         services.AddScoped<IValidator<RolePermissionEntity>, RolePermissionValidator>();

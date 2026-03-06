@@ -38,6 +38,7 @@ public class AuthAppService : IAuthAppService
     private readonly IUserRoleDataRepository _userRoleRepo;
     private readonly IRolePermissionDataRepository _rolePermissionRepo;
     private readonly ISubscriptionDomainService _subscriptionDomain;
+    private readonly IRequestTenantContext _requestTenantContext;
 
     public AuthAppService(
         IUserDataRepository userRepo,
@@ -54,7 +55,8 @@ public class AuthAppService : IAuthAppService
         ISecretProvider secretProvider,
         ISubscriptionDomainService subscriptionDomain,
         IUserRoleDataRepository userRoleRepo,
-        IRolePermissionDataRepository rolePermissionRepo)
+        IRolePermissionDataRepository rolePermissionRepo,
+        IRequestTenantContext requestTenantContext)
     {
         _userRepo = userRepo;
         _refreshRepo = refreshRepo;
@@ -71,6 +73,7 @@ public class AuthAppService : IAuthAppService
         _subscriptionDomain = subscriptionDomain;
         _userRoleRepo = userRoleRepo;
         _rolePermissionRepo = rolePermissionRepo;
+        _requestTenantContext = requestTenantContext;
     }
 
     public async Task<AuthResponse> RegisterAsync(RegisterRequest request, CancellationToken ct)
@@ -82,15 +85,8 @@ public class AuthAppService : IAuthAppService
             return null;
         }
 
-        // Definir contexto do tenant para RLS
-        try
-        {
-            await _dbContext.SetTenantContextAsync(request.TenantId, ct);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Erro ao setar tenant context");
-        }
+        // Propaga o TenantId para o interceptor ANTES de qualquer query
+        _requestTenantContext.SetTenantId(request.TenantId);
 
         // Verificar se email já existe (no tenant informado)
         var exists = await _userRepo.ExistsByEmailAsync(request.Email, ct);
@@ -117,8 +113,7 @@ public class AuthAppService : IAuthAppService
         // Enviar email de confirmação (NoOp por enquanto)
         await _emailSender.SendAsync(user.Email, "Application.Service.Auth.Email.Confirm.Subject", "Application.Service.Auth.Email.Confirm.Body", user.Name);
 
-        // Limpar contexto tenant
-        try { await _dbContext.ClearTenantContextAsync(ct); } catch { }
+        _requestTenantContext.Clear();
 
         // Retornar sem tokens (login separado)
         return new AuthResponse
@@ -139,15 +134,10 @@ public class AuthAppService : IAuthAppService
             return null;
         }
 
-        // Set tenant context for RLS
-        try
-        {
-            await _dbContext.SetTenantContextAsync(request.TenantId, ct);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Erro ao setar tenant context");
-        }
+        // Propaga o TenantId para o interceptor ANTES de qualquer query.
+        // Os interceptors TenantSessionConnectionInterceptor e TenantSessionCommandInterceptor
+        // irão ler este valor e setar o SESSION_CONTEXT do SQL Server automaticamente.
+        _requestTenantContext.SetTenantId(request.TenantId);
 
         var user = await _userRepo.GetByEmailAsync(request.Email, ct);
         if (user == null)
@@ -218,7 +208,7 @@ public class AuthAppService : IAuthAppService
         var refreshTokenEntity = new RefreshTokenEntity(user.TenantId, user.Id, refreshTokenValue, DateTime.UtcNow.AddDays(_jwtSettings.RefreshTokenExpirationDays), user.Id);
         await _refreshRepo.AddAsync(refreshTokenEntity);
 
-        try { await _dbContext.ClearTenantContextAsync(ct); } catch { }
+        _requestTenantContext.Clear();
 
         return new AuthResponse
         {
@@ -241,14 +231,8 @@ public class AuthAppService : IAuthAppService
             return null;
         }
 
-        try
-        {
-            await _dbContext.SetTenantContextAsync(request.TenantId, ct);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Erro ao setar tenant context");
-        }
+        // Propaga o TenantId para o interceptor ANTES de qualquer query
+        _requestTenantContext.SetTenantId(request.TenantId);
 
         var tokenEntity = await _refreshRepo.GetByTokenAsync(request.RefreshToken, request.TenantId);
         if (tokenEntity == null || !tokenEntity.IsActive())
@@ -305,7 +289,7 @@ public class AuthAppService : IAuthAppService
 
         var accessToken = await GenerateAccessTokenAsync(user, isTrial, ct);
 
-        try { await _dbContext.ClearTenantContextAsync(ct); } catch { }
+        _requestTenantContext.Clear();
 
         return new AuthResponse
         {

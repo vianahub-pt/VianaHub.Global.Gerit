@@ -42,6 +42,7 @@ public class Program
         builder.Host.UseSerilog();
         builder.Services.AddHttpContextAccessor();
         builder.Services.AddScoped<TenantSessionConnectionInterceptor>();
+        builder.Services.AddScoped<TenantSessionCommandInterceptor>();
         builder.Services.AddScoped<TelemetryInterceptor>();
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwagger(builder.Configuration, builder.Environment);
@@ -51,11 +52,13 @@ public class Program
         {
             options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 
-            var tenantInterceptor = serviceProvider.GetRequiredService<TenantSessionConnectionInterceptor>();
+            var tenantConnectionInterceptor = serviceProvider.GetRequiredService<TenantSessionConnectionInterceptor>();
+            var tenantCommandInterceptor = serviceProvider.GetRequiredService<TenantSessionCommandInterceptor>();
             var telemetryInterceptor = serviceProvider.GetRequiredService<TelemetryInterceptor>();
 
             options.AddInterceptors(
-                tenantInterceptor,
+                tenantConnectionInterceptor,
+                tenantCommandInterceptor,
                 telemetryInterceptor
             );
         });
