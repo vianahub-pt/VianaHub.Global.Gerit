@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using VianaHub.Global.Gerit.Application.Configuration;
 using VianaHub.Global.Gerit.Domain.Interfaces.Base;
@@ -99,8 +100,46 @@ public static class JwtSetup
 
                     try
                     {
-                        // NOTA: Como não temos TenantId no contexto ainda, buscar todas as chaves ativas
-                        // Em produção, isso pode ser otimizado com cache ou busca por tenant específico
+                        // ---------------------------------------------------------------
+                        // PASSO CRÍTICO: Extrair tenant_id do token SEM validá-lo ainda.
+                        //
+                        // O token ainda não foi validado neste evento — o usuário não está
+                        // autenticado. Por isso os interceptores EF Core não conseguem
+                        // resolver o TenantId via JWT claim, e o SESSION_CONTEXT do SQL
+                        // Server fica vazio, fazendo o RLS bloquear a query em dbo.JwtKeys.
+                        //
+                        // Solução: decodificar o payload do JWT (sem verificar assinatura)
+                        // apenas para ler o tenant_id, e populá-lo no IRequestTenantContext
+                        // para que os interceptores consigam definir o SESSION_CONTEXT antes
+                        // de executar qualquer query no banco.
+                        // ---------------------------------------------------------------
+                        var rawToken = context.Request.Headers.Authorization
+                            .FirstOrDefault()?.Replace("Bearer ", string.Empty, StringComparison.OrdinalIgnoreCase)
+                            ?? context.Token;
+
+                        if (!string.IsNullOrWhiteSpace(rawToken))
+                        {
+                            var requestTenantContext = context.HttpContext.RequestServices
+                                .GetRequiredService<IRequestTenantContext>();
+
+                            var tenantId = ExtractTenantIdFromRawToken(rawToken, logger);
+                            if (tenantId.HasValue)
+                            {
+                                requestTenantContext.SetTenantId(tenantId.Value);
+                                logger.LogDebug(
+                                    "[JWT] TenantId={TenantId} extraído do token (pré-validação) e definido no IRequestTenantContext",
+                                    tenantId.Value);
+                            }
+                            else
+                            {
+                                logger.LogWarning("[JWT] Não foi possível extrair tenant_id do token antes da validação. RLS pode bloquear a busca de chaves.");
+                            }
+                        }
+
+                        // ---------------------------------------------------------------
+                        // Buscar chaves do banco — agora com SESSION_CONTEXT corretamente
+                        // definido pelos interceptores EF Core.
+                        // ---------------------------------------------------------------
                         var allKeys = await keyRepository.GetAllAsync(default);
                         var keys = allKeys.Where(k => k.IsValidForValidation());
 
@@ -202,6 +241,46 @@ public static class JwtSetup
         });
 
         return services;
+    }
+
+    /// <summary>
+    /// Decodifica o payload do JWT sem validar a assinatura para extrair o tenant_id.
+    /// Utilizado exclusivamente no evento OnMessageReceived, antes da validação completa
+    /// do token, para permitir que os interceptores EF Core configurem o SESSION_CONTEXT
+    /// do SQL Server e assim o RLS não bloqueie a query de busca de chaves.
+    ///
+    /// SEGURANÇA: Este método NÃO valida a assinatura, expiração ou qualquer outra claim.
+    /// O tenant_id extraído aqui é usado APENAS para configurar o SESSION_CONTEXT antes
+    /// de buscar as chaves públicas — a validação real do token ocorre logo em seguida
+    /// pelo framework com as chaves carregadas do banco.
+    /// </summary>
+    private static int? ExtractTenantIdFromRawToken(string rawToken, ILogger logger)
+    {
+        try
+        {
+            var handler = new JsonWebTokenHandler();
+
+            // Lê o token sem validar — apenas para inspecionar o payload
+            var jwt = handler.ReadJsonWebToken(rawToken);
+            if (jwt is null)
+                return null;
+
+            // Tenta as três variações de nome da claim
+            var tenantClaim = jwt.TryGetClaim("tenant_id", out var c1) ? c1.Value
+                            : jwt.TryGetClaim("tenantId", out var c2) ? c2.Value
+                            : jwt.TryGetClaim("tenant", out var c3) ? c3.Value
+                            : null;
+
+            if (tenantClaim is not null && int.TryParse(tenantClaim, out var tenantId))
+                return tenantId;
+
+            return null;
+        }
+        catch (Exception ex)
+        {
+            logger.LogDebug(ex, "[JWT] Falha ao decodificar token para extração do tenant_id (pré-validação)");
+            return null;
+        }
     }
 
     /// <summary>
