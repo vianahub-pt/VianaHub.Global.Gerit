@@ -72,6 +72,23 @@ public static class JwtSetup
             {
                 OnMessageReceived = async context =>
                 {
+                    var path = context.HttpContext.Request.Path;
+
+                    // 🔥 IGNORAR HANGFIRE
+                    if (path.StartsWithSegments("/hangfire"))
+                    {
+                        context.NoResult();
+                        return;
+                    }
+
+                    // 🔥 SE NÃO TEM TOKEN, NÃO TENTE VALIDAR
+                    var authHeader = context.Request.Headers["Authorization"].FirstOrDefault();
+                    if (string.IsNullOrWhiteSpace(authHeader) || !authHeader.StartsWith("Bearer "))
+                    {
+                        context.NoResult();
+                        return;
+                    }
+
                     // Aqui temos acesso ao HttpContext e podemos resolver chaves corretamente
                     var keyRepository = context.HttpContext.RequestServices
                         .GetRequiredService<IJwtKeyDataRepository>();
