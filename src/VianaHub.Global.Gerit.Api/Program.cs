@@ -75,7 +75,12 @@ public class Program
         builder.Services.AddRateLimitingConfiguration(builder.Configuration);
         builder.Services.AddCorsConfiguration(builder.Configuration);
 
-        // Hangfire configuration - usa conexão separada se fornecida (HangfireConnection)
+        // Configuração do dashboard Hangfire (Basic Auth)
+        builder.Services.Configure<HangfireDashboardSettings>(
+            builder.Configuration.GetSection("HangfireDashboard"));
+        builder.Services.AddTransient<HangfireDashboardAuthorizationFilter>();
+
+        // Hangfire configuration - usa conex?o separada se fornecida (HangfireConnection)
         var hangfireConn = builder.Configuration.GetConnectionString("HangfireConnection")
                           ?? builder.Configuration.GetConnectionString("DefaultConnection");
 
@@ -158,10 +163,10 @@ public class Program
         app.UseAuthentication();
         app.UseAuthorization();
 
-        // Hangfire dashboard (protegido por autorização em produção)
+        // Hangfire dashboard (protegido por Basic Auth - configurável via appsettings Hangfire)
         app.UseHangfireDashboard("/hangfire", new DashboardOptions
         {
-            Authorization = new[] { new HangfireDashboardAuthorizationFilter() }
+            Authorization = new[] { app.Services.GetRequiredService<HangfireDashboardAuthorizationFilter>() }
         });
 
         // Registro automático de todos os endpoints via reflexão
