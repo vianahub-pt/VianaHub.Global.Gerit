@@ -1,23 +1,38 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore.Diagnostics;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System.Data.Common;
-using System.Data;
+using VianaHub.Global.Gerit.Domain.Interfaces.Base;
 
 namespace VianaHub.Global.Gerit.Infra.Data.Interceptors;
 
+/// <summary>
+/// Interceptor de comando responsável por garantir que o SESSION_CONTEXT do SQL Server
+/// tenha o TenantId correto antes de cada execução de comando.
+///
+/// Necessário porque conexões do pool podem ser reutilizadas entre requests distintos.
+/// A lógica de resolução do TenantId é idêntica à do TenantSessionConnectionInterceptor:
+///   1. Usuário autenticado  ? claim 'tenant_id' do JWT
+///   2. Usuário não autenticado (ex: login) ? IRequestTenantContext (populado pelo AppService a partir do body)
+///   3. Nenhuma das anteriores ? não seta SESSION_CONTEXT; RLS bloqueia o acesso
+///
+/// IMPORTANTE: A aplicação NUNCA seta IsSuperAdmin no SESSION_CONTEXT.
+/// O TenantId passado é sempre o do tenant autenticado ou do body da requisição.
+/// </summary>
 public class TenantSessionCommandInterceptor : DbCommandInterceptor
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
-    private readonly IHostEnvironment _environment;
+    private readonly IRequestTenantContext _requestTenantContext;
     private readonly ILogger<TenantSessionCommandInterceptor> _logger;
 
-    public TenantSessionCommandInterceptor(IHttpContextAccessor httpContextAccessor, IHostEnvironment environment, ILogger<TenantSessionCommandInterceptor> logger)
+    public TenantSessionCommandInterceptor(
+        IHttpContextAccessor httpContextAccessor,
+        IRequestTenantContext requestTenantContext,
+        ILogger<TenantSessionCommandInterceptor> logger)
     {
         _httpContextAccessor = httpContextAccessor;
-        _environment = environment;
+        _requestTenantContext = requestTenantContext;
         _logger = logger;
     }
 
@@ -27,7 +42,7 @@ public class TenantSessionCommandInterceptor : DbCommandInterceptor
         InterceptionResult<DbDataReader> result,
         CancellationToken cancellationToken = default)
     {
-        await EnsureSessionContextAsync(command, cancellationToken);
+        await EnsureTenantSessionContextAsync(command, cancellationToken);
         return await base.ReaderExecutingAsync(command, eventData, result, cancellationToken);
     }
 
@@ -37,7 +52,7 @@ public class TenantSessionCommandInterceptor : DbCommandInterceptor
         InterceptionResult<object> result,
         CancellationToken cancellationToken = default)
     {
-        await EnsureSessionContextAsync(command, cancellationToken);
+        await EnsureTenantSessionContextAsync(command, cancellationToken);
         return await base.ScalarExecutingAsync(command, eventData, result, cancellationToken);
     }
 
@@ -47,117 +62,105 @@ public class TenantSessionCommandInterceptor : DbCommandInterceptor
         InterceptionResult<int> result,
         CancellationToken cancellationToken = default)
     {
-        await EnsureSessionContextAsync(command, cancellationToken);
+        await EnsureTenantSessionContextAsync(command, cancellationToken);
         return await base.NonQueryExecutingAsync(command, eventData, result, cancellationToken);
     }
 
-    private static bool ParseBoolHeader(string? value)
+    /// <summary>
+    /// Garante que o SESSION_CONTEXT da sessão SQL contenha o TenantId correto
+    /// antes de qualquer comando ser executado.
+    /// Evita recursão verificando se o próprio comando já é um sp_set_session_context.
+    /// </summary>
+    private async Task EnsureTenantSessionContextAsync(DbCommand command, CancellationToken cancellationToken)
     {
-        if (string.IsNullOrWhiteSpace(value))
-            return false;
-
-        if (bool.TryParse(value, out var b))
-            return b;
-
-        // Accept numeric truthy values like "1" or "0"
-        if (int.TryParse(value, out var i))
-            return i != 0;
-
-        // Accept common truthy strings
-        var v = value.Trim().ToLowerInvariant();
-        return v == "yes" || v == "y" || v == "on";
-    }
-
-    private async Task EnsureSessionContextAsync(DbCommand command, CancellationToken cancellationToken)
-    {
-        // Avoid recursion: if the current command already sets session context, skip
-        if (command.CommandText != null && command.CommandText.IndexOf("sp_set_session_context", StringComparison.OrdinalIgnoreCase) >= 0)
+        // Evita recursão infinita: ignora comandos que já são sp_set_session_context
+        if (command.CommandText is not null &&
+            command.CommandText.IndexOf("sp_set_session_context", StringComparison.OrdinalIgnoreCase) >= 0)
             return;
 
         if (command.Connection is not SqlConnection sqlConnection)
             return;
 
-        var httpContext = _httpContextAccessor.HttpContext;
+        var tenantId = ResolveTenantId();
 
-        // If no HttpContext and not Development, skip (safety)
-        if (httpContext == null && !_environment.IsDevelopment())
+        if (tenantId is null)
         {
-            _logger.LogDebug("[RLS] No HttpContext and not Development. Skipping session context setup.");
+            _logger.LogDebug("[RLS] TenantId não resolvido no interceptor de comando. SESSION_CONTEXT não será atualizado.");
             return;
         }
 
-        // Determine tenant and superadmin similar to connection interceptor
-        int tenantValue = 0;
-        var isSuperAdmin = false;
+        await SetTenantSessionContextAsync(sqlConnection, tenantId.Value, cancellationToken);
+    }
 
-        if (httpContext != null)
+    /// <summary>
+    /// Resolve o TenantId para o request atual.
+    /// Prioridade: claim JWT ? IRequestTenantContext (payload do body, ex: login)
+    /// </summary>
+    private int? ResolveTenantId()
+    {
+        var httpContext = _httpContextAccessor.HttpContext;
+
+        if (httpContext is null)
         {
-            var user = httpContext.User;
-            if (user?.Identity is { IsAuthenticated: true })
-            {
-                var tenantIdClaim = user.FindFirst("tenant_id") ?? user.FindFirst("tenant") ?? user.FindFirst("tenantId");
-                var isSuperAdminClaim = user.FindFirst("is_super_admin") ?? user.FindFirst("isSuperAdmin") ?? user.FindFirst("superadmin");
-
-                if (tenantIdClaim is not null && int.TryParse(tenantIdClaim.Value, out var t))
-                    tenantValue = t;
-
-                if (isSuperAdminClaim is not null && bool.TryParse(isSuperAdminClaim.Value, out var s))
-                    isSuperAdmin = s;
-            }
+            _logger.LogDebug("[RLS] Sem HttpContext no interceptor de comando. TenantId não pode ser resolvido.");
+            return null;
         }
 
-        // Development fallback: prefer headers if provided, otherwise force superadmin when unauthenticated
-        if (_environment.IsDevelopment())
+        var user = httpContext.User;
+
+        // 1. Usuário autenticado: TenantId vem exclusivamente do claim do JWT
+        if (user?.Identity?.IsAuthenticated == true)
         {
-            var headers = httpContext?.Request?.Headers;
-            if (headers != null && (headers.ContainsKey("x-tenant-id") || headers.ContainsKey("x-super-admin")))
+            var tenantClaim = user.FindFirst("tenant_id")
+                           ?? user.FindFirst("tenantId")
+                           ?? user.FindFirst("tenant");
+
+            if (tenantClaim is not null && int.TryParse(tenantClaim.Value, out var tenantFromJwt))
             {
-                int tenantFromHeader = 0;
-                bool superAdminFromHeader = false;
-
-                if (headers.TryGetValue("x-tenant-id", out var headerTenant))
-                    int.TryParse(headerTenant.ToString(), out tenantFromHeader);
-
-                if (headers.TryGetValue("x-super-admin", out var headerSuper))
-                    superAdminFromHeader = ParseBoolHeader(headerSuper.ToString());
-
-                tenantValue = tenantFromHeader;
-                isSuperAdmin = superAdminFromHeader;
-
-                _logger.LogDebug("[RLS] Development header fallback applied. TenantId={TenantId}, IsSuperAdmin={IsSuperAdmin}", tenantValue, isSuperAdmin);
+                _logger.LogDebug("[RLS] TenantId resolvido via JWT claim no interceptor de comando: {TenantId}", tenantFromJwt);
+                return tenantFromJwt;
             }
-            else if (httpContext == null || httpContext.User?.Identity is not { IsAuthenticated: true })
-            {
-                isSuperAdmin = true;
-                tenantValue = 0;
-                _logger.LogDebug("[RLS] Development debug path: forcing SuperAdmin session context.");
-            }
+
+            _logger.LogWarning("[RLS] Usuário autenticado sem claim tenant_id válida no token (interceptor de comando).");
+            return null;
         }
 
+        // 2. Usuário não autenticado: TenantId vem do IRequestTenantContext (ex: login)
+        if (_requestTenantContext.TenantId.HasValue)
+        {
+            _logger.LogDebug("[RLS] TenantId resolvido via IRequestTenantContext no interceptor de comando: {TenantId}",
+                _requestTenantContext.TenantId.Value);
+            return _requestTenantContext.TenantId.Value;
+        }
+
+        _logger.LogDebug("[RLS] Request não autenticado sem IRequestTenantContext definido (interceptor de comando). TenantId não resolvido.");
+        return null;
+    }
+
+    /// <summary>
+    /// Executa o sp_set_session_context para definir o TenantId na sessão SQL Server.
+    /// Utiliza parâmetro para evitar SQL injection.
+    /// </summary>
+    private async Task SetTenantSessionContextAsync(SqlConnection connection, int tenantId, CancellationToken cancellationToken)
+    {
         try
         {
-            await using var cmd = sqlConnection.CreateCommand();
-            // Sempre definir o SESSION_CONTEXT para garantir que conexões reusadas do pool sejam atualizadas
-            cmd.CommandText = @"EXEC sp_set_session_context @key=N'IsSuperAdmin', @value=@isSuperAdmin;
-EXEC sp_set_session_context @key=N'TenantId', @value=@tenantId;";
+            await using var cmd = connection.CreateCommand();
+            cmd.CommandText = "EXEC sp_set_session_context @key=N'TenantId', @value=@tenantId;";
 
-            var pSuper = cmd.CreateParameter();
-            pSuper.ParameterName = "@isSuperAdmin";
-            pSuper.Value = isSuperAdmin ? 1 : 0;
-            cmd.Parameters.Add(pSuper);
-
-            var pTenant = cmd.CreateParameter();
-            pTenant.ParameterName = "@tenantId";
-            pTenant.Value = tenantValue;
-            cmd.Parameters.Add(pTenant);
+            var param = cmd.CreateParameter();
+            param.ParameterName = "@tenantId";
+            param.Value = tenantId;
+            cmd.Parameters.Add(param);
 
             await cmd.ExecuteNonQueryAsync(cancellationToken);
 
-            _logger.LogDebug("[RLS] Ensured session context. TenantId={TenantId}, IsSuperAdmin={IsSuperAdmin}", tenantValue, isSuperAdmin);
+            _logger.LogDebug("[RLS] SESSION_CONTEXT TenantId={TenantId} atualizado no interceptor de comando.", tenantId);
         }
         catch (Exception ex)
         {
-            _logger.LogWarning(ex, "[RLS] Failed to ensure session context before command execution");
+            _logger.LogError(ex, "[RLS] Falha ao atualizar SESSION_CONTEXT TenantId={TenantId} no interceptor de comando.", tenantId);
+            throw;
         }
     }
 }
