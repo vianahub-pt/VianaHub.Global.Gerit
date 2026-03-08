@@ -8,6 +8,7 @@ public interface ITenantDataRepository
 {
     Task<TenantEntity> GetByIdAsync(int id, CancellationToken ct);
     Task<IEnumerable<TenantEntity>> GetAllAsync(CancellationToken ct);
+    Task<IEnumerable<TenantEntity>> GetLoginAsync(CancellationToken ct);
     Task<ListPage<TenantEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct);
     Task<bool> ExistsByIdAsync(int id, CancellationToken ct);
     Task<bool> ExistsByNameAsync(string name, CancellationToken ct);

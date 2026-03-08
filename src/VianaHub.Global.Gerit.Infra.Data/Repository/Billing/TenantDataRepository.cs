@@ -21,6 +21,15 @@ public class TenantDataRepository : ITenantDataRepository
         return await _context.Set<TenantEntity>().AsNoTracking().FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted, ct);
     }
 
+    public async Task<IEnumerable<TenantEntity>> GetLoginAsync(CancellationToken ct)
+    {
+        return await _context.Set<TenantEntity>()
+            .AsNoTracking()
+            .Where(x => !x.IsDeleted)
+            .OrderBy(x => x.Name)
+            .ToListAsync(ct);
+    }
+
     public async Task<IEnumerable<TenantEntity>> GetAllAsync(CancellationToken ct)
     {
         return await _context.Set<TenantEntity>()

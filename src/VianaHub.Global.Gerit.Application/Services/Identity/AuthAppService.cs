@@ -1,32 +1,39 @@
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Security.Cryptography;
-using Microsoft.IdentityModel.Tokens;
+using AutoMapper;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using VianaHub.Global.Gerit.Application.Configuration;
-using VianaHub.Global.Gerit.Domain.Helpers;
-using VianaHub.Global.Gerit.Domain.Tools.Notifications;
-using VianaHub.Global.Gerit.Domain.Tools.Cryptography;
-using VianaHub.Global.Gerit.Infra.Data.Context;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text.Json;
-using VianaHub.Global.Gerit.Application.Interfaces.Identity;
-using VianaHub.Global.Gerit.Application.Dtos.Response.Identity.Auth;
+using VianaHub.Global.Gerit.Application.Configuration;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Identity.Auth;
+using VianaHub.Global.Gerit.Application.Dtos.Response.Billing.Tenant;
+using VianaHub.Global.Gerit.Application.Dtos.Response.Identity.Auth;
+using VianaHub.Global.Gerit.Application.Interfaces.Identity;
+using VianaHub.Global.Gerit.Domain.Entities.Billing;
 using VianaHub.Global.Gerit.Domain.Entities.Identity;
+using VianaHub.Global.Gerit.Domain.Helpers;
+using VianaHub.Global.Gerit.Domain.Interfaces.Base;
 using VianaHub.Global.Gerit.Domain.Interfaces.Billing;
 using VianaHub.Global.Gerit.Domain.Interfaces.Identity;
-using VianaHub.Global.Gerit.Domain.Interfaces.Base;
+using VianaHub.Global.Gerit.Domain.Tools.Cryptography;
+using VianaHub.Global.Gerit.Domain.Tools.Notifications;
+using VianaHub.Global.Gerit.Infra.Data.Context;
 
 namespace VianaHub.Global.Gerit.Application.Services.Identity;
 
 public class AuthAppService : IAuthAppService
 {
-    private readonly IUserDataRepository _userRepo;
-    private readonly IRefreshTokenDataRepository _refreshRepo;
-    private readonly IEmailSender _emailSender;
     private readonly INotify _notify;
+    private readonly IMapper _mapper;
+    private readonly IRolePermissionDataRepository _rolePermissionRepo;
+    private readonly IRefreshTokenDataRepository _refreshRepo;
+    private readonly IUserDataRepository _userRepo;
+    private readonly IUserRoleDataRepository _userRoleRepo;
+    private readonly ITenantDataRepository _tenantRepo;
+    private readonly IEmailSender _emailSender;
     private readonly ILocalizationService _localization;
     private readonly ICurrentUserService _currentUser;
     private readonly JwtSettings _jwtSettings;
@@ -35,16 +42,18 @@ public class AuthAppService : IAuthAppService
     private readonly IJwtKeyDataRepository _jwtKeyRepo;
     private readonly GeritDbContext _dbContext;
     private readonly ISecretProvider _secretProvider;
-    private readonly IUserRoleDataRepository _userRoleRepo;
-    private readonly IRolePermissionDataRepository _rolePermissionRepo;
     private readonly ISubscriptionDomainService _subscriptionDomain;
     private readonly IRequestTenantContext _requestTenantContext;
 
     public AuthAppService(
-        IUserDataRepository userRepo,
-        IRefreshTokenDataRepository refreshRepo,
-        IEmailSender emailSender,
         INotify notify,
+        IMapper mapper,
+        IRolePermissionDataRepository rolePermissionRepo,
+        IRefreshTokenDataRepository refreshRepo,
+        IUserDataRepository userRepo,
+        IUserRoleDataRepository userRoleRepo,
+        ITenantDataRepository tenantRepo,
+        IEmailSender emailSender,
         ILocalizationService localization,
         ICurrentUserService currentUser,
         IOptions<JwtSettings> jwtOptions,
@@ -54,14 +63,16 @@ public class AuthAppService : IAuthAppService
         GeritDbContext dbContext,
         ISecretProvider secretProvider,
         ISubscriptionDomainService subscriptionDomain,
-        IUserRoleDataRepository userRoleRepo,
-        IRolePermissionDataRepository rolePermissionRepo,
         IRequestTenantContext requestTenantContext)
     {
-        _userRepo = userRepo;
-        _refreshRepo = refreshRepo;
-        _emailSender = emailSender;
         _notify = notify;
+        _mapper = mapper;
+        _rolePermissionRepo = rolePermissionRepo;
+        _refreshRepo = refreshRepo;
+        _userRepo = userRepo;
+        _userRoleRepo = userRoleRepo;
+        _tenantRepo = tenantRepo;
+        _emailSender = emailSender;
         _localization = localization;
         _currentUser = currentUser;
         _jwtSettings = jwtOptions.Value;
@@ -71,8 +82,6 @@ public class AuthAppService : IAuthAppService
         _dbContext = dbContext;
         _secretProvider = secretProvider;
         _subscriptionDomain = subscriptionDomain;
-        _userRoleRepo = userRoleRepo;
-        _rolePermissionRepo = rolePermissionRepo;
         _requestTenantContext = requestTenantContext;
     }
 
@@ -302,6 +311,13 @@ public class AuthAppService : IAuthAppService
             Email = user.Email,
             Name = user.Name
         };
+    }
+
+    
+    public async Task<IEnumerable<TenantLoginResponse>> GetLoginAsync(CancellationToken ct)
+    {
+        var entities = await _tenantRepo.GetLoginAsync(ct);
+        return _mapper.Map<IEnumerable<TenantLoginResponse>>(entities);
     }
 
     private async Task<(string Token, DateTime ExpiresAt)> GenerateAccessTokenAsync(UserEntity user, bool isTrial, CancellationToken ct)

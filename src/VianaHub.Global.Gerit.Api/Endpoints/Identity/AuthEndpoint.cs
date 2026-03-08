@@ -54,5 +54,18 @@ public static class AuthEndpoint
         .Produces(StatusCodes.Status200OK)
         .Produces(StatusCodes.Status400BadRequest)
         .Produces(StatusCodes.Status401Unauthorized);
+
+        groupV1.MapGet("/tenants", async (IAuthAppService authService, INotify notify, CancellationToken ct) =>
+        {
+            var result = await authService.GetLoginAsync(ct);
+            return notify.CustomResponse(result);
+        })
+        .WithName("Auth.Tenant")
+        .RequireRateLimiting("tenant")
+        .WithValidation<RefreshRequest>()
+        .WithSummary("Swagger.Endpoint.Auth.Tenant.Summary")
+        .Produces(StatusCodes.Status200OK)
+        .Produces(StatusCodes.Status400BadRequest)
+        .Produces(StatusCodes.Status401Unauthorized);
     }
 }
