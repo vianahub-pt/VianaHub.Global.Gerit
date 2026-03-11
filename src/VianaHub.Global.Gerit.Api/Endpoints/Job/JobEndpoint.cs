@@ -16,7 +16,7 @@ public static class JobEndpoint
     {
         var groupV1 = app.MapGroup("/v1/admin/job-definition").WithTags("JobDefinitions").WithGroupName("v1").RequireAuthorization();
 
-        groupV1.MapGet("/{id}", async (int id, IJobAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapGet("/{id}", async ([FromRoute] int id, [FromServices] IJobAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var response = await appService.GetByIdAsync(id, ct);
             return notify.CustomResponse(response, 200);
@@ -29,7 +29,7 @@ public static class JobEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapGet("/paged", async ([AsParameters] JobPagedFilter request, IJobAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapGet("/paged", async ([AsParameters] JobPagedFilter request, [FromServices] IJobAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var response = await appService.GetPagedAsync(request, ct);
             return notify.CustomResponse(response, 200);
@@ -41,7 +41,7 @@ public static class JobEndpoint
         .Produces(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapPost("/", async ([FromBody] CreateJobRequest request, IJobAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapPost("/", async ([FromBody] CreateJobRequest request, [FromServices] IJobAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var created = await appService.CreateAsync(request, ct);
             return notify.CustomResponse(created ? 201 : 400);
@@ -55,7 +55,7 @@ public static class JobEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError)
         .WithValidation<CreateJobRequest>();
 
-        groupV1.MapPut("/{id}", async (int id, [FromBody] UpdateJobRequest request, IJobAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapPut("/{id}", async ([FromRoute] int id, [FromBody] UpdateJobRequest request, [FromServices] IJobAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var updated = await appService.UpdateAsync(id, request, ct);
             return notify.CustomResponse(updated, 200);
@@ -69,7 +69,7 @@ public static class JobEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError)
         .WithValidation<UpdateJobRequest>();
 
-        groupV1.MapPatch("/{id}/activate", async (int id, IJobAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapPatch("/{id}/activate", async ([FromRoute] int id, [FromServices] IJobAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var ok = await appService.ActivateAsync(id, ct);
             return notify.CustomResponse(ok);
@@ -82,7 +82,7 @@ public static class JobEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapPatch("/{id}/deactivate", async (int id, IJobAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapPatch("/{id}/deactivate", async ([FromRoute] int id, [FromServices] IJobAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var ok = await appService.DeactivateAsync(id, ct);
             return notify.CustomResponse(ok);
@@ -95,7 +95,7 @@ public static class JobEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapPost("/{id}/execute", async (int id, IJobAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapPost("/{id}/execute", async ([FromRoute] int id, [FromServices] IJobAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var ok = await appService.ExecuteAsync(id, ct);
             return notify.CustomResponse(ok);
@@ -109,7 +109,7 @@ public static class JobEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapDelete("/{id}", async (int id, IJobAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapDelete("/{id}", async ([FromRoute] int id, [FromServices] IJobAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var ok = await appService.DeleteAsync(id, ct);
             return notify.CustomResponse();

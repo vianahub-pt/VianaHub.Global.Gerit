@@ -239,5 +239,33 @@
   "Api.Validator.InterventionContact.Update.Email": "Email is required",
   "Api.Validator.InterventionContact.Update.Email.MaximumLength": "Email must be at most {0} characters",
   "Api.Validator.InterventionContact.Update.Email.Invalid": "Invalid email",
-  "Api.Validator.InterventionContact.Update.Phone.MaximumLength": "Phone must be at most {0} characters"
+  "Api.Validator.InterventionContact.Update.Phone.MaximumLength": "Phone must be at most {0} characters",
+
+  "Api.Validator.InterventionContact.ValidateBulkItem.InterventionId": "Intervention ID is required for intervention {0}",
+
+  "Api.Validator.UserPreferences.Create.Appearance": "Appearance is required",
+  "Api.Validator.UserPreferences.Create.Appearance.MaximumLength": "Appearance must be at most {0} characters",
+  "Api.Validator.UserPreferences.Create.Locale": "Locale is required",
+  "Api.Validator.UserPreferences.Create.Locale.MaximumLength": "Locale must be at most {0} characters",
+  "Api.Validator.UserPreferences.Create.Timezone": "Timezone is required",
+  "Api.Validator.UserPreferences.Create.Timezone.MaximumLength": "Timezone must be at most {0} characters",
+  "Api.Validator.UserPreferences.Create.DateFormat": "Date format is required",
+  "Api.Validator.UserPreferences.Create.DateFormat.MaximumLength": "Date format must be at most {0} characters",
+  "Api.Validator.UserPreferences.Create.TimeFormat": "Time format is required",
+  "Api.Validator.UserPreferences.Create.TimeFormat.MaximumLength": "Time format must be at most {0} characters",
+  "Api.Validator.UserPreferences.Create.DayStart": "Day start is required",
+  "Api.Validator.UserPreferences.Create.DayStart.Format": "Day start must be in format HH:mm",
+
+  "Api.Validator.UserPreferences.Update.Appearance": "Appearance is required",
+  "Api.Validator.UserPreferences.Update.Appearance.MaximumLength": "Appearance must be at most {0} characters",
+  "Api.Validator.UserPreferences.Update.Locale": "Locale is required",
+  "Api.Validator.UserPreferences.Update.Locale.MaximumLength": "Locale must be at most {0} characters",
+  "Api.Validator.UserPreferences.Update.Timezone": "Timezone is required",
+  "Api.Validator.UserPreferences.Update.Timezone.MaximumLength": "Timezone must be at most {0} characters",
+  "Api.Validator.UserPreferences.Update.DateFormat": "Date format is required",
+  "Api.Validator.UserPreferences.Update.DateFormat.MaximumLength": "Date format must be at most {0} characters",
+  "Api.Validator.UserPreferences.Update.TimeFormat": "Time format is required",
+  "Api.Validator.UserPreferences.Update.TimeFormat.MaximumLength": "Time format must be at most {0} characters",
+  "Api.Validator.UserPreferences.Update.DayStart": "Day start is required",
+  "Api.Validator.UserPreferences.Update.DayStart.Format": "Day start must be in format HH:mm"
 }

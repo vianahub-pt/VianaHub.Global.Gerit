@@ -26,7 +26,7 @@ public static class InterventionTeamEquipmentsEndpoint
         .Produces(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapGet("/{id}", async (int id, [FromServices] IInterventionTeamEquipmentsAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
+        groupV1.MapGet("/{id}", async ([FromRoute] int id, [FromServices] IInterventionTeamEquipmentsAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var response = await appService.GetByIdAsync(id, ct);
             return notify.CustomResponse(response, 200);
@@ -63,7 +63,7 @@ public static class InterventionTeamEquipmentsEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError)
         .WithValidation<CreateInterventionTeamEquipmentRequest>();
 
-        groupV1.MapPut("/{id}", async (int id, [FromBody] UpdateInterventionTeamEquipmentRequest request, [FromServices] IInterventionTeamEquipmentsAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
+        groupV1.MapPut("/{id}", async ([FromRoute] int id, [FromBody] UpdateInterventionTeamEquipmentRequest request, [FromServices] IInterventionTeamEquipmentsAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var updated = await appService.UpdateAsync(id, request, ct);
             return notify.CustomResponse(updated, 200);
@@ -77,7 +77,7 @@ public static class InterventionTeamEquipmentsEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError)
         .WithValidation<UpdateInterventionTeamEquipmentRequest>();
 
-        groupV1.MapPatch("/{id}/activate", async (int id, [FromServices] IInterventionTeamEquipmentsAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
+        groupV1.MapPatch("/{id}/activate", async ([FromRoute] int id, [FromServices] IInterventionTeamEquipmentsAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var ok = await appService.ActivateAsync(id, ct);
             return notify.CustomResponse();
@@ -89,7 +89,7 @@ public static class InterventionTeamEquipmentsEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status410Gone)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapPatch("/{id}/deactivate", async (int id, [FromServices] IInterventionTeamEquipmentsAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
+        groupV1.MapPatch("/{id}/deactivate", async ([FromRoute] int id, [FromServices] IInterventionTeamEquipmentsAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var ok = await appService.DeactivateAsync(id, ct);
             return notify.CustomResponse();
@@ -101,7 +101,7 @@ public static class InterventionTeamEquipmentsEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status410Gone)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapDelete("/{id}", async (int id, [FromServices] IInterventionTeamEquipmentsAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
+        groupV1.MapDelete("/{id}", async ([FromRoute] int id, [FromServices] IInterventionTeamEquipmentsAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var ok = await appService.DeleteAsync(id, ct);
             return notify.CustomResponse();

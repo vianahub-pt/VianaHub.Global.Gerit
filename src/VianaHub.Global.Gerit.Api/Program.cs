@@ -15,6 +15,7 @@ using VianaHub.Global.Gerit.Infra.Data.Tools;
 using VianaHub.Global.Gerit.Application.Mappings.Identity;
 using VianaHub.Global.Gerit.Api.Middleware;
 using VianaHub.Global.Gerit.Domain.Interfaces.Base;
+using Microsoft.AspNetCore.Http; // for RequestDelegateFactoryOptions
 
 namespace VianaHub.Global.Gerit.Api;
 
@@ -45,6 +46,7 @@ public class Program
         builder.Services.AddScoped<TenantSessionCommandInterceptor>();
         builder.Services.AddScoped<TelemetryInterceptor>();
         builder.Services.AddEndpointsApiExplorer();
+
         builder.Services.AddSwagger(builder.Configuration, builder.Environment);
 
         builder.Services.AddAutoMapper(typeof(ActionMappingProfile).Assembly);

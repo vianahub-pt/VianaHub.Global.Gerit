@@ -254,6 +254,38 @@ CREATE TABLE dbo.Users (                                                        
     CONSTRAINT FK_Users_Tenant FOREIGN KEY (TenantId) REFERENCES dbo.Tenants(Id)	-- FK para tenant
 );
 GO
+CREATE TABLE dbo.UserPreferences (                                                              -- Preferências do usuário (tema, notificações, etc.)
+    Id                              INT IDENTITY(1,1)   NOT NULL,                               -- Identificador, chave primária
+    TenantId                        INT                 NOT NULL,                               -- Tenant dono
+    UserId                          INT                 NOT NULL,                               -- Usuário dono
+    Appearance                      NVARCHAR(10)        NOT NULL DEFAULT ('light'),             -- Tema (light/dark)
+    Locale                          NVARCHAR(10)        NOT NULL DEFAULT ('pt-PT'),             -- Localização (pt-PT, en-US, es-ES, etc.)
+    Timezone                        NVARCHAR(100)       NOT NULL DEFAULT ('Europe/Lisbon'),     -- Timezone IANA
+    DateFormat                      NVARCHAR(20)        NOT NULL DEFAULT ('DD-MM-YYYY'),        -- Formato de data
+    TimeFormat                      NVARCHAR(10)        NOT NULL DEFAULT ('24h'),               -- Formato de hora (24h/12h)
+    DayStart                        TIME(0)             NOT NULL DEFAULT ('09:00'),             -- Início do dia para notificações, relatórios e trabalho (usado para calcular "hoje", "amanhã", etc.)
+    EmailNewsletter                 BIT                 NOT NULL DEFAULT (0),                   -- Receber newsletter por email
+    EmailWeeklyReport               BIT                 NOT NULL DEFAULT (0),                   -- Receber relatório semanal por email
+    EmailApproval                   BIT                 NOT NULL DEFAULT (0),                   -- Receber emails de aprovação (intervenções, equipamentos, etc.)
+    EmailAlerts                     BIT                 NOT NULL DEFAULT (1),                   -- Receber alertas críticos por email (intervenções atrasadas, falhas, etc.)
+    EmailReminders                  BIT                 NOT NULL DEFAULT (1),                   -- Receber lembretes por email (intervenções agendadas para o dia, etc.)
+    EmailPlanner                    BIT                 NOT NULL DEFAULT (1),                   -- Receber email com planejamento diário/semanal
+    IsActive                        BIT                 NOT NULL DEFAULT (1),                   -- Flag de ativo
+    IsDeleted                       BIT                 NOT NULL DEFAULT (0),                   -- Soft delete
+    CreatedBy                       INT                 NOT NULL,                               -- Usuário criador
+    CreatedAt                       DATETIME2(7)        NOT NULL DEFAULT (SYSDATETIME()),       -- Data de criação
+    ModifiedBy                      INT                     NULL,                               -- Usuário modificador
+    ModifiedAt                      DATETIME2(7)            NULL,                               -- Data de modificação
+    CONSTRAINT PK_UserPreferences PRIMARY KEY CLUSTERED (Id),                                   -- PK
+    CONSTRAINT CK_UserPreferences_Active_Deleted CHECK (NOT (IsActive = 1 AND IsDeleted = 1)),  -- Garantir que as preferências não podem ser ativas e deletadas ao mesmo tempo
+    CONSTRAINT CK_UserPreferences_Appearance CHECK (Appearance IN ('light', 'dark')),           -- Aparência limitada a light/dark
+    CONSTRAINT CK_UserPreferences_Locale CHECK (Locale IN ('pt-PT', 'en-US')),                  -- Localização limitada a pt-PT/en-US (pode ser expandida no futuro)
+    CONSTRAINT CK_UserPreferences_TimeFormat CHECK (TimeFormat IN ('24h', '12h')),              -- Formato de hora limitado a 24h/12h
+    CONSTRAINT FK_UserPreferences_Tenant FOREIGN KEY (TenantId) REFERENCES dbo.Tenants(Id),     -- FK para tenant
+    CONSTRAINT FK_UserPreferences_User FOREIGN KEY (UserId, TenantId) REFERENCES dbo.Users(Id, TenantId)  -- FK para usuário
+);
+
+GO
 /* =========================
    RBAC STRUCTURE
    ========================= */
@@ -890,7 +922,7 @@ CREATE UNIQUE INDEX UX_InterventionTeamEquipments_Unique            ON dbo.Inter
 CREATE UNIQUE INDEX UX_InterventionTeamVehicles_Unique              ON dbo.InterventionTeamVehicles (TenantId, InterventionTeamId, VehicleId) WHERE IsDeleted = 0;
 CREATE UNIQUE INDEX UX_InterventionAttachments_S3Key                ON dbo.InterventionAttachments (TenantId, S3Key) WHERE IsDeleted = 0;
 CREATE UNIQUE INDEX UX_JwtKeys_Active                               ON dbo.JwtKeys (TenantId) WHERE IsActive = 1 AND IsDeleted = 0;
-
+CREATE UNIQUE INDEX UX_UserPreferences_Tenant_User_Active           ON dbo.UserPreferences (TenantId, UserId) WHERE IsDeleted = 0;
 
 CREATE NONCLUSTERED INDEX IX_TenantContacts_TenantId				        ON dbo.TenantContacts (TenantId) WHERE IsDeleted = 0;
 CREATE NONCLUSTERED INDEX IX_Clients_Tenant_Active					        ON dbo.Clients (TenantId, Name) INCLUDE (Email, Phone) WHERE IsDeleted = 0;
@@ -957,6 +989,7 @@ CREATE SECURITY POLICY dbo.TenantSecurityPolicy												                -- Cr
 ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.Users,					                -- Filtro por TenantId, aplica RLS em Users
 ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.Roles,					                -- Aplica RLS em Roles
 ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.UserRoles,				                -- Aplica RLS em UserRoles
+ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.UserPreferences,			                -- Aplica RLS em UserPreferences
 ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.RolePermissions,			                -- Aplica RLS em RolePermissions
 ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.JwtKeys,					                -- Aplica RLS em JwtKeys
 ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.Subscriptions,			                -- Aplica RLS em Subscriptions
@@ -992,6 +1025,9 @@ ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.InterventionA
 ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.Users AFTER INSERT,	                    -- Bloqueia INSERT fora do Tenant
 ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.Users AFTER UPDATE,	                    -- Bloqueia UPDATE fora do Tenant
 ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.Users BEFORE DELETE,                     -- Bloqueia DELETE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.UserPreferences AFTER INSERT,	        -- Bloqueia INSERT fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.UserPreferences AFTER UPDATE,	        -- Bloqueia UPDATE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.UserPreferences BEFORE DELETE,           -- Bloqueia DELETE fora do Tenant
 ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.Roles AFTER INSERT,                      -- Bloqueia INSERT fora do Tenant
 ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.Roles AFTER UPDATE,                      -- Bloqueia UPDATE fora do Tenant
 ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId)	ON dbo.Roles BEFORE DELETE,                     -- Bloqueia DELETE fora do Tenant

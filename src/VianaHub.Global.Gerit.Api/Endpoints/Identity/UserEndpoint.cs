@@ -16,7 +16,7 @@ public static class UserEndpoint
     {
         var groupV1 = app.MapGroup("/v1/users").WithTags("Users").WithGroupName("v1").RequireAuthorization();
 
-        groupV1.MapGet("/", async (IUserAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapGet("/", async ([FromServices] IUserAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var response = await appService.GetAllAsync(ct);
             return notify.CustomResponse(response, 200);
@@ -28,7 +28,7 @@ public static class UserEndpoint
         .Produces(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapGet("/{id}", async (int id, IUserAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapGet("/{id}", async ([FromRoute] int id, [FromServices] IUserAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var response = await appService.GetByIdAsync(id, ct);
             return notify.CustomResponse(response, 200);
@@ -41,7 +41,7 @@ public static class UserEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapGet("/paged", async ([AsParameters] PagedFilterRequest request, IUserAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapGet("/paged", async ([AsParameters] PagedFilterRequest request, [FromServices] IUserAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var response = await appService.GetPagedAsync(request, ct);
             return notify.CustomResponse(response, 200);
@@ -53,7 +53,7 @@ public static class UserEndpoint
         .Produces(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapPost("/", async ([FromBody] CreateUserRequest request, IUserAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapPost("/", async ([FromBody] CreateUserRequest request, [FromServices] IUserAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var created = await appService.CreateAsync(request, ct);
             return notify.CustomResponse(201);
@@ -67,7 +67,7 @@ public static class UserEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError)
         .WithValidation<CreateUserRequest>();
 
-        groupV1.MapPut("/{id}", async (int id, [FromBody] UpdateUserRequest request, IUserAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapPut("/{id}", async ([FromRoute] int id, [FromBody] UpdateUserRequest request, [FromServices] IUserAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var updated = await appService.UpdateAsync(id, request, ct);
             return notify.CustomResponse(updated, 200);
@@ -82,7 +82,7 @@ public static class UserEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError)
         .WithValidation<UpdateUserRequest>();
 
-        groupV1.MapPatch("/{id}/password", async (int id, [FromBody] UpdatePasswordRequest request, IUserAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapPatch("/{id}/password", async ([FromRoute] int id, [FromBody] UpdatePasswordRequest request, [FromServices] IUserAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var updated = await appService.UpdatePasswordAsync(id, request, ct);
             return notify.CustomResponse();
@@ -96,7 +96,7 @@ public static class UserEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapPatch("/{id}/activate", async (int id, IUserAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapPatch("/{id}/activate", async ([FromRoute] int id, [FromServices] IUserAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var ok = await appService.ActivateAsync(id, ct);
             return notify.CustomResponse();
@@ -109,7 +109,7 @@ public static class UserEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapPatch("/{id}/deactivate", async (int id, IUserAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapPatch("/{id}/deactivate", async ([FromRoute] int id, [FromServices] IUserAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var ok = await appService.DeactivateAsync(id, ct);
             return notify.CustomResponse();
@@ -122,7 +122,7 @@ public static class UserEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapDelete("/{id}", async (int id, IUserAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapDelete("/{id}", async ([FromRoute] int id, [FromServices] IUserAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var ok = await appService.DeleteAsync(id, ct);
             return notify.CustomResponse();
@@ -135,7 +135,7 @@ public static class UserEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapPost("/bulk-upload", async (HttpRequest request, IUserAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapPost("/bulk-upload", async (HttpRequest request, [FromServices] IUserAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             if (!request.HasFormContentType || request.Form.Files.Count == 0)
             {

@@ -16,7 +16,7 @@ public static class SubscriptionEndpoint
     {
         var groupV1 = app.MapGroup("/v1/subscriptions").WithTags("Subscriptions").WithGroupName("v1").RequireAuthorization();
 
-        groupV1.MapGet("/", async (ISubscriptionAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapGet("/", async ([FromServices] ISubscriptionAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var subscriptions = await appService.GetAllAsync(ct);
             return notify.CustomResponse(subscriptions, 200);
@@ -27,7 +27,7 @@ public static class SubscriptionEndpoint
         .Produces<IEnumerable<SubscriptionResponse>>(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapGet("/{id}", async (int id, ISubscriptionAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapGet("/{id}", async ([FromRoute] int id, [FromServices] ISubscriptionAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var subscription = await appService.GetByIdAsync(id, ct);
             return notify.CustomResponse(subscription, 200);
@@ -39,7 +39,7 @@ public static class SubscriptionEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapGet("/tenant/{tenantId}", async (int tenantId, ISubscriptionAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapGet("/tenant/{tenantId}", async (int tenantId, [FromServices] ISubscriptionAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var subscription = await appService.GetByTenantIdAsync(tenantId, ct);
             return notify.CustomResponse(subscription, 200);
@@ -51,7 +51,7 @@ public static class SubscriptionEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapGet("/active", async (ISubscriptionAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapGet("/active", async ([FromServices] ISubscriptionAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var subscriptions = await appService.GetActiveSubscriptionsAsync(ct);
             return notify.CustomResponse(subscriptions, 200);
@@ -62,7 +62,7 @@ public static class SubscriptionEndpoint
         .Produces<IEnumerable<SubscriptionResponse>>(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapGet("/expiring/{days}", async (int days, ISubscriptionAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapGet("/expiring/{days}", async (int days, [FromServices] ISubscriptionAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var subscriptions = await appService.GetExpiringSubscriptionsAsync(days, ct);
             return notify.CustomResponse(subscriptions, 200);
@@ -73,7 +73,7 @@ public static class SubscriptionEndpoint
         .Produces<IEnumerable<SubscriptionResponse>>(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapGet("/paged", async ([AsParameters] PagedFilterRequest request, ISubscriptionAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapGet("/paged", async ([AsParameters] PagedFilterRequest request, [FromServices] ISubscriptionAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var subscriptions = await appService.GetPagedAsync(request, ct);
             return notify.CustomResponse(subscriptions, 200);
@@ -84,7 +84,7 @@ public static class SubscriptionEndpoint
         .Produces<ListPageResponse<SubscriptionResponse>>(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapPost("/", async ([FromBody] CreateSubscriptionRequest request, ISubscriptionAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapPost("/", async ([FromBody] CreateSubscriptionRequest request, [FromServices] ISubscriptionAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var ok = await appService.CreateAsync(request, ct);
             return notify.CustomResponse(201);
@@ -96,7 +96,7 @@ public static class SubscriptionEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status400BadRequest)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapPut("/{id}", async (int id, [FromBody] UpdateSubscriptionRequest request, ISubscriptionAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapPut("/{id}", async ([FromRoute] int id, [FromBody] UpdateSubscriptionRequest request, [FromServices] ISubscriptionAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var ok = await appService.UpdateAsync(id, request, ct);
             return notify.CustomResponse();
@@ -109,7 +109,7 @@ public static class SubscriptionEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status400BadRequest)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapPatch("/{id}/activate", async (int id, ISubscriptionAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapPatch("/{id}/activate", async ([FromRoute] int id, [FromServices] ISubscriptionAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var ok = await appService.ActivateAsync(id, ct);
             return notify.CustomResponse();
@@ -121,7 +121,7 @@ public static class SubscriptionEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapPatch("/{id}/deactivate", async (int id, ISubscriptionAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapPatch("/{id}/deactivate", async ([FromRoute] int id, [FromServices] ISubscriptionAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var ok = await appService.DeactivateAsync(id, ct);
             return notify.CustomResponse();
@@ -133,7 +133,7 @@ public static class SubscriptionEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapPatch("/{id}/cancel", async (int id, [FromBody] CancelSubscriptionRequest request, ISubscriptionAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapPatch("/{id}/cancel", async ([FromRoute] int id, [FromBody] CancelSubscriptionRequest request, [FromServices] ISubscriptionAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var ok = await appService.CancelAsync(id, request, ct);
             return notify.CustomResponse();
@@ -145,7 +145,7 @@ public static class SubscriptionEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapPatch("/{id}/renew", async (int id, [FromBody] RenewSubscriptionRequest request, ISubscriptionAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapPatch("/{id}/renew", async ([FromRoute] int id, [FromBody] RenewSubscriptionRequest request, [FromServices] ISubscriptionAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var ok = await appService.RenewAsync(id, request, ct);
             return notify.CustomResponse();
@@ -157,7 +157,7 @@ public static class SubscriptionEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapDelete("/{id}", async (int id, ISubscriptionAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapDelete("/{id}", async ([FromRoute] int id, [FromServices] ISubscriptionAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var ok = await appService.DeleteAsync(id, ct);
             return notify.CustomResponse();
@@ -170,7 +170,7 @@ public static class SubscriptionEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
         // Upload massivo de Functions via CSV
-        groupV1.MapPost("/bulk-upload", async (HttpRequest request, ISubscriptionAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapPost("/bulk-upload", async (HttpRequest request, [FromServices] ISubscriptionAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             if (!request.HasFormContentType || request.Form.Files.Count == 0)
             {

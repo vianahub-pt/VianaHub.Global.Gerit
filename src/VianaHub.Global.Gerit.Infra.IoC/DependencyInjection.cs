@@ -17,9 +17,7 @@ using VianaHub.Global.Gerit.Domain.Services.Identity;
 using VianaHub.Global.Gerit.Infra.Data.Repository.Identity;
 using VianaHub.Global.Gerit.Application.Interfaces.Billing;
 using VianaHub.Global.Gerit.Application.Interfaces.Business;
-using VianaHub.Global.Gerit.Application.Interfaces.Job;
 using VianaHub.Global.Gerit.Application.Interfaces.Common;
-using VianaHub.Global.Gerit.Application.Services.Job;
 using VianaHub.Global.Gerit.Application.Services.Billing;
 using VianaHub.Global.Gerit.Application.Services.Business;
 using VianaHub.Global.Gerit.Application.Services.Common;
@@ -69,6 +67,7 @@ using VianaHub.Global.Gerit.Domain.Validators.Business.InterventionTeam;
 using VianaHub.Global.Gerit.Domain.Interfaces.Base;
 using VianaHub.Global.Gerit.Domain.Validators.Business.InterventionTeamVehicle;
 using VianaHub.Global.Gerit.Domain.Validators.Business.InterventionTeamEquipment;
+using VianaHub.Global.Gerit.Domain.Validators.Identity.UserPreferences; // <-- added
 
 namespace VianaHub.Global.Gerit.Infra.IoC;
 
@@ -100,6 +99,7 @@ public static class DependencyInjection
         services.AddScoped<IEntityDomainValidator<TenantEntity>, TenantValidator>();
         services.AddScoped<IEntityDomainValidator<SubscriptionEntity>, SubscriptionValidator>();
         services.AddScoped<IEntityDomainValidator<UserEntity>, UserValidator>();
+        services.AddScoped<IEntityDomainValidator<UserPreferencesEntity>, UserPreferencesValidator>();
         services.AddScoped<IEntityDomainValidator<JobDefinitionEntity>, JobDefinitionValidator>();
         services.AddScoped<IEntityDomainValidator<JwtKeyEntity>, JwtKeyValidator>();
         services.AddScoped<IEntityDomainValidator<VehicleEntity>, VehicleValidator>();
@@ -128,6 +128,9 @@ public static class DependencyInjection
         services.AddScoped<IFileValidationService, FileValidationService>();
 
         // Application - App Services
+        services.AddScoped<IAuthAppService, AuthAppService>();
+        services.AddScoped<IUserRoleAppService, UserRoleAppService>();
+        services.AddScoped<IJwtKeyAppService, JwtKeyAppService>();
         services.AddScoped<IAddressTypeAppService, AddressTypeAppService>();
         services.AddScoped<IFunctionAppService, FunctionAppService>();
         services.AddScoped<ITeamAppService, TeamAppService>();
@@ -148,17 +151,12 @@ public static class DependencyInjection
         services.AddScoped<IActionAppService, ActionAppService>();
         services.AddScoped<IResourceAppService, ResourceAppService>();
         services.AddScoped<IRoleAppService, RoleAppService>();
+        services.AddScoped<IRolePermissionAppService, RolePermissionAppService>();
         services.AddScoped<IPlanAppService, PlanAppService>();
         services.AddScoped<ITenantAppService, TenantAppService>();
         services.AddScoped<ISubscriptionAppService, SubscriptionAppService>();
         services.AddScoped<IUserAppService, UserAppService>();
-        services.AddScoped<IUserRoleAppService, UserRoleAppService>();
-        services.AddScoped<IRolePermissionAppService, RolePermissionAppService>();
-        services.AddScoped<IAuthAppService, AuthAppService>();
-        services.AddScoped<IJobAppService, JobAppService>();
-        services.AddScoped<IJwtKeyAppService, JwtKeyAppService>();
-        services.AddScoped<IInterventionTeamVehiclesAppService, InterventionTeamVehicleAppService>();
-        services.AddScoped<IInterventionTeamEquipmentsAppService, InterventionTeamEquipmentAppService>();
+        services.AddScoped<IUserPreferencesAppService, UserPreferencesAppService>();
 
         // Domain
         services.AddScoped<IUserRoleDomainService, UserRoleDomainService>();
@@ -172,6 +170,7 @@ public static class DependencyInjection
         services.AddScoped<ITenantDomainService, TenantDomainService>();
         services.AddScoped<ISubscriptionDomainService, SubscriptionDomainService>();
         services.AddScoped<IUserDomainService, UserDomainService>();
+        services.AddScoped<IUserPreferencesDomainService, UserPreferencesDomainService>();
         services.AddScoped<IRolePermissionDomainService, RolePermissionDomainService>();
         services.AddScoped<IJwtKeyDomainService, JwtKeyDomainService>();
         services.AddScoped<IFunctionDomainService, FunctionDomainService>();
@@ -219,6 +218,7 @@ public static class DependencyInjection
         services.AddScoped<ISubscriptionDataRepository, SubscriptionDataRepository>();
         services.AddScoped<IJwtKeyDataRepository, JwtKeyDataRepository>();
         services.AddScoped<IUserDataRepository, UserDataRepository>();
+        services.AddScoped<IUserPreferencesDataRepository, UserPreferencesDataRepository>();
         services.AddScoped<IUserRoleDataRepository, UserRoleDataRepository>();
         services.AddScoped<IRolePermissionDataRepository, RolePermissionDataRepository>();
         services.AddScoped<IRefreshTokenDataRepository, RefreshTokenDataRepository>();

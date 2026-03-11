@@ -109,6 +109,10 @@ public class UserMapping : IEntityTypeConfiguration<UserEntity>
             .IsRequired(false);
 
         // Constraints únicos
+        // Adiciona alternate key (Id, TenantId) para compatibilidade com FKs compostas no banco
+        builder.HasAlternateKey(x => new { x.Id, x.TenantId })
+            .HasName("UQ_Users_Id_Tenant");
+
         builder.HasIndex(x => new { x.TenantId, x.Email })
             .IsUnique()
             .HasDatabaseName("UQ_Users_Tenant_Email");

@@ -17,7 +17,7 @@ public static class UserRoleEndpoint
     {
         var groupV1 = app.MapGroup("/v1/userroles").WithTags("UserRoles").WithGroupName("v1").RequireAuthorization();
 
-        groupV1.MapGet("/", async (IUserRoleAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapGet("/", async ([FromServices] IUserRoleAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var result = await appService.GetAllAsync(ct);
             return notify.CustomResponse(result, 200);
@@ -29,7 +29,7 @@ public static class UserRoleEndpoint
         .Produces<IEnumerable<UserRoleResponse>>(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapGet("/users/{userId}/roles/{roleId}", async (int userId, int roleId, IUserRoleAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapGet("/users/{userId}/roles/{roleId}", async ([FromRoute] int userId, [FromRoute] int roleId, [FromServices] IUserRoleAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var result = await appService.GetByIdAsync(userId, roleId, ct);
             return notify.CustomResponse(result, result != null ? 200 : 404);
@@ -42,7 +42,7 @@ public static class UserRoleEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapGet("/user/{userId}", async (int userId, IUserRoleAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapGet("/user/{userId}", async ([FromRoute] int userId, [FromServices] IUserRoleAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var result = await appService.GetByUserAsync(userId, ct);
             return notify.CustomResponse(result, 200);
@@ -54,7 +54,7 @@ public static class UserRoleEndpoint
         .Produces<IEnumerable<UserRoleResponse>>(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapGet("/role/{roleId}", async (int roleId, IUserRoleAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapGet("/role/{roleId}", async ([FromRoute] int roleId, [FromServices] IUserRoleAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var result = await appService.GetByRoleAsync(roleId, ct);
             return notify.CustomResponse(result, 200);
@@ -66,7 +66,7 @@ public static class UserRoleEndpoint
         .Produces<IEnumerable<UserRoleResponse>>(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapPost("/", async ([FromBody] CreateUserRoleRequest request, IUserRoleAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapPost("/", async ([FromBody] CreateUserRoleRequest request, [FromServices] IUserRoleAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var created = await appService.CreateAsync(request, ct);
             return notify.CustomResponse(201);
@@ -80,7 +80,7 @@ public static class UserRoleEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError)
         .WithValidation<CreateUserRoleRequest>();
 
-        groupV1.MapDelete("/users/{userId}/roles/{roleId}", async (int userId, int roleId, IUserRoleAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapDelete("/users/{userId}/roles/{roleId}", async ([FromRoute] int userId, [FromRoute] int roleId, [FromServices] IUserRoleAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             await appService.DeleteAsync(userId, roleId, ct);
             return notify.CustomResponse();
@@ -93,7 +93,7 @@ public static class UserRoleEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapPost("/bulk-upload", async (HttpRequest request, IUserRoleAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapPost("/bulk-upload", async (HttpRequest request, [FromServices] IUserRoleAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             if (!request.HasFormContentType)
             {
