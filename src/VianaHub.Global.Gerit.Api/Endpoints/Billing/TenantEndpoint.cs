@@ -1,4 +1,5 @@
 using FluentValidation;
+using Microsoft.AspNetCore.Mvc;
 using VianaHub.Global.Gerit.Api.Endpoints.Base;
 using VianaHub.Global.Gerit.Api.Helpers;
 using VianaHub.Global.Gerit.Application.Dtos.Base;
@@ -16,7 +17,7 @@ public static class TenantEndpoint
     {
         var groupV1 = app.MapGroup("/v1/tenants").WithTags("Tenants").WithGroupName("v1").RequireAuthorization();
 
-        groupV1.MapGet("/", async (ITenantAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapGet("/", async ([FromServices] ITenantAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var result = await appService.GetAllAsync(ct);
             return notify.CustomResponse(result);
@@ -28,7 +29,7 @@ public static class TenantEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status401Unauthorized)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapGet("/{id}", async (int id, ITenantAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapGet("/{id}", async ([FromRoute] int id, [FromServices] ITenantAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var result = await appService.GetByIdAsync(id, ct);
             return notify.CustomResponse(result);
@@ -40,7 +41,7 @@ public static class TenantEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapGet("/paged", async ([AsParameters] PagedFilterRequest request, ITenantAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapGet("/paged", async ([AsParameters] PagedFilterRequest request, [FromServices] ITenantAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var result = await appService.GetPagedAsync(request, ct);
             return notify.CustomResponse(result);
@@ -52,7 +53,7 @@ public static class TenantEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status401Unauthorized)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapPost("/", async (CreateTenantRequest request, ITenantAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapPost("/", async ([FromBody] CreateTenantRequest request, [FromServices] ITenantAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var created = await appService.CreateAsync(request, ct);
             return notify.CustomResponse(201);
@@ -65,7 +66,7 @@ public static class TenantEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError)
         .WithValidation<CreateTenantRequest>();
 
-        groupV1.MapPut("/{id}", async (int id, UpdateTenantRequest request, ITenantAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapPut("/{id}", async ([FromRoute] int id, [FromBody] UpdateTenantRequest request, [FromServices] ITenantAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var ok = await appService.UpdateAsync(id, request, ct);
             return notify.CustomResponse();
@@ -78,7 +79,7 @@ public static class TenantEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError)
         .WithValidation<UpdateTenantRequest>();
 
-        groupV1.MapPatch("/{id}/activate", async (int id, ITenantAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapPatch("/{id}/activate", async ([FromRoute] int id, [FromServices] ITenantAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var ok = await appService.ActivateAsync(id, ct);
             return notify.CustomResponse();
@@ -90,7 +91,7 @@ public static class TenantEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapPatch("/{id}/deactivate", async (int id, ITenantAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapPatch("/{id}/deactivate", async ([FromRoute] int id, [FromServices] ITenantAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var ok = await appService.DeactivateAsync(id, ct);
             return notify.CustomResponse();
@@ -102,7 +103,7 @@ public static class TenantEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapDelete("/{id}", async (int id, ITenantAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapDelete("/{id}", async ([FromRoute] int id, [FromServices] ITenantAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var ok = await appService.DeleteAsync(id, ct);
             return notify.CustomResponse();
@@ -115,7 +116,7 @@ public static class TenantEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
         // Upload massivo de tenants via CSV
-        groupV1.MapPost("/bulk-upload", async (HttpRequest request, ITenantAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapPost("/bulk-upload", async (HttpRequest request, [FromServices] ITenantAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             if (!request.HasFormContentType)
             {

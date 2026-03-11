@@ -17,7 +17,7 @@ public static class RolePermissionEndpoint
     {
         var groupV1 = app.MapGroup("/v1/rolepermissions").WithTags("RolePermissions").WithGroupName("v1").RequireAuthorization();
 
-        groupV1.MapGet("/", async (IRolePermissionAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapGet("/", async ([FromServices] IRolePermissionAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var result = await appService.GetAllAsync(ct);
             return notify.CustomResponse(result, 200);
@@ -28,7 +28,7 @@ public static class RolePermissionEndpoint
         .Produces<IEnumerable<RolePermissionResponse>>(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapGet("/roles/{roleId}/resources/{resourceId}/actions/{actionId}", async (int roleId, int resourceId, int actionId, IRolePermissionAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapGet("/roles/{roleId}/resources/{resourceId}/actions/{actionId}", async ([FromRoute] int roleId, [FromRoute] int resourceId, [FromRoute] int actionId, [FromServices] IRolePermissionAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var result = await appService.GetByIdAsync(roleId, resourceId, actionId, ct);
             return notify.CustomResponse(result, result != null ? 200 : 404);
@@ -40,7 +40,7 @@ public static class RolePermissionEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapGet("/role/{roleId}", async (int roleId, IRolePermissionAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapGet("/role/{roleId}", async ([FromRoute] int roleId, [FromServices] IRolePermissionAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var result = await appService.GetByRoleAsync(roleId, ct);
             return notify.CustomResponse(result, 200);
@@ -51,7 +51,7 @@ public static class RolePermissionEndpoint
         .Produces<IEnumerable<RolePermissionResponse>>(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapGet("/resource/{resourceId}", async (int resourceId, IRolePermissionAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapGet("/resource/{resourceId}", async ([FromRoute] int resourceId, [FromServices] IRolePermissionAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var result = await appService.GetByResourceAsync(resourceId, ct);
             return notify.CustomResponse(result, 200);
@@ -62,7 +62,7 @@ public static class RolePermissionEndpoint
         .Produces<IEnumerable<RolePermissionResponse>>(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapPost("/", async ([FromBody] CreateRolePermissionRequest request, IRolePermissionAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapPost("/", async ([FromBody] CreateRolePermissionRequest request, [FromServices] IRolePermissionAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var created = await appService.CreateAsync(request, ct);
             return notify.CustomResponse(created != null ? 201 : 400);
@@ -75,7 +75,7 @@ public static class RolePermissionEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status400BadRequest)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapDelete("/roles/{roleId}/resources/{resourceId}/actions/{actionId}", async (int roleId, int resourceId, int actionId, IRolePermissionAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapDelete("/roles/{roleId}/resources/{resourceId}/actions/{actionId}", async ([FromRoute] int roleId, [FromRoute] int resourceId, [FromRoute] int actionId, [FromServices] IRolePermissionAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             await appService.DeleteAsync(roleId, resourceId, actionId, ct);
             return notify.CustomResponse();
@@ -88,7 +88,7 @@ public static class RolePermissionEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
         // Upload massivo de roles via CSV
-        groupV1.MapPost("/bulk-upload", async (HttpRequest request, IRolePermissionAppService appService, INotify notify, CancellationToken ct) =>
+        groupV1.MapPost("/bulk-upload", async (HttpRequest request, [FromServices] IRolePermissionAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             if (!request.HasFormContentType || request.Form.Files.Count == 0)
             {

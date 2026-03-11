@@ -17,6 +17,8 @@ public class UserRoleDataRepository : IUserRoleDataRepository
     public async Task<IList<UserRoleEntity>> GetAllAsync(int tenantId, CancellationToken ct)
     {
         return await _context.UserRoles
+            .AsNoTracking()
+            .Include(x => x.Tenant)
             .Include(x => x.User)
             .Include(x => x.Role)
             .Where(x => x.TenantId == tenantId)
@@ -25,6 +27,7 @@ public class UserRoleDataRepository : IUserRoleDataRepository
     public async Task<UserRoleEntity> GetByIdAsync(int tenantId, int userId, int roleId, CancellationToken ct)
     {
         return await _context.UserRoles
+            .AsNoTracking()
             .Include(x => x.Tenant)
             .Include(x => x.User)
             .Include(x => x.Role)
@@ -35,6 +38,8 @@ public class UserRoleDataRepository : IUserRoleDataRepository
     public async Task<IList<UserRoleEntity>> GetByUserAsync(int tenantId, int userId, CancellationToken ct)
     {
         return await _context.UserRoles
+            .AsNoTracking()
+            .Include(x => x.Tenant)
             .Include(x => x.Role)
             .Where(x => x.TenantId == tenantId && x.UserId == userId)
             .ToListAsync(ct);
@@ -42,6 +47,8 @@ public class UserRoleDataRepository : IUserRoleDataRepository
     public async Task<IList<UserRoleEntity>> GetByRoleAsync(int tenantId, int roleId, CancellationToken ct)
     {
         return await _context.UserRoles
+            .AsNoTracking()
+            .Include(x => x.Tenant)
             .Include(x => x.User)
             .Where(x => x.TenantId == tenantId && x.RoleId == roleId)
             .ToListAsync(ct);

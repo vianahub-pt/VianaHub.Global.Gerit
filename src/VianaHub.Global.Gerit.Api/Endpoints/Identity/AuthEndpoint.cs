@@ -3,6 +3,7 @@ using VianaHub.Global.Gerit.Domain.Tools.Notifications;
 using VianaHub.Global.Gerit.Application.Interfaces.Identity;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Identity.Auth;
 using VianaHub.Global.Gerit.Api.Endpoints.Base;
+using Microsoft.AspNetCore.Mvc;
 
 namespace VianaHub.Global.Gerit.Api.Endpoints.Identity;
 
@@ -16,7 +17,7 @@ public static class AuthEndpoint
             .WithGroupName("v1")
             .AllowAnonymous(); // Endpoints de autenticação devem ser públicos
 
-        groupV1.MapPost("/register", async (RegisterRequest request, IAuthAppService authService, INotify notify, CancellationToken ct) =>
+        groupV1.MapPost("/register", async ([FromBody] RegisterRequest request, [FromServices] IAuthAppService authService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var result = await authService.RegisterAsync(request, ct);
             return notify.CustomResponse(result);
@@ -29,7 +30,7 @@ public static class AuthEndpoint
         .Produces(StatusCodes.Status400BadRequest)
         .Produces(StatusCodes.Status409Conflict);
 
-        groupV1.MapPost("/login", async (LoginRequest request, IAuthAppService authService, INotify notify, CancellationToken ct) =>
+        groupV1.MapPost("/login", async ([FromBody] LoginRequest request, [FromServices] IAuthAppService authService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var result = await authService.LoginAsync(request, ct);
             return notify.CustomResponse(result);
@@ -42,7 +43,7 @@ public static class AuthEndpoint
         .Produces(StatusCodes.Status400BadRequest)
         .Produces(StatusCodes.Status401Unauthorized);
 
-        groupV1.MapPost("/refresh", async (RefreshRequest request, IAuthAppService authService, INotify notify, CancellationToken ct) =>
+        groupV1.MapPost("/refresh", async ([FromBody] RefreshRequest request, [FromServices] IAuthAppService authService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var result = await authService.RefreshAsync(request, ct);
             return notify.CustomResponse(result);
@@ -55,7 +56,7 @@ public static class AuthEndpoint
         .Produces(StatusCodes.Status400BadRequest)
         .Produces(StatusCodes.Status401Unauthorized);
 
-        groupV1.MapGet("/tenants", async (IAuthAppService authService, INotify notify, CancellationToken ct) =>
+        groupV1.MapGet("/tenants", async ([FromServices] IAuthAppService authService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var result = await authService.GetLoginAsync(ct);
             return notify.CustomResponse(result);

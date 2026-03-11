@@ -182,5 +182,11 @@
   "Application.Service.InterventionTeamEquipment.ProcessBulkItems.ExistsByInterventionAndEquipment": "La asociación entre la intervención {0} y el equipo {1} ya existe",
   "Application.Service.InterventionTeamEquipment.ProcessBulkItems.FailedToCreate": "Error al crear la asociación para la intervención {0} y el equipo {1}",
   "Application.Service.InterventionTeamEquipment.ValidateBulkItem.InterventionTeamId": "El ID de la intervención es obligatorio para la intervención {0}",
-  "Application.Service.InterventionTeamEquipment.ValidateBulkItem.EquipmentId": "El ID del equipo es obligatorio para el equipo {0}"
+  "Application.Service.InterventionTeamEquipment.ValidateBulkItem.EquipmentId": "El ID del equipo es obligatorio para el equipo {0}",
+
+  "Application.Service.UserPreferences.Update.ResourceNotFound": "Preferencias de usuario no encontradas o inactivas",
+  "Application.Service.UserPreferences.Create.ResourceAlreadyExists": "Las preferencias de usuario ya existen para este usuario",
+  "Application.Service.UserPreferences.Activate.ResourceNotFound": "Preferencias de usuario no encontradas",
+  "Application.Service.UserPreferences.Deactivate.ResourceNotFound": "Preferencias de usuario no encontradas",
+  "Application.Service.UserPreferences.Delete.ResourceNotFound": "Preferencias de usuario no encontradas"
 }

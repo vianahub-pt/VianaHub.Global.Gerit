@@ -27,7 +27,7 @@ public static class EquipmentEndpoint
         .Produces(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapGet("/{id}", async (int id, [FromServices] IEquipmentAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
+        groupV1.MapGet("/{id}", async ([FromRoute] int id, [FromServices] IEquipmentAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var response = await appService.GetByIdAsync(id, ct);
             return notify.CustomResponse(response, 200);
@@ -63,7 +63,7 @@ public static class EquipmentEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError)
         .WithValidation<CreateEquipmentRequest>();
 
-        groupV1.MapPut("/{id}", async (int id, [FromBody] UpdateEquipmentRequest request, [FromServices] IEquipmentAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
+        groupV1.MapPut("/{id}", async ([FromRoute] int id, [FromBody] UpdateEquipmentRequest request, [FromServices] IEquipmentAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var updated = await appService.UpdateAsync(id, request, ct);
             return notify.CustomResponse(updated ? 204 : 400);
@@ -76,7 +76,7 @@ public static class EquipmentEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError)
         .WithValidation<UpdateEquipmentRequest>();
 
-        groupV1.MapPatch("/{id}/activate", async (int id, [FromServices] IEquipmentAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
+        groupV1.MapPatch("/{id}/activate", async ([FromRoute] int id, [FromServices] IEquipmentAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var ok = await appService.ActivateAsync(id, ct);
             return notify.CustomResponse();
@@ -88,7 +88,7 @@ public static class EquipmentEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapPatch("/{id}/deactivate", async (int id, [FromServices] IEquipmentAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
+        groupV1.MapPatch("/{id}/deactivate", async ([FromRoute] int id, [FromServices] IEquipmentAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var ok = await appService.DeactivateAsync(id, ct);
             return notify.CustomResponse();
@@ -100,7 +100,7 @@ public static class EquipmentEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapDelete("/{id}", async (int id, [FromServices] IEquipmentAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
+        groupV1.MapDelete("/{id}", async ([FromRoute] int id, [FromServices] IEquipmentAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var ok = await appService.DeleteAsync(id, ct);
             return notify.CustomResponse();

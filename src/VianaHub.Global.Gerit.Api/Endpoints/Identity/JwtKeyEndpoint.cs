@@ -16,7 +16,7 @@ public static class JwtKeyEndpoint
     {
         var groupV1 = app.MapGroup("/v1/admin/jwtkeys").WithTags("JwtKeys").WithGroupName("v1").RequireAuthorization();
 
-        groupV1.MapGet("/{tenantId}", async (int tenantId, IJwtKeyAppService service, INotify notify, CancellationToken ct) =>
+        groupV1.MapGet("/{tenantId}", async ([FromRoute] int tenantId, [FromServices] IJwtKeyAppService service, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var result = await service.GetByTenantAsync(tenantId, ct);
             return notify.CustomResponse(result, StatusCodes.Status200OK);
@@ -27,7 +27,7 @@ public static class JwtKeyEndpoint
         .Produces(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapGet("/{tenantId}/active", async (int tenantId, IJwtKeyAppService service, INotify notify, CancellationToken ct) =>
+        groupV1.MapGet("/{tenantId}/active", async ([FromRoute] int tenantId, [FromServices] IJwtKeyAppService service, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var result = await service.GetActiveKeyAsync(tenantId, ct);
             if (result == null)
@@ -43,7 +43,7 @@ public static class JwtKeyEndpoint
         .Produces(StatusCodes.Status204NoContent)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapPost("/{tenantId}/create-initial", async (int tenantId, IJwtKeyAppService service, INotify notify, CancellationToken ct) =>
+        groupV1.MapPost("/{tenantId}/create-initial", async ([FromRoute] int tenantId, [FromServices] IJwtKeyAppService service, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var ok = await service.CreateInitialIfNotExistsAsync(tenantId, ct);
             if (!ok) return notify.CustomResponse();
@@ -56,7 +56,7 @@ public static class JwtKeyEndpoint
         .Produces(StatusCodes.Status201Created)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapPatch("/{id}/revoke", async (int id, [FromBody] RevokeRequest req, IJwtKeyAppService service, INotify notify, CancellationToken ct) =>
+        groupV1.MapPatch("/{id}/revoke", async ([FromRoute] int id, [FromBody] RevokeRequest req, [FromServices] IJwtKeyAppService service, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var ok = await service.RevokeAsync(id, req.Reason, ct);
             if (!ok) return notify.CustomResponse();

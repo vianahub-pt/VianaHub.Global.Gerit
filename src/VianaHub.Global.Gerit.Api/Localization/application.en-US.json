@@ -196,5 +196,11 @@
   "Application.Service.InterventionTeamEquipment.ProcessBulkItems.ExistsByInterventionAndEquipment": "Association between intervention {0} and equipment {1} already exists",
   "Application.Service.InterventionTeamEquipment.ProcessBulkItems.FailedToCreate": "Failed to create association for intervention {0} and equipment {1}",
   "Application.Service.InterventionTeamEquipment.ValidateBulkItem.InterventionTeamId": "Intervention ID is required for intervention {0}",
-  "Application.Service.InterventionTeamEquipment.ValidateBulkItem.EquipmentId": "Equipment ID is required for equipment {0}"
+  "Application.Service.InterventionTeamEquipment.ValidateBulkItem.EquipmentId": "Equipment ID is required for equipment {0}",
+
+  "Application.Service.UserPreferences.Update.ResourceNotFound": "User preferences not found or inactive",
+  "Application.Service.UserPreferences.Create.ResourceAlreadyExists": "User preferences already exist for this user",
+  "Application.Service.UserPreferences.Activate.ResourceNotFound": "User preferences not found",
+  "Application.Service.UserPreferences.Deactivate.ResourceNotFound": "User preferences not found",
+  "Application.Service.UserPreferences.Delete.ResourceNotFound": "User preferences not found"
 }
