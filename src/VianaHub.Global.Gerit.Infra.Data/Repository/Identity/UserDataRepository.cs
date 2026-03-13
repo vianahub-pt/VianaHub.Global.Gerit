@@ -122,13 +122,23 @@ public class UserDataRepository : IUserDataRepository
 
     public async Task<bool> UpdateAsync(UserEntity entity, CancellationToken ct)
     {
-        _context.Set<UserEntity>().Update(entity);
+        var entry = _context.Entry(entity);
+        if (entry.State == EntityState.Detached)
+        {
+            _context.Set<UserEntity>().Attach(entity);
+        }
+        entry.State = EntityState.Modified;
         return await _context.SaveChangesAsync(ct) > 0;
     }
 
     public async Task<bool> DeleteAsync(UserEntity entity, CancellationToken ct)
     {
-        _context.Set<UserEntity>().Update(entity);
+        var entry = _context.Entry(entity);
+        if (entry.State == EntityState.Detached)
+        {
+            _context.Set<UserEntity>().Attach(entity);
+        }
+        entry.State = EntityState.Modified;
         return await _context.SaveChangesAsync(ct) > 0;
     }
 }

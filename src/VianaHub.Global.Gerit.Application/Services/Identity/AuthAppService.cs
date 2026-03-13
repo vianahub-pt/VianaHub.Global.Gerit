@@ -354,7 +354,7 @@ public class AuthAppService : IAuthAppService
         try
         {
             // Buscar roles do usuário
-            var userRoles = await _userRoleRepo.GetByUserAsync(user.Id, user.TenantId, ct);
+            var userRoles = await _userRoleRepo.GetByUserAsync(user.TenantId, user.Id, ct);
 
             var roleNames = userRoles?
                 .Where(r => r?.Role != null)

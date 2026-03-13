@@ -17,6 +17,7 @@ public class RolePermissionDataRepository : IRolePermissionDataRepository
     public async Task<IList<RolePermissionEntity>> GetAllAsync(int tenantId, CancellationToken ct)
     {
         return await _context.RolePermissions
+            .AsNoTracking()
             .Include(x => x.Role)
             .Include(x => x.Resource)
             .Include(x => x.Action)
@@ -26,6 +27,7 @@ public class RolePermissionDataRepository : IRolePermissionDataRepository
     public async Task<RolePermissionEntity> GetByIdAsync(int tenantId, int roleId, int resourceId, int actionId, CancellationToken ct)
     {
         return await _context.RolePermissions
+            .AsNoTracking()
             .Include(x => x.Tenant)
             .Include(x => x.Role)
             .Include(x => x.Resource)
@@ -38,6 +40,7 @@ public class RolePermissionDataRepository : IRolePermissionDataRepository
     public async Task<IList<RolePermissionEntity>> GetByRoleAsync(int roleId, int tenantId, CancellationToken ct)
     {
         return await _context.RolePermissions
+            .AsNoTracking()
             .Include(x => x.Role)
             .Include(x => x.Resource)
             .Include(x => x.Action)
@@ -47,6 +50,7 @@ public class RolePermissionDataRepository : IRolePermissionDataRepository
     public async Task<IList<RolePermissionEntity>> GetByResourceAsync(int resourceId, int tenantId, CancellationToken ct)
     {
         return await _context.RolePermissions
+            .AsNoTracking()
             .Include(x => x.Role)
             .Include(x => x.Action)
             .Include(x => x.Resource)
