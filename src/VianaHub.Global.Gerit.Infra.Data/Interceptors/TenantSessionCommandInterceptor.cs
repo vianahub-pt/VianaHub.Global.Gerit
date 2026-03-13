@@ -89,7 +89,7 @@ public class TenantSessionCommandInterceptor : DbCommandInterceptor
             return;
         }
 
-        await SetTenantSessionContextAsync(sqlConnection, tenantId.Value, cancellationToken);
+        await SetTenantSessionContextAsync(sqlConnection, tenantId.Value, command.Transaction, cancellationToken);
     }
 
     /// <summary>
@@ -141,12 +141,18 @@ public class TenantSessionCommandInterceptor : DbCommandInterceptor
     /// Executa o sp_set_session_context para definir o TenantId na sessão SQL Server.
     /// Utiliza parâmetro para evitar SQL injection.
     /// </summary>
-    private async Task SetTenantSessionContextAsync(SqlConnection connection, int tenantId, CancellationToken cancellationToken)
+    private async Task SetTenantSessionContextAsync(SqlConnection connection, int tenantId, DbTransaction? transaction, CancellationToken cancellationToken)
     {
         try
         {
             await using var cmd = connection.CreateCommand();
             cmd.CommandText = "EXEC sp_set_session_context @key=N'TenantId', @value=@tenantId;";
+
+            // Associa a transação ativa ao comando para evitar o erro
+            // "BeginExecuteNonQuery requires the command to have a transaction
+            //  when the connection assigned to the command is in a pending local transaction"
+            if (transaction is SqlTransaction sqlTransaction)
+                cmd.Transaction = sqlTransaction;
 
             var param = cmd.CreateParameter();
             param.ParameterName = "@tenantId";
