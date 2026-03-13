@@ -20,6 +20,9 @@ public class UserDataRepository : IUserDataRepository
     {
         return await _context.Set<UserEntity>()
             .AsNoTracking()
+            .Include(x => x.Tenant)
+            .Include(x => x.UserRoles)
+            .ThenInclude(ur => ur.Role)
             .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted, ct);
     }
 
@@ -28,6 +31,9 @@ public class UserDataRepository : IUserDataRepository
         var normalizedEmail = email?.ToUpperInvariant();
         return await _context.Set<UserEntity>()
             .AsNoTracking()
+            .Include(x => x.Tenant)
+            .Include(x => x.UserRoles)
+            .ThenInclude(ur => ur.Role)
             .FirstOrDefaultAsync(x => x.NormalizedEmail == normalizedEmail && !x.IsDeleted, ct);
     }
 
@@ -35,6 +41,9 @@ public class UserDataRepository : IUserDataRepository
     {
         return await _context.Set<UserEntity>()
             .AsNoTracking()
+            .Include(x => x.Tenant)
+            .Include(x => x.UserRoles)
+            .ThenInclude(ur => ur.Role)
             .Where(x => !x.IsDeleted)
             .OrderBy(x => x.Name)
             .ToListAsync(ct);
@@ -44,6 +53,9 @@ public class UserDataRepository : IUserDataRepository
     {
         var query = _context.Set<UserEntity>()
             .AsNoTracking()
+            .Include(x => x.Tenant)
+            .Include(x => x.UserRoles)
+            .ThenInclude(ur => ur.Role)
             .Where(x => !x.IsDeleted);
 
         // ?? Filtro de busca
