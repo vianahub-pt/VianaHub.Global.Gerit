@@ -127,10 +127,13 @@ public class AuthAppService : IAuthAppService
         // Retornar sem tokens (login separado)
         return new AuthResponse
         {
-            UserId = user.Id,
+            RoleId = user.UserRoles.FirstOrDefault()?.RoleId ?? 0,
+            RoleName = user.UserRoles.FirstOrDefault()?.Role?.Name,
             TenantId = user.TenantId,
-            Email = user.Email,
-            Name = user.Name
+            TenantName = user.Tenant.Name,
+            UserId = user.Id,
+            UserName = user.Name,
+            Email = user.Email
         };
     }
 
@@ -225,10 +228,13 @@ public class AuthAppService : IAuthAppService
             RefreshToken = refreshTokenValue,
             AccessTokenExpiresAt = accessToken.ExpiresAt,
             RefreshTokenExpiresAt = refreshTokenEntity.ExpiresAt,
-            UserId = user.Id,
+            RoleId = user.UserRoles.FirstOrDefault()?.RoleId ?? 0,
+            RoleName = user.UserRoles.FirstOrDefault()?.Role?.Name,
             TenantId = user.TenantId,
-            Email = user.Email,
-            Name = user.Name
+            TenantName = user.Tenant.Name, 
+            UserId = user.Id,
+            UserName = user.Name,
+            Email = user.Email
         };
     }
 
@@ -306,10 +312,13 @@ public class AuthAppService : IAuthAppService
             RefreshToken = newRefreshValue,
             AccessTokenExpiresAt = accessToken.ExpiresAt,
             RefreshTokenExpiresAt = newRefresh.ExpiresAt,
-            UserId = user.Id,
+            RoleId = user.UserRoles.FirstOrDefault()?.RoleId ?? 0,
+            RoleName = user.UserRoles.FirstOrDefault()?.Role?.Name,
             TenantId = user.TenantId,
-            Email = user.Email,
-            Name = user.Name
+            TenantName = user.Tenant.Name,
+            UserId = user.Id,
+            UserName = user.Name,
+            Email = user.Email
         };
     }
 
@@ -345,7 +354,7 @@ public class AuthAppService : IAuthAppService
         try
         {
             // Buscar roles do usuário
-            var userRoles = await _userRoleRepo.GetByUserAsync(user.Id, user.TenantId, ct);
+            var userRoles = await _userRoleRepo.GetByUserAsync(user.TenantId, user.Id, ct);
 
             var roleNames = userRoles?
                 .Where(r => r?.Role != null)

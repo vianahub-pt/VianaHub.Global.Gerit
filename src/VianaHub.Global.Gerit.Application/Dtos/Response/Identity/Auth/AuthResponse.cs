@@ -6,8 +6,11 @@ public class AuthResponse
     public string RefreshToken { get; set; }
     public DateTime AccessTokenExpiresAt { get; set; }
     public DateTime RefreshTokenExpiresAt { get; set; }
-    public int UserId { get; set; }
+    public int RoleId { get; set; }
+    public string RoleName { get; set; }
     public int TenantId { get; set; }
+    public string TenantName { get; set; }
+    public int UserId { get; set; }
+    public string UserName { get; set; }
     public string Email { get; set; }
-    public string Name { get; set; }
 }
