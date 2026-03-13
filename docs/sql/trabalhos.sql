@@ -3,6 +3,7 @@ select * from dbo.Plans;				--
 select * from dbo.Subscriptions;		--
 select * from dbo.Tenants;				--
 select * from dbo.Users;				--
+select * from dbo.UserPreferences;		--
 select * from dbo.Actions;				--
 select * from dbo.Resources;			--
 select * from dbo.Roles;				--

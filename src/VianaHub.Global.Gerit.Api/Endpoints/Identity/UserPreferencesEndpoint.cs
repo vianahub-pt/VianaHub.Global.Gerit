@@ -46,7 +46,7 @@ public static class UserPreferencesEndpoint
             var response = await appService.GetByUserAsync(userId, ct);
             return notify.CustomResponse(response, 200);
         })
-        .CustomAuthorize("Admin,BackOffice,Manager,Operator,User", "UserPreferences", "GetByUser")
+        .CustomAuthorize("Admin,BackOffice,Manager,Operator,User", "UserPreferences", "GetBy")
         .AllowAnonymous()
         .WithName("GetUserPreferencesByUser")
         .WithSummary("Swagger.Endpoint.UserPreferences.GetByUser.Summary")
