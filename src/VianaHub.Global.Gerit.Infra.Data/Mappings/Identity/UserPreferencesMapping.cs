@@ -61,8 +61,13 @@ public class UserPreferencesMapping : IEntityTypeConfiguration<UserPreferencesEn
         builder.Property(x => x.DayStart)
             .HasColumnName("DayStart")
             .HasColumnType("TIME(0)")
-            // Match SQL default literal
             .HasDefaultValueSql("('09:00')")
+            .IsRequired();
+
+        builder.Property(x => x.DayEnd)
+            .HasColumnName("DayEnd")
+            .HasColumnType("TIME(0)")
+            .HasDefaultValueSql("('18:00')")
             .IsRequired();
 
         builder.Property(x => x.EmailNewsletter).HasColumnName("EmailNewsletter").HasColumnType("BIT").HasDefaultValue(false).IsRequired();
