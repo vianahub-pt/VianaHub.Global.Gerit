@@ -264,6 +264,7 @@ CREATE TABLE dbo.UserPreferences (                                              
     DateFormat                      NVARCHAR(20)        NOT NULL DEFAULT ('DD-MM-YYYY'),        -- Formato de data
     TimeFormat                      NVARCHAR(10)        NOT NULL DEFAULT ('24h'),               -- Formato de hora (24h/12h)
     DayStart                        TIME(0)             NOT NULL DEFAULT ('09:00'),             -- Início do dia para notificações, relatórios e trabalho (usado para calcular "hoje", "amanhã", etc.)
+    DayEnd                          TIME(0)             NOT NULL DEFAULT ('18:00'),             -- Início do dia para notificações, relatórios e trabalho (usado para calcular "hoje", "amanhã", etc.)
     EmailNewsletter                 BIT                 NOT NULL DEFAULT (0),                   -- Receber newsletter por email
     EmailWeeklyReport               BIT                 NOT NULL DEFAULT (0),                   -- Receber relatório semanal por email
     EmailApproval                   BIT                 NOT NULL DEFAULT (0),                   -- Receber emails de aprovação (intervenções, equipamentos, etc.)
@@ -279,7 +280,6 @@ CREATE TABLE dbo.UserPreferences (                                              
     CONSTRAINT PK_UserPreferences PRIMARY KEY CLUSTERED (Id),                                   -- PK
     CONSTRAINT CK_UserPreferences_Active_Deleted CHECK (NOT (IsActive = 1 AND IsDeleted = 1)),  -- Garantir que as preferências não podem ser ativas e deletadas ao mesmo tempo
     CONSTRAINT CK_UserPreferences_Appearance CHECK (Appearance IN ('light', 'dark')),           -- Aparência limitada a light/dark
-    CONSTRAINT CK_UserPreferences_Locale CHECK (Locale IN ('pt-PT', 'en-US')),                  -- Localização limitada a pt-PT/en-US (pode ser expandida no futuro)
     CONSTRAINT CK_UserPreferences_TimeFormat CHECK (TimeFormat IN ('24h', '12h')),              -- Formato de hora limitado a 24h/12h
     CONSTRAINT FK_UserPreferences_Tenant FOREIGN KEY (TenantId) REFERENCES dbo.Tenants(Id),     -- FK para tenant
     CONSTRAINT FK_UserPreferences_User FOREIGN KEY (UserId, TenantId) REFERENCES dbo.Users(Id, TenantId)  -- FK para usuário

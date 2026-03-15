@@ -14,6 +14,7 @@ public class UserPreferencesEntity : Entity
     public string DateFormat { get; private set; }
     public string TimeFormat { get; private set; }
     public TimeSpan DayStart { get; private set; }
+    public TimeSpan DayEnd { get; private set; }
 
     public bool EmailNewsletter { get; private set; }
     public bool EmailWeeklyReport { get; private set; }
@@ -31,7 +32,7 @@ public class UserPreferencesEntity : Entity
 
     protected UserPreferencesEntity() { }
 
-    public UserPreferencesEntity(int tenantId, int userId, string appearance, string locale, string timezone, string dateFormat, string timeFormat, TimeSpan dayStart, int createdBy)
+    public UserPreferencesEntity(int tenantId, int userId, string appearance, string locale, string timezone, string dateFormat, string timeFormat, TimeSpan dayStart, TimeSpan dayEnd, int createdBy)
     {
         TenantId = tenantId;
         UserId = userId;
@@ -41,6 +42,7 @@ public class UserPreferencesEntity : Entity
         DateFormat = dateFormat;
         TimeFormat = timeFormat;
         DayStart = dayStart;
+        DayEnd = dayEnd;
 
         EmailNewsletter = false;
         EmailWeeklyReport = false;
@@ -55,7 +57,7 @@ public class UserPreferencesEntity : Entity
         CreatedAt = DateTime.UtcNow;
     }
 
-    public void Update(string appearance, string locale, string timezone, string dateFormat, string timeFormat, TimeSpan dayStart,
+    public void Update(string appearance, string locale, string timezone, string dateFormat, string timeFormat, TimeSpan dayStart, TimeSpan dayEnd,
         bool emailNewsletter, bool emailWeeklyReport, bool emailApproval, bool emailAlerts, bool emailReminders, bool emailPlanner, int modifiedBy)
     {
         Appearance = appearance;
@@ -64,6 +66,7 @@ public class UserPreferencesEntity : Entity
         DateFormat = dateFormat;
         TimeFormat = timeFormat;
         DayStart = dayStart;
+        DayEnd = dayEnd;
 
         EmailNewsletter = emailNewsletter;
         EmailWeeklyReport = emailWeeklyReport;

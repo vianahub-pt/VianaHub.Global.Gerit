@@ -93,10 +93,12 @@ public class UserPreferencesAppService : IUserPreferencesAppService
 
         if (!TimeSpan.TryParse(request.DayStart, out var dayStart))
             dayStart = TimeSpan.Parse("09:00");
+        if (!TimeSpan.TryParse(request.DayEnd, out var dayEnd))
+            dayEnd = TimeSpan.Parse("18:00");
 
-        var entity = new UserPreferencesEntity(tenantId, userId, request.Appearance, request.Locale, request.Timezone, request.DateFormat, request.TimeFormat, dayStart, _currentUser.GetUserId());
+        var entity = new UserPreferencesEntity(tenantId, userId, request.Appearance, request.Locale, request.Timezone, request.DateFormat, request.TimeFormat, dayStart, dayEnd, _currentUser.GetUserId());
 
-        entity.Update(request.Appearance, request.Locale, request.Timezone, request.DateFormat, request.TimeFormat, dayStart, request.EmailNewsletter, request.EmailWeeklyReport, request.EmailApproval, request.EmailAlerts, request.EmailReminders, request.EmailPlanner, _currentUser.GetUserId());
+        entity.Update(request.Appearance, request.Locale, request.Timezone, request.DateFormat, request.TimeFormat, dayStart, dayEnd, request.EmailNewsletter, request.EmailWeeklyReport, request.EmailApproval, request.EmailAlerts, request.EmailReminders, request.EmailPlanner, _currentUser.GetUserId());
 
         return await _domain.CreateAsync(entity, ct);
     }
@@ -112,8 +114,10 @@ public class UserPreferencesAppService : IUserPreferencesAppService
 
         if (!TimeSpan.TryParse(request.DayStart, out var dayStart))
             dayStart = entity.DayStart;
+        if (!TimeSpan.TryParse(request.DayEnd, out var dayEnd))
+            dayEnd = entity.DayEnd;
 
-        entity.Update(request.Appearance, request.Locale, request.Timezone, request.DateFormat, request.TimeFormat, dayStart, request.EmailNewsletter, request.EmailWeeklyReport, request.EmailApproval, request.EmailAlerts, request.EmailReminders, request.EmailPlanner, _currentUser.GetUserId());
+        entity.Update(request.Appearance, request.Locale, request.Timezone, request.DateFormat, request.TimeFormat, dayStart, dayEnd, request.EmailNewsletter, request.EmailWeeklyReport, request.EmailApproval, request.EmailAlerts, request.EmailReminders, request.EmailPlanner, _currentUser.GetUserId());
 
         return await _domain.UpdateAsync(entity, ct);
     }
