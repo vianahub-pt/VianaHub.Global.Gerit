@@ -15,6 +15,7 @@ public class UserPreferencesResponse
     public string DateFormat { get; set; }
     public string TimeFormat { get; set; }
     public string DayStart { get; set; }
+    public string DayEnd { get; set; }
 
     public bool EmailNewsletter { get; set; }
     public bool EmailWeeklyReport { get; set; }
