@@ -75,6 +75,103 @@
                 }
               },
               "response": []
+            },
+            {
+              "name": "refresh",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "// Executa após receber a resposta do /auth/login\r",
+                      "const json = pm.response.json();\r",
+                      "\r",
+                      "if (json && json.accessToken) {\r",
+                      "  // Sugestão: variável de ambiente (Environment)\r",
+                      "  pm.environment.set(\"accessToken\", json.accessToken);\r",
+                      "  pm.collectionVariables.set(\"accessToken\", json.accessToken)\r",
+                      "\r",
+                      "  // Opcional: salvar também refreshToken e expiração\r",
+                      "  pm.environment.set(\"refreshToken\", json.refreshToken);\r",
+                      "  pm.environment.set(\"accessTokenExpiresAt\", json.accessTokenExpiresAt);\r",
+                      "\r",
+                      "  console.log(\"accessToken salvo no environment.\");\r",
+                      "} else {\r",
+                      "  console.warn(\"Resposta não contém accessToken.\");\r",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept-Language",
+                    "value": "pt-BR",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"tenantId\": 1,\r\n  \"refreshToken\": \"/aJWfxwQasvzg7KZO4uGNY3gBkQiAHC6MPgRtMhmP14YJfEwaKR2SGPJro5QwFjtGG3+Aa3okcX+MRRfubL2NQ\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{protocol}}{{host}}{{port}}{{path}}/auth/refresh",
+                  "host": [
+                    "{{protocol}}{{host}}{{port}}{{path}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "refresh"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Obter todos",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept-Language",
+                    "value": "pt-BR",
+                    "type": "text"
+                  },
+                  {
+                    "key": "x-tenant-id",
+                    "value": "1",
+                    "type": "text",
+                    "disabled": true
+                  }
+                ],
+                "url": {
+                  "raw": "{{protocol}}{{host}}{{port}}{{path}}/auth/tenants",
+                  "host": [
+                    "{{protocol}}{{host}}{{port}}{{path}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "tenants"
+                  ]
+                }
+              },
+              "response": []
             }
           ]
         },
@@ -1591,6 +1688,311 @@
                   "path": [
                     "userroles",
                     "bulk-upload"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "UserPreferences",
+          "item": [
+            {
+              "name": "Obter todos",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept-Language",
+                    "value": "pt-BR",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{protocol}}{{host}}{{port}}{{path}}/user-preferences",
+                  "host": [
+                    "{{protocol}}{{host}}{{port}}{{path}}"
+                  ],
+                  "path": [
+                    "user-preferences"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Obter por id",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept-Language",
+                    "value": "pt-BR",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{protocol}}{{host}}{{port}}{{path}}/user-preferences/1",
+                  "host": [
+                    "{{protocol}}{{host}}{{port}}{{path}}"
+                  ],
+                  "path": [
+                    "user-preferences",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Obter por usuário",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept-Language",
+                    "value": "pt-BR",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{protocol}}{{host}}{{port}}{{path}}/user-preferences/user/1",
+                  "host": [
+                    "{{protocol}}{{host}}{{port}}{{path}}"
+                  ],
+                  "path": [
+                    "user-preferences",
+                    "user",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Obter paginado por filtro",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept-Language",
+                    "value": "pt-BR",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{protocol}}{{host}}{{port}}{{path}}/user-preferences/paged?Search=&PageNumber=1&PageSize=10&SortBy=Name&SortDirection=asc",
+                  "host": [
+                    "{{protocol}}{{host}}{{port}}{{path}}"
+                  ],
+                  "path": [
+                    "user-preferences",
+                    "paged"
+                  ],
+                  "query": [
+                    {
+                      "key": "Search",
+                      "value": ""
+                    },
+                    {
+                      "key": "PageNumber",
+                      "value": "1"
+                    },
+                    {
+                      "key": "PageSize",
+                      "value": "10"
+                    },
+                    {
+                      "key": "SortBy",
+                      "value": "Name"
+                    },
+                    {
+                      "key": "SortDirection",
+                      "value": "asc"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Criar novo",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept-Language",
+                    "value": "pt-BR",
+                    "type": "text"
+                  },
+                  {
+                    "key": "x-tenant-id",
+                    "value": "1",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"appearance\": \"string\",\r\n  \"locale\": \"string\",\r\n  \"timezone\": \"string\",\r\n  \"dateFormat\": \"string\",\r\n  \"timeFormat\": \"string\",\r\n  \"dayStart\": \"string\",\r\n  \"emailNewsletter\": true,\r\n  \"emailWeeklyReport\": true,\r\n  \"emailApproval\": true,\r\n  \"emailAlerts\": true,\r\n  \"emailReminders\": true,\r\n  \"emailPlanner\": true\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{protocol}}{{host}}{{port}}{{path}}/user-preferences",
+                  "host": [
+                    "{{protocol}}{{host}}{{port}}{{path}}"
+                  ],
+                  "path": [
+                    "user-preferences"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Cadastro em massa",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept-Language",
+                    "value": "pt-BR",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "file",
+                      "type": "file",
+                      "uuid": "8ff4b496-46c5-49ea-926a-9b4b75a3c17a",
+                      "src": "postman-cloud:///1f10a637-2c80-4ff0-97e9-92f67afc0592"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{protocol}}{{host}}{{port}}{{path}}/user-preferences/bulk-upload",
+                  "host": [
+                    "{{protocol}}{{host}}{{port}}{{path}}"
+                  ],
+                  "path": [
+                    "user-preferences",
+                    "bulk-upload"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Atualizar",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Accept-Language",
+                    "value": "pt-BR",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"appearance\": \"string\",\r\n  \"locale\": \"string\",\r\n  \"timezone\": \"string\",\r\n  \"dateFormat\": \"string\",\r\n  \"timeFormat\": \"string\",\r\n  \"dayStart\": \"string\",\r\n  \"emailNewsletter\": true,\r\n  \"emailWeeklyReport\": true,\r\n  \"emailApproval\": true,\r\n  \"emailAlerts\": true,\r\n  \"emailReminders\": true,\r\n  \"emailPlanner\": true\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{protocol}}{{host}}{{port}}{{path}}/user-preferences/1",
+                  "host": [
+                    "{{protocol}}{{host}}{{port}}{{path}}"
+                  ],
+                  "path": [
+                    "user-preferences",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Ativar",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Accept-Language",
+                    "value": "pt-BR",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{protocol}}{{host}}{{port}}{{path}}/user-preferences/1/activate",
+                  "host": [
+                    "{{protocol}}{{host}}{{port}}{{path}}"
+                  ],
+                  "path": [
+                    "user-preferences",
+                    "1",
+                    "activate"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Desativar",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Accept-Language",
+                    "value": "pt-BR",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{protocol}}{{host}}{{port}}{{path}}/user-preferences/1/deactivate",
+                  "host": [
+                    "{{protocol}}{{host}}{{port}}{{path}}"
+                  ],
+                  "path": [
+                    "user-preferences",
+                    "1",
+                    "deactivate"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Excluir",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Accept-Language",
+                    "value": "pt-BR",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{protocol}}{{host}}{{port}}{{path}}/user-preferences/1",
+                  "host": [
+                    "{{protocol}}{{host}}{{port}}{{path}}"
+                  ],
+                  "path": [
+                    "user-preferences",
+                    "1"
                   ]
                 }
               },

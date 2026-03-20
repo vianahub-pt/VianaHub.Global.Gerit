@@ -9,6 +9,7 @@ public class UserPreferencesEntity : Entity
     public int UserId { get; private set; }
 
     public string Appearance { get; private set; }
+    public string CurrencyCode { get; private set; }
     public string Locale { get; private set; }
     public string Timezone { get; private set; }
     public string DateFormat { get; private set; }
@@ -32,11 +33,12 @@ public class UserPreferencesEntity : Entity
 
     protected UserPreferencesEntity() { }
 
-    public UserPreferencesEntity(int tenantId, int userId, string appearance, string locale, string timezone, string dateFormat, string timeFormat, TimeSpan dayStart, TimeSpan dayEnd, int createdBy)
+    public UserPreferencesEntity(int tenantId, int userId, string appearance, string currencyCode, string locale, string timezone, string dateFormat, string timeFormat, TimeSpan dayStart, TimeSpan dayEnd, int createdBy)
     {
         TenantId = tenantId;
         UserId = userId;
         Appearance = appearance;
+        CurrencyCode = currencyCode;
         Locale = locale;
         Timezone = timezone;
         DateFormat = dateFormat;
@@ -57,10 +59,11 @@ public class UserPreferencesEntity : Entity
         CreatedAt = DateTime.UtcNow;
     }
 
-    public void Update(string appearance, string locale, string timezone, string dateFormat, string timeFormat, TimeSpan dayStart, TimeSpan dayEnd,
+    public void Update(string appearance, string locale, string currencyCode, string timezone, string dateFormat, string timeFormat, TimeSpan dayStart, TimeSpan dayEnd,
         bool emailNewsletter, bool emailWeeklyReport, bool emailApproval, bool emailAlerts, bool emailReminders, bool emailPlanner, int modifiedBy)
     {
         Appearance = appearance;
+        CurrencyCode = currencyCode;
         Locale = locale;
         Timezone = timezone;
         DateFormat = dateFormat;
