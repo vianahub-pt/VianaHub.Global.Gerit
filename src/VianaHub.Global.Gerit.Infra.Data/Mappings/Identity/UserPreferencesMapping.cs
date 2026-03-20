@@ -94,8 +94,6 @@ public class UserPreferencesMapping : IEntityTypeConfiguration<UserPreferencesEn
 
         // Check constraints to match SQL table
         builder.HasCheckConstraint("CK_UserPreferences_Active_Deleted", "NOT (IsActive = 1 AND IsDeleted = 1)");
-        builder.HasCheckConstraint("CK_UserPreferences_Appearance", "Appearance IN ('light', 'dark')");
-        builder.HasCheckConstraint("CK_UserPreferences_Locale", "Locale IN ('pt-PT', 'en-US')");
         builder.HasCheckConstraint("CK_UserPreferences_TimeFormat", "TimeFormat IN ('24h', '12h')");
 
         // Relationships
