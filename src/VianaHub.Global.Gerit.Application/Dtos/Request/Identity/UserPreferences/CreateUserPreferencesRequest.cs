@@ -3,6 +3,7 @@ namespace VianaHub.Global.Gerit.Application.Dtos.Request.Identity.UserPreference
 public class CreateUserPreferencesRequest
 {
     public string Appearance { get; set; }
+    public string CurrencyCode { get; set; }
     public string Locale { get; set; }
     public string Timezone { get; set; }
     public string DateFormat { get; set; }

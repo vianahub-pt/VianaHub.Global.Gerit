@@ -259,6 +259,7 @@ CREATE TABLE dbo.UserPreferences (                                              
     TenantId                        INT                 NOT NULL,                               -- Tenant dono
     UserId                          INT                 NOT NULL,                               -- Usuário dono
     Appearance                      NVARCHAR(10)        NOT NULL DEFAULT ('light'),             -- Tema (light/dark)
+	CurrencyCode 					NVARCHAR(3) 		NOT NULL DEFAULT ('EUR')
     Locale                          NVARCHAR(10)        NOT NULL DEFAULT ('pt-PT'),             -- Localização (pt-PT, en-US, es-ES, etc.)
     Timezone                        NVARCHAR(100)       NOT NULL DEFAULT ('Europe/Lisbon'),     -- Timezone IANA
     DateFormat                      NVARCHAR(20)        NOT NULL DEFAULT ('DD-MM-YYYY'),        -- Formato de data

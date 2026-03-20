@@ -31,6 +31,13 @@ public class UserPreferencesMapping : IEntityTypeConfiguration<UserPreferencesEn
             .IsRequired();
 
         builder.Property(x => x.Locale)
+            .HasColumnName("CurrencyCode")
+            .HasColumnType("NVARCHAR(3)")
+            .HasMaxLength(10)
+            .HasDefaultValue("pt-PT")
+            .IsRequired();
+
+        builder.Property(x => x.Locale)
             .HasColumnName("Locale")
             .HasColumnType("NVARCHAR(10)")
             .HasMaxLength(10)

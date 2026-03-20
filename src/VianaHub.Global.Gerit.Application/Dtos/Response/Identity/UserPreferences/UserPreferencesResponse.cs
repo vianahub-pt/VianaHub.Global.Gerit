@@ -9,6 +9,7 @@ public class UserPreferencesResponse
     public string User { get; set; }
 
     public string Appearance { get; set; }
+    public string CurrencyCode { get; set; }
     public string Locale { get; set; }
     public string Timezone { get; set; }
     public string DateFormat { get; set; }
