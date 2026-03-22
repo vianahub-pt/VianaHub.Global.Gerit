@@ -64,6 +64,11 @@ public class ClientAddressDataRepository : IClientAddressDataRepository
                 EF.Functions.Like(x.AddressType.Name.ToLower(), $"%{search}%"));
         }
 
+        if (request.IsActive.HasValue)
+        {
+            query = query.Where(x => x.IsActive == request.IsActive.Value);
+        }
+
         // Total de registros
         var count = await query.CountAsync(ct);
 
@@ -81,7 +86,7 @@ public class ClientAddressDataRepository : IClientAddressDataRepository
 
         return new ListPage<ClientAddressEntity>
         {
-            Data = result,
+            Items = result,
             PageNumber = pageNumber,
             PageSize = pageSize,
             TotalItems = count,

@@ -64,7 +64,7 @@ public class InterventionTeamVehicleAppService : IInterventionTeamVehiclesAppSer
 
     public async Task<ListPageResponse<InterventionTeamVehicleResponse>> GetPagedAsync(PagedFilterRequest request, CancellationToken ct)
     {
-        var filter = new PagedFilter(request.Search, request.PageNumber, request.PageSize, request.SortBy, request.SortDirection);
+        var filter = new PagedFilter(request.Search, request.IsActive, request.PageNumber, request.PageSize, request.SortBy, request.SortDirection);
         var paged = await _repo.GetPagedAsync(filter, ct);
         return _mapper.Map<ListPageResponse<InterventionTeamVehicleResponse>>(paged);
     }

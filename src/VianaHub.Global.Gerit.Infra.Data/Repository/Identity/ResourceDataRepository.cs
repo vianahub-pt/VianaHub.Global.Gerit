@@ -44,6 +44,11 @@ public class ResourceDataRepository : IResourceDataRepository
             );
         }
 
+        if (request.IsActive.HasValue)
+        {
+            query = query.Where(x => x.IsActive == request.IsActive.Value);
+        }
+
         var count = await query.CountAsync(ct);
 
         var orderedQuery = CreateSort.ApplyOrdering(query, request);
@@ -58,7 +63,7 @@ public class ResourceDataRepository : IResourceDataRepository
 
         return new ListPage<ResourceEntity>
         {
-            Data = result,
+            Items = result,
             PageNumber = pageNumber,
             PageSize = pageSize,
             TotalItems = count,

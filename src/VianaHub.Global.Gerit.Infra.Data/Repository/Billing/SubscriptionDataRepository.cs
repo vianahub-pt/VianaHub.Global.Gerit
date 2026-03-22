@@ -56,6 +56,11 @@ public class SubscriptionDataRepository : ISubscriptionDataRepository
             );
         }
 
+        if (request.IsActive.HasValue)
+        {
+            query = query.Where(x => x.IsActive == request.IsActive.Value);
+        }
+
         var count = await query.CountAsync(ct);
 
         var orderedQuery = CreateSort.ApplyOrdering(query, request);
@@ -70,7 +75,7 @@ public class SubscriptionDataRepository : ISubscriptionDataRepository
 
         return new ListPage<SubscriptionEntity>
         {
-            Data = result,
+            Items = result,
             PageNumber = pageNumber,
             PageSize = pageSize,
             TotalItems = count,

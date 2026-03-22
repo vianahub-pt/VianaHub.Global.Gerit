@@ -32,24 +32,29 @@ public class StatusTypeDataRepository : IStatusTypeDataRepository
             .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted, ct);
     }
 
-    public async Task<ListPage<StatusTypeEntity>> GetPagedAsync(PagedFilter filter, CancellationToken ct)
+    public async Task<ListPage<StatusTypeEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct)
     {
         var query = _context.StatusTypes
             .AsNoTracking()
             .Where(x => !x.IsDeleted);
 
-        if (!string.IsNullOrWhiteSpace(filter.Search))
+        if (!string.IsNullOrWhiteSpace(request.Search))
         {
-            var search = filter.Search.Trim().ToLower();
+            var search = request.Search.Trim().ToLower();
             query = query.Where(x => 
                 EF.Functions.Like(x.Name.ToLower(), $"%{search}%") ||
                 EF.Functions.Like(x.Description.ToLower(), $"%{search}%"));
         }
 
+        if (request.IsActive.HasValue)
+        {
+            query = query.Where(x => x.IsActive == request.IsActive.Value);
+        }
+
         var count = await query.CountAsync(ct);
-        var orderedQuery = CreateSort.ApplyOrdering(query, filter);
-        var pageNumber = filter.PageNumber ?? 1;
-        var pageSize = filter.PageSize ?? Paging.MinPageSize();
+        var orderedQuery = CreateSort.ApplyOrdering(query, request);
+        var pageNumber = request.PageNumber ?? 1;
+        var pageSize = request.PageSize ?? Paging.MinPageSize();
 
         var result = await orderedQuery
             .Skip((pageNumber - 1) * pageSize)
@@ -58,7 +63,7 @@ public class StatusTypeDataRepository : IStatusTypeDataRepository
 
         return new ListPage<StatusTypeEntity>
         {
-            Data = result,
+            Items = result,
             PageNumber = pageNumber,
             PageSize = pageSize,
             TotalItems = count,

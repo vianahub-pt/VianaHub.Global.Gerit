@@ -40,7 +40,7 @@ public class InterventionAddressDataRepository : IInterventionAddressDataReposit
             .ToListAsync(ct);
     }
 
-    public async Task<ListPage<InterventionAddressEntity>> GetPagedAsync(PagedFilter filter, CancellationToken ct)
+    public async Task<ListPage<InterventionAddressEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct)
     {
         var query = _context.InterventionAddresses
             .AsNoTracking()
@@ -48,9 +48,9 @@ public class InterventionAddressDataRepository : IInterventionAddressDataReposit
             .Include(x => x.AddressType)
             .Where(x => !x.IsDeleted);
 
-        if (!string.IsNullOrWhiteSpace(filter.Search))
+        if (!string.IsNullOrWhiteSpace(request.Search))
         {
-            var searchLower = filter.Search.ToLower();
+            var searchLower = request.Search.ToLower();
             query = query.Where(x =>
                 EF.Functions.Like(x.Street.ToLower(), $"%{searchLower}%") ||
                 EF.Functions.Like(x.City.ToLower(), $"%{searchLower}%") ||
@@ -61,10 +61,15 @@ public class InterventionAddressDataRepository : IInterventionAddressDataReposit
                 EF.Functions.Like(x.AddressType.Name.ToLower(), $"%{searchLower}%"));
         }
 
+        if (request.IsActive.HasValue)
+        {
+            query = query.Where(x => x.IsActive == request.IsActive.Value);
+        }
+
         var count = await query.CountAsync(ct);
-        var orderedQuery = CreateSort.ApplyOrdering(query, filter);
-        var pageNumber = filter.PageNumber ?? 1;
-        var pageSize = filter.PageSize ?? Paging.MinPageSize();
+        var orderedQuery = CreateSort.ApplyOrdering(query, request);
+        var pageNumber = request.PageNumber ?? 1;
+        var pageSize = request.PageSize ?? Paging.MinPageSize();
 
         var result = await orderedQuery
             .Skip((pageNumber - 1) * pageSize)
@@ -73,7 +78,7 @@ public class InterventionAddressDataRepository : IInterventionAddressDataReposit
 
         return new ListPage<InterventionAddressEntity>
         {
-            Data = result,
+            Items = result,
             PageNumber = pageNumber,
             PageSize = pageSize,
             TotalItems = count,

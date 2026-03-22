@@ -69,6 +69,11 @@ public class UserDataRepository : IUserDataRepository
             );
         }
 
+        if (request.IsActive.HasValue)
+        {
+            query = query.Where(x => x.IsActive == request.IsActive.Value);
+        }
+
         var count = await query.CountAsync(ct);
 
         var orderedQuery = CreateSort.ApplyOrdering(query, request);
@@ -83,7 +88,7 @@ public class UserDataRepository : IUserDataRepository
 
         return new ListPage<UserEntity>
         {
-            Data = result,
+            Items = result,
             PageNumber = pageNumber,
             PageSize = pageSize,
             TotalItems = count,

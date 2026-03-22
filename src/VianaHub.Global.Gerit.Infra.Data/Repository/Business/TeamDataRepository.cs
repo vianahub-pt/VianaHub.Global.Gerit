@@ -37,6 +37,11 @@ public class TeamDataRepository : ITeamDataRepository
                                      EF.Functions.Like(x.Description.ToLower(), $"%{search}%"));
         }
 
+        if (request.IsActive.HasValue)
+        {
+            query = query.Where(x => x.IsActive == request.IsActive.Value);
+        }
+
         var count = await query.CountAsync(ct);
         var orderedQuery = CreateSort.ApplyOrdering(query, request);
         var pageNumber = request.PageNumber ?? 1;
@@ -46,7 +51,7 @@ public class TeamDataRepository : ITeamDataRepository
 
         return new ListPage<TeamEntity>
         {
-            Data = result,
+            Items = result,
             PageNumber = pageNumber,
             PageSize = pageSize,
             TotalItems = count,
