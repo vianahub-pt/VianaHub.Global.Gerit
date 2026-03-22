@@ -136,6 +136,7 @@ public static class DependencyInjection
         services.AddScoped<ITeamAppService, TeamAppService>();
         services.AddScoped<IVehicleAppService, VehicleAppService>();
         services.AddScoped<IEquipmentAppService, EquipmentAppService>();
+        services.AddScoped<ITeamMemberAppService, TeamMemberAppService>();
         services.AddScoped<ITeamMembersTeamsAppService, TeamMembersTeamAppService>();
         services.AddScoped<ITeamMembersTeamDataRepository, TeamMembersTeamDataRepository>();
         services.AddScoped<IInterventionTeamsAppService, InterventionTeamAppService>();
