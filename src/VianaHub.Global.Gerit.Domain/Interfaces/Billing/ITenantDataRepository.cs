@@ -7,6 +7,7 @@ namespace VianaHub.Global.Gerit.Domain.Interfaces.Billing;
 public interface ITenantDataRepository
 {
     Task<TenantEntity> GetByIdAsync(int id, CancellationToken ct);
+    Task<TenantEntity> GetByUserEmailAsync(string email, CancellationToken ct);
     Task<IEnumerable<TenantEntity>> GetAllAsync(CancellationToken ct);
     Task<IEnumerable<TenantEntity>> GetLoginAsync(CancellationToken ct);
     Task<ListPage<TenantEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct);

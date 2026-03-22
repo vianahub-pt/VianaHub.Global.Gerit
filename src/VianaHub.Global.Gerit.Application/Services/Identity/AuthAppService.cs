@@ -139,17 +139,14 @@ public class AuthAppService : IAuthAppService
 
     public async Task<AuthResponse> LoginAsync(LoginRequest request, CancellationToken ct)
     {
-        // Validar tenantId básico
-        if (request.TenantId <= 0)
+        var tenantId = await _tenantRepo.GetByUserEmailAsync(request.Email, ct);
+        if (tenantId == null)
         {
-            _notify.Add(_localization.GetMessage("Application.Service.Auth.Login.InvalidTenantId"), 400);
+            _notify.Add(_localization.GetMessage("Application.Service.Auth.UserNotAssociateInTenant"), 401);
             return null;
         }
 
-        // Propaga o TenantId para o interceptor ANTES de qualquer query.
-        // Os interceptors TenantSessionConnectionInterceptor e TenantSessionCommandInterceptor
-        // irão ler este valor e setar o SESSION_CONTEXT do SQL Server automaticamente.
-        _requestTenantContext.SetTenantId(request.TenantId);
+        _requestTenantContext.SetTenantId(tenantId.Id);
 
         var user = await _userRepo.GetByEmailAsync(request.Email, ct);
         if (user == null)
@@ -158,39 +155,38 @@ public class AuthAppService : IAuthAppService
             return null;
         }
 
-        // Verifica senha
         if (!DomainExtensions.VerifyClientSecret(user.PasswordHash, request.Password))
         {
             _notify.Add(_localization.GetMessage("Application.Service.Auth.Login.InvalidCredentials"), 401);
             return null;
         }
 
-        if (!await _subscriptionDomain.IsActiveAsync(request.TenantId, ct))
+        if (!await _subscriptionDomain.IsActiveAsync(tenantId.Id, ct))
         {
             _notify.Add(_localization.GetMessage("Application.Service.Auth.Login.Subscription.NonActive"), 403);
             return null;
         }
-        if (await _subscriptionDomain.IsCanceledAsync(request.TenantId, ct))
+        if (await _subscriptionDomain.IsCanceledAsync(tenantId.Id, ct))
         {
             _notify.Add(_localization.GetMessage("Application.Service.Auth.Login.Subscription.Canceled"), 403);
             return null;
         }
-        if (await _subscriptionDomain.IsDeletedAsync(request.TenantId, ct))
+        if (await _subscriptionDomain.IsDeletedAsync(tenantId.Id, ct))
         {
             _notify.Add(_localization.GetMessage("Application.Service.Auth.Login.Subscription.Deleted"), 403);
             return null;
         }
 
-        var isTrial = await _subscriptionDomain.IsTrialAsync(request.TenantId, ct);
+        var isTrial = await _subscriptionDomain.IsTrialAsync(tenantId.Id, ct);
         if (isTrial)
         {
-            if (await _subscriptionDomain.IsTrialPeriodExpiredAsync(request.TenantId, ct))
+            if (await _subscriptionDomain.IsTrialPeriodExpiredAsync(tenantId.Id, ct))
             {
                 _notify.Add(_localization.GetMessage("Application.Service.Auth.Login.Subscription.TrialPeriodExpired"), 403);
                 return null;
             }
         }
-        else if (await _subscriptionDomain.IsSubscriptionPeriodExpiredAsync(request.TenantId, ct))
+        else if (await _subscriptionDomain.IsSubscriptionPeriodExpiredAsync(tenantId.Id, ct))
         {
             _notify.Add(_localization.GetMessage("Application.Service.Auth.Login.Subscription.PeriodExpired"), 403);
             return null;

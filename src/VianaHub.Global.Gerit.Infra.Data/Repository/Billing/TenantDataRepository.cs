@@ -1,3 +1,4 @@
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using VianaHub.Global.Gerit.Domain.Entities.Billing;
 using VianaHub.Global.Gerit.Domain.Interfaces.Billing;
@@ -19,6 +20,23 @@ public class TenantDataRepository : ITenantDataRepository
     public async Task<TenantEntity> GetByIdAsync(int id, CancellationToken ct)
     {
         return await _context.Set<TenantEntity>().AsNoTracking().FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted, ct);
+    }
+
+    public async Task<TenantEntity> GetByUserEmailAsync(string email, CancellationToken ct)
+    {
+        await _context.Database.OpenConnectionAsync(ct);
+        await _context.Database.ExecuteSqlRawAsync(
+            "EXEC sp_set_session_context @key=N'IsSuperAdmin', @value=1", ct);
+
+        var result = await _context.Set<TenantEntity>()
+            .AsNoTracking()
+            .Include(x => x.Users)
+            .Where(x => !x.IsDeleted && x.Users.Any(u => u.Email == email))
+            .FirstOrDefaultAsync(ct);
+
+        await _context.Database.CloseConnectionAsync();
+
+        return result;
     }
 
     public async Task<IEnumerable<TenantEntity>> GetLoginAsync(CancellationToken ct)
