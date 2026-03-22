@@ -41,10 +41,15 @@ public class ClientDataRepository : IClientDataRepository
         if (!string.IsNullOrWhiteSpace(request.Search))
         {
             var search = request.Search.Trim().ToLower();
-            query = query.Where(x => 
-                EF.Functions.Like(x.Name.ToLower(), $"%{search}%") || 
+            query = query.Where(x =>
+                EF.Functions.Like(x.Name.ToLower(), $"%{search}%") ||
                 EF.Functions.Like(x.Email.ToLower(), $"%{search}%") ||
                 EF.Functions.Like(x.Phone.ToLower(), $"%{search}%"));
+        }
+
+        if (request.IsActive.HasValue)
+        {
+            query = query.Where(x => x.IsActive == request.IsActive.Value);
         }
 
         var count = await query.CountAsync(ct);
@@ -56,7 +61,7 @@ public class ClientDataRepository : IClientDataRepository
 
         return new ListPage<ClientEntity>
         {
-            Data = result,
+            Items = result,
             PageNumber = pageNumber,
             PageSize = pageSize,
             TotalItems = count,

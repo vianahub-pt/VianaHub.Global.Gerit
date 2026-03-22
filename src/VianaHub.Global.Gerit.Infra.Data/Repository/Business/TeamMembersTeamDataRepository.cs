@@ -50,6 +50,11 @@ public class TeamMembersTeamDataRepository : ITeamMembersTeamDataRepository
                                      EF.Functions.Like(x.TeamMember.Name.ToString(), $"%{request.Search}%"));
         }
 
+        if (request.IsActive.HasValue)
+        {
+            query = query.Where(x => x.IsActive == request.IsActive.Value);
+        }
+
         var total = await query.CountAsync(ct);
 
         var page = request.PageNumber ?? 1;

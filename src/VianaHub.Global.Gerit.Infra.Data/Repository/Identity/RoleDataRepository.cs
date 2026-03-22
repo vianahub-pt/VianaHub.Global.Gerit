@@ -50,6 +50,11 @@ public class RoleDataRepository : IRoleDataRepository
             );
         }
 
+        if (request.IsActive.HasValue)
+        {
+            query = query.Where(x => x.IsActive == request.IsActive.Value);
+        }
+
         var count = await query.CountAsync(ct);
 
         var orderedQuery = CreateSort.ApplyOrdering(query, request);
@@ -64,7 +69,7 @@ public class RoleDataRepository : IRoleDataRepository
 
         return new ListPage<RoleEntity>
         {
-            Data = result,
+            Items = result,
             PageNumber = pageNumber,
             PageSize = pageSize,
             TotalItems = count,

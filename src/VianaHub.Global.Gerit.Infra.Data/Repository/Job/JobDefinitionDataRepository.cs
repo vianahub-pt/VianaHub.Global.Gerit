@@ -45,7 +45,7 @@ public class JobDefinitionDataRepository : IJobDefinitionDataRepository
     public async Task<ListPage<JobDefinitionEntity>> GetPagedAsync(PagedFilter filter, CancellationToken ct)
     {
         // Accept JobPagedFilter or fallback to PagedFilter
-        var jobFilter = filter as JobPagedFilter ?? new JobPagedFilter(filter?.Search, filter?.PageNumber, filter?.PageSize, filter?.SortBy, filter?.SortDirection);
+        var jobFilter = filter as JobPagedFilter ?? new JobPagedFilter(filter?.Search, filter.IsActive, filter?.PageNumber, filter?.PageSize, filter?.SortBy, filter?.SortDirection);
 
         var query = _context.Set<JobDefinitionEntity>()
             .AsNoTracking()
@@ -82,7 +82,7 @@ public class JobDefinitionDataRepository : IJobDefinitionDataRepository
 
         return new ListPage<JobDefinitionEntity>
         {
-            Data = data,
+            Items = data,
             PageNumber = pageNumber,
             PageSize = pageSize,
             TotalItems = count,

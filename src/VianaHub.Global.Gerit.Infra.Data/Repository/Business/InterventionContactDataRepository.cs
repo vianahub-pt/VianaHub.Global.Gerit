@@ -51,6 +51,11 @@ public class InterventionContactDataRepository : IInterventionContactDataReposit
                 EF.Functions.Like(x.Intervention.Title.ToLower(), $"%{search}%"));
         }
 
+        if (request.IsActive.HasValue)
+        {
+            query = query.Where(x => x.IsActive == request.IsActive.Value);
+        }
+
         var count = await query.CountAsync(ct);
         var orderedQuery = CreateSort.ApplyOrdering(query, request);
         var pageNumber = request.PageNumber ?? 1;
@@ -60,7 +65,7 @@ public class InterventionContactDataRepository : IInterventionContactDataReposit
 
         return new ListPage<InterventionContactEntity>
         {
-            Data = result,
+            Items = result,
             PageNumber = pageNumber,
             PageSize = pageSize,
             TotalItems = count,

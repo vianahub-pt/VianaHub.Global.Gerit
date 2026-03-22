@@ -2,16 +2,16 @@
 
 public class ListPage<T>
 {
-    public IEnumerable<T> Data { get; set; }
+    public IEnumerable<T> Items { get; set; }
     public int PageNumber { get; set; }
     public int PageSize { get; set; }
     public int TotalItems { get; set; }
     public int TotalPages { get; set; }
 
     public ListPage() { }
-    public ListPage(IEnumerable<T> data, int pageNumber, int pageSize, int totalItems, int totalPages)
+    public ListPage(IEnumerable<T> items, int pageNumber, int pageSize, int totalItems, int totalPages)
     {
-        Data = data;
+        Items = items;
         PageNumber = pageNumber;
         PageSize = pageSize;
         TotalItems = totalItems;

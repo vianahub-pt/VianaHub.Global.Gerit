@@ -53,6 +53,11 @@ public class InterventionTeamDataRepository : IInterventionTeamDataRepository
                 EF.Functions.Like(x.Intervention.Title.ToLower(), $"%{search}%"));
         }
 
+        if (request.IsActive.HasValue)
+        {
+            query = query.Where(x => x.IsActive == request.IsActive.Value);
+        }
+
         var count = await query.CountAsync(ct);
 
         var pageNumber = request.PageNumber ?? 1;
@@ -62,7 +67,7 @@ public class InterventionTeamDataRepository : IInterventionTeamDataRepository
 
         return new ListPage<InterventionTeamEntity>
         {
-            Data = result,
+            Items = result,
             PageNumber = pageNumber,
             PageSize = pageSize,
             TotalItems = count,
