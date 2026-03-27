@@ -63,18 +63,27 @@ GO
    CORE MULTI-TENANT TABLES
    ========================= */
 
-CREATE TABLE dbo.Tenants (											-- Tabela principal de tenants
-    Id			INT IDENTITY(1,1)	NOT NULL,						-- Identificador único do tenant, chave primária
-    Name	    NVARCHAR(200)		NOT NULL,						-- Razão social
-	Consent		BIT					NOT NULL DEFAULT 1,				-- Consentimento LGPD
-    IsActive	BIT					NOT NULL DEFAULT 1,             -- Flag de ativo
-    IsDeleted	BIT					NOT NULL DEFAULT 0,             -- Soft delete
-    CreatedBy	INT         		NOT NULL,						-- Usuário criador
-    CreatedAt	DATETIME2(7)		NOT NULL DEFAULT SYSDATETIME(),	-- Data de criação
-    ModifiedBy	INT         		NULL,							-- Usuário modificador
-    ModifiedAt	DATETIME2(7)		NULL,							-- Data de modificação
-	CONSTRAINT PK_Tenants PRIMARY KEY CLUSTERED (Id),
-    CONSTRAINT CK_Tenants_Active_Deleted CHECK (NOT (IsActive = 1 AND IsDeleted = 1))
+CREATE TABLE dbo.Tenants (											                    -- Tabela principal de tenants
+    Id			        INT IDENTITY(1,1)	NOT NULL,				                    -- Identificador único do tenant, chave primária
+    TenantType          INT                 NOT NULL,				                    -- Tipo do tenant (residencial, comercial, etc.)
+    Name	            NVARCHAR(200)		NOT NULL,				                    -- Razão social
+    Email		        NVARCHAR(255)		NOT NULL,				                    -- Email do contato
+    Website		        NVARCHAR(255)		    NULL,				                    -- Website do tenant
+    Origin		        NVARCHAR(255)		    NULL,				                    -- Origem do tenant (para tracking de marketing)
+    ConsentType         INT		            NOT NULL,				                    -- Tipo de consentimento (LGPD, GDPR, etc.)
+    Consent		        BIT					NOT NULL DEFAULT 0,		                    -- Consentimento LGPD/GDPR
+    ConsentDate	        DATETIME2(7)		NOT NULL,				                    -- Data do consentimento
+    RevokedConsentDate  DATETIME2(7)		    NULL,				                    -- Data de revogação do consentimento
+    PrivacyPolicy       BIT		            NOT NULL DEFAULT 0,                         -- Aceitou a política de privacidade
+    Remarks		        NVARCHAR(1000)		    NULL,				                    -- Observações gerais sobre o tenant
+    IsActive	        BIT					NOT NULL DEFAULT 1,                         -- Flag de ativo
+    IsDeleted	        BIT					NOT NULL DEFAULT 0,                         -- Soft delete
+    CreatedBy	        INT         		NOT NULL,						            -- Usuário criador
+    CreatedAt	        DATETIME2(7)		NOT NULL DEFAULT SYSDATETIME(),	            -- Data de criação
+    ModifiedBy	        INT         		NULL,							            -- Usuário modificador
+    ModifiedAt	        DATETIME2(7)		NULL,							            -- Data de modificação
+	CONSTRAINT PK_Tenants PRIMARY KEY CLUSTERED (Id),                                   -- PK
+    CONSTRAINT CK_Tenants_Active_Deleted CHECK (NOT (IsActive = 1 AND IsDeleted = 1))   -- Garantir que um tenant não pode ser ativo e deletado ao mesmo tempo
 );
 GO
 CREATE TABLE dbo.StatusTypes (                                                          -- Tipos de status (Intervention, Equipment, Vehicle)
@@ -94,7 +103,6 @@ CREATE TABLE dbo.StatusTypes (                                                  
     CONSTRAINT UQ_StatusTypes_Tenant_Name UNIQUE (TenantId, Name),                      -- Tipo de endereço único por tenant
     CONSTRAINT FK_StatusTypes_Tenant FOREIGN KEY (TenantId) REFERENCES dbo.Tenants(Id)  -- FK para tenant
 );
-
 GO
 CREATE TABLE dbo.Status (                                                               -- Status das intervenções
     Id			    INT IDENTITY(1,1)	NOT NULL,                                       -- Identificador, chave primária
@@ -109,26 +117,29 @@ CREATE TABLE dbo.Status (                                                       
     ModifiedBy	    INT         		NULL,							                -- Usuário modificador
     ModifiedAt	    DATETIME2(7)		NULL,							                -- Data de modificação
 	CONSTRAINT PK_Status PRIMARY KEY CLUSTERED (Id),                                    -- PK
-    CONSTRAINT CK_Status_Active_Deleted CHECK (NOT (IsActive = 1 AND IsDeleted = 1)),
+    CONSTRAINT CK_Status_Active_Deleted CHECK (NOT (IsActive = 1 AND IsDeleted = 1)),   -- Garantir que um status não pode ser ativo e deletado ao mesmo tempo
     CONSTRAINT UQ_Status_Id_Tenant UNIQUE (Id, TenantId),                               -- Garantir que o Id é único dentro do tenant (para FKs compostas)
     CONSTRAINT UQ_Status_Tenant_Name UNIQUE (TenantId, StatusTypeId, Name),             -- Status único por tipo e tenant
     CONSTRAINT FK_Status_Tenant FOREIGN KEY (TenantId) REFERENCES dbo.Tenants(Id),      -- FK para tenant
     CONSTRAINT FK_Status_StatusType FOREIGN KEY (StatusTypeId, TenantId) REFERENCES dbo.StatusTypes(Id, TenantId)   -- FK para tipo de status
 );
 GO
-CREATE TABLE dbo.TenantContacts (									    -- Contatos do tenant
-    Id			INT IDENTITY(1,1)	NOT NULL,						    -- Identificador do contato, chave primária
-    TenantId	INT					NOT NULL,						    -- Tenant dono do contato
-    Name		NVARCHAR(150)		NOT NULL,						    -- Nome do contato
-    Email		NVARCHAR(255)		NOT NULL,						    -- Email do contato
-    Phone		NVARCHAR(30)			NULL,						    -- Telefone
-    IsPrimary	BIT					NOT NULL DEFAULT 0,				    -- Contato principal
-    IsActive	BIT					NOT NULL DEFAULT 1,				    -- Flag de ativo
-    IsDeleted	BIT					NOT NULL DEFAULT 0,				    -- Soft delete
-    CreatedBy	INT         		NOT NULL,						    -- Usuário criador
-    CreatedAt	DATETIME2(7)		NOT NULL DEFAULT SYSDATETIME(),	-- Data de criação
-    ModifiedBy	INT         		    NULL,						    -- Usuário modificador
-    ModifiedAt	DATETIME2(7)			NULL,						-- Data de modificação
+CREATE TABLE dbo.TenantContacts (									        -- Contatos do tenant
+    Id			        INT IDENTITY(1,1)	NOT NULL,						-- Identificador do contato, chave primária
+    TenantId	        INT					NOT NULL,						-- Tenant dono do contato
+    Name		        NVARCHAR(150)		NOT NULL,						-- Nome do contato
+    Email		        NVARCHAR(255)		NOT NULL,						-- Email do contato
+    Phone		        NVARCHAR(30)		    NULL,				        -- Telefone
+    PhoneIsWhatsapp     BIT					    NULL DEFAULT 0,		        -- O telefone é WhatsApp?
+    CellPhone	        NVARCHAR(30)		    NULL,				        -- Telemóvel
+    CellPhoneIsWhatsapp BIT					    NULL DEFAULT 0,		        -- O telemóvel é WhatsApp?
+    IsPrimary	        BIT					NOT NULL DEFAULT 0,				-- Contato principal
+    IsActive	        BIT					NOT NULL DEFAULT 1,				-- Flag de ativo
+    IsDeleted	        BIT					NOT NULL DEFAULT 0,				-- Soft delete
+    CreatedBy	        INT         		NOT NULL,						-- Usuário criador
+    CreatedAt	        DATETIME2(7)		NOT NULL DEFAULT SYSDATETIME(),	-- Data de criação
+    ModifiedBy	        INT         		    NULL,						    -- Usuário modificador
+    ModifiedAt	        DATETIME2(7)			NULL,						-- Data de modificação
 	CONSTRAINT PK_TenantContacts PRIMARY KEY CLUSTERED (Id),
     CONSTRAINT CK_TenantContacts_Active_Deleted CHECK (NOT (IsActive = 1 AND IsDeleted = 1)),
     CONSTRAINT UQ_TenantContacts_Email UNIQUE (TenantId, Email),			                -- Email único por client
@@ -168,7 +179,7 @@ CREATE TABLE dbo.TenantAddresses (									                        -- Endereços 
     Complement      NVARCHAR(100)           NULL,                                           -- Apto, bloco, andar, etc.
     Latitude        DECIMAL(9,6)            NULL,                                           -- Latitude geográfica (opcional)
     Longitude       DECIMAL(9,6)            NULL,                                           -- Longitude geográfica (opcional)
-    Notes           NVARCHAR(500)           NULL,                                           -- Observações adicionais sobre o endereço  
+    Remarks         NVARCHAR(500)           NULL,                                           -- Observações adicionais sobre o endereço  
     IsPrimary		BIT					NOT NULL DEFAULT 0,				                    -- Endereço principal
     IsActive		BIT					NOT NULL DEFAULT 1,				                    -- Flag de ativo
     IsDeleted		BIT					NOT NULL DEFAULT 0,				                    -- Soft delete
@@ -186,8 +197,10 @@ GO
 CREATE TABLE dbo.TenantFiscalData (										                    -- Dados fiscais do tenant
     Id				INT IDENTITY(1,1)	NOT NULL,						                    -- Identificador fiscal, chave primária
     TenantId		INT					NOT NULL,						                    -- Tenant dono
-    NIF				CHAR(9)				NOT NULL,						                    -- NIF português
-    VATNumber		NVARCHAR(20)		NOT NULL,						                    -- VAT calculado
+    TaxNumber   	CHAR(9)				NOT NULL,						                    -- NIF português
+    VatNumber		NVARCHAR(20)		NOT NULL,						                    -- VAT calculado
+    IbanNumber		NVARCHAR(34)		NULL,						                        -- IBAN para faturamento
+    DocumentNumber	NVARCHAR(50)		NULL,						                        -- Número de identificação (passaporte, etc.)
     CAE				NVARCHAR(10)			NULL,						                    -- Código CAE
     FiscalCountry	CHAR(2)				NOT NULL DEFAULT 'PT',			                    -- País fiscal
     IsVATRegistered BIT					NOT NULL DEFAULT 1,				                    -- Regime IVA
@@ -259,7 +272,7 @@ CREATE TABLE dbo.UserPreferences (                                              
     TenantId                        INT                 NOT NULL,                               -- Tenant dono
     UserId                          INT                 NOT NULL,                               -- Usuário dono
     Appearance                      NVARCHAR(10)        NOT NULL DEFAULT ('light'),             -- Tema (light/dark)
-	CurrencyCode 					NVARCHAR(3) 		NOT NULL DEFAULT ('EUR')
+	CurrencyCode 					NVARCHAR(3) 		NOT NULL DEFAULT ('EUR'),               -- Código de moeda ISO (EUR, USD, etc.)
     Locale                          NVARCHAR(10)        NOT NULL DEFAULT ('pt-PT'),             -- Localização (pt-PT, en-US, es-ES, etc.)
     Timezone                        NVARCHAR(100)       NOT NULL DEFAULT ('Europe/Lisbon'),     -- Timezone IANA
     DateFormat                      NVARCHAR(20)        NOT NULL DEFAULT ('DD-MM-YYYY'),        -- Formato de data
@@ -489,23 +502,33 @@ CREATE TABLE dbo.Functions (
     CONSTRAINT FK_Functions_Tenant FOREIGN KEY (TenantId) REFERENCES dbo.Tenants(Id)    -- FK para tenant
 )
 GO
-CREATE TABLE dbo.Clients (
-    Id				INT IDENTITY(1,1)	NOT NULL,						            -- Clientes do tenant
-    TenantId		INT					NOT NULL,						            -- Tenant dono
-    Name			NVARCHAR(150)		NOT NULL,						            -- Nome do cliente
-    Email			NVARCHAR(255)			NULL,						            -- Email do cliente
-    Phone			NVARCHAR(50)		NOT NULL,						            -- Phone do cliente
-    Consent			BIT					NOT NULL DEFAULT 1,				            -- Consentimento LGPD
-    IsActive		BIT					NOT NULL DEFAULT 1,                         -- Flag de ativo
-    IsDeleted		BIT					NOT NULL DEFAULT 0,                         -- Soft delete
-    CreatedBy		INT         		NOT NULL,						            -- Usuário criador
-    CreatedAt		DATETIME2(7)		NOT NULL DEFAULT SYSDATETIME(),	            -- Data de criação
-    ModifiedBy	    INT         		    NULL,						            -- Usuário modificador
-    ModifiedAt		DATETIME2(7)			NULL,                                   -- Data de modificação
-	CONSTRAINT PK_Clients PRIMARY KEY CLUSTERED (Id),                               -- PK
-    CONSTRAINT CK_Clients_Active_Deleted CHECK (NOT (IsActive = 1 AND IsDeleted = 1)),
-    CONSTRAINT UQ_Clients_Id_Tenant UNIQUE (Id, TenantId),                            -- Garantir que o Id é único dentro do tenant (para FKs compostas)
-    CONSTRAINT FK_Clients_Tenant FOREIGN KEY (TenantId) REFERENCES dbo.Tenants(Id)  -- FK para tenant
+CREATE TABLE dbo.Clients (                                                              -- Clientes do tenant
+    Id				    INT IDENTITY(1,1)	NOT NULL,						            -- Identificador do cliente, chave primária
+    TenantId		    INT					NOT NULL,						            -- Tenant dono do cliente
+    ClientType          INT				    NOT NULL,						            -- Tipo do cliente (1=Individual, 2=Empresa, etc.)
+    Origin              NVARCHAR(100)           NULL,						            -- Origem do cliente (site, indicação, etc.)
+    Name			    NVARCHAR(150)		NOT NULL,						            -- Nome do cliente
+    Phone			    NVARCHAR(50)			NULL,						            -- Telefone do cliente
+    Email			    NVARCHAR(255)			NULL,						            -- Email do cliente
+    Website			    NVARCHAR(255)			NULL,						            -- Website do cliente
+    UrlImage    	    NVARCHAR(255)			NULL,						            -- URL da imagem/avatar do cliente
+    Score			    INT						NULL,						            -- Score de crédito ou satisfação do cliente
+    ConsentType         INT		            NOT NULL,				                    -- Tipo de consentimento (LGPD, GDPR, etc.)
+    Consent		        BIT				    NOT NULL DEFAULT 0,		                    -- Consentimento LGPD/GDPR
+    ConsentDate	        DATETIME2(7)	    NOT NULL,				                    -- Data do consentimento
+    RevokedConsentDate  DATETIME2(7)	        NULL,				                    -- Data de revogação do consentimento
+    PrivacyPolicy       BIT		            NOT NULL DEFAULT 0,                         -- Aceitou a política de privacidade
+    Remarks             NVARCHAR(500)           NULL,						            -- Observações adicionais sobre o cliente
+    IsActive		    BIT					NOT NULL DEFAULT 1,                         -- Flag de ativo
+    IsDeleted		    BIT					NOT NULL DEFAULT 0,                         -- Soft delete
+    CreatedBy		    INT         		NOT NULL,						            -- Usuário criador
+    CreatedAt		    DATETIME2(7)		NOT NULL DEFAULT SYSDATETIME(),	            -- Data de criação
+    ModifiedBy	        INT         		    NULL,						            -- Usuário modificador
+    ModifiedAt		    DATETIME2(7)			NULL,                                   -- Data de modificação
+	CONSTRAINT PK_Clients PRIMARY KEY CLUSTERED (Id),                                   -- PK
+    CONSTRAINT CK_Clients_Active_Deleted CHECK (NOT (IsActive = 1 AND IsDeleted = 1)),  -- Garantir que um cliente não pode ser ativo e deletado ao mesmo tempo
+    CONSTRAINT UQ_Clients_Id_Tenant UNIQUE (Id, TenantId),                              -- Garantir que o Id é único dentro do tenant (para FKs compostas)
+    CONSTRAINT FK_Clients_Tenant FOREIGN KEY (TenantId) REFERENCES dbo.Tenants(Id)      -- FK para tenant
 );
 GO
 CREATE TABLE dbo.ClientContacts (															-- Contatos do client
@@ -911,7 +934,7 @@ CREATE TABLE dbo.InterventionAttachments (                                      
 CREATE UNIQUE INDEX UX_Clients_Tenant_Name_Active					ON dbo.Clients (TenantId, Name) WHERE IsDeleted = 0;
 CREATE UNIQUE INDEX UX_ClientAddresses_Primary						ON dbo.ClientAddresses (ClientId, TenantId) WHERE IsPrimary = 1 AND IsDeleted = 0;
 CREATE UNIQUE INDEX UX_TeamMembers_Tenant_TaxNumber                 ON dbo.TeamMembers (TenantId, TaxNumber) WHERE TaxNumber IS NOT NULL AND IsDeleted = 0;
-CREATE UNIQUE INDEX UX_TenantFiscalData_NIF_Active                  ON dbo.TenantFiscalData (TenantId, NIF) WHERE IsDeleted = 0;
+CREATE UNIQUE INDEX UX_TenantFiscalData_NIF_Active                  ON dbo.TenantFiscalData (TenantId, TaxNumber) WHERE IsDeleted = 0;
 CREATE UNIQUE INDEX UX_TenantFiscalData_Active                      ON dbo.TenantFiscalData(TenantId) WHERE IsActive = 1 AND IsDeleted = 0;
 CREATE UNIQUE INDEX UX_Subscriptions_Active                         ON dbo.Subscriptions(TenantId) WHERE IsActive = 1 AND IsDeleted = 0;
 CREATE UNIQUE INDEX UX_Clients_Email_Active                         ON dbo.Clients (TenantId, Email) WHERE Email IS NOT NULL AND IsDeleted = 0;

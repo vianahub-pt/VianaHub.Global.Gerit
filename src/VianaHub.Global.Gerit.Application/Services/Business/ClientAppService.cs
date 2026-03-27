@@ -10,6 +10,7 @@ using VianaHub.Global.Gerit.Application.Dtos.Response.Business.Client;
 using VianaHub.Global.Gerit.Application.Interfaces.Business;
 using VianaHub.Global.Gerit.Application.Interfaces.Common;
 using VianaHub.Global.Gerit.Domain.Entities.Business;
+using VianaHub.Global.Gerit.Domain.Enums;
 using VianaHub.Global.Gerit.Domain.Helpers;
 using VianaHub.Global.Gerit.Domain.Interfaces.Base;
 using VianaHub.Global.Gerit.Domain.Interfaces.Business;
@@ -55,7 +56,7 @@ public class ClientAppService : IClientAppService
         return _mapper.Map<IEnumerable<ClientResponse>>(entities);
     }
 
-    public async Task<ClientResponse> GetByIdAsync(int id, CancellationToken ct)
+    public async Task<ClientDetailResponse> GetByIdAsync(int id, CancellationToken ct)
     {
         var entity = await _repo.GetByIdAsync(id, ct);
         if (entity == null || entity.IsDeleted || !entity.IsActive)
@@ -63,7 +64,7 @@ public class ClientAppService : IClientAppService
             _notify.Add(_localization.GetMessage("Application.Service.Client.GetById.ResourceNotFound"), 410);
             return null;
         }
-        return _mapper.Map<ClientResponse>(entity);
+        return _mapper.Map<ClientDetailResponse>(entity);
     }
 
     public async Task<ListPageResponse<ClientResponse>> GetPagedAsync(PagedFilterRequest request, CancellationToken ct)
@@ -83,7 +84,7 @@ public class ClientAppService : IClientAppService
             return false;
         }
 
-        var entity = new ClientEntity(tenantId, request.Name, request.Phone, request.Email, request.Consent, _currentUser.GetUserId());
+        var entity = new ClientEntity(tenantId, (ClientType)request.ClientType, request.Origin, request.Name, request.Phone, request.Email, request.Website, request.UrlImage, request.Score, request.ConsentType, request.Consent, request.ConsentDate, request.PrivacyPolicy, request.Remarks, _currentUser.GetUserId());
         return await _domain.CreateAsync(entity, ct);
     }
 
@@ -104,7 +105,7 @@ public class ClientAppService : IClientAppService
             return false;
         }
 
-        entity.Update(request.Name, request.Phone, request.Email, request.Consent, _currentUser.GetUserId());
+        entity.Update((ClientType)request.ClientType, request.Origin, request.Name, request.Phone, request.Email, request.Website, request.UrlImage, request.Score, request.ConsentType, request.Consent, request.PrivacyPolicy, request.Remarks, _currentUser.GetUserId());
         return await _domain.UpdateAsync(entity, ct);
     }
 
@@ -279,7 +280,7 @@ public class ClientAppService : IClientAppService
             }
 
             // Cria a entidade
-            var entity = new ClientEntity(tenantId, item.Name, item.Phone, item.Email, item.Consent, _currentUser.GetUserId());
+            var entity = new ClientEntity(tenantId, (ClientType)item.ClientType, item.Origin, item.Name, item.Phone, item.Email, item.Website, item.UrlImage, item.Score, item.ConsentType, item.Consent, item.ConsentDate, item.PrivacyPolicy, item.Remarks, _currentUser.GetUserId());
 
             // Tenta criar no domínio
             var success = await _domain.CreateAsync(entity, ct);

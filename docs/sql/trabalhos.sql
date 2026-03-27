@@ -1,8 +1,14 @@
 EXEC sp_set_session_context @key=N'IsSuperAdmin', @value=1;
-select * from dbo.Plans;				--
-select * from dbo.Subscriptions;		--
+
 select * from dbo.Tenants;				--
 select * from dbo.Users;				--
+
+Update dbo.Users Set PhoneNumber = '+351 960 268 351', PhoneNumberConfirmed = 1 where id = 2;
+
+select * from dbo.Plans;				--
+select * from dbo.Subscriptions;		--
+
+
 select * from dbo.UserPreferences;		--
 select * from dbo.Actions;				--
 select * from dbo.Resources;			--
@@ -41,7 +47,9 @@ select * from dbo.InterventionAttachments;
 
 FOR JSON AUTO;
 
-
+select * from dbo.Clients;
+select * from dbo.Clients where IsActive = 0;
+select * from dbo.Clients where IsActive = 1;
 
 
 /*
