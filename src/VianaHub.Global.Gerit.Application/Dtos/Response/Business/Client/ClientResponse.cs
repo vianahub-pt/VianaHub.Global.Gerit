@@ -10,7 +10,7 @@ public class ClientResponse
     public string Name { get; set; }
     public string Phone { get; set; }
     public string Email { get; set; }
-    public string Contacto { get; set; }
+    public string Contact { get; set; }
     public bool Consent { get; set; }
     public bool IsActive { get; set; }
 }
