@@ -10,8 +10,6 @@ using System.Text.RegularExpressions;
 using VianaHub.Global.Gerit.Domain.Tools.Cryptography;
 using FluentValidation;
 using VianaHub.Global.Gerit.Domain.Tools.Notifications;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace VianaHub.Global.Gerit.Domain.Helpers;
 
@@ -420,18 +418,18 @@ public static class DomainExtensions
 
     public static string GetDescription(this Enum input)
     {
-        Type type = input.GetType();
+        if (input == null)
+            return string.Empty;
 
-        MemberInfo[] memInfo = type.GetMember(input.ToString());
+        var type = input.GetType();
+        var memInfo = type.GetMember(input.ToString());
 
-        if (!memInfo.Equals(null) && memInfo.Length > 0)
+        if (memInfo.Length > 0)
         {
-            object[] attrs = memInfo[0].GetCustomAttributes(typeof(DescriptionAttribute), false);
+            var attrs = memInfo[0].GetCustomAttributes(typeof(DescriptionAttribute), false);
 
-            if (!attrs.Equals(null) && attrs.Length > 0)
-            {
+            if (attrs.Length > 0)
                 return ((DescriptionAttribute)attrs[0]).Description;
-            }
         }
 
         return input.ToString();

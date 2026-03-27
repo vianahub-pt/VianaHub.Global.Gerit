@@ -36,6 +36,8 @@ public class ClientDataRepository : IClientDataRepository
     {
         var query = _context.Set<ClientEntity>()
             .AsNoTracking()
+            .AsSplitQuery()
+            .Include(x => x.Contacts)
             .Where(x => !x.IsDeleted);
 
         if (!string.IsNullOrWhiteSpace(request.Search))
@@ -44,7 +46,11 @@ public class ClientDataRepository : IClientDataRepository
             query = query.Where(x =>
                 EF.Functions.Like(x.Name.ToLower(), $"%{search}%") ||
                 EF.Functions.Like(x.Email.ToLower(), $"%{search}%") ||
-                EF.Functions.Like(x.Phone.ToLower(), $"%{search}%"));
+                EF.Functions.Like(x.Phone.ToLower(), $"%{search}%") ||
+                x.Contacts.Any(c =>
+                    EF.Functions.Like(c.Name.ToLower(), $"%{search}%") ||
+                    EF.Functions.Like(c.Email.ToLower(), $"%{search}%") ||
+                    EF.Functions.Like(c.Phone.ToLower(), $"%{search}%")));
         }
 
         if (request.IsActive.HasValue)

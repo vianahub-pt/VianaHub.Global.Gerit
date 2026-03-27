@@ -30,13 +30,31 @@ public class ClientMapping : IEntityTypeConfiguration<ClientEntity>
         // Propriedades
         builder.Property(x => x.TenantId)
             .HasColumnName("TenantId")
-            .IsRequired();
+            .HasColumnType("INT")
+            .IsRequired(true);
+
+        builder.Property(x => x.ClientType)
+            .HasColumnName("ClientType")
+            .HasColumnType("INT")
+            .IsRequired(true);
+
+        builder.Property(x => x.Origin)
+            .HasColumnName("Origin")
+            .HasColumnType("NVARCHAR(100)")
+            .HasMaxLength(100)
+            .IsRequired(false);
 
         builder.Property(x => x.Name)
             .HasColumnName("Name")
             .HasColumnType("NVARCHAR(150)")
             .HasMaxLength(150)
-            .IsRequired();
+            .IsRequired(true);
+
+        builder.Property(x => x.Phone)
+            .HasColumnName("Phone")
+            .HasColumnType("NVARCHAR(50)")
+            .HasMaxLength(50)
+            .IsRequired(true);
 
         builder.Property(x => x.Email)
             .HasColumnName("Email")
@@ -44,40 +62,80 @@ public class ClientMapping : IEntityTypeConfiguration<ClientEntity>
             .HasMaxLength(255)
             .IsRequired(false);
 
-        builder.Property(x => x.Phone)
-            .HasColumnName("Phone")
-            .HasColumnType("NVARCHAR(50)")
-            .HasMaxLength(50)
-            .IsRequired();
+        builder.Property(x => x.Website)
+            .HasColumnName("Website")
+            .HasColumnType("NVARCHAR(255)")
+            .HasMaxLength(255)
+            .IsRequired(false);
+
+        builder.Property(x => x.UrlImage)
+            .HasColumnName("UrlImage")
+            .HasColumnType("NVARCHAR(255)")
+            .HasMaxLength(255)
+            .IsRequired(false);
+
+        builder.Property(x => x.Score)
+            .HasColumnName("Score")
+            .HasColumnType("INT")
+            .IsRequired(false);
+
+        builder.Property(x => x.ConsentType)
+            .HasColumnName("ConsentType")
+            .HasColumnType("INT")
+            .IsRequired(true);
 
         builder.Property(x => x.Consent)
             .HasColumnName("Consent")
             .HasColumnType("BIT")
-            .HasDefaultValue(true)
-            .IsRequired();
+            .HasDefaultValue(false)
+            .IsRequired(true);
+
+        builder.Property(x => x.ConsentDate)
+            .HasColumnName("ConsentDate")
+            .HasColumnType("DATETIME2")
+            .HasDefaultValueSql("SYSDATETIME()")
+            .IsRequired(true);
+
+        builder.Property(x => x.RevokedConsentDate)
+            .HasColumnName("RevokedConsentDate")
+            .HasColumnType("DATETIME2")
+            .HasDefaultValueSql("SYSDATETIME()")
+            .IsRequired(false);
+
+        builder.Property(x => x.PrivacyPolicy)
+            .HasColumnName("PrivacyPolicy")
+            .HasColumnType("BIT")
+            .HasDefaultValue(false)
+            .IsRequired(true);
+
+        builder.Property(x => x.Remarks)
+            .HasColumnName("Remarks")
+            .HasColumnType("NVARCHAR(500)")
+            .HasMaxLength(500)
+            .IsRequired(false);
 
         builder.Property(x => x.IsActive)
             .HasColumnName("IsActive")
             .HasColumnType("BIT")
             .HasDefaultValue(true)
-            .IsRequired();
+            .IsRequired(true);
 
         builder.Property(x => x.IsDeleted)
             .HasColumnName("IsDeleted")
             .HasColumnType("BIT")
             .HasDefaultValue(false)
-            .IsRequired();
+            .IsRequired(true);
 
         builder.Property(x => x.CreatedBy)
               .HasColumnName("CreatedBy")
               .HasColumnType("INT")
-              .IsRequired();
+              .IsRequired(true);
 
         builder.Property(x => x.CreatedAt)
             .HasColumnName("CreatedAt")
             .HasColumnType("DATETIME2")
             .HasDefaultValueSql("SYSDATETIME()")
-            .IsRequired();
+            .IsRequired(true);
 
         builder.Property(x => x.ModifiedBy)
             .HasColumnName("ModifiedBy")

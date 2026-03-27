@@ -1,5 +1,6 @@
 using VianaHub.Global.Gerit.Domain.Base;
 using VianaHub.Global.Gerit.Domain.Entities.Billing;
+using VianaHub.Global.Gerit.Domain.Enums;
 
 namespace VianaHub.Global.Gerit.Domain.Entities.Business;
 
@@ -10,10 +11,20 @@ namespace VianaHub.Global.Gerit.Domain.Entities.Business;
 public class ClientEntity : Entity, IAggregateRoot
 {
     public int TenantId { get; private set; }
+    public ClientType ClientType { get; private set; }
+    public string Origin { get; private set; }
     public string Name { get; private set; }
-    public string Email { get; private set; }
     public string Phone { get; private set; }
+    public string Email { get; private set; }
+    public string Website { get; private set; }
+    public string UrlImage { get; private set; }
+    public int? Score { get; private set; }
+    public int ConsentType { get; private set; }
     public bool Consent { get; private set; }
+    public DateTime ConsentDate { get; private set; }
+    public DateTime? RevokedConsentDate { get; private set; }
+    public bool PrivacyPolicy { get; private set; }
+    public string Remarks { get; private set; }
     public bool IsActive { get; private set; }
     public bool IsDeleted { get; private set; }
 
@@ -35,32 +46,81 @@ public class ClientEntity : Entity, IAggregateRoot
     /// <summary>
     /// Construtor para criação de um novo Cliente
     /// </summary>
-    public ClientEntity(int tenantId, string name, string phone, string email, bool consent, int createdBy)
+    public ClientEntity(int tenantId, ClientType clientType, string origin, string name, string phone, string email, string website, string urlImage, int? score, int consentType, bool consent, DateTime consentDate, bool privacyPolicy, string remarks, int createdBy)
     {
         TenantId = tenantId;
+        ClientType = clientType;
+        Origin = origin;
         Name = name;
         Phone = phone;
         Email = email;
+        Website = website;
+        UrlImage = urlImage;
+        Score = score;
+        ConsentType = consentType;
         Consent = consent;
+        ConsentDate = consentDate;
+        PrivacyPolicy = privacyPolicy;
+        Remarks = remarks;
         IsActive = true;
         IsDeleted = false;
         CreatedBy = createdBy;
         CreatedAt = DateTime.UtcNow;
     }
 
-    public void Update(string name, string phone, string email, bool consent, int modifiedBy)
+    public void Update(ClientType clientType, string origin, string name, string phone, string email, string website, string urlImage, int? score, int consentType, bool consent, bool privacyPolicy, string remarks, int modifiedBy)
     {
+        ClientType = clientType;
+        Origin = origin;
         Name = name;
         Phone = phone;
         Email = email;
+        Website = website;
+        UrlImage = urlImage;
+        Score = score;
+        ConsentType = consentType;
         Consent = consent;
+        PrivacyPolicy = privacyPolicy;
+        Remarks = remarks;
         ModifiedBy = modifiedBy;
         ModifiedAt = DateTime.UtcNow;
     }
 
-    public void UpdateConsent(bool consent, int modifiedBy)
+    public void UpdateConsent(int consentType, bool consent, bool privacyPolicy, int modifiedBy)
     {
+        ConsentType = consentType;
         Consent = consent;
+        PrivacyPolicy = privacyPolicy;
+        ModifiedBy = modifiedBy;
+        ModifiedAt = DateTime.UtcNow;
+    }
+
+    public void RevokeConsent(int modifiedBy)
+    {
+        Consent = false;
+        RevokedConsentDate = DateTime.UtcNow;
+        ModifiedBy = modifiedBy;
+        ModifiedAt = DateTime.UtcNow;
+    }
+
+    public void RestoreConsent(int modifiedBy)
+    {
+        Consent = true;
+        RevokedConsentDate = null;
+        ModifiedBy = modifiedBy;
+        ModifiedAt = DateTime.UtcNow;
+    }
+
+    public void UpdateScore(int score, int modifiedBy)
+    {
+        Score = score;
+        ModifiedBy = modifiedBy;
+        ModifiedAt = DateTime.UtcNow;
+    }
+
+    public void UpadateImage(string urlImage, int modifiedBy)
+    {
+        UrlImage = urlImage;
         ModifiedBy = modifiedBy;
         ModifiedAt = DateTime.UtcNow;
     }

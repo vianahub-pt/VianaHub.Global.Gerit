@@ -1,18 +1,17 @@
-namespace VianaHub.Global.Gerit.Application.Dtos.Request.Business.Client;
+ï»¿namespace VianaHub.Global.Gerit.Application.Dtos.Response.Business.Client;
 
-/// <summary>
-/// Request para criação de Client
-/// </summary>
-public class CreateClientRequest
+public class ClientDetailResponse
 {
+    public int Id { get; set; }
     public int ClientType { get; set; }
+    public string ClientTypeDescription { get; set; }
     public string Origin { get; set; }
     public string Name { get; set; }
     public string Phone { get; set; }
     public string Email { get; set; }
     public string Website { get; set; }
     public string UrlImage { get; set; }
-    public int Score { get;  set; }
+    public int? Score { get; set; }
     public int ConsentType { get; set; }
     public bool Consent { get; set; }
     public DateTime ConsentDate { get; set; }
