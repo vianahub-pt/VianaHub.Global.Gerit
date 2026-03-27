@@ -15,7 +15,7 @@ public class ClientMappingProfile : Profile
     public ClientMappingProfile()
     {
         CreateMap<ClientEntity, ClientResponse>()
-            .ForMember(dest => dest.Contacto, opt => opt.MapFrom(src => src.Contacts.FirstOrDefault().Name));
+            .ForMember(dest => dest.Contact, opt => opt.MapFrom(src => src.Contacts.FirstOrDefault().Name));
         CreateMap<ClientEntity, ClientDetailResponse>()
             .ForMember(dest => dest.ClientType, opt => opt.MapFrom(src => (int)src.ClientType))
             .ForMember(dest => dest.ClientTypeDescription, opt => opt.MapFrom(src => src.ClientType.GetDescription())); 
