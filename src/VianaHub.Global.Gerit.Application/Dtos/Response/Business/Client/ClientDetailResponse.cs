@@ -3,6 +3,7 @@
 public class ClientDetailResponse
 {
     public int Id { get; set; }
+    public int TenantId { get; set; }
     public int ClientType { get; set; }
     public string ClientTypeDescription { get; set; }
     public int Origin { get; set; }
@@ -14,7 +15,6 @@ public class ClientDetailResponse
     public string UrlImage { get; set; }
     public int? Score { get; set; }
     public bool Consent { get; set; }
-    public DateTime ConsentDate { get; set; }
-    public bool PrivacyPolicy { get; set; }
     public string Remarks { get; set; }
+    public bool IsActive { get; set; }
 }
