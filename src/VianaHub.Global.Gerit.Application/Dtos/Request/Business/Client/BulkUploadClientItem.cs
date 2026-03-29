@@ -16,6 +16,5 @@ public class BulkUploadClientItem
     public int ConsentType { get; set; }
     public bool Consent { get; set; }
     public DateTime ConsentDate { get; set; }
-    public bool PrivacyPolicy { get; set; }
     public string Remarks { get; set; }
 }

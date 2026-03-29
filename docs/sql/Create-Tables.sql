@@ -513,7 +513,6 @@ CREATE TABLE dbo.Clients (                                                      
     Website			    NVARCHAR(255)			NULL,						            -- Website do cliente
     UrlImage    	    NVARCHAR(255)			NULL,						            -- URL da imagem/avatar do cliente
     Score			    INT						NULL,						            -- Score de crédito ou satisfação do cliente
-    ConsentType         INT		            NOT NULL,				                    -- Tipo de consentimento (LGPD, GDPR, etc.)
     Consent		        BIT				    NOT NULL DEFAULT 0,		                    -- Consentimento LGPD/GDPR
     ConsentDate	        DATETIME2(7)	    NOT NULL,				                    -- Data do consentimento
     RevokedConsentDate  DATETIME2(7)	        NULL,				                    -- Data de revogação do consentimento

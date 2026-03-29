@@ -78,11 +78,6 @@ public class ClientMapping : IEntityTypeConfiguration<ClientEntity>
             .HasColumnType("INT")
             .IsRequired(false);
 
-        builder.Property(x => x.ConsentType)
-            .HasColumnName("ConsentType")
-            .HasColumnType("INT")
-            .IsRequired(true);
-
         builder.Property(x => x.Consent)
             .HasColumnName("Consent")
             .HasColumnType("BIT")
@@ -100,12 +95,6 @@ public class ClientMapping : IEntityTypeConfiguration<ClientEntity>
             .HasColumnType("DATETIME2")
             .HasDefaultValueSql("SYSDATETIME()")
             .IsRequired(false);
-
-        builder.Property(x => x.PrivacyPolicy)
-            .HasColumnName("PrivacyPolicy")
-            .HasColumnType("BIT")
-            .HasDefaultValue(false)
-            .IsRequired(true);
 
         builder.Property(x => x.Remarks)
             .HasColumnName("Remarks")
