@@ -40,9 +40,8 @@ public class ClientMapping : IEntityTypeConfiguration<ClientEntity>
 
         builder.Property(x => x.Origin)
             .HasColumnName("Origin")
-            .HasColumnType("NVARCHAR(100)")
-            .HasMaxLength(100)
-            .IsRequired(false);
+            .HasColumnType("INT")
+            .IsRequired(true);
 
         builder.Property(x => x.Name)
             .HasColumnName("Name")

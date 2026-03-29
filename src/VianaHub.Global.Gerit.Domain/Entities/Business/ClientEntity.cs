@@ -12,14 +12,14 @@ public class ClientEntity : Entity, IAggregateRoot
 {
     public int TenantId { get; private set; }
     public ClientType ClientType { get; private set; }
-    public string Origin { get; private set; }
+    public Origin Origin { get; private set; }
     public string Name { get; private set; }
     public string Phone { get; private set; }
     public string Email { get; private set; }
     public string Website { get; private set; }
     public string UrlImage { get; private set; }
     public int? Score { get; private set; }
-    public int ConsentType { get; private set; }
+    public ConsentType ConsentType { get; private set; }
     public bool Consent { get; private set; }
     public DateTime ConsentDate { get; private set; }
     public DateTime? RevokedConsentDate { get; private set; }
@@ -46,7 +46,7 @@ public class ClientEntity : Entity, IAggregateRoot
     /// <summary>
     /// Construtor para criação de um novo Cliente
     /// </summary>
-    public ClientEntity(int tenantId, ClientType clientType, string origin, string name, string phone, string email, string website, string urlImage, int? score, int consentType, bool consent, DateTime consentDate, bool privacyPolicy, string remarks, int createdBy)
+    public ClientEntity(int tenantId, ClientType clientType, Origin origin, string name, string phone, string email, string website, string urlImage, int? score, ConsentType consentType, bool consent, DateTime consentDate, bool privacyPolicy, string remarks, int createdBy)
     {
         TenantId = tenantId;
         ClientType = clientType;
@@ -68,7 +68,7 @@ public class ClientEntity : Entity, IAggregateRoot
         CreatedAt = DateTime.UtcNow;
     }
 
-    public void Update(ClientType clientType, string origin, string name, string phone, string email, string website, string urlImage, int? score, int consentType, bool consent, bool privacyPolicy, string remarks, int modifiedBy)
+    public void Update(ClientType clientType, Origin origin, string name, string phone, string email, string website, string urlImage, int? score, ConsentType consentType, bool consent, bool privacyPolicy, string remarks, int modifiedBy)
     {
         ClientType = clientType;
         Origin = origin;
@@ -86,7 +86,7 @@ public class ClientEntity : Entity, IAggregateRoot
         ModifiedAt = DateTime.UtcNow;
     }
 
-    public void UpdateConsent(int consentType, bool consent, bool privacyPolicy, int modifiedBy)
+    public void UpdateConsent(ConsentType consentType, bool consent, bool privacyPolicy, int modifiedBy)
     {
         ConsentType = consentType;
         Consent = consent;

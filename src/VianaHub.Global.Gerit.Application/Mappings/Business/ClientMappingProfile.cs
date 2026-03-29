@@ -16,9 +16,14 @@ public class ClientMappingProfile : Profile
     {
         CreateMap<ClientEntity, ClientResponse>()
             .ForMember(dest => dest.Contact, opt => opt.MapFrom(src => src.Contacts.FirstOrDefault().Name));
+
         CreateMap<ClientEntity, ClientDetailResponse>()
+            .ForMember(dest => dest.Origin, opt => opt.MapFrom(src => (int)src.Origin))
+            .ForMember(dest => dest.OriginDescription, opt => opt.MapFrom(src => src.Origin.GetDescription()))
             .ForMember(dest => dest.ClientType, opt => opt.MapFrom(src => (int)src.ClientType))
-            .ForMember(dest => dest.ClientTypeDescription, opt => opt.MapFrom(src => src.ClientType.GetDescription())); 
+            .ForMember(dest => dest.ClientTypeDescription, opt => opt.MapFrom(src => src.ClientType.GetDescription()))
+            .ForMember(dest => dest.ConsentType, opt => opt.MapFrom(src => (int)src.ConsentType))
+            .ForMember(dest => dest.ConsentTypeDescription, opt => opt.MapFrom(src => src.ConsentType.GetDescription())); 
         CreateMap<ListPage<ClientEntity>, ListPageResponse<ClientResponse>>();
     }
 }

@@ -2,7 +2,7 @@
 
 namespace VianaHub.Global.Gerit.Domain.Enums;
 
-public enum ClientType : byte
+public enum ClientType
 {
     [Description("Individual")]
     Individual = 1,
