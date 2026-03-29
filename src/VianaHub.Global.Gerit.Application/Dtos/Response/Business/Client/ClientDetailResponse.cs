@@ -16,4 +16,5 @@ public class ClientDetailResponse
     public int? Score { get; set; }
     public bool Consent { get; set; }
     public string Remarks { get; set; }
+    public bool IsActive { get; set; }
 }
