@@ -13,8 +13,6 @@ public class ClientDetailResponse
     public string Website { get; set; }
     public string UrlImage { get; set; }
     public int? Score { get; set; }
-    public int ConsentType { get; set; }
-    public string ConsentTypeDescription { get; set; }
     public bool Consent { get; set; }
     public DateTime ConsentDate { get; set; }
     public bool PrivacyPolicy { get; set; }
