@@ -21,9 +21,7 @@ public class ClientMappingProfile : Profile
             .ForMember(dest => dest.Origin, opt => opt.MapFrom(src => (int)src.Origin))
             .ForMember(dest => dest.OriginDescription, opt => opt.MapFrom(src => src.Origin.GetDescription()))
             .ForMember(dest => dest.ClientType, opt => opt.MapFrom(src => (int)src.ClientType))
-            .ForMember(dest => dest.ClientTypeDescription, opt => opt.MapFrom(src => src.ClientType.GetDescription()))
-            .ForMember(dest => dest.ConsentType, opt => opt.MapFrom(src => (int)src.ConsentType))
-            .ForMember(dest => dest.ConsentTypeDescription, opt => opt.MapFrom(src => src.ConsentType.GetDescription())); 
+            .ForMember(dest => dest.ClientTypeDescription, opt => opt.MapFrom(src => src.ClientType.GetDescription()));
         CreateMap<ListPage<ClientEntity>, ListPageResponse<ClientResponse>>();
     }
 }
