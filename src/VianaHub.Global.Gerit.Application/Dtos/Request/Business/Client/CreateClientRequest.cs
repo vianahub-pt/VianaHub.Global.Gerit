@@ -6,7 +6,7 @@ namespace VianaHub.Global.Gerit.Application.Dtos.Request.Business.Client;
 public class CreateClientRequest
 {
     public int ClientType { get; set; }
-    public string Origin { get; set; }
+    public int Origin { get; set; }
     public string Name { get; set; }
     public string Phone { get; set; }
     public string Email { get; set; }

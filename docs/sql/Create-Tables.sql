@@ -506,7 +506,7 @@ CREATE TABLE dbo.Clients (                                                      
     Id				    INT IDENTITY(1,1)	NOT NULL,						            -- Identificador do cliente, chave primária
     TenantId		    INT					NOT NULL,						            -- Tenant dono do cliente
     ClientType          INT				    NOT NULL,						            -- Tipo do cliente (1=Individual, 2=Empresa, etc.)
-    Origin              NVARCHAR(100)           NULL,						            -- Origem do cliente (site, indicação, etc.)
+    Origin              INT                 NOT NULL DEFAULT 1,						    -- Origem do cliente (Instagram, Facebook, Outros.)
     Name			    NVARCHAR(150)		NOT NULL,						            -- Nome do cliente
     Phone			    NVARCHAR(50)			NULL,						            -- Telefone do cliente
     Email			    NVARCHAR(255)			NULL,						            -- Email do cliente

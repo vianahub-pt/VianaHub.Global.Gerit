@@ -84,7 +84,7 @@ public class ClientAppService : IClientAppService
             return false;
         }
 
-        var entity = new ClientEntity(tenantId, (ClientType)request.ClientType, request.Origin, request.Name, request.Phone, request.Email, request.Website, request.UrlImage, request.Score, request.ConsentType, request.Consent, request.ConsentDate, request.PrivacyPolicy, request.Remarks, _currentUser.GetUserId());
+        var entity = new ClientEntity(tenantId, (ClientType)request.ClientType, (Origin)request.Origin, request.Name, request.Phone, request.Email, request.Website, request.UrlImage, request.Score, (ConsentType)request.ConsentType, request.Consent, request.ConsentDate, request.PrivacyPolicy, request.Remarks, _currentUser.GetUserId());
         return await _domain.CreateAsync(entity, ct);
     }
 
@@ -105,7 +105,7 @@ public class ClientAppService : IClientAppService
             return false;
         }
 
-        entity.Update((ClientType)request.ClientType, request.Origin, request.Name, request.Phone, request.Email, request.Website, request.UrlImage, request.Score, request.ConsentType, request.Consent, request.PrivacyPolicy, request.Remarks, _currentUser.GetUserId());
+        entity.Update((ClientType)request.ClientType, (Origin)request.Origin, request.Name, request.Phone, request.Email, request.Website, request.UrlImage, request.Score, (ConsentType)request.ConsentType, request.Consent, request.PrivacyPolicy, request.Remarks, _currentUser.GetUserId());
         return await _domain.UpdateAsync(entity, ct);
     }
 
@@ -280,7 +280,7 @@ public class ClientAppService : IClientAppService
             }
 
             // Cria a entidade
-            var entity = new ClientEntity(tenantId, (ClientType)item.ClientType, item.Origin, item.Name, item.Phone, item.Email, item.Website, item.UrlImage, item.Score, item.ConsentType, item.Consent, item.ConsentDate, item.PrivacyPolicy, item.Remarks, _currentUser.GetUserId());
+            var entity = new ClientEntity(tenantId, (ClientType)item.ClientType, (Origin)item.Origin, item.Name, item.Phone, item.Email, item.Website, item.UrlImage, item.Score, (ConsentType)item.ConsentType, item.Consent, item.ConsentDate, item.PrivacyPolicy, item.Remarks, _currentUser.GetUserId());
 
             // Tenta criar no domínio
             var success = await _domain.CreateAsync(entity, ct);
