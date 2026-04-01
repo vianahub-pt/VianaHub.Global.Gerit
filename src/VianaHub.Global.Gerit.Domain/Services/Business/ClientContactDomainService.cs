@@ -26,21 +26,21 @@ public class ClientContactDomainService : IClientContactDomainService
         _notify = notify;
     }
 
-    public async Task<ClientContactEntity> GetByIdAsync(int id, CancellationToken ct)
+    public async Task<ClientContactEntity> GetByIdAsync(int clientId, int id, CancellationToken ct)
     {
-        return await _repo.GetByIdAsync(id, ct);
+        return await _repo.GetByIdAsync(clientId, id, ct);
     }
-    public async Task<IEnumerable<ClientContactEntity>> GetAllAsync(CancellationToken ct)
+    public async Task<IEnumerable<ClientContactEntity>> GetAllAsync(int clientId, CancellationToken ct)
     {
-        return await _repo.GetAllAsync(ct);
+        return await _repo.GetAllAsync(clientId, ct);
     }
-    public async Task<ListPage<ClientContactEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct)
+    public async Task<ListPage<ClientContactEntity>> GetPagedAsync(int clientId, PagedFilter request, CancellationToken ct)
     {
-        return await _repo.GetPagedAsync(request, ct);
+        return await _repo.GetPagedAsync(clientId, request, ct);
     }
-    public async Task<bool> ExistsByIdAsync(int id, CancellationToken ct)
+    public async Task<bool> ExistsByIdAsync(int clientId, int id, CancellationToken ct)
     {
-        return await _repo.ExistsByIdAsync(id, ct);
+        return await _repo.ExistsByIdAsync(clientId, id, ct);
     }
 
     public async Task<bool> CreateAsync(ClientContactEntity entity, CancellationToken ct)

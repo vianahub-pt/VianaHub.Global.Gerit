@@ -11,10 +11,6 @@ public class CreateClientContactRouteValidator : AbstractValidator<CreateClientC
 {
     public CreateClientContactRouteValidator(ILocalizationService localization)
     {
-        RuleFor(x => x.ClientId)
-            .GreaterThan(0)
-            .WithMessage(localization.GetMessage("Api.Validator.ClientContact.Create.ClientId"));
-
         RuleFor(x => x.Name)
             .NotEmpty()
             .WithMessage(localization.GetMessage("Api.Validator.ClientContact.Create.Name"))

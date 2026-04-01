@@ -9,10 +9,10 @@ namespace VianaHub.Global.Gerit.Domain.Interfaces.Business;
 /// </summary>
 public interface IClientAddressDataRepository
 {
-    Task<ClientAddressEntity?> GetByIdAsync(int id, CancellationToken ct);
-    Task<IEnumerable<ClientAddressEntity>> GetAllAsync(CancellationToken ct);
-    Task<ListPage<ClientAddressEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct);
-    Task<bool> ExistsByIdAsync(int id, CancellationToken ct);
+    Task<ClientAddressEntity> GetByIdAsync(int clientId, int id, CancellationToken ct);
+    Task<IEnumerable<ClientAddressEntity>> GetAllAsync(int clientId, CancellationToken ct);
+    Task<ListPage<ClientAddressEntity>> GetPagedAsync(int clientId, PagedFilter request, CancellationToken ct);
+    Task<bool> ExistsByIdAsync(int clientId, int id, CancellationToken ct);
     Task<bool> ExistsByClientAndAddressTypeAsync(int clientId, int addressTypeId, CancellationToken ct);
     Task<bool> ExistsByClientAndAddressTypeExcludingIdAsync(int clientId, int addressTypeId, int excludeId, CancellationToken ct);
     Task<bool> AddAsync(ClientAddressEntity entity, CancellationToken ct);

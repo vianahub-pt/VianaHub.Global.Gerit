@@ -5,7 +5,6 @@ namespace VianaHub.Global.Gerit.Application.Dtos.Request.Business.ClientContact;
 /// </summary>
 public class CreateClientContactRequest
 {
-    public int ClientId { get; set; }
     public string Name { get; set; }
     public string Email { get; set; }
     public string Phone { get; set; }

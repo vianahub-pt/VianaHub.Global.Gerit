@@ -5,7 +5,6 @@ namespace VianaHub.Global.Gerit.Application.Dtos.Request.Business.ClientAddress;
 /// </summary>
 public class CreateClientAddressRequest
 {
-    public int ClientId { get; set; }
     public int AddressTypeId { get; set; }
     public string CountryCode { get; set; }
     public string Street { get; set; }

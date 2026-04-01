@@ -16,30 +16,30 @@ public class ClientContactDataRepository : IClientContactDataRepository
         _context = context;
     }
 
-    public async Task<ClientContactEntity> GetByIdAsync(int id, CancellationToken ct)
+    public async Task<ClientContactEntity> GetByIdAsync(int clientId, int id, CancellationToken ct)
     {
         return await _context.Set<ClientContactEntity>()
             .AsNoTracking()
             .Include(x => x.Client)
-            .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted, ct);
+            .FirstOrDefaultAsync(x => x.ClientId == clientId && x.Id == id && !x.IsDeleted, ct);
     }
 
-    public async Task<IEnumerable<ClientContactEntity>> GetAllAsync(CancellationToken ct)
+    public async Task<IEnumerable<ClientContactEntity>> GetAllAsync(int clientId, CancellationToken ct)
     {
         return await _context.Set<ClientContactEntity>()
             .AsNoTracking()
             .Include(x => x.Client)
-            .Where(x => !x.IsDeleted)
+            .Where(x => x.ClientId == clientId && !x.IsDeleted)
             .OrderBy(x => x.Name)
             .ToListAsync(ct);
     }
 
-    public async Task<ListPage<ClientContactEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct)
+    public async Task<ListPage<ClientContactEntity>> GetPagedAsync(int clientId, PagedFilter request, CancellationToken ct)
     {
         var query = _context.Set<ClientContactEntity>()
             .AsNoTracking()
             .Include(x => x.Client)
-            .Where(x => !x.IsDeleted);
+            .Where(x => x.ClientId == clientId && !x.IsDeleted);
 
         if (!string.IsNullOrWhiteSpace(request.Search))
         {
@@ -73,11 +73,11 @@ public class ClientContactDataRepository : IClientContactDataRepository
         };
     }
 
-    public async Task<bool> ExistsByIdAsync(int id, CancellationToken ct)
+    public async Task<bool> ExistsByIdAsync(int clientId, int id, CancellationToken ct)
     {
         return await _context.Set<ClientContactEntity>()
             .AsNoTracking()
-            .AnyAsync(x => x.Id == id && !x.IsDeleted, ct);
+            .AnyAsync(x => x.ClientId == clientId && x.Id == id && !x.IsDeleted, ct);
     }
 
     public async Task<bool> ExistsByClientAndEmailAsync(int clientId, string email, int? excludeId, CancellationToken ct)
