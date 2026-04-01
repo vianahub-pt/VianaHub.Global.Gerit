@@ -10,13 +10,13 @@ namespace VianaHub.Global.Gerit.Application.Interfaces.Business;
 /// </summary>
 public interface IClientAddressAppService
 {
-    Task<IEnumerable<ClientAddressResponse>> GetAllAsync(CancellationToken ct);
-    Task<ClientAddressResponse> GetByIdAsync(int id, CancellationToken ct);
-    Task<ListPageResponse<ClientAddressResponse>> GetPagedAsync(PagedFilterRequest request, CancellationToken ct);
-    Task<bool> CreateAsync(CreateClientAddressRequest request, CancellationToken ct);
-    Task<bool> UpdateAsync(int id, UpdateClientAddressRequest request, CancellationToken ct);
-    Task<bool> ActivateAsync(int id, CancellationToken ct);
-    Task<bool> DeactivateAsync(int id, CancellationToken ct);
-    Task<bool> DeleteAsync(int id, CancellationToken ct);
-    Task<bool> BulkUploadAsync(IFormFile file, CancellationToken ct);
+    Task<IEnumerable<ClientAddressResponse>> GetAllAsync(int clientId, CancellationToken ct);
+    Task<ClientAddressResponse> GetByIdAsync(int clientId, int id, CancellationToken ct);
+    Task<ListPageResponse<ClientAddressResponse>> GetPagedAsync(int clientId, PagedFilterRequest request, CancellationToken ct);
+    Task<bool> CreateAsync(int clientId, CreateClientAddressRequest request, CancellationToken ct);
+    Task<bool> UpdateAsync(int clientId, int id, UpdateClientAddressRequest request, CancellationToken ct);
+    Task<bool> ActivateAsync(int clientId, int id, CancellationToken ct);
+    Task<bool> DeactivateAsync(int clientId, int id, CancellationToken ct);
+    Task<bool> DeleteAsync(int clientId, int id, CancellationToken ct);
+    Task<bool> BulkUploadAsync(int clientId, IFormFile file, CancellationToken ct);
 }

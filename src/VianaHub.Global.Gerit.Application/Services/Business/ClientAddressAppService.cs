@@ -48,15 +48,15 @@ public class ClientAddressAppService : IClientAddressAppService
         _fileValidation = fileValidation;
     }
 
-    public async Task<IEnumerable<ClientAddressResponse>> GetAllAsync(CancellationToken ct)
+    public async Task<IEnumerable<ClientAddressResponse>> GetAllAsync(int clientId, CancellationToken ct)
     {
-        var entities = await _repo.GetAllAsync(ct);
+        var entities = await _repo.GetAllAsync(clientId, ct);
         return _mapper.Map<IEnumerable<ClientAddressResponse>>(entities);
     }
 
-    public async Task<ClientAddressResponse> GetByIdAsync(int id, CancellationToken ct)
+    public async Task<ClientAddressResponse> GetByIdAsync(int clientId, int id, CancellationToken ct)
     {
-        var entity = await _repo.GetByIdAsync(id, ct);
+        var entity = await _repo.GetByIdAsync(clientId, id, ct);
         if (entity == null || entity.IsDeleted || !entity.IsActive)
         {
             _notify.Add(_localization.GetMessage("Application.Service.ClientAddress.GetById.ResourceNotFound"), 410);
@@ -65,18 +65,18 @@ public class ClientAddressAppService : IClientAddressAppService
         return _mapper.Map<ClientAddressResponse>(entity);
     }
 
-    public async Task<ListPageResponse<ClientAddressResponse>> GetPagedAsync(PagedFilterRequest request, CancellationToken ct)
+    public async Task<ListPageResponse<ClientAddressResponse>> GetPagedAsync(int clientId, PagedFilterRequest request, CancellationToken ct)
     {
         var filter = new PagedFilter(request.Search, request.IsActive, request.PageNumber, request.PageSize, request.SortBy, request.SortDirection);
-        var paged = await _repo.GetPagedAsync(filter, ct);
+        var paged = await _repo.GetPagedAsync(clientId, filter, ct);
         return _mapper.Map<ListPageResponse<ClientAddressResponse>>(paged);
     }
 
-    public async Task<bool> CreateAsync(CreateClientAddressRequest request, CancellationToken ct)
+    public async Task<bool> CreateAsync(int clientId, CreateClientAddressRequest request, CancellationToken ct)
     {
         var tenantId = _currentUser.GetTenantId();
         
-        var exists = await _repo.ExistsByClientAndAddressTypeAsync(request.ClientId, request.AddressTypeId, ct);
+        var exists = await _repo.ExistsByClientAndAddressTypeAsync(clientId, request.AddressTypeId, ct);
         if (exists)
         {
             _notify.Add(_localization.GetMessage("Application.Service.ClientAddress.Create.ResourceAlreadyExists"), 409);
@@ -85,7 +85,7 @@ public class ClientAddressAppService : IClientAddressAppService
 
         var entity = new ClientAddressEntity(
             tenantId,
-            request.ClientId,
+            clientId,
             request.AddressTypeId,
             request.CountryCode,
             request.Street,
@@ -104,9 +104,9 @@ public class ClientAddressAppService : IClientAddressAppService
         return await _domain.CreateAsync(entity, ct);
     }
 
-    public async Task<bool> UpdateAsync(int id, UpdateClientAddressRequest request, CancellationToken ct)
+    public async Task<bool> UpdateAsync(int clientId, int id, UpdateClientAddressRequest request, CancellationToken ct)
     {
-        var entity = await _repo.GetByIdAsync(id, ct);
+        var entity = await _repo.GetByIdAsync(clientId, id, ct);
         if (entity == null)
         {
             _notify.Add(_localization.GetMessage("Application.Service.ClientAddress.Update.ResourceNotFound"), 410);
@@ -138,9 +138,9 @@ public class ClientAddressAppService : IClientAddressAppService
         return await _domain.UpdateAsync(entity, ct);
     }
 
-    public async Task<bool> ActivateAsync(int id, CancellationToken ct)
+    public async Task<bool> ActivateAsync(int clientId, int id, CancellationToken ct)
     {
-        var entity = await _repo.GetByIdAsync(id, ct);
+        var entity = await _repo.GetByIdAsync(clientId, id, ct);
         if (entity == null)
         {
             _notify.Add(_localization.GetMessage("Application.Service.ClientAddress.Activate.ResourceNotFound"), 410);
@@ -151,9 +151,9 @@ public class ClientAddressAppService : IClientAddressAppService
         return await _domain.ActivateAsync(entity, ct);
     }
 
-    public async Task<bool> DeactivateAsync(int id, CancellationToken ct)
+    public async Task<bool> DeactivateAsync(int clientId, int id, CancellationToken ct)
     {
-        var entity = await _repo.GetByIdAsync(id, ct);
+        var entity = await _repo.GetByIdAsync(clientId, id, ct);
         if (entity == null)
         {
             _notify.Add(_localization.GetMessage("Application.Service.ClientAddress.Deactivate.ResourceNotFound"), 410);
@@ -164,9 +164,9 @@ public class ClientAddressAppService : IClientAddressAppService
         return await _domain.DeactivateAsync(entity, ct);
     }
 
-    public async Task<bool> DeleteAsync(int id, CancellationToken ct)
+    public async Task<bool> DeleteAsync(int clientId, int id, CancellationToken ct)
     {
-        var entity = await _repo.GetByIdAsync(id, ct);
+        var entity = await _repo.GetByIdAsync(clientId, id, ct);
         if (entity == null)
         {
             _notify.Add(_localization.GetMessage("Application.Service.ClientAddress.Delete.ResourceNotFound"), 410);
@@ -177,7 +177,7 @@ public class ClientAddressAppService : IClientAddressAppService
         return await _domain.DeleteAsync(entity, ct);
     }
 
-    public async Task<bool> BulkUploadAsync(IFormFile file, CancellationToken ct)
+    public async Task<bool> BulkUploadAsync(int clientId, IFormFile file, CancellationToken ct)
     {
         if (!_fileValidation.ValidateFile(file))
             return false;
@@ -192,7 +192,7 @@ public class ClientAddressAppService : IClientAddressAppService
             return false;
         }
 
-        return await ProcessBulkItemsAsync(items, ct);
+        return await ProcessBulkItemsAsync(clientId, items, ct);
     }
 
     private List<BulkUploadClientAddressItem> ReadCsvFile(IFormFile file)
@@ -282,30 +282,30 @@ public class ClientAddressAppService : IClientAddressAppService
         }
     }
 
-    private async Task<bool> ProcessBulkItemsAsync(List<BulkUploadClientAddressItem> items, CancellationToken ct)
+    private async Task<bool> ProcessBulkItemsAsync(int clientId, List<BulkUploadClientAddressItem> items, CancellationToken ct)
     {
         var hasErrors = false;
         var tenantId = _currentUser.GetTenantId();
 
         foreach (var item in items)
         {
-            if (!ValidateBulkItem(item))
+            if (!ValidateBulkItem(clientId, item))
             {
                 hasErrors = true;
                 continue;
             }
 
-            var exists = await _repo.ExistsByClientAndAddressTypeAsync(item.ClientId, item.AddressTypeId, ct);
+            var exists = await _repo.ExistsByClientAndAddressTypeAsync(clientId, item.AddressTypeId, ct);
             if (exists)
             {
-                _notify.Add(_localization.GetMessage("Application.Service.ClientAddress.ProcessBulkItems.ExistsByClientAndType", item.ClientId, item.AddressTypeId), 400);
+                _notify.Add(_localization.GetMessage("Application.Service.ClientAddress.ProcessBulkItems.ExistsByClientAndType", clientId, item.AddressTypeId), 400);
                 hasErrors = true;
                 continue;
             }
 
             var entity = new ClientAddressEntity(
                 tenantId,
-                item.ClientId,
+                clientId,
                 item.AddressTypeId,
                 item.CountryCode,
                 item.Street,
@@ -333,41 +333,41 @@ public class ClientAddressAppService : IClientAddressAppService
         return !hasErrors;
     }
 
-    private bool ValidateBulkItem(BulkUploadClientAddressItem item)
+    private bool ValidateBulkItem(int clientId, BulkUploadClientAddressItem item)
     {
         if (string.IsNullOrWhiteSpace(item.Street))
         {
-            _notify.Add(_localization.GetMessage("Application.Service.ClientAddress.ValidateBulkItem.Street", item.ClientId), 400);
+            _notify.Add(_localization.GetMessage("Application.Service.ClientAddress.ValidateBulkItem.Street", clientId), 400);
             return false;
         }
 
         if (string.IsNullOrWhiteSpace(item.City))
         {
-            _notify.Add(_localization.GetMessage("Application.Service.ClientAddress.ValidateBulkItem.City", item.ClientId), 400);
+            _notify.Add(_localization.GetMessage("Application.Service.ClientAddress.ValidateBulkItem.City", clientId), 400);
             return false;
         }
 
         if (string.IsNullOrWhiteSpace(item.PostalCode))
         {
-            _notify.Add(_localization.GetMessage("Application.Service.ClientAddress.ValidateBulkItem.PostalCode", item.ClientId), 400);
+            _notify.Add(_localization.GetMessage("Application.Service.ClientAddress.ValidateBulkItem.PostalCode", clientId), 400);
             return false;
         }
 
         if (string.IsNullOrWhiteSpace(item.CountryCode))
         {
-            _notify.Add(_localization.GetMessage("Application.Service.ClientAddress.ValidateBulkItem.CountryCode", item.ClientId), 400);
+            _notify.Add(_localization.GetMessage("Application.Service.ClientAddress.ValidateBulkItem.CountryCode", clientId), 400);
             return false;
         }
 
-        if (item.ClientId <= 0)
+        if (clientId <= 0)
         {
-            _notify.Add(_localization.GetMessage("Application.Service.ClientAddress.ValidateBulkItem.ClientId", item.ClientId), 400);
+            _notify.Add(_localization.GetMessage("Application.Service.ClientAddress.ValidateBulkItem.ClientId", clientId), 400);
             return false;
         }
 
         if (item.AddressTypeId <= 0)
         {
-            _notify.Add(_localization.GetMessage("Application.Service.ClientAddress.ValidateBulkItem.AddressTypeId", item.ClientId), 400);
+            _notify.Add(_localization.GetMessage("Application.Service.ClientAddress.ValidateBulkItem.AddressTypeId", clientId), 400);
             return false;
         }
 

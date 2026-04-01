@@ -56,7 +56,7 @@
                 ],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\r\n  \"tenantId\": 1,\r\n  \"email\": \"viana.dener@gmail.com\",\r\n  \"password\": \"Teste@123\"\r\n}",
+                  "raw": "{\r\n  \"email\": \"viana.dener@gmail.com\",\r\n  \"password\": \"Teste@123\"\r\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -824,6 +824,52 @@
                   "path": [
                     "roles",
                     "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Obter paginado por filtro",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept-Language",
+                    "value": "pt-BR",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{protocol}}{{host}}{{port}}{{path}}/roles/paged?Search=&PageNumber=1&PageSize=10&SortBy=Name&SortDirection=asc",
+                  "host": [
+                    "{{protocol}}{{host}}{{port}}{{path}}"
+                  ],
+                  "path": [
+                    "roles",
+                    "paged"
+                  ],
+                  "query": [
+                    {
+                      "key": "Search",
+                      "value": ""
+                    },
+                    {
+                      "key": "PageNumber",
+                      "value": "1"
+                    },
+                    {
+                      "key": "PageSize",
+                      "value": "10"
+                    },
+                    {
+                      "key": "SortBy",
+                      "value": "Name"
+                    },
+                    {
+                      "key": "SortDirection",
+                      "value": "asc"
+                    }
                   ]
                 }
               },
@@ -1639,7 +1685,7 @@
                 ],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\r\n  \"userId\": 1,\r\n  \"roleId\": 1\r\n}",
+                  "raw": "{\r\n  \"userId\": 2,\r\n  \"roleId\": 2\r\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -1904,7 +1950,7 @@
                 ],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\r\n  \"appearance\": \"string\",\r\n  \"locale\": \"string\",\r\n  \"timezone\": \"string\",\r\n  \"dateFormat\": \"string\",\r\n  \"timeFormat\": \"string\",\r\n  \"dayStart\": \"string\",\r\n  \"emailNewsletter\": true,\r\n  \"emailWeeklyReport\": true,\r\n  \"emailApproval\": true,\r\n  \"emailAlerts\": true,\r\n  \"emailReminders\": true,\r\n  \"emailPlanner\": true\r\n}",
+                  "raw": "{\r\n    \"appearance\": \"dark\",\r\n    \"currencyCode\": \"USD\",\r\n    \"locale\": \"pt-BR\",\r\n    \"timezone\": \"America/Sao_Paulo\",\r\n    \"dateFormat\": \"DD/MM/YYYY\",\r\n    \"timeFormat\": \"24h\",\r\n    \"dayStart\": \"08:00:00\",\r\n    \"dayEnd\": \"17:00:00\",\r\n    \"emailNewsletter\": false,\r\n    \"emailWeeklyReport\": true,\r\n    \"emailApproval\": true,\r\n    \"emailAlerts\": true,\r\n    \"emailReminders\": true,\r\n    \"emailPlanner\": true\r\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -3635,7 +3681,7 @@
                   }
                 ],
                 "url": {
-                  "raw": "{{protocol}}{{host}}{{port}}{{path}}/clients/paged?Search=&PageNumber=1&PageSize=10&SortBy=Name&SortDirection=asc",
+                  "raw": "{{protocol}}{{host}}{{port}}{{path}}/clients/paged?Search=João Silva&IsActive=true&PageNumber=1&PageSize=10&SortBy=Name&SortDirection=asc",
                   "host": [
                     "{{protocol}}{{host}}{{port}}{{path}}"
                   ],
@@ -3646,7 +3692,11 @@
                   "query": [
                     {
                       "key": "Search",
-                      "value": ""
+                      "value": "João Silva"
+                    },
+                    {
+                      "key": "IsActive",
+                      "value": "true"
                     },
                     {
                       "key": "PageNumber",
@@ -3749,7 +3799,7 @@
                 ],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\r\n  \"functionId\": 61,\r\n  \"name\": \"Ana Pereira\"\r\n}",
+                  "raw": "{\r\n    \"clientType\": 1,\r\n    \"origin\": \"Web\",\r\n    \"name\": \"DesentoFossa Lisboa, Lda.\",\r\n    \"phone\": \"351 912 345 678\",\r\n    \"email\": \"geral@desentofossalisboa.pt\",\r\n    \"website\": \"www.desentofossa.pt\",\r\n    \"urlImage\": \"www.getit.com/desentofossa.jpg\",\r\n    \"score\": 4,\r\n    \"consentType\": 1,\r\n    \"consent\": true,\r\n    \"consentDate\": \"2026-03-27T07:30:39.5532227\",\r\n    \"privacyPolicy\": false,\r\n    \"remarks\": \"Limpeza de fossas sépticas\"\r\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -3860,12 +3910,14 @@
                   }
                 ],
                 "url": {
-                  "raw": "{{protocol}}{{host}}{{port}}{{path}}/client-addresses",
+                  "raw": "{{protocol}}{{host}}{{port}}{{path}}/client/1/addresses",
                   "host": [
                     "{{protocol}}{{host}}{{port}}{{path}}"
                   ],
                   "path": [
-                    "client-addresses"
+                    "client",
+                    "1",
+                    "addresses"
                   ]
                 }
               },
@@ -3883,12 +3935,14 @@
                   }
                 ],
                 "url": {
-                  "raw": "{{protocol}}{{host}}{{port}}{{path}}/client-addresses/1",
+                  "raw": "{{protocol}}{{host}}{{port}}{{path}}/client/1/addresses/1",
                   "host": [
                     "{{protocol}}{{host}}{{port}}{{path}}"
                   ],
                   "path": [
-                    "client-addresses",
+                    "client",
+                    "1",
+                    "addresses",
                     "1"
                   ]
                 }
@@ -3907,12 +3961,14 @@
                   }
                 ],
                 "url": {
-                  "raw": "{{protocol}}{{host}}{{port}}{{path}}/client-addresses/paged?Search=&PageNumber=1&PageSize=10&SortBy=Name&SortDirection=asc",
+                  "raw": "{{protocol}}{{host}}{{port}}{{path}}/client/1/addresses/paged?Search=&PageNumber=1&PageSize=10&SortBy=Name&SortDirection=asc",
                   "host": [
                     "{{protocol}}{{host}}{{port}}{{path}}"
                   ],
                   "path": [
-                    "client-addresses",
+                    "client",
+                    "1",
+                    "addresses",
                     "paged"
                   ],
                   "query": [
@@ -3962,12 +4018,14 @@
                   }
                 },
                 "url": {
-                  "raw": "{{protocol}}{{host}}{{port}}{{path}}/client-addresses",
+                  "raw": "{{protocol}}{{host}}{{port}}{{path}}/client/1/addresses",
                   "host": [
                     "{{protocol}}{{host}}{{port}}{{path}}"
                   ],
                   "path": [
-                    "client-addresses"
+                    "client",
+                    "1",
+                    "addresses"
                   ]
                 }
               },
@@ -3996,7 +4054,7 @@
                   ]
                 },
                 "url": {
-                  "raw": "https://localhost:7111/v1/client-addresses/bulk-upload",
+                  "raw": "https://localhost:7111/v1/client/1/addresses/bulk-upload",
                   "protocol": "https",
                   "host": [
                     "localhost"
@@ -4004,7 +4062,9 @@
                   "port": "7111",
                   "path": [
                     "v1",
-                    "client-addresses",
+                    "client",
+                    "1",
+                    "addresses",
                     "bulk-upload"
                   ]
                 }
@@ -4032,7 +4092,7 @@
                   }
                 },
                 "url": {
-                  "raw": "https://localhost:7111/v1/client-addresses/1",
+                  "raw": "https://localhost:7111/v1/client/1/addresses/1",
                   "protocol": "https",
                   "host": [
                     "localhost"
@@ -4040,7 +4100,9 @@
                   "port": "7111",
                   "path": [
                     "v1",
-                    "client-addresses",
+                    "client",
+                    "1",
+                    "addresses",
                     "1"
                   ]
                 }
@@ -4059,7 +4121,7 @@
                   }
                 ],
                 "url": {
-                  "raw": "https://localhost:7111/v1/client-addresses/1/activate",
+                  "raw": "https://localhost:7111/v1/client/1/addresses/1/activate",
                   "protocol": "https",
                   "host": [
                     "localhost"
@@ -4067,7 +4129,9 @@
                   "port": "7111",
                   "path": [
                     "v1",
-                    "client-addresses",
+                    "client",
+                    "1",
+                    "addresses",
                     "1",
                     "activate"
                   ]
@@ -4087,7 +4151,7 @@
                   }
                 ],
                 "url": {
-                  "raw": "https://localhost:7111/v1/client-addresses/1/deactivate",
+                  "raw": "https://localhost:7111/v1/client/1/addresses/1/deactivate",
                   "protocol": "https",
                   "host": [
                     "localhost"
@@ -4095,7 +4159,9 @@
                   "port": "7111",
                   "path": [
                     "v1",
-                    "client-addresses",
+                    "client",
+                    "1",
+                    "addresses",
                     "1",
                     "deactivate"
                   ]
@@ -4115,7 +4181,7 @@
                   }
                 ],
                 "url": {
-                  "raw": "https://localhost:7111/v1/client-addresses/1",
+                  "raw": "https://localhost:7111/v1/client/1/addresses/1",
                   "protocol": "https",
                   "host": [
                     "localhost"
@@ -4123,7 +4189,9 @@
                   "port": "7111",
                   "path": [
                     "v1",
-                    "client-addresses",
+                    "client",
+                    "1",
+                    "addresses",
                     "1"
                   ]
                 }
@@ -4147,7 +4215,7 @@
                   }
                 ],
                 "url": {
-                  "raw": "https://localhost:7111/v1/client-contacts",
+                  "raw": "https://localhost:7111/v1/client/1/contacts",
                   "protocol": "https",
                   "host": [
                     "localhost"
@@ -4155,7 +4223,9 @@
                   "port": "7111",
                   "path": [
                     "v1",
-                    "client-contacts"
+                    "client",
+                    "1",
+                    "contacts"
                   ]
                 }
               },
@@ -4173,7 +4243,7 @@
                   }
                 ],
                 "url": {
-                  "raw": "https://localhost:7111/v1/client-contacts/1",
+                  "raw": "https://localhost:7111/v1/client/1/contacts/1",
                   "protocol": "https",
                   "host": [
                     "localhost"
@@ -4181,7 +4251,9 @@
                   "port": "7111",
                   "path": [
                     "v1",
-                    "client-contacts",
+                    "client",
+                    "1",
+                    "contacts",
                     "1"
                   ]
                 }
@@ -4200,7 +4272,7 @@
                   }
                 ],
                 "url": {
-                  "raw": "https://localhost:7111/v1/client-contacts/paged?Search=Viseu&PageNumber=1&PageSize=10&SortBy=Name&SortDirection=asc",
+                  "raw": "https://localhost:7111/v1/client/1/contacts/paged?Search=&PageNumber=1&PageSize=10&SortBy=Name&SortDirection=asc",
                   "protocol": "https",
                   "host": [
                     "localhost"
@@ -4208,13 +4280,15 @@
                   "port": "7111",
                   "path": [
                     "v1",
-                    "client-contacts",
+                    "client",
+                    "1",
+                    "contacts",
                     "paged"
                   ],
                   "query": [
                     {
                       "key": "Search",
-                      "value": "Viseu"
+                      "value": ""
                     },
                     {
                       "key": "PageNumber",
@@ -4250,7 +4324,7 @@
                 ],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\r\n  \"clientId\": 0,\r\n  \"name\": \"string\",\r\n  \"email\": \"string\",\r\n  \"phone\": \"string\",\r\n  \"isPrimary\": true\r\n}",
+                  "raw": "{\r\n  \"name\": \"string\",\r\n  \"email\": \"string\",\r\n  \"phone\": \"string\",\r\n  \"isPrimary\": true\r\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -4258,7 +4332,7 @@
                   }
                 },
                 "url": {
-                  "raw": "https://localhost:7111/v1/client-contacts",
+                  "raw": "https://localhost:7111/v1/client/1/contacts",
                   "protocol": "https",
                   "host": [
                     "localhost"
@@ -4266,7 +4340,9 @@
                   "port": "7111",
                   "path": [
                     "v1",
-                    "client-contacts"
+                    "client",
+                    "1",
+                    "contacts"
                   ]
                 }
               },
@@ -4295,7 +4371,7 @@
                   ]
                 },
                 "url": {
-                  "raw": "https://localhost:7111/v1/client-contacts/bulk-upload",
+                  "raw": "https://localhost:7111/v1/client/1/contacts/bulk-upload",
                   "protocol": "https",
                   "host": [
                     "localhost"
@@ -4303,7 +4379,9 @@
                   "port": "7111",
                   "path": [
                     "v1",
-                    "client-contacts",
+                    "client",
+                    "1",
+                    "contacts",
                     "bulk-upload"
                   ]
                 }
@@ -4331,7 +4409,7 @@
                   }
                 },
                 "url": {
-                  "raw": "https://localhost:7111/v1/client-contacts/1",
+                  "raw": "https://localhost:7111/v1/client/1/contacts/1",
                   "protocol": "https",
                   "host": [
                     "localhost"
@@ -4339,7 +4417,9 @@
                   "port": "7111",
                   "path": [
                     "v1",
-                    "client-contacts",
+                    "client",
+                    "1",
+                    "contacts",
                     "1"
                   ]
                 }
@@ -4358,7 +4438,7 @@
                   }
                 ],
                 "url": {
-                  "raw": "https://localhost:7111/v1/client-contacts/1/activate",
+                  "raw": "https://localhost:7111/v1/client/1/contacts/1/activate",
                   "protocol": "https",
                   "host": [
                     "localhost"
@@ -4366,7 +4446,9 @@
                   "port": "7111",
                   "path": [
                     "v1",
-                    "client-contacts",
+                    "client",
+                    "1",
+                    "contacts",
                     "1",
                     "activate"
                   ]
@@ -4386,7 +4468,7 @@
                   }
                 ],
                 "url": {
-                  "raw": "https://localhost:7111/v1/client-contacts/1/deactivate",
+                  "raw": "https://localhost:7111/v1/client/1/contacts/1/deactivate",
                   "protocol": "https",
                   "host": [
                     "localhost"
@@ -4394,7 +4476,9 @@
                   "port": "7111",
                   "path": [
                     "v1",
-                    "client-contacts",
+                    "client",
+                    "1",
+                    "contacts",
                     "1",
                     "deactivate"
                   ]
@@ -4414,7 +4498,7 @@
                   }
                 ],
                 "url": {
-                  "raw": "https://localhost:7111/v1/client-contacts/1",
+                  "raw": "https://localhost:7111/v1/client/1/contacts/1",
                   "protocol": "https",
                   "host": [
                     "localhost"
@@ -4422,7 +4506,9 @@
                   "port": "7111",
                   "path": [
                     "v1",
-                    "client-contacts",
+                    "client",
+                    "1",
+                    "contacts",
                     "1"
                   ]
                 }
@@ -5097,14 +5183,11 @@
                   }
                 ],
                 "url": {
-                  "raw": "https://localhost:7111/v1/equipments/paged?Search=Medição&PageNumber=1&PageSize=10&SortBy=Name&SortDirection=asc",
-                  "protocol": "https",
+                  "raw": "{{protocol}}{{host}}{{port}}{{path}}/equipments/paged?Search=Medição&IsActive=true&PageNumber=1&PageSize=10&SortBy=Name&SortDirection=asc",
                   "host": [
-                    "localhost"
+                    "{{protocol}}{{host}}{{port}}{{path}}"
                   ],
-                  "port": "7111",
                   "path": [
-                    "v1",
                     "equipments",
                     "paged"
                   ],
@@ -5112,6 +5195,10 @@
                     {
                       "key": "Search",
                       "value": "Medição"
+                    },
+                    {
+                      "key": "IsActive",
+                      "value": "true"
                     },
                     {
                       "key": "PageNumber",
@@ -5396,21 +5483,22 @@
                   }
                 ],
                 "url": {
-                  "raw": "https://localhost:7111/v1/team-members/paged?Search=Ajudante&PageNumber=1&PageSize=10&SortBy=Name&SortDirection=asc",
-                  "protocol": "https",
+                  "raw": "{{protocol}}{{host}}{{port}}{{path}}/team-members/paged?Search=&IsActive=true&PageNumber=1&PageSize=10&SortBy=Name&SortDirection=asc",
                   "host": [
-                    "localhost"
+                    "{{protocol}}{{host}}{{port}}{{path}}"
                   ],
-                  "port": "7111",
                   "path": [
-                    "v1",
                     "team-members",
                     "paged"
                   ],
                   "query": [
                     {
                       "key": "Search",
-                      "value": "Ajudante"
+                      "value": ""
+                    },
+                    {
+                      "key": "IsActive",
+                      "value": "true"
                     },
                     {
                       "key": "PageNumber",
@@ -8029,21 +8117,22 @@
                   }
                 ],
                 "url": {
-                  "raw": "https://localhost:7111/v1/teams/paged?Search=Órion&PageNumber=1&PageSize=10&SortBy=Name&SortDirection=asc",
-                  "protocol": "https",
+                  "raw": "{{protocol}}{{host}}{{port}}{{path}}/teams/paged?Search=&IsActive=true&PageNumber=1&PageSize=1&SortBy=Name&SortDirection=asc",
                   "host": [
-                    "localhost"
+                    "{{protocol}}{{host}}{{port}}{{path}}"
                   ],
-                  "port": "7111",
                   "path": [
-                    "v1",
                     "teams",
                     "paged"
                   ],
                   "query": [
                     {
                       "key": "Search",
-                      "value": "Órion"
+                      "value": ""
+                    },
+                    {
+                      "key": "IsActive",
+                      "value": "true"
                     },
                     {
                       "key": "PageNumber",
@@ -8051,7 +8140,7 @@
                     },
                     {
                       "key": "PageSize",
-                      "value": "10"
+                      "value": "1"
                     },
                     {
                       "key": "SortBy",

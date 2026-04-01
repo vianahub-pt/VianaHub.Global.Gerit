@@ -26,21 +26,21 @@ public class ClientAddressDomainService : IClientAddressDomainService
         _notify = notify;
     }
 
-    public async Task<ClientAddressEntity> GetByIdAsync(int id, CancellationToken ct)
+    public async Task<ClientAddressEntity> GetByIdAsync(int clientId, int id, CancellationToken ct)
     {
-        return await _repo.GetByIdAsync(id, ct);
+        return await _repo.GetByIdAsync(clientId, id, ct);
     }
-    public async Task<IEnumerable<ClientAddressEntity>> GetAllAsync(CancellationToken ct)
+    public async Task<IEnumerable<ClientAddressEntity>> GetAllAsync(int clientId, CancellationToken ct)
     {
-        return await _repo.GetAllAsync(ct);
+        return await _repo.GetAllAsync(clientId, ct);
     }
-    public async Task<ListPage<ClientAddressEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct)
+    public async Task<ListPage<ClientAddressEntity>> GetPagedAsync(int clientId, PagedFilter request, CancellationToken ct)
     {
-        return await _repo.GetPagedAsync(request, ct);
+        return await _repo.GetPagedAsync(clientId, request, ct);
     }
-    public async Task<bool> ExistsByIdAsync(int id, CancellationToken ct)
+    public async Task<bool> ExistsByIdAsync(int clientId, int id, CancellationToken ct)
     {
-        return await _repo.ExistsByIdAsync(id, ct);
+        return await _repo.ExistsByIdAsync(clientId, id, ct);
     }
 
     public async Task<bool> CreateAsync(ClientAddressEntity entity, CancellationToken ct)

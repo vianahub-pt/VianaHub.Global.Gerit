@@ -52,15 +52,15 @@ public class ClientContactAppService : IClientContactAppService
         _logger = logger;
     }
 
-    public async Task<IEnumerable<ClientContactResponse>> GetAllAsync(CancellationToken ct)
+    public async Task<IEnumerable<ClientContactResponse>> GetAllAsync(int clientId, CancellationToken ct)
     {
-        var entities = await _repo.GetAllAsync(ct);
+        var entities = await _repo.GetAllAsync(clientId, ct);
         return _mapper.Map<IEnumerable<ClientContactResponse>>(entities);
     }
 
-    public async Task<ClientContactResponse> GetByIdAsync(int id, CancellationToken ct)
+    public async Task<ClientContactResponse> GetByIdAsync(int clientId, int id, CancellationToken ct)
     {
-        var entity = await _repo.GetByIdAsync(id, ct);
+        var entity = await _repo.GetByIdAsync(clientId, id, ct);
         if (entity == null || entity.IsDeleted || !entity.IsActive)
         {
             _notify.Add(_localization.GetMessage("Application.Service.ClientContact.GetById.ResourceNotFound"), 410);
@@ -69,20 +69,20 @@ public class ClientContactAppService : IClientContactAppService
         return _mapper.Map<ClientContactResponse>(entity);
     }
 
-    public async Task<ListPageResponse<ClientContactResponse>> GetPagedAsync(PagedFilterRequest request, CancellationToken ct)
+    public async Task<ListPageResponse<ClientContactResponse>> GetPagedAsync(int clientId, PagedFilterRequest request, CancellationToken ct)
     {
         var filter = new PagedFilter(request.Search, request.IsActive, request.PageNumber, request.PageSize, request.SortBy, request.SortDirection);
-        var paged = await _repo.GetPagedAsync(filter, ct);
+        var paged = await _repo.GetPagedAsync(clientId, filter, ct);
         return _mapper.Map<ListPageResponse<ClientContactResponse>>(paged);
     }
 
-    public async Task<bool> CreateAsync(CreateClientContactRequest request, CancellationToken ct)
+    public async Task<bool> CreateAsync(int clientId, CreateClientContactRequest request, CancellationToken ct)
     {
         var tenantId = _currentUser.GetTenantId();
         var userId = _currentUser.GetUserId();
 
         // Validar unicidade: Email único por Cliente
-        var exists = await _repo.ExistsByClientAndEmailAsync(request.ClientId, request.Email, null, ct);
+        var exists = await _repo.ExistsByClientAndEmailAsync(clientId, request.Email, null, ct);
         if (exists)
         {
             _notify.Add(_localization.GetMessage("Application.Service.ClientContact.Create.ResourceAlreadyExists"), 409);
@@ -91,7 +91,7 @@ public class ClientContactAppService : IClientContactAppService
 
         var entity = new ClientContactEntity(
             tenantId,
-            request.ClientId,
+            clientId,
             request.Name,
             request.Email,
             request.Phone,
@@ -102,9 +102,9 @@ public class ClientContactAppService : IClientContactAppService
         return await _domain.CreateAsync(entity, ct);
     }
 
-    public async Task<bool> UpdateAsync(int id, UpdateClientContactRequest request, CancellationToken ct)
+    public async Task<bool> UpdateAsync(int clientId, int id, UpdateClientContactRequest request, CancellationToken ct)
     {
-        var entity = await _repo.GetByIdAsync(id, ct);
+        var entity = await _repo.GetByIdAsync(clientId, id, ct);
         if (entity == null || entity.IsDeleted)
         {
             _notify.Add(_localization.GetMessage("Application.Service.ClientContact.Update.ResourceNotFound"), 410);
@@ -123,9 +123,9 @@ public class ClientContactAppService : IClientContactAppService
         return await _domain.UpdateAsync(entity, ct);
     }
 
-    public async Task<bool> ActivateAsync(int id, CancellationToken ct)
+    public async Task<bool> ActivateAsync(int clientId, int id, CancellationToken ct)
     {
-        var entity = await _repo.GetByIdAsync(id, ct);
+        var entity = await _repo.GetByIdAsync(clientId, id, ct);
         if (entity == null || entity.IsDeleted)
         {
             _notify.Add(_localization.GetMessage("Application.Service.ClientContact.Activate.ResourceNotFound"), 410);
@@ -136,9 +136,9 @@ public class ClientContactAppService : IClientContactAppService
         return await _domain.ActivateAsync(entity, ct);
     }
 
-    public async Task<bool> DeactivateAsync(int id, CancellationToken ct)
+    public async Task<bool> DeactivateAsync(int clientId, int id, CancellationToken ct)
     {
-        var entity = await _repo.GetByIdAsync(id, ct);
+        var entity = await _repo.GetByIdAsync(clientId, id, ct);
         if (entity == null || entity.IsDeleted)
         {
             _notify.Add(_localization.GetMessage("Application.Service.ClientContact.Deactivate.ResourceNotFound"), 410);
@@ -149,9 +149,9 @@ public class ClientContactAppService : IClientContactAppService
         return await _domain.DeactivateAsync(entity, ct);
     }
 
-    public async Task<bool> DeleteAsync(int id, CancellationToken ct)
+    public async Task<bool> DeleteAsync(int clientId, int id, CancellationToken ct)
     {
-        var entity = await _repo.GetByIdAsync(id, ct);
+        var entity = await _repo.GetByIdAsync(clientId, id, ct);
         if (entity == null || entity.IsDeleted)
         {
             _notify.Add(_localization.GetMessage("Application.Service.ClientContact.Delete.ResourceNotFound"), 410);
@@ -162,7 +162,7 @@ public class ClientContactAppService : IClientContactAppService
         return await _domain.DeleteAsync(entity, ct);
     }
 
-    public async Task<bool> BulkUploadAsync(IFormFile file, CancellationToken ct)
+    public async Task<bool> BulkUploadAsync(int clientId, IFormFile file, CancellationToken ct)
     {
         // Valida arquivo usando serviço centralizado
         if (!_fileValidation.ValidateFile(file))
@@ -180,7 +180,7 @@ public class ClientContactAppService : IClientContactAppService
         }
 
         // Processa cada item
-        return await ProcessBulkItemsAsync(items, ct);
+        return await ProcessBulkItemsAsync(clientId, items, ct);
     }
 
     private List<BulkUploadClientContactItem> ReadCsvFile(IFormFile file)
@@ -270,7 +270,7 @@ public class ClientContactAppService : IClientContactAppService
         }
     }
 
-    private async Task<bool> ProcessBulkItemsAsync(List<BulkUploadClientContactItem> items, CancellationToken ct)
+    private async Task<bool> ProcessBulkItemsAsync(int clientId, List<BulkUploadClientContactItem> items, CancellationToken ct)
     {
         var tenantId = _currentUser.GetTenantId();
         var userId = _currentUser.GetUserId();
@@ -286,17 +286,17 @@ public class ClientContactAppService : IClientContactAppService
             }
 
             // Verificar se já existe
-            var exists = await _repo.ExistsByClientAndEmailAsync(item.ClientId, item.Email, null, ct);
+            var exists = await _repo.ExistsByClientAndEmailAsync(clientId, item.Email, null, ct);
             if (exists)
             {
-                _notify.Add(_localization.GetMessage("Application.Service.ClientContact.ProcessBulkItems.ExistsByClientAndEmail", item.Email, item.ClientId), 400);
+                _notify.Add(_localization.GetMessage("Application.Service.ClientContact.ProcessBulkItems.ExistsByClientAndEmail", item.Email, clientId), 400);
                 hasErrors = true;
                 continue;
             }
 
             var entity = new ClientContactEntity(
                 tenantId,
-                item.ClientId,
+                clientId,
                 item.Name,
                 item.Email,
                 item.Phone,
@@ -317,12 +317,6 @@ public class ClientContactAppService : IClientContactAppService
 
     private bool ValidateBulkItem(BulkUploadClientContactItem item)
     {
-        if (item.ClientId <= 0)
-        {
-            _notify.Add(_localization.GetMessage("Application.Service.ClientContact.ValidateBulkItem.ClientId"), 400);
-            return false;
-        }
-
         if (string.IsNullOrWhiteSpace(item.Name))
         {
             _notify.Add(_localization.GetMessage("Application.Service.ClientContact.ValidateBulkItem.Name"), 400);

@@ -19,36 +19,36 @@ public class ClientAddressDataRepository : IClientAddressDataRepository
         _context = context;
     }
 
-    public async Task<ClientAddressEntity?> GetByIdAsync(int id, CancellationToken ct)
+    public async Task<ClientAddressEntity> GetByIdAsync(int clientId, int id, CancellationToken ct)
     {
         return await _context.ClientAddresses
             .AsNoTracking()
             .Include(x => x.Client)
             .Include(x => x.AddressType)
-            .Where(x => x.Id == id && !x.IsDeleted)
+            .Where(x => x.Client.Id == clientId && x.Id == id && !x.IsDeleted)
             .FirstOrDefaultAsync(ct);
     }
 
-    public async Task<IEnumerable<ClientAddressEntity>> GetAllAsync(CancellationToken ct)
+    public async Task<IEnumerable<ClientAddressEntity>> GetAllAsync(int clientId, CancellationToken ct)
     {
         return await _context.ClientAddresses
             .AsNoTracking()
             .Include(x => x.Client)
             .Include(x => x.AddressType)
-            .Where(x => !x.IsDeleted)
+            .Where(x => x.Client.Id == clientId && !x.IsDeleted)
             .OrderBy(x => x.ClientId)
             .ThenBy(x => x.IsPrimary ? 0 : 1)
             .ThenBy(x => x.Id)
             .ToListAsync(ct);
     }
 
-    public async Task<ListPage<ClientAddressEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct)
+    public async Task<ListPage<ClientAddressEntity>> GetPagedAsync(int clientId, PagedFilter request, CancellationToken ct)
     {
         var query = _context.ClientAddresses
             .AsNoTracking()
             .Include(x => x.Client)
             .Include(x => x.AddressType)
-            .Where(x => !x.IsDeleted);
+            .Where(x => x.Client.Id == clientId && !x.IsDeleted);
 
         // Aplicar busca
         if (!string.IsNullOrWhiteSpace(request.Search))
@@ -94,11 +94,11 @@ public class ClientAddressDataRepository : IClientAddressDataRepository
         };
     }
 
-    public async Task<bool> ExistsByIdAsync(int id, CancellationToken ct)
+    public async Task<bool> ExistsByIdAsync(int clientId, int id, CancellationToken ct)
     {
         return await _context.ClientAddresses
             .AsNoTracking()
-            .AnyAsync(x => x.Id == id && !x.IsDeleted, ct);
+            .AnyAsync(x => x.Client.Id == clientId && x.Id == id && !x.IsDeleted, ct);
     }
 
     public async Task<bool> ExistsByClientAndAddressTypeAsync(int clientId, int addressTypeId, CancellationToken ct)
