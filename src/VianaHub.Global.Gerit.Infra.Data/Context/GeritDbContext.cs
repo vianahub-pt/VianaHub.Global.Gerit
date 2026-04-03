@@ -33,6 +33,7 @@ public class GeritDbContext : DbContext
 
     #region DbSets - Domain Tables
     public DbSet<AddressTypeEntity> AddressTypes { get; set; }
+    public DbSet<ClientTypeEntity> ClientTypes { get; set; }
     public DbSet<ClientEntity> Clients { get; set; }
     public DbSet<ClientContactEntity> ClientContacts { get; set; }
     public DbSet<ClientAddressEntity> ClientAddresses { get; set; }

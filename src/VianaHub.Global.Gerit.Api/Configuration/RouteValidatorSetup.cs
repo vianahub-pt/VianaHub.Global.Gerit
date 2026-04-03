@@ -5,6 +5,7 @@ using VianaHub.Global.Gerit.Api.Validators.Billing.Tenant;
 using VianaHub.Global.Gerit.Api.Validators.Business.Equipment;
 using VianaHub.Global.Gerit.Api.Validators.Business.Function;
 using VianaHub.Global.Gerit.Api.Validators.Business.Vehicle;
+using VianaHub.Global.Gerit.Api.Validators.Business.ClientType;
 using VianaHub.Global.Gerit.Api.Validators.Identity.Action;
 using VianaHub.Global.Gerit.Api.Validators.Identity.Auth;
 using VianaHub.Global.Gerit.Api.Validators.Identity.Resource;
@@ -18,6 +19,7 @@ using VianaHub.Global.Gerit.Application.Dtos.Request.Business.Equipment;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Business.Function;
 // Vehicle DTOs & Validators
 using VianaHub.Global.Gerit.Application.Dtos.Request.Business.Vehicle;
+using VianaHub.Global.Gerit.Application.Dtos.Request.Business.ClientType;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Identity.Action;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Identity.Auth;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Identity.Resource;
@@ -101,6 +103,10 @@ public static class RouteValidatorSetup
         // Equipment Route Validators
         services.AddScoped<IValidator<CreateEquipmentRequest>, CreateEquipmentRouteValidator>();
         services.AddScoped<IValidator<UpdateEquipmentRequest>, UpdateEquipmentRouteValidator>();
+
+        // ClientType Route Validators
+        services.AddScoped<IValidator<CreateClientTypeRequest>, CreateClientTypeRouteValidator>();
+        services.AddScoped<IValidator<UpdateClientTypeRequest>, UpdateClientTypeRouteValidator>();
 
         // TeamMembersTeams Route Validators
         services.AddScoped<IValidator<CreateTeamMembersTeamRequest>, CreateTeamMembersTeamRouteValidator>();
