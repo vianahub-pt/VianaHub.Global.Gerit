@@ -17,6 +17,7 @@ select * from dbo.JobDefinitions;
 select * from dbo.StatusTypes;				--
 select * from dbo.Status;					--
 select * from dbo.AddressTypes;				--
+select * from dbo.ClientTypes;
 select * from dbo.Clients;					--
 select * from dbo.ClientAddresses;			--
 select * from dbo.ClientContacts;			--
@@ -43,26 +44,7 @@ select * from dbo.InterventionAttachments;
 
 FOR JSON AUTO;
 
-select * from dbo.Clients;
-select * from dbo.Clients where IsActive = 0;
-select * from dbo.Clients where IsActive = 1;
-
 
 /*
-Estado do equipamento	1 - Disponível, Em uso, Em manutenção
-Estado da intervenção	2 - Aberto, Pendente, Fechado, 
-Estado do veículo		3 - Novo, Usado, Em Manutenção
-
-
-TeamMembers
-TeamMember
-ActivateTeamMemberValidator
-CreateTeamMemberValidator
-DeactivateTeamMemberValidator
-
-InterventionAddresses
-InterventionContacts
-InterventionStatus
-Interventions
 
 */
