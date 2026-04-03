@@ -5,34 +5,22 @@ using VianaHub.Global.Gerit.Domain.Entities.Business;
 namespace VianaHub.Global.Gerit.Infra.Data.Mappings.Business;
 
 /// <summary>
-/// Mapeamento da entidade AddressType Tipos de endereço (residencial, comercial, etc)
+/// Provides the Entity Framework Core configuration for the ClientTypeEntity entity type.
 /// </summary>
-public class AddressTypeMapping : IEntityTypeConfiguration<AddressTypeEntity>
+public class ClientTypeMapping : IEntityTypeConfiguration<ClientTypeEntity>
 {
-    public void Configure(EntityTypeBuilder<AddressTypeEntity> builder)
+    public void Configure(EntityTypeBuilder<ClientTypeEntity> builder)
     {
-        builder.ToTable("AddressTypes", "dbo");
+        builder.ToTable("ClientTypes", "dbo");
 
-        // Chave Primária
         builder.HasKey(x => x.Id)
-            .HasName("PK_AddressTypes");
+            .HasName("PK_ClientTypes");
 
         builder.Property(x => x.Id)
             .HasColumnName("Id")
             .UseIdentityColumn(1, 1)
             .IsRequired();
 
-        // Chave alternativa para suportar FKs compostas com TenantId
-        builder.HasAlternateKey(x => new { x.Id, x.TenantId })
-            .HasName("UQ_AddressesType_Id_Tenant");
-
-        // TenantId
-        builder.Property(x => x.TenantId)
-            .HasColumnName("TenantId")
-            .HasColumnType("INT")
-            .IsRequired();
-
-        // Propriedades
         builder.Property(x => x.Name)
             .HasColumnName("Name")
             .HasColumnType("NVARCHAR(200)")
@@ -77,17 +65,5 @@ public class AddressTypeMapping : IEntityTypeConfiguration<AddressTypeEntity>
             .HasColumnName("ModifiedAt")
             .HasColumnType("DATETIME2")
             .IsRequired(false);
-
-        // Foreign Key para Tenant
-        builder.HasOne(x => x.Tenant)
-            .WithMany()
-            .HasForeignKey(x => x.TenantId)
-            .HasConstraintName("FK_AddressTypes_Tenant")
-            .OnDelete(DeleteBehavior.Restrict);
-
-        // Constraint única: Tipo de endereço único por tenant
-        builder.HasIndex(x => new { x.TenantId, x.Name })
-            .IsUnique()
-            .HasDatabaseName("UQ_AddressTypes_TenantId_Name");
     }
 }

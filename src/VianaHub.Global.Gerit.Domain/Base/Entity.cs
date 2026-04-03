@@ -1,6 +1,6 @@
 ﻿namespace VianaHub.Global.Gerit.Domain.Base;
 
-public abstract class Entity : IEquatable<Entity>
+public class Entity : IEquatable<Entity>
 {
     public int Id { get; protected set; }
     public int CreatedBy { get; protected set; }
