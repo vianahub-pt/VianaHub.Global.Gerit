@@ -22,16 +22,6 @@ public class AddressTypeMapping : IEntityTypeConfiguration<AddressTypeEntity>
             .UseIdentityColumn(1, 1)
             .IsRequired();
 
-        // Chave alternativa para suportar FKs compostas com TenantId
-        builder.HasAlternateKey(x => new { x.Id, x.TenantId })
-            .HasName("UQ_AddressesType_Id_Tenant");
-
-        // TenantId
-        builder.Property(x => x.TenantId)
-            .HasColumnName("TenantId")
-            .HasColumnType("INT")
-            .IsRequired();
-
         // Propriedades
         builder.Property(x => x.Name)
             .HasColumnName("Name")
@@ -77,17 +67,5 @@ public class AddressTypeMapping : IEntityTypeConfiguration<AddressTypeEntity>
             .HasColumnName("ModifiedAt")
             .HasColumnType("DATETIME2")
             .IsRequired(false);
-
-        // Foreign Key para Tenant
-        builder.HasOne(x => x.Tenant)
-            .WithMany()
-            .HasForeignKey(x => x.TenantId)
-            .HasConstraintName("FK_AddressTypes_Tenant")
-            .OnDelete(DeleteBehavior.Restrict);
-
-        // Constraint única: Tipo de endereço único por tenant
-        builder.HasIndex(x => new { x.TenantId, x.Name })
-            .IsUnique()
-            .HasDatabaseName("UQ_AddressTypes_TenantId_Name");
     }
 }

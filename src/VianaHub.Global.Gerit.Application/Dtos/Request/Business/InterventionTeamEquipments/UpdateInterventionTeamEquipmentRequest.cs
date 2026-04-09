@@ -1,8 +1,8 @@
-namespace VianaHub.Global.Gerit.Application.Dtos.Request.Business.InterventionTeamEquipments;
+namespace VianaHub.Global.Gerit.Application.Dtos.Request.Business.VisitTeamEquipments;
 
-public class UpdateInterventionTeamEquipmentRequest
+public class UpdateVisitTeamEquipmentRequest
 {
-    public int InterventionTeamId { get; set; }
+    public int VisitTeamId { get; set; }
     public int EquipmentId { get; set; }
     public int ModifiedBy { get; set; }
 }

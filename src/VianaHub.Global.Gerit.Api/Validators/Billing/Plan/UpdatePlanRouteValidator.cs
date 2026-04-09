@@ -27,10 +27,10 @@ public class UpdatePlanRouteValidator : AbstractValidator<UpdatePlanRequest>
                 .GreaterThan(0).WithMessage(_localization.GetMessage("Api.Validator.Plan.Update.MaxUsers"));
         });
 
-        When(x => x.MaxPhotosPerInterventions > 0, () =>
+        When(x => x.MaxPhotosPerVisits > 0, () =>
         {
-            RuleFor(x => x.MaxPhotosPerInterventions)
-                .GreaterThan(0).WithMessage(_localization.GetMessage("Api.Validator.Plan.Update.MaxPhotosPerInterventions"));
+            RuleFor(x => x.MaxPhotosPerVisits)
+                .GreaterThan(0).WithMessage(_localization.GetMessage("Api.Validator.Plan.Update.MaxPhotosPerVisits"));
         });
 
         When(x => x.PricePerHour.HasValue, () =>

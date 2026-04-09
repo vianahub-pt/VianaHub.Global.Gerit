@@ -7,14 +7,11 @@ namespace VianaHub.Global.Gerit.Domain.Entities.Business;
 /// </summary>
 public class AddressTypeEntity : Entity
 {
-    public int TenantId { get; private set; }
     public string Name { get; private set; }
     public string Description { get; private set; }
     public bool IsActive { get; private set; }
     public bool IsDeleted { get; private set; }
 
-    // Navigation Property
-    public Billing.TenantEntity Tenant { get; private set; }
 
     // Construtor protegido para o EF Core
     protected AddressTypeEntity() { }
@@ -22,9 +19,8 @@ public class AddressTypeEntity : Entity
     /// <summary>
     /// Construtor para criação de um novo Tipo de Endereço
     /// </summary>
-    public AddressTypeEntity(int tenantId, string name, string description, int createdBy)
+    public AddressTypeEntity(string name, string description, int createdBy)
     {
-        TenantId = tenantId;
         Name = name;
         Description = description;
         IsActive = true;

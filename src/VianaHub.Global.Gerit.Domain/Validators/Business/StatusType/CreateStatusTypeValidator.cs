@@ -8,10 +8,6 @@ public class CreateStatusTypeValidator : AbstractValidator<StatusTypeEntity>
 {
     public CreateStatusTypeValidator(ILocalizationService localization)
     {
-        RuleFor(x => x.TenantId)
-            .GreaterThan(0)
-            .WithMessage(localization.GetMessage("Domain.StatusType.TenantIdRequired"));
-
         RuleFor(x => x.Name)
             .NotEmpty()
             .WithMessage(localization.GetMessage("Domain.StatusType.NameRequired"))

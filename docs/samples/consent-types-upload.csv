@@ -1,0 +1,11 @@
+Name;Description
+PrivacyPolicy;Consentimento referente à política de privacidade (LGPD/GDPR).
+Marketing;Autoriza o envio de comunicações de marketing e promoções por e-mail.
+TermsOfService;Aceitação dos termos de uso e condições do serviço.
+DataProcessing;Consentimento para processamento de dados pessoais para fins específicos.
+Cookies;Permissão para uso de cookies (persistentes e de sessão) e tracking no site.
+EmailConsent;Opt-in para recebimento de comunicações transacionais e newsletters por e-mail.
+SMSConsent;Autorização para envio de SMS (alertas e promoções).
+ThirdPartySharing;Consentimento para compartilhamento de dados com terceiros e parceiros autorizados.
+Analytics;Permissão para coleta de dados analíticos e telemetria (ex.: Google Analytics).
+Personalization;Consentimento para personalização de conteúdo e recomendações com base em preferências do usuário.

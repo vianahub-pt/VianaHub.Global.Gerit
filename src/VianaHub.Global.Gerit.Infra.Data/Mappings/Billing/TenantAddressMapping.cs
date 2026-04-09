@@ -8,9 +8,9 @@ namespace VianaHub.Global.Gerit.Infra.Data.Mappings.Billing;
 /// Mapeamento da entidade TenantAddress
 /// Endereços do tenant com suporte a Row Level Security
 /// </summary>
-public class TenantAddressMapping : IEntityTypeConfiguration<TenantAddress>
+public class TenantAddressMapping : IEntityTypeConfiguration<TenantAddressEntity>
 {
-    public void Configure(EntityTypeBuilder<TenantAddress> builder)
+    public void Configure(EntityTypeBuilder<TenantAddressEntity> builder)
     {
         builder.ToTable("TenantAddresses", "dbo");
 
@@ -143,13 +143,6 @@ public class TenantAddressMapping : IEntityTypeConfiguration<TenantAddress>
             .WithMany(t => t.Addresses)
             .HasForeignKey(x => x.TenantId)
             .HasConstraintName("FK_TenantAddresses_Tenant")
-            .OnDelete(DeleteBehavior.NoAction);
-
-        builder.HasOne(x => x.AddressType)
-            .WithMany()
-            .HasForeignKey(x => new { x.AddressTypeId, x.TenantId })
-            .HasConstraintName("FK_TenantAddresses_AddressType")
-            .HasPrincipalKey(a => new { a.Id, a.TenantId })
             .OnDelete(DeleteBehavior.NoAction);
 
         // Constraint Única: Garantir que o Id é único dentro do tenant (para FKs compostas)

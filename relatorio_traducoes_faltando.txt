@@ -1,0 +1,591 @@
+﻿# RELATÓRIO DE CHAVES DE TRADUÇÃO FALTANDO
+
+## Total: 473 chaves
+
+
+### Serviço: Action (15 chaves)
+
+- Application.Service.Action.Activate.ResourceNotFound
+- Application.Service.Action.BulkUpload.EmptyFile
+- Application.Service.Action.Create.ResourceAlreadyExists
+- Application.Service.Action.Deactivate.ResourceNotFound
+- Application.Service.Action.Delete.ResourceNotFound
+- Application.Service.Action.ProcessBulkItems.ExistsByName
+- Application.Service.Action.ProcessBulkItems.FailedToCreate
+- Application.Service.Action.ReadCsvFile.CsvHelperException
+- Application.Service.Action.ReadCsvFile.Description.IsSafeCsvValue
+- Application.Service.Action.ReadCsvFile.Exception
+- Application.Service.Action.ReadCsvFile.MaxRows
+- Application.Service.Action.ReadCsvFile.Name.IsSafeCsvValue
+- Application.Service.Action.Update.ResourceNotFound
+- Application.Service.Action.ValidateBulkItem.Description
+- Application.Service.Action.ValidateBulkItem.Name
+
+### Serviço: AddressType (17 chaves)
+
+- Application.Service.AddressType.Activate.ResourceNotFound
+- Application.Service.AddressType.BulkUpload.EmptyFile
+- Application.Service.AddressType.Create.ResourceAlreadyExists
+- Application.Service.AddressType.Deactivate.ResourceNotFound
+- Application.Service.AddressType.Delete.ResourceNotFound
+- Application.Service.AddressType.GetById.ResourceNotFound
+- Application.Service.AddressType.ProcessBulkItems.ExistsByName
+- Application.Service.AddressType.ProcessBulkItems.FailedToCreate
+- Application.Service.AddressType.ReadCsvFile.CsvHelperException
+- Application.Service.AddressType.ReadCsvFile.Description.IsSafeCsvValue
+- Application.Service.AddressType.ReadCsvFile.Exception
+- Application.Service.AddressType.ReadCsvFile.MaxRows
+- Application.Service.AddressType.ReadCsvFile.Name.IsSafeCsvValue
+- Application.Service.AddressType.Update.ResourceAlreadyExists
+- Application.Service.AddressType.Update.ResourceNotFound
+- Application.Service.AddressType.ValidateBulkItem.Description
+- Application.Service.AddressType.ValidateBulkItem.Name
+
+### Serviço: AttachmentCategory (7 chaves)
+
+- Application.Service.AttachmentCategory.Activate.ResourceNotFound
+- Application.Service.AttachmentCategory.Create.NameAlreadyExists
+- Application.Service.AttachmentCategory.Deactivate.ResourceNotFound
+- Application.Service.AttachmentCategory.Delete.ResourceNotFound
+- Application.Service.AttachmentCategory.GetById.ResourceNotFound
+- Application.Service.AttachmentCategory.Update.NameAlreadyExists
+- Application.Service.AttachmentCategory.Update.ResourceNotFound
+
+### Serviço: Auth (22 chaves)
+
+- Application.Service.Auth.Login.InvalidCredentials
+- Application.Service.Auth.Login.Subscription.Canceled
+- Application.Service.Auth.Login.Subscription.Deleted
+- Application.Service.Auth.Login.Subscription.NonActive
+- Application.Service.Auth.Login.Subscription.PeriodExpired
+- Application.Service.Auth.Login.Subscription.TrialPeriodExpired
+- Application.Service.Auth.Refresh.InvalidRefreshToken
+- Application.Service.Auth.Refresh.InvalidTenantId
+- Application.Service.Auth.Refresh.UserNotFound
+- Application.Service.Auth.RefreshToken.Subscription.Canceled
+- Application.Service.Auth.RefreshToken.Subscription.Deleted
+- Application.Service.Auth.RefreshToken.Subscription.NonActive
+- Application.Service.Auth.RefreshToken.Subscription.PeriodExpired
+- Application.Service.Auth.RefreshToken.Subscription.TrialPeriodExpired
+- Application.Service.Auth.Register.EmailAlreadyExists
+- Application.Service.Auth.Register.FailedToCreateUser
+- Application.Service.Auth.Register.InvalidTenantId
+- Application.Service.Auth.Token.CreateFailed
+- Application.Service.Auth.Token.EncryptionKeyMissing
+- Application.Service.Auth.Token.InvalidPrivateKey
+- Application.Service.Auth.Token.NoActiveKey
+- Application.Service.Auth.UserNotAssociateInTenant
+
+### Serviço: Client (19 chaves)
+
+- Application.Service.Client.Activate.ResourceNotFound
+- Application.Service.Client.BulkUpload.EmptyFile
+- Application.Service.Client.Create.ResourceAlreadyExists
+- Application.Service.Client.Deactivate.ResourceNotFound
+- Application.Service.Client.Delete.ResourceNotFound
+- Application.Service.Client.GetById.ResourceNotFound
+- Application.Service.Client.ProcessBulkItems.ExistsByEmail
+- Application.Service.Client.ProcessBulkItems.FailedToCreate
+- Application.Service.Client.ReadCsvFile.CsvHelperException
+- Application.Service.Client.ReadCsvFile.Email.IsSafeCsvValue
+- Application.Service.Client.ReadCsvFile.Exception
+- Application.Service.Client.ReadCsvFile.MaxRows
+- Application.Service.Client.ReadCsvFile.Name.IsSafeCsvValue
+- Application.Service.Client.ReadCsvFile.Phone.IsSafeCsvValue
+- Application.Service.Client.Update.EmailAlreadyExists
+- Application.Service.Client.Update.ResourceNotFound
+- Application.Service.Client.ValidateBulkItem.Email
+- Application.Service.Client.ValidateBulkItem.Name
+- Application.Service.Client.ValidateBulkItem.Phone
+
+### Serviço: ClientCompany (7 chaves)
+
+- Application.Service.ClientCompany.Activate.ResourceNotFound
+- Application.Service.ClientCompany.Create.ClientAlreadyHasCompanyData
+- Application.Service.ClientCompany.Deactivate.ResourceNotFound
+- Application.Service.ClientCompany.Delete.ResourceNotFound
+- Application.Service.ClientCompany.GetByClientId.ResourceNotFound
+- Application.Service.ClientCompany.GetById.ResourceNotFound
+- Application.Service.ClientCompany.Update.ResourceNotFound
+
+### Serviço: ClientCompanyFiscalData (9 chaves)
+
+- Application.Service.ClientCompanyFiscalData.Activate.ResourceNotFound
+- Application.Service.ClientCompanyFiscalData.Create.ClientCompanyAlreadyHasFiscalData
+- Application.Service.ClientCompanyFiscalData.Create.TaxNumberAlreadyExists
+- Application.Service.ClientCompanyFiscalData.Deactivate.ResourceNotFound
+- Application.Service.ClientCompanyFiscalData.Delete.ResourceNotFound
+- Application.Service.ClientCompanyFiscalData.GetByClientCompanyId.ResourceNotFound
+- Application.Service.ClientCompanyFiscalData.GetById.ResourceNotFound
+- Application.Service.ClientCompanyFiscalData.Update.ResourceNotFound
+- Application.Service.ClientCompanyFiscalData.Update.TaxNumberAlreadyExists
+
+### Serviço: ClientConsents (9 chaves)
+
+- Application.Service.ClientConsents.Activate.ResourceNotFound
+- Application.Service.ClientConsents.Create.ResourceAlreadyExists
+- Application.Service.ClientConsents.Deactivate.ResourceNotFound
+- Application.Service.ClientConsents.Delete.ResourceNotFound
+- Application.Service.ClientConsents.GetByClientAndConsentType.ResourceNotFound
+- Application.Service.ClientConsents.GetById.ResourceNotFound
+- Application.Service.ClientConsents.GrantConsent.ResourceNotFound
+- Application.Service.ClientConsents.RevokeConsent.ResourceNotFound
+- Application.Service.ClientConsents.Update.ResourceNotFound
+
+### Serviço: ClientContact (18 chaves)
+
+- Application.Service.ClientContact.Activate.ResourceNotFound
+- Application.Service.ClientContact.BulkUpload.EmptyFile
+- Application.Service.ClientContact.Create.ResourceAlreadyExists
+- Application.Service.ClientContact.Deactivate.ResourceNotFound
+- Application.Service.ClientContact.Delete.ResourceNotFound
+- Application.Service.ClientContact.GetById.ResourceNotFound
+- Application.Service.ClientContact.ProcessBulkItems.ExistsByClientAndEmail
+- Application.Service.ClientContact.ProcessBulkItems.FailedToCreate
+- Application.Service.ClientContact.ReadCsvFile.CsvHelperException
+- Application.Service.ClientContact.ReadCsvFile.Email.IsSafeCsvValue
+- Application.Service.ClientContact.ReadCsvFile.Exception
+- Application.Service.ClientContact.ReadCsvFile.MaxRows
+- Application.Service.ClientContact.ReadCsvFile.Name.IsSafeCsvValue
+- Application.Service.ClientContact.ReadCsvFile.Phone.IsSafeCsvValue
+- Application.Service.ClientContact.Update.ResourceAlreadyExists
+- Application.Service.ClientContact.Update.ResourceNotFound
+- Application.Service.ClientContact.ValidateBulkItem.Email
+- Application.Service.ClientContact.ValidateBulkItem.Name
+
+### Serviço: ClientHierarchy (6 chaves)
+
+- Application.Service.ClientHierarchy.Activate.ResourceNotFound
+- Application.Service.ClientHierarchy.Create.RelationshipAlreadyExists
+- Application.Service.ClientHierarchy.Deactivate.ResourceNotFound
+- Application.Service.ClientHierarchy.Delete.ResourceNotFound
+- Application.Service.ClientHierarchy.GetById.ResourceNotFound
+- Application.Service.ClientHierarchy.Update.ResourceNotFound
+
+### Serviço: ClientIndividual (10 chaves)
+
+- Application.Service.ClientIndividual.Activate.ResourceNotFound
+- Application.Service.ClientIndividual.Create.ClientAlreadyHasIndividualData
+- Application.Service.ClientIndividual.Create.DocumentAlreadyExists
+- Application.Service.ClientIndividual.Deactivate.ResourceNotFound
+- Application.Service.ClientIndividual.Delete.ResourceNotFound
+- Application.Service.ClientIndividual.GetByClientId.ResourceNotFound
+- Application.Service.ClientIndividual.GetByDocument.ResourceNotFound
+- Application.Service.ClientIndividual.GetById.ResourceNotFound
+- Application.Service.ClientIndividual.Update.DocumentAlreadyExists
+- Application.Service.ClientIndividual.Update.ResourceNotFound
+
+### Serviço: ClientIndividualFiscalData (9 chaves)
+
+- Application.Service.ClientIndividualFiscalData.Activate.ResourceNotFound
+- Application.Service.ClientIndividualFiscalData.Create.ClientIndividualAlreadyHasFiscalData
+- Application.Service.ClientIndividualFiscalData.Create.TaxNumberAlreadyExists
+- Application.Service.ClientIndividualFiscalData.Deactivate.ResourceNotFound
+- Application.Service.ClientIndividualFiscalData.Delete.ResourceNotFound
+- Application.Service.ClientIndividualFiscalData.GetByClientIndividualId.ResourceNotFound
+- Application.Service.ClientIndividualFiscalData.GetById.ResourceNotFound
+- Application.Service.ClientIndividualFiscalData.Update.ResourceNotFound
+- Application.Service.ClientIndividualFiscalData.Update.TaxNumberAlreadyExists
+
+### Serviço: Employee (16 chaves)
+
+- Application.Service.Employee.Activate.ResourceNotFound
+- Application.Service.Employee.BulkUpload.EmptyFile
+- Application.Service.Employee.Create.ResourceAlreadyExists
+- Application.Service.Employee.Deactivate.ResourceNotFound
+- Application.Service.Employee.Delete.ResourceNotFound
+- Application.Service.Employee.GetById.ResourceNotFound
+- Application.Service.Employee.ProcessBulkItems.ExistsByTaxNumber
+- Application.Service.Employee.ProcessBulkItems.FailedToCreate
+- Application.Service.Employee.ReadCsvFile.CsvHelperException
+- Application.Service.Employee.ReadCsvFile.Exception
+- Application.Service.Employee.ReadCsvFile.MaxRows
+- Application.Service.Employee.ReadCsvFile.Name.IsSafeCsvValue
+- Application.Service.Employee.ReadCsvFile.TaxNumber.IsSafeCsvValue
+- Application.Service.Employee.Update.ResourceNotFound
+- Application.Service.Employee.ValidateBulkItem.Name
+- Application.Service.Employee.ValidateBulkItem.TaxNumber
+
+### Serviço: EmployeeAddress (20 chaves)
+
+- Application.Service.EmployeeAddress.Activate.ResourceNotFound
+- Application.Service.EmployeeAddress.BulkUpload.EmptyFile
+- Application.Service.EmployeeAddress.Create.ResourceAlreadyExists
+- Application.Service.EmployeeAddress.Deactivate.ResourceNotFound
+- Application.Service.EmployeeAddress.Delete.ResourceNotFound
+- Application.Service.EmployeeAddress.GetById.ResourceNotFound
+- Application.Service.EmployeeAddress.ProcessBulkItems.ExistsByAddress
+- Application.Service.EmployeeAddress.ProcessBulkItems.FailedToCreate
+- Application.Service.EmployeeAddress.ReadCsvFile.City.IsSafeCsvValue
+- Application.Service.EmployeeAddress.ReadCsvFile.CsvHelperException
+- Application.Service.EmployeeAddress.ReadCsvFile.Exception
+- Application.Service.EmployeeAddress.ReadCsvFile.MaxRows
+- Application.Service.EmployeeAddress.ReadCsvFile.PostalCode.IsSafeCsvValue
+- Application.Service.EmployeeAddress.ReadCsvFile.Street.IsSafeCsvValue
+- Application.Service.EmployeeAddress.Update.ResourceNotFound
+- Application.Service.EmployeeAddress.ValidateBulkItem.City
+- Application.Service.EmployeeAddress.ValidateBulkItem.CountryCode
+- Application.Service.EmployeeAddress.ValidateBulkItem.EmployeeId
+- Application.Service.EmployeeAddress.ValidateBulkItem.PostalCode
+- Application.Service.EmployeeAddress.ValidateBulkItem.Street
+
+### Serviço: EmployeeContact (19 chaves)
+
+- Application.Service.EmployeeContact.Activate.ResourceNotFound
+- Application.Service.EmployeeContact.BulkUpload.EmptyFile
+- Application.Service.EmployeeContact.Create.ResourceAlreadyExists
+- Application.Service.EmployeeContact.Deactivate.ResourceNotFound
+- Application.Service.EmployeeContact.Delete.ResourceNotFound
+- Application.Service.EmployeeContact.GetById.ResourceNotFound
+- Application.Service.EmployeeContact.ProcessBulkItems.ExistsByEmail
+- Application.Service.EmployeeContact.ProcessBulkItems.FailedToCreate
+- Application.Service.EmployeeContact.ReadCsvFile.CsvHelperException
+- Application.Service.EmployeeContact.ReadCsvFile.Email.IsSafeCsvValue
+- Application.Service.EmployeeContact.ReadCsvFile.Exception
+- Application.Service.EmployeeContact.ReadCsvFile.MaxRows
+- Application.Service.EmployeeContact.ReadCsvFile.Name.IsSafeCsvValue
+- Application.Service.EmployeeContact.ReadCsvFile.Phone.IsSafeCsvValue
+- Application.Service.EmployeeContact.Update.EmailAlreadyExists
+- Application.Service.EmployeeContact.Update.ResourceNotFound
+- Application.Service.EmployeeContact.ValidateBulkItem.Email
+- Application.Service.EmployeeContact.ValidateBulkItem.EmployeeId
+- Application.Service.EmployeeContact.ValidateBulkItem.Name
+
+### Serviço: EmployeeTeam (14 chaves)
+
+- Application.Service.EmployeeTeam.Activate.ResourceNotFound
+- Application.Service.EmployeeTeam.BulkUpload.EmptyFile
+- Application.Service.EmployeeTeam.Create.ResourceAlreadyExists
+- Application.Service.EmployeeTeam.Deactivate.ResourceNotFound
+- Application.Service.EmployeeTeam.Delete.ResourceNotFound
+- Application.Service.EmployeeTeam.GetById.ResourceNotFound
+- Application.Service.EmployeeTeam.ProcessBulkItems.ExistsByTeamAndMember
+- Application.Service.EmployeeTeam.ProcessBulkItems.FailedToCreate
+- Application.Service.EmployeeTeam.ReadCsvFile.CsvHelperException
+- Application.Service.EmployeeTeam.ReadCsvFile.Exception
+- Application.Service.EmployeeTeam.ReadCsvFile.MaxRows
+- Application.Service.EmployeeTeam.Update.ResourceNotFound
+- Application.Service.EmployeeTeam.ValidateBulkItem.EmployeeId
+- Application.Service.EmployeeTeam.ValidateBulkItem.TeamId
+
+### Serviço: Function (14 chaves)
+
+- Application.Service.Function.Activate.ResourceNotFound
+- Application.Service.Function.BulkUpload.EmptyFile
+- Application.Service.Function.Create.ResourceAlreadyExists
+- Application.Service.Function.Deactivate.ResourceNotFound
+- Application.Service.Function.Delete.ResourceNotFound
+- Application.Service.Function.ProcessBulkItems.ExistsByName
+- Application.Service.Function.ProcessBulkItems.FailedToCreate
+- Application.Service.Function.ReadCsvFile.CsvHelperException
+- Application.Service.Function.ReadCsvFile.Description.IsSafeCsvValue
+- Application.Service.Function.ReadCsvFile.Exception
+- Application.Service.Function.ReadCsvFile.MaxRows
+- Application.Service.Function.ReadCsvFile.Name.IsSafeCsvValue
+- Application.Service.Function.Update.ResourceNotFound
+- Application.Service.Function.ValidateBulkItem.Name
+
+### Serviço: Job (10 chaves)
+
+- Application.Service.Job.Activate.ResourceNotFound
+- Application.Service.Job.Create.ResourceAlreadyExists
+- Application.Service.Job.Deactivate.ResourceNotFound
+- Application.Service.Job.Delete.ResourceNotFound
+- Application.Service.Job.Execute.Enqueued
+- Application.Service.Job.Execute.FailedToEnqueue
+- Application.Service.Job.Execute.JobNotActive
+- Application.Service.Job.Execute.ResourceNotFound
+- Application.Service.Job.Get.ResourceNotFound
+- Application.Service.Job.Update.ResourceNotFound
+
+### Serviço: Jwt (3 chaves)
+
+- Application.Service.Jwt.Revoke.AlreadyRevoked
+- Application.Service.Jwt.Revoke.ReasonRequired
+- Application.Service.Jwt.Revoke.ResourceNotFound
+
+### Serviço: OriginType (15 chaves)
+
+- Application.Service.OriginType.Activate.ResourceNotFound
+- Application.Service.OriginType.BulkUpload.EmptyFile
+- Application.Service.OriginType.Create.ResourceAlreadyExists
+- Application.Service.OriginType.Deactivate.ResourceNotFound
+- Application.Service.OriginType.Delete.ResourceNotFound
+- Application.Service.OriginType.GetById.ResourceNotFound
+- Application.Service.OriginType.ProcessBulkItems.ExistsByName
+- Application.Service.OriginType.ProcessBulkItems.FailedToCreate
+- Application.Service.OriginType.ReadCsvFile.CsvHelperException
+- Application.Service.OriginType.ReadCsvFile.Description.IsSafeCsvValue
+- Application.Service.OriginType.ReadCsvFile.Exception
+- Application.Service.OriginType.ReadCsvFile.MaxRows
+- Application.Service.OriginType.ReadCsvFile.Name.IsSafeCsvValue
+- Application.Service.OriginType.Update.ResourceNotFound
+- Application.Service.OriginType.ValidateBulkItem.Name
+
+### Serviço: Plan (14 chaves)
+
+- Application.Service.Plan.Activate.ResourceNotFound
+- Application.Service.Plan.BulkUpload.EmptyFile
+- Application.Service.Plan.Create.ResourceAlreadyExists
+- Application.Service.Plan.Deactivate.ResourceNotFound
+- Application.Service.Plan.Delete.ResourceNotFound
+- Application.Service.Plan.ProcessBulkItems.ExistsByName
+- Application.Service.Plan.ProcessBulkItems.FailedToCreate
+- Application.Service.Plan.ReadCsvFile.CsvHelperException
+- Application.Service.Plan.ReadCsvFile.Description.IsSafeCsvValue
+- Application.Service.Plan.ReadCsvFile.Exception
+- Application.Service.Plan.ReadCsvFile.MaxRows
+- Application.Service.Plan.ReadCsvFile.Name.IsSafeCsvValue
+- Application.Service.Plan.Update.ResourceNotFound
+- Application.Service.Plan.ValidateBulkItem.Name
+
+### Serviço: Resource (15 chaves)
+
+- Application.Service.Resource.Activate.ResourceNotFound
+- Application.Service.Resource.BulkUpload.EmptyFile
+- Application.Service.Resource.Create.ResourceAlreadyExists
+- Application.Service.Resource.Deactivate.ResourceNotFound
+- Application.Service.Resource.Delete.ResourceNotFound
+- Application.Service.Resource.ProcessBulkItems.ExistsByName
+- Application.Service.Resource.ProcessBulkItems.FailedToCreate
+- Application.Service.Resource.ReadCsvFile.CsvHelperException
+- Application.Service.Resource.ReadCsvFile.Description.IsSafeCsvValue
+- Application.Service.Resource.ReadCsvFile.Exception
+- Application.Service.Resource.ReadCsvFile.MaxRows
+- Application.Service.Resource.ReadCsvFile.Name.IsSafeCsvValue
+- Application.Service.Resource.Update.ResourceNotFound
+- Application.Service.Resource.ValidateBulkItem.Description
+- Application.Service.Resource.ValidateBulkItem.Name
+
+### Serviço: Role (15 chaves)
+
+- Application.Service.Role.Activate.ResourceNotFound
+- Application.Service.Role.BulkUpload.EmptyFile
+- Application.Service.Role.Create.ResourceAlreadyExists
+- Application.Service.Role.Deactivate.ResourceNotFound
+- Application.Service.Role.Delete.ResourceNotFound
+- Application.Service.Role.ProcessBulkItems.ExistsByName
+- Application.Service.Role.ProcessBulkItems.FailedToCreate
+- Application.Service.Role.ReadCsvFile.CsvHelperException
+- Application.Service.Role.ReadCsvFile.Description.IsSafeCsvValue
+- Application.Service.Role.ReadCsvFile.Exception
+- Application.Service.Role.ReadCsvFile.MaxRows
+- Application.Service.Role.ReadCsvFile.Name.IsSafeCsvValue
+- Application.Service.Role.Update.ResourceNotFound
+- Application.Service.Role.ValidateBulkItem.Description
+- Application.Service.Role.ValidateBulkItem.Name
+
+### Serviço: RolePermission (17 chaves)
+
+- Application.Service.RolePermission.BulkUpload.EmptyFile
+- Application.Service.RolePermission.Create.ActionNotFound
+- Application.Service.RolePermission.Create.ResourceAlreadyExists
+- Application.Service.RolePermission.Create.ResourceNotFound
+- Application.Service.RolePermission.Create.RoleNotFound
+- Application.Service.RolePermission.Delete.ResourceNotFound
+- Application.Service.RolePermission.ProcessBulkItems.ExistsByName
+- Application.Service.RolePermission.ProcessBulkItems.FailedToCreate
+- Application.Service.RolePermission.ReadCsvFile.ActionId.IsSafeCsvValue
+- Application.Service.RolePermission.ReadCsvFile.CsvHelperException
+- Application.Service.RolePermission.ReadCsvFile.Exception
+- Application.Service.RolePermission.ReadCsvFile.MaxRows
+- Application.Service.RolePermission.ReadCsvFile.ResourceId.IsSafeCsvValue
+- Application.Service.RolePermission.ReadCsvFile.RoleId.IsSafeCsvValue
+- Application.Service.RolePermission.ValidateBulkItem.ActionId
+- Application.Service.RolePermission.ValidateBulkItem.ResourceId
+- Application.Service.RolePermission.ValidateBulkItem.RoleId
+
+### Serviço: Status (17 chaves)
+
+- Application.Service.Status.Activate.ResourceNotFound
+- Application.Service.Status.BulkUpload.EmptyFile
+- Application.Service.Status.Create.ResourceAlreadyExists
+- Application.Service.Status.Deactivate.ResourceNotFound
+- Application.Service.Status.Delete.ResourceNotFound
+- Application.Service.Status.GetById.ResourceNotFound
+- Application.Service.Status.ProcessBulkItems.ExistsByName
+- Application.Service.Status.ProcessBulkItems.FailedToCreate
+- Application.Service.Status.ReadCsvFile.CsvHelperException
+- Application.Service.Status.ReadCsvFile.Description.IsSafeCsvValue
+- Application.Service.Status.ReadCsvFile.Exception
+- Application.Service.Status.ReadCsvFile.MaxRows
+- Application.Service.Status.ReadCsvFile.Name.IsSafeCsvValue
+- Application.Service.Status.Update.NameAlreadyExists
+- Application.Service.Status.Update.ResourceNotFound
+- Application.Service.Status.ValidateBulkItem.Description
+- Application.Service.Status.ValidateBulkItem.Name
+
+### Serviço: Subscription (20 chaves)
+
+- Application.Service.Subscription.Activate.ResourceNotFound
+- Application.Service.Subscription.BulkUpload.EmptyFile
+- Application.Service.Subscription.Cancel.ResourceNotFound
+- Application.Service.Subscription.Create.TenantAlreadyHasSubscription
+- Application.Service.Subscription.Deactivate.ResourceNotFound
+- Application.Service.Subscription.Delete.ResourceNotFound
+- Application.Service.Subscription.ProcessBulkItems.ExistsByTenantId
+- Application.Service.Subscription.ProcessBulkItems.FailedToCreate
+- Application.Service.Subscription.ReadCsvFile.CsvHelperException
+- Application.Service.Subscription.ReadCsvFile.CurrentPeriodEnd.CurrentPeriodStart.IsSafeCsvValue
+- Application.Service.Subscription.ReadCsvFile.CurrentPeriodEnd.IsSafeCsvValue
+- Application.Service.Subscription.ReadCsvFile.CurrentPeriodStart.IsSafeCsvValue
+- Application.Service.Subscription.ReadCsvFile.Exception
+- Application.Service.Subscription.ReadCsvFile.MaxRows
+- Application.Service.Subscription.ReadCsvFile.PlanId.IsSafeCsvValue
+- Application.Service.Subscription.ReadCsvFile.TenantId.IsSafeCsvValue
+- Application.Service.Subscription.Renew.ResourceNotFound
+- Application.Service.Subscription.Update.ResourceNotFound
+- Application.Service.Subscription.ValidateBulkItem.PlanId
+- Application.Service.Subscription.ValidateBulkItem.TenantId
+
+### Serviço: Tenant (13 chaves)
+
+- Application.Service.Tenant.Activate.ResourceNotFound
+- Application.Service.Tenant.BulkUpload.EmptyFile
+- Application.Service.Tenant.Create.ResourceAlreadyExists
+- Application.Service.Tenant.Deactivate.ResourceNotFound
+- Application.Service.Tenant.Delete.ResourceNotFound
+- Application.Service.Tenant.ProcessBulkItems.ExistsBylName
+- Application.Service.Tenant.ProcessBulkItems.FailedToCreate
+- Application.Service.Tenant.ReadCsvFile.CsvHelperException
+- Application.Service.Tenant.ReadCsvFile.Exception
+- Application.Service.Tenant.ReadCsvFile.MaxRows
+- Application.Service.Tenant.ReadCsvFile.Name.IsSafeCsvValue
+- Application.Service.Tenant.Update.ResourceNotFound
+- Application.Service.Tenant.ValidateBulkItem.Name
+
+### Serviço: TenantContact (8 chaves)
+
+- Application.Service.TenantContact.Activate.ResourceNotFound
+- Application.Service.TenantContact.Create.PrimaryAlreadyExists
+- Application.Service.TenantContact.Deactivate.ResourceNotFound
+- Application.Service.TenantContact.Delete.ResourceNotFound
+- Application.Service.TenantContact.GetById.ResourceNotFound
+- Application.Service.TenantContact.GetPrimaryByTenantId.ResourceNotFound
+- Application.Service.TenantContact.SetAsPrimary.ResourceNotFound
+- Application.Service.TenantContact.Update.ResourceNotFound
+
+### Serviço: User (18 chaves)
+
+- Application.Service.User.Activate.ResourceNotFound
+- Application.Service.User.BulkUpload.EmptyFile
+- Application.Service.User.Create.ResourceAlreadyExists
+- Application.Service.User.Deactivate.ResourceNotFound
+- Application.Service.User.Delete.ResourceNotFound
+- Application.Service.User.ProcessBulkItems.ExistsByEmail
+- Application.Service.User.ProcessBulkItems.FailedToCreate
+- Application.Service.User.ReadCsvFile.CsvHelperException
+- Application.Service.User.ReadCsvFile.Email.IsSafeCsvValue
+- Application.Service.User.ReadCsvFile.Exception
+- Application.Service.User.ReadCsvFile.MaxRows
+- Application.Service.User.ReadCsvFile.Name.IsSafeCsvValue
+- Application.Service.User.Update.ResourceNotFound
+- Application.Service.User.UpdatePassword.InvalidCurrentPassword
+- Application.Service.User.UpdatePassword.ResourceNotFound
+- Application.Service.User.ValidateBulkItem.Email
+- Application.Service.User.ValidateBulkItem.Name
+- Application.Service.User.ValidateBulkItem.Password
+
+### Serviço: UserRole (13 chaves)
+
+- Application.Service.UserRole.BulkUpload.EmptyFile
+- Application.Service.UserRole.Create.ResourceAlreadyExists
+- Application.Service.UserRole.Create.RoleNotFound
+- Application.Service.UserRole.Delete.ResourceNotFound
+- Application.Service.UserRole.ProcessBulkItems.ExistsByEmail
+- Application.Service.UserRole.ProcessBulkItems.FailedToCreate
+- Application.Service.UserRole.ReadCsvFile.CsvHelperException
+- Application.Service.UserRole.ReadCsvFile.Exception
+- Application.Service.UserRole.ReadCsvFile.MaxRows
+- Application.Service.UserRole.ReadCsvFile.RoleId.IsSafeCsvValue
+- Application.Service.UserRole.ReadCsvFile.UserId.IsSafeCsvValue
+- Application.Service.UserRole.ValidateBulkItem.RoleId
+- Application.Service.UserRole.ValidateBulkItem.UserId
+
+### Serviço: Vehicle (17 chaves)
+
+- Application.Service.Vehicle.Activate.ResourceNotFound
+- Application.Service.Vehicle.BulkUpload.EmptyFile
+- Application.Service.Vehicle.Create.ResourceAlreadyExists
+- Application.Service.Vehicle.Deactivate.ResourceNotFound
+- Application.Service.Vehicle.Delete.ResourceNotFound
+- Application.Service.Vehicle.ProcessBulkItems.ExistsByPlate
+- Application.Service.Vehicle.ProcessBulkItems.FailedToCreate
+- Application.Service.Vehicle.ReadCsvFile.Brand.IsSafeCsvValue
+- Application.Service.Vehicle.ReadCsvFile.CsvHelperException
+- Application.Service.Vehicle.ReadCsvFile.Exception
+- Application.Service.Vehicle.ReadCsvFile.MaxRows
+- Application.Service.Vehicle.ReadCsvFile.Model.IsSafeCsvValue
+- Application.Service.Vehicle.ReadCsvFile.Plate.IsSafeCsvValue
+- Application.Service.Vehicle.Update.ResourceNotFound
+- Application.Service.Vehicle.ValidateBulkItem.Brand
+- Application.Service.Vehicle.ValidateBulkItem.Model
+- Application.Service.Vehicle.ValidateBulkItem.Plate
+
+### Serviço: Visit (20 chaves)
+
+- Application.Service.Visit.Activate.ResourceNotFound
+- Application.Service.Visit.BulkUpload.EmptyFile
+- Application.Service.Visit.Create.ResourceAlreadyExists
+- Application.Service.Visit.Deactivate.ResourceNotFound
+- Application.Service.Visit.Delete.ResourceNotFound
+- Application.Service.Visit.GetById.ResourceNotFound
+- Application.Service.Visit.ProcessBulkItems.ExistsByTitle
+- Application.Service.Visit.ProcessBulkItems.FailedToCreate
+- Application.Service.Visit.ReadCsvFile.CsvHelperException
+- Application.Service.Visit.ReadCsvFile.Description.IsSafeCsvValue
+- Application.Service.Visit.ReadCsvFile.Exception
+- Application.Service.Visit.ReadCsvFile.MaxRows
+- Application.Service.Visit.ReadCsvFile.Title.IsSafeCsvValue
+- Application.Service.Visit.Update.ResourceNotFound
+- Application.Service.Visit.ValidateBulkItem.ClientId
+- Application.Service.Visit.ValidateBulkItem.Description
+- Application.Service.Visit.ValidateBulkItem.EstimatedValue
+- Application.Service.Visit.ValidateBulkItem.StartDateTime
+- Application.Service.Visit.ValidateBulkItem.StatusId
+- Application.Service.Visit.ValidateBulkItem.Title
+
+### Serviço: VisitAddress (1 chaves)
+
+- Application.Service.VisitAddress.ValidateBulkItem.VisitTeamId
+
+### Serviço: VisitAttachment (13 chaves)
+
+- Application.Service.VisitAttachment.Activate.ResourceNotFound
+- Application.Service.VisitAttachment.Create.CategoryNotFound
+- Application.Service.VisitAttachment.Create.FileTypeNotFound
+- Application.Service.VisitAttachment.Create.S3KeyAlreadyExists
+- Application.Service.VisitAttachment.Create.VisitNotFound
+- Application.Service.VisitAttachment.Deactivate.ResourceNotFound
+- Application.Service.VisitAttachment.Delete.ResourceNotFound
+- Application.Service.VisitAttachment.GetById.ResourceNotFound
+- Application.Service.VisitAttachment.GetByPublicId.ResourceNotFound
+- Application.Service.VisitAttachment.GetPrimary.ResourceNotFound
+- Application.Service.VisitAttachment.SetAsPrimary.ResourceNotFound
+- Application.Service.VisitAttachment.Update.CategoryNotFound
+- Application.Service.VisitAttachment.Update.ResourceNotFound
+
+### Serviço: VisitContact (2 chaves)
+
+- Application.Service.VisitContact.ProcessBulkItems.ExistsByVisitAndEmail
+- Application.Service.VisitContact.ValidateBulkItem.VisitTeamId
+
+### Serviço: VisitTeam (1 chaves)
+
+- Application.Service.VisitTeam.ValidateBulkItem.VisitTeamId
+
+### Serviço: VisitTeamEmployee (9 chaves)
+
+- Application.Service.VisitTeamEmployee.Activate.ResourceNotFound
+- Application.Service.VisitTeamEmployee.Create.AlreadyAssigned
+- Application.Service.VisitTeamEmployee.Create.EmployeeNotFound
+- Application.Service.VisitTeamEmployee.Create.FunctionNotFound
+- Application.Service.VisitTeamEmployee.Deactivate.ResourceNotFound
+- Application.Service.VisitTeamEmployee.Delete.ResourceNotFound
+- Application.Service.VisitTeamEmployee.GetById.ResourceNotFound
+- Application.Service.VisitTeamEmployee.Update.FunctionNotFound
+- Application.Service.VisitTeamEmployee.Update.ResourceNotFound
+
+### Serviço: VisitTeamVehicle (1 chaves)
+
+- Application.Service.VisitTeamVehicle.ValidateBulkItem.VisitTeamId

@@ -8,10 +8,6 @@ public class CreateAddressTypeValidator : AbstractValidator<AddressTypeEntity>
 {
     public CreateAddressTypeValidator(ILocalizationService localization)
     {
-        RuleFor(x => x.TenantId)
-            .GreaterThan(0)
-            .WithMessage(localization.GetMessage("Domain.AddressType.TenantIdRequired"));
-
         RuleFor(x => x.Name)
             .NotEmpty()
             .WithMessage(localization.GetMessage("Domain.AddressType.NameRequired"))

@@ -156,13 +156,6 @@ public class ClientAddressMapping : IEntityTypeConfiguration<ClientAddressEntity
             .HasConstraintName("FK_ClientAddresses_Client")
             .OnDelete(DeleteBehavior.NoAction);
 
-        builder.HasOne(x => x.AddressType)
-            .WithMany()
-            .HasForeignKey(x => new { x.AddressTypeId, x.TenantId })
-            .HasConstraintName("FK_ClientAddresses_AddressType")
-            .HasPrincipalKey(a => new { a.Id, a.TenantId })
-            .OnDelete(DeleteBehavior.NoAction);
-
         // Índices únicos com filtro para endereço primário
         builder.HasIndex(x => x.ClientId)
             .IsUnique()

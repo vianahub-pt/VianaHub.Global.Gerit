@@ -16,8 +16,8 @@ public class GeritDbContext : DbContext
     public DbSet<PlanEntity> Plans { get; set; }
     public DbSet<SubscriptionEntity> Subscriptions { get; set; }
     public DbSet<TenantEntity> Tenants { get; set; }
-    public DbSet<TenantContact> TenantContacts { get; set; }
-    public DbSet<TenantAddress> TenantAddresses { get; set; }
+    public DbSet<TenantContactEntity> TenantContacts { get; set; }
+    public DbSet<TenantAddressEntity> TenantAddresses { get; set; }
     public DbSet<TenantFiscalDataEntity> TenantFiscalData { get; set; }
     public DbSet<UserEntity> Users { get; set; }
     #endregion
@@ -39,20 +39,24 @@ public class GeritDbContext : DbContext
     public DbSet<ClientAddressEntity> ClientAddresses { get; set; }
     public DbSet<ClientFiscalDataEntity> ClientFiscalData { get; set; }
     public DbSet<TeamEntity> Teams { get; set; }
-    public DbSet<TeamMemberEntity> TeamMembers { get; set; }
-    public DbSet<TeamMemberContactEntity> TeamMemberContacts { get; set; }
-    public DbSet<TeamMemberAddressEntity> TeamMemberAddresses { get; set; }
+    public DbSet<EmployeeEntity> Employees { get; set; }
+    public DbSet<EmployeeContactEntity> EmployeeContacts { get; set; }
+    public DbSet<EmployeeAddressEntity> EmployeeAddresses { get; set; }
     public DbSet<FunctionEntity> Functions { get; set; }
     public DbSet<EquipmentEntity> Equipments { get; set; }
     public DbSet<EquipmentTypeEntity> EquipmentTypes { get; set; }
     public DbSet<VehicleEntity> Vehicles { get; set; }
     public DbSet<StatusTypeEntity> StatusTypes { get; set; }
     public DbSet<StatusEntity> Status { get; set; }
-    public DbSet<InterventionEntity> Interventions { get; set; }
-    public DbSet<InterventionTeamEntity> InterventionTeams { get; set; }
-    public DbSet<InterventionContactEntity> InterventionContacts { get; set; }
-    public DbSet<InterventionAddressEntity> InterventionAddresses { get; set; }
-    public DbSet<InterventionTeamVehicleEntity> InterventionTeamVehicles { get; set; }
+    public DbSet<VisitEntity> Visits { get; set; }
+    public DbSet<VisitTeamEntity> VisitTeams { get; set; }
+    public DbSet<VisitTeamEmployeeEntity> VisitTeamEmployees { get; set; }
+    public DbSet<VisitContactEntity> VisitContacts { get; set; }
+    public DbSet<VisitAddressEntity> VisitAddresses { get; set; }
+    public DbSet<VisitTeamVehicleEntity> VisitTeamVehicles { get; set; }
+    public DbSet<AttachmentCategoryEntity> AttachmentCategories { get; set; }
+    public DbSet<VisitAttachmentEntity> VisitAttachments { get; set; }
+    public DbSet<ClientIndividualEntity> ClientIndividuals { get; set; }
     public DbSet<RefreshTokenEntity> RefreshTokens { get; set; }
     #endregion
 

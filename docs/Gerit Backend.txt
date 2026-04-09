@@ -9,6 +9,11 @@ Haja como um especialista em desenvolvimento de software com mais de 30 anos de 
 * Clean Architecture
 * Suporte a multi-idiomas
 
+A classe TenantContactAppService, está totalmente fora da arquitetura da aplicação, veja o padrão da aplicação nas classes ClientAppService, EquipmentAppService e TeamAppService
+todos no namespace VianaHub.Global.Gerit.Application.Services.Billing.
+Estude estas classes indicadas e use o mesmo padrão de arquitetura, design e formato.
+
+
 Regras obrigatórias:
 1. Nenhuma mensagem pode ficar hardcoded na aplicação.
    - O sistema de tradução i18n, utiliza 12 arquivos localizados na pasta: VianaHub.Global.Gerit.Api/Localization
@@ -34,7 +39,7 @@ Regras obrigatórias:
 2. Nunca utilize comandos PowerShell para leitura ou escrita no chat.
 
 Tarefa:
-Implemente o recurso UserPreferences, utilizando como base e modelo o código já existente do recurso Users, seguindo obrigatoriamente a mesma estrutura, padrões arquiteturais e organização de camadas.
+Implemente o recurso FileTypes, utilizando como base e modelo o código já existente do recurso AddressTypes, seguindo obrigatoriamente a mesma estrutura, padrões arquiteturais e organização de camadas.
 
 3. BANCO DE DADOS:
    - A estrutura das tabela está no arquivo Create-Tables.sql

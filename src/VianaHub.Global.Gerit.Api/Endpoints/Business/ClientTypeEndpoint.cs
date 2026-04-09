@@ -13,7 +13,7 @@ public static class ClientTypeEndpoint
 {
     public static void MapClientTypeEndpoints(this IEndpointRouteBuilder app)
     {
-        var groupV1 = app.MapGroup("/v1/client-types").WithTags("ClientTypes").WithGroupName("v1").RequireAuthorization();
+        var groupV1 = app.MapGroup("/v1/client-types").WithTags("ClientTypes").WithGroupName("v1");//.RequireAuthorization();
 
         groupV1.MapGet("/", async ([FromServices] IClientTypeAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
@@ -123,7 +123,8 @@ public static class ClientTypeEndpoint
             var success = await appService.BulkUploadAsync(file, ct);
             return notify.CustomResponse(success);
         })
-        .CustomAuthorize("Admin,BackOffice,Manager", "ClientTypes", "BulkUpload")
+        //.CustomAuthorize("Admin,BackOffice,Manager", "ClientTypes", "BulkUpload")
+        .AllowAnonymous()
         .WithName("BulkUploadClientTypes")
         .WithSummary("Swagger.Endpoint.ClientType.BulkUpload.Summary")
         .DisableAntiforgery()

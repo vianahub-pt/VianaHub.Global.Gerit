@@ -35,9 +35,6 @@ public class ClientEntity : Entity, IAggregateRoot
     private readonly List<ClientAddressEntity> _addresses = new();
     public IReadOnlyCollection<ClientAddressEntity> Addresses => _addresses.AsReadOnly();
 
-    private readonly List<ClientFiscalDataEntity> _fiscalData = new();
-    public IReadOnlyCollection<ClientFiscalDataEntity> FiscalData => _fiscalData.AsReadOnly();
-
     // Construtor protegido para o EF Core
     protected ClientEntity() { }
 
@@ -153,13 +150,5 @@ public class ClientEntity : Entity, IAggregateRoot
             throw new ArgumentNullException(nameof(address));
 
         _addresses.Add(address);
-    }
-
-    public void AddFiscalData(ClientFiscalDataEntity fiscalData, int createdBy)
-    {
-        if (fiscalData == null)
-            throw new ArgumentNullException(nameof(fiscalData));
-
-        _fiscalData.Add(fiscalData);
     }
 }

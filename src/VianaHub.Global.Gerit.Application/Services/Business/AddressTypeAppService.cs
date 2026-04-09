@@ -76,14 +76,14 @@ public class AddressTypeAppService : IAddressTypeAppService
     public async Task<bool> CreateAsync(CreateAddressTypeRequest request, CancellationToken ct)
     {
         var tenantId = _currentUser.GetTenantId();
-        var exists = await _repo.ExistsByNameAsync(tenantId, request.Name, ct);
+        var exists = await _repo.ExistsByNameAsync(request.Name, ct);
         if (exists)
         {
             _notify.Add(_localization.GetMessage("Application.Service.AddressType.Create.ResourceAlreadyExists"), 409);
             return false;
         }
 
-        var entity = new AddressTypeEntity(tenantId, request.Name, request.Description, _currentUser.GetUserId());
+        var entity = new AddressTypeEntity(request.Name, request.Description, _currentUser.GetUserId());
         return await _domain.CreateAsync(entity, ct);
     }
 
@@ -97,7 +97,7 @@ public class AddressTypeAppService : IAddressTypeAppService
         }
 
         // Verifica se já existe outro com o mesmo nome no mesmo tenant
-        var exists = await _repo.ExistsByNameAsync(entity.TenantId, request.Name, ct);
+        var exists = await _repo.ExistsByNameAsync(request.Name, ct);
         if (exists)
         {
             _notify.Add(_localization.GetMessage("Application.Service.AddressType.Update.ResourceAlreadyExists"), 409);
@@ -251,8 +251,6 @@ public class AddressTypeAppService : IAddressTypeAppService
     private async Task<bool> ProcessBulkItemsAsync(List<BulkUploadAddressTypeItem> items, CancellationToken ct)
     {
         var hasErrors = false;
-        var tenantId = _currentUser.GetTenantId();
-
         foreach (var item in items)
         {
             // Valida campos obrigatórios
@@ -263,7 +261,7 @@ public class AddressTypeAppService : IAddressTypeAppService
             }
 
             // Verifica duplicidade
-            var exists = await _repo.ExistsByNameAsync(tenantId, item.Name, ct);
+            var exists = await _repo.ExistsByNameAsync(item.Name, ct);
             if (exists)
             {
                 _notify.Add(_localization.GetMessage("Application.Service.AddressType.ProcessBulkItems.ExistsByName", item.Name), 400);
@@ -272,7 +270,7 @@ public class AddressTypeAppService : IAddressTypeAppService
             }
 
             // Cria a entidade
-            var entity = new AddressTypeEntity(tenantId, item.Name, item.Description, _currentUser.GetUserId());
+            var entity = new AddressTypeEntity(item.Name, item.Description, _currentUser.GetUserId());
 
             // Tenta criar no domínio
             var success = await _domain.CreateAsync(entity, ct);

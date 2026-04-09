@@ -78,18 +78,18 @@ public class StatusTypeDataRepository : IStatusTypeDataRepository
             .AnyAsync(x => x.Id == id && !x.IsDeleted, ct);
     }
 
-    public async Task<bool> ExistsByNameAsync(int tenantId, string name, CancellationToken ct)
+    public async Task<bool> ExistsByNameAsync(string name, CancellationToken ct)
     {
         return await _context.StatusTypes
             .AsNoTracking()
-            .AnyAsync(x => x.TenantId == tenantId && x.Name == name && !x.IsDeleted, ct);
+            .AnyAsync(x => x.Name == name && !x.IsDeleted, ct);
     }
 
-    public async Task<bool> ExistsByNameForUpdateAsync(int tenantId, string name, int excludeId, CancellationToken ct)
+    public async Task<bool> ExistsByNameForUpdateAsync(string name, int excludeId, CancellationToken ct)
     {
         return await _context.StatusTypes
             .AsNoTracking()
-            .AnyAsync(x => x.TenantId == tenantId && x.Name == name && x.Id != excludeId && !x.IsDeleted, ct);
+            .AnyAsync(x => x.Name == name && x.Id != excludeId && !x.IsDeleted, ct);
     }
 
     public async Task<bool> AddAsync(StatusTypeEntity entity, CancellationToken ct)

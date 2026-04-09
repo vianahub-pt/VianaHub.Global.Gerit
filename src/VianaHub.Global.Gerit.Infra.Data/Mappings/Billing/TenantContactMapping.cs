@@ -8,9 +8,9 @@ namespace VianaHub.Global.Gerit.Infra.Data.Mappings.Billing;
 /// Mapeamento da entidade TenantContact
 /// Contatos do tenant com suporte a Row Level Security
 /// </summary>
-public class TenantContactMapping : IEntityTypeConfiguration<TenantContact>
+public class TenantContactMapping : IEntityTypeConfiguration<TenantContactEntity>
 {
-    public void Configure(EntityTypeBuilder<TenantContact> builder)
+    public void Configure(EntityTypeBuilder<TenantContactEntity> builder)
     {
         builder.ToTable("TenantContacts", "dbo");
 

@@ -1,9 +1,9 @@
-namespace VianaHub.Global.Gerit.Application.Dtos.Request.Business.InterventionAddress;
+namespace VianaHub.Global.Gerit.Application.Dtos.Request.Business.VisitAddress;
 
 /// <summary>
-/// DTO para atualização de InterventionAddress
+/// DTO para atualização de VisitAddress
 /// </summary>
-public class UpdateInterventionAddressRequest
+public class UpdateVisitAddressRequest
 {
     public int AddressTypeId { get; set; }
     public string CountryCode { get; set; }

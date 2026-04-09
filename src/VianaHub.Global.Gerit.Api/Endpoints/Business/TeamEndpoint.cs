@@ -13,7 +13,7 @@ public static class TeamEndpoint
 {
     public static void MapTeamEndpoints(this IEndpointRouteBuilder app)
     {
-        var groupV1 = app.MapGroup("/v1/Teams").WithTags("Teams").WithGroupName("v1").RequireAuthorization();
+        var groupV1 = app.MapGroup("/v1/teams").WithTags("Teams").WithGroupName("v1").RequireAuthorization();
 
         groupV1.MapGet("/", async ([FromServices] ITeamAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {

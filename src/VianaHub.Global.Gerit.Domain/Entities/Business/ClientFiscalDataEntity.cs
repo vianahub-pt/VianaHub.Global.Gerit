@@ -1,4 +1,4 @@
-using VianaHub.Global.Gerit.Domain.Base;
+ï»¿using VianaHub.Global.Gerit.Domain.Base;
 using VianaHub.Global.Gerit.Domain.Entities.Billing;
 
 namespace VianaHub.Global.Gerit.Domain.Entities.Business;
@@ -26,7 +26,7 @@ public class ClientFiscalDataEntity : Entity
     protected ClientFiscalDataEntity() { }
 
     /// <summary>
-    /// Construtor para criação de novos dados fiscais do Cliente
+    /// Construtor para criaÃ¾Ã’o de novos dados fiscais do Cliente
     /// </summary>
     public ClientFiscalDataEntity(int tenantId, int clientId, string nif, string vatNumber, string cae, string fiscalCountry, bool isVATRegistered, int createdBy)
     {

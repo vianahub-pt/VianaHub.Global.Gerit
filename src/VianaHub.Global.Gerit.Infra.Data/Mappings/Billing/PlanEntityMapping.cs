@@ -56,8 +56,8 @@ public class PlanEntityMapping : IEntityTypeConfiguration<PlanEntity>
             .HasColumnName("MaxUsers")
             .IsRequired();
 
-        builder.Property(x => x.MaxPhotosPerInterventions)
-            .HasColumnName("MaxPhotosPerInterventions")
+        builder.Property(x => x.MaxPhotosPerVisits)
+            .HasColumnName("MaxPhotosPerVisits")
             .IsRequired();
 
         builder.Property(x => x.IsActive)

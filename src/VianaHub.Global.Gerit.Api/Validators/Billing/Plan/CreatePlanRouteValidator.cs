@@ -26,8 +26,8 @@ public class CreatePlanRouteValidator : AbstractValidator<CreatePlanRequest>
         RuleFor(x => x.MaxUsers)
             .GreaterThan(0).WithMessage(_localization.GetMessage("Api.Validator.Plan.Create.MaxUsers"));
 
-        RuleFor(x => x.MaxPhotosPerInterventions)
-            .GreaterThan(0).WithMessage(_localization.GetMessage("Api.Validator.Plan.Create.MaxPhotosPerInterventions"));
+        RuleFor(x => x.MaxPhotosPerVisits)
+            .GreaterThan(0).WithMessage(_localization.GetMessage("Api.Validator.Plan.Create.MaxPhotosPerVisits"));
 
         When(x => x.PricePerHour.HasValue, () =>
         {

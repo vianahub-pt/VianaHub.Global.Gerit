@@ -75,11 +75,11 @@ public class AddressTypeDataRepository : IAddressTypeDataRepository
             .AsNoTracking()
             .AnyAsync(x => x.Id == id && !x.IsDeleted, ct);
     }
-    public async Task<bool> ExistsByNameAsync(int tenantId, string name, CancellationToken ct)
+    public async Task<bool> ExistsByNameAsync(string name, CancellationToken ct)
     {
         return await _context.Set<AddressTypeEntity>()
             .AsNoTracking()
-            .AnyAsync(x => x.TenantId == tenantId && x.Name == name && !x.IsDeleted, ct);
+            .AnyAsync(x => x.Name == name && !x.IsDeleted, ct);
     }
 
     public async Task<bool> AddAsync(AddressTypeEntity entity, CancellationToken ct)

@@ -13,7 +13,7 @@ public static class FunctionEndpoint
 {
     public static void MapFunctionEndpoints(this IEndpointRouteBuilder app)
     {
-        var groupV1 = app.MapGroup("/v1/Functions").WithTags("Functions").WithGroupName("v1").RequireAuthorization();
+        var groupV1 = app.MapGroup("/v1/functions").WithTags("Functions").WithGroupName("v1").RequireAuthorization();
 
         groupV1.MapGet("/", async ([FromServices] IFunctionAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {

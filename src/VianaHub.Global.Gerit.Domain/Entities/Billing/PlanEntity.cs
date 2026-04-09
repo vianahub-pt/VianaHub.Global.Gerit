@@ -15,7 +15,7 @@ public class PlanEntity : Entity
     public decimal? PricePerYear { get; set; }
     public string Currency { get; private set; }
     public int MaxUsers { get; private set; }
-    public int MaxPhotosPerInterventions { get; private set; }
+    public int MaxPhotosPerVisits { get; private set; }
     public bool IsActive { get; private set; }
     public bool IsDeleted { get; private set; }
 
@@ -38,7 +38,7 @@ public class PlanEntity : Entity
         decimal? pricePerYear,
         string currency,
         int maxUsers,
-        int maxPhotosPerInterventions,
+        int maxPhotosPerVisits,
         int createdBy)
     {
         Name = name;
@@ -49,7 +49,7 @@ public class PlanEntity : Entity
         PricePerYear = pricePerYear;
         Currency = currency ?? "USD";
         MaxUsers = maxUsers;
-        MaxPhotosPerInterventions = maxPhotosPerInterventions;
+        MaxPhotosPerVisits = maxPhotosPerVisits;
         IsActive = true;
         IsDeleted = false;
         CreatedBy = createdBy;
@@ -64,7 +64,7 @@ public class PlanEntity : Entity
         decimal? pricePerYear,
         string currency,
         int maxUsers,
-        int maxPhotosPerInterventions,
+        int maxPhotosPerVisits,
         int modifiedBy)
     {
         Name = name;
@@ -75,7 +75,7 @@ public class PlanEntity : Entity
         PricePerYear = pricePerYear;
         Currency = currency ?? "USD";
         MaxUsers = maxUsers;
-        MaxPhotosPerInterventions = maxPhotosPerInterventions;
+        MaxPhotosPerVisits = maxPhotosPerVisits;
         ModifiedBy = modifiedBy;
         ModifiedAt = DateTime.UtcNow;
     }

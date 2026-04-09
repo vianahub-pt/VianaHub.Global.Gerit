@@ -15,11 +15,11 @@ public class TenantEntity : Entity, IAggregateRoot
     public bool IsDeleted { get; private set; }
 
     // Navigation Properties
-    private readonly List<TenantContact> _contacts = new();
-    public IReadOnlyCollection<TenantContact> Contacts => _contacts.AsReadOnly();
+    private readonly List<TenantContactEntity> _contacts = new();
+    public IReadOnlyCollection<TenantContactEntity> Contacts => _contacts.AsReadOnly();
 
-    private readonly List<TenantAddress> _addresses = new();
-    public IReadOnlyCollection<TenantAddress> Addresses => _addresses.AsReadOnly();
+    private readonly List<TenantAddressEntity> _addresses = new();
+    public IReadOnlyCollection<TenantAddressEntity> Addresses => _addresses.AsReadOnly();
 
     private readonly List<TenantFiscalDataEntity> _fiscalData = new();
     public IReadOnlyCollection<TenantFiscalDataEntity> FiscalData => _fiscalData.AsReadOnly();
@@ -77,7 +77,7 @@ public class TenantEntity : Entity, IAggregateRoot
         ModifiedAt = DateTime.UtcNow;
     }
 
-    public void AddAddress(TenantAddress address, int createdBy)
+    public void AddAddress(TenantAddressEntity address, int createdBy)
     {
         if (address == null)
             throw new ArgumentNullException(nameof(address));

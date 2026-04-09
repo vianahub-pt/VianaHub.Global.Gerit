@@ -1,0 +1,19 @@
+using FluentValidation;
+using VianaHub.Global.Gerit.Domain.Entities.Business;
+using VianaHub.Global.Gerit.Domain.Interfaces.Base;
+
+namespace VianaHub.Global.Gerit.Domain.Validators.Business.Visit;
+
+public class DeactivateVisitValidator : AbstractValidator<VisitEntity>
+{
+    public DeactivateVisitValidator(ILocalizationService localization)
+    {
+        RuleFor(x => x.Id)
+            .GreaterThan(0)
+            .WithMessage(localization.GetMessage("Domain.Visit.IdRequired"));
+
+        RuleFor(x => x.IsDeleted)
+            .Must(x => !x)
+            .WithMessage(localization.GetMessage("Domain.Visit.CannotDeactivateDeleted"));
+    }
+}
