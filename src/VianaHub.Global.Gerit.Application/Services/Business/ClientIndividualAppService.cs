@@ -15,6 +15,7 @@ namespace VianaHub.Global.Gerit.Application.Services.Business;
 public class ClientIndividualAppService : IClientIndividualAppService
 {
     private readonly IClientIndividualDataRepository _repo;
+    private readonly IClientRepository _clientRepository;
     private readonly IClientIndividualDomainService _domain;
     private readonly IMapper _mapper;
     private readonly INotify _notify;
@@ -24,6 +25,7 @@ public class ClientIndividualAppService : IClientIndividualAppService
 
     public ClientIndividualAppService(
         IClientIndividualDataRepository repo,
+        IClientRepository clientRepository,
         IClientIndividualDomainService domain,
         IMapper mapper,
         INotify notify,
@@ -32,6 +34,7 @@ public class ClientIndividualAppService : IClientIndividualAppService
         ILogger<ClientIndividualAppService> logger)
     {
         _repo = repo;
+        _clientRepository = clientRepository;
         _domain = domain;
         _mapper = mapper;
         _notify = notify;
@@ -95,6 +98,12 @@ public class ClientIndividualAppService : IClientIndividualAppService
     public async Task<bool> CreateAsync(CreateClientIndividualRequest request, CancellationToken ct)
     {
         var tenantId = _currentUser.GetTenantId();
+        var client = await _clientRepository.GetAggregateForUpdateAsync(tenantId, request.ClientId, ct);
+        if (client == null || client.IsDeleted || !client.IsActive)
+        {
+            _notify.Add(_localization.GetMessage("Application.Service.ClientIndividual.Create.ResourceNotFound"), 410);
+            return false;
+        }
 
         if (await _repo.ExistsByClientIdAsync(tenantId, request.ClientId, ct))
         {
@@ -125,7 +134,8 @@ public class ClientIndividualAppService : IClientIndividualAppService
             request.Nationality,
             _currentUser.GetUserId());
 
-        return await _domain.CreateAsync(entity, ct);
+        client.SetIndividual(entity);
+        return await _clientRepository.UpdateAsync(client, ct);
     }
 
     public async Task<bool> UpdateAsync(int id, UpdateClientIndividualRequest request, CancellationToken ct)
@@ -139,6 +149,13 @@ public class ClientIndividualAppService : IClientIndividualAppService
             return false;
         }
 
+        var client = await _clientRepository.GetAggregateForUpdateAsync(tenantId, entity.ClientId, ct);
+        if (client?.Individual == null || client.Individual.Id != id)
+        {
+            _notify.Add(_localization.GetMessage("Application.Service.ClientIndividual.Update.ResourceNotFound"), 410);
+            return false;
+        }
+
         if (!string.IsNullOrWhiteSpace(request.DocumentNumber) &&
             await _repo.ExistsByDocumentAsync(tenantId, request.DocumentType, request.DocumentNumber, id, ct))
         {
@@ -146,7 +163,7 @@ public class ClientIndividualAppService : IClientIndividualAppService
             return false;
         }
 
-        entity.Update(
+        client.Individual.Update(
             request.FirstName,
             request.LastName,
             request.PhoneNumber,
@@ -160,7 +177,7 @@ public class ClientIndividualAppService : IClientIndividualAppService
             request.Nationality,
             _currentUser.GetUserId());
 
-        return await _domain.UpdateAsync(entity, ct);
+        return await _clientRepository.UpdateAsync(client, ct);
     }
 
     public async Task<bool> ActivateAsync(int id, CancellationToken ct)
@@ -172,8 +189,15 @@ public class ClientIndividualAppService : IClientIndividualAppService
             return false;
         }
 
-        entity.Activate(_currentUser.GetUserId());
-        return await _domain.ActivateAsync(entity, ct);
+        var client = await _clientRepository.GetAggregateForUpdateAsync(_currentUser.GetTenantId(), entity.ClientId, ct);
+        if (client?.Individual == null || client.Individual.Id != id)
+        {
+            _notify.Add(_localization.GetMessage("Application.Service.ClientIndividual.Activate.ResourceNotFound"), 410);
+            return false;
+        }
+
+        client.Individual.Activate(_currentUser.GetUserId());
+        return await _clientRepository.UpdateAsync(client, ct);
     }
 
     public async Task<bool> DeactivateAsync(int id, CancellationToken ct)
@@ -185,8 +209,15 @@ public class ClientIndividualAppService : IClientIndividualAppService
             return false;
         }
 
-        entity.Deactivate(_currentUser.GetUserId());
-        return await _domain.DeactivateAsync(entity, ct);
+        var client = await _clientRepository.GetAggregateForUpdateAsync(_currentUser.GetTenantId(), entity.ClientId, ct);
+        if (client?.Individual == null || client.Individual.Id != id)
+        {
+            _notify.Add(_localization.GetMessage("Application.Service.ClientIndividual.Deactivate.ResourceNotFound"), 410);
+            return false;
+        }
+
+        client.Individual.Deactivate(_currentUser.GetUserId());
+        return await _clientRepository.UpdateAsync(client, ct);
     }
 
     public async Task<bool> DeleteAsync(int id, CancellationToken ct)
@@ -198,7 +229,15 @@ public class ClientIndividualAppService : IClientIndividualAppService
             return false;
         }
 
-        entity.Delete(_currentUser.GetUserId());
-        return await _domain.DeleteAsync(entity, ct);
+        var client = await _clientRepository.GetAggregateForUpdateAsync(_currentUser.GetTenantId(), entity.ClientId, ct);
+        if (client?.Individual == null || client.Individual.Id != id)
+        {
+            _notify.Add(_localization.GetMessage("Application.Service.ClientIndividual.Delete.ResourceNotFound"), 410);
+            return false;
+        }
+
+        client.Individual.Delete(_currentUser.GetUserId());
+        return await _clientRepository.UpdateAsync(client, ct);
     }
 }
+

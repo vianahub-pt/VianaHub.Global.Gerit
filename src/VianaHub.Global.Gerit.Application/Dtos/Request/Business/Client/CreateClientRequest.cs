@@ -1,20 +1,21 @@
+using VianaHub.Global.Gerit.Application.Dtos.Business.Client;
+using VianaHub.Global.Gerit.Domain.Enums;
+
 namespace VianaHub.Global.Gerit.Application.Dtos.Request.Business.Client;
 
-/// <summary>
-/// Request para criação de Client
-/// </summary>
 public class CreateClientRequest
 {
-    public int ClientType { get; set; }
-    public int Origin { get; set; }
-    public string Name { get; set; }
-    public string Phone { get; set; }
-    public string Email { get; set; }
-    public string Website { get; set; }
+    public CreateClientTypeRequest ClientType { get; set; }
+    public Origin Origin { get; set; }
     public string UrlImage { get; set; }
-    public int Score { get;  set; }
-    public int ConsentType { get; set; }
-    public bool Consent { get; set; }
-    public DateTime ConsentDate { get; set; }
-    public string Remarks { get; set; }
+    public string Notes { get; set; }
+
+    public CreateClientIndividualRequest? Individual { get; set; }
+    public CreateClientCompanyRequest? Company { get; set; }
+
+    public List<CreateClientContactRequest> Contacts { get; set; } = [];
+    public List<CreateClientAddressRequest> Addresses { get; set; } = [];
+    public List<CreateClientConsentRequest> Consents { get; set; } = [];
+    public List<CreateClientHierarchyRequest> ParentHierarchies { get; set; } = [];
+    public List<CreateClientHierarchyRequest> ChildHierarchies { get; set; } = [];
 }

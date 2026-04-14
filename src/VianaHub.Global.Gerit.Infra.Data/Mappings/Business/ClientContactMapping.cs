@@ -14,7 +14,7 @@ public class ClientContactMapping : IEntityTypeConfiguration<ClientContactEntity
     {
         builder.ToTable("ClientContacts", "dbo");
 
-        // Chave Primária
+        // Chave Primï¿½ria
         builder.HasKey(x => x.Id)
             .HasName("PK_ClientContacts");
 
@@ -89,7 +89,7 @@ public class ClientContactMapping : IEntityTypeConfiguration<ClientContactEntity
             .HasColumnType("DATETIME2")
             .IsRequired(false);
 
-        // Índices
+        // ï¿½ndices
         builder.HasIndex(x => x.ClientId)
             .HasDatabaseName("IX_ClientContacts_ClientId")
             .IncludeProperties(x => x.TenantId)
@@ -105,3 +105,4 @@ public class ClientContactMapping : IEntityTypeConfiguration<ClientContactEntity
         // Relacionamento com Client configurado no ClientMapping
     }
 }
+

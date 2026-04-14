@@ -14,7 +14,7 @@ public class ClientMapping : IEntityTypeConfiguration<ClientEntity>
     {
         builder.ToTable("Clients", "dbo");
 
-        // Chave Primária
+        // Chave Primï¿½ria
         builder.HasKey(x => x.Id)
             .HasName("PK_Clients");
 
@@ -135,18 +135,18 @@ public class ClientMapping : IEntityTypeConfiguration<ClientEntity>
             .HasColumnType("DATETIME2")
             .IsRequired(false);
 
-        // Constraints únicos
+        // Constraints ï¿½nicos
         builder.HasIndex(v => new { v.TenantId, v.Name })
             .IsUnique()
             .HasDatabaseName("UQ_Clients_Tenant_Name");
 
-        // Índices únicos com filtro
+        // ï¿½ndices ï¿½nicos com filtro
         builder.HasIndex(v => new { v.TenantId, v.Name })
             .IsUnique()
             .HasDatabaseName("UX_Clients_Tenant_Name_Active")
             .HasFilter("[IsDeleted] = 0");
 
-        // Índices não clusterizados
+        // ï¿½ndices nï¿½o clusterizados
         builder.HasIndex(v => new { v.TenantId, v.Name })
             .HasDatabaseName("IX_Clients_Tenant_Active")
             .IncludeProperties(v => new { v.Email, v.Phone })
@@ -171,6 +171,40 @@ public class ClientMapping : IEntityTypeConfiguration<ClientEntity>
             .HasConstraintName("FK_ClientAddresses_Client")
             .OnDelete(DeleteBehavior.Restrict);
 
-        // Relacionamento FiscalData configurado no ClientFiscalDataMapping
+        builder.HasOne(x => x.Individual)
+            .WithOne(ci => ci.Client)
+            .HasForeignKey<ClientIndividualEntity>(ci => new { ci.ClientId, ci.TenantId })
+            .HasPrincipalKey<ClientEntity>(c => new { c.Id, c.TenantId })
+            .HasConstraintName("FK_ClientIndividuals_Client")
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasOne(x => x.Company)
+            .WithOne(cc => cc.Client)
+            .HasForeignKey<ClientCompanyEntity>(cc => new { cc.ClientId, cc.TenantId })
+            .HasPrincipalKey<ClientEntity>(c => new { c.Id, c.TenantId })
+            .HasConstraintName("FK_ClientCompanies_Client")
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasMany(x => x.Consents)
+            .WithOne(cc => cc.Client)
+            .HasForeignKey(cc => new { cc.ClientId, cc.TenantId })
+            .HasPrincipalKey(c => new { c.Id, c.TenantId })
+            .HasConstraintName("FK_ClientConsents_Client")
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasMany(x => x.ChildHierarchies)
+            .WithOne(h => h.ParentClient)
+            .HasForeignKey(h => new { h.ParentClientId, h.TenantId })
+            .HasPrincipalKey(c => new { c.Id, c.TenantId })
+            .HasConstraintName("FK_ClientHierarchies_ParentClient")
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasMany(x => x.ParentHierarchies)
+            .WithOne(h => h.ChildClient)
+            .HasForeignKey(h => new { h.ChildClientId, h.TenantId })
+            .HasPrincipalKey(c => new { c.Id, c.TenantId })
+            .HasConstraintName("FK_ClientHierarchies_ChildClient")
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }
+

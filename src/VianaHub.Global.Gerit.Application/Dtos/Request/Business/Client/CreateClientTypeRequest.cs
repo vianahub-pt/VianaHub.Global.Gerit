@@ -1,4 +1,4 @@
-namespace VianaHub.Global.Gerit.Application.Dtos.Request.Business.ClientType;
+namespace VianaHub.Global.Gerit.Application.Dtos.Request.Business.Client;
 
 public class CreateClientTypeRequest
 {

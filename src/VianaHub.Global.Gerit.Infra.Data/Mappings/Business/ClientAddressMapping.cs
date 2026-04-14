@@ -6,7 +6,7 @@ namespace VianaHub.Global.Gerit.Infra.Data.Mappings.Business;
 
 /// <summary>
 /// Mapeamento da entidade ClientAddress
-/// Endereços do cliente com suporte a Row Level Security
+/// Endereï¿½os do cliente com suporte a Row Level Security
 /// </summary>
 public class ClientAddressMapping : IEntityTypeConfiguration<ClientAddressEntity>
 {
@@ -14,7 +14,7 @@ public class ClientAddressMapping : IEntityTypeConfiguration<ClientAddressEntity
     {
         builder.ToTable("ClientAddresses", "dbo");
 
-        // Chave Primária
+        // Chave Primï¿½ria
         builder.HasKey(x => x.Id)
             .HasName("PK_ClientAddresses");
 
@@ -156,16 +156,17 @@ public class ClientAddressMapping : IEntityTypeConfiguration<ClientAddressEntity
             .HasConstraintName("FK_ClientAddresses_Client")
             .OnDelete(DeleteBehavior.NoAction);
 
-        // Índices únicos com filtro para endereço primário
+        // ï¿½ndices ï¿½nicos com filtro para endereï¿½o primï¿½rio
         builder.HasIndex(x => x.ClientId)
             .IsUnique()
             .HasDatabaseName("UX_ClientAddresses_Primary")
             .HasFilter("[IsPrimary] = 1 AND [IsDeleted] = 0");
 
-        // Índices não clusterizados
+        // ï¿½ndices nï¿½o clusterizados
         builder.HasIndex(x => x.ClientId)
             .HasDatabaseName("IX_ClientAddresses_ClientId")
             .IncludeProperties(x => x.TenantId)
             .HasFilter("[IsDeleted] = 0");
     }
 }
+

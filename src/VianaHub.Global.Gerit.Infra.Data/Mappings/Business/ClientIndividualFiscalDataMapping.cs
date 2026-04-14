@@ -37,9 +37,9 @@ public class ClientIndividualFiscalDataMapping : IEntityTypeConfiguration<Client
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(x => x.ClientIndividual)
-            .WithMany()
-            .HasForeignKey(x => new { x.ClientIndividualId, x.TenantId })
-            .HasPrincipalKey(x => new { x.Id, x.TenantId })
+            .WithOne(ci => ci.FiscalData)
+            .HasForeignKey<ClientIndividualFiscalDataEntity>(nameof(ClientIndividualFiscalDataEntity.ClientIndividualId), nameof(ClientIndividualFiscalDataEntity.TenantId))
+            .HasPrincipalKey<ClientIndividualEntity>(nameof(ClientIndividualEntity.Id), nameof(ClientIndividualEntity.TenantId))
             .OnDelete(DeleteBehavior.Restrict);
 
         // Índices
@@ -58,3 +58,4 @@ public class ClientIndividualFiscalDataMapping : IEntityTypeConfiguration<Client
             "NOT ([IsActive] = 1 AND [IsDeleted] = 1)");
     }
 }
+

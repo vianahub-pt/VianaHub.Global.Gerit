@@ -1,7 +1,7 @@
 # Gerit – Evolução da Arquitetura e Modelo de Dados
 
 ## 📌 Visão Geral
-A evolução entre as versões `Create-Tables.sql` (v1) e `Create-Tables-v2.sql` (v2) demonstra uma transformação significativa do Gerit:
+A evolução entre as versões (v1) e (v2) demonstra uma transformação significativa do Gerit:
 
 > De um sistema operacional técnico para uma plataforma SaaS multi-tenant, orientada ao negócio, escalável e com características enterprise.
 

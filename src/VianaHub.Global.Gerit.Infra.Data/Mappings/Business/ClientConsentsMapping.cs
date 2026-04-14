@@ -39,7 +39,7 @@ public class ClientConsentsMapping : IEntityTypeConfiguration<ClientConsentsEnti
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(x => x.Client)
-            .WithMany()
+            .WithMany(c => c.Consents)
             .HasForeignKey(x => new { x.ClientId, x.TenantId })
             .HasPrincipalKey(x => new { x.Id, x.TenantId })
             .OnDelete(DeleteBehavior.Restrict);
@@ -59,3 +59,4 @@ public class ClientConsentsMapping : IEntityTypeConfiguration<ClientConsentsEnti
             .HasDatabaseName("IX_ClientConsents_Granted_Tenant");
     }
 }
+

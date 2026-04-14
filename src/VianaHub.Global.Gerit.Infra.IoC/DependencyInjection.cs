@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 using FluentValidation;
 using VianaHub.Global.Gerit.Domain.Base;
 using VianaHub.Global.Gerit.Domain.Tools.Notifications;
@@ -162,9 +162,14 @@ public static class DependencyInjection
         services.AddScoped<IAttachmentCategoryAppService, AttachmentCategoryAppService>();
         services.AddScoped<IVisitAttachmentAppService, VisitAttachmentAppService>();
         services.AddScoped<IClientIndividualAppService, ClientIndividualAppService>();
+        services.AddScoped<IClientCompanyAppService, ClientCompanyAppService>();
+        services.AddScoped<IClientHierarchyAppService, ClientHierarchyAppService>();
         services.AddScoped<IClientAppService, ClientAppService>();
         services.AddScoped<IClientAddressAppService, ClientAddressAppService>();
         services.AddScoped<IClientContactAppService, ClientContactAppService>();
+        services.AddScoped<IClientConsentsAppService, ClientConsentsAppService>();
+        services.AddScoped<IClientIndividualFiscalDataAppService, ClientIndividualFiscalDataAppService>();
+        services.AddScoped<IClientCompanyFiscalDataAppService, ClientCompanyFiscalDataAppService>();
         services.AddScoped<IVisitContactAppService, VisitContactAppService>();
         services.AddScoped<IVisitAddressAppService, VisitAddressAppService>();
         services.AddScoped<IStatusAppService, StatusAppService>();
@@ -220,6 +225,11 @@ public static class DependencyInjection
         services.AddScoped<IAttachmentCategoryDomainService, AttachmentCategoryDomainService>();
         services.AddScoped<IVisitAttachmentDomainService, VisitAttachmentDomainService>();
         services.AddScoped<IClientIndividualDomainService, ClientIndividualDomainService>();
+        services.AddScoped<IClientCompanyDomainService, ClientCompanyDomainService>();
+        services.AddScoped<IClientHierarchyDomainService, ClientHierarchyDomainService>();
+        services.AddScoped<IClientConsentsDomainService, ClientConsentsDomainService>();
+        services.AddScoped<IClientIndividualFiscalDataDomainService, ClientIndividualFiscalDataDomainService>();
+        services.AddScoped<IClientCompanyFiscalDataDomainService, ClientCompanyFiscalDataDomainService>();
 
         // Infra.Data - Repositories
         services.AddScoped<IAddressTypeDataRepository, AddressTypeDataRepository>();
@@ -234,9 +244,16 @@ public static class DependencyInjection
         services.AddScoped<IEmployeeDataRepository, EmployeeDataRepository>();
         services.AddScoped<IEmployeeAddressDataRepository, EmployeeAddressDataRepository>();
         services.AddScoped<IEmployeeContactDataRepository, EmployeeContactDataRepository>();
-        services.AddScoped<IClientDataRepository, ClientDataRepository>();
-        services.AddScoped<IClientAddressDataRepository, ClientAddressDataRepository>();
-        services.AddScoped<IClientContactDataRepository, ClientContactDataRepository>();
+        services.AddScoped<IClientRepository, ClientDataRepository>();
+        services.AddScoped<IClientDataRepository>(sp => (IClientDataRepository)sp.GetRequiredService<IClientRepository>());
+        services.AddScoped<IClientAddressDataRepository>(sp => (IClientAddressDataRepository)sp.GetRequiredService<IClientRepository>());
+        services.AddScoped<IClientContactDataRepository>(sp => (IClientContactDataRepository)sp.GetRequiredService<IClientRepository>());
+        services.AddScoped<IClientConsentsDataRepository>(sp => (IClientConsentsDataRepository)sp.GetRequiredService<IClientRepository>());
+        services.AddScoped<IClientCompanyDataRepository>(sp => (IClientCompanyDataRepository)sp.GetRequiredService<IClientRepository>());
+        services.AddScoped<IClientCompanyFiscalDataDataRepository>(sp => (IClientCompanyFiscalDataDataRepository)sp.GetRequiredService<IClientRepository>());
+        services.AddScoped<IClientHierarchyDataRepository>(sp => (IClientHierarchyDataRepository)sp.GetRequiredService<IClientRepository>());
+        services.AddScoped<IClientIndividualDataRepository>(sp => (IClientIndividualDataRepository)sp.GetRequiredService<IClientRepository>());
+        services.AddScoped<IClientIndividualFiscalDataDataRepository>(sp => (IClientIndividualFiscalDataDataRepository)sp.GetRequiredService<IClientRepository>());
         services.AddScoped<IVisitContactDataRepository, VisitContactDataRepository>();
         services.AddScoped<IVisitAddressDataRepository, VisitAddressDataRepository>();
         services.AddScoped<IStatusDataRepository, StatusDataRepository>();
@@ -261,7 +278,6 @@ public static class DependencyInjection
         services.AddScoped<IVisitTeamEquipmentDataRepository, VisitTeamEquipmentDataRepository>();
         services.AddScoped<IAttachmentCategoryDataRepository, AttachmentCategoryDataRepository>();
         services.AddScoped<IVisitAttachmentDataRepository, VisitAttachmentDataRepository>();
-        services.AddScoped<IClientIndividualDataRepository, ClientIndividualDataRepository>();
 
         // Infra.Messaging (Email sender no-op por enquanto)
         services.AddScoped<IEmailSender, NoOpEmailSender>();
@@ -286,4 +302,5 @@ public static class DependencyInjection
         return services;
     }
 }
+
 

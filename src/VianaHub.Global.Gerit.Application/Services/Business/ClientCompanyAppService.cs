@@ -15,6 +15,7 @@ namespace VianaHub.Global.Gerit.Application.Services.Business;
 public class ClientCompanyAppService : IClientCompanyAppService
 {
     private readonly IClientCompanyDataRepository _repo;
+    private readonly IClientRepository _clientRepository;
     private readonly IClientCompanyDomainService _domain;
     private readonly IMapper _mapper;
     private readonly INotify _notify;
@@ -23,6 +24,7 @@ public class ClientCompanyAppService : IClientCompanyAppService
 
     public ClientCompanyAppService(
         IClientCompanyDataRepository repo,
+        IClientRepository clientRepository,
         IClientCompanyDomainService domain,
         IMapper mapper,
         INotify notify,
@@ -30,6 +32,7 @@ public class ClientCompanyAppService : IClientCompanyAppService
         ICurrentUserService currentUser)
     {
         _repo = repo;
+        _clientRepository = clientRepository;
         _domain = domain;
         _mapper = mapper;
         _notify = notify;
@@ -81,6 +84,12 @@ public class ClientCompanyAppService : IClientCompanyAppService
     public async Task<bool> CreateAsync(CreateClientCompanyRequest request, CancellationToken ct)
     {
         var tenantId = _currentUser.GetTenantId();
+        var client = await _clientRepository.GetAggregateForUpdateAsync(tenantId, request.ClientId, ct);
+        if (client == null || client.IsDeleted || !client.IsActive)
+        {
+            _notify.Add(_localization.GetMessage("Application.Service.ClientCompany.Create.ResourceNotFound"), 410);
+            return false;
+        }
 
         if (await _repo.ExistsByClientIdAsync(request.ClientId, ct))
         {
@@ -104,7 +113,8 @@ public class ClientCompanyAppService : IClientCompanyAppService
             request.LegalRepresentative,
             _currentUser.GetUserId());
 
-        return await _domain.CreateAsync(entity, ct);
+        client.SetCompany(entity);
+        return await _clientRepository.UpdateAsync(client, ct);
     }
 
     public async Task<bool> UpdateAsync(int id, UpdateClientCompanyRequest request, CancellationToken ct)
@@ -116,7 +126,14 @@ public class ClientCompanyAppService : IClientCompanyAppService
             return false;
         }
 
-        entity.Update(
+        var client = await _clientRepository.GetAggregateForUpdateAsync(_currentUser.GetTenantId(), entity.ClientId, ct);
+        if (client?.Company == null || client.Company.Id != id)
+        {
+            _notify.Add(_localization.GetMessage("Application.Service.ClientCompany.Update.ResourceNotFound"), 410);
+            return false;
+        }
+
+        client.Company.Update(
             request.LegalName,
             request.TradeName,
             request.PhoneNumber,
@@ -130,7 +147,7 @@ public class ClientCompanyAppService : IClientCompanyAppService
             request.LegalRepresentative,
             _currentUser.GetUserId());
 
-        return await _domain.UpdateAsync(entity, ct);
+        return await _clientRepository.UpdateAsync(client, ct);
     }
 
     public async Task<bool> ActivateAsync(int id, CancellationToken ct)
@@ -142,8 +159,15 @@ public class ClientCompanyAppService : IClientCompanyAppService
             return false;
         }
 
-        entity.Activate(_currentUser.GetUserId());
-        return await _domain.ActivateAsync(entity, ct);
+        var client = await _clientRepository.GetAggregateForUpdateAsync(_currentUser.GetTenantId(), entity.ClientId, ct);
+        if (client?.Company == null || client.Company.Id != id)
+        {
+            _notify.Add(_localization.GetMessage("Application.Service.ClientCompany.Activate.ResourceNotFound"), 410);
+            return false;
+        }
+
+        client.Company.Activate(_currentUser.GetUserId());
+        return await _clientRepository.UpdateAsync(client, ct);
     }
 
     public async Task<bool> DeactivateAsync(int id, CancellationToken ct)
@@ -155,8 +179,15 @@ public class ClientCompanyAppService : IClientCompanyAppService
             return false;
         }
 
-        entity.Deactivate(_currentUser.GetUserId());
-        return await _domain.DeactivateAsync(entity, ct);
+        var client = await _clientRepository.GetAggregateForUpdateAsync(_currentUser.GetTenantId(), entity.ClientId, ct);
+        if (client?.Company == null || client.Company.Id != id)
+        {
+            _notify.Add(_localization.GetMessage("Application.Service.ClientCompany.Deactivate.ResourceNotFound"), 410);
+            return false;
+        }
+
+        client.Company.Deactivate(_currentUser.GetUserId());
+        return await _clientRepository.UpdateAsync(client, ct);
     }
 
     public async Task<bool> DeleteAsync(int id, CancellationToken ct)
@@ -168,7 +199,15 @@ public class ClientCompanyAppService : IClientCompanyAppService
             return false;
         }
 
-        entity.Delete(_currentUser.GetUserId());
-        return await _domain.DeleteAsync(entity, ct);
+        var client = await _clientRepository.GetAggregateForUpdateAsync(_currentUser.GetTenantId(), entity.ClientId, ct);
+        if (client?.Company == null || client.Company.Id != id)
+        {
+            _notify.Add(_localization.GetMessage("Application.Service.ClientCompany.Delete.ResourceNotFound"), 410);
+            return false;
+        }
+
+        client.Company.Delete(_currentUser.GetUserId());
+        return await _clientRepository.UpdateAsync(client, ct);
     }
 }
+

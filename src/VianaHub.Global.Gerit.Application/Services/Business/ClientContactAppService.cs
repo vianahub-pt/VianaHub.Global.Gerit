@@ -19,11 +19,12 @@ using VianaHub.Global.Gerit.Domain.Tools.Notifications;
 namespace VianaHub.Global.Gerit.Application.Services.Business;
 
 /// <summary>
-/// Serviço de aplicação para ClientContact
+/// Serviï¿½o de aplicaï¿½ï¿½o para ClientContact
 /// </summary>
 public class ClientContactAppService : IClientContactAppService
 {
     private readonly IClientContactDataRepository _repo;
+    private readonly IClientRepository _clientRepository;
     private readonly IClientContactDomainService _domain;
     private readonly IMapper _mapper;
     private readonly INotify _notify;
@@ -34,6 +35,7 @@ public class ClientContactAppService : IClientContactAppService
 
     public ClientContactAppService(
         IClientContactDataRepository repo,
+        IClientRepository clientRepository,
         IClientContactDomainService domain,
         IMapper mapper,
         INotify notify,
@@ -43,6 +45,7 @@ public class ClientContactAppService : IClientContactAppService
         ILogger<ClientContactAppService> logger)
     {
         _repo = repo;
+        _clientRepository = clientRepository;
         _domain = domain;
         _mapper = mapper;
         _notify = notify;
@@ -80,8 +83,14 @@ public class ClientContactAppService : IClientContactAppService
     {
         var tenantId = _currentUser.GetTenantId();
         var userId = _currentUser.GetUserId();
+        var client = await _clientRepository.GetAggregateForUpdateAsync(tenantId, clientId, ct);
+        if (client == null || client.IsDeleted || !client.IsActive)
+        {
+            _notify.Add(_localization.GetMessage("Application.Service.ClientContact.Create.ResourceNotFound"), 410);
+            return false;
+        }
 
-        // Validar unicidade: Email único por Cliente
+        // Validar unicidade: Email ï¿½nico por Cliente
         var exists = await _repo.ExistsByClientAndEmailAsync(clientId, request.Email, null, ct);
         if (exists)
         {
@@ -99,7 +108,8 @@ public class ClientContactAppService : IClientContactAppService
             userId
         );
 
-        return await _domain.CreateAsync(entity, ct);
+        client.AddContact(entity, userId);
+        return await _clientRepository.UpdateAsync(client, ct);
     }
 
     public async Task<bool> UpdateAsync(int clientId, int id, UpdateClientContactRequest request, CancellationToken ct)
@@ -111,7 +121,21 @@ public class ClientContactAppService : IClientContactAppService
             return false;
         }
 
-        // Validar unicidade: Email único por Cliente (excluindo o próprio registro)
+        var client = await _clientRepository.GetAggregateForUpdateAsync(_currentUser.GetTenantId(), entity.ClientId, ct);
+        if (client == null || client.IsDeleted)
+        {
+            _notify.Add(_localization.GetMessage("Application.Service.ClientContact.Update.ResourceNotFound"), 410);
+            return false;
+        }
+
+        var trackedContact = client.FindContact(id);
+        if (trackedContact == null)
+        {
+            _notify.Add(_localization.GetMessage("Application.Service.ClientContact.Update.ResourceNotFound"), 410);
+            return false;
+        }
+
+        // Validar unicidade: Email ï¿½nico por Cliente (excluindo o prï¿½prio registro)
         var exists = await _repo.ExistsByClientAndEmailAsync(entity.ClientId, request.Email, id, ct);
         if (exists)
         {
@@ -119,8 +143,17 @@ public class ClientContactAppService : IClientContactAppService
             return false;
         }
 
-        entity.Update(request.Name, request.Email, request.Phone, request.IsPrimary, _currentUser.GetUserId());
-        return await _domain.UpdateAsync(entity, ct);
+        trackedContact.Update(request.Name, request.Email, request.Phone, request.IsPrimary, _currentUser.GetUserId());
+        if (request.IsPrimary)
+        {
+            client.EnsureSinglePrimaryContact(id, _currentUser.GetUserId());
+        }
+        else if (trackedContact.IsPrimary)
+        {
+            trackedContact.RemoveAsPrimary(_currentUser.GetUserId());
+        }
+
+        return await _clientRepository.UpdateAsync(client, ct);
     }
 
     public async Task<bool> ActivateAsync(int clientId, int id, CancellationToken ct)
@@ -132,8 +165,16 @@ public class ClientContactAppService : IClientContactAppService
             return false;
         }
 
-        entity.Activate(_currentUser.GetUserId());
-        return await _domain.ActivateAsync(entity, ct);
+        var client = await _clientRepository.GetAggregateForUpdateAsync(_currentUser.GetTenantId(), entity.ClientId, ct);
+        var trackedContact = client?.FindContact(id);
+        if (trackedContact == null)
+        {
+            _notify.Add(_localization.GetMessage("Application.Service.ClientContact.Activate.ResourceNotFound"), 410);
+            return false;
+        }
+
+        trackedContact.Activate(_currentUser.GetUserId());
+        return await _clientRepository.UpdateAsync(client!, ct);
     }
 
     public async Task<bool> DeactivateAsync(int clientId, int id, CancellationToken ct)
@@ -145,8 +186,16 @@ public class ClientContactAppService : IClientContactAppService
             return false;
         }
 
-        entity.Deactivate(_currentUser.GetUserId());
-        return await _domain.DeactivateAsync(entity, ct);
+        var client = await _clientRepository.GetAggregateForUpdateAsync(_currentUser.GetTenantId(), entity.ClientId, ct);
+        var trackedContact = client?.FindContact(id);
+        if (trackedContact == null)
+        {
+            _notify.Add(_localization.GetMessage("Application.Service.ClientContact.Deactivate.ResourceNotFound"), 410);
+            return false;
+        }
+
+        trackedContact.Deactivate(_currentUser.GetUserId());
+        return await _clientRepository.UpdateAsync(client!, ct);
     }
 
     public async Task<bool> DeleteAsync(int clientId, int id, CancellationToken ct)
@@ -158,17 +207,25 @@ public class ClientContactAppService : IClientContactAppService
             return false;
         }
 
-        entity.Delete(_currentUser.GetUserId());
-        return await _domain.DeleteAsync(entity, ct);
+        var client = await _clientRepository.GetAggregateForUpdateAsync(_currentUser.GetTenantId(), entity.ClientId, ct);
+        var trackedContact = client?.FindContact(id);
+        if (trackedContact == null)
+        {
+            _notify.Add(_localization.GetMessage("Application.Service.ClientContact.Delete.ResourceNotFound"), 410);
+            return false;
+        }
+
+        trackedContact.Delete(_currentUser.GetUserId());
+        return await _clientRepository.UpdateAsync(client!, ct);
     }
 
     public async Task<bool> BulkUploadAsync(int clientId, IFormFile file, CancellationToken ct)
     {
-        // Valida arquivo usando serviço centralizado
+        // Valida arquivo usando serviï¿½o centralizado
         if (!_fileValidation.ValidateFile(file))
             return false;
 
-        // Lê itens do CSV
+        // Lï¿½ itens do CSV
         var items = ReadCsvFile(file);
         if (items == null)
             return false;
@@ -187,17 +244,17 @@ public class ClientContactAppService : IClientContactAppService
     {
         try
         {
-            // Cria StreamReader com encoding UTF-8 forçado
+            // Cria StreamReader com encoding UTF-8 forï¿½ado
             using var reader = file.OpenReadStream().CreateUtf8StreamReader();
 
             var config = new CsvConfiguration(CultureInfo.InvariantCulture)
             {
                 HasHeaderRecord = true,
-                Delimiter = ";", // CSV usa ponto e vírgula como delimitador
+                Delimiter = ";", // CSV usa ponto e vï¿½rgula como delimitador
                 MissingFieldFound = null,
                 HeaderValidated = null,
                 TrimOptions = TrimOptions.Trim,
-                BadDataFound = null // Ignora linhas mal formatadas ao invés de lançar exceção
+                BadDataFound = null // Ignora linhas mal formatadas ao invï¿½s de lanï¿½ar exceï¿½ï¿½o
             };
 
             using var csv = new CsvReader(reader, config);
@@ -221,7 +278,7 @@ public class ClientContactAppService : IClientContactAppService
                         record.Email = record.Email?.SanitizeCsvInput().NormalizeUtf8();
                         record.Phone = record.Phone?.SanitizeCsvInput().NormalizeUtf8();
 
-                        // Valida se os campos não contêm conteúdo perigoso
+                        // Valida se os campos nï¿½o contï¿½m conteï¿½do perigoso
                         if (!string.IsNullOrEmpty(record.Name) && !record.Name.IsSafeCsvValue())
                         {
                             _notify.Add(_localization.GetMessage("Application.Service.ClientContact.ReadCsvFile.Name.IsSafeCsvValue", rowCount + 2), 400);
@@ -278,14 +335,14 @@ public class ClientContactAppService : IClientContactAppService
 
         foreach (var item in items)
         {
-            // Validação básica
+            // Validaï¿½ï¿½o bï¿½sica
             if (!ValidateBulkItem(item))
             {
                 hasErrors = true;
                 continue;
             }
 
-            // Verificar se já existe
+            // Verificar se jï¿½ existe
             var exists = await _repo.ExistsByClientAndEmailAsync(clientId, item.Email, null, ct);
             if (exists)
             {
@@ -332,3 +389,4 @@ public class ClientContactAppService : IClientContactAppService
         return true;
     }
 }
+

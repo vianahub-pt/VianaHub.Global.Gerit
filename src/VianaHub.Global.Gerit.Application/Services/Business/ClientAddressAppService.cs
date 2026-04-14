@@ -18,11 +18,12 @@ using VianaHub.Global.Gerit.Domain.Tools.Notifications;
 namespace VianaHub.Global.Gerit.Application.Services.Business;
 
 /// <summary>
-/// Serviço de aplicação para ClientAddress
+/// Serviï¿½o de aplicaï¿½ï¿½o para ClientAddress
 /// </summary>
 public class ClientAddressAppService : IClientAddressAppService
 {
     private readonly IClientAddressDataRepository _repo;
+    private readonly IClientRepository _clientRepository;
     private readonly IClientAddressDomainService _domain;
     private readonly IMapper _mapper;
     private readonly INotify _notify;
@@ -32,6 +33,7 @@ public class ClientAddressAppService : IClientAddressAppService
 
     public ClientAddressAppService(
         IClientAddressDataRepository repo,
+        IClientRepository clientRepository,
         IClientAddressDomainService domain,
         IMapper mapper,
         INotify notify,
@@ -40,6 +42,7 @@ public class ClientAddressAppService : IClientAddressAppService
         IFileValidationService fileValidation)
     {
         _repo = repo;
+        _clientRepository = clientRepository;
         _domain = domain;
         _mapper = mapper;
         _notify = notify;
@@ -75,6 +78,12 @@ public class ClientAddressAppService : IClientAddressAppService
     public async Task<bool> CreateAsync(int clientId, CreateClientAddressRequest request, CancellationToken ct)
     {
         var tenantId = _currentUser.GetTenantId();
+        var client = await _clientRepository.GetAggregateForUpdateAsync(tenantId, clientId, ct);
+        if (client == null || client.IsDeleted || !client.IsActive)
+        {
+            _notify.Add(_localization.GetMessage("Application.Service.ClientAddress.Create.ResourceNotFound"), 410);
+            return false;
+        }
         
         var exists = await _repo.ExistsByClientAndAddressTypeAsync(clientId, request.AddressTypeId, ct);
         if (exists)
@@ -101,13 +110,28 @@ public class ClientAddressAppService : IClientAddressAppService
             request.IsPrimary,
             _currentUser.GetUserId());
 
-        return await _domain.CreateAsync(entity, ct);
+        client.AddAddress(entity, _currentUser.GetUserId());
+        return await _clientRepository.UpdateAsync(client, ct);
     }
 
     public async Task<bool> UpdateAsync(int clientId, int id, UpdateClientAddressRequest request, CancellationToken ct)
     {
         var entity = await _repo.GetByIdAsync(clientId, id, ct);
         if (entity == null)
+        {
+            _notify.Add(_localization.GetMessage("Application.Service.ClientAddress.Update.ResourceNotFound"), 410);
+            return false;
+        }
+
+        var client = await _clientRepository.GetAggregateForUpdateAsync(_currentUser.GetTenantId(), entity.ClientId, ct);
+        if (client == null || client.IsDeleted)
+        {
+            _notify.Add(_localization.GetMessage("Application.Service.ClientAddress.Update.ResourceNotFound"), 410);
+            return false;
+        }
+
+        var trackedAddress = client.FindAddress(id);
+        if (trackedAddress == null)
         {
             _notify.Add(_localization.GetMessage("Application.Service.ClientAddress.Update.ResourceNotFound"), 410);
             return false;
@@ -120,7 +144,7 @@ public class ClientAddressAppService : IClientAddressAppService
             return false;
         }
 
-        entity.UpdateAddress(
+        trackedAddress.UpdateAddress(
             request.AddressTypeId,
             request.CountryCode,
             request.Street,
@@ -135,7 +159,7 @@ public class ClientAddressAppService : IClientAddressAppService
             request.Notes,
             _currentUser.GetUserId());
 
-        return await _domain.UpdateAsync(entity, ct);
+        return await _clientRepository.UpdateAsync(client, ct);
     }
 
     public async Task<bool> ActivateAsync(int clientId, int id, CancellationToken ct)
@@ -147,8 +171,16 @@ public class ClientAddressAppService : IClientAddressAppService
             return false;
         }
 
-        entity.Activate(_currentUser.GetUserId());
-        return await _domain.ActivateAsync(entity, ct);
+        var client = await _clientRepository.GetAggregateForUpdateAsync(_currentUser.GetTenantId(), entity.ClientId, ct);
+        var trackedAddress = client?.FindAddress(id);
+        if (trackedAddress == null)
+        {
+            _notify.Add(_localization.GetMessage("Application.Service.ClientAddress.Activate.ResourceNotFound"), 410);
+            return false;
+        }
+
+        trackedAddress.Activate(_currentUser.GetUserId());
+        return await _clientRepository.UpdateAsync(client!, ct);
     }
 
     public async Task<bool> DeactivateAsync(int clientId, int id, CancellationToken ct)
@@ -160,8 +192,16 @@ public class ClientAddressAppService : IClientAddressAppService
             return false;
         }
 
-        entity.Deactivate(_currentUser.GetUserId());
-        return await _domain.DeactivateAsync(entity, ct);
+        var client = await _clientRepository.GetAggregateForUpdateAsync(_currentUser.GetTenantId(), entity.ClientId, ct);
+        var trackedAddress = client?.FindAddress(id);
+        if (trackedAddress == null)
+        {
+            _notify.Add(_localization.GetMessage("Application.Service.ClientAddress.Deactivate.ResourceNotFound"), 410);
+            return false;
+        }
+
+        trackedAddress.Deactivate(_currentUser.GetUserId());
+        return await _clientRepository.UpdateAsync(client!, ct);
     }
 
     public async Task<bool> DeleteAsync(int clientId, int id, CancellationToken ct)
@@ -173,8 +213,16 @@ public class ClientAddressAppService : IClientAddressAppService
             return false;
         }
 
-        entity.Delete(_currentUser.GetUserId());
-        return await _domain.DeleteAsync(entity, ct);
+        var client = await _clientRepository.GetAggregateForUpdateAsync(_currentUser.GetTenantId(), entity.ClientId, ct);
+        var trackedAddress = client?.FindAddress(id);
+        if (trackedAddress == null)
+        {
+            _notify.Add(_localization.GetMessage("Application.Service.ClientAddress.Delete.ResourceNotFound"), 410);
+            return false;
+        }
+
+        trackedAddress.Delete(_currentUser.GetUserId());
+        return await _clientRepository.UpdateAsync(client!, ct);
     }
 
     public async Task<bool> BulkUploadAsync(int clientId, IFormFile file, CancellationToken ct)
@@ -374,3 +422,4 @@ public class ClientAddressAppService : IClientAddressAppService
         return true;
     }
 }
+

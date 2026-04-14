@@ -44,9 +44,9 @@ public class ClientCompanyMapping : IEntityTypeConfiguration<ClientCompanyEntity
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(x => x.Client)
-            .WithMany()
-            .HasForeignKey(x => new { x.ClientId, x.TenantId })
-            .HasPrincipalKey(x => new { x.Id, x.TenantId })
+            .WithOne(c => c.Company)
+            .HasForeignKey<ClientCompanyEntity>(nameof(ClientCompanyEntity.ClientId), nameof(ClientCompanyEntity.TenantId))
+            .HasPrincipalKey<ClientEntity>(nameof(ClientEntity.Id), nameof(ClientEntity.TenantId))
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasIndex(x => new { x.TenantId, x.ClientId })
@@ -58,3 +58,4 @@ public class ClientCompanyMapping : IEntityTypeConfiguration<ClientCompanyEntity
             "NOT ([IsActive] = 1 AND [IsDeleted] = 1)");
     }
 }
+

@@ -1,5 +1,5 @@
 using FluentValidation;
-using VianaHub.Global.Gerit.Application.Dtos.Request.Business.ClientType;
+using VianaHub.Global.Gerit.Application.Dtos.Request.Business.Client;
 using VianaHub.Global.Gerit.Domain.Interfaces.Base;
 
 namespace VianaHub.Global.Gerit.Api.Validators.Business.ClientType;

@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Http;
 using VianaHub.Global.Gerit.Application.Dtos.Base;
+using VianaHub.Global.Gerit.Application.Dtos.Request.Business.Client;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Business.ClientType;
 using VianaHub.Global.Gerit.Application.Dtos.Response.Business.ClientType;
 

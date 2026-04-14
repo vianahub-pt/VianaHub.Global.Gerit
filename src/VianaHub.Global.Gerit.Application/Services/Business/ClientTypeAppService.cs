@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System.Globalization;
 using VianaHub.Global.Gerit.Application.Dtos.Base;
+using VianaHub.Global.Gerit.Application.Dtos.Request.Business.Client;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Business.ClientType;
 using VianaHub.Global.Gerit.Application.Dtos.Response.Business.ClientType;
 using VianaHub.Global.Gerit.Application.Interfaces.Business;

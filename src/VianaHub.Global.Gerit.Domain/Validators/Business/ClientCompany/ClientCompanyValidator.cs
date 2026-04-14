@@ -14,17 +14,6 @@ public class ClientCompanyValidator : AbstractValidator<ClientCompanyEntity>
         RuleFor(x => x.TradeName)
             .MaximumLength(200).WithMessage("TradeName_MaxLength");
 
-        RuleFor(x => x.PhoneNumber)
-            .MaximumLength(50).WithMessage("PhoneNumber_MaxLength");
-
-        RuleFor(x => x.CellPhoneNumber)
-            .MaximumLength(50).WithMessage("CellPhoneNumber_MaxLength");
-
-        RuleFor(x => x.Email)
-            .MaximumLength(500).WithMessage("Email_MaxLength")
-            .EmailAddress().WithMessage("Email_Invalid")
-            .When(x => !string.IsNullOrEmpty(x.Email));
-
         RuleFor(x => x.Site)
             .MaximumLength(500).WithMessage("Site_MaxLength");
 

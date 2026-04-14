@@ -43,6 +43,7 @@ using VianaHub.Global.Gerit.Api.Validators.Business.VisitTeamVehicles;
 // UserPreferences DTOs & Validators
 using VianaHub.Global.Gerit.Application.Dtos.Request.Identity.UserPreferences;
 using VianaHub.Global.Gerit.Api.Validators.Identity.UserPreferences;
+using VianaHub.Global.Gerit.Application.Dtos.Request.Business.Client;
 
 namespace VianaHub.Global.Gerit.Api.Configuration;
 

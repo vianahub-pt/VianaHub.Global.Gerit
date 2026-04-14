@@ -37,11 +37,6 @@ public class UpdateClientContactValidator : AbstractValidator<ClientContactEntit
             .EmailAddress()
             .WithMessage(localization.GetMessage("Domain.ClientContact.EmailInvalid"));
 
-        RuleFor(x => x.Phone)
-            .MaximumLength(30)
-            .WithMessage(localization.GetMessage("Domain.ClientContact.PhoneMaxLength", 30))
-            .When(x => !string.IsNullOrWhiteSpace(x.Phone));
-
         RuleFor(x => x.IsDeleted)
             .Equal(false)
             .WithMessage(localization.GetMessage("Domain.ClientContact.CannotUpdateDeleted"));

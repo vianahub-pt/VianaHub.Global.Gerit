@@ -34,13 +34,13 @@ public class ClientHierarchyMapping : IEntityTypeConfiguration<ClientHierarchyEn
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(x => x.ParentClient)
-            .WithMany()
+            .WithMany(c => c.ChildHierarchies)
             .HasForeignKey(x => new { x.ParentClientId, x.TenantId })
             .HasPrincipalKey(x => new { x.Id, x.TenantId })
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(x => x.ChildClient)
-            .WithMany()
+            .WithMany(c => c.ParentHierarchies)
             .HasForeignKey(x => new { x.ChildClientId, x.TenantId })
             .HasPrincipalKey(x => new { x.Id, x.TenantId })
             .OnDelete(DeleteBehavior.Restrict);
@@ -53,3 +53,4 @@ public class ClientHierarchyMapping : IEntityTypeConfiguration<ClientHierarchyEn
             .HasDatabaseName("IX_ClientHierarchies_TenantId");
     }
 }
+
