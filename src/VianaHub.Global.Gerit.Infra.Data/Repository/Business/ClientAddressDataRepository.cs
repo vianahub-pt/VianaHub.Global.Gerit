@@ -25,7 +25,7 @@ public class ClientAddressDataRepository : IClientAddressDataRepository
             .AsNoTracking()
             .Include(x => x.Client)
             .Include(x => x.AddressType)
-            .Where(x => x.Client.Id == clientId && x.Id == id && !x.IsDeleted)
+            .Where(x => x.ClientId == clientId && x.Id == id && !x.IsDeleted)
             .FirstOrDefaultAsync(ct);
     }
 
@@ -48,6 +48,8 @@ public class ClientAddressDataRepository : IClientAddressDataRepository
             .AsNoTracking()
             .Include(x => x.Client)
             .Include(x => x.AddressType)
+            .Include(x => x.Client.Individual)
+            .Include(x => x.Client.Company)
             .Where(x => x.Client.Id == clientId && !x.IsDeleted);
 
         // Aplicar busca
@@ -60,7 +62,9 @@ public class ClientAddressDataRepository : IClientAddressDataRepository
                 EF.Functions.Like(x.PostalCode.ToLower(), $"%{search}%") ||
                 EF.Functions.Like(x.District.ToLower(), $"%{search}%") ||
                 EF.Functions.Like(x.Neighborhood.ToLower(), $"%{search}%") ||
-                EF.Functions.Like(x.Client.Name.ToLower(), $"%{search}%") ||
+                EF.Functions.Like(x.Client.Individual.FirstName.ToLower(), $"%{search}%") ||
+                EF.Functions.Like(x.Client.Individual.LastName.ToLower(), $"%{search}%") ||
+                EF.Functions.Like(x.Client.Company.LegalName.ToLower(), $"%{search}%") ||
                 EF.Functions.Like(x.AddressType.Name.ToLower(), $"%{search}%"));
         }
 
@@ -94,11 +98,26 @@ public class ClientAddressDataRepository : IClientAddressDataRepository
         };
     }
 
-    public async Task<bool> ExistsByIdAsync(int clientId, int id, CancellationToken ct)
+    public async Task<bool> ExistsByIdAsync(int id, CancellationToken ct)
     {
         return await _context.ClientAddresses
             .AsNoTracking()
-            .AnyAsync(x => x.Client.Id == clientId && x.Id == id && !x.IsDeleted, ct);
+            .AnyAsync(x => x.Id == id && !x.IsDeleted, ct);
+    }
+
+    public async Task<bool> ExistsByClientIdAsync(int clientId, string countryCode, string street, string streetNumber, string neighborhood, string city, string district, string postalCode, CancellationToken ct)
+    {
+        return await _context.ClientAddresses
+            .AsNoTracking()
+            .AnyAsync(x => x.Client.Id == clientId && 
+                           x.CountryCode == countryCode &&
+                           x.Street == street &&
+                           x.StreetNumber == streetNumber &&
+                           x.Neighborhood == neighborhood &&
+                           x.City == city &&
+                           x.District == district &&
+                           x.PostalCode == postalCode &&
+                           !x.IsDeleted, ct);
     }
 
     public async Task<bool> ExistsByClientAndAddressTypeAsync(int clientId, int addressTypeId, CancellationToken ct)
@@ -108,14 +127,7 @@ public class ClientAddressDataRepository : IClientAddressDataRepository
             .AnyAsync(x => x.ClientId == clientId && x.AddressTypeId == addressTypeId && !x.IsDeleted, ct);
     }
 
-    public async Task<bool> ExistsByClientAndAddressTypeExcludingIdAsync(int clientId, int addressTypeId, int excludeId, CancellationToken ct)
-    {
-        return await _context.ClientAddresses
-            .AsNoTracking()
-            .AnyAsync(x => x.ClientId == clientId && x.AddressTypeId == addressTypeId && x.Id != excludeId && !x.IsDeleted, ct);
-    }
-
-    public async Task<bool> AddAsync(ClientAddressEntity entity, CancellationToken ct)
+    public async Task<bool> CreateAsync(ClientAddressEntity entity, CancellationToken ct)
     {
         await _context.ClientAddresses.AddAsync(entity, ct);
         return await _context.SaveChangesAsync(ct) > 0;

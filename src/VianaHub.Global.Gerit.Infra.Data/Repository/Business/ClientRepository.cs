@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using VianaHub.Global.Gerit.Domain.Entities.Business;
+using VianaHub.Global.Gerit.Domain.Helpers;
 using VianaHub.Global.Gerit.Domain.Interfaces.Business;
 using VianaHub.Global.Gerit.Domain.ReadModels;
 using VianaHub.Global.Gerit.Domain.Tools.Pagination;
@@ -10,7 +11,7 @@ namespace VianaHub.Global.Gerit.Infra.Data.Repository.Business;
 /// <summary>
 /// Repositório principal do agregado Client.
 /// </summary>
-public class ClientRepository : IClientRepository, IClientDataRepository
+public class ClientRepository : IClientRepository
 {
     private readonly GeritDbContext _context;
 
@@ -23,8 +24,12 @@ public class ClientRepository : IClientRepository, IClientDataRepository
     {
         return await _context.Clients
             .AsNoTracking()
+            .AsSplitQuery()
+            .Include(x => x.Individual)
+            .Include(x => x.Company)
+            .Include(x => x.Contacts)
             .Where(x => !x.IsDeleted)
-            .OrderBy(x => x.Name)
+            .OrderBy(x => x.CreatedAt)
             .ToListAsync(ct);
     }
 
@@ -33,43 +38,52 @@ public class ClientRepository : IClientRepository, IClientDataRepository
         return await _context.Clients
             .AsNoTracking()
             .AsSplitQuery()
+            .Include(x => x.Individual)
+            .Include(x => x.Company)
             .Include(x => x.Contacts)
-            .Include(x => x.Addresses)
             .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted, ct);
     }
-
-    public async Task<ClientEntity> GetAggregateByIdAsync(int tenantId, int id, CancellationToken ct)
-    {
-        return await BuildAggregateQuery(trackChanges: false)
-            .FirstOrDefaultAsync(x => x.TenantId == tenantId && x.Id == id && !x.IsDeleted, ct);
-    }
-
-    public async Task<ClientEntity> GetAggregateForUpdateAsync(int tenantId, int id, CancellationToken ct)
-    {
-        return await BuildAggregateQuery(trackChanges: true)
-            .FirstOrDefaultAsync(x => x.TenantId == tenantId && x.Id == id && !x.IsDeleted, ct);
-    }
-
 
     public async Task<ListPage<ClientEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct)
     {
         var query = _context.Clients
             .AsNoTracking()
             .AsSplitQuery()
+            .Include(x => x.Individual)
+            .Include(x => x.Company)
             .Include(x => x.Contacts)
             .Where(x => !x.IsDeleted);
 
         if (!string.IsNullOrWhiteSpace(request.Search))
         {
             var search = request.Search.Trim().ToLower();
-            query = query.Where(x =>
-                EF.Functions.Like(x.Name.ToLower(), $"%{search}%") ||
-                EF.Functions.Like(x.Email.ToLower(), $"%{search}%") ||
-                EF.Functions.Like(x.Phone.ToLower(), $"%{search}%") ||
-                x.Contacts.Any(c =>
-                    EF.Functions.Like(c.Name.ToLower(), $"%{search}%") ||
-                    EF.Functions.Like(c.Email.ToLower(), $"%{search}%") ||
-                    EF.Functions.Like(c.Phone.ToLower(), $"%{search}%")));
+
+            var clientType = ClientTypeHelper.FromDescription(search);
+            if (clientType.HasValue)
+            {
+                query = query.Where(x => x.ClientType == clientType.Value);
+            }
+            else
+            {
+                query = query.Where(x =>
+                    EF.Functions.Like(x.Individual.FirstName.ToLower(), $"%{search}%") ||
+                    EF.Functions.Like(x.Individual.LastName.ToLower(), $"%{search}%") ||
+                    EF.Functions.Like(x.Individual.Email.ToLower(), $"%{search}%") ||
+                    EF.Functions.Like(x.Individual.Gender.ToLower(), $"%{search}%") ||
+                    EF.Functions.Like(x.Individual.Nationality.ToLower(), $"%{search}%") ||
+                    EF.Functions.Like(x.Individual.PhoneNumber.ToLower(), $"%{search}%") ||
+                    EF.Functions.Like(x.Individual.CellPhoneNumber.ToLower(), $"%{search}%") ||
+
+                    EF.Functions.Like(x.Company.LegalName.ToLower(), $"%{search}%") ||
+                    EF.Functions.Like(x.Company.TradeName.ToLower(), $"%{search}%") ||
+                    EF.Functions.Like(x.Company.PhoneNumber.ToLower(), $"%{search}%") ||
+                    EF.Functions.Like(x.Company.CellPhoneNumber.ToLower(), $"%{search}%") ||
+                    EF.Functions.Like(x.Company.Email.ToLower(), $"%{search}%") ||
+                    EF.Functions.Like(x.Company.Site.ToLower(), $"%{search}%") ||
+                    x.Contacts.Any(c => EF.Functions.Like(c.Name.ToLower(), $"%{search}%") ||
+                                        EF.Functions.Like(c.Email.ToLower(), $"%{search}%") ||
+                                        EF.Functions.Like(c.PhoneNumber.ToLower(), $"%{search}%")));
+            }
         }
 
         if (request.IsActive.HasValue)
@@ -100,20 +114,6 @@ public class ClientRepository : IClientRepository, IClientDataRepository
             .AnyAsync(x => x.Id == id && !x.IsDeleted, ct);
     }
 
-    public async Task<bool> ExistsByEmailAsync(int tenantId, string email, CancellationToken ct)
-    {
-        return await _context.Clients
-            .AsNoTracking()
-            .AnyAsync(x => x.TenantId == tenantId && x.Email == email && !x.IsDeleted, ct);
-    }
-
-    public async Task<bool> ExistsByEmailForUpdateAsync(int tenantId, string email, int excludeId, CancellationToken ct)
-    {
-        return await _context.Clients
-            .AsNoTracking()
-            .AnyAsync(x => x.TenantId == tenantId && x.Email == email && x.Id != excludeId && !x.IsDeleted, ct);
-    }
-
     public async Task<bool> AddAsync(ClientEntity entity, CancellationToken ct)
     {
         await _context.Clients.AddAsync(entity, ct);
@@ -124,16 +124,5 @@ public class ClientRepository : IClientRepository, IClientDataRepository
     {
         _context.Clients.Update(entity);
         return await _context.SaveChangesAsync(ct) > 0;
-    }
-
-    private IQueryable<ClientEntity> BuildAggregateQuery(bool trackChanges)
-    {
-        var query = _context.Clients
-            .AsSplitQuery()
-            .Include(x => x.Contacts)
-            .Include(x => x.Addresses)
-            .AsQueryable();
-
-        return trackChanges ? query : query.AsNoTracking();
     }
 }

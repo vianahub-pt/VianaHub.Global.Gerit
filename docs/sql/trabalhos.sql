@@ -1,8 +1,6 @@
 select * from dbo.AddressTypes;
 select * from dbo.FileTypes;
-select * from dbo.ClientTypes;
 select * from dbo.ConsentTypes;
-select * from dbo.OriginTypes;
 select * from dbo.StatusTypes;
 select * from dbo.Plans;
 select * from dbo.PlanFileRules;
@@ -19,18 +17,20 @@ select * from dbo.TenantAddresses;
 select * from dbo.TenantFiscalData;
 select * from dbo.Subscriptions;
 
+
+
 select * from dbo.Users;				--
 select * from dbo.UserPreferences;		--
-select * from dbo.UserRoles;			--
-select * from dbo.RolePermissions order by ResourceId;		--
+select * from dbo.UserRoles;			-- T1, U1, R2 
+select * from dbo.RolePermissions;		-- T1, R4, R1, A1
 select * from dbo.JwtKeys;
 select * from dbo.JobDefinitions;
 ------------------------------
-select * from dbo.Clients;					--
-select * from dbo.ClientIndividuals;
-select * from dbo.ClientCompanies;
-select * from dbo.ClientAddresses;			--
-select * from dbo.ClientContacts;			--
+select * from dbo.Clients order by id desc;					--
+select * from dbo.ClientIndividuals order by id desc;
+select * from dbo.ClientCompanies order by id desc;
+select * from dbo.ClientAddresses order by id desc;			--
+select * from dbo.ClientContacts order by id desc;			--
 select * from dbo.ClientIndividualFiscalData;
 select * from dbo.ClientCompanyFiscalData;
 select * from dbo.ClientHierarchy;
@@ -43,22 +43,12 @@ select * from dbo.Functions;				--
 
 select * from dbo.EquipmentTypes;			--
 select * from dbo.Equipments;				--
-select * from dbo.TeamMembers;				--
-select * from dbo.TeamMembersTeams;			--
-select * from dbo.TeamMemberAddresses;		--
-select * from dbo.TeamMemberContacts;		--
-select * from dbo.Interventions;			--
-select * from dbo.InterventionAddresses;	--
-select * from dbo.InterventionContacts;		--
-select * from dbo.InterventionTeams;		--
-select * from dbo.InterventionTeamVehicles;	--
-select * from dbo.InterventionTeamEquipments;--
+
 select * from dbo.Vehicles;					--
 
 select * from dbo.FileTypes;
 select * from dbo.PlanFileRules;
 select * from dbo.AttachmentCategories;
-select * from dbo.InterventionAttachments;
 
 FOR JSON AUTO;
 
@@ -67,4 +57,3 @@ FOR JSON AUTO;
 */
 
 
-OriginTypes

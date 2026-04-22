@@ -23,8 +23,9 @@ namespace VianaHub.Global.Gerit.Application.Services.Business;
 /// </summary>
 public class ClientContactAppService : IClientContactAppService
 {
+    public int TenantId { get; set; }
+    public int UserId { get; set; }
     private readonly IClientContactDataRepository _repo;
-    private readonly IClientRepository _clientRepository;
     private readonly IClientContactDomainService _domain;
     private readonly IMapper _mapper;
     private readonly INotify _notify;
@@ -33,19 +34,11 @@ public class ClientContactAppService : IClientContactAppService
     private readonly IFileValidationService _fileValidation;
     private readonly ILogger<ClientContactAppService> _logger;
 
-    public ClientContactAppService(
-        IClientContactDataRepository repo,
-        IClientRepository clientRepository,
-        IClientContactDomainService domain,
-        IMapper mapper,
-        INotify notify,
-        ILocalizationService localization,
-        ICurrentUserService currentUser,
-        IFileValidationService fileValidation,
-        ILogger<ClientContactAppService> logger)
+    public ClientContactAppService(IClientContactDataRepository repo, IClientContactDomainService domain, IMapper mapper, INotify notify, ILocalizationService localization, ICurrentUserService currentUser, IFileValidationService fileValidation, ILogger<ClientContactAppService> logger)
     {
+        TenantId = currentUser.GetTenantId();
+        UserId = currentUser.GetUserId();
         _repo = repo;
-        _clientRepository = clientRepository;
         _domain = domain;
         _mapper = mapper;
         _notify = notify;
@@ -81,142 +74,82 @@ public class ClientContactAppService : IClientContactAppService
 
     public async Task<bool> CreateAsync(int clientId, CreateClientContactRequest request, CancellationToken ct)
     {
-        var tenantId = _currentUser.GetTenantId();
-        var userId = _currentUser.GetUserId();
-        var client = await _clientRepository.GetAggregateForUpdateAsync(tenantId, clientId, ct);
-        if (client == null || client.IsDeleted || !client.IsActive)
-        {
-            _notify.Add(_localization.GetMessage("Application.Service.ClientContact.Create.ResourceNotFound"), 410);
-            return false;
-        }
-
-        // Validar unicidade: Email �nico por Cliente
-        var exists = await _repo.ExistsByClientAndEmailAsync(clientId, request.Email, null, ct);
+        var exists = await _repo.ExistsByClientAndEmailAsync(clientId, request.Name, request.Email, ct);
         if (exists)
         {
             _notify.Add(_localization.GetMessage("Application.Service.ClientContact.Create.ResourceAlreadyExists"), 409);
             return false;
         }
 
-        var entity = new ClientContactEntity(
-            tenantId,
+        var clientContact = new ClientContactEntity(
+            TenantId,
             clientId,
             request.Name,
+            request.PhoneNumber,
+            request.CellPhoneNumber,
+            request.IsWhatsapp,
             request.Email,
-            request.Phone,
             request.IsPrimary,
-            userId
+            UserId
         );
 
-        client.AddContact(entity, userId);
-        return await _clientRepository.UpdateAsync(client, ct);
+        return await _domain.CreateAsync(clientContact, ct);
     }
 
     public async Task<bool> UpdateAsync(int clientId, int id, UpdateClientContactRequest request, CancellationToken ct)
     {
-        var entity = await _repo.GetByIdAsync(clientId, id, ct);
-        if (entity == null || entity.IsDeleted)
+        var clientContact = await _repo.GetByIdAsync(clientId, id, ct);
+        if (clientContact == null || clientContact.IsDeleted)
         {
             _notify.Add(_localization.GetMessage("Application.Service.ClientContact.Update.ResourceNotFound"), 410);
             return false;
         }
 
-        var client = await _clientRepository.GetAggregateForUpdateAsync(_currentUser.GetTenantId(), entity.ClientId, ct);
-        if (client == null || client.IsDeleted)
-        {
-            _notify.Add(_localization.GetMessage("Application.Service.ClientContact.Update.ResourceNotFound"), 410);
-            return false;
-        }
+        clientContact.Update(request.Name, request.PhoneNumber, request.CellPhoneNumber, request.IsWhatsapp, request.Email, request.IsPrimary, UserId);
 
-        var trackedContact = client.FindContact(id);
-        if (trackedContact == null)
-        {
-            _notify.Add(_localization.GetMessage("Application.Service.ClientContact.Update.ResourceNotFound"), 410);
-            return false;
-        }
-
-        // Validar unicidade: Email �nico por Cliente (excluindo o pr�prio registro)
-        var exists = await _repo.ExistsByClientAndEmailAsync(entity.ClientId, request.Email, id, ct);
-        if (exists)
-        {
-            _notify.Add(_localization.GetMessage("Application.Service.ClientContact.Update.ResourceAlreadyExists"), 409);
-            return false;
-        }
-
-        trackedContact.Update(request.Name, request.Email, request.Phone, request.IsPrimary, _currentUser.GetUserId());
-        if (request.IsPrimary)
-        {
-            client.EnsureSinglePrimaryContact(id, _currentUser.GetUserId());
-        }
-        else if (trackedContact.IsPrimary)
-        {
-            trackedContact.RemoveAsPrimary(_currentUser.GetUserId());
-        }
-
-        return await _clientRepository.UpdateAsync(client, ct);
+        return await _repo.UpdateAsync(clientContact, ct);
     }
 
     public async Task<bool> ActivateAsync(int clientId, int id, CancellationToken ct)
     {
-        var entity = await _repo.GetByIdAsync(clientId, id, ct);
-        if (entity == null || entity.IsDeleted)
+        var clientContact = await _repo.GetByIdAsync(clientId, id, ct);
+        if (clientContact == null || clientContact.IsDeleted)
         {
             _notify.Add(_localization.GetMessage("Application.Service.ClientContact.Activate.ResourceNotFound"), 410);
             return false;
         }
 
-        var client = await _clientRepository.GetAggregateForUpdateAsync(_currentUser.GetTenantId(), entity.ClientId, ct);
-        var trackedContact = client?.FindContact(id);
-        if (trackedContact == null)
-        {
-            _notify.Add(_localization.GetMessage("Application.Service.ClientContact.Activate.ResourceNotFound"), 410);
-            return false;
-        }
+        clientContact.Activate(UserId);
 
-        trackedContact.Activate(_currentUser.GetUserId());
-        return await _clientRepository.UpdateAsync(client!, ct);
+        return await _repo.UpdateAsync(clientContact, ct);
     }
 
     public async Task<bool> DeactivateAsync(int clientId, int id, CancellationToken ct)
     {
-        var entity = await _repo.GetByIdAsync(clientId, id, ct);
-        if (entity == null || entity.IsDeleted)
+        var clientContact = await _repo.GetByIdAsync(clientId, id, ct);
+        if (clientContact == null || clientContact.IsDeleted)
         {
             _notify.Add(_localization.GetMessage("Application.Service.ClientContact.Deactivate.ResourceNotFound"), 410);
             return false;
         }
 
-        var client = await _clientRepository.GetAggregateForUpdateAsync(_currentUser.GetTenantId(), entity.ClientId, ct);
-        var trackedContact = client?.FindContact(id);
-        if (trackedContact == null)
-        {
-            _notify.Add(_localization.GetMessage("Application.Service.ClientContact.Deactivate.ResourceNotFound"), 410);
-            return false;
-        }
+        clientContact.Deactivate(UserId);
 
-        trackedContact.Deactivate(_currentUser.GetUserId());
-        return await _clientRepository.UpdateAsync(client!, ct);
+        return await _repo.UpdateAsync(clientContact, ct);
     }
 
     public async Task<bool> DeleteAsync(int clientId, int id, CancellationToken ct)
     {
-        var entity = await _repo.GetByIdAsync(clientId, id, ct);
-        if (entity == null || entity.IsDeleted)
+        var clientContact = await _repo.GetByIdAsync(clientId, id, ct);
+        if (clientContact == null || clientContact.IsDeleted)
         {
             _notify.Add(_localization.GetMessage("Application.Service.ClientContact.Delete.ResourceNotFound"), 410);
             return false;
         }
 
-        var client = await _clientRepository.GetAggregateForUpdateAsync(_currentUser.GetTenantId(), entity.ClientId, ct);
-        var trackedContact = client?.FindContact(id);
-        if (trackedContact == null)
-        {
-            _notify.Add(_localization.GetMessage("Application.Service.ClientContact.Delete.ResourceNotFound"), 410);
-            return false;
-        }
+        clientContact.Delete(UserId);
 
-        trackedContact.Delete(_currentUser.GetUserId());
-        return await _clientRepository.UpdateAsync(client!, ct);
+        return await _repo.UpdateAsync(clientContact, ct);
     }
 
     public async Task<bool> BulkUploadAsync(int clientId, IFormFile file, CancellationToken ct)
@@ -351,22 +284,22 @@ public class ClientContactAppService : IClientContactAppService
                 continue;
             }
 
-            var entity = new ClientContactEntity(
-                tenantId,
-                clientId,
-                item.Name,
-                item.Email,
-                item.Phone,
-                item.IsPrimary,
-                userId
-            );
+            //var entity = new ClientContactEntity(
+            //    tenantId,
+            //    clientId,
+            //    item.Name,
+            //    item.Email,
+            //    item.Phone,
+            //    item.IsPrimary,
+            //    userId
+            //);
 
-            var created = await _domain.CreateAsync(entity, ct);
-            if (!created)
-            {
-                _notify.Add(_localization.GetMessage("Application.Service.ClientContact.ProcessBulkItems.FailedToCreate", item.Name), 400);
-                hasErrors = true;
-            }
+            //var created = await _domain.CreateAsync(entity, ct);
+            //if (!created)
+            //{
+            //    _notify.Add(_localization.GetMessage("Application.Service.ClientContact.ProcessBulkItems.FailedToCreate", item.Name), 400);
+            //    hasErrors = true;
+            //}
         }
 
         return !hasErrors;

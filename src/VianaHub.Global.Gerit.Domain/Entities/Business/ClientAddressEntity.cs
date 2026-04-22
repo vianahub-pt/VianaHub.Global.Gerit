@@ -18,7 +18,7 @@ namespace VianaHub.Global.Gerit.Domain.Entities.Business
         public string PostalCode { get; private set; } = null!;
         public decimal? Latitude { get; private set; }
         public decimal? Longitude { get; private set; }
-        public string Notes { get; private set; }
+        public string Note { get; private set; }
 
         public bool IsPrimary { get; private set; }
         public bool IsActive { get; private set; }
@@ -31,10 +31,10 @@ namespace VianaHub.Global.Gerit.Domain.Entities.Business
         // Construtor protegido para EF Core
         protected ClientAddressEntity() { }
 
-        public ClientAddressEntity(int tenantId, int clientId, int addressTypeId, string countryCode, string street, string streetNumber, string complement, string neighborhood, string city, string district, string postalCode, decimal? latitude, decimal? longitude, string notes, bool isPrimary, int createdBy)
+        public ClientAddressEntity(int tenantId, int addressTypeId, string countryCode, string street, string streetNumber, string complement, string neighborhood, string city, string district, string postalCode, decimal? latitude, decimal? longitude, string note, bool isPrimary, int createdBy)
         {
             TenantId = tenantId;
-            ClientId = clientId;
+            ClientId = Id;
             AddressTypeId = addressTypeId;
 
             CountryCode = countryCode;
@@ -47,7 +47,7 @@ namespace VianaHub.Global.Gerit.Domain.Entities.Business
             Complement = complement;
             Latitude = latitude;
             Longitude = longitude;
-            Notes = notes;
+            Note = note;
 
             IsPrimary = isPrimary;
             IsActive = true;
@@ -56,7 +56,7 @@ namespace VianaHub.Global.Gerit.Domain.Entities.Business
             CreatedAt = DateTime.UtcNow;
         }
 
-        public void Update(int addressTypeId, string countryCode, string street, string streetNumber, string complement, string neighborhood, string city, string district, string postalCode, decimal? latitude, decimal? longitude, string notes, bool isPrimary, int modifiedBy)
+        public void Update(int addressTypeId, string countryCode, string street, string streetNumber, string complement, string neighborhood, string city, string district, string postalCode, decimal? latitude, decimal? longitude, string note, bool isPrimary, int modifiedBy)
         {
             AddressTypeId = addressTypeId;
             CountryCode = countryCode;
@@ -69,7 +69,7 @@ namespace VianaHub.Global.Gerit.Domain.Entities.Business
             Complement = complement;
             Latitude = latitude;
             Longitude = longitude;
-            Notes = notes;
+            Note = note;
             IsPrimary = isPrimary;
             ModifiedBy = modifiedBy;
             ModifiedAt = DateTime.UtcNow;

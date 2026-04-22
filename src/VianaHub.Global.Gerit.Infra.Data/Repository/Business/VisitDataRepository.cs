@@ -49,8 +49,7 @@ public class VisitDataRepository : IVisitDataRepository
             var search = request.Search.Trim().ToLower();
             query = query.Where(x => 
                 EF.Functions.Like(x.Title.ToLower(), $"%{search}%") || 
-                EF.Functions.Like(x.Description.ToLower(), $"%{search}%") ||
-                EF.Functions.Like(x.Client.Name.ToLower(), $"%{search}%"));
+                EF.Functions.Like(x.Description.ToLower(), $"%{search}%"));
         }
 
         if (request.IsActive.HasValue)

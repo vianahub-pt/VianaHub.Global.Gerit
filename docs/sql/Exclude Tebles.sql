@@ -59,7 +59,6 @@ DROP TABLE IF EXISTS dbo.Plans;
 DROP TABLE IF EXISTS dbo.StatusTypes;
 DROP TABLE IF EXISTS dbo.OriginTypes;
 DROP TABLE IF EXISTS dbo.ConsentTypes;
-DROP TABLE IF EXISTS dbo.ClientTypes;
 DROP TABLE IF EXISTS dbo.FileTypes;
 DROP TABLE IF EXISTS dbo.AddressTypes;
 

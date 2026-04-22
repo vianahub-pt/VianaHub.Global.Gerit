@@ -33,8 +33,7 @@ public class ClientHierarchyDataRepository : IClientHierarchyDataRepository
             .AsSplitQuery()
             .Include(x => x.ParentClient)
             .Include(x => x.ChildClient)
-            .Where(x => x.ParentClientId == parentClientId && !x.IsDeleted)
-            .OrderBy(x => x.ChildClient.Name)
+            .Where(x => x.ParentId == parentClientId && !x.IsDeleted)
             .ToListAsync(ct);
     }
 
@@ -45,8 +44,8 @@ public class ClientHierarchyDataRepository : IClientHierarchyDataRepository
             .AsSplitQuery()
             .Include(x => x.ParentClient)
             .Include(x => x.ChildClient)
-            .Where(x => x.ChildClientId == childClientId && !x.IsDeleted)
-            .OrderBy(x => x.ParentClient.Name)
+            .Where(x => x.ChildId == childClientId && !x.IsDeleted)
+            .OrderBy(x => x.ParentClient.CreatedAt)
             .ToListAsync(ct);
     }
 
@@ -58,8 +57,7 @@ public class ClientHierarchyDataRepository : IClientHierarchyDataRepository
             .Include(x => x.ParentClient)
             .Include(x => x.ChildClient)
             .Where(x => !x.IsDeleted)
-            .OrderBy(x => x.ParentClient.Name)
-            .ThenBy(x => x.ChildClient.Name)
+            .OrderBy(x => x.ParentClient.CreatedAt)
             .ToListAsync(ct);
     }
 
@@ -71,8 +69,7 @@ public class ClientHierarchyDataRepository : IClientHierarchyDataRepository
             .Include(x => x.ParentClient)
             .Include(x => x.ChildClient)
             .Where(x => x.IsActive && !x.IsDeleted)
-            .OrderBy(x => x.ParentClient.Name)
-            .ThenBy(x => x.ChildClient.Name)
+            .OrderBy(x => x.ParentClient.CreatedAt)
             .ToListAsync(ct);
     }
 
@@ -88,8 +85,10 @@ public class ClientHierarchyDataRepository : IClientHierarchyDataRepository
         if (!string.IsNullOrWhiteSpace(filter.Search))
         {
             query = query.Where(x =>
-                x.ParentClient.Name.Contains(filter.Search) ||
-                x.ChildClient.Name.Contains(filter.Search));
+                x.ParentClient.Individual.FirstName.Contains(filter.Search) ||
+                x.ParentClient.Individual.LastName.Contains(filter.Search) ||
+                x.ChildClient.Individual.FirstName.Contains(filter.Search) ||
+                x.ChildClient.Individual.LastName.Contains(filter.Search));
         }
 
         var totalCount = await query.CountAsync(ct);
@@ -98,8 +97,7 @@ public class ClientHierarchyDataRepository : IClientHierarchyDataRepository
         var pageSize = filter.PageSize ?? 10;
 
         var items = await query
-            .OrderBy(x => x.ParentClient.Name)
-            .ThenBy(x => x.ChildClient.Name)
+            .OrderBy(x => x.ParentClient.CreatedAt)
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync(ct);
@@ -123,7 +121,7 @@ public class ClientHierarchyDataRepository : IClientHierarchyDataRepository
     public async Task<bool> ExistsRelationshipAsync(int parentClientId, int childClientId, CancellationToken ct)
     {
         return await _context.Set<ClientHierarchyEntity>()
-            .AnyAsync(x => x.ParentClientId == parentClientId && x.ChildClientId == childClientId && !x.IsDeleted, ct);
+            .AnyAsync(x => x.ParentId == parentClientId && x.ChildId == childClientId && !x.IsDeleted, ct);
     }
 
     public async Task<bool> AddAsync(ClientHierarchyEntity entity, CancellationToken ct)

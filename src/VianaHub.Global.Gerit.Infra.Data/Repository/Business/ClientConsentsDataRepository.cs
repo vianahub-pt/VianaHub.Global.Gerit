@@ -111,7 +111,6 @@ public class ClientConsentsDataRepository : IClientConsentsDataRepository
         if (!string.IsNullOrWhiteSpace(filter.Search))
         {
             query = query.Where(x =>
-                x.Client.Name.Contains(filter.Search) ||
                 x.ConsentType.Name.Contains(filter.Search) ||
                 x.Origin.Contains(filter.Search));
         }

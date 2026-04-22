@@ -13,7 +13,6 @@ public class VisitAttachmentMapping : IEntityTypeConfiguration<VisitAttachmentEn
         builder.HasKey(x => x.Id);
 
         builder.Property(x => x.Id)
-            .HasColumnName("Id")
             .IsRequired();
 
         // Chave alternativa para suportar FKs compostas com TenantId
@@ -21,77 +20,64 @@ public class VisitAttachmentMapping : IEntityTypeConfiguration<VisitAttachmentEn
             .HasName("UQ_VisitAttachments_Id_Tenant");
 
         builder.Property(x => x.TenantId)
-            .HasColumnName("TenantId")
             .IsRequired();
 
         builder.Property(x => x.FileTypeId)
-            .HasColumnName("FileTypeId")
             .IsRequired();
 
         builder.Property(x => x.VisitId)
-            .HasColumnName("VisitId")
             .IsRequired();
 
         builder.Property(x => x.AttachmentCategoryId)
-            .HasColumnName("AttachmentCategoryId")
             .IsRequired();
 
         builder.Property(x => x.PublicId)
-            .HasColumnName("PublicId")
             .HasDefaultValueSql("NEWID()")
             .IsRequired();
 
         builder.Property(x => x.S3Key)
-            .HasColumnName("S3Key")
             .HasColumnType("NVARCHAR(500)")
             .HasMaxLength(500)
             .IsRequired();
 
         builder.Property(x => x.FileName)
-            .HasColumnName("FileName")
             .HasColumnType("NVARCHAR(255)")
             .HasMaxLength(255)
             .IsRequired();
 
         builder.Property(x => x.FileSizeBytes)
-            .HasColumnName("FileSizeBytes")
             .IsRequired();
 
         builder.Property(x => x.DisplayOrder)
-            .HasColumnName("DisplayOrder")
             .HasDefaultValue(0)
             .IsRequired();
 
         builder.Property(x => x.IsPrimary)
-            .HasColumnName("IsPrimary")
             .HasDefaultValue(false)
             .IsRequired();
 
         builder.Property(x => x.IsActive)
-            .HasColumnName("IsActive")
-            .HasDefaultValue(true)
-            .IsRequired();
+           .HasDefaultValue(true)
+           .IsRequired();
 
         builder.Property(x => x.IsDeleted)
-            .HasColumnName("IsDeleted")
             .HasDefaultValue(false)
             .IsRequired();
 
         builder.Property(x => x.CreatedBy)
-            .HasColumnName("CreatedBy")
             .IsRequired();
 
         builder.Property(x => x.CreatedAt)
-            .HasColumnName("CreatedAt")
             .HasColumnType("DATETIME2(7)")
             .IsRequired();
 
         builder.Property(x => x.ModifiedBy)
-            .HasColumnName("ModifiedBy");
+            .HasColumnType("INT")
+            .IsRequired(false);
 
         builder.Property(x => x.ModifiedAt)
-            .HasColumnName("ModifiedAt")
-            .HasColumnType("DATETIME2(7)");
+            .HasColumnType("DATETIME2(7)")
+            .IsRequired(false);
 
         // Relacionamentos
         builder.HasOne(x => x.Tenant)

@@ -7,10 +7,10 @@ public class CreateClientHierarchyRouteValidator : AbstractValidator<CreateClien
 {
     public CreateClientHierarchyRouteValidator()
     {
-        RuleFor(x => x.ParentClientId)
+        RuleFor(x => x.ParentId)
             .GreaterThan(0).WithMessage("ParentClientId_Required");
 
-        RuleFor(x => x.ChildClientId)
+        RuleFor(x => x.ChildId)
             .GreaterThan(0).WithMessage("ChildClientId_Required");
 
         RuleFor(x => x.RelationshipType)

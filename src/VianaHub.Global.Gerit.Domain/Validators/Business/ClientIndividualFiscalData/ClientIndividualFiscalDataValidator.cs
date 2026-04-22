@@ -1,9 +1,11 @@
 using FluentValidation;
+using FluentValidation.Results;
+using VianaHub.Global.Gerit.Domain.Base;
 using VianaHub.Global.Gerit.Domain.Entities.Business;
 
 namespace VianaHub.Global.Gerit.Domain.Validators.Business.ClientIndividualFiscalData;
 
-public class ClientIndividualFiscalDataValidator : AbstractValidator<ClientIndividualFiscalDataEntity>
+public class ClientIndividualFiscalDataValidator : AbstractValidator<ClientIndividualFiscalDataEntity>, IEntityDomainValidator<ClientIndividualFiscalDataEntity>
 {
     public ClientIndividualFiscalDataValidator()
     {
@@ -26,4 +28,22 @@ public class ClientIndividualFiscalDataValidator : AbstractValidator<ClientIndiv
             .EmailAddress().WithMessage("FiscalEmail_Invalid")
             .When(x => !string.IsNullOrEmpty(x.FiscalEmail));
     }
+
+    public async Task<ValidationResult> ValidateForCreateAsync(ClientIndividualFiscalDataEntity entity)
+        => await new CreateClientIndividualFiscalDataValidator().ValidateAsync(entity);
+
+    public async Task<ValidationResult> ValidateForUpdateAsync(ClientIndividualFiscalDataEntity entity)
+        => await new UpdateClientIndividualFiscalDataValidator().ValidateAsync(entity);
+
+    public async Task<ValidationResult> ValidateForActivateAsync(ClientIndividualFiscalDataEntity entity)
+        => await new ActivateClientIndividualFiscalDataValidator().ValidateAsync(entity);
+
+    public async Task<ValidationResult> ValidateForDeactivateAsync(ClientIndividualFiscalDataEntity entity)
+        => await new DeactivateClientIndividualFiscalDataValidator().ValidateAsync(entity);
+
+    public async Task<ValidationResult> ValidateForDeleteAsync(ClientIndividualFiscalDataEntity entity)
+        => await new DeleteClientIndividualFiscalDataValidator().ValidateAsync(entity);
+
+    public Task<ValidationResult> ValidateForRevokeAsync(ClientIndividualFiscalDataEntity entity)
+        => ValidateForDeleteAsync(entity);
 }

@@ -1,4 +1,5 @@
 using AutoMapper;
+using Azure.Core;
 using CsvHelper;
 using CsvHelper.Configuration;
 using Microsoft.AspNetCore.Http;
@@ -21,6 +22,8 @@ namespace VianaHub.Global.Gerit.Application.Services.Business;
 
 public class ClientAppService : IClientAppService
 {
+    private int UserId { get; set; }
+    private int TenantId { get; set; }
     private readonly IClientRepository _repo;
     private readonly IClientDomainService _domain;
     private readonly IMapper _mapper;
@@ -29,6 +32,7 @@ public class ClientAppService : IClientAppService
     private readonly ICurrentUserService _currentUser;
     private readonly IFileValidationService _fileValidation;
     private readonly ILogger<ClientAppService> _logger;
+
 
     public ClientAppService(
         IClientRepository repo,
@@ -48,6 +52,8 @@ public class ClientAppService : IClientAppService
         _currentUser = currentUser;
         _fileValidation = fileValidation;
         _logger = logger;
+        UserId = _currentUser.GetUserId();
+        TenantId = _currentUser.GetTenantId();
     }
 
     public async Task<IEnumerable<ClientResponse>> GetAllAsync(CancellationToken ct)
@@ -58,8 +64,8 @@ public class ClientAppService : IClientAppService
 
     public async Task<ClientDetailResponse> GetByIdAsync(int id, CancellationToken ct)
     {
-        var entity = await _repo.GetAggregateByIdAsync(_currentUser.GetTenantId(), id, ct);
-        if (entity == null || entity.IsDeleted || !entity.IsActive)
+        var entity = await _repo.GetByIdAsync(id, ct);
+        if (entity == null || entity.IsDeleted)
         {
             _notify.Add(_localization.GetMessage("Application.Service.Client.GetById.ResourceNotFound"), 410);
             return null;
@@ -76,75 +82,93 @@ public class ClientAppService : IClientAppService
 
     public async Task<bool> CreateAsync(CreateClientRequest request, CancellationToken ct)
     {
-        var tenantId = _currentUser.GetTenantId();
-        var exists = await _repo.ExistsByEmailAsync(tenantId, request.Email, ct);
-        if (exists)
+        var client = new ClientEntity(TenantId, (ClientType)request.ClientType, (OriginType)request.OriginType, request.UrlImage, request.Note, UserId);
+
+        switch (client.ClientType)
         {
-            _notify.Add(_localization.GetMessage("Application.Service.Client.Create.ResourceAlreadyExists"), 409);
-            return false;
+            case ClientType.PessoaSingular:
+            case ClientType.RecibosVerdes:
+            case ClientType.Freelancer:
+                client.AddIndividual(new ClientIndividualEntity(TenantId, request.Individual.FirstName, request.Individual.LastName, request.Individual.PhoneNumber, request.Individual.CellPhoneNumber, request.Individual.IsWhatsapp, request.Individual.Email, request.Individual.BirthDate, request.Individual.Gender, request.Individual.DocumentType, request.Individual.DocumentNumber, request.Individual.Nationality, UserId));
+                break;
+            case ClientType.PessoaJuridica:
+            case ClientType.SociedadeUnipessoalQuotas:
+                client.AddCompany(new ClientCompanyEntity(TenantId, request.Company.LegalName, request.Company.TradeName, request.Company.PhoneNumber, request.Company.CellPhoneNumber, request.Company.IsWhatsapp, request.Company.Email, request.Company.Site, request.Company.CompanyRegistration, request.Company.CAE, request.Company.NumberOfEmployee, request.Company.LegalRepresentative, UserId));
+                break;
+            default:
+                break;
         }
 
-        var entity = new ClientEntity(tenantId, (ClientType)request.ClientType, (Origin)request.Origin, request.Name, request.Phone, request.Email, request.Website, request.UrlImage, request.Score, request.Consent, request.ConsentDate, request.Remarks, _currentUser.GetUserId());
-        return await _domain.CreateAsync(entity, ct);
+        return await _domain.CreateAsync(client, ct);
     }
 
     public async Task<bool> UpdateAsync(int id, UpdateClientRequest request, CancellationToken ct)
     {
-        var entity = await _repo.GetAggregateForUpdateAsync(_currentUser.GetTenantId(), id, ct);
-        if (entity == null || entity.IsDeleted || !entity.IsActive)
+        var client = await _repo.GetByIdAsync(id, ct);
+
+        if (client == null || client.IsDeleted || !client.IsActive)
         {
             _notify.Add(_localization.GetMessage("Application.Service.Client.Update.ResourceNotFound"), 410);
             return false;
         }
 
-        var exists = await _repo.ExistsByEmailForUpdateAsync(entity.TenantId, request.Email, id, ct);
-        if (exists)
+        client.Update((ClientType)request.ClientType, (OriginType)request.OriginType, request.UrlImage, request.Note, UserId);
+
+        switch ((ClientType)request.ClientType)
         {
-            _notify.Add(_localization.GetMessage("Application.Service.Client.Update.EmailAlreadyExists"), 409);
-            return false;
+            case ClientType.PessoaSingular:
+            case ClientType.RecibosVerdes:
+            case ClientType.Freelancer:
+                client.UpdateIndividual(request.Individual.FirstName, request.Individual.LastName, request.Individual.PhoneNumber, request.Individual.CellPhoneNumber, request.Individual.IsWhatsapp, request.Individual.Email, request.Individual.BirthDate, request.Individual.Gender, request.Individual.DocumentType, request.Individual.DocumentNumber, request.Individual.Nationality, UserId);
+                break;
+            case ClientType.PessoaJuridica:
+            case ClientType.SociedadeUnipessoalQuotas:
+                client.UpdateCompany(request.Company.LegalName, request.Company.TradeName, request.Company.PhoneNumber, request.Company.CellPhoneNumber, request.Company.IsWhatsapp, request.Company.Email, request.Company.Site,request.Company.CompanyRegistration, request.Company.CAE, request.Company.NumberOfEmployee, request.Company.LegalRepresentative, UserId);
+                break;
+            default:
+                break;
         }
 
-        entity.Update((ClientType)request.ClientType, (Origin)request.Origin, request.Name, request.Phone, request.Email, request.Website, request.UrlImage, request.Score, request.Consent, request.Remarks, _currentUser.GetUserId());
-        return await _domain.UpdateAsync(entity, ct);
+        return await _domain.UpdateAsync(client, ct);
     }
 
     public async Task<bool> ActivateAsync(int id, CancellationToken ct)
     {
-        var entity = await _repo.GetAggregateForUpdateAsync(_currentUser.GetTenantId(), id, ct);
-        if (entity == null || entity.IsDeleted)
+        var client = await _repo.GetByIdAsync(id, ct);
+        if (client == null || client.IsDeleted)
         {
             _notify.Add(_localization.GetMessage("Application.Service.Client.Activate.ResourceNotFound"), 410);
             return false;
         }
 
-        entity.Activate(_currentUser.GetUserId());
-        return await _domain.ActivateAsync(entity, ct);
+        client.Activate(client.ClientType, UserId);
+        return await _domain.ActivateAsync(client, ct);
     }
 
     public async Task<bool> DeactivateAsync(int id, CancellationToken ct)
     {
-        var entity = await _repo.GetAggregateForUpdateAsync(_currentUser.GetTenantId(), id, ct);
-        if (entity == null || entity.IsDeleted || !entity.IsActive)
+        var client = await _repo.GetByIdAsync(id, ct);
+        if (client == null || client.IsDeleted)
         {
             _notify.Add(_localization.GetMessage("Application.Service.Client.Deactivate.ResourceNotFound"), 410);
             return false;
         }
 
-        entity.Deactivate(_currentUser.GetUserId());
-        return await _domain.DeactivateAsync(entity, ct);
+        client.Deactivate(client.ClientType, UserId);
+        return await _domain.ActivateAsync(client, ct);
     }
 
     public async Task<bool> DeleteAsync(int id, CancellationToken ct)
     {
-        var entity = await _repo.GetAggregateForUpdateAsync(_currentUser.GetTenantId(), id, ct);
-        if (entity == null || entity.IsDeleted)
+        var client = await _repo.GetByIdAsync(id, ct);
+        if (client == null || client.IsDeleted)
         {
             _notify.Add(_localization.GetMessage("Application.Service.Client.Delete.ResourceNotFound"), 410);
             return false;
         }
 
-        entity.Delete(_currentUser.GetUserId());
-        return await _domain.DeleteAsync(entity, ct);
+        client.Delete(client.ClientType, UserId);
+        return await _domain.DeleteAsync(client, ct);
     }
 
     public async Task<bool> BulkUploadAsync(IFormFile file, CancellationToken ct)
@@ -201,30 +225,6 @@ public class ClientAppService : IClientAppService
                     var record = csv.GetRecord<BulkUploadClientItem>();
                     if (record != null)
                     {
-                        // Sanitiza e normaliza campos
-                        record.Name = record.Name?.SanitizeCsvInput().NormalizeUtf8();
-                        record.Email = record.Email?.SanitizeCsvInput().NormalizeUtf8();
-                        record.Phone = record.Phone?.SanitizeCsvInput().NormalizeUtf8();
-
-                        // Valida se os campos n�o cont�m conte�do perigoso
-                        if (!string.IsNullOrEmpty(record.Name) && !record.Name.IsSafeCsvValue())
-                        {
-                            _notify.Add(_localization.GetMessage("Application.Service.Client.ReadCsvFile.Name.IsSafeCsvValue", rowCount + 2), 400);
-                            continue;
-                        }
-
-                        if (!string.IsNullOrEmpty(record.Email) && !record.Email.IsSafeCsvValue())
-                        {
-                            _notify.Add(_localization.GetMessage("Application.Service.Client.ReadCsvFile.Email.IsSafeCsvValue", rowCount + 2), 400);
-                            continue;
-                        }
-
-                        if (!string.IsNullOrEmpty(record.Phone) && !record.Phone.IsSafeCsvValue())
-                        {
-                            _notify.Add(_localization.GetMessage("Application.Service.Client.ReadCsvFile.Phone.IsSafeCsvValue", rowCount + 2), 400);
-                            continue;
-                        }
-
                         records.Add(record);
                     }
                     rowCount++;
@@ -270,23 +270,23 @@ public class ClientAppService : IClientAppService
             }
 
             // Verifica duplicidade
-            var exists = await _repo.ExistsByEmailAsync(tenantId, item.Email, ct);
-            if (exists)
-            {
-                _notify.Add(_localization.GetMessage("Application.Service.Client.ProcessBulkItems.ExistsByEmail", item.Email), 400);
-                hasErrors = true;
-                continue;
-            }
+            //var exists = await _repo.ExistsByEmailAsync(tenantId, item.Email, ct);
+            //if (exists)
+            //{
+            //    _notify.Add(_localization.GetMessage("Application.Service.Client.ProcessBulkItems.ExistsByEmail", item.Email), 400);
+            //    hasErrors = true;
+            //    continue;
+            //}
 
             // Cria a entidade
-            var entity = new ClientEntity(tenantId, (ClientType)item.ClientType, (Origin)item.Origin, item.Name, item.Phone, item.Email, item.Website, item.UrlImage, item.Score, item.Consent, item.ConsentDate, item.Remarks, _currentUser.GetUserId());
+            var entity = new ClientEntity(_currentUser.GetTenantId(), (ClientType)item.ClientType, (OriginType)item.OriginType, item.UrlImage, item.Note, _currentUser.GetUserId());
 
             // Tenta criar no dom�nio
             var success = await _domain.CreateAsync(entity, ct);
 
             if (!success)
             {
-                _notify.Add(_localization.GetMessage("Application.Service.Client.ProcessBulkItems.FailedToCreate", item.Name), 400);
+                _notify.Add(_localization.GetMessage("Application.Service.Client.ProcessBulkItems.FailedToCreate"), 400);
                 hasErrors = true;
             }
         }
@@ -296,21 +296,15 @@ public class ClientAppService : IClientAppService
 
     private bool ValidateBulkItem(BulkUploadClientItem item)
     {
-        if (string.IsNullOrWhiteSpace(item.Name))
+        if (item.ClientType <=0)
         {
-            _notify.Add(_localization.GetMessage("Application.Service.Client.ValidateBulkItem.Name", item.Name ?? "N/A"), 400);
+            _notify.Add(_localization.GetMessage("Application.Service.Client.ValidateBulkItem.ClientType"), 400);
             return false;
         }
 
-        if (string.IsNullOrWhiteSpace(item.Email))
+        if (item.OriginType <= 0)
         {
-            _notify.Add(_localization.GetMessage("Application.Service.Client.ValidateBulkItem.Email", item.Email ?? "N/A"), 400);
-            return false;
-        }
-
-        if (string.IsNullOrWhiteSpace(item.Phone))
-        {
-            _notify.Add(_localization.GetMessage("Application.Service.Client.ValidateBulkItem.Phone", item.Phone ?? "N/A"), 400);
+            _notify.Add(_localization.GetMessage("Application.Service.Client.ValidateBulkItem.OriginType"), 400);
             return false;
         }
 

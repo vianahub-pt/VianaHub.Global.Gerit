@@ -19,68 +19,52 @@ public class EquipmentMapping : IEntityTypeConfiguration<EquipmentEntity>
             .HasName("PK_Equipments");
 
         builder.Property(x => x.Id)
-            .HasColumnName("Id")
             .UseIdentityColumn(1, 1)
             .IsRequired();
 
         // Propriedades
         builder.Property(x => x.TenantId)
-            .HasColumnName("TenantId")
             .IsRequired();
 
         builder.Property(x => x.EquipmentTypeId)
-            .HasColumnName("EquipmentTypeId")
             .HasColumnType("INT")
             .IsRequired();
 
         builder.Property(x => x.StatusId)
-            .HasColumnName("StatusId")
             .HasColumnType("INT")
             .IsRequired();
 
         builder.Property(x => x.Name)
-            .HasColumnName("Name")
             .HasColumnType("NVARCHAR(150)")
             .HasMaxLength(150)
             .IsRequired();
 
         builder.Property(x => x.SerialNumber)
-            .HasColumnName("SerialNumber")
             .HasColumnType("NVARCHAR(100)")
             .HasMaxLength(100)
             .IsRequired(false);
 
         builder.Property(x => x.IsActive)
-            .HasColumnName("IsActive")
-            .HasColumnType("BIT")
             .HasDefaultValue(true)
             .IsRequired();
 
         builder.Property(x => x.IsDeleted)
-            .HasColumnName("IsDeleted")
-            .HasColumnType("BIT")
             .HasDefaultValue(false)
             .IsRequired();
 
         builder.Property(x => x.CreatedBy)
-              .HasColumnName("CreatedBy")
-              .HasColumnType("INT")
-              .IsRequired();
+            .IsRequired();
 
         builder.Property(x => x.CreatedAt)
-            .HasColumnName("CreatedAt")
-            .HasColumnType("DATETIME2")
-            .HasDefaultValueSql("SYSDATETIME()")
+            .HasColumnType("DATETIME2(7)")
             .IsRequired();
 
         builder.Property(x => x.ModifiedBy)
-            .HasColumnName("ModifiedBy")
             .HasColumnType("INT")
             .IsRequired(false);
 
         builder.Property(x => x.ModifiedAt)
-            .HasColumnName("ModifiedAt")
-            .HasColumnType("DATETIME2")
+            .HasColumnType("DATETIME2(7)")
             .IsRequired(false);
 
         // Relacionamentos

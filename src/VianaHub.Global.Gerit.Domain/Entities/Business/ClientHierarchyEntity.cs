@@ -1,13 +1,14 @@
 using VianaHub.Global.Gerit.Domain.Base;
+using VianaHub.Global.Gerit.Domain.Enums;
 
 namespace VianaHub.Global.Gerit.Domain.Entities.Business
 {
     public class ClientHierarchyEntity : Entity
     {
         public int TenantId { get; private set; }
-        public int ParentClientId { get; private set; }
-        public int ChildClientId { get; private set; }
-        public int RelationshipType { get; private set; }
+        public int ParentId { get; private set; }
+        public int ChildId { get; private set; }
+        public RelationshipType RelationshipType { get; private set; }
 
         public bool IsActive { get; private set; }
         public bool IsDeleted { get; private set; }
@@ -19,11 +20,11 @@ namespace VianaHub.Global.Gerit.Domain.Entities.Business
         // Construtor protegido para EF Core
         protected ClientHierarchyEntity() { }
 
-        public ClientHierarchyEntity(int tenantId, int parentClientId, int childClientId, int relationshipType, int createdBy)
+        public ClientHierarchyEntity(int tenantId, int parentId, int childId, RelationshipType relationshipType, int createdBy)
         {
             TenantId = tenantId;
-            ParentClientId = parentClientId;
-            ChildClientId = childClientId;
+            ParentId = parentId;
+            ChildId = childId;
             RelationshipType = relationshipType;
 
             IsActive = true;
@@ -32,7 +33,7 @@ namespace VianaHub.Global.Gerit.Domain.Entities.Business
             CreatedAt = DateTime.UtcNow;
         }
 
-        public void UpdateRelationshipType(int relationshipType, int modifiedBy)
+        public void UpdateRelationshipType(RelationshipType relationshipType, int modifiedBy)
         {
             RelationshipType = relationshipType;
             ModifiedBy = modifiedBy;

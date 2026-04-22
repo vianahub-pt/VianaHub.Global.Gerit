@@ -11,36 +11,63 @@ public class ClientCompanyFiscalDataMapping : IEntityTypeConfiguration<ClientCom
         builder.ToTable("ClientCompanyFiscalData");
 
         builder.HasKey(x => x.Id);
-        builder.Property(x => x.Id).HasColumnName("Id").IsRequired();
+        builder.Property(x => x.Id)
+            .IsRequired();
 
-        builder.Property(x => x.TenantId).HasColumnName("TenantId").IsRequired();
-        builder.Property(x => x.ClientCompanyId).HasColumnName("ClientCompanyId").IsRequired();
+        builder.Property(x => x.TenantId)
+            .IsRequired();
 
-        builder.Property(x => x.TaxNumber).HasColumnName("TaxNumber").HasColumnType("NVARCHAR(20)").HasMaxLength(20).IsRequired();
-        builder.Property(x => x.VatNumber).HasColumnName("VatNumber").HasColumnType("NVARCHAR(20)").HasMaxLength(20);
-        builder.Property(x => x.FiscalCountry).HasColumnName("FiscalCountry").HasColumnType("CHAR(2)").HasMaxLength(2).IsRequired().HasDefaultValue("PT");
-        builder.Property(x => x.IsVatRegistered).HasColumnName("IsVatRegistered").HasDefaultValue(false);
-        builder.Property(x => x.IBAN).HasColumnName("IBAN").HasColumnType("NVARCHAR(34)").HasMaxLength(34);
-        builder.Property(x => x.FiscalEmail).HasColumnName("FiscalEmail").HasColumnType("NVARCHAR(255)").HasMaxLength(255);
+        builder.Property(x => x.ClientCompanyId)
+            .IsRequired();
 
-        builder.Property(x => x.IsActive).HasColumnName("IsActive").HasDefaultValue(true);
-        builder.Property(x => x.IsDeleted).HasColumnName("IsDeleted").HasDefaultValue(false);
-        builder.Property(x => x.CreatedBy).HasColumnName("CreatedBy").IsRequired();
-        builder.Property(x => x.CreatedAt).HasColumnName("CreatedAt").HasColumnType("DATETIME2(7)").IsRequired();
-        builder.Property(x => x.ModifiedBy).HasColumnName("ModifiedBy");
-        builder.Property(x => x.ModifiedAt).HasColumnName("ModifiedAt").HasColumnType("DATETIME2(7)");
+        builder.Property(x => x.TaxNumber)
+            .HasColumnType("NVARCHAR(20)")
+            .HasMaxLength(20)
+            .IsRequired();
 
-        // Relacionamentos
-        builder.HasOne(x => x.Tenant)
-            .WithMany()
-            .HasForeignKey(x => x.TenantId)
-            .OnDelete(DeleteBehavior.Restrict);
+        builder.Property(x => x.VatNumber)
+            .HasColumnType("NVARCHAR(20)")
+            .HasMaxLength(20);
 
-        builder.HasOne(x => x.ClientCompany)
-            .WithOne(cc => cc.FiscalData)
-            .HasForeignKey<ClientCompanyFiscalDataEntity>(nameof(ClientCompanyFiscalDataEntity.ClientCompanyId), nameof(ClientCompanyFiscalDataEntity.TenantId))
-            .HasPrincipalKey<ClientCompanyEntity>(nameof(ClientCompanyEntity.Id), nameof(ClientCompanyEntity.TenantId))
-            .OnDelete(DeleteBehavior.Restrict);
+        builder.Property(x => x.FiscalCountry)
+            .HasColumnType("CHAR(2)")
+            .HasMaxLength(2)
+            .HasDefaultValue("PT")
+            .IsRequired();
+
+        builder.Property(x => x.IsVatRegistered)
+            .HasDefaultValue(false);
+
+        builder.Property(x => x.IBAN)
+            .HasColumnType("NVARCHAR(34)")
+            .HasMaxLength(34);
+
+        builder.Property(x => x.FiscalEmail)
+            .HasColumnType("NVARCHAR(255)")
+            .HasMaxLength(255);
+
+        builder.Property(x => x.IsActive)
+            .HasDefaultValue(true)
+            .IsRequired();
+
+        builder.Property(x => x.IsDeleted)
+            .HasDefaultValue(false)
+            .IsRequired();
+
+        builder.Property(x => x.CreatedBy)
+            .IsRequired();
+
+        builder.Property(x => x.CreatedAt)
+            .HasColumnType("DATETIME2(7)")
+            .IsRequired();
+
+        builder.Property(x => x.ModifiedBy)
+            .HasColumnType("INT")
+            .IsRequired(false);
+
+        builder.Property(x => x.ModifiedAt)
+            .HasColumnType("DATETIME2(7)")
+            .IsRequired(false);
 
         // Índices
         builder.HasIndex(x => new { x.TenantId, x.ClientCompanyId })

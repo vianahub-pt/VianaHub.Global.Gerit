@@ -38,9 +38,9 @@ public class ClientContactDomainService : IClientContactDomainService
     {
         return await _repo.GetPagedAsync(clientId, request, ct);
     }
-    public async Task<bool> ExistsByIdAsync(int clientId, int id, CancellationToken ct)
+    public async Task<bool> ExistsByClientAndEmailAsync(int clientId, string name, string email, CancellationToken ct)
     {
-        return await _repo.ExistsByIdAsync(clientId, id, ct);
+        return await _repo.ExistsByClientAndEmailAsync(clientId, name, email, ct);
     }
 
     public async Task<bool> CreateAsync(ClientContactEntity entity, CancellationToken ct)

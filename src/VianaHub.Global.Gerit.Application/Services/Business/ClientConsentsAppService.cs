@@ -96,7 +96,6 @@ public class ClientConsentsAppService : IClientConsentsAppService
 
         var entity = new ClientConsentsEntity(
             tenantId,
-            request.ClientId,
             request.ConsentTypeId,
             request.Granted,
             request.GrantedDate,
@@ -117,14 +116,14 @@ public class ClientConsentsAppService : IClientConsentsAppService
             return false;
         }
 
-        if (request.Granted && !entity.Granted)
-        {
-            entity.GrantConsent(_currentUser.GetUserId());
-        }
-        else if (!request.Granted && entity.Granted)
-        {
-            entity.RevokeConsent(_currentUser.GetUserId());
-        }
+        //if (request.Granted && !entity.Granted)
+        //{
+        //    entity.GrantConsent(_currentUser.GetUserId());
+        //}
+        //else if (!request.Granted && entity.Granted)
+        //{
+        //    entity.RevokeConsent(_currentUser.GetUserId());
+        //}
 
         return await _domain.UpdateAsync(entity, ct);
     }
@@ -138,7 +137,7 @@ public class ClientConsentsAppService : IClientConsentsAppService
             return false;
         }
 
-        entity.RevokeConsent(_currentUser.GetUserId());
+        //entity.RevokeConsent(_currentUser.GetUserId());
         return await _domain.UpdateAsync(entity, ct);
     }
 
@@ -151,7 +150,7 @@ public class ClientConsentsAppService : IClientConsentsAppService
             return false;
         }
 
-        entity.GrantConsent(_currentUser.GetUserId());
+        //entity.GrantConsent(_currentUser.GetUserId());
         return await _domain.UpdateAsync(entity, ct);
     }
 

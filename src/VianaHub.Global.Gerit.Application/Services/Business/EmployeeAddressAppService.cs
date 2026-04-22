@@ -93,7 +93,7 @@ public class EmployeeAddressAppService : IEmployeeAddressAppService
             request.PostalCode,
             request.Latitude,
             request.Longitude,
-            request.Notes,
+            request.Note,
             request.IsPrimary,
             _currentUser.GetUserId());
 
@@ -121,7 +121,7 @@ public class EmployeeAddressAppService : IEmployeeAddressAppService
             request.PostalCode,
             request.Latitude,
             request.Longitude,
-            request.Notes,
+            request.Note,
             _currentUser.GetUserId());
 
         return await _domain.UpdateAsync(entity, ct);
@@ -302,7 +302,7 @@ public class EmployeeAddressAppService : IEmployeeAddressAppService
                 item.PostalCode,
                 item.Latitude,
                 item.Longitude,
-                item.Notes,
+                item.Note,
                 item.IsPrimary,
                 _currentUser.GetUserId());
 

@@ -4,6 +4,7 @@ using VianaHub.Global.Gerit.Application.Dtos.Request.Business.ClientHierarchy;
 using VianaHub.Global.Gerit.Application.Dtos.Response.Business.ClientHierarchy;
 using VianaHub.Global.Gerit.Application.Interfaces.Business;
 using VianaHub.Global.Gerit.Domain.Entities.Business;
+using VianaHub.Global.Gerit.Domain.Enums;
 using VianaHub.Global.Gerit.Domain.Interfaces.Base;
 using VianaHub.Global.Gerit.Domain.Interfaces.Business;
 using VianaHub.Global.Gerit.Domain.ReadModels;
@@ -76,7 +77,7 @@ public class ClientHierarchyAppService : IClientHierarchyAppService
     {
         var tenantId = _currentUser.GetTenantId();
 
-        if (await _repo.ExistsRelationshipAsync(request.ParentClientId, request.ChildClientId, ct))
+        if (await _repo.ExistsRelationshipAsync(request.ParentId, request.ChildId, ct))
         {
             _notify.Add(_localization.GetMessage("Application.Service.ClientHierarchy.Create.RelationshipAlreadyExists"), 409);
             return false;
@@ -84,9 +85,9 @@ public class ClientHierarchyAppService : IClientHierarchyAppService
 
         var entity = new ClientHierarchyEntity(
             tenantId,
-            request.ParentClientId,
-            request.ChildClientId,
-            request.RelationshipType,
+            request.ParentId,
+            request.ChildId,
+            (RelationshipType)request.RelationshipType,
             _currentUser.GetUserId());
 
         return await _domain.CreateAsync(entity, ct);
@@ -101,7 +102,7 @@ public class ClientHierarchyAppService : IClientHierarchyAppService
             return false;
         }
 
-        entity.Update(request.RelationshipType, _currentUser.GetUserId());
+        //entity.Update(request.RelationshipType, _currentUser.GetUserId());
 
         return await _domain.UpdateAsync(entity, ct);
     }

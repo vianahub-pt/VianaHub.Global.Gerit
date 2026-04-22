@@ -19,88 +19,68 @@ public class VisitMapping : IEntityTypeConfiguration<VisitEntity>
             .HasName("PK_Visits");
 
         builder.Property(x => x.Id)
-            .HasColumnName("Id")
             .UseIdentityColumn(1, 1)
             .IsRequired();
 
         // Propriedades
         builder.Property(x => x.TenantId)
-            .HasColumnName("TenantId")
             .IsRequired();
 
         builder.Property(x => x.ClientId)
-            .HasColumnName("ClientId")
             .IsRequired();
 
         builder.Property(x => x.StatusId)
-            .HasColumnName("StatusId")
             .IsRequired();
 
         builder.Property(x => x.Title)
-            .HasColumnName("Title")
             .HasColumnType("NVARCHAR(200)")
             .HasMaxLength(200)
             .IsRequired();
 
         builder.Property(x => x.Description)
-            .HasColumnName("Description")
             .HasColumnType("NVARCHAR(2000)")
             .HasMaxLength(2000)
             .IsRequired();
 
         builder.Property(x => x.StartDateTime)
-            .HasColumnName("StartDateTime")
             .HasColumnType("DATETIME2")
             .IsRequired();
 
         builder.Property(x => x.EndDateTime)
-            .HasColumnName("EndDateTime")
             .HasColumnType("DATETIME2")
             .IsRequired(false);
 
         builder.Property(x => x.EstimatedValue)
-            .HasColumnName("EstimatedValue")
             .HasColumnType("DECIMAL(10,2)")
             .HasPrecision(10, 2)
             .IsRequired();
 
         builder.Property(x => x.RealValue)
-            .HasColumnName("RealValue")
             .HasColumnType("DECIMAL(10,2)")
             .HasPrecision(10, 2)
             .IsRequired(false);
 
         builder.Property(x => x.IsActive)
-            .HasColumnName("IsActive")
-            .HasColumnType("BIT")
             .HasDefaultValue(true)
             .IsRequired();
 
         builder.Property(x => x.IsDeleted)
-            .HasColumnName("IsDeleted")
-            .HasColumnType("BIT")
             .HasDefaultValue(false)
             .IsRequired();
 
         builder.Property(x => x.CreatedBy)
-            .HasColumnName("CreatedBy")
-            .HasColumnType("INT")
             .IsRequired();
 
         builder.Property(x => x.CreatedAt)
-            .HasColumnName("CreatedAt")
-            .HasColumnType("DATETIME2")
-            .HasDefaultValueSql("SYSDATETIME()")
+            .HasColumnType("DATETIME2(7)")
             .IsRequired();
 
         builder.Property(x => x.ModifiedBy)
-            .HasColumnName("ModifiedBy")
             .HasColumnType("INT")
             .IsRequired(false);
 
         builder.Property(x => x.ModifiedAt)
-            .HasColumnName("ModifiedAt")
-            .HasColumnType("DATETIME2")
+            .HasColumnType("DATETIME2(7)")
             .IsRequired(false);
 
         // Constraints de check

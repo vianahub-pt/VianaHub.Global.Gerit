@@ -2,7 +2,7 @@
 
 namespace VianaHub.Global.Gerit.Domain.Enums;
 
-public enum Origin
+public enum OriginType
 {
     [Description("Outros")]     // Indica que a origem do cliente não se encaixa nas categorias específicas listadas ou que o cliente não forneceu essa informação.
     Outros = 1,

@@ -11,41 +11,61 @@ public class ClientHierarchyMapping : IEntityTypeConfiguration<ClientHierarchyEn
         builder.ToTable("ClientHierarchies");
 
         builder.HasKey(x => x.Id);
-        builder.Property(x => x.Id).HasColumnName("Id").IsRequired();
+        
+        builder.Property(x => x.Id)
+            .IsRequired();
 
         builder.HasAlternateKey(x => new { x.Id, x.TenantId })
             .HasName("UQ_ClientHierarchies_Id_Tenant");
 
-        builder.Property(x => x.TenantId).HasColumnName("TenantId").IsRequired();
-        builder.Property(x => x.ParentClientId).HasColumnName("ParentClientId").IsRequired();
-        builder.Property(x => x.ChildClientId).HasColumnName("ChildClientId").IsRequired();
-        builder.Property(x => x.RelationshipType).HasColumnName("RelationshipType").IsRequired();
+        builder.Property(x => x.TenantId)
+            .IsRequired();
+        
+        builder.Property(x => x.ParentId)
+            .IsRequired();
+        
+        builder.Property(x => x.ChildId)
+            .IsRequired();
+        
+        builder.Property(x => x.RelationshipType)
+            .IsRequired();
 
-        builder.Property(x => x.IsActive).HasColumnName("IsActive").HasDefaultValue(true);
-        builder.Property(x => x.IsDeleted).HasColumnName("IsDeleted").HasDefaultValue(false);
-        builder.Property(x => x.CreatedBy).HasColumnName("CreatedBy").IsRequired();
-        builder.Property(x => x.CreatedAt).HasColumnName("CreatedAt").HasColumnType("DATETIME2(7)").IsRequired();
-        builder.Property(x => x.ModifiedBy).HasColumnName("ModifiedBy");
-        builder.Property(x => x.ModifiedAt).HasColumnName("ModifiedAt").HasColumnType("DATETIME2(7)");
+        builder.Property(x => x.IsActive)
+            .HasDefaultValue(true)
+            .IsRequired();
 
-        builder.HasOne(x => x.Tenant)
-            .WithMany()
-            .HasForeignKey(x => x.TenantId)
-            .OnDelete(DeleteBehavior.Restrict);
+        builder.Property(x => x.IsDeleted)
+            .HasDefaultValue(false)
+            .IsRequired();
+
+        builder.Property(x => x.CreatedBy)
+            .IsRequired();
+
+        builder.Property(x => x.CreatedAt)
+            .HasColumnType("DATETIME2(7)")
+            .IsRequired();
+
+        builder.Property(x => x.ModifiedBy)
+            .HasColumnType("INT")
+            .IsRequired(false);
+
+        builder.Property(x => x.ModifiedAt)
+            .HasColumnType("DATETIME2(7)")
+            .IsRequired(false);
 
         builder.HasOne(x => x.ParentClient)
             .WithMany(c => c.ChildHierarchies)
-            .HasForeignKey(x => new { x.ParentClientId, x.TenantId })
+            .HasForeignKey(x => new { x.ParentId, x.TenantId })
             .HasPrincipalKey(x => new { x.Id, x.TenantId })
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(x => x.ChildClient)
             .WithMany(c => c.ParentHierarchies)
-            .HasForeignKey(x => new { x.ChildClientId, x.TenantId })
+            .HasForeignKey(x => new { x.ChildId, x.TenantId })
             .HasPrincipalKey(x => new { x.Id, x.TenantId })
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder.HasIndex(x => new { x.ParentClientId, x.ChildClientId, x.TenantId })
+        builder.HasIndex(x => new { x.ParentId, x.ChildId, x.TenantId })
             .HasDatabaseName("IX_ClientHierarchies_ParentChild_Tenant")
             .IsUnique();
 

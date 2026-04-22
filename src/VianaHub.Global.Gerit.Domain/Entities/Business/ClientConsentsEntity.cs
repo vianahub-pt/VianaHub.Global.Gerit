@@ -26,10 +26,10 @@ namespace VianaHub.Global.Gerit.Domain.Entities.Business
         // Construtor protegido para EF Core
         protected ClientConsentsEntity() { }
 
-        public ClientConsentsEntity(int tenantId, int clientId, int consentTypeId, bool granted, DateTime grantedDate, string origin, string ipAddress, string userAgent, int createdBy)
+        public ClientConsentsEntity(int tenantId, int consentTypeId, bool granted, DateTime grantedDate, string origin, string ipAddress, string userAgent, int createdBy)
         {
             TenantId = tenantId;
-            ClientId = clientId;
+            ClientId = Id;
             ConsentTypeId = consentTypeId;
             Granted = granted;
             GrantedDate = grantedDate;

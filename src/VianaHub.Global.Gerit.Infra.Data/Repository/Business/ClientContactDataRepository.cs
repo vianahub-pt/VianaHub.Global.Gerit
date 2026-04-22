@@ -46,9 +46,7 @@ public class ClientContactDataRepository : IClientContactDataRepository
             var search = request.Search.Trim().ToLower();
             query = query.Where(x => 
                 EF.Functions.Like(x.Name.ToLower(), $"%{search}%") || 
-                EF.Functions.Like(x.Email.ToLower(), $"%{search}%") ||
-                EF.Functions.Like(x.Phone.ToLower(), $"%{search}%") ||
-                EF.Functions.Like(x.Client.Name.ToLower(), $"%{search}%"));
+                EF.Functions.Like(x.Email.ToLower(), $"%{search}%"));
         }
 
         if (request.IsActive.HasValue)
@@ -73,25 +71,14 @@ public class ClientContactDataRepository : IClientContactDataRepository
         };
     }
 
-    public async Task<bool> ExistsByIdAsync(int clientId, int id, CancellationToken ct)
+    public async Task<bool> ExistsByClientAndEmailAsync(int clientId, string name, string email, CancellationToken ct)
     {
-        return await _context.Set<ClientContactEntity>()
+        return await _context.ClientContacts
             .AsNoTracking()
-            .AnyAsync(x => x.ClientId == clientId && x.Id == id && !x.IsDeleted, ct);
-    }
-
-    public async Task<bool> ExistsByClientAndEmailAsync(int clientId, string email, int? excludeId, CancellationToken ct)
-    {
-        var query = _context.Set<ClientContactEntity>()
-            .AsNoTracking()
-            .Where(x => x.ClientId == clientId && x.Email == email && !x.IsDeleted);
-
-        if (excludeId.HasValue)
-        {
-            query = query.Where(x => x.Id != excludeId.Value);
-        }
-
-        return await query.AnyAsync(ct);
+            .AnyAsync(x => x.Client.Id == clientId &&
+                           x.Name == name &&
+                           x.Email == email &&
+                           !x.IsDeleted, ct);
     }
 
     public async Task<bool> AddAsync(ClientContactEntity entity, CancellationToken ct)

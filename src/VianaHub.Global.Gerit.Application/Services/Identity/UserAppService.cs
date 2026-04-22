@@ -6,14 +6,14 @@ using System.Globalization;
 using VianaHub.Global.Gerit.Application.Dtos.Base;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Identity.User;
 using VianaHub.Global.Gerit.Application.Dtos.Response.Identity.User;
-using VianaHub.Global.Gerit.Application.Interfaces.Identity;
 using VianaHub.Global.Gerit.Application.Interfaces.Common;
+using VianaHub.Global.Gerit.Application.Interfaces.Identity;
 using VianaHub.Global.Gerit.Domain.Entities.Identity;
 using VianaHub.Global.Gerit.Domain.Helpers;
+using VianaHub.Global.Gerit.Domain.Interfaces.Base;
 using VianaHub.Global.Gerit.Domain.Interfaces.Identity;
 using VianaHub.Global.Gerit.Domain.ReadModels;
 using VianaHub.Global.Gerit.Domain.Tools.Notifications;
-using VianaHub.Global.Gerit.Domain.Interfaces.Base;
 
 namespace VianaHub.Global.Gerit.Application.Services.Identity;
 
@@ -26,6 +26,7 @@ public class UserAppService : IUserAppService
     private readonly IMapper _mapper;
     private readonly ILocalizationService _localization;
     private readonly IFileValidationService _fileValidation;
+    private readonly IRequestTenantContext _requestTenantContext;
 
     public UserAppService(
         IUserDataRepository repo,
@@ -34,7 +35,8 @@ public class UserAppService : IUserAppService
         IMapper mapper,
         ICurrentUserService currentUser,
         ILocalizationService localization,
-        IFileValidationService fileValidation)
+        IFileValidationService fileValidation,
+        IRequestTenantContext requestTenantContext)
     {
         _repo = repo;
         _domain = domain;
@@ -43,6 +45,7 @@ public class UserAppService : IUserAppService
         _currentUser = currentUser;
         _localization = localization;
         _fileValidation = fileValidation;
+        _requestTenantContext = requestTenantContext;
     }
 
     public async Task<IEnumerable<UserResponse>> GetAllAsync(CancellationToken ct)
@@ -260,6 +263,7 @@ public class UserAppService : IUserAppService
     {
         var hasErrors = false;
         var tenantId = _currentUser.GetTenantId();
+        _requestTenantContext.SetTenantId(tenantId);
 
         foreach (var item in items)
         {

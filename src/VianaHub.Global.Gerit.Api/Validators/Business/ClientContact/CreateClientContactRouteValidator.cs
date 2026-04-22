@@ -25,9 +25,9 @@ public class CreateClientContactRouteValidator : AbstractValidator<CreateClientC
             .EmailAddress()
             .WithMessage(localization.GetMessage("Api.Validator.ClientContact.Create.Email.Invalid"));
 
-        RuleFor(x => x.Phone)
+        RuleFor(x => x.PhoneNumber)
             .MaximumLength(30)
             .WithMessage(localization.GetMessage("Api.Validator.ClientContact.Create.Phone.MaximumLength", 30))
-            .When(x => !string.IsNullOrWhiteSpace(x.Phone));
+            .When(x => !string.IsNullOrWhiteSpace(x.PhoneNumber));
     }
 }

@@ -21,7 +21,7 @@ public class EmployeeAddressEntity : Entity
     public string Complement { get; private set; }
     public decimal? Latitude { get; private set; }
     public decimal? Longitude { get; private set; }
-    public string Notes { get; private set; }
+    public string Note { get; private set; }
     public bool IsPrimary { get; private set; }
     public bool IsActive { get; private set; }
     public bool IsDeleted { get; private set; }
@@ -51,7 +51,7 @@ public class EmployeeAddressEntity : Entity
         string postalCode,
         decimal? latitude,
         decimal? longitude,
-        string notes,
+        string note,
         bool isPrimary, 
         int createdBy)
     {
@@ -68,7 +68,7 @@ public class EmployeeAddressEntity : Entity
         PostalCode = postalCode;
         Latitude = latitude;
         Longitude = longitude;
-        Notes = notes;
+        Note = note;
         IsPrimary = isPrimary;
         IsActive = true;
         IsDeleted = false;
@@ -88,7 +88,7 @@ public class EmployeeAddressEntity : Entity
         string postalCode,
         decimal? latitude,
         decimal? longitude,
-        string notes,
+        string note,
         int modifiedBy)
     {
         AddressTypeId = addressTypeId;
@@ -102,7 +102,7 @@ public class EmployeeAddressEntity : Entity
         PostalCode = postalCode;
         Latitude = latitude;
         Longitude = longitude;
-        Notes = notes;
+        Note = note;
         ModifiedBy = modifiedBy;
         ModifiedAt = DateTime.UtcNow;
     }

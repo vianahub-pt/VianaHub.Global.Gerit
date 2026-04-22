@@ -12,50 +12,85 @@ public class JwtKeyMapping : IEntityTypeConfiguration<JwtKeyEntity>
         builder.ToTable("JwtKeys", "dbo");
         builder.HasKey(x => x.Id);
 
-        builder.Property(x => x.TenantId).IsRequired();
-        builder.Property(x => x.KeyId).IsRequired();
-        builder.Property(x => x.PublicKey).IsRequired();
-        builder.Property(x => x.PrivateKeyEncrypted).IsRequired();
-        builder.Property(x => x.Algorithm).HasMaxLength(50).IsRequired();
-        builder.Property(x => x.KeySize).IsRequired();
-        builder.Property(x => x.KeyType).HasMaxLength(50).IsRequired();
-        builder.Property(x => x.RevokedReason).HasMaxLength(500);
-        builder.Property(x => x.UsageCount).IsRequired();
+        builder.Property(x => x.TenantId)
+            .IsRequired();
+        
+        builder.Property(x => x.KeyId)
+            .IsRequired();
+        
+        builder.Property(x => x.PublicKey)
+            .IsRequired();
+        
+        builder.Property(x => x.PrivateKeyEncrypted)
+            .IsRequired();
+        
+        builder.Property(x => x.Algorithm)
+            .HasMaxLength(50)
+            .IsRequired();
+        
+        builder.Property(x => x.KeySize)
+            .IsRequired();
+        
+        builder.Property(x => x.KeyType)
+            .HasMaxLength(50)
+            .IsRequired();
+        
+        builder.Property(x => x.RevokedReason)
+            .HasMaxLength(500);
+        
+        builder.Property(x => x.UsageCount)
+            .IsRequired();
+        
         builder.Property(x => x.ActivatedAt);
-        builder.Property(x => x.ExpiresAt).IsRequired();
+        
+        builder.Property(x => x.ExpiresAt)
+            .IsRequired();
+        
         builder.Property(x => x.LastUsedAt);
-        builder.Property(x => x.NextRotationAt).IsRequired();
+        
+        builder.Property(x => x.NextRotationAt)
+            .IsRequired();
+        
         builder.Property(x => x.RevokedAt);
+        
         builder.Property(x => x.LastValidatedAt);
-        builder.Property(x => x.ValidationCount).IsRequired();
-        builder.Property(x => x.RotationPolicyDays).IsRequired();
-        builder.Property(x => x.OverlapPeriodDays).IsRequired();
-        builder.Property(x => x.MaxTokenLifetimeMinutes).IsRequired();
-        builder.Property(x => x.IsActive).IsRequired();
-        builder.Property(x => x.IsDeleted).IsRequired();
+        
+        builder.Property(x => x.ValidationCount)
+            .IsRequired();
+        
+        builder.Property(x => x.RotationPolicyDays)
+            .IsRequired();
+        
+        builder.Property(x => x.OverlapPeriodDays)
+            .IsRequired();
+        
+        builder.Property(x => x.MaxTokenLifetimeMinutes)
+            .IsRequired();
 
         // PlainPrivateKey não deve ser persistido no banco - é apenas um campo temporário
         builder.Ignore(x => x.PlainPrivateKey);
 
+        builder.Property(x => x.IsActive)
+            .HasDefaultValue(true)
+            .IsRequired();
+
+        builder.Property(x => x.IsDeleted)
+            .HasDefaultValue(false)
+            .IsRequired();
+
         builder.Property(x => x.CreatedBy)
-              .HasColumnName("CreatedBy")
-              .HasColumnType("INT")
-              .IsRequired();
+            .IsRequired();
 
         builder.Property(x => x.CreatedAt)
-            .HasColumnName("CreatedAt")
-            .HasColumnType("DATETIME2")
-            .HasDefaultValueSql("SYSDATETIME()")
+            .HasColumnType("DATETIME2(7)")
             .IsRequired();
 
         builder.Property(x => x.ModifiedBy)
-            .HasColumnName("ModifiedBy")
             .HasColumnType("INT")
             .IsRequired(false);
 
         builder.Property(x => x.ModifiedAt)
-            .HasColumnName("ModifiedAt")
-            .HasColumnType("DATETIME2")
+            .HasColumnType("DATETIME2(7)")
             .IsRequired(false);
 
         // Relacionamentos

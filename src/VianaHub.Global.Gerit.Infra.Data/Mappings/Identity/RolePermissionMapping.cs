@@ -20,19 +20,15 @@ public class RolePermissionMapping : IEntityTypeConfiguration<RolePermissionEnti
 
         // Propriedades
         builder.Property(x => x.TenantId)
-            .HasColumnName("TenantId")
             .IsRequired();
 
         builder.Property(x => x.RoleId)
-            .HasColumnName("RoleId")
             .IsRequired();
 
         builder.Property(x => x.ResourceId)
-            .HasColumnName("ResourceId")
             .IsRequired();
 
         builder.Property(x => x.ActionId)
-            .HasColumnName("ActionId")
             .IsRequired();
 
         // Constraints únicos

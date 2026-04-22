@@ -13,7 +13,6 @@ public class AttachmentCategoryMapping : IEntityTypeConfiguration<AttachmentCate
         builder.HasKey(x => x.Id);
 
         builder.Property(x => x.Id)
-            .HasColumnName("Id")
             .IsRequired();
 
         // Chave alternativa para suportar FKs compostas com TenantId
@@ -21,55 +20,48 @@ public class AttachmentCategoryMapping : IEntityTypeConfiguration<AttachmentCate
             .HasName("UQ_AttachmentCategories_Id_Tenant");
 
         builder.Property(x => x.TenantId)
-            .HasColumnName("TenantId")
             .IsRequired();
 
         builder.Property(x => x.Name)
-            .HasColumnName("Name")
             .HasColumnType("NVARCHAR(100)")
             .HasMaxLength(100)
             .IsRequired();
 
         builder.Property(x => x.Description)
-            .HasColumnName("Description")
             .HasColumnType("NVARCHAR(300)")
             .HasMaxLength(300);
 
         builder.Property(x => x.DisplayOrder)
-            .HasColumnName("DisplayOrder")
             .HasDefaultValue(0)
             .IsRequired();
 
         builder.Property(x => x.IsSystem)
-            .HasColumnName("IsSystem")
             .HasDefaultValue(false)
             .IsRequired();
 
         builder.Property(x => x.IsActive)
-            .HasColumnName("IsActive")
             .HasDefaultValue(true)
             .IsRequired();
 
         builder.Property(x => x.IsDeleted)
-            .HasColumnName("IsDeleted")
             .HasDefaultValue(false)
             .IsRequired();
 
         builder.Property(x => x.CreatedBy)
-            .HasColumnName("CreatedBy")
             .IsRequired();
 
         builder.Property(x => x.CreatedAt)
-            .HasColumnName("CreatedAt")
             .HasColumnType("DATETIME2(7)")
             .IsRequired();
 
         builder.Property(x => x.ModifiedBy)
-            .HasColumnName("ModifiedBy");
+            .HasColumnType("INT")
+            .IsRequired(false);
 
         builder.Property(x => x.ModifiedAt)
-            .HasColumnName("ModifiedAt")
-            .HasColumnType("DATETIME2(7)");
+            .HasColumnType("DATETIME2(7)")
+            .IsRequired(false);
+
 
         // Relacionamentos
         builder.HasOne(x => x.Tenant)

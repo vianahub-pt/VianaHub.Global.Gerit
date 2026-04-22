@@ -2,6 +2,11 @@ namespace VianaHub.Global.Gerit.Application.Dtos.Request.Billing.Tenant;
 
 public class CreateTenantRequest
 {
+    public int TenantType { get; set; }
+    public int OriginType { get; set; }
     public string Name { get; set; }
-    public bool Consent { get; set; } = true;
+    public string Email { get; set; }
+    public string Website { get; set; }
+    public string UrlImage { get; set; }
+    public string Note { get; set; }
 }

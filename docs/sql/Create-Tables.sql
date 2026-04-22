@@ -28,21 +28,6 @@ CREATE TABLE dbo.FileTypes (                                                    
     CONSTRAINT CK_FileTypes_Active_Deleted CHECK (NOT (IsActive = 1 AND IsDeleted = 1)) -- Garantir que um tipo de arquivo não pode ser ativo e deletado ao mesmo tempo
 );
 GO
-CREATE TABLE dbo.ClientTypes (                                                          -- Catálogo global de tipos de cliente (residencial, comercial, etc.)
-    Id                          INT IDENTITY(1,1)   NOT NULL,                           -- Identificador do tipo de cliente, chave primária
-    Name                        NVARCHAR(100)       NOT NULL,                           -- Nome do tipo de cliente (residencial, comercial, etc.)
-    Description                 NVARCHAR(500)       NOT NULL,                           -- Descrição do tipo de cliente
-    IsActive	                BIT					NOT NULL DEFAULT 1,                 -- Flag de ativo
-    IsDeleted	                BIT					NOT NULL DEFAULT 0,                 -- Soft delete
-    CreatedBy	                INT         		NOT NULL,						    -- Usuário criador
-    CreatedAt	                DATETIME2(7)		NOT NULL DEFAULT SYSDATETIME(),	    -- Data de criação
-    ModifiedBy	                INT         		    NULL,						    -- Usuário modificador
-    ModifiedAt	                DATETIME2(7)		    NULL,						    -- Data de modificação
-    CONSTRAINT PK_ClientTypes PRIMARY KEY CLUSTERED (Id),                               -- PK
-    CONSTRAINT UQ_ClientTypes_Name UNIQUE (Name),                                         -- Garantir que cada tipo de cliente é único
-    CONSTRAINT CK_ClientTypes_Active_Deleted CHECK (NOT (IsActive = 1 AND IsDeleted = 1)) -- Garantir que um tipo de arquivo não pode ser ativo e deletado ao mesmo tempo
-);
-GO
 CREATE TABLE dbo.ConsentTypes (                                                         -- Catálogo global de tipos de consentimento (LGPD, GDPR, etc.) | 1 = PrivacyPolicy, 2 = Marketing, 3 = TermsOfService, 4 = DataProcessing, 5 = Cookies
     Id                          INT IDENTITY(1,1)   NOT NULL,                           -- Identificador do tipo de cliente, chave primária
     Name                        NVARCHAR(100)       NOT NULL,                           -- Nome do tipo de cliente (residencial, comercial, etc.)
@@ -56,21 +41,6 @@ CREATE TABLE dbo.ConsentTypes (                                                 
     CONSTRAINT PK_ConsentTypes PRIMARY KEY CLUSTERED (Id),                              -- PK
     CONSTRAINT UQ_ConsentTypes_Name UNIQUE (Name),                                      -- Garantir que cada tipo de consentimento é único
     CONSTRAINT CK_ConsentTypes_Active_Deleted CHECK (NOT (IsActive = 1 AND IsDeleted = 1)) -- Garantir que um tipo de arquivo não pode ser ativo e deletado ao mesmo tempo
-);
-GO
-CREATE TABLE dbo.OriginTypes (                                                          -- Catálogo global de tipos de origem do cliente (residencial, comercial, etc.)
-    Id                          INT IDENTITY(1,1)   NOT NULL,                           -- Identificador do tipo de cliente, chave primária
-    Name                        NVARCHAR(100)       NOT NULL,                           -- Nome do tipo de cliente (residencial, comercial, etc.)
-    Description                 NVARCHAR(500)       NOT NULL,                           -- Descrição do tipo de cliente
-    IsActive	                BIT					NOT NULL DEFAULT 1,                 -- Flag de ativo
-    IsDeleted	                BIT					NOT NULL DEFAULT 0,                 -- Soft delete
-    CreatedBy	                INT         		NOT NULL,						    -- Usuário criador
-    CreatedAt	                DATETIME2(7)		NOT NULL DEFAULT SYSDATETIME(),	    -- Data de criação
-    ModifiedBy	                INT         		    NULL,						    -- Usuário modificador
-    ModifiedAt	                DATETIME2(7)		    NULL,						    -- Data de modificação
-    CONSTRAINT PK_OriginTypes PRIMARY KEY CLUSTERED (Id),                               -- PK
-    CONSTRAINT UQ_OriginTypes_Name UNIQUE (Name),                                         -- Garantir que cada tipo de cliente é único
-    CONSTRAINT CK_OriginTypes_Active_Deleted CHECK (NOT (IsActive = 1 AND IsDeleted = 1)) -- Garantir que um tipo de arquivo não pode ser ativo e deletado ao mesmo tempo
 );
 GO
 CREATE TABLE dbo.StatusTypes (                                                              -- Catálogo global de tipos de status das intervenções (Agendada, Em andamento, Concluída, Cancelada, etc.)
@@ -129,13 +99,13 @@ CREATE TABLE dbo.PlanFileRules (                                                
 GO
 CREATE TABLE dbo.Tenants (											                        -- Tabela principal de tenants
     Id			            INT IDENTITY(1,1)	NOT NULL,				                    -- Identificador único do tenant, chave primária
-    TenantTypeId            INT                 NOT NULL,				                    -- Tipo do tenant (residencial, comercial, etc.)
-    OriginTypeId            INT                 NOT NULL,						            -- Origem do tenant (para tracking de marketing)
+    TenantType              INT                 NOT NULL,				                    -- Tipo do tenant (residencial, comercial, etc.)
+    OriginType              INT                 NOT NULL,						            -- Origem do tenant (para tracking de marketing)
     Name	                NVARCHAR(200)		NOT NULL,				                    -- Razão social
     Email		            NVARCHAR(255)		NOT NULL,				                    -- Email do contato
     Website		            NVARCHAR(255)		    NULL,				                    -- Website do tenant
     UrlImage    	        NVARCHAR(500)			NULL,                                   -- URL da imagem de perfil do tenant (opcional)
-    Notes		            NVARCHAR(1000)		    NULL,				                    -- Observações gerais sobre o tenant
+    Note		            NVARCHAR(1000)		    NULL,				                    -- Observações gerais sobre o tenant
     IsActive	            BIT					NOT NULL DEFAULT 1,                         -- Flag de ativo
     IsDeleted	            BIT					NOT NULL DEFAULT 0,                         -- Soft delete
     CreatedBy	            INT         		NOT NULL,						            -- Usuário criador
@@ -143,9 +113,7 @@ CREATE TABLE dbo.Tenants (											                        -- Tabela principal
     ModifiedBy	            INT         		NULL,							            -- Usuário modificador
     ModifiedAt	            DATETIME2(7)		NULL,							            -- Data de modificação
 	CONSTRAINT PK_Tenants PRIMARY KEY CLUSTERED (Id),                                       -- PK
-    CONSTRAINT CK_Tenants_Active_Deleted CHECK (NOT (IsActive = 1 AND IsDeleted = 1)),      -- Garantir que um tenant não pode ser ativo e deletado ao mesmo tempo
-    CONSTRAINT FK_Tenants_TenantType FOREIGN KEY (TenantTypeId) REFERENCES dbo.ClientTypes(Id),     -- FK para tipo de cliente
-    CONSTRAINT FK_Tenants_OriginType FOREIGN KEY (OriginTypeId) REFERENCES dbo.OriginTypes(Id)     -- FK para tipo de origem
+    CONSTRAINT CK_Tenants_Active_Deleted CHECK (NOT (IsActive = 1 AND IsDeleted = 1))      -- Garantir que um tenant não pode ser ativo e deletado ao mesmo tempo
 );
 
 GO
@@ -205,7 +173,7 @@ CREATE TABLE dbo.TenantAddresses (									                        -- Endereços 
     Complement      NVARCHAR(100)           NULL,                                           -- Apto, bloco, andar, etc.
     Latitude        DECIMAL(9,6)            NULL,                                           -- Latitude geográfica (opcional)
     Longitude       DECIMAL(9,6)            NULL,                                           -- Longitude geográfica (opcional)
-    Notes           NVARCHAR(500)           NULL,                                           -- Observações adicionais sobre o endereço  
+    Note            NVARCHAR(500)           NULL,                                           -- Observações adicionais sobre o endereço  
     IsPrimary		BIT					NOT NULL DEFAULT 0,				                    -- Endereço principal
     IsActive		BIT					NOT NULL DEFAULT 1,				                    -- Flag de ativo
     IsDeleted		BIT					NOT NULL DEFAULT 0,				                    -- Soft delete
@@ -437,7 +405,7 @@ CREATE TABLE dbo.JwtKeys (
     RotationPolicyDays 		INT 				NOT NULL DEFAULT 90,
     OverlapPeriodDays 		INT 				NOT NULL DEFAULT 7,
     MaxTokenLifetimeMinutes INT 				NOT NULL DEFAULT 60,
-    IsActive 				BIT 				NOT NULL DEFAULT 0,
+    IsActive 				BIT 				NOT NULL DEFAULT 1,
     IsDeleted 				BIT 				NOT NULL DEFAULT 0,
     CreatedBy		        INT		            NOT NULL,
     CreatedAt		        DATETIME2(7)		NOT NULL DEFAULT SYSDATETIME(),
@@ -505,10 +473,10 @@ GO
 CREATE TABLE dbo.Clients (                                                              -- Clientes do tenant
     Id				    INT IDENTITY(1,1)	NOT NULL,						            -- Identificador do cliente, chave primária
     TenantId		    INT					NOT NULL,						            -- Tenant dono do cliente
-    ClientTypeId        INT				    NOT NULL,						            -- Tipo do cliente (1=Individual, 2=Empresa, etc.)
-    OriginTypeId        INT                 NOT NULL DEFAULT 1,						    -- Origem do cliente (Instagram, Facebook, Outros.)
+    ClientType          INT				    NOT NULL,						            -- Tipo do cliente (1=Individual, 2=Empresa, etc.)
+    OriginType          INT                 NOT NULL DEFAULT 1,						    -- Origem do cliente (Instagram, Facebook, Outros.)
     UrlImage    	    NVARCHAR(500)			NULL,						            -- URL da imagem/avatar do cliente
-    Notes               NVARCHAR(500)           NULL,						            -- Observações adicionais sobre o cliente
+    Note                NVARCHAR(500)           NULL,						            -- Observações adicionais sobre o cliente
     IsActive		    BIT					NOT NULL DEFAULT 1,                         -- Flag de ativo
     IsDeleted		    BIT					NOT NULL DEFAULT 0,                         -- Soft delete
     CreatedBy		    INT         		NOT NULL,						            -- Usuário criador
@@ -518,9 +486,7 @@ CREATE TABLE dbo.Clients (                                                      
 	CONSTRAINT PK_Clients PRIMARY KEY CLUSTERED (Id),                                   -- PK
     CONSTRAINT CK_Clients_Active_Deleted CHECK (NOT (IsActive = 1 AND IsDeleted = 1)),  -- Garantir que um cliente não pode ser ativo e deletado ao mesmo tempo
     CONSTRAINT UQ_Clients_Id_Tenant UNIQUE (Id, TenantId),                              -- Garantir que o Id é único dentro do tenant (para FKs compostas)
-    CONSTRAINT FK_Clients_ClientType FOREIGN KEY (ClientTypeId) REFERENCES dbo.ClientTypes(Id), -- FK para tipo do cliente
-    CONSTRAINT FK_Clients_OriginType FOREIGN KEY (OriginTypeId) REFERENCES dbo.OriginTypes(Id), -- FK para origem do cliente
-    CONSTRAINT FK_Clients_Tenant FOREIGN KEY (TenantId) REFERENCES dbo.Tenants(Id)              -- FK para tenant
+    CONSTRAINT FK_Clients_Tenant FOREIGN KEY (TenantId) REFERENCES dbo.Tenants(Id)      -- FK para tenant
 );
 GO
 CREATE TABLE dbo.ClientIndividuals (                                                     -- Dados específicos de clientes individuais (Pessoa Física)
@@ -592,7 +558,7 @@ CREATE TABLE dbo.ClientAddresses (															-- Endereços do client
     Complement      NVARCHAR(100)           NULL,                                           -- Apto, bloco, andar, etc.
     Latitude        DECIMAL(9,6)            NULL,                                           -- Latitude geográfica (opcional)
     Longitude       DECIMAL(9,6)            NULL,                                           -- Longitude geográfica (opcional)
-    Notes           NVARCHAR(500)           NULL,                                           -- Observações adicionais sobre o endereço  
+    Note            NVARCHAR(500)           NULL,                                           -- Observações adicionais sobre o endereço  
     IsPrimary		BIT					NOT NULL DEFAULT 0,				                    -- Endereço principal
     IsActive		BIT					NOT NULL DEFAULT 1,				                    -- Flag de ativo
     IsDeleted		BIT					NOT NULL DEFAULT 0,				                    -- Soft delete
@@ -790,7 +756,7 @@ CREATE TABLE dbo.EmployeeAddresses (									                    -- Endereços do
     Complement      NVARCHAR(100)           NULL,                                           -- Apto, bloco, andar, etc.
     Latitude        DECIMAL(9,6)            NULL,                                           -- Latitude geográfica (opcional)
     Longitude       DECIMAL(9,6)            NULL,                                           -- Longitude geográfica (opcional)
-    Notes           NVARCHAR(500)           NULL,                                           -- Observações adicionais sobre o endereço  
+    Note            NVARCHAR(500)           NULL,                                           -- Observações adicionais sobre o endereço  
     IsPrimary		BIT					NOT NULL DEFAULT 0,				                    -- Endereço principal
     IsActive		BIT					NOT NULL DEFAULT 1,				                    -- Flag de ativo
     IsDeleted		BIT					NOT NULL DEFAULT 0,				                    -- Soft delete
@@ -952,7 +918,7 @@ CREATE TABLE dbo.VisitAddresses (								                                       
     Complement          NVARCHAR(100)           NULL,                                                                   -- Apto, bloco, andar, etc.
     Latitude            DECIMAL(9,6)            NULL,                                                                   -- Latitude geográfica (opcional)
     Longitude           DECIMAL(9,6)            NULL,                                                                   -- Longitude geográfica (opcional)
-    Notes               NVARCHAR(500)           NULL,                                                                   -- Observações adicionais sobre o endereço  
+    Note                NVARCHAR(500)           NULL,                                                                   -- Observações adicionais sobre o endereço  
     IsPrimary		    BIT					NOT NULL DEFAULT 0,				                                            -- Endereço principal
     IsActive		    BIT					NOT NULL DEFAULT 1,				                                            -- Flag de ativo
     IsDeleted		    BIT					NOT NULL DEFAULT 0,				                                            -- Soft delete

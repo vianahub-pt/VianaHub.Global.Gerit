@@ -15,54 +15,41 @@ public class OriginTypeMapping : IEntityTypeConfiguration<OriginTypeEntity>
             .HasName("PK_OriginTypes");
 
         builder.Property(x => x.Id)
-            .HasColumnName("Id")
             .UseIdentityColumn(1, 1)
             .IsRequired();
 
         // Propriedades
         builder.Property(x => x.Name)
-            .HasColumnName("Name")
             .HasColumnType("NVARCHAR(200)")
             .HasMaxLength(200)
             .IsRequired();
 
         builder.Property(x => x.Description)
-            .HasColumnName("Description")
             .HasColumnType("NVARCHAR(500)")
             .HasMaxLength(500)
             .IsRequired();
 
         builder.Property(x => x.IsActive)
-            .HasColumnName("IsActive")
-            .HasColumnType("BIT")
             .HasDefaultValue(true)
             .IsRequired();
 
         builder.Property(x => x.IsDeleted)
-            .HasColumnName("IsDeleted")
-            .HasColumnType("BIT")
             .HasDefaultValue(false)
             .IsRequired();
 
         builder.Property(x => x.CreatedBy)
-            .HasColumnName("CreatedBy")
-            .HasColumnType("INT")
             .IsRequired();
 
         builder.Property(x => x.CreatedAt)
-            .HasColumnName("CreatedAt")
-            .HasColumnType("DATETIME2")
-            .HasDefaultValueSql("SYSDATETIME()")
+            .HasColumnType("DATETIME2(7)")
             .IsRequired();
 
         builder.Property(x => x.ModifiedBy)
-            .HasColumnName("ModifiedBy")
             .HasColumnType("INT")
             .IsRequired(false);
 
         builder.Property(x => x.ModifiedAt)
-            .HasColumnName("ModifiedAt")
-            .HasColumnType("DATETIME2")
+            .HasColumnType("DATETIME2(7)")
             .IsRequired(false);
     }
 }

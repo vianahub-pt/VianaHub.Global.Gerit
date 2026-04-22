@@ -16,27 +16,60 @@ public class ClientConsentsMapping : IEntityTypeConfiguration<ClientConsentsEnti
         builder.HasAlternateKey(x => new { x.Id, x.TenantId })
             .HasName("UQ_ClientConsents_Id_Tenant");
 
-        builder.Property(x => x.TenantId).HasColumnName("TenantId").IsRequired();
-        builder.Property(x => x.ClientId).HasColumnName("ClientId").IsRequired();
-        builder.Property(x => x.ConsentTypeId).HasColumnName("ConsentTypeId").IsRequired();
-        builder.Property(x => x.Granted).HasColumnName("Granted").HasDefaultValue(false);
-        builder.Property(x => x.GrantedDate).HasColumnName("GrantedDate").HasColumnType("DATETIME2(7)").IsRequired();
-        builder.Property(x => x.RevokedDate).HasColumnName("RevokedDate").HasColumnType("DATETIME2(7)");
-        builder.Property(x => x.Origin).HasColumnName("Origin").HasColumnType("NVARCHAR(50)").HasMaxLength(50).IsRequired();
-        builder.Property(x => x.IpAddress).HasColumnName("IpAddress").HasColumnType("NVARCHAR(50)").HasMaxLength(50);
-        builder.Property(x => x.UserAgent).HasColumnName("UserAgent").HasColumnType("NVARCHAR(500)").HasMaxLength(500);
+        builder.Property(x => x.TenantId)
+            .IsRequired();
+        
+        builder.Property(x => x.ClientId)
+            .IsRequired();
+        
+        builder.Property(x => x.ConsentTypeId)
+            .IsRequired();
+        
+        builder.Property(x => x.Granted)
+            .HasDefaultValue(false);
+        
+        builder.Property(x => x.GrantedDate)
+            .HasColumnType("DATETIME2(7)")
+            .IsRequired();
+        
+        builder.Property(x => x.RevokedDate)
+            .HasColumnType("DATETIME2(7)");
+        
+        builder.Property(x => x.Origin)
+            .HasColumnType("NVARCHAR(50)")
+            .HasMaxLength(50)
+            .IsRequired();
+        
+        builder.Property(x => x.IpAddress)
+            .HasColumnType("NVARCHAR(50)")
+            .HasMaxLength(50);
+        
+        builder.Property(x => x.UserAgent)
+            .HasColumnType("NVARCHAR(500)")
+            .HasMaxLength(500);
 
-        builder.Property(x => x.IsActive).HasColumnName("IsActive").HasDefaultValue(true);
-        builder.Property(x => x.IsDeleted).HasColumnName("IsDeleted").HasDefaultValue(false);
-        builder.Property(x => x.CreatedBy).HasColumnName("CreatedBy").IsRequired();
-        builder.Property(x => x.CreatedAt).HasColumnName("CreatedAt").HasColumnType("DATETIME2(7)").IsRequired();
-        builder.Property(x => x.ModifiedBy).HasColumnName("ModifiedBy");
-        builder.Property(x => x.ModifiedAt).HasColumnName("ModifiedAt").HasColumnType("DATETIME2(7)");
+        builder.Property(x => x.IsActive)
+            .HasDefaultValue(true)
+            .IsRequired();
 
-        builder.HasOne(x => x.Tenant)
-            .WithMany()
-            .HasForeignKey(x => x.TenantId)
-            .OnDelete(DeleteBehavior.Restrict);
+        builder.Property(x => x.IsDeleted)
+            .HasDefaultValue(false)
+            .IsRequired();
+
+        builder.Property(x => x.CreatedBy)
+            .IsRequired();
+
+        builder.Property(x => x.CreatedAt)
+            .HasColumnType("DATETIME2(7)")
+            .IsRequired();
+
+        builder.Property(x => x.ModifiedBy)
+            .HasColumnType("INT")
+            .IsRequired(false);
+
+        builder.Property(x => x.ModifiedAt)
+            .HasColumnType("DATETIME2(7)")
+            .IsRequired(false);
 
         builder.HasOne(x => x.Client)
             .WithMany(c => c.Consents)

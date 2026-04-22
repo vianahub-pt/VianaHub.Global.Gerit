@@ -1,5 +1,4 @@
-﻿
-GO
+﻿GO
 INSERT INTO dbo.AddressTypes (Name, Description, CreatedBy)
 SELECT v.Name, v.Description, 1
 FROM (VALUES
@@ -46,24 +45,6 @@ WHERE NOT EXISTS (
     SELECT 1 FROM dbo.FileTypes f WHERE f.MimeType = v.MimeType
 );
 GO
-INSERT INTO dbo.ClientTypes (Name, Description, CreatedBy)
-SELECT v.Name, v.Description, 1
-FROM (VALUES
-    (N'Consumidor final', N'Pessoa física que compra para uso pessoal/familiar.'),
-    (N'Pequenas e Médias Empresas (PME)', N'Negócios de menor dimensão com compras regulares ou pontuais.'),
-    (N'Grandes empresas / Corporates', N'Empresas com grande volume de compras e processos formais.'),
-    (N'Setor público / Administração', N'Entidades governamentais e serviços públicos.'),
-    (N'Instituições e ONG', N'Organizações sem fins lucrativos e fundações.'),
-    (N'Cliente internacional / expatriado', N'Compradores não nacionais ou que trazem necessidades transfronteiriças.'),
-    (N'Cliente digital / online-only', N'Compra exclusivamente por canais digitais.'),
-    (N'Cliente recorrente / subscritor', N'Tem relacionamento continuado (assinaturas/contratos).'),
-    (N'Cliente VIP / alto valor', N'Pouco número mas muito valor por cliente; exige serviço premium.'),
-    (N'Parceiro / revendedor', N'Intermediário que vende ou recomenda produtos/serviços.')
-) AS v(Name, Description)
-WHERE NOT EXISTS (
-    SELECT 1 FROM dbo.ClientTypes c WHERE c.Name = v.Name
-);
-GO
 INSERT INTO dbo.ConsentTypes (Name, Description, CreatedBy)
 SELECT v.Name, v.Description, 1
 FROM (VALUES
@@ -80,28 +61,6 @@ FROM (VALUES
 ) AS v(Name, Description)
 WHERE NOT EXISTS (
     SELECT 1 FROM dbo.ConsentTypes c WHERE c.Name = v.Name
-);
-GO
-INSERT INTO dbo.OriginTypes (Name, Description, CreatedBy)
-SELECT v.Name, v.Description, 1
-FROM (VALUES
-    (N'Website', N'Cliente originado através do website institucional ou landing pages.'),
-    (N'Google', N'Cliente proveniente de campanhas pagas no Google (Search, Display, YouTube).'),
-    (N'Facebook', N'Cliente proveniente de campanhas pagas no Facebook/Instagram.'),
-    (N'Instagram', N'Cliente que chegou através de conteúdo orgânico no Instagram.'),
-    (N'LinkedIn', N'Cliente proveniente do LinkedIn (orgânico ou campanhas).'),
-    (N'Recomendação', N'Cliente indicado por outro cliente ou parceiro.'),
-    (N'Parceria', N'Cliente adquirido através de parceiros comerciais ou estratégicos.'),
-    (N'Evento', N'Cliente captado em eventos, feiras ou conferências.'),
-    (N'Email marketing', N'Cliente proveniente de campanhas de email marketing.'),
-    (N'WhatsApp', N'Cliente que iniciou contacto via WhatsApp.'),
-    (N'Contacto direto', N'Cliente que entrou em contacto direto (telefone, visita, etc.).'),
-    (N'Marketplace', N'Cliente vindo de plataformas externas ou marketplaces.'),
-    (N'App mobile', N'Cliente originado através da aplicação mobile.'),
-    (N'Prospecção', N'Cliente adquirido através de abordagem ativa (cold calls, cold emails).')
-) AS v(Name, Description)
-WHERE NOT EXISTS (
-    SELECT 1 FROM dbo.OriginTypes o WHERE o.Name = v.Name
 );
 GO
 INSERT INTO dbo.StatusTypes (Name, Description, CreatedBy)
@@ -129,7 +88,7 @@ WHERE NOT EXISTS (
 GO
 INSERT INTO dbo.Plans (
     Name, Description, PricePerHour, PricePerDay, PricePerMonth, PricePerYear,
-    Currency, MaxUsers, MaxPhotosPerInterventions, CreatedBy
+    Currency, MaxUsers, MaxPhotosPerVisits, CreatedBy
 )
 SELECT *
 FROM (VALUES
@@ -142,7 +101,7 @@ FROM (VALUES
     (N'Pay-as-you-go Daily', N'Plano baseado em consumo por dia.', NULL, 25.00, NULL, NULL, N'EUR', 10, 100, 1)
 ) AS v(
     Name, Description, PricePerHour, PricePerDay, PricePerMonth, PricePerYear,
-    Currency, MaxUsers, MaxPhotosPerInterventions, CreatedBy
+    Currency, MaxUsers, MaxPhotosPerVisits, CreatedBy
 )
 WHERE NOT EXISTS (
     SELECT 1 FROM dbo.Plans p WHERE p.Name = v.Name
@@ -215,7 +174,6 @@ FROM (VALUES
     (N'ClientHierarchy', N'Hierarquia entre clientes.'),
     (N'ClientIndividuals', N'Dados de clientes individuais.'),
     (N'Clients', N'Clientes do sistema.'),
-    (N'ClientTypes', N'Tipos de clientes.'),
     (N'ConsentTypes', N'Tipos de consentimento.'),
     (N'Equipments', N'Equipamentos.'),
     (N'EquipmentTypes', N'Tipos de equipamentos.'),
@@ -230,7 +188,6 @@ FROM (VALUES
     (N'InterventionTeamVehicles', N'Veículos das equipas nas intervenções.'),
     (N'JobDefinitions', N'Definições de jobs/processos.'),
     (N'JwtKeys', N'Chaves JWT.'),
-    (N'OriginTypes', N'Tipos de origem.'),
     (N'PlanFileRules', N'Regras de arquivos por plano.'),
     (N'Plans', N'Planos do sistema.'),
     (N'RefreshTokens', N'Tokens de atualização.'),
@@ -259,36 +216,35 @@ WHERE NOT EXISTS (
 );
 GO
 INSERT INTO dbo.Tenants (
-    TenantTypeId,
-    OriginTypeId,
-    ConsentTypeId,
+    TenantType,
+    OriginType,
     Name,
     Email,
     Website,
     UrlImage,
-    Remarks,
+    Note,
     CreatedBy
 )
 SELECT *
 FROM (VALUES
-    (2, 1, 1, N'VianaHub Lda', N'contact@vianahub.pt', N'https://vianahub.pt', NULL, N'Tenant principal', 1),
-    (2, 1, 1, N'Gerit Demo Lda', N'demo@gerit.pt', N'https://demo.gerit.pt', NULL, N'Ambiente de demonstração', 1),
-    (2, 1, 1, N'Teste Lda', N'teste@teste.pt', NULL, NULL, N'Tenant para testes internos', 1)
+    (2, 1, N'VianaHub Lda', N'contact@vianahub.pt', N'https://vianahub.pt', NULL, N'Tenant principal', 1),
+    (2, 1, N'Gerit Demo Lda', N'demo@gerit.pt', N'https://demo.gerit.pt', NULL, N'Ambiente de demonstração', 1),
+    (2, 1, N'Teste Lda', N'teste@teste.pt', NULL, NULL, N'Tenant para testes internos', 1)
 ) AS v(
-    TenantTypeId,
-    OriginTypeId,
-    ConsentTypeId,
+    TenantType,
+    OriginType,
     Name,
     Email,
     Website,
     UrlImage,
-    Remarks,
+    Note,
     CreatedBy
 )
 WHERE NOT EXISTS (
     SELECT 1 FROM dbo.Tenants t WHERE t.Name = v.Name
 );
 GO
+EXEC sp_set_session_context @key=N'IsSuperAdmin', @value=1;
 INSERT INTO dbo.Roles (
     TenantId,
     Name,
@@ -386,7 +342,7 @@ INSERT INTO dbo.TenantAddresses (
     Complement,
     Latitude,
     Longitude,
-    Remarks,
+    Note,
     IsPrimary,
     CreatedBy
 )
@@ -408,7 +364,7 @@ FROM (VALUES
     Complement,
     Latitude,
     Longitude,
-    Remarks,
+    Note,
     IsPrimary,
     CreatedBy
 )
@@ -479,19 +435,449 @@ WHERE NOT EXISTS (
     FROM dbo.Subscriptions s 
     WHERE s.TenantId = t.Id
 );
+EXEC sp_set_session_context @key=N'IsSuperAdmin', @value=1;
+INSERT INTO [dbo].[RolePermissions]
+           ([TenantId]
+           ,[RoleId]
+           ,[ResourceId]
+           ,[ActionId])
+VALUES
+(1, 2, 1,1),
+(1, 2, 1,2),
+(1, 2, 1,3),
+(1, 2, 1,4),
+(1, 2, 1,5),
+(1, 2, 1,6),
+(1, 2, 1,7),
+(1, 2, 1,8),
+(1, 2, 1,9),
+(1, 2, 2,1),
+(1, 2, 2,2),
+(1, 2, 2,3),
+(1, 2, 2,4),
+(1, 2, 2,5),
+(1, 2, 2,6),
+(1, 2, 2,7),
+(1, 2, 2,8),
+(1, 2, 2,9),
+(1, 2, 3,1),
+(1, 2, 3,2),
+(1, 2, 3,3),
+(1, 2, 3,4),
+(1, 2, 3,5),
+(1, 2, 3,6),
+(1, 2, 3,7),
+(1, 2, 3,8),
+(1, 2, 3,9),
+(1, 2, 4,1),
+(1, 2, 4,2),
+(1, 2, 4,3),
+(1, 2, 4,4),
+(1, 2, 4,5),
+(1, 2, 4,6),
+(1, 2, 4,7),
+(1, 2, 4,8),
+(1, 2, 4,9),
+(1, 2, 5,1),
+(1, 2, 5,2),
+(1, 2, 5,3),
+(1, 2, 5,4),
+(1, 2, 5,5),
+(1, 2, 5,6),
+(1, 2, 5,7),
+(1, 2, 5,8),
+(1, 2, 5,9),
+(1, 2, 6,1),
+(1, 2, 6,2),
+(1, 2, 6,3),
+(1, 2, 6,4),
+(1, 2, 6,5),
+(1, 2, 6,6),
+(1, 2, 6,7),
+(1, 2, 6,8),
+(1, 2, 6,9),
+(1, 2, 7,1),
+(1, 2, 7,2),
+(1, 2, 7,3),
+(1, 2, 7,4),
+(1, 2, 7,5),
+(1, 2, 7,6),
+(1, 2, 7,7),
+(1, 2, 7,8),
+(1, 2, 7,9),
+(1, 2, 8,1),
+(1, 2, 8,2),
+(1, 2, 8,3),
+(1, 2, 8,4),
+(1, 2, 8,5),
+(1, 2, 8,6),
+(1, 2, 8,7),
+(1, 2, 8,8),
+(1, 2, 8,9),
+(1, 2, 9,1),
+(1, 2, 9,2),
+(1, 2, 9,3),
+(1, 2, 9,4),
+(1, 2, 9,5),
+(1, 2, 9,6),
+(1, 2, 9,7),
+(1, 2, 9,8),
+(1, 2, 9,9),
+(1, 2, 10,1),
+(1, 2, 10,2),
+(1, 2, 10,3),
+(1, 2, 10,4),
+(1, 2, 10,5),
+(1, 2, 10,6),
+(1, 2, 10,7),
+(1, 2, 10,8),
+(1, 2, 10,9),
+(1, 2, 11,1),
+(1, 2, 11,2),
+(1, 2, 11,3),
+(1, 2, 11,4),
+(1, 2, 11,5),
+(1, 2, 11,6),
+(1, 2, 11,7),
+(1, 2, 11,8),
+(1, 2, 11,9),
+(1, 2, 12,1),
+(1, 2, 12,2),
+(1, 2, 12,3),
+(1, 2, 12,4),
+(1, 2, 12,5),
+(1, 2, 12,6),
+(1, 2, 12,7),
+(1, 2, 12,8),
+(1, 2, 12,9),
+(1, 2, 13,1),
+(1, 2, 13,2),
+(1, 2, 13,3),
+(1, 2, 13,4),
+(1, 2, 13,5),
+(1, 2, 13,6),
+(1, 2, 13,7),
+(1, 2, 13,8),
+(1, 2, 13,9),
+(1, 2, 14,1),
+(1, 2, 14,2),
+(1, 2, 14,3),
+(1, 2, 14,4),
+(1, 2, 14,5),
+(1, 2, 14,6),
+(1, 2, 14,7),
+(1, 2, 14,8),
+(1, 2, 14,9),
+(1, 2, 15,1),
+(1, 2, 15,2),
+(1, 2, 15,3),
+(1, 2, 15,4),
+(1, 2, 15,5),
+(1, 2, 15,6),
+(1, 2, 15,7),
+(1, 2, 15,8),
+(1, 2, 15,9),
+(1, 2, 16,1),
+(1, 2, 16,2),
+(1, 2, 16,3),
+(1, 2, 16,4),
+(1, 2, 16,5),
+(1, 2, 16,6),
+(1, 2, 16,7),
+(1, 2, 16,8),
+(1, 2, 16,9),
+(1, 2, 17,1),
+(1, 2, 17,2),
+(1, 2, 17,3),
+(1, 2, 17,4),
+(1, 2, 17,5),
+(1, 2, 17,6),
+(1, 2, 17,7),
+(1, 2, 17,8),
+(1, 2, 17,9),
+(1, 2, 18,1),
+(1, 2, 18,2),
+(1, 2, 18,3),
+(1, 2, 18,4),
+(1, 2, 18,5),
+(1, 2, 18,6),
+(1, 2, 18,7),
+(1, 2, 18,8),
+(1, 2, 18,9),
+(1, 2, 19,1),
+(1, 2, 19,2),
+(1, 2, 19,3),
+(1, 2, 19,4),
+(1, 2, 19,5),
+(1, 2, 19,6),
+(1, 2, 19,7),
+(1, 2, 19,8),
+(1, 2, 19,9),
+(1, 2, 20,1),
+(1, 2, 20,2),
+(1, 2, 20,3),
+(1, 2, 20,4),
+(1, 2, 20,5),
+(1, 2, 20,6),
+(1, 2, 20,7),
+(1, 2, 20,8),
+(1, 2, 20,9),
+(1, 2, 21,1),
+(1, 2, 21,2),
+(1, 2, 21,3),
+(1, 2, 21,4),
+(1, 2, 21,5),
+(1, 2, 21,6),
+(1, 2, 21,7),
+(1, 2, 21,8),
+(1, 2, 21,9),
+(1, 2, 22,1),
+(1, 2, 22,2),
+(1, 2, 22,3),
+(1, 2, 22,4),
+(1, 2, 22,5),
+(1, 2, 22,6),
+(1, 2, 22,7),
+(1, 2, 22,8),
+(1, 2, 22,9),
+(1, 2, 23,1),
+(1, 2, 23,2),
+(1, 2, 23,3),
+(1, 2, 23,4),
+(1, 2, 23,5),
+(1, 2, 23,6),
+(1, 2, 23,7),
+(1, 2, 23,8),
+(1, 2, 23,9),
+(1, 2, 24,1),
+(1, 2, 24,2),
+(1, 2, 24,3),
+(1, 2, 24,4),
+(1, 2, 24,5),
+(1, 2, 24,6),
+(1, 2, 24,7),
+(1, 2, 24,8),
+(1, 2, 24,9),
+(1, 2, 25,1),
+(1, 2, 25,2),
+(1, 2, 25,3),
+(1, 2, 25,4),
+(1, 2, 25,5),
+(1, 2, 25,6),
+(1, 2, 25,7),
+(1, 2, 25,8),
+(1, 2, 25,9),
+(1, 2, 26,1),
+(1, 2, 26,2),
+(1, 2, 26,3),
+(1, 2, 26,4),
+(1, 2, 26,5),
+(1, 2, 26,6),
+(1, 2, 26,7),
+(1, 2, 26,8),
+(1, 2, 26,9),
+(1, 2, 27,1),
+(1, 2, 27,2),
+(1, 2, 27,3),
+(1, 2, 27,4),
+(1, 2, 27,5),
+(1, 2, 27,6),
+(1, 2, 27,7),
+(1, 2, 27,8),
+(1, 2, 27,9),
+(1, 2, 28,1),
+(1, 2, 28,2),
+(1, 2, 28,3),
+(1, 2, 28,4),
+(1, 2, 28,5),
+(1, 2, 28,6),
+(1, 2, 28,7),
+(1, 2, 28,8),
+(1, 2, 28,9),
+(1, 2, 29,1),
+(1, 2, 29,2),
+(1, 2, 29,3),
+(1, 2, 29,4),
+(1, 2, 29,5),
+(1, 2, 29,6),
+(1, 2, 29,7),
+(1, 2, 29,8),
+(1, 2, 29,9),
+(1, 2, 30,1),
+(1, 2, 30,2),
+(1, 2, 30,3),
+(1, 2, 30,4),
+(1, 2, 30,5),
+(1, 2, 30,6),
+(1, 2, 30,7),
+(1, 2, 30,8),
+(1, 2, 30,9),
+(1, 2, 31,1),
+(1, 2, 31,2),
+(1, 2, 31,3),
+(1, 2, 31,4),
+(1, 2, 31,5),
+(1, 2, 31,6),
+(1, 2, 31,7),
+(1, 2, 31,8),
+(1, 2, 31,9),
+(1, 2, 32,1),
+(1, 2, 32,2),
+(1, 2, 32,3),
+(1, 2, 32,4),
+(1, 2, 32,5),
+(1, 2, 32,6),
+(1, 2, 32,7),
+(1, 2, 32,8),
+(1, 2, 32,9),
+(1, 2, 33,1),
+(1, 2, 33,2),
+(1, 2, 33,3),
+(1, 2, 33,4),
+(1, 2, 33,5),
+(1, 2, 33,6),
+(1, 2, 33,7),
+(1, 2, 33,8),
+(1, 2, 33,9),
+(1, 2, 34,1),
+(1, 2, 34,2),
+(1, 2, 34,3),
+(1, 2, 34,4),
+(1, 2, 34,5),
+(1, 2, 34,6),
+(1, 2, 34,7),
+(1, 2, 34,8),
+(1, 2, 34,9),
+(1, 2, 35,1),
+(1, 2, 35,2),
+(1, 2, 35,3),
+(1, 2, 35,4),
+(1, 2, 35,5),
+(1, 2, 35,6),
+(1, 2, 35,7),
+(1, 2, 35,8),
+(1, 2, 35,9),
+(1, 2, 36,1),
+(1, 2, 36,2),
+(1, 2, 36,3),
+(1, 2, 36,4),
+(1, 2, 36,5),
+(1, 2, 36,6),
+(1, 2, 36,7),
+(1, 2, 36,8),
+(1, 2, 36,9),
+(1, 2, 37,1),
+(1, 2, 37,2),
+(1, 2, 37,3),
+(1, 2, 37,4),
+(1, 2, 37,5),
+(1, 2, 37,6),
+(1, 2, 37,7),
+(1, 2, 37,8),
+(1, 2, 37,9),
+(1, 2, 38,1),
+(1, 2, 38,2),
+(1, 2, 38,3),
+(1, 2, 38,4),
+(1, 2, 38,5),
+(1, 2, 38,6),
+(1, 2, 38,7),
+(1, 2, 38,8),
+(1, 2, 38,9),
+(1, 2, 39,1),
+(1, 2, 39,2),
+(1, 2, 39,3),
+(1, 2, 39,4),
+(1, 2, 39,5),
+(1, 2, 39,6),
+(1, 2, 39,7),
+(1, 2, 39,8),
+(1, 2, 39,9),
+(1, 2, 40,1),
+(1, 2, 40,2),
+(1, 2, 40,3),
+(1, 2, 40,4),
+(1, 2, 40,5),
+(1, 2, 40,6),
+(1, 2, 40,7),
+(1, 2, 40,8),
+(1, 2, 40,9),
+(1, 2, 41,1),
+(1, 2, 41,2),
+(1, 2, 41,3),
+(1, 2, 41,4),
+(1, 2, 41,5),
+(1, 2, 41,6),
+(1, 2, 41,7),
+(1, 2, 41,8),
+(1, 2, 41,9),
+(1, 2, 42,1),
+(1, 2, 42,2),
+(1, 2, 42,3),
+(1, 2, 42,4),
+(1, 2, 42,5),
+(1, 2, 42,6),
+(1, 2, 42,7),
+(1, 2, 42,8),
+(1, 2, 42,9),
+(1, 2, 43,1),
+(1, 2, 43,2),
+(1, 2, 43,3),
+(1, 2, 43,4),
+(1, 2, 43,5),
+(1, 2, 43,6),
+(1, 2, 43,7),
+(1, 2, 43,8),
+(1, 2, 43,9),
+(1, 2, 44,1),
+(1, 2, 44,2),
+(1, 2, 44,3),
+(1, 2, 44,4),
+(1, 2, 44,5),
+(1, 2, 44,6),
+(1, 2, 44,7),
+(1, 2, 44,8),
+(1, 2, 44,9),
+(1, 2, 45,1),
+(1, 2, 45,2),
+(1, 2, 45,3),
+(1, 2, 45,4),
+(1, 2, 45,5),
+(1, 2, 45,6),
+(1, 2, 45,7),
+(1, 2, 45,8),
+(1, 2, 45,9),
+(1, 2, 46,1),
+(1, 2, 46,2),
+(1, 2, 46,3),
+(1, 2, 46,4),
+(1, 2, 46,5),
+(1, 2, 46,6),
+(1, 2, 46,7),
+(1, 2, 46,8),
+(1, 2, 46,9),
+(1, 2, 47,1),
+(1, 2, 47,2),
+(1, 2, 47,3),
+(1, 2, 47,4),
+(1, 2, 47,5),
+(1, 2, 47,6),
+(1, 2, 47,7),
+(1, 2, 47,8),
+(1, 2, 47,9)
 GO
 INSERT INTO dbo.Clients (
     TenantId,
-    ClientTypeId,
-    OriginTypeId,
-    Remarks,
+    ClientType,
+    OriginType,
+    Note,
     CreatedBy
 )
 SELECT 
     t.Id,
-    v.ClientTypeId,
+    v.ClientType,
     1,
-    v.Remarks,
+    v.Note,
     1
 FROM dbo.Tenants t
 CROSS JOIN (VALUES
@@ -514,7 +900,7 @@ CROSS JOIN (VALUES
     (2, N'Empresa 10'),
     (2, N'Empresa 11'),
     (2, N'Empresa 12')
-) v(ClientTypeId, Remarks);
+) v(ClientType, Note);
 GO
 INSERT INTO dbo.ClientIndividuals (
     ClientId,
@@ -577,7 +963,7 @@ FROM (
             ORDER BY c.Id
         ) AS rn
     FROM dbo.Clients c
-    WHERE c.ClientTypeId = 1
+    WHERE c.ClientType = 1
 ) c
 WHERE c.rn <= 4
 AND NOT EXISTS (
@@ -593,7 +979,7 @@ INSERT INTO dbo.ClientCompanies (
     TradeName,
     CompanyRegistration,
     CAE,
-    NumberOfEmployees,
+    NumberOfEmployee,
     LegalRepresentative,
     CreatedBy
 )
@@ -659,7 +1045,7 @@ FROM (
             ORDER BY c.Id
         ) AS rn
     FROM dbo.Clients c
-    WHERE c.ClientTypeId = 2
+    WHERE c.ClientType = 2
 ) c
 WHERE c.rn <= 12
 AND NOT EXISTS (
@@ -669,7 +1055,6 @@ AND NOT EXISTS (
 );
 GO
 DECLARE @Now DATETIME2 = SYSDATETIME();
-
 INSERT INTO dbo.ClientAddresses (
     TenantId,
     ClientId,
@@ -684,7 +1069,7 @@ INSERT INTO dbo.ClientAddresses (
     Complement,
     Latitude,
     Longitude,
-    Notes,
+    Note,
     IsPrimary,
     IsActive,
     IsDeleted,
@@ -695,7 +1080,7 @@ SELECT
     c.TenantId,
     c.Id,
     CASE 
-        WHEN c.ClientTypeId = 1 THEN 1 -- Residencial
+        WHEN c.ClientType = 1 THEN 1 -- Residencial
         ELSE 2                         -- Comercial
     END,
     'PT',
@@ -764,7 +1149,7 @@ SELECT
     c.TenantId,
     c.Id,
     CASE 
-        WHEN c.ClientTypeId = 1 
+        WHEN c.ClientType = 1 
             THEN CONCAT(ci.FirstName, ' ', ci.LastName)
         ELSE cc.LegalName
     END,
@@ -909,13 +1294,13 @@ FROM dbo.Clients cParent
 JOIN dbo.Clients cChild 
     ON cParent.TenantId = cChild.TenantId
 WHERE 
-    cParent.ClientTypeId = 2 -- empresa
-    AND cChild.ClientTypeId = 2
+    cParent.ClientType = 2 -- empresa
+    AND cChild.ClientType = 2
     AND cParent.Id = (
         SELECT MIN(Id)
         FROM dbo.Clients
         WHERE TenantId = cParent.TenantId
-          AND ClientTypeId = 2
+          AND ClientType = 2
     )
     AND cChild.Id <> cParent.Id
     AND NOT EXISTS (
@@ -1020,4 +1405,8 @@ WHERE NOT EXISTS (
     SELECT 1 FROM dbo.Functions fx
     WHERE fx.TenantId = t.Id AND fx.Name = f.Name
 );
+GO
+EXEC sp_set_session_context @key=N'IsSuperAdmin', @value=1;
+INSERT INTO dbo.UserRoles (TenantId, UserId, RoleId) VALUES 
+(1, 1, 2)
 GO

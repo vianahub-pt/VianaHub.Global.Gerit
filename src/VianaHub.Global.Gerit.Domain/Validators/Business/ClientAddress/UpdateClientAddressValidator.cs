@@ -63,9 +63,9 @@ public class UpdateClientAddressValidator : AbstractValidator<ClientAddressEntit
             .When(x => !string.IsNullOrEmpty(x.Complement))
             .WithMessage(localization.GetMessage("Domain.ClientAddress.ComplementMaxLength"));
 
-        RuleFor(x => x.Notes)
+        RuleFor(x => x.Note)
             .MaximumLength(500)
-            .When(x => !string.IsNullOrEmpty(x.Notes))
+            .When(x => !string.IsNullOrEmpty(x.Note))
             .WithMessage(localization.GetMessage("Domain.ClientAddress.NotesMaxLength"));
 
         RuleFor(x => x.IsDeleted)

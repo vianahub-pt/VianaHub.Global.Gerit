@@ -16,5 +16,5 @@ public class UpdateEmployeeAddressRequest
     public string District { get; set; }
     public decimal? Latitude { get; set; }
     public decimal? Longitude { get; set; }
-    public string Notes { get; set; }
+    public string Note { get; set; }
 }

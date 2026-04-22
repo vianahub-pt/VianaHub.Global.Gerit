@@ -17,6 +17,6 @@ public class CreateVisitAddressRequest
     public string PostalCode { get; set; }
     public decimal? Latitude { get; set; }
     public decimal? Longitude { get; set; }
-    public string Notes { get; set; }
+    public string Note { get; set; }
     public bool IsPrimary { get; set; }
 }

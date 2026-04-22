@@ -20,7 +20,7 @@ public class TenantAddressEntity : Entity
     public string Complement { get; private set; }
     public decimal? Latitude { get; private set; }
     public decimal? Longitude { get; private set; }
-    public string Notes { get; private set; }
+    public string Note { get; private set; }
     public bool IsPrimary { get; private set; }
     public bool IsActive { get; private set; }
     public bool IsDeleted { get; private set; }
@@ -48,7 +48,7 @@ public class TenantAddressEntity : Entity
         string complement,
         decimal? latitude,
         decimal? longitude,
-        string notes,
+        string note,
         bool isPrimary, 
         int createdBy)
     {
@@ -64,7 +64,7 @@ public class TenantAddressEntity : Entity
         Complement = complement;
         Latitude = latitude;
         Longitude = longitude;
-        Notes = notes;
+        Note = note;
         IsPrimary = isPrimary;
         IsActive = true;
         IsDeleted = false;
@@ -84,7 +84,7 @@ public class TenantAddressEntity : Entity
         string complement,
         decimal? latitude,
         decimal? longitude,
-        string notes,
+        string note,
         int modifiedBy)
     {
         AddressTypeId = addressTypeId;
@@ -98,7 +98,7 @@ public class TenantAddressEntity : Entity
         Complement = complement;
         Latitude = latitude;
         Longitude = longitude;
-        Notes = notes;
+        Note = note;
         ModifiedBy = modifiedBy;
         ModifiedAt = DateTime.UtcNow;
     }

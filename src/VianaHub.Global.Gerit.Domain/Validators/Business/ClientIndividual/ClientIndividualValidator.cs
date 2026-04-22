@@ -95,15 +95,6 @@ public class ClientIndividualValidator : IEntityDomainValidator<ClientIndividual
         else if (entity.LastName.Length > 100)
             errors.Add(new ValidationFailure(nameof(entity.LastName), "client_individual.last_name.max_length"));
 
-        if (!string.IsNullOrWhiteSpace(entity.PhoneNumber) && entity.PhoneNumber.Length > 50)
-            errors.Add(new ValidationFailure(nameof(entity.PhoneNumber), "client_individual.phone_number.max_length"));
-
-        if (!string.IsNullOrWhiteSpace(entity.CellPhoneNumber) && entity.CellPhoneNumber.Length > 50)
-            errors.Add(new ValidationFailure(nameof(entity.CellPhoneNumber), "client_individual.cell_phone_number.max_length"));
-
-        if (!string.IsNullOrWhiteSpace(entity.Email) && entity.Email.Length > 500)
-            errors.Add(new ValidationFailure(nameof(entity.Email), "client_individual.email.max_length"));
-
         if (!string.IsNullOrWhiteSpace(entity.Gender) && entity.Gender.Length > 20)
             errors.Add(new ValidationFailure(nameof(entity.Gender), "client_individual.gender.max_length"));
 

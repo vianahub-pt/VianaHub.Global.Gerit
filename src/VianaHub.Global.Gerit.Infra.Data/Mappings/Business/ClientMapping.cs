@@ -19,7 +19,6 @@ public class ClientMapping : IEntityTypeConfiguration<ClientEntity>
             .HasName("PK_Clients");
 
         builder.Property(x => x.Id)
-            .HasColumnName("Id")
             .UseIdentityColumn(1, 1)
             .IsRequired();
 
@@ -29,128 +28,49 @@ public class ClientMapping : IEntityTypeConfiguration<ClientEntity>
 
         // Propriedades
         builder.Property(x => x.TenantId)
-            .HasColumnName("TenantId")
             .HasColumnType("INT")
             .IsRequired(true);
 
         builder.Property(x => x.ClientType)
-            .HasColumnName("ClientType")
             .HasColumnType("INT")
             .IsRequired(true);
 
-        builder.Property(x => x.Origin)
-            .HasColumnName("Origin")
+        builder.Property(x => x.OriginType)
             .HasColumnType("INT")
             .IsRequired(true);
-
-        builder.Property(x => x.Name)
-            .HasColumnName("Name")
-            .HasColumnType("NVARCHAR(150)")
-            .HasMaxLength(150)
-            .IsRequired(true);
-
-        builder.Property(x => x.Phone)
-            .HasColumnName("Phone")
-            .HasColumnType("NVARCHAR(50)")
-            .HasMaxLength(50)
-            .IsRequired(true);
-
-        builder.Property(x => x.Email)
-            .HasColumnName("Email")
-            .HasColumnType("NVARCHAR(255)")
-            .HasMaxLength(255)
-            .IsRequired(false);
-
-        builder.Property(x => x.Website)
-            .HasColumnName("Website")
-            .HasColumnType("NVARCHAR(255)")
-            .HasMaxLength(255)
-            .IsRequired(false);
 
         builder.Property(x => x.UrlImage)
-            .HasColumnName("UrlImage")
-            .HasColumnType("NVARCHAR(255)")
-            .HasMaxLength(255)
+            .HasColumnType("NVARCHAR(500)")
+            .HasMaxLength(500)
             .IsRequired(false);
 
-        builder.Property(x => x.Score)
-            .HasColumnName("Score")
-            .HasColumnType("INT")
-            .IsRequired(false);
-
-        builder.Property(x => x.Consent)
-            .HasColumnName("Consent")
-            .HasColumnType("BIT")
-            .HasDefaultValue(false)
-            .IsRequired(true);
-
-        builder.Property(x => x.ConsentDate)
-            .HasColumnName("ConsentDate")
-            .HasColumnType("DATETIME2")
-            .HasDefaultValueSql("SYSDATETIME()")
-            .IsRequired(true);
-
-        builder.Property(x => x.RevokedConsentDate)
-            .HasColumnName("RevokedConsentDate")
-            .HasColumnType("DATETIME2")
-            .HasDefaultValueSql("SYSDATETIME()")
-            .IsRequired(false);
-
-        builder.Property(x => x.Remarks)
-            .HasColumnName("Remarks")
+        builder.Property(x => x.Note)
             .HasColumnType("NVARCHAR(500)")
             .HasMaxLength(500)
             .IsRequired(false);
 
         builder.Property(x => x.IsActive)
-            .HasColumnName("IsActive")
-            .HasColumnType("BIT")
             .HasDefaultValue(true)
-            .IsRequired(true);
+            .IsRequired();
 
         builder.Property(x => x.IsDeleted)
-            .HasColumnName("IsDeleted")
-            .HasColumnType("BIT")
             .HasDefaultValue(false)
-            .IsRequired(true);
+            .IsRequired();
 
         builder.Property(x => x.CreatedBy)
-              .HasColumnName("CreatedBy")
-              .HasColumnType("INT")
-              .IsRequired(true);
+            .IsRequired();
 
         builder.Property(x => x.CreatedAt)
-            .HasColumnName("CreatedAt")
-            .HasColumnType("DATETIME2")
-            .HasDefaultValueSql("SYSDATETIME()")
-            .IsRequired(true);
+            .HasColumnType("DATETIME2(7)")
+            .IsRequired();
 
         builder.Property(x => x.ModifiedBy)
-            .HasColumnName("ModifiedBy")
             .HasColumnType("INT")
             .IsRequired(false);
 
         builder.Property(x => x.ModifiedAt)
-            .HasColumnName("ModifiedAt")
-            .HasColumnType("DATETIME2")
+            .HasColumnType("DATETIME2(7)")
             .IsRequired(false);
-
-        // Constraints �nicos
-        builder.HasIndex(v => new { v.TenantId, v.Name })
-            .IsUnique()
-            .HasDatabaseName("UQ_Clients_Tenant_Name");
-
-        // �ndices �nicos com filtro
-        builder.HasIndex(v => new { v.TenantId, v.Name })
-            .IsUnique()
-            .HasDatabaseName("UX_Clients_Tenant_Name_Active")
-            .HasFilter("[IsDeleted] = 0");
-
-        // �ndices n�o clusterizados
-        builder.HasIndex(v => new { v.TenantId, v.Name })
-            .HasDatabaseName("IX_Clients_Tenant_Active")
-            .IncludeProperties(v => new { v.Email, v.Phone })
-            .HasFilter("[IsDeleted] = 0");
 
         // Relacionamentos
         builder.HasOne(x => x.Tenant)
@@ -194,14 +114,14 @@ public class ClientMapping : IEntityTypeConfiguration<ClientEntity>
 
         builder.HasMany(x => x.ChildHierarchies)
             .WithOne(h => h.ParentClient)
-            .HasForeignKey(h => new { h.ParentClientId, h.TenantId })
+            .HasForeignKey(h => new { h.ParentId, h.TenantId })
             .HasPrincipalKey(c => new { c.Id, c.TenantId })
             .HasConstraintName("FK_ClientHierarchies_ParentClient")
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasMany(x => x.ParentHierarchies)
             .WithOne(h => h.ChildClient)
-            .HasForeignKey(h => new { h.ChildClientId, h.TenantId })
+            .HasForeignKey(h => new { h.ChildId, h.TenantId })
             .HasPrincipalKey(c => new { c.Id, c.TenantId })
             .HasConstraintName("FK_ClientHierarchies_ChildClient")
             .OnDelete(DeleteBehavior.Restrict);

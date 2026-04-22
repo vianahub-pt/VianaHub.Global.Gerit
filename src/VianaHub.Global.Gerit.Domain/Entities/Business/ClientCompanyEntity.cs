@@ -4,11 +4,17 @@ namespace VianaHub.Global.Gerit.Domain.Entities.Business;
 
 public class ClientCompanyEntity : Entity
 {
+    private readonly List<ClientCompanyFiscalDataEntity> _fiscalData = [];
+
     public int TenantId { get; private set; }
     public int ClientId { get; private set; }
 
-    public string LegalName { get; private set; } = null!;
+    public string LegalName { get; private set; }
     public string TradeName { get; private set; }
+    public string PhoneNumber { get; private set; }
+    public string CellPhoneNumber { get; private set; }
+    public bool IsWhatsapp { get; private set; } = false;
+    public string Email { get; private set; }
     public string Site { get; private set; }
     public string CompanyRegistration { get; private set; }
     public string CAE { get; private set; }
@@ -20,18 +26,23 @@ public class ClientCompanyEntity : Entity
 
     // Navigation Properties
     public ClientEntity Client { get; private set; } = null!;
-    public ClientCompanyFiscalDataEntity? FiscalData { get; private set; }
+
+    public IReadOnlyCollection<ClientCompanyFiscalDataEntity> FiscalData => _fiscalData.AsReadOnly();
 
     // Construtor protegido para EF Core
     protected ClientCompanyEntity() { }
 
-    public ClientCompanyEntity(int tenantId, int clientId, string legalName, string tradeName, string site, string companyRegistration, string cae, int numberOfEmployee, string legalRepresentative, int createdBy)
+    public ClientCompanyEntity(int tenantId, string legalName, string tradeName, string phoneMumber, string cellPhoneNumber, bool isWhatsapp, string email, string site, string companyRegistration, string cae, int? numberOfEmployee, string legalRepresentative, int createdBy)
     {
         TenantId = tenantId;
-        ClientId = clientId;
+        ClientId = Id;
 
         LegalName = legalName;
         TradeName = tradeName;
+        PhoneNumber = phoneMumber;
+        CellPhoneNumber = cellPhoneNumber;
+        IsWhatsapp = isWhatsapp;
+        Email = email;
         Site = site;
         CompanyRegistration = companyRegistration;
         CAE = cae;
@@ -46,10 +57,14 @@ public class ClientCompanyEntity : Entity
 
     public string DisplayName => TradeName ?? LegalName;
 
-    public void Update(string legalName, string tradeName, string site, string companyRegistration, string cae, int numberOfEmployee, string legalRepresentative, int modifiedBy)
+    public void Update(string legalName, string tradeName, string phoneMumber, string cellPhoneNumber, bool isWhatsapp, string email, string site, string companyRegistration, string cae, int? numberOfEmployee, string legalRepresentative, int modifiedBy)
     {
         LegalName = legalName;
         TradeName = tradeName;
+        PhoneNumber = phoneMumber;
+        CellPhoneNumber = cellPhoneNumber;
+        IsWhatsapp = isWhatsapp;
+        Email = email;
         Site = site;
         CompanyRegistration = companyRegistration;
         CAE = cae;
@@ -57,20 +72,6 @@ public class ClientCompanyEntity : Entity
         LegalRepresentative = legalRepresentative;
         ModifiedBy = modifiedBy;
         ModifiedAt = DateTime.UtcNow;
-    }
-
-    public void SetFiscalData(ClientCompanyFiscalDataEntity fiscalData)
-    {
-        FiscalData = fiscalData;
-    }
-
-    public void RemoveFiscalData(int modifiedBy)
-    {
-        if (FiscalData is null)
-            return;
-
-        FiscalData.Delete(modifiedBy);
-        FiscalData = null;
     }
 
     public void Activate(int modifiedBy)
@@ -89,8 +90,6 @@ public class ClientCompanyEntity : Entity
 
     public void Delete(int modifiedBy)
     {
-        FiscalData?.Delete(modifiedBy);
-
         IsActive = false;
         IsDeleted = true;
         ModifiedBy = modifiedBy;
