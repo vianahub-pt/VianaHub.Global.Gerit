@@ -37,7 +37,49 @@
     // Wait for Swagger UI to be fully loaded
     window.addEventListener('load', function () {
         setTimeout(initSwitchers, 1000);
+        collapseAllSections();
     });
+
+    function collapseAllSections() {
+        var maxAttempts = 20;
+        var attempts = 0;
+
+        function tryCollapse() {
+            attempts++;
+            var expandedSections = document.querySelectorAll(
+                '.opblock.is-open, .opblock-tag-section.is-open, details[open]'
+            );
+
+            var swaggerUi = document.querySelector('#swagger-ui');
+            if (!swaggerUi && attempts < maxAttempts) {
+                setTimeout(tryCollapse, 500);
+                return;
+            }
+
+            var observer = new MutationObserver(function (mutations) {
+                var rendered = document.querySelector('.opblock-tag');
+                if (rendered) {
+                    observer.disconnect();
+                    setTimeout(function () {
+                        document.querySelectorAll('.opblock-tag-section.is-open').forEach(function (el) {
+                            var btn = el.querySelector('h3.opblock-tag button, h4.opblock-tag button');
+                            if (btn) btn.click();
+                        });
+                        document.querySelectorAll('.opblock.is-open').forEach(function (el) {
+                            var btn = el.querySelector('.opblock-summary');
+                            if (btn) btn.click();
+                        });
+                    }, 100);
+                }
+            });
+
+            if (swaggerUi) {
+                observer.observe(swaggerUi, { childList: true, subtree: true });
+            }
+        }
+
+        tryCollapse();
+    }
 
     function getDefaultLanguage() {
         // Try to get from cookie first
@@ -202,6 +244,7 @@
         // Update the spec URL to reload with new language
         ui.specActions.updateUrl(url.toString());
         ui.specActions.download(url.toString());
+        collapseAllSections();
     }
 
     function getCookie(name) {
