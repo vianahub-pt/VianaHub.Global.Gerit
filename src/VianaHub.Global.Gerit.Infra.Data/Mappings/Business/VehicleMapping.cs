@@ -19,7 +19,6 @@ public class VehicleMapping : IEntityTypeConfiguration<VehicleEntity>
             .HasName("PK_Vehicles");
 
         builder.Property(x => x.Id)
-            .HasColumnName("Id")
             .UseIdentityColumn(1, 1)
             .IsRequired();
 
@@ -29,78 +28,60 @@ public class VehicleMapping : IEntityTypeConfiguration<VehicleEntity>
 
         // Propriedades
         builder.Property(x => x.TenantId)
-            .HasColumnName("TenantId")
             .IsRequired();
 
         builder.Property(x => x.StatusId)
-            .HasColumnName("StatusId")
             .IsRequired();
 
         builder.Property(x => x.Plate)
-            .HasColumnName("Plate")
             .HasColumnType("NVARCHAR(20)")
             .HasMaxLength(20)
             .IsRequired();
 
         builder.Property(x => x.Brand)
-            .HasColumnName("Brand")
             .HasColumnType("NVARCHAR(100)")
             .HasMaxLength(100)
             .IsRequired();
 
         builder.Property(x => x.Model)
-            .HasColumnName("Model")
             .HasColumnType("NVARCHAR(100)")
             .HasMaxLength(100)
             .IsRequired();
 
         builder.Property(x => x.Year)
-            .HasColumnName("Year")
             .IsRequired();
 
         builder.Property(x => x.Color)
-            .HasColumnName("Color")
             .HasColumnType("NVARCHAR(50)")
             .HasMaxLength(50)
             .IsRequired(false);
 
         builder.Property(x => x.FuelType)
-            .HasColumnName("FuelType")
             .HasColumnType("NVARCHAR(50)")
             .HasMaxLength(50)
             .IsRequired(false);
 
         builder.Property(x => x.IsActive)
-            .HasColumnName("IsActive")
-            .HasColumnType("BIT")
-            .HasDefaultValue(true)
-            .IsRequired();
+           .HasDefaultValue(true)
+           .IsRequired();
 
         builder.Property(x => x.IsDeleted)
-            .HasColumnName("IsDeleted")
-            .HasColumnType("BIT")
             .HasDefaultValue(false)
             .IsRequired();
 
         builder.Property(x => x.CreatedBy)
-            .HasColumnName("CreatedBy")
-            .HasColumnType("INT")
             .IsRequired();
 
         builder.Property(x => x.CreatedAt)
-            .HasColumnName("CreatedAt")
-            .HasColumnType("DATETIME2")
-            .HasDefaultValueSql("SYSDATETIME()")
+            .HasColumnType("DATETIME2(7)")
             .IsRequired();
 
         builder.Property(x => x.ModifiedBy)
-            .HasColumnName("ModifiedBy")
             .HasColumnType("INT")
             .IsRequired(false);
 
         builder.Property(x => x.ModifiedAt)
-            .HasColumnName("ModifiedAt")
-            .HasColumnType("DATETIME2")
+            .HasColumnType("DATETIME2(7)")
             .IsRequired(false);
 
         // Constraints únicos

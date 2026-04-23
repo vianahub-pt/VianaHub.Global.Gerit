@@ -139,14 +139,14 @@ public class AuthAppService : IAuthAppService
 
     public async Task<AuthResponse> LoginAsync(LoginRequest request, CancellationToken ct)
     {
-        var tenantId = await _tenantRepo.GetByUserEmailAsync(request.Email, ct);
-        if (tenantId == null)
+        var tenant = await _tenantRepo.GetByUserEmailAsync(request.Email, ct);
+        if (tenant == null)
         {
             _notify.Add(_localization.GetMessage("Application.Service.Auth.UserNotAssociateInTenant"), 401);
             return null;
         }
 
-        _requestTenantContext.SetTenantId(tenantId.Id);
+        _requestTenantContext.SetTenantId(tenant.Id);
 
         var user = await _userRepo.GetByEmailAsync(request.Email, ct);
         if (user == null)
@@ -161,32 +161,32 @@ public class AuthAppService : IAuthAppService
             return null;
         }
 
-        if (!await _subscriptionDomain.IsActiveAsync(tenantId.Id, ct))
+        if (!await _subscriptionDomain.IsActiveAsync(tenant.Id, ct))
         {
             _notify.Add(_localization.GetMessage("Application.Service.Auth.Login.Subscription.NonActive"), 403);
             return null;
         }
-        if (await _subscriptionDomain.IsCanceledAsync(tenantId.Id, ct))
+        if (await _subscriptionDomain.IsCanceledAsync(tenant.Id, ct))
         {
             _notify.Add(_localization.GetMessage("Application.Service.Auth.Login.Subscription.Canceled"), 403);
             return null;
         }
-        if (await _subscriptionDomain.IsDeletedAsync(tenantId.Id, ct))
+        if (await _subscriptionDomain.IsDeletedAsync(tenant.Id, ct))
         {
             _notify.Add(_localization.GetMessage("Application.Service.Auth.Login.Subscription.Deleted"), 403);
             return null;
         }
 
-        var isTrial = await _subscriptionDomain.IsTrialAsync(tenantId.Id, ct);
+        var isTrial = await _subscriptionDomain.IsTrialAsync(tenant.Id, ct);
         if (isTrial)
         {
-            if (await _subscriptionDomain.IsTrialPeriodExpiredAsync(tenantId.Id, ct))
+            if (await _subscriptionDomain.IsTrialPeriodExpiredAsync(tenant.Id, ct))
             {
                 _notify.Add(_localization.GetMessage("Application.Service.Auth.Login.Subscription.TrialPeriodExpired"), 403);
                 return null;
             }
         }
-        else if (await _subscriptionDomain.IsSubscriptionPeriodExpiredAsync(tenantId.Id, ct))
+        else if (await _subscriptionDomain.IsSubscriptionPeriodExpiredAsync(tenant.Id, ct))
         {
             _notify.Add(_localization.GetMessage("Application.Service.Auth.Login.Subscription.PeriodExpired"), 403);
             return null;

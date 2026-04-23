@@ -8,16 +8,16 @@ using VianaHub.Global.Gerit.Domain.Tools.Pagination;
 namespace VianaHub.Global.Gerit.Domain.Services.Business;
 
 /// <summary>
-/// Serviço de domínio para Client
+/// Serviï¿½o de domï¿½nio para Client
 /// </summary>
 public class ClientDomainService : IClientDomainService
 {
-    private readonly IClientDataRepository _repo;
+    private readonly IClientRepository _repo;
     private readonly IEntityDomainValidator<ClientEntity> _validator;
     private readonly INotify _notify;
 
     public ClientDomainService(
-        IClientDataRepository repo,
+        IClientRepository repo,
         IEntityDomainValidator<ClientEntity> validator,
         INotify notify)
     {
@@ -114,3 +114,4 @@ public class ClientDomainService : IClientDomainService
         return await _repo.UpdateAsync(entity, ct);
     }
 }
+

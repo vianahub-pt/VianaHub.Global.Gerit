@@ -38,11 +38,18 @@ public class ClientAddressDomainService : IClientAddressDomainService
     {
         return await _repo.GetPagedAsync(clientId, request, ct);
     }
-    public async Task<bool> ExistsByIdAsync(int clientId, int id, CancellationToken ct)
+    public async Task<bool> ExistsByIdAsync(int id, CancellationToken ct)
     {
-        return await _repo.ExistsByIdAsync(clientId, id, ct);
+        return await _repo.ExistsByIdAsync(id, ct);
     }
-
+    public async Task<bool> ExistsByClientIdAsync(int clientId, string countryCode, string street, string streetNumber, string neighborhood, string city, string district, string postalCode, CancellationToken ct)
+    {
+        return await _repo.ExistsByClientIdAsync(clientId, countryCode, street, streetNumber, neighborhood, city, district, postalCode, ct);
+    }
+    public async Task<bool> ExistsByClientAndAddressTypeAsync(int clientId, int addressTypeId, CancellationToken ct)
+    {
+        return await _repo.ExistsByClientAndAddressTypeAsync(clientId, addressTypeId, ct);
+    }
     public async Task<bool> CreateAsync(ClientAddressEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForCreateAsync(entity);
@@ -55,7 +62,7 @@ public class ClientAddressDomainService : IClientAddressDomainService
             return false;
         }
 
-        return await _repo.AddAsync(entity, ct);
+        return await _repo.CreateAsync(entity, ct);
     }
     public async Task<bool> UpdateAsync(ClientAddressEntity entity, CancellationToken ct)
     {

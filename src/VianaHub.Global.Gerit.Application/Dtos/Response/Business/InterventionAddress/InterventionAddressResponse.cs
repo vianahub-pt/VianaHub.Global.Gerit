@@ -1,14 +1,14 @@
-namespace VianaHub.Global.Gerit.Application.Dtos.Response.Business.InterventionAddress;
+namespace VianaHub.Global.Gerit.Application.Dtos.Response.Business.VisitAddress;
 
 /// <summary>
-/// DTO de resposta para InterventionAddress
+/// DTO de resposta para VisitAddress
 /// </summary>
-public class InterventionAddressResponse
+public class VisitAddressResponse
 {
     public int Id { get; set; }
     public int TenantId { get; set; }
-    public int InterventionId { get; set; }
-    public string Intervention { get; set; }
+    public int VisitId { get; set; }
+    public string Visit { get; set; }
     public int AddressTypeId { get; set; }
     public string AddressType { get; set; }
     public string CountryCode { get; set; }
@@ -21,7 +21,7 @@ public class InterventionAddressResponse
     public string PostalCode { get; set; }
     public decimal? Latitude { get; set; }
     public decimal? Longitude { get; set; }
-    public string Notes { get; set; }
+    public string Note { get; set; }
     public bool IsPrimary { get; set; }
     public bool IsActive { get; set; }
 }

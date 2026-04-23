@@ -4,121 +4,84 @@ using VianaHub.Global.Gerit.Domain.Entities.Business;
 
 namespace VianaHub.Global.Gerit.Infra.Data.Mappings.Business;
 
-/// <summary>
-/// Mapeamento da entidade ClientFiscalData
-/// Dados fiscais do cliente com suporte a Row Level Security
-/// </summary>
 public class ClientFiscalDataMapping : IEntityTypeConfiguration<ClientFiscalDataEntity>
 {
     public void Configure(EntityTypeBuilder<ClientFiscalDataEntity> builder)
     {
-        builder.ToTable("ClientFiscalData", "dbo");
+        builder.ToTable("ClientFiscalData");
 
-        // Chave Primária
-        builder.HasKey(x => x.Id)
-            .HasName("PK_ClientFiscalData");
-
+        builder.HasKey(x => x.Id);
+        
         builder.Property(x => x.Id)
-            .HasColumnName("Id")
-            .UseIdentityColumn(1, 1)
             .IsRequired();
 
-        // Propriedades
         builder.Property(x => x.TenantId)
-            .HasColumnName("TenantId")
             .IsRequired();
-
+        
         builder.Property(x => x.ClientId)
-            .HasColumnName("ClientId")
             .IsRequired();
 
-        builder.Property(x => x.NIF)
-            .HasColumnName("NIF")
-            .HasColumnType("CHAR(9)")
-            .HasMaxLength(9)
-            .IsRequired();
-
-        builder.Property(x => x.VATNumber)
-            .HasColumnName("VATNumber")
+        builder.Property(x => x.TaxNumber)
             .HasColumnType("NVARCHAR(20)")
             .HasMaxLength(20)
             .IsRequired();
-
-        builder.Property(x => x.CAE)
-            .HasColumnName("CAE")
-            .HasColumnType("NVARCHAR(10)")
-            .HasMaxLength(10)
-            .IsRequired(false);
-
+        
+        builder.Property(x => x.VatNumber)
+            .HasColumnType("NVARCHAR(20)")
+            .HasMaxLength(20);
+        
         builder.Property(x => x.FiscalCountry)
-            .HasColumnName("FiscalCountry")
-            .HasColumnType("CHAR(2)")
-            .HasMaxLength(2)
-            .HasDefaultValue("PT")
-            .IsRequired();
-
-        builder.Property(x => x.IsVATRegistered)
-            .HasColumnName("IsVATRegistered")
-            .HasColumnType("BIT")
-            .HasDefaultValue(true)
-            .IsRequired();
+            .HasColumnType("CHAR(2)").HasMaxLength(2)
+            .IsRequired()
+            .HasDefaultValue("PT");
+        
+        builder.Property(x => x.IsVatRegistered)
+            .HasDefaultValue(false);
+        
+        builder.Property(x => x.IBAN)
+            .HasColumnType("NVARCHAR(34)")
+            .HasMaxLength(34);
+        
+        builder.Property(x => x.FiscalEmail)
+            .HasColumnType("NVARCHAR(255)")
+            .HasMaxLength(255);
 
         builder.Property(x => x.IsActive)
-            .HasColumnName("IsActive")
-            .HasColumnType("BIT")
             .HasDefaultValue(true)
             .IsRequired();
 
         builder.Property(x => x.IsDeleted)
-            .HasColumnName("IsDeleted")
-            .HasColumnType("BIT")
             .HasDefaultValue(false)
             .IsRequired();
 
         builder.Property(x => x.CreatedBy)
-              .HasColumnName("CreatedBy")
-              .HasColumnType("INT")
-              .IsRequired();
+            .IsRequired();
 
         builder.Property(x => x.CreatedAt)
-            .HasColumnName("CreatedAt")
-            .HasColumnType("DATETIME2")
-            .HasDefaultValueSql("SYSDATETIME()")
+            .HasColumnType("DATETIME2(7)")
             .IsRequired();
 
         builder.Property(x => x.ModifiedBy)
-            .HasColumnName("ModifiedBy")
             .HasColumnType("INT")
             .IsRequired(false);
 
         builder.Property(x => x.ModifiedAt)
-            .HasColumnName("ModifiedAt")
-            .HasColumnType("DATETIME2")
+            .HasColumnType("DATETIME2(7)")
             .IsRequired(false);
 
-        // Constraints únicos
-        builder.HasIndex(x => x.NIF)
+        // Ãndices
+        builder.HasIndex(x => new { x.TenantId, x.ClientId })
+            .HasFilter("[IsActive] = 1 AND [IsDeleted] = 0")
             .IsUnique()
-            .HasDatabaseName("UQ_ClientFiscalData_NIF");
+            .HasDatabaseName("UX_ClientFiscalData_Active");
 
-        // Índices
-        builder.HasIndex(x => x.ClientId)
-            .HasDatabaseName("IX_ClientFiscalData_ClientId")
-            .IncludeProperties(x => x.TenantId)
-            .HasFilter("[IsDeleted] = 0");
+        builder.HasIndex(x => new { x.TenantId, x.TaxNumber })
+            .HasFilter("[TaxNumber] IS NOT NULL AND [IsDeleted] = 0")
+            .IsUnique()
+            .HasDatabaseName("UX_ClientFiscalData_TaxNumber");
 
-        // Relacionamentos
-        builder.HasOne(x => x.Tenant)
-            .WithMany()
-            .HasForeignKey(x => x.TenantId)
-            .HasConstraintName("FK_ClientFiscalData_Tenant")
-            .OnDelete(DeleteBehavior.Restrict);
-
-        // Relacionamento Many-to-One com Client (ClientFiscalData.Client -> Client.FiscalData)
-        builder.HasOne(x => x.Client)
-            .WithMany(c => c.FiscalData)
-            .HasForeignKey(x => x.ClientId)
-            .HasConstraintName("FK_ClientFiscalData_Client")
-            .OnDelete(DeleteBehavior.Restrict);
+        // Constraints
+        builder.HasCheckConstraint("CK_ClientFiscalData_Active_Deleted", "NOT ([IsActive] = 1 AND [IsDeleted] = 1)");
     }
 }
+

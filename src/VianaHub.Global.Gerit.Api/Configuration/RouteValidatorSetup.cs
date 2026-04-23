@@ -5,6 +5,7 @@ using VianaHub.Global.Gerit.Api.Validators.Billing.Tenant;
 using VianaHub.Global.Gerit.Api.Validators.Business.Equipment;
 using VianaHub.Global.Gerit.Api.Validators.Business.Function;
 using VianaHub.Global.Gerit.Api.Validators.Business.Vehicle;
+using VianaHub.Global.Gerit.Api.Validators.Business.ConsentType;
 using VianaHub.Global.Gerit.Api.Validators.Identity.Action;
 using VianaHub.Global.Gerit.Api.Validators.Identity.Auth;
 using VianaHub.Global.Gerit.Api.Validators.Identity.Resource;
@@ -18,23 +19,24 @@ using VianaHub.Global.Gerit.Application.Dtos.Request.Business.Equipment;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Business.Function;
 // Vehicle DTOs & Validators
 using VianaHub.Global.Gerit.Application.Dtos.Request.Business.Vehicle;
+using VianaHub.Global.Gerit.Application.Dtos.Request.Business.ConsentType;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Identity.Action;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Identity.Auth;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Identity.Resource;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Identity.Role;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Identity.User;
 
-// TeamMembersTeams DTOs & Validators
-using VianaHub.Global.Gerit.Application.Dtos.Request.Business.TeamMembersTeams;
-using VianaHub.Global.Gerit.Api.Validators.Business.TeamMembersTeams;
+// EmployeeTeams DTOs & Validators
+using VianaHub.Global.Gerit.Application.Dtos.Request.Business.EmployeeTeams;
+using VianaHub.Global.Gerit.Api.Validators.Business.EmployeeTeams;
 
-// InterventionTeams DTOs & Validators
-using VianaHub.Global.Gerit.Application.Dtos.Request.Business.InterventionTeams;
-using VianaHub.Global.Gerit.Api.Validators.Business.InterventionTeams;
+// VisitTeams DTOs & Validators
+using VianaHub.Global.Gerit.Application.Dtos.Request.Business.VisitTeams;
+using VianaHub.Global.Gerit.Api.Validators.Business.VisitTeams;
 
-// InterventionTeamVehicles DTOs & Validators
-using VianaHub.Global.Gerit.Application.Dtos.Request.Business.InterventionTeamVehicles;
-using VianaHub.Global.Gerit.Api.Validators.Business.InterventionTeamVehicles;
+// VisitTeamVehicles DTOs & Validators
+using VianaHub.Global.Gerit.Application.Dtos.Request.Business.VisitTeamVehicles;
+using VianaHub.Global.Gerit.Api.Validators.Business.VisitTeamVehicles;
 
 // UserPreferences DTOs & Validators
 using VianaHub.Global.Gerit.Application.Dtos.Request.Identity.UserPreferences;
@@ -102,19 +104,23 @@ public static class RouteValidatorSetup
         services.AddScoped<IValidator<CreateEquipmentRequest>, CreateEquipmentRouteValidator>();
         services.AddScoped<IValidator<UpdateEquipmentRequest>, UpdateEquipmentRouteValidator>();
 
-        // TeamMembersTeams Route Validators
-        services.AddScoped<IValidator<CreateTeamMembersTeamRequest>, CreateTeamMembersTeamRouteValidator>();
-        services.AddScoped<IValidator<UpdateTeamMembersTeamRequest>, UpdateTeamMembersTeamRouteValidator>();
+        // ConsentType Route Validators
+        services.AddScoped<IValidator<CreateConsentTypeRequest>, CreateConsentTypeRouteValidator>();
+        services.AddScoped<IValidator<UpdateConsentTypeRequest>, UpdateConsentTypeRouteValidator>();
 
-        // InterventionTeams Route Validators
-        services.AddScoped<IValidator<CreateInterventionTeamRequest>, CreateInterventionTeamRouteValidator>();
-        services.AddScoped<IValidator<UpdateInterventionTeamRequest>, UpdateInterventionTeamRouteValidator>();
-        services.AddScoped<IValidator<IFormFile>, BulkUploadInterventionTeamsRouteValidator>();
+        // EmployeeTeams Route Validators
+        services.AddScoped<IValidator<CreateEmployeeTeamRequest>, CreateEmployeeTeamRouteValidator>();
+        services.AddScoped<IValidator<UpdateEmployeeTeamRequest>, UpdateEmployeeTeamRouteValidator>();
 
-        // InterventionTeamVehicles Route Validators
-        services.AddScoped<IValidator<CreateInterventionTeamVehicleRequest>, CreateInterventionTeamVehicleRouteValidator>();
-        services.AddScoped<IValidator<UpdateInterventionTeamVehicleRequest>, UpdateInterventionTeamVehicleRouteValidator>();
-        services.AddScoped<IValidator<IFormFile>, BulkUploadInterventionTeamVehiclesRouteValidator>();
+        // VisitTeams Route Validators
+        services.AddScoped<IValidator<CreateVisitTeamRequest>, CreateVisitTeamRouteValidator>();
+        services.AddScoped<IValidator<UpdateVisitTeamRequest>, UpdateVisitTeamRouteValidator>();
+        services.AddScoped<IValidator<IFormFile>, BulkUploadVisitTeamsRouteValidator>();
+
+        // VisitTeamVehicles Route Validators
+        services.AddScoped<IValidator<CreateVisitTeamVehicleRequest>, CreateVisitTeamVehicleRouteValidator>();
+        services.AddScoped<IValidator<UpdateVisitTeamVehicleRequest>, UpdateVisitTeamVehicleRouteValidator>();
+        services.AddScoped<IValidator<IFormFile>, BulkUploadVisitTeamVehiclesRouteValidator>();
 
         // UserPreferences Route Validators
         services.AddScoped<IValidator<CreateUserPreferencesRequest>, CreateUserPreferencesRouteValidator>();

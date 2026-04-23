@@ -4,7 +4,7 @@ namespace VianaHub.Global.Gerit.Domain.Enums;
 
 public enum ClientType
 {
-    [Description("Pessoa Singular")]                    // Cliente sem atividade profissional aberta nas finanças, compra para uso próprio.
+    [Description("Pessoa Singular")]                    // Sem atividade profissional aberta nas finanças, compra para uso próprio.
     PessoaSingular = 1,
 
     [Description("Recibos Verdes")]                     // Profissional que trabalha por conta própria, emitindo recibos verdes (prestação de serviços), sem estrutura empresarial complexa.

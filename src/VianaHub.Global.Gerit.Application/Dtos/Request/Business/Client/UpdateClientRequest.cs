@@ -6,15 +6,10 @@ namespace VianaHub.Global.Gerit.Application.Dtos.Request.Business.Client;
 public class UpdateClientRequest
 {
     public int ClientType { get; set; }
-    public int Origin { get; set; }
-    public string Name { get; set; }
-    public string Phone { get; set; }
-    public string Email { get; set; }
-    public string Website { get; set; }
+    public int OriginType { get; set; }
     public string UrlImage { get; set; }
-    public int Score { get; set; }
-    public int ConsentType { get; set; }
-    public bool Consent { get; set; }
-    public DateTime ConsentDate { get; set; }
-    public string Remarks { get; set; }
+    public string Note { get; set; }
+
+    public UpdateClientIndividualRequest Individual { get; set; }
+    public UpdateClientCompanyRequest Company { get; set; }
 }

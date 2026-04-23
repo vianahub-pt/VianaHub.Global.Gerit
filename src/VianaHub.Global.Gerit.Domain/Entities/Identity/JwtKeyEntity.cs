@@ -24,7 +24,7 @@ public class JwtKeyEntity : Entity
     public int RotationPolicyDays { get; private set; }
     public int OverlapPeriodDays { get; private set; }
     public int MaxTokenLifetimeMinutes { get; private set; }
-    public bool IsActive { get; private set; }
+    public bool IsActive { get; private set; } = true;
     public bool IsDeleted { get; private set; }
 
     // Propriedade temporária para retornar a chave privada descriptografada (nunca persiste)

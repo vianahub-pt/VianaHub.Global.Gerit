@@ -16,10 +16,7 @@ public static class ClientAddressEndpoint
 {
     public static void MapClientAddressEndpoints(this IEndpointRouteBuilder app)
     {
-        var groupV1 = app.MapGroup("/v1/client")
-            .WithTags("ClientAddresses")
-            .WithGroupName("v1")
-            .RequireAuthorization();
+        var groupV1 = app.MapGroup("/v1/clients").WithTags("ClientAddresses").WithGroupName("v1").RequireAuthorization();
 
         groupV1.MapGet("/{clientId}/addresses", async ([FromRoute] int clientId, [FromServices] IClientAddressAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {

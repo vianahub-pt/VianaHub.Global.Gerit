@@ -12,10 +12,6 @@ public class UpdateAddressTypeValidator : AbstractValidator<AddressTypeEntity>
             .GreaterThan(0)
             .WithMessage(localization.GetMessage("Domain.AddressType.IdRequired"));
 
-        RuleFor(x => x.TenantId)
-            .GreaterThan(0)
-            .WithMessage(localization.GetMessage("Domain.AddressType.TenantIdRequired"));
-
         RuleFor(x => x.Name)
             .NotEmpty()
             .WithMessage(localization.GetMessage("Domain.AddressType.NameRequired"))

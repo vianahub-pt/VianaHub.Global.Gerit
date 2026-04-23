@@ -11,24 +11,12 @@ public class UpdateClientRouteValidator : AbstractValidator<UpdateClientRequest>
 {
     public UpdateClientRouteValidator(ILocalizationService localization)
     {
-        RuleFor(x => x.Name)
+        RuleFor(x => x.ClientType)
             .NotEmpty()
-            .WithMessage(localization.GetMessage("Api.Validator.Client.Update.Name"))
-            .MaximumLength(150)
-            .WithMessage(localization.GetMessage("Api.Validator.Client.Update.Name.MaximumLength", 150));
+            .WithMessage(localization.GetMessage("Api.Validator.Client.Update.ClientType"));
 
-        RuleFor(x => x.Email)
+        RuleFor(x => x.OriginType)
             .NotEmpty()
-            .WithMessage(localization.GetMessage("Api.Validator.Client.Update.Email"))
-            .MaximumLength(255)
-            .WithMessage(localization.GetMessage("Api.Validator.Client.Update.Email.MaximumLength", 255))
-            .EmailAddress()
-            .WithMessage(localization.GetMessage("Api.Validator.Client.Update.Email.Invalid"));
-
-        RuleFor(x => x.Phone)
-            .NotEmpty()
-            .WithMessage(localization.GetMessage("Api.Validator.Client.Update.Phone"))
-            .MaximumLength(30)
-            .WithMessage(localization.GetMessage("Api.Validator.Client.Update.Phone.MaximumLength", 30));
+            .WithMessage(localization.GetMessage("Api.Validator.Client.Update.OriginType"));
     }
 }

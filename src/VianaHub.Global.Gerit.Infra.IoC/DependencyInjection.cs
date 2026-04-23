@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 using FluentValidation;
 using VianaHub.Global.Gerit.Domain.Base;
 using VianaHub.Global.Gerit.Domain.Tools.Notifications;
@@ -6,7 +6,6 @@ using VianaHub.Global.Gerit.Domain.Validators.Job;
 using VianaHub.Global.Gerit.Infra.Integration.Messaging;
 using VianaHub.Global.Gerit.Infra.Data.Context;
 using VianaHub.Global.Gerit.Infra.Data.Security;
-using System.Reflection;
 using VianaHub.Global.Gerit.Infra.Job.Services;
 using VianaHub.Global.Gerit.Infra.Job.HostedServices;
 using VianaHub.Global.Gerit.Domain.Interfaces.Job;
@@ -44,15 +43,15 @@ using VianaHub.Global.Gerit.Domain.Validators.Business.Vehicle;
 using VianaHub.Global.Gerit.Domain.Validators.Business.Equipment;
 using VianaHub.Global.Gerit.Domain.Validators.Business.Function;
 using VianaHub.Global.Gerit.Domain.Validators.Business.Team;
-using VianaHub.Global.Gerit.Domain.Validators.Business.TeamMember;
-using VianaHub.Global.Gerit.Domain.Validators.Business.TeamMemberAddress;
-using VianaHub.Global.Gerit.Domain.Validators.Business.TeamMemberContact;
+using VianaHub.Global.Gerit.Domain.Validators.Business.Employee;
+using VianaHub.Global.Gerit.Domain.Validators.Business.EmployeeAddress;
+using VianaHub.Global.Gerit.Domain.Validators.Business.EmployeeContact;
 using VianaHub.Global.Gerit.Domain.Validators.Business.Client;
 using VianaHub.Global.Gerit.Domain.Validators.Business.ClientAddress;
 using VianaHub.Global.Gerit.Domain.Validators.Business.ClientContact;
 using VianaHub.Global.Gerit.Domain.Validators.Business.Status;
-using VianaHub.Global.Gerit.Domain.Validators.Business.Intervention;
-using VianaHub.Global.Gerit.Domain.Validators.Business.InterventionContact;
+using VianaHub.Global.Gerit.Domain.Validators.Business.Visit;
+using VianaHub.Global.Gerit.Domain.Validators.Business.VisitContact;
 using VianaHub.Global.Gerit.Domain.Validators.Business.EquipmentType;
 using VianaHub.Global.Gerit.Domain.Validators.Business.AddressType;
 using VianaHub.Global.Gerit.Infra.Data.Repository.Business;
@@ -60,14 +59,24 @@ using VianaHub.Global.Gerit.Infra.Data.Repository.Billing;
 using VianaHub.Global.Gerit.Infra.Data.Repository.Job;
 using VianaHub.Global.Gerit.Infra.Job.Jobs.Maintenance;
 using VianaHub.Global.Gerit.Infra.Job.Jobs.Security;
-using VianaHub.Global.Gerit.Domain.Validators.Business.InterventionAddress;
+using VianaHub.Global.Gerit.Domain.Validators.Business.VisitAddress;
 using VianaHub.Global.Gerit.Domain.Validators.Business.StatusType;
-using VianaHub.Global.Gerit.Domain.Validators.Business.TeamMembersTeam;
-using VianaHub.Global.Gerit.Domain.Validators.Business.InterventionTeam;
+using VianaHub.Global.Gerit.Domain.Validators.Business.EmployeeTeam;
+using VianaHub.Global.Gerit.Domain.Validators.Business.VisitTeam;
+using VianaHub.Global.Gerit.Domain.Validators.Business.VisitTeamEmployee;
 using VianaHub.Global.Gerit.Domain.Interfaces.Base;
-using VianaHub.Global.Gerit.Domain.Validators.Business.InterventionTeamVehicle;
-using VianaHub.Global.Gerit.Domain.Validators.Business.InterventionTeamEquipment;
-using VianaHub.Global.Gerit.Domain.Validators.Identity.UserPreferences; // <-- added
+using VianaHub.Global.Gerit.Domain.Validators.Business.VisitTeamVehicle;
+using VianaHub.Global.Gerit.Domain.Validators.Business.VisitTeamEquipment;
+using VianaHub.Global.Gerit.Domain.Validators.Identity.UserPreferences;
+using VianaHub.Global.Gerit.Domain.Validators.Business.ConsentType;
+using VianaHub.Global.Gerit.Domain.Validators.Business.FileType;
+using VianaHub.Global.Gerit.Domain.Validators.Business.AttachmentCategory;
+using VianaHub.Global.Gerit.Domain.Validators.Business.VisitAttachment;
+using VianaHub.Global.Gerit.Domain.Validators.Business.ClientIndividual;
+using VianaHub.Global.Gerit.Domain.Validators.Business.ClientCompany;
+using VianaHub.Global.Gerit.Domain.Validators.Business.ClientHierarchy;
+using VianaHub.Global.Gerit.Domain.Validators.Business.ClientConsents;
+using VianaHub.Global.Gerit.Domain.Validators.Business.ClientFiscalData;
 
 namespace VianaHub.Global.Gerit.Infra.IoC;
 
@@ -107,22 +116,33 @@ public static class DependencyInjection
         services.AddScoped<IEntityDomainValidator<EquipmentTypeEntity>, EquipmentTypeValidator>();
         services.AddScoped<IEntityDomainValidator<FunctionEntity>, FunctionValidator>();
         services.AddScoped<IEntityDomainValidator<TeamEntity>, TeamValidator>();
-        services.AddScoped<IEntityDomainValidator<TeamMemberEntity>, TeamMemberValidator>();
-        services.AddScoped<IEntityDomainValidator<TeamMemberAddressEntity>, TeamMemberAddressValidator>();
-        services.AddScoped<IEntityDomainValidator<TeamMemberContactEntity>, TeamMemberContactValidator>();
+        services.AddScoped<IEntityDomainValidator<EmployeeEntity>, EmployeeValidator>();
+        services.AddScoped<IEntityDomainValidator<EmployeeAddressEntity>, EmployeeAddressValidator>();
+        services.AddScoped<IEntityDomainValidator<EmployeeContactEntity>, EmployeeContactValidator>();
         services.AddScoped<IEntityDomainValidator<AddressTypeEntity>, AddressTypeValidator>();
+        services.AddScoped<IEntityDomainValidator<FileTypeEntity>, FileTypeValidator>();
+        services.AddScoped<IEntityDomainValidator<ConsentTypeEntity>, ConsentTypeValidator>();
         services.AddScoped<IEntityDomainValidator<ClientEntity>, ClientValidator>();
         services.AddScoped<IEntityDomainValidator<ClientAddressEntity>, ClientAddressValidator>();
         services.AddScoped<IEntityDomainValidator<ClientContactEntity>, ClientContactValidator>();
-        services.AddScoped<IEntityDomainValidator<InterventionContactEntity>, InterventionContactValidator>();
+        services.AddScoped<IEntityDomainValidator<VisitContactEntity>, VisitContactValidator>();
         services.AddScoped<IEntityDomainValidator<StatusEntity>, StatusValidator>();
-        services.AddScoped<IEntityDomainValidator<InterventionEntity>, InterventionValidator>();
+        services.AddScoped<IEntityDomainValidator<VisitEntity>, VisitValidator>();
         services.AddScoped<IEntityDomainValidator<StatusTypeEntity>, StatusTypeValidator>();
-        services.AddScoped<IEntityDomainValidator<InterventionAddressEntity>, InterventionAddressValidator>();
-        services.AddScoped<IEntityDomainValidator<TeamMembersTeamEntity>, TeamMembersTeamValidator>();
-        services.AddScoped<IEntityDomainValidator<InterventionTeamEntity>, InterventionTeamValidator>();
-        services.AddScoped<IEntityDomainValidator<InterventionTeamVehicleEntity>, InterventionTeamVehicleValidator>();
-        services.AddScoped<IEntityDomainValidator<InterventionTeamEquipmentEntity>, InterventionTeamEquipmentValidator>();
+        services.AddScoped<IEntityDomainValidator<VisitAddressEntity>, VisitAddressValidator>();
+        services.AddScoped<IEntityDomainValidator<EmployeeTeamEntity>, EmployeeTeamValidator>();
+        services.AddScoped<IEntityDomainValidator<VisitTeamEntity>, VisitTeamValidator>();
+        services.AddScoped<IEntityDomainValidator<VisitTeamEmployeeEntity>, VisitTeamEmployeeValidator>();
+        services.AddScoped<IEntityDomainValidator<VisitTeamVehicleEntity>, VisitTeamVehicleValidator>();
+        services.AddScoped<IEntityDomainValidator<VisitTeamEquipmentEntity>, VisitTeamEquipmentValidator>();
+        services.AddScoped<IEntityDomainValidator<AttachmentCategoryEntity>, AttachmentCategoryValidator>();
+        services.AddScoped<IEntityDomainValidator<VisitAttachmentEntity>, VisitAttachmentValidator>();
+        services.AddScoped<IEntityDomainValidator<ClientIndividualEntity>, ClientIndividualValidator>();
+        services.AddScoped<IEntityDomainValidator<ClientCompanyEntity>, ClientCompanyValidator>();
+        services.AddScoped<IEntityDomainValidator<ClientHierarchyEntity>, ClientHierarchyValidator>();
+        services.AddScoped<IEntityDomainValidator<ClientConsentsEntity>, ClientConsentsValidator>();
+        services.AddScoped<IEntityDomainValidator<ClientFiscalDataEntity>, ClientFiscalDataValidator>();
+
 
         // Application - Common Services
         services.AddScoped<IFileValidationService, FileValidationService>();
@@ -132,22 +152,30 @@ public static class DependencyInjection
         services.AddScoped<IUserRoleAppService, UserRoleAppService>();
         services.AddScoped<IJwtKeyAppService, JwtKeyAppService>();
         services.AddScoped<IAddressTypeAppService, AddressTypeAppService>();
+        services.AddScoped<IFileTypeAppService, FileTypeAppService>();
+        services.AddScoped<IConsentTypeAppService, ConsentTypeAppService>();
         services.AddScoped<IFunctionAppService, FunctionAppService>();
         services.AddScoped<ITeamAppService, TeamAppService>();
         services.AddScoped<IVehicleAppService, VehicleAppService>();
         services.AddScoped<IEquipmentAppService, EquipmentAppService>();
-        services.AddScoped<ITeamMemberAppService, TeamMemberAppService>();
-        services.AddScoped<ITeamMembersTeamsAppService, TeamMembersTeamAppService>();
-        services.AddScoped<ITeamMembersTeamDataRepository, TeamMembersTeamDataRepository>();
-        services.AddScoped<IInterventionTeamsAppService, InterventionTeamAppService>();
-        services.AddScoped<IInterventionTeamDataRepository, InterventionTeamDataRepository>();
+        services.AddScoped<IEmployeeAppService, EmployeeAppService>();
+        services.AddScoped<IEmployeeTeamsAppService, EmployeeTeamAppService>();
+        services.AddScoped<IEmployeeTeamDataRepository, EmployeeTeamDataRepository>();
+        services.AddScoped<IVisitTeamsAppService, VisitTeamAppService>();
+        services.AddScoped<IVisitTeamDataRepository, VisitTeamDataRepository>();
+        services.AddScoped<IVisitTeamEmployeeAppService, VisitTeamEmployeeAppService>();
+        services.AddScoped<IAttachmentCategoryAppService, AttachmentCategoryAppService>();
+        services.AddScoped<IVisitAttachmentAppService, VisitAttachmentAppService>();
+        services.AddScoped<IClientHierarchyAppService, ClientHierarchyAppService>();
         services.AddScoped<IClientAppService, ClientAppService>();
         services.AddScoped<IClientAddressAppService, ClientAddressAppService>();
         services.AddScoped<IClientContactAppService, ClientContactAppService>();
-        services.AddScoped<IInterventionContactAppService, InterventionContactAppService>();
-        services.AddScoped<IInterventionAddressAppService, InterventionAddressAppService>();
+        services.AddScoped<IClientConsentsAppService, ClientConsentsAppService>();
+        services.AddScoped<IClientFiscalDataAppService, ClientFiscalDataAppService>();
+        services.AddScoped<IVisitContactAppService, VisitContactAppService>();
+        services.AddScoped<IVisitAddressAppService, VisitAddressAppService>();
         services.AddScoped<IStatusAppService, StatusAppService>();
-        services.AddScoped<IInterventionAppService, InterventionAppService>();
+        services.AddScoped<IVisitAppService, VisitAppService>();
         services.AddScoped<IStatusTypeAppService, StatusTypeAppService>();
         services.AddScoped<IActionAppService, ActionAppService>();
         services.AddScoped<IResourceAppService, ResourceAppService>();
@@ -161,11 +189,14 @@ public static class DependencyInjection
 
         // Domain
         services.AddScoped<IUserRoleDomainService, UserRoleDomainService>();
-        services.AddScoped<IInterventionTeamDomainService, InterventionTeamDomainService>();
+        services.AddScoped<IVisitTeamDomainService, VisitTeamDomainService>();
+        services.AddScoped<IVisitTeamEmployeeDomainService, VisitTeamEmployeeDomainService>();
         services.AddScoped<IActionDomainService, ActionDomainService>();
-        services.AddScoped<ITeamMembersTeamDomainService, TeamMembersTeamDomainService>();
+        services.AddScoped<IEmployeeTeamDomainService, EmployeeTeamDomainService>();
         services.AddScoped<IResourceDomainService, ResourceDomainService>();
         services.AddScoped<IAddressTypeDomainService, AddressTypeDomainService>();
+        services.AddScoped<IFileTypeDomainService, FileTypeDomainService>();
+        services.AddScoped<IConsentTypeDomainService, ConsentTypeDomainService>();
         services.AddScoped<IRoleDomainService, RoleDomainService>();
         services.AddScoped<IPlanDomainService, PlanDomainService>();
         services.AddScoped<ITenantDomainService, TenantDomainService>();
@@ -179,37 +210,48 @@ public static class DependencyInjection
         services.AddScoped<IVehicleDomainService, VehicleDomainService>();
         services.AddScoped<IEquipmentDomainService, EquipmentDomainService>();
         services.AddScoped<IEquipmentTypeDomainService, EquipmentTypeDomainService>();
-        services.AddScoped<ITeamMemberDomainService, TeamMemberDomainService>();
-        services.AddScoped<ITeamMemberAddressDomainService, TeamMemberAddressDomainService>();
-        services.AddScoped<ITeamMemberContactDomainService, TeamMemberContactDomainService>();
+        services.AddScoped<IEmployeeDomainService, EmployeeDomainService>();
+        services.AddScoped<IEmployeeAddressDomainService, EmployeeAddressDomainService>();
+        services.AddScoped<IEmployeeContactDomainService, EmployeeContactDomainService>();
         services.AddScoped<IClientDomainService, ClientDomainService>();
         services.AddScoped<IClientAddressDomainService, ClientAddressDomainService>();
         services.AddScoped<IClientContactDomainService, ClientContactDomainService>();
-        services.AddScoped<IInterventionContactDomainService, InterventionContactDomainService>();
-        services.AddScoped<IInterventionAddressDomainService, InterventionAddressDomainService>();
+        services.AddScoped<IVisitContactDomainService, VisitContactDomainService>();
+        services.AddScoped<IVisitAddressDomainService, VisitAddressDomainService>();
         services.AddScoped<IStatusDomainService, StatusDomainService>();
-        services.AddScoped<IInterventionDomainService, InterventionDomainService>();
+        services.AddScoped<IVisitDomainService, VisitDomainService>();
         services.AddScoped<IStatusTypeDomainService, StatusTypeDomainService>();
-        services.AddScoped<IInterventionTeamVehicleDomainService, InterventionTeamVehicleDomainService>();
-        services.AddScoped<IInterventionTeamEquipmentDomainService, InterventionTeamEquipmentDomainService>();
+        services.AddScoped<IVisitTeamVehicleDomainService, VisitTeamVehicleDomainService>();
+        services.AddScoped<IVisitTeamEquipmentDomainService, VisitTeamEquipmentDomainService>();
+        services.AddScoped<IAttachmentCategoryDomainService, AttachmentCategoryDomainService>();
+        services.AddScoped<IVisitAttachmentDomainService, VisitAttachmentDomainService>();
+        services.AddScoped<IClientHierarchyDomainService, ClientHierarchyDomainService>();
+        services.AddScoped<IClientConsentsDomainService, ClientConsentsDomainService>();
+        services.AddScoped<IClientFiscalDataDomainService, ClientFiscalDataDomainService>();
 
         // Infra.Data - Repositories
         services.AddScoped<IAddressTypeDataRepository, AddressTypeDataRepository>();
+        services.AddScoped<IFileTypeDataRepository, FileTypeDataRepository>();
+        services.AddScoped<IConsentTypeDataRepository, ConsentTypeDataRepository>();
         services.AddScoped<IFunctionDataRepository, FunctionDataRepository>();
         services.AddScoped<ITeamDataRepository, TeamDataRepository>();
         services.AddScoped<IVehicleDataRepository, VehicleDataRepository>();
         services.AddScoped<IEquipmentDataRepository, EquipmentDataRepository>();
         services.AddScoped<IEquipmentTypeDataRepository, EquipmentTypeDataRepository>();
-        services.AddScoped<ITeamMemberDataRepository, TeamMemberDataRepository>();
-        services.AddScoped<ITeamMemberAddressDataRepository, TeamMemberAddressDataRepository>();
-        services.AddScoped<ITeamMemberContactDataRepository, TeamMemberContactDataRepository>();
+        services.AddScoped<IEmployeeDataRepository, EmployeeDataRepository>();
+        services.AddScoped<IEmployeeAddressDataRepository, EmployeeAddressDataRepository>();
+        services.AddScoped<IEmployeeContactDataRepository, EmployeeContactDataRepository>();
+        services.AddScoped<IClientRepository, ClientRepository>();
         services.AddScoped<IClientDataRepository, ClientDataRepository>();
-        services.AddScoped<IClientAddressDataRepository, ClientAddressDataRepository>();
-        services.AddScoped<IClientContactDataRepository, ClientContactDataRepository>();
-        services.AddScoped<IInterventionContactDataRepository, InterventionContactDataRepository>();
-        services.AddScoped<IInterventionAddressDataRepository, InterventionAddressDataRepository>();
+        services.AddScoped<IClientContactDataRepository, ClientContactRepository>();
+        services.AddScoped<IClientAddressDataRepository, ClientAddressRepository>();
+        services.AddScoped<IClientFiscalDataDataRepository, ClientFiscalDataDataRepository>();
+        services.AddScoped<IClientConsentsDataRepository, ClientConsentRepository>();
+        services.AddScoped<IClientHierarchyDataRepository, ClientHierarchyRepository>();
+        services.AddScoped<IVisitContactDataRepository, VisitContactDataRepository>();
+        services.AddScoped<IVisitAddressDataRepository, VisitAddressDataRepository>();
         services.AddScoped<IStatusDataRepository, StatusDataRepository>();
-        services.AddScoped<IInterventionDataRepository, InterventionDataRepository>();
+        services.AddScoped<IVisitDataRepository, VisitDataRepository>();
         services.AddScoped<IStatusTypeDataRepository, StatusTypeDataRepository>();
         services.AddScoped<IActionDataRepository, ActionDataRepository>();
         services.AddScoped<IResourceDataRepository, ResourceDataRepository>();
@@ -224,9 +266,12 @@ public static class DependencyInjection
         services.AddScoped<IRolePermissionDataRepository, RolePermissionDataRepository>();
         services.AddScoped<IRefreshTokenDataRepository, RefreshTokenDataRepository>();
         services.AddScoped<IJobDefinitionDataRepository, JobDefinitionDataRepository>();
-        services.AddScoped<IInterventionTeamDataRepository, InterventionTeamDataRepository>();
-        services.AddScoped<IInterventionTeamVehicleDataRepository, InterventionTeamVehicleDataRepository>();
-        services.AddScoped<IInterventionTeamEquipmentDataRepository, InterventionTeamEquipmentDataRepository>();
+        services.AddScoped<IVisitTeamDataRepository, VisitTeamDataRepository>();
+        services.AddScoped<IVisitTeamEmployeeDataRepository, VisitTeamEmployeeDataRepository>();
+        services.AddScoped<IVisitTeamVehicleDataRepository, VisitTeamVehicleDataRepository>();
+        services.AddScoped<IVisitTeamEquipmentDataRepository, VisitTeamEquipmentDataRepository>();
+        services.AddScoped<IAttachmentCategoryDataRepository, AttachmentCategoryDataRepository>();
+        services.AddScoped<IVisitAttachmentDataRepository, VisitAttachmentDataRepository>();
 
         // Infra.Messaging (Email sender no-op por enquanto)
         services.AddScoped<IEmailSender, NoOpEmailSender>();
@@ -242,13 +287,11 @@ public static class DependencyInjection
         // Data Context
         services.AddScoped<GeritDbContext>();
 
-        // AutoMapper
-        services.AddAutoMapper(Assembly.GetExecutingAssembly());
-
         // Secret provider (chave mestra gerenciada externamente) - por padrão lê variável de ambiente JWT_MASTER_KEY
         services.AddSingleton<ISecretProvider, SecretProviderEnvironment>();
 
         return services;
     }
 }
+
 

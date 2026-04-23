@@ -1,6 +1,6 @@
-﻿namespace VianaHub.Global.Gerit.Application.Dtos.Request.Business.Intervention;
+﻿namespace VianaHub.Global.Gerit.Application.Dtos.Request.Business.Visit;
 
-public class BulkUploadInterventionItem
+public class BulkUploadVisitItem
 {
     public int ClientId { get; set; }
     public int StatusId { get; set; }

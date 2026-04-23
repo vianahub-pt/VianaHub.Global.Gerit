@@ -89,7 +89,7 @@ public class PlanAppService : IPlanAppService
             request.PricePerYear,
             request.Currency ?? "USD",
             request.MaxUsers,
-            request.MaxPhotosPerInterventions,
+            request.MaxPhotosPerVisits,
             _currentUser.GetUserId());
 
         return await _domain.CreateAsync(entity, ct);
@@ -113,7 +113,7 @@ public class PlanAppService : IPlanAppService
             request.PricePerYear,
             request.Currency ?? "USD",
             request.MaxUsers,
-            request.MaxPhotosPerInterventions,
+            request.MaxPhotosPerVisits,
             _currentUser.GetUserId());
 
         return await _domain.UpdateAsync(entity, ct);
@@ -221,7 +221,7 @@ public class PlanAppService : IPlanAppService
                         record.PricePerYear = record.PricePerYear;
                         record.Currency = record.Currency?.SanitizeCsvInput().NormalizeUtf8();
                         record.MaxUsers = record.MaxUsers;
-                        record.MaxPhotosPerInterventions = record.MaxPhotosPerInterventions;
+                        record.MaxPhotosPerVisits = record.MaxPhotosPerVisits;
 
                         // Valida se os campos não contêm conteúdo perigoso
                         if (!string.IsNullOrEmpty(record.Name) && !record.Name.IsSafeCsvValue())
@@ -290,7 +290,7 @@ public class PlanAppService : IPlanAppService
             }
 
             // Cria a entidade
-            var entity = new PlanEntity(item.Name, item.Description, item.PricePerHour, item.PricePerDay, item.PricePerMonth, item.PricePerYear, item.Currency, item.MaxUsers, item.MaxPhotosPerInterventions, _currentUser.GetUserId());
+            var entity = new PlanEntity(item.Name, item.Description, item.PricePerHour, item.PricePerDay, item.PricePerMonth, item.PricePerYear, item.Currency, item.MaxUsers, item.MaxPhotosPerVisits, _currentUser.GetUserId());
 
             // Tenta criar no domínio
             var success = await _domain.CreateAsync(entity, ct);

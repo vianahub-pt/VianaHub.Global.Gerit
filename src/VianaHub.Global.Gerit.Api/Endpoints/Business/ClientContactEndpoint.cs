@@ -13,7 +13,7 @@ public static class ClientContactEndpoint
 {
     public static void MapClientContactEndpoints(this IEndpointRouteBuilder app)
     {
-        var groupV1 = app.MapGroup("/v1/client").WithTags("ClientContacts").WithGroupName("v1").RequireAuthorization();
+        var groupV1 = app.MapGroup("/v1/clients").WithTags("ClientContacts").WithGroupName("v1").RequireAuthorization();
 
         groupV1.MapGet("/{clientId}/contacts", async ([FromRoute] int clientId, [FromServices] IClientContactAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {

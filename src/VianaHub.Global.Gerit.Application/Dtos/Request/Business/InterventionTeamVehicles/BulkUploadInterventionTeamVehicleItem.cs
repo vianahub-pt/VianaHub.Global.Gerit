@@ -1,7 +1,7 @@
-namespace VianaHub.Global.Gerit.Application.Dtos.Request.Business.InterventionTeamVehicles;
+namespace VianaHub.Global.Gerit.Application.Dtos.Request.Business.VisitTeamVehicles;
 
-public class BulkUploadInterventionTeamVehicleItem
+public class BulkUploadVisitTeamVehicleItem
 {
-    public int InterventionTeamId { get; set; }
+    public int VisitTeamId { get; set; }
     public int VehicleId { get; set; }
 }

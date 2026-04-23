@@ -10,7 +10,7 @@ public interface IAddressTypeDataRepository
     Task<AddressTypeEntity> GetByIdAsync(int id, CancellationToken ct);
     Task<ListPage<AddressTypeEntity>> GetPagedAsync(PagedFilter filter, CancellationToken ct);
     Task<bool> ExistsByIdAsync(int id, CancellationToken ct);
-    Task<bool> ExistsByNameAsync(int tenantId, string name, CancellationToken ct);
+    Task<bool> ExistsByNameAsync(string name, CancellationToken ct);
 
     Task<bool> AddAsync(AddressTypeEntity entity, CancellationToken ct);
     Task<bool> UpdateAsync(AddressTypeEntity entity, CancellationToken ct);

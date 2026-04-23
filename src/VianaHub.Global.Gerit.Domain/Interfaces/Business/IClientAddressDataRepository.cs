@@ -12,10 +12,10 @@ public interface IClientAddressDataRepository
     Task<ClientAddressEntity> GetByIdAsync(int clientId, int id, CancellationToken ct);
     Task<IEnumerable<ClientAddressEntity>> GetAllAsync(int clientId, CancellationToken ct);
     Task<ListPage<ClientAddressEntity>> GetPagedAsync(int clientId, PagedFilter request, CancellationToken ct);
-    Task<bool> ExistsByIdAsync(int clientId, int id, CancellationToken ct);
+    Task<bool> ExistsByIdAsync(int id, CancellationToken ct);
+    Task<bool> ExistsByClientIdAsync(int clientId, string countryCode, string street, string streetNumber, string neighborhood, string city, string district, string postalCode, CancellationToken ct);
     Task<bool> ExistsByClientAndAddressTypeAsync(int clientId, int addressTypeId, CancellationToken ct);
-    Task<bool> ExistsByClientAndAddressTypeExcludingIdAsync(int clientId, int addressTypeId, int excludeId, CancellationToken ct);
-    Task<bool> AddAsync(ClientAddressEntity entity, CancellationToken ct);
+    Task<bool> CreateAsync(ClientAddressEntity entity, CancellationToken ct);
     Task<bool> UpdateAsync(ClientAddressEntity entity, CancellationToken ct);
     Task<bool> DeleteAsync(ClientAddressEntity entity, CancellationToken ct);
 }

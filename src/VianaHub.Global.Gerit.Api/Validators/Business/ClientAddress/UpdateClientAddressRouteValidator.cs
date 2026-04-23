@@ -53,9 +53,9 @@ public class UpdateClientAddressRouteValidator : AbstractValidator<UpdateClientA
             .When(x => !string.IsNullOrEmpty(x.Complement))
             .WithMessage(localization.GetMessage("Api.Validator.ClientAddress.Update.Complement.MaximumLength", 200));
 
-        RuleFor(x => x.Notes)
+        RuleFor(x => x.Note)
             .MaximumLength(500)
-            .When(x => !string.IsNullOrEmpty(x.Notes))
+            .When(x => !string.IsNullOrEmpty(x.Note))
             .WithMessage(localization.GetMessage("Api.Validator.ClientAddress.Update.Notes.MaximumLength", 500));
 
         RuleFor(x => x.CountryCode)

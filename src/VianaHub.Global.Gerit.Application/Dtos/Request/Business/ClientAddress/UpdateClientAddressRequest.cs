@@ -1,7 +1,7 @@
 namespace VianaHub.Global.Gerit.Application.Dtos.Request.Business.ClientAddress;
 
 /// <summary>
-/// DTO para atualiza��o de ClientAddress
+/// DTO para atualizaï¿½ï¿½o de ClientAddress
 /// </summary>
 public class UpdateClientAddressRequest
 {
@@ -16,5 +16,7 @@ public class UpdateClientAddressRequest
     public string PostalCode { get; set; }
     public decimal? Latitude { get; set; }
     public decimal? Longitude { get; set; }
-    public string Notes { get; set; }
+    public string Note { get; set; }
+    public bool IsPrimary { get; set; }
 }
+

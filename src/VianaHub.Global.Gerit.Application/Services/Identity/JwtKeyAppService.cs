@@ -1,10 +1,10 @@
 using AutoMapper;
-using VianaHub.Global.Gerit.Domain.Entities;
-using VianaHub.Global.Gerit.Domain.Tools.Notifications;
-using VianaHub.Global.Gerit.Application.Interfaces.Identity;
+using Azure.Core;
 using VianaHub.Global.Gerit.Application.Dtos.Response.Identity.Jwt;
-using VianaHub.Global.Gerit.Domain.Interfaces.Identity;
+using VianaHub.Global.Gerit.Application.Interfaces.Identity;
 using VianaHub.Global.Gerit.Domain.Interfaces.Base;
+using VianaHub.Global.Gerit.Domain.Interfaces.Identity;
+using VianaHub.Global.Gerit.Domain.Tools.Notifications;
 
 namespace VianaHub.Global.Gerit.Application.Services.Identity;
 
@@ -16,6 +16,7 @@ public class JwtKeyAppService : IJwtKeyAppService
     private readonly IMapper _mapper;
     private readonly ICurrentUserService _currentUser;
     private readonly ILocalizationService _localization;
+    private readonly IRequestTenantContext _requestTenantContext;
 
     public JwtKeyAppService(
         IJwtKeyDataRepository repo,
@@ -23,7 +24,8 @@ public class JwtKeyAppService : IJwtKeyAppService
         INotify notify,
         IMapper mapper,
         ICurrentUserService currentUser,
-        ILocalizationService localization)
+        ILocalizationService localization,
+        IRequestTenantContext requestTenantContext)
     {
         _repo = repo;
         _domain = domain;
@@ -31,6 +33,7 @@ public class JwtKeyAppService : IJwtKeyAppService
         _mapper = mapper;
         _currentUser = currentUser;
         _localization = localization;
+        _requestTenantContext = requestTenantContext;
     }
 
     public async Task<IEnumerable<JwtKeyResponse>> GetByTenantAsync(int tenantId, CancellationToken ct)
@@ -47,6 +50,8 @@ public class JwtKeyAppService : IJwtKeyAppService
 
     public async Task<bool> CreateInitialIfNotExistsAsync(int tenantId, CancellationToken ct)
     {
+        _requestTenantContext.SetTenantId(tenantId);
+
         var exists = await _repo.HasActiveKeyAsync(tenantId, ct);
         if (exists)
             return true;

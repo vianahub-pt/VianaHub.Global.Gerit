@@ -78,15 +78,14 @@ public class StatusTypeAppService : IStatusTypeAppService
 
     public async Task<bool> CreateAsync(CreateStatusTypeRequest request, CancellationToken ct)
     {
-        var tenantId = _currentUser.GetTenantId();
-        var exists = await _repo.ExistsByNameAsync(tenantId, request.Name, ct);
+        var exists = await _repo.ExistsByNameAsync(request.Name, ct);
         if (exists)
         {
             _notify.Add(_localization.GetMessage("Application.Service.StatusType.Create.ResourceAlreadyExists"), 409);
             return false;
         }
 
-        var entity = new StatusTypeEntity(tenantId, request.Name, request.Description, _currentUser.GetUserId());
+        var entity = new StatusTypeEntity(request.Name, request.Description, _currentUser.GetUserId());
         return await _domain.CreateAsync(entity, ct);
     }
 
@@ -100,7 +99,7 @@ public class StatusTypeAppService : IStatusTypeAppService
         }
 
         // Verifica se já existe outro com o mesmo nome no mesmo tenant
-        var exists = await _repo.ExistsByNameForUpdateAsync(entity.TenantId, request.Name, id, ct);
+        var exists = await _repo.ExistsByNameForUpdateAsync(request.Name, id, ct);
         if (exists)
         {
             _notify.Add(_localization.GetMessage("Application.Service.StatusType.Update.NameAlreadyExists"), 409);
@@ -254,8 +253,6 @@ public class StatusTypeAppService : IStatusTypeAppService
     private async Task<bool> ProcessBulkItemsAsync(List<BulkUploadStatusTypeItem> items, CancellationToken ct)
     {
         var hasErrors = false;
-        var tenantId = _currentUser.GetTenantId();
-
         foreach (var item in items)
         {
             // Valida campos obrigatórios
@@ -266,7 +263,7 @@ public class StatusTypeAppService : IStatusTypeAppService
             }
 
             // Verifica duplicidade
-            var exists = await _repo.ExistsByNameAsync(tenantId, item.Name, ct);
+            var exists = await _repo.ExistsByNameAsync(item.Name, ct);
             if (exists)
             {
                 _notify.Add(_localization.GetMessage("Application.Service.StatusType.ProcessBulkItems.ExistsByName", item.Name), 400);
@@ -275,7 +272,7 @@ public class StatusTypeAppService : IStatusTypeAppService
             }
 
             // Cria a entidade
-            var entity = new StatusTypeEntity(tenantId, item.Name, item.Description, _currentUser.GetUserId());
+            var entity = new StatusTypeEntity(item.Name, item.Description, _currentUser.GetUserId());
 
             // Tenta criar no domínio
             var success = await _domain.CreateAsync(entity, ct);

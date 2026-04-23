@@ -1,7 +1,7 @@
-namespace VianaHub.Global.Gerit.Application.Dtos.Request.Business.InterventionTeams;
+namespace VianaHub.Global.Gerit.Application.Dtos.Request.Business.VisitTeams;
 
-public class CreateInterventionTeamRequest
+public class CreateVisitTeamRequest
 {
-    public int InterventionId { get; set; }
+    public int VisitId { get; set; }
     public int TeamId { get; set; }
 }

@@ -24,7 +24,7 @@ public class PlanMappingProfile : Profile
             .ForMember(dest => dest.PricePerYear, opt => opt.MapFrom(src => src.PricePerYear))
             .ForMember(dest => dest.Currency, opt => opt.MapFrom(src => src.Currency))
             .ForMember(dest => dest.MaxUsers, opt => opt.MapFrom(src => src.MaxUsers))
-            .ForMember(dest => dest.MaxPhotosPerInterventions, opt => opt.MapFrom(src => src.MaxPhotosPerInterventions))
+            .ForMember(dest => dest.MaxPhotosPerVisits, opt => opt.MapFrom(src => src.MaxPhotosPerVisits))
             .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsActive));
 
         CreateMap<ListPage<PlanEntity>, ListPageResponse<PlanResponse>>();

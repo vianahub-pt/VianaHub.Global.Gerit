@@ -4,7 +4,7 @@ namespace VianaHub.Global.Gerit.Api.ModelBinders;
 
 /// <summary>
 /// Model binder customizado para aceitar Guids com ou sem hífens em parâmetros de rota.
-/// Permite que URLs usem formatos como: /api/resource/4c84e95c4e164d6c927291a0f113e92b
+/// Permite que URLs usem formatos como: /v1/resource/4c84e95c4e164d6c927291a0f113e92b
 /// </summary>
 public class GuidNoDashesModelBinder : IModelBinder
 {

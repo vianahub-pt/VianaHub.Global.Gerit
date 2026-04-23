@@ -1,6 +1,6 @@
-namespace VianaHub.Global.Gerit.Application.Dtos.Response.Business.Intervention;
+namespace VianaHub.Global.Gerit.Application.Dtos.Response.Business.Visit;
 
-public class InterventionResponse
+public class VisitResponse
 {
     public int Id { get; set; }
     public int TenantId { get; set; }

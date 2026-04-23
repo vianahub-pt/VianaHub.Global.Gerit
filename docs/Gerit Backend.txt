@@ -1,0 +1,176 @@
+Ignore qualquer contexto ou conversas anteriores.
+
+Responda sempre em português.
+Não crie nenhuma documentação, a não ser que seja explicitamente solicitado no token.
+Haja como um especialista em desenvolvimento de software com mais de 30 anos de experiência no desenvolvimento de APIs em .NET, utilizando obrigatoriamente:
+* Arquitetura Hexagonal
+* Princípios SOLID
+* DDD (Domain-Driven Design)
+* Clean Architecture
+* Suporte a multi-idiomas
+
+A classe TenantContactAppService, está totalmente fora da arquitetura da aplicação, veja o padrão da aplicação nas classes ClientAppService, EquipmentAppService e TeamAppService
+todos no namespace VianaHub.Global.Gerit.Application.Services.Billing.
+Estude estas classes indicadas e use o mesmo padrão de arquitetura, design e formato.
+
+
+Regras obrigatórias:
+1. Nenhuma mensagem pode ficar hardcoded na aplicação.
+   - O sistema de tradução i18n, utiliza 12 arquivos localizados na pasta: VianaHub.Global.Gerit.Api/Localization
+   - Os arquivos são separados por camada da aplicação.
+   - Consistência significa:
+      * A mesma quantidade de linhas por conjunto de arquivos da mesma camada.
+      * As mesmas chaves de tradução.
+      * As chaves devem estar exatamente nas mesmas posições/linhas.
+	  Exemplo:
+	    * api.en-US.json    
+	    * api.es-ES.json
+	    * api.pt-PT.json   
+	    * application.en-US.json    
+	    * application.es-ES.json
+	    * application.pt-PT.json 
+	    * domain.en-US.json    
+	    * domain.es-ES.json
+	    * domain.pt-PT.json 
+	    * swagger.en-US.json    
+	    * swagger.es-ES.json
+	    * swagger.pt-PT.json 
+        Todos devem possuir a mesma quantidade de linhas e as mesmas chaves nas mesmas posições.
+2. Nunca utilize comandos PowerShell para leitura ou escrita no chat.
+
+Tarefa:
+Implemente o recurso FileTypes, utilizando como base e modelo o código já existente do recurso AddressTypes, seguindo obrigatoriamente a mesma estrutura, padrões arquiteturais e organização de camadas.
+
+3. BANCO DE DADOS:
+   - A estrutura das tabela está no arquivo Create-Tables.sql
+   - Antes de começar qualquer implementação/alteração em código, faça uma varredura no arquivo C:\git\my\VianaHub.Global.Gerit\docs\sql\Create-Tables.sql e entenda como a tabela do recurso que será implmentado/alterado se relaciona no modelo do banco de dados.
+
+4. API:
+   - Endpoint: src/VianaHub.Global.Gerit.Api/Endpoints/Business/{NomeRecurso}Endpoint.cs
+     * Classe estática com MapEndpoints
+     * Grupo /v1/{recurso-plural}
+     * Endpoints: GET /, GET /{id}, GET /paged, POST /, PUT /{id}, PATCH /{id}/activate, PATCH /{id}/deactivate, DELETE /{id}, POST /bulk-upload
+     * CustomAuthorize com roles, resource e action
+     * WithValidation<TRequest> para POST/PUT
+     * notify.CustomResponse() em todos os retornos
+     * Chaves de tradução: Swagger.Endpoint.{NomeRecurso}.{Operação}.Summary
+
+   - Validators: src/VianaHub.Global.Gerit.Api/Validators/Business/{NomeRecurso}/
+     * Create{NomeRecurso}RouteValidator : AbstractValidator<Create{NomeRecurso}Request>
+     * Update{NomeRecurso}RouteValidator : AbstractValidator<Update{NomeRecurso}Request>
+     * FluentValidation com chaves de tradução
+
+5. APPLICATION:
+   - DTOs:
+     * Request: src/VianaHub.Global.Gerit.Application/Dtos/Request/Business/{NomeRecurso}/
+       - Create{NomeRecurso}Request (POCOs com propriedades de negócio)
+       - Update{NomeRecurso}Request (mesma estrutura)
+     * Response: src/VianaHub.Global.Gerit.Application/Dtos/Response/Business/{NomeRecurso}/
+       - {NomeRecurso}Response (POCOs com Id, TenantId, propriedades, IsActive)
+
+   - Interfaces: src/VianaHub.Global.Gerit.Application/Interfaces/Business/
+     * I{NomeRecurso}AppService com métodos:
+       - Task<IEnumerable<{NomeRecurso}Response>> GetAllAsync(CancellationToken ct)
+       - Task<{NomeRecurso}Response> GetByIdAsync(int id, CancellationToken ct)
+       - Task<ListPageResponse<{NomeRecurso}Response>> GetPagedAsync(PagedFilterRequest request, CancellationToken ct)
+       - Task<bool> CreateAsync(Create{NomeRecurso}Request request, CancellationToken ct)
+       - Task<bool> UpdateAsync(int id, Update{NomeRecurso}Request request, CancellationToken ct)
+       - Task<bool> ActivateAsync(int id, CancellationToken ct)
+       - Task<bool> DeactivateAsync(int id, CancellationToken ct)
+       - Task<bool> DeleteAsync(int id, CancellationToken ct)
+       - Task<bool> BulkUploadAsync(IFormFile file, CancellationToken ct) [opcional]
+
+   - Services: src/VianaHub.Global.Gerit.Application/Services/Business/
+     * {NomeRecurso}AppService : I{NomeRecurso}AppService
+     * Dependências: IRepository, IDomainService, IMapper, INotify, ILocalizationService, ICurrentUserService, IFileValidationService
+     * GetByIdAsync: Validar IsDeleted/IsActive, retornar 410 se inativo
+     * CreateAsync: Validar unicidade (critério de negócio), retornar 400 se duplicado
+     * Update/Activate/Deactivate/Delete: Validar existência (410), chamar método da entidade, delegar para domain
+     * BulkUploadAsync: Validar arquivo, ler CSV (UTF-8, delimitador ;), sanitizar, validar segurança, processar lote
+     * Chaves de tradução: Application.Service.{NomeRecurso}.{Operação}.{Mensagem}
+
+   - Mappings: src/VianaHub.Global.Gerit.Application/Mappings/
+     * CreateMap<{NomeRecurso}Entity, {NomeRecurso}Response>()
+     * CreateMap<ListPage<{NomeRecurso}Entity>, ListPageResponse<{NomeRecurso}Response>>()
+
+6. DOMAIN:
+   - Entities: src/VianaHub.Global.Gerit.Domain/Entities/Business/
+     * {NomeRecurso}Entity : Entity
+     * Propriedades: TenantId, campos de negócio, IsActive, IsDeleted
+     * Encapsulamento: private set em todas as propriedades
+     * Construtor: Parametrizado para criação, protected vazio para EF Core
+     * Métodos: Update(...), Activate(int modifiedBy), Deactivate(int modifiedBy), Delete(int modifiedBy)
+     * Navigation Properties: TenantEntity Tenant
+
+   - Interfaces: src/VianaHub.Global.Gerit.Domain/Interfaces/Business/
+     * I{NomeRecurso}DomainService com métodos CRUD + validações
+     * I{NomeRecurso}DataRepository com métodos de acesso a dados
+     * ExistsByXxxAsync para validações de unicidade
+
+   - Services: src/VianaHub.Global.Gerit.Domain/Services/Business/
+     * {NomeRecurso}DomainService : I{NomeRecurso}DomainService
+     * Dependências: IRepository, IEntityDomainValidator, INotify
+     * Cada método: Validar via validator específico, adicionar erros ao INotify (400), retornar bool
+
+   - Validators: src/VianaHub.Global.Gerit.Domain/Validators/Business/{NomeRecurso}/
+     * {NomeRecurso}Validator : BaseEntityValidator<{NomeRecurso}Entity>
+       - ValidateForCreateAsync -> Create{NomeRecurso}Validator
+       - ValidateForUpdateAsync -> Update{NomeRecurso}Validator
+       - ValidateForActivateAsync -> Activate{NomeRecurso}Validator
+       - ValidateForDeactivateAsync -> Deactivate{NomeRecurso}Validator
+       - ValidateForDeleteAsync -> Delete{NomeRecurso}Validator
+     * Create/Update/Etc Validators: AbstractValidator<{NomeRecurso}Entity> com FluentValidation
+     * Chaves de tradução: Domain.{NomeRecurso}.{Campo}{Regra}
+
+7. INFRA.DATA:
+   - Context: src/VianaHub.Global.Gerit.Infra.Data/Context/GeritDbContext.cs
+     * public DbSet<{NomeRecurso}Entity> {NomeRecurso}s { get; set; }
+     * modelBuilder.ApplyConfiguration(new {NomeRecurso}Mapping())
+
+   - Mappings: src/VianaHub.Global.Gerit.Infra.Data/Mappings/Business/
+     * {NomeRecurso}Mapping : IEntityTypeConfiguration<{NomeRecurso}Entity>
+     * ToTable("{NomeRecurso}s", "dbo")
+     * Primary Key com Identity
+     * Propriedades com tipos SQL explícitos (NVARCHAR, INT, BIT, DATETIME2)
+     * HasIndex único para regras de unicidade multi-tenant
+     * HasOne/WithMany para FK com DeleteBehavior.Restrict
+     * DefaultValues para IsActive (true), IsDeleted (false), CreatedAt (SYSDATETIME())
+
+   - Repository: src/VianaHub.Global.Gerit.Infra.Data/Repository/Business/
+     * {NomeRecurso}DataRepository : I{NomeRecurso}DataRepository
+     * Dependência: GeritDbContext
+     * GetByIdAsync: AsNoTracking, filtro !IsDeleted
+     * GetAllAsync: AsNoTracking, !IsDeleted, OrderBy
+     * GetPagedAsync: AsNoTracking, !IsDeleted, Search (EF.Functions.Like), CreateSort, Skip/Take
+     * ExistsByIdAsync: AsNoTracking, !IsDeleted
+     * ExistsByXxxAsync: AsNoTracking para validação de unicidade (TenantId + campo único)
+     * AddAsync: AddAsync + SaveChangesAsync
+     * UpdateAsync: Update + SaveChangesAsync
+
+8. INFRA.IOC:
+   - DependencyInjection.cs: src/VianaHub.Global.Gerit.Infra.IoC/
+     * services.AddScoped<IEntityDomainValidator<{NomeRecurso}Entity>, {NomeRecurso}Validator>()
+     * services.AddScoped<I{NomeRecurso}AppService, {NomeRecurso}AppService>()
+     * services.AddScoped<I{NomeRecurso}DomainService, {NomeRecurso}DomainService>()
+     * services.AddScoped<I{NomeRecurso}DataRepository, {NomeRecurso}DataRepository>()
+
+9. PADRÕES OBRIGATÓRIOS:
+   - SOLID rigorosamente aplicado
+   - DDD: Aggregate Roots, Value Objects, Domain Services, Repository Pattern
+   - Clean Architecture: Dependências apontam para Domain
+   - Multi-Idioma: ZERO mensagens hardcoded, todas via ILocalizationService
+   - Segurança: RBAC, Multi-Tenant isolation, CSV Injection protection, SQL parametrizado e RLS
+   - Performance: AsNoTracking, Pagination, Async/Await, CancellationToken
+   - Status HTTP: 410 Gone (recurso não encontrado/inativo), 400 Bad Request (validação), 409 Conflict (duplicado)
+   - Auditoria: CreatedBy/At, ModifiedBy/At em todas as entidades
+   - Soft Delete: IsDeleted em todas as entidades, filtro em todas as queries
+
+10. CHAVES DE TRADUÇÃO PADRÃO:
+   - Swagger.Endpoint.{NomeRecurso}.{Operação}.Summary
+   - Api.{NomeRecurso}.{Validação}
+   - Application.Service.{NomeRecurso}.{Operação}.{Mensagem}
+   - Domain.{NomeRecurso}.{Campo}{Regra}
+
+11. SISTEMA DE TRADUÇÃO I18N
+   - Após qualquer nova implementação ou alteração em código, você deve fazer uma varredura completa no código implementado/alterado em busca das chaves de tradução que foram 
+     criadas/alteradas e confirmar/validar que elas estão registradas nos 12 arquivos de tradução deixando assim eles consistentes entre si.

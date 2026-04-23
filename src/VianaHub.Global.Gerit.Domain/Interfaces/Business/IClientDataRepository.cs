@@ -13,8 +13,6 @@ public interface IClientDataRepository
     Task<IEnumerable<ClientEntity>> GetAllAsync(CancellationToken ct);
     Task<ListPage<ClientEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct);
     Task<bool> ExistsByIdAsync(int id, CancellationToken ct);
-    Task<bool> ExistsByEmailAsync(int tenantId, string email, CancellationToken ct);
-    Task<bool> ExistsByEmailForUpdateAsync(int tenantId, string email, int excludeId, CancellationToken ct);
     Task<bool> AddAsync(ClientEntity entity, CancellationToken ct);
     Task<bool> UpdateAsync(ClientEntity entity, CancellationToken ct);
 }

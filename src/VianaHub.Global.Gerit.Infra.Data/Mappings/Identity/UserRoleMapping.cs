@@ -20,15 +20,12 @@ public class UserRoleMapping : IEntityTypeConfiguration<UserRoleEntity>
 
         // Propriedades
         builder.Property(x => x.TenantId)
-            .HasColumnName("TenantId")
             .IsRequired();
 
         builder.Property(x => x.UserId)
-            .HasColumnName("UserId")
             .IsRequired();
 
         builder.Property(x => x.RoleId)
-            .HasColumnName("RoleId")
             .IsRequired();
 
         // Índices

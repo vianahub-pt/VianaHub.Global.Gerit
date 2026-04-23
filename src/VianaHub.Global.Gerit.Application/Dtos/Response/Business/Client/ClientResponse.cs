@@ -7,10 +7,11 @@ public class ClientResponse
 {
     public int Id { get; set; }
     public int TenantId { get; set; }
+    public int ClientType { get; set; }
+    public string ClientTypeDescription { get; set; }
     public string Name { get; set; }
-    public string Phone { get; set; }
+    public string PhoneNumber { get; set; }
     public string Email { get; set; }
     public string Contact { get; set; }
-    public bool Consent { get; set; }
     public bool IsActive { get; set; }
 }

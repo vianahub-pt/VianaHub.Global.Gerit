@@ -14,30 +14,84 @@ public class JobDefinitionMapping : IEntityTypeConfiguration<JobDefinitionEntity
         // Primary key and identity
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Id)
-            .HasColumnName("Id")
             .UseIdentityColumn(1, 1)
             .IsRequired();
 
-        builder.Property(x => x.JobCategory).HasMaxLength(100).IsRequired();
-        builder.Property(x => x.JobName).HasMaxLength(150).IsRequired();
-        builder.Property(x => x.Description).HasMaxLength(1000);
-        builder.Property(x => x.JobPurpose).HasMaxLength(1000);
-        builder.Property(x => x.JobType).HasMaxLength(200).IsRequired();
-        builder.Property(x => x.JobMethod).HasMaxLength(100);
-        builder.Property(x => x.CronExpression).HasMaxLength(200);
-        builder.Property(x => x.TimeZoneId).HasMaxLength(150);
-        builder.Property(x => x.ExecuteOnlyOnce).IsRequired();
-        builder.Property(x => x.TimeoutMinutes).IsRequired();
-        builder.Property(x => x.Priority).IsRequired();
-        builder.Property(x => x.Queue).HasMaxLength(100);
-        builder.Property(x => x.MaxRetries).IsRequired();
-        builder.Property(x => x.JobConfiguration).HasColumnType("text");
-        builder.Property(x => x.IsSystemJob).IsRequired();
-        builder.Property(x => x.HangfireJobId).HasMaxLength(200);
+        builder.Property(x => x.JobCategory)
+            .HasMaxLength(100)
+            .IsRequired();
+        
+        builder.Property(x => x.JobName)
+            .HasMaxLength(150)
+            .IsRequired();
+        
+        builder.Property(x => x.Description)
+            .HasMaxLength(1000);
+        
+        builder.Property(x => x.JobPurpose)
+            .HasMaxLength(1000);
+        
+        builder.Property(x => x.JobType)
+            .HasMaxLength(200)
+            .IsRequired();
+        
+        builder.Property(x => x.JobMethod)
+            .HasMaxLength(100);
+        
+        builder.Property(x => x.CronExpression).
+            HasMaxLength(200);
+        
+        builder.Property(x => x.TimeZoneId)
+            .HasMaxLength(150);
+        
+        builder.Property(x => x.ExecuteOnlyOnce)
+            .IsRequired();
+        
+        builder.Property(x => x.TimeoutMinutes)
+            .IsRequired();
+        
+        builder.Property(x => x.Priority)
+            .IsRequired();
+        
+        builder.Property(x => x.Queue)
+            .HasMaxLength(100);
+        
+        builder.Property(x => x.MaxRetries)
+            .IsRequired();
+        
+        builder.Property(x => x.JobConfiguration)
+            .HasColumnType("text");
+        
+        builder.Property(x => x.IsSystemJob)
+            .IsRequired();
+        
+        builder.Property(x => x.HangfireJobId)
+            .HasMaxLength(200);
+        
         builder.Property(x => x.LastRegisteredAt);
 
-        builder.Property(x => x.IsActive).IsRequired();
-        builder.Property(x => x.IsDeleted).IsRequired();
+        builder.Property(x => x.IsActive)
+            .HasDefaultValue(true)
+            .IsRequired();
+
+        builder.Property(x => x.IsDeleted)
+            .HasDefaultValue(false)
+            .IsRequired();
+
+        builder.Property(x => x.CreatedBy)
+            .IsRequired();
+
+        builder.Property(x => x.CreatedAt)
+            .HasColumnType("DATETIME2(7)")
+            .IsRequired();
+
+        builder.Property(x => x.ModifiedBy)
+            .HasColumnType("INT")
+            .IsRequired(false);
+
+        builder.Property(x => x.ModifiedAt)
+            .HasColumnType("DATETIME2(7)")
+            .IsRequired(false);
 
         // Indexes
         builder.HasIndex(x => new { x.JobCategory, x.IsActive, x.IsDeleted }).HasDatabaseName("IX_Services_Category_Active");
@@ -47,10 +101,6 @@ public class JobDefinitionMapping : IEntityTypeConfiguration<JobDefinitionEntity
         // Unique constraint
         builder.HasIndex(x => x.JobName).IsUnique().HasDatabaseName("UQ_Job_JobName");
 
-        // Audit
-        builder.Property(x => x.CreatedBy).IsRequired().HasColumnName("CreatedBy");
-        builder.Property(x => x.CreatedAt).IsRequired().HasColumnName("CreatedAt");
-        builder.Property(x => x.ModifiedBy).HasColumnName("UpdatedBy");
-        builder.Property(x => x.ModifiedAt).HasColumnName("UpdatedAt");
+
     }
 }

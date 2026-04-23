@@ -29,7 +29,7 @@ public class CreatePlanValidator : AbstractValidator<PlanEntity>
             .GreaterThan(0)
             .WithMessage(localization.GetMessage("Domain.Plan.MaxUsersRequired"));
 
-        RuleFor(x => x.MaxPhotosPerInterventions)
+        RuleFor(x => x.MaxPhotosPerVisits)
             .GreaterThan(0)
             .WithMessage(localization.GetMessage("Domain.Plan.MaxPhotosRequired"));
 

@@ -13,95 +13,77 @@ public class SubscriptionEntityMapping : IEntityTypeConfiguration<SubscriptionEn
         builder.HasKey(x => x.Id);
 
         builder.Property(x => x.Id)
-            .HasColumnName("Id")
             .ValueGeneratedOnAdd();
 
         builder.Property(x => x.TenantId)
-            .HasColumnName("TenantId")
             .IsRequired();
 
         builder.Property(x => x.PlanId)
-            .HasColumnName("PlanId")
             .IsRequired();
 
         builder.Property(x => x.StripeId)
-            .HasColumnName("StripeId")
             .HasMaxLength(100)
             .IsRequired(false);
 
         builder.Property(x => x.CurrentPeriodStart)
-            .HasColumnName("CurrentPeriodStart")
             .HasColumnType("DATETIME2")
             .IsRequired();
 
         builder.Property(x => x.CurrentPeriodEnd)
-            .HasColumnName("CurrentPeriodEnd")
             .HasColumnType("DATETIME2")
             .IsRequired();
 
         builder.Property(x => x.TrialStart)
-            .HasColumnName("TrialStart")
             .HasColumnType("DATETIME2")
             .IsRequired(false);
 
         builder.Property(x => x.TrialEnd)
-            .HasColumnName("TrialEnd")
             .HasColumnType("DATETIME2")
             .IsRequired(false);
 
         builder.Property(x => x.CancelAtPeriodEnd)
-            .HasColumnName("CancelAtPeriodEnd")
             .HasColumnType("BIT")
             .IsRequired()
             .HasDefaultValue(false);
 
         builder.Property(x => x.CanceledAt)
-            .HasColumnName("CanceledAt")
             .HasColumnType("DATETIME2")
             .IsRequired(false);
 
         builder.Property(x => x.CancellationReason)
-            .HasColumnName("CancellationReason")
             .HasColumnType("NVARCHAR(500)")
             .HasMaxLength(500)
             .IsRequired(false);
 
         builder.Property(x => x.StripeCustomerId)
-            .HasColumnName("StripeCustomerId")
             .HasColumnType("NVARCHAR(100)")
             .HasMaxLength(100)
             .IsRequired(false);
 
         builder.Property(x => x.IsActive)
-            .HasColumnName("IsActive")
             .HasColumnType("BIT")
             .IsRequired()
             .HasDefaultValue(true);
 
         builder.Property(x => x.IsDeleted)
-            .HasColumnName("IsDeleted")
             .HasColumnType("BIT")
             .IsRequired()
             .HasDefaultValue(false);
 
         builder.Property(x => x.CreatedBy)
-              .HasColumnName("CreatedBy")
               .HasColumnType("INT")
               .IsRequired();
 
         builder.Property(x => x.CreatedAt)
-            .HasColumnName("CreatedAt")
             .HasColumnType("DATETIME2")
             .HasDefaultValueSql("SYSDATETIME()")
             .IsRequired();
 
         builder.Property(x => x.ModifiedBy)
-            .HasColumnName("ModifiedBy")
             .HasColumnType("INT")
             .IsRequired(false);
 
         builder.Property(x => x.ModifiedAt)
-            .HasColumnName("ModifiedAt")
             .HasColumnType("DATETIME2")
             .IsRequired(false);
 

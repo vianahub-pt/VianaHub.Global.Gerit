@@ -596,7 +596,7 @@
                 ],
                 "body": {
                   "mode": "raw",
-                  "raw": "\t{\r\n\t\t\"Name\": \"InterventionTeamEquipments\",\r\n\t\t\"Description\": \"Associações Intervenção-Equipamento\"\r\n\t}",
+                  "raw": "\t{\r\n\t\t\"Name\": \"VisitTeamEquipments\",\r\n\t\t\"Description\": \"Associações Intervenção-Equipamento\"\r\n\t}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -2197,7 +2197,7 @@
                 ],
                 "body": {
                   "mode": "raw",
-                  "raw": "\t{\r\n\t\t\"Name\": \"Unlimited\",\r\n\t\t\"Description\": \"Plano ilimitado para uso sem restrições operacionais.\",\r\n\t\t\"PricePerHour\": 1.5,\r\n\t\t\"PricePerDay\": 30.0,\r\n\t\t\"PricePerMonth\": 299.9,\r\n\t\t\"PricePerYear\": 2999.0,\r\n\t\t\"Currency\": \"EUR\",\r\n\t\t\"MaxUsers\": 999,\r\n\t\t\"MaxPhotosPerInterventions\": 999\r\n\t}",
+                  "raw": "\t{\r\n\t\t\"Name\": \"Unlimited\",\r\n\t\t\"Description\": \"Plano ilimitado para uso sem restrições operacionais.\",\r\n\t\t\"PricePerHour\": 1.5,\r\n\t\t\"PricePerDay\": 30.0,\r\n\t\t\"PricePerMonth\": 299.9,\r\n\t\t\"PricePerYear\": 2999.0,\r\n\t\t\"Currency\": \"EUR\",\r\n\t\t\"MaxUsers\": 999,\r\n\t\t\"MaxPhotosPerVisits\": 999\r\n\t}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -2264,7 +2264,7 @@
                 ],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\r\n    \"name\": \"Tryal\",\r\n    \"description\": \"Teste a aplicação por 30 dias de forma gratuita\",\r\n    \"pricePerHour\": 0.00,\r\n    \"pricePerDay\": 0.00,\r\n    \"pricePerMonth\": 0.00,\r\n    \"pricePerYear\": 0.00,\r\n    \"currency\": \"EUR\",\r\n    \"maxUsers\": 2,\r\n    \"maxPhotosPerInterventions\": 2\r\n}",
+                  "raw": "{\r\n    \"name\": \"Tryal\",\r\n    \"description\": \"Teste a aplicação por 30 dias de forma gratuita\",\r\n    \"pricePerHour\": 0.00,\r\n    \"pricePerDay\": 0.00,\r\n    \"pricePerMonth\": 0.00,\r\n    \"pricePerYear\": 0.00,\r\n    \"currency\": \"EUR\",\r\n    \"maxUsers\": 2,\r\n    \"maxPhotosPerVisits\": 2\r\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -6314,7 +6314,7 @@
           ]
         },
         {
-          "name": "Interventions",
+          "name": "Visits",
           "item": [
             {
               "name": "Obter todos",
@@ -6494,7 +6494,7 @@
           ]
         },
         {
-          "name": "InterventionAddresses",
+          "name": "VisitAddresses",
           "item": [
             {
               "name": "Obter todos",
@@ -6508,7 +6508,7 @@
                   }
                 ],
                 "url": {
-                  "raw": "https://localhost:7111/v1/intervention-addresses",
+                  "raw": "https://localhost:7111/v1/visit-addresses",
                   "protocol": "https",
                   "host": [
                     "localhost"
@@ -6516,7 +6516,7 @@
                   "port": "7111",
                   "path": [
                     "v1",
-                    "intervention-addresses"
+                    "visit-addresses"
                   ]
                 }
               },
@@ -6534,7 +6534,7 @@
                   }
                 ],
                 "url": {
-                  "raw": "https://localhost:7111/v1/intervention-addresses/1",
+                  "raw": "https://localhost:7111/v1/visit-addresses/1",
                   "protocol": "https",
                   "host": [
                     "localhost"
@@ -6542,7 +6542,7 @@
                   "port": "7111",
                   "path": [
                     "v1",
-                    "intervention-addresses",
+                    "visit-addresses",
                     "1"
                   ]
                 }
@@ -6561,7 +6561,7 @@
                   }
                 ],
                 "url": {
-                  "raw": "https://localhost:7111/v1/intervention-addresses/paged?Search=&PageNumber=1&PageSize=10&SortBy=Name&SortDirection=asc",
+                  "raw": "https://localhost:7111/v1/visit-addresses/paged?Search=&PageNumber=1&PageSize=10&SortBy=Name&SortDirection=asc",
                   "protocol": "https",
                   "host": [
                     "localhost"
@@ -6569,7 +6569,7 @@
                   "port": "7111",
                   "path": [
                     "v1",
-                    "intervention-addresses",
+                    "visit-addresses",
                     "paged"
                   ],
                   "query": [
@@ -6619,7 +6619,7 @@
                   }
                 },
                 "url": {
-                  "raw": "https://localhost:7111/v1/intervention-addresses",
+                  "raw": "https://localhost:7111/v1/visit-addresses",
                   "protocol": "https",
                   "host": [
                     "localhost"
@@ -6627,7 +6627,7 @@
                   "port": "7111",
                   "path": [
                     "v1",
-                    "intervention-addresses"
+                    "visit-addresses"
                   ]
                 }
               },
@@ -6651,12 +6651,12 @@
                       "key": "file",
                       "type": "file",
                       "uuid": "8ff4b496-46c5-49ea-926a-9b4b75a3c17a",
-                      "src": "/C:/git/my/VianaHub.Global.Gerit/docs/samples/intervention-addresses-upload.csv"
+                      "src": "/C:/git/my/VianaHub.Global.Gerit/docs/samples/visit-addresses-upload.csv"
                     }
                   ]
                 },
                 "url": {
-                  "raw": "https://localhost:7111/v1/intervention-addresses/bulk-upload",
+                  "raw": "https://localhost:7111/v1/visit-addresses/bulk-upload",
                   "protocol": "https",
                   "host": [
                     "localhost"
@@ -6664,7 +6664,7 @@
                   "port": "7111",
                   "path": [
                     "v1",
-                    "intervention-addresses",
+                    "visit-addresses",
                     "bulk-upload"
                   ]
                 }
@@ -6674,7 +6674,7 @@
           ]
         },
         {
-          "name": "InterventionContacts",
+          "name": "VisitContacts",
           "item": [
             {
               "name": "Obter todos",
@@ -6688,7 +6688,7 @@
                   }
                 ],
                 "url": {
-                  "raw": "https://localhost:7111/v1/intervention-contacts",
+                  "raw": "https://localhost:7111/v1/visit-contacts",
                   "protocol": "https",
                   "host": [
                     "localhost"
@@ -6696,7 +6696,7 @@
                   "port": "7111",
                   "path": [
                     "v1",
-                    "intervention-contacts"
+                    "visit-contacts"
                   ]
                 }
               },
@@ -6714,7 +6714,7 @@
                   }
                 ],
                 "url": {
-                  "raw": "https://localhost:7111/v1/intervention-contacts/21",
+                  "raw": "https://localhost:7111/v1/visit-contacts/21",
                   "protocol": "https",
                   "host": [
                     "localhost"
@@ -6722,7 +6722,7 @@
                   "port": "7111",
                   "path": [
                     "v1",
-                    "intervention-contacts",
+                    "visit-contacts",
                     "21"
                   ]
                 }
@@ -6741,7 +6741,7 @@
                   }
                 ],
                 "url": {
-                  "raw": "https://localhost:7111/v1/intervention-contacts/paged?Search=Ana Ferreira&PageNumber=1&PageSize=10&SortBy=Name&SortDirection=asc",
+                  "raw": "https://localhost:7111/v1/visit-contacts/paged?Search=Ana Ferreira&PageNumber=1&PageSize=10&SortBy=Name&SortDirection=asc",
                   "protocol": "https",
                   "host": [
                     "localhost"
@@ -6749,7 +6749,7 @@
                   "port": "7111",
                   "path": [
                     "v1",
-                    "intervention-contacts",
+                    "visit-contacts",
                     "paged"
                   ],
                   "query": [
@@ -6799,7 +6799,7 @@
                   }
                 },
                 "url": {
-                  "raw": "https://localhost:7111/v1/intervention-contacts",
+                  "raw": "https://localhost:7111/v1/visit-contacts",
                   "protocol": "https",
                   "host": [
                     "localhost"
@@ -6807,7 +6807,7 @@
                   "port": "7111",
                   "path": [
                     "v1",
-                    "intervention-contacts"
+                    "visit-contacts"
                   ]
                 }
               },
@@ -6831,12 +6831,12 @@
                       "key": "file",
                       "type": "file",
                       "uuid": "8ff4b496-46c5-49ea-926a-9b4b75a3c17a",
-                      "src": "/C:/git/my/VianaHub.Global.Gerit/docs/samples/intervention-contacts-upload.csv"
+                      "src": "/C:/git/my/VianaHub.Global.Gerit/docs/samples/visit-contacts-upload.csv"
                     }
                   ]
                 },
                 "url": {
-                  "raw": "https://localhost:7111/v1/intervention-contacts/bulk-upload",
+                  "raw": "https://localhost:7111/v1/visit-contacts/bulk-upload",
                   "protocol": "https",
                   "host": [
                     "localhost"
@@ -6844,7 +6844,7 @@
                   "port": "7111",
                   "path": [
                     "v1",
-                    "intervention-contacts",
+                    "visit-contacts",
                     "bulk-upload"
                   ]
                 }
@@ -6854,7 +6854,7 @@
           ]
         },
         {
-          "name": "InterventionTeams",
+          "name": "VisitTeams",
           "item": [
             {
               "name": "Obter todos",
@@ -6868,7 +6868,7 @@
                   }
                 ],
                 "url": {
-                  "raw": "https://localhost:7111/v1/intervention-teams",
+                  "raw": "https://localhost:7111/v1/visit-teams",
                   "protocol": "https",
                   "host": [
                     "localhost"
@@ -6876,7 +6876,7 @@
                   "port": "7111",
                   "path": [
                     "v1",
-                    "intervention-teams"
+                    "visit-teams"
                   ]
                 }
               },
@@ -6894,7 +6894,7 @@
                   }
                 ],
                 "url": {
-                  "raw": "https://localhost:7111/v1/intervention-teams/1",
+                  "raw": "https://localhost:7111/v1/visit-teams/1",
                   "protocol": "https",
                   "host": [
                     "localhost"
@@ -6902,7 +6902,7 @@
                   "port": "7111",
                   "path": [
                     "v1",
-                    "intervention-teams",
+                    "visit-teams",
                     "1"
                   ]
                 }
@@ -6921,7 +6921,7 @@
                   }
                 ],
                 "url": {
-                  "raw": "https://localhost:7111/v1/intervention-teams/paged?Search=ducato&PageNumber=1&PageSize=10&SortBy=Name&SortDirection=asc",
+                  "raw": "https://localhost:7111/v1/visit-teams/paged?Search=ducato&PageNumber=1&PageSize=10&SortBy=Name&SortDirection=asc",
                   "protocol": "https",
                   "host": [
                     "localhost"
@@ -6929,7 +6929,7 @@
                   "port": "7111",
                   "path": [
                     "v1",
-                    "intervention-teams",
+                    "visit-teams",
                     "paged"
                   ],
                   "query": [
@@ -6979,7 +6979,7 @@
                   }
                 },
                 "url": {
-                  "raw": "https://localhost:7111/v1/intervention-teams",
+                  "raw": "https://localhost:7111/v1/visit-teams",
                   "protocol": "https",
                   "host": [
                     "localhost"
@@ -6987,7 +6987,7 @@
                   "port": "7111",
                   "path": [
                     "v1",
-                    "intervention-teams"
+                    "visit-teams"
                   ]
                 }
               },
@@ -7016,7 +7016,7 @@
                   ]
                 },
                 "url": {
-                  "raw": "https://localhost:7111/v1/intervention-teams/bulk-upload",
+                  "raw": "https://localhost:7111/v1/visit-teams/bulk-upload",
                   "protocol": "https",
                   "host": [
                     "localhost"
@@ -7024,7 +7024,7 @@
                   "port": "7111",
                   "path": [
                     "v1",
-                    "intervention-teams",
+                    "visit-teams",
                     "bulk-upload"
                   ]
                 }
@@ -7052,7 +7052,7 @@
                   }
                 },
                 "url": {
-                  "raw": "https://localhost:7111/v1/intervention-teams/1",
+                  "raw": "https://localhost:7111/v1/visit-teams/1",
                   "protocol": "https",
                   "host": [
                     "localhost"
@@ -7060,7 +7060,7 @@
                   "port": "7111",
                   "path": [
                     "v1",
-                    "intervention-teams",
+                    "visit-teams",
                     "1"
                   ]
                 }
@@ -7079,7 +7079,7 @@
                   }
                 ],
                 "url": {
-                  "raw": "https://localhost:7111/v1/intervention-teams/1/activate",
+                  "raw": "https://localhost:7111/v1/visit-teams/1/activate",
                   "protocol": "https",
                   "host": [
                     "localhost"
@@ -7087,7 +7087,7 @@
                   "port": "7111",
                   "path": [
                     "v1",
-                    "intervention-teams",
+                    "visit-teams",
                     "1",
                     "activate"
                   ]
@@ -7107,7 +7107,7 @@
                   }
                 ],
                 "url": {
-                  "raw": "https://localhost:7111/v1/intervention-teams/1/deactivate",
+                  "raw": "https://localhost:7111/v1/visit-teams/1/deactivate",
                   "protocol": "https",
                   "host": [
                     "localhost"
@@ -7115,7 +7115,7 @@
                   "port": "7111",
                   "path": [
                     "v1",
-                    "intervention-teams",
+                    "visit-teams",
                     "1",
                     "deactivate"
                   ]
@@ -7135,7 +7135,7 @@
                   }
                 ],
                 "url": {
-                  "raw": "https://localhost:7111/v1/intervention-teams/1",
+                  "raw": "https://localhost:7111/v1/visit-teams/1",
                   "protocol": "https",
                   "host": [
                     "localhost"
@@ -7143,7 +7143,7 @@
                   "port": "7111",
                   "path": [
                     "v1",
-                    "intervention-teams",
+                    "visit-teams",
                     "1"
                   ]
                 }
@@ -7153,7 +7153,7 @@
           ]
         },
         {
-          "name": "InterventionTeamEquipments",
+          "name": "VisitTeamEquipments",
           "item": [
             {
               "name": "Obter todos",
@@ -7167,7 +7167,7 @@
                   }
                 ],
                 "url": {
-                  "raw": "https://localhost:7111/v1/intervention-team-equipments",
+                  "raw": "https://localhost:7111/v1/visit-team-equipments",
                   "protocol": "https",
                   "host": [
                     "localhost"
@@ -7175,7 +7175,7 @@
                   "port": "7111",
                   "path": [
                     "v1",
-                    "intervention-team-equipments"
+                    "visit-team-equipments"
                   ]
                 }
               },
@@ -7193,7 +7193,7 @@
                   }
                 ],
                 "url": {
-                  "raw": "https://localhost:7111/v1/intervention-team-equipments/1",
+                  "raw": "https://localhost:7111/v1/visit-team-equipments/1",
                   "protocol": "https",
                   "host": [
                     "localhost"
@@ -7201,7 +7201,7 @@
                   "port": "7111",
                   "path": [
                     "v1",
-                    "intervention-team-equipments",
+                    "visit-team-equipments",
                     "1"
                   ]
                 }
@@ -7220,7 +7220,7 @@
                   }
                 ],
                 "url": {
-                  "raw": "https://localhost:7111/v1/intervention-team-equipments/paged?Search=&PageNumber=1&PageSize=10&SortBy=Name&SortDirection=asc",
+                  "raw": "https://localhost:7111/v1/visit-team-equipments/paged?Search=&PageNumber=1&PageSize=10&SortBy=Name&SortDirection=asc",
                   "protocol": "https",
                   "host": [
                     "localhost"
@@ -7228,7 +7228,7 @@
                   "port": "7111",
                   "path": [
                     "v1",
-                    "intervention-team-equipments",
+                    "visit-team-equipments",
                     "paged"
                   ],
                   "query": [
@@ -7278,7 +7278,7 @@
                   }
                 },
                 "url": {
-                  "raw": "https://localhost:7111/v1/intervention-team-equipments",
+                  "raw": "https://localhost:7111/v1/visit-team-equipments",
                   "protocol": "https",
                   "host": [
                     "localhost"
@@ -7286,7 +7286,7 @@
                   "port": "7111",
                   "path": [
                     "v1",
-                    "intervention-team-equipments"
+                    "visit-team-equipments"
                   ]
                 }
               },
@@ -7315,7 +7315,7 @@
                   ]
                 },
                 "url": {
-                  "raw": "https://localhost:7111/v1/intervention-team-equipments/bulk-upload",
+                  "raw": "https://localhost:7111/v1/visit-team-equipments/bulk-upload",
                   "protocol": "https",
                   "host": [
                     "localhost"
@@ -7323,7 +7323,7 @@
                   "port": "7111",
                   "path": [
                     "v1",
-                    "intervention-team-equipments",
+                    "visit-team-equipments",
                     "bulk-upload"
                   ]
                 }
@@ -7351,7 +7351,7 @@
                   }
                 },
                 "url": {
-                  "raw": "https://localhost:7111/v1/intervention-team-equipments/1",
+                  "raw": "https://localhost:7111/v1/visit-team-equipments/1",
                   "protocol": "https",
                   "host": [
                     "localhost"
@@ -7359,7 +7359,7 @@
                   "port": "7111",
                   "path": [
                     "v1",
-                    "intervention-team-equipments",
+                    "visit-team-equipments",
                     "1"
                   ]
                 }
@@ -7378,7 +7378,7 @@
                   }
                 ],
                 "url": {
-                  "raw": "https://localhost:7111/v1/intervention-team-equipments/1/activate",
+                  "raw": "https://localhost:7111/v1/visit-team-equipments/1/activate",
                   "protocol": "https",
                   "host": [
                     "localhost"
@@ -7386,7 +7386,7 @@
                   "port": "7111",
                   "path": [
                     "v1",
-                    "intervention-team-equipments",
+                    "visit-team-equipments",
                     "1",
                     "activate"
                   ]
@@ -7406,7 +7406,7 @@
                   }
                 ],
                 "url": {
-                  "raw": "https://localhost:7111/v1/intervention-team-equipments/1/deactivate",
+                  "raw": "https://localhost:7111/v1/visit-team-equipments/1/deactivate",
                   "protocol": "https",
                   "host": [
                     "localhost"
@@ -7414,7 +7414,7 @@
                   "port": "7111",
                   "path": [
                     "v1",
-                    "intervention-team-equipments",
+                    "visit-team-equipments",
                     "1",
                     "deactivate"
                   ]
@@ -7434,7 +7434,7 @@
                   }
                 ],
                 "url": {
-                  "raw": "https://localhost:7111/v1/intervention-team-equipments/1",
+                  "raw": "https://localhost:7111/v1/visit-team-equipments/1",
                   "protocol": "https",
                   "host": [
                     "localhost"
@@ -7442,7 +7442,7 @@
                   "port": "7111",
                   "path": [
                     "v1",
-                    "intervention-team-equipments",
+                    "visit-team-equipments",
                     "1"
                   ]
                 }
@@ -7452,7 +7452,7 @@
           ]
         },
         {
-          "name": "InterventionTeamVehicles",
+          "name": "VisitTeamVehicles",
           "item": [
             {
               "name": "Obter todos",
@@ -7466,7 +7466,7 @@
                   }
                 ],
                 "url": {
-                  "raw": "https://localhost:7111/v1/intervention-team-vehicles",
+                  "raw": "https://localhost:7111/v1/visit-team-vehicles",
                   "protocol": "https",
                   "host": [
                     "localhost"
@@ -7474,7 +7474,7 @@
                   "port": "7111",
                   "path": [
                     "v1",
-                    "intervention-team-vehicles"
+                    "visit-team-vehicles"
                   ]
                 }
               },
@@ -7492,7 +7492,7 @@
                   }
                 ],
                 "url": {
-                  "raw": "https://localhost:7111/v1/intervention-team-vehicles/1",
+                  "raw": "https://localhost:7111/v1/visit-team-vehicles/1",
                   "protocol": "https",
                   "host": [
                     "localhost"
@@ -7500,7 +7500,7 @@
                   "port": "7111",
                   "path": [
                     "v1",
-                    "intervention-team-vehicles",
+                    "visit-team-vehicles",
                     "1"
                   ]
                 }
@@ -7519,7 +7519,7 @@
                   }
                 ],
                 "url": {
-                  "raw": "https://localhost:7111/v1/intervention-team-vehicles/paged?Search=ducato&PageNumber=1&PageSize=10&SortBy=Name&SortDirection=asc",
+                  "raw": "https://localhost:7111/v1/visit-team-vehicles/paged?Search=ducato&PageNumber=1&PageSize=10&SortBy=Name&SortDirection=asc",
                   "protocol": "https",
                   "host": [
                     "localhost"
@@ -7527,7 +7527,7 @@
                   "port": "7111",
                   "path": [
                     "v1",
-                    "intervention-team-vehicles",
+                    "visit-team-vehicles",
                     "paged"
                   ],
                   "query": [
@@ -7577,7 +7577,7 @@
                   }
                 },
                 "url": {
-                  "raw": "https://localhost:7111/v1/intervention-team-vehicles",
+                  "raw": "https://localhost:7111/v1/visit-team-vehicles",
                   "protocol": "https",
                   "host": [
                     "localhost"
@@ -7585,7 +7585,7 @@
                   "port": "7111",
                   "path": [
                     "v1",
-                    "intervention-team-vehicles"
+                    "visit-team-vehicles"
                   ]
                 }
               },
@@ -7614,7 +7614,7 @@
                   ]
                 },
                 "url": {
-                  "raw": "https://localhost:7111/v1/intervention-team-vehicles/bulk-upload",
+                  "raw": "https://localhost:7111/v1/visit-team-vehicles/bulk-upload",
                   "protocol": "https",
                   "host": [
                     "localhost"
@@ -7622,7 +7622,7 @@
                   "port": "7111",
                   "path": [
                     "v1",
-                    "intervention-team-vehicles",
+                    "visit-team-vehicles",
                     "bulk-upload"
                   ]
                 }
@@ -7650,7 +7650,7 @@
                   }
                 },
                 "url": {
-                  "raw": "https://localhost:7111/v1/intervention-team-vehicles/1",
+                  "raw": "https://localhost:7111/v1/visit-team-vehicles/1",
                   "protocol": "https",
                   "host": [
                     "localhost"
@@ -7658,7 +7658,7 @@
                   "port": "7111",
                   "path": [
                     "v1",
-                    "intervention-team-vehicles",
+                    "visit-team-vehicles",
                     "1"
                   ]
                 }
@@ -7677,7 +7677,7 @@
                   }
                 ],
                 "url": {
-                  "raw": "https://localhost:7111/v1/intervention-team-vehicles/1/activate",
+                  "raw": "https://localhost:7111/v1/visit-team-vehicles/1/activate",
                   "protocol": "https",
                   "host": [
                     "localhost"
@@ -7685,7 +7685,7 @@
                   "port": "7111",
                   "path": [
                     "v1",
-                    "intervention-team-vehicles",
+                    "visit-team-vehicles",
                     "1",
                     "activate"
                   ]
@@ -7705,7 +7705,7 @@
                   }
                 ],
                 "url": {
-                  "raw": "https://localhost:7111/v1/intervention-team-vehicles/1/deactivate",
+                  "raw": "https://localhost:7111/v1/visit-team-vehicles/1/deactivate",
                   "protocol": "https",
                   "host": [
                     "localhost"
@@ -7713,7 +7713,7 @@
                   "port": "7111",
                   "path": [
                     "v1",
-                    "intervention-team-vehicles",
+                    "visit-team-vehicles",
                     "1",
                     "deactivate"
                   ]
@@ -7733,7 +7733,7 @@
                   }
                 ],
                 "url": {
-                  "raw": "https://localhost:7111/v1/intervention-team-vehicles/1",
+                  "raw": "https://localhost:7111/v1/visit-team-vehicles/1",
                   "protocol": "https",
                   "host": [
                     "localhost"
@@ -7741,7 +7741,7 @@
                   "port": "7111",
                   "path": [
                     "v1",
-                    "intervention-team-vehicles",
+                    "visit-team-vehicles",
                     "1"
                   ]
                 }

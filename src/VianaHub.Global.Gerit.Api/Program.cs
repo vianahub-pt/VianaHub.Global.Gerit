@@ -1,21 +1,23 @@
 using FluentValidation;
+using Hangfire;
+using Hangfire.SqlServer;
+using Microsoft.AspNetCore.Http; // for RequestDelegateFactoryOptions
 using Microsoft.EntityFrameworkCore;
 using Serilog;
+using System.Reflection;
+using System.Text.Json.Serialization;
 using VianaHub.Global.Gerit.Api.Configuration;
 using VianaHub.Global.Gerit.Api.Configuration.Swagger;
 using VianaHub.Global.Gerit.Api.Helpers;
+using VianaHub.Global.Gerit.Api.Middleware;
+using VianaHub.Global.Gerit.Api.Security;
 using VianaHub.Global.Gerit.Api.Services;
+using VianaHub.Global.Gerit.Application.Mappings.Identity;
+using VianaHub.Global.Gerit.Domain.Interfaces.Base;
 using VianaHub.Global.Gerit.Infra.Data.Context;
 using VianaHub.Global.Gerit.Infra.Data.Interceptors;
-using VianaHub.Global.Gerit.Infra.IoC;
-using Hangfire;
-using Hangfire.SqlServer;
-using VianaHub.Global.Gerit.Api.Security;
 using VianaHub.Global.Gerit.Infra.Data.Tools;
-using VianaHub.Global.Gerit.Application.Mappings.Identity;
-using VianaHub.Global.Gerit.Api.Middleware;
-using VianaHub.Global.Gerit.Domain.Interfaces.Base;
-using Microsoft.AspNetCore.Http; // for RequestDelegateFactoryOptions
+using VianaHub.Global.Gerit.Infra.IoC;
 
 namespace VianaHub.Global.Gerit.Api;
 
@@ -46,10 +48,8 @@ public class Program
         builder.Services.AddScoped<TenantSessionCommandInterceptor>();
         builder.Services.AddScoped<TelemetryInterceptor>();
         builder.Services.AddEndpointsApiExplorer();
-
         builder.Services.AddSwagger(builder.Configuration, builder.Environment);
-
-        builder.Services.AddAutoMapper(typeof(ActionMappingProfile).Assembly);
+        builder.Services.AddAutoMapper(cfg => cfg.AddMaps(typeof(ActionMappingProfile).Assembly));
         builder.Services.AddDbContext<GeritDbContext>((serviceProvider, options) =>
         {
             options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
@@ -63,6 +63,10 @@ public class Program
                 tenantCommandInterceptor,
                 telemetryInterceptor
             );
+        });
+        builder.Services.ConfigureHttpJsonOptions(options =>
+        {
+            options.SerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
         });
         builder.Services.AddJwt(builder.Configuration);
         builder.Services.AddRouteValidatorSetup();

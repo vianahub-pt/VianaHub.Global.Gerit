@@ -1,6 +1,6 @@
-namespace VianaHub.Global.Gerit.Application.Dtos.Request.Business.Intervention;
+namespace VianaHub.Global.Gerit.Application.Dtos.Request.Business.Visit;
 
-public class CreateInterventionRequest
+public class CreateVisitRequest
 {
     public int ClientId { get; set; }
     public int StatusId { get; set; }

@@ -1,8 +1,8 @@
-namespace VianaHub.Global.Gerit.Application.Dtos.Request.Business.InterventionAddress;
+namespace VianaHub.Global.Gerit.Application.Dtos.Request.Business.VisitAddress;
 
-public class BulkUploadInterventionAddressItem
+public class BulkUploadVisitAddressItem
 {
-    public int InterventionId { get; set; }
+    public int VisitId { get; set; }
     public int AddressTypeId { get; set; }
     public string CountryCode { get; set; }
     public string Street { get; set; }
@@ -14,6 +14,6 @@ public class BulkUploadInterventionAddressItem
     public string PostalCode { get; set; }
     public decimal? Latitude { get; set; }
     public decimal? Longitude { get; set; }
-    public string Notes { get; set; }
+    public string Note { get; set; }
     public bool IsPrimary { get; set; }
 }

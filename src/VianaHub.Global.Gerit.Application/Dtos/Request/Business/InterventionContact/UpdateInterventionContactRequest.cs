@@ -1,9 +1,9 @@
-namespace VianaHub.Global.Gerit.Application.Dtos.Request.Business.InterventionContact;
+namespace VianaHub.Global.Gerit.Application.Dtos.Request.Business.VisitContact;
 
 /// <summary>
-/// Request para atualização de InterventionContact
+/// Request para atualização de VisitContact
 /// </summary>
-public class UpdateInterventionContactRequest
+public class UpdateVisitContactRequest
 {
     public string Name { get; set; }
     public string Email { get; set; }

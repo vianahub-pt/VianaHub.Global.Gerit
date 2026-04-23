@@ -25,9 +25,9 @@ public class UpdateClientContactRouteValidator : AbstractValidator<UpdateClientC
             .EmailAddress()
             .WithMessage(localization.GetMessage("Api.Validator.ClientContact.Update.Email.Invalid"));
 
-        RuleFor(x => x.Phone)
+        RuleFor(x => x.PhoneNumber)
             .MaximumLength(30)
             .WithMessage(localization.GetMessage("Api.Validator.ClientContact.Update.Phone.MaximumLength", 30))
-            .When(x => !string.IsNullOrWhiteSpace(x.Phone));
+            .When(x => !string.IsNullOrWhiteSpace(x.PhoneNumber));
     }
 }

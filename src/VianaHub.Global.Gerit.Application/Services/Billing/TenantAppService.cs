@@ -1,4 +1,5 @@
 using AutoMapper;
+using Azure.Core;
 using CsvHelper;
 using CsvHelper.Configuration;
 using Microsoft.AspNetCore.Http;
@@ -9,6 +10,7 @@ using VianaHub.Global.Gerit.Application.Dtos.Response.Billing.Tenant;
 using VianaHub.Global.Gerit.Application.Interfaces.Billing;
 using VianaHub.Global.Gerit.Application.Interfaces.Common;
 using VianaHub.Global.Gerit.Domain.Entities.Billing;
+using VianaHub.Global.Gerit.Domain.Enums;
 using VianaHub.Global.Gerit.Domain.Helpers;
 using VianaHub.Global.Gerit.Domain.Interfaces.Base;
 using VianaHub.Global.Gerit.Domain.Interfaces.Billing;
@@ -73,7 +75,7 @@ public class TenantAppService : ITenantAppService
             return false;
         }
 
-        var entity = new TenantEntity(request.Name, request.Consent, _currentUser.GetUserId());
+        var entity = new TenantEntity((TenantType)request.TenantType, (OriginType)request.OriginType, request.Name, request.Email, request.Website, request.UrlImage, request.Note, _currentUser.GetUserId());
         return await _domain.CreateAsync(entity, ct);
     }
     
@@ -86,7 +88,7 @@ public class TenantAppService : ITenantAppService
             return false;
         }
 
-        entity.Update(request.Name, request.Consent, _currentUser.GetUserId());
+        entity.Update((TenantType)request.TenantType, (OriginType)request.OriginType, request.Name, request.Email, request.Website, request.UrlImage, request.Note, _currentUser.GetUserId());
         return await _domain.UpdateAsync(entity, ct);
     }
     
@@ -244,7 +246,7 @@ public class TenantAppService : ITenantAppService
             }
 
             // Cria a entidade
-            var entity = new TenantEntity(item.Name, item.Consent, _currentUser.GetUserId());
+            var entity = new TenantEntity((TenantType)item.TenantType, (OriginType)item.OriginType, item.Name, item.Email, item.Website, item.UrlImage, item.Note, _currentUser.GetUserId());
 
             // Tenta criar no domínio
             var success = await _domain.CreateAsync(entity, ct);

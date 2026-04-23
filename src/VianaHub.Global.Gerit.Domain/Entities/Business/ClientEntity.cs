@@ -4,162 +4,148 @@ using VianaHub.Global.Gerit.Domain.Enums;
 
 namespace VianaHub.Global.Gerit.Domain.Entities.Business;
 
-/// <summary>
-/// Entidade que representa um Cliente do Tenant
-/// Aggregate Root para o contexto de Cliente
-/// </summary>
 public class ClientEntity : Entity, IAggregateRoot
 {
+    private readonly List<ClientAddressEntity> _addresses = [];
+    private readonly List<ClientContactEntity> _contacts = [];
+    private readonly List<ClientConsentsEntity> _consents = [];
+    private readonly List<ClientHierarchyEntity> _childHierarchies = [];
+    private readonly List<ClientHierarchyEntity> _parentHierarchies = [];
+
     public int TenantId { get; private set; }
     public ClientType ClientType { get; private set; }
-    public Origin Origin { get; private set; }
-    public string Name { get; private set; }
-    public string Phone { get; private set; }
-    public string Email { get; private set; }
-    public string Website { get; private set; }
+    public OriginType OriginType { get; private set; }
     public string UrlImage { get; private set; }
-    public int? Score { get; private set; }
-    public bool Consent { get; private set; }
-    public DateTime ConsentDate { get; private set; }
-    public DateTime? RevokedConsentDate { get; private set; }
-    public string Remarks { get; private set; }
+    public string Note { get; private set; }
     public bool IsActive { get; private set; }
     public bool IsDeleted { get; private set; }
 
+    // EspecializaÃ§Ãµes do agregado
+    public ClientIndividualEntity Individual { get; private set; }
+    public ClientCompanyEntity Company { get; private set; }
+
+
     // Navigation Properties
-    public TenantEntity Tenant { get; private set; }
+    public TenantEntity Tenant { get; private set; } = null!;
 
-    private readonly List<ClientContactEntity> _contacts = new();
-    public IReadOnlyCollection<ClientContactEntity> Contacts => _contacts.AsReadOnly();
 
-    private readonly List<ClientAddressEntity> _addresses = new();
     public IReadOnlyCollection<ClientAddressEntity> Addresses => _addresses.AsReadOnly();
+    public IReadOnlyCollection<ClientContactEntity> Contacts => _contacts.AsReadOnly();
+    public IReadOnlyCollection<ClientConsentsEntity> Consents => _consents.AsReadOnly();
+    public IReadOnlyCollection<ClientHierarchyEntity> ChildHierarchies => _childHierarchies.AsReadOnly();
+    public IReadOnlyCollection<ClientHierarchyEntity> ParentHierarchies => _parentHierarchies.AsReadOnly();
 
-    private readonly List<ClientFiscalDataEntity> _fiscalData = new();
-    public IReadOnlyCollection<ClientFiscalDataEntity> FiscalData => _fiscalData.AsReadOnly();
 
     // Construtor protegido para o EF Core
     protected ClientEntity() { }
 
-    /// <summary>
-    /// Construtor para criação de um novo Cliente
-    /// </summary>
-    public ClientEntity(int tenantId, ClientType clientType, Origin origin, string name, string phone, string email, string website, string urlImage, int? score, bool consent, DateTime consentDate, string remarks, int createdBy)
+    public ClientEntity(int tenantId, ClientType clientType, OriginType originType, string urlImage, string note, int createdBy)
     {
         TenantId = tenantId;
         ClientType = clientType;
-        Origin = origin;
-        Name = name;
-        Phone = phone;
-        Email = email;
-        Website = website;
+        OriginType = originType;
         UrlImage = urlImage;
-        Score = score;
-        Consent = consent;
-        ConsentDate = consentDate;
-        Remarks = remarks;
+        Note = note;
         IsActive = true;
         IsDeleted = false;
         CreatedBy = createdBy;
         CreatedAt = DateTime.UtcNow;
     }
 
-    public void Update(ClientType clientType, Origin origin, string name, string phone, string email, string website, string urlImage, int? score, bool consent, string remarks, int modifiedBy)
+    public void AddIndividual(ClientIndividualEntity clientIndividual)
+    {
+        Individual = clientIndividual;
+    }
+
+    public void AddCompany(ClientCompanyEntity clientCompany)
+    {
+        Company = clientCompany;
+    }
+
+    public void Update(ClientType clientType, OriginType originType, string urlImage, string note, int modifiedBy)
     {
         ClientType = clientType;
-        Origin = origin;
-        Name = name;
-        Phone = phone;
-        Email = email;
-        Website = website;
+        OriginType = originType;
         UrlImage = urlImage;
-        Score = score;
-        Consent = consent;
-        Remarks = remarks;
+        Note = note;
         ModifiedBy = modifiedBy;
         ModifiedAt = DateTime.UtcNow;
     }
 
-    public void UpdateConsent(bool consent, int modifiedBy)
+    public void UpdateIndividual(string firstName, string lastName, string phoneNumber, string cellPhoneNumber, bool isWhatsapp, string email, DateTime birthDate, string gender, string documentType, string documentNumber, string nationality, int modifiedBy)
     {
-        Consent = consent;
-        ModifiedBy = modifiedBy;
-        ModifiedAt = DateTime.UtcNow;
+        Individual.Update(firstName, lastName, phoneNumber, cellPhoneNumber, isWhatsapp, email, birthDate, gender, documentType, documentNumber, nationality, modifiedBy);
     }
-
-    public void RevokeConsent(int modifiedBy)
+    public void UpdateCompany(string legalName, string tradeName, string phoneMumber, string cellPhoneNumber, bool isWhatsapp, string email, string site, string companyRegistration, string cae, int? numberOfEmployee, string legalRepresentative, int modifiedBy)
     {
-        Consent = false;
-        RevokedConsentDate = DateTime.UtcNow;
-        ModifiedBy = modifiedBy;
-        ModifiedAt = DateTime.UtcNow;
+        Company.Update(legalName, tradeName, phoneMumber, cellPhoneNumber, isWhatsapp, email, site, companyRegistration, cae, numberOfEmployee, legalRepresentative, modifiedBy);
     }
 
-    public void RestoreConsent(int modifiedBy)
-    {
-        Consent = true;
-        RevokedConsentDate = null;
-        ModifiedBy = modifiedBy;
-        ModifiedAt = DateTime.UtcNow;
-    }
-
-    public void UpdateScore(int score, int modifiedBy)
-    {
-        Score = score;
-        ModifiedBy = modifiedBy;
-        ModifiedAt = DateTime.UtcNow;
-    }
-
-    public void UpadateImage(string urlImage, int modifiedBy)
-    {
-        UrlImage = urlImage;
-        ModifiedBy = modifiedBy;
-        ModifiedAt = DateTime.UtcNow;
-    }
-
-    public void Activate(int modifiedBy)
+    public void Activate(ClientType clientType, int modifiedBy)
     {
         IsActive = true;
+
+        switch (clientType)
+        {
+            case ClientType.PessoaSingular:
+            case ClientType.RecibosVerdes:
+            case ClientType.Freelancer:
+                Individual.Activate(modifiedBy);
+                break;
+            case ClientType.PessoaJuridica:
+            case ClientType.SociedadeUnipessoalQuotas:
+                Company.Activate(modifiedBy);
+                break;
+            default:
+                break;
+        }
+
         ModifiedBy = modifiedBy;
         ModifiedAt = DateTime.UtcNow;
     }
-
-    public void Deactivate(int modifiedBy)
+    public void Deactivate(ClientType clientType, int modifiedBy)
     {
         IsActive = false;
+
+        switch (clientType)
+        {
+            case ClientType.PessoaSingular:
+            case ClientType.RecibosVerdes:
+            case ClientType.Freelancer:
+                Individual.Deactivate(modifiedBy);
+                break;
+            case ClientType.PessoaJuridica:
+            case ClientType.SociedadeUnipessoalQuotas:
+                Company.Deactivate(modifiedBy);
+                break;
+            default:
+                break;
+        }
+
         ModifiedBy = modifiedBy;
         ModifiedAt = DateTime.UtcNow;
     }
-
-    public void Delete(int modifiedBy)
+    public void Delete(ClientType clientType, int modifiedBy)
     {
+        IsActive = false;
         IsDeleted = true;
-        IsActive = false;
+
+        switch (clientType)
+        {
+            case ClientType.PessoaSingular:
+            case ClientType.RecibosVerdes:
+            case ClientType.Freelancer:
+                Individual.Delete(modifiedBy);
+                break;
+            case ClientType.PessoaJuridica:
+            case ClientType.SociedadeUnipessoalQuotas:
+                Company.Delete(modifiedBy);
+                break;
+            default:
+                break;
+        }
+
         ModifiedBy = modifiedBy;
         ModifiedAt = DateTime.UtcNow;
-    }
-
-    public void AddContact(ClientContactEntity contact, int createdBy)
-    {
-        if (contact == null)
-            throw new ArgumentNullException(nameof(contact));
-
-        _contacts.Add(contact);
-    }
-
-    public void AddAddress(ClientAddressEntity address, int createdBy)
-    {
-        if (address == null)
-            throw new ArgumentNullException(nameof(address));
-
-        _addresses.Add(address);
-    }
-
-    public void AddFiscalData(ClientFiscalDataEntity fiscalData, int createdBy)
-    {
-        if (fiscalData == null)
-            throw new ArgumentNullException(nameof(fiscalData));
-
-        _fiscalData.Add(fiscalData);
     }
 }
