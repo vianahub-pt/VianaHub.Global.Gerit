@@ -4,6 +4,7 @@ using Hangfire.SqlServer;
 using Microsoft.AspNetCore.Http; // for RequestDelegateFactoryOptions
 using Microsoft.EntityFrameworkCore;
 using Serilog;
+using System.Reflection;
 using System.Text.Json.Serialization;
 using VianaHub.Global.Gerit.Api.Configuration;
 using VianaHub.Global.Gerit.Api.Configuration.Swagger;
@@ -48,7 +49,7 @@ public class Program
         builder.Services.AddScoped<TelemetryInterceptor>();
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwagger(builder.Configuration, builder.Environment);
-        builder.Services.AddAutoMapper(typeof(ActionMappingProfile).Assembly);
+        builder.Services.AddAutoMapper(cfg => cfg.AddMaps(typeof(ActionMappingProfile).Assembly));
         builder.Services.AddDbContext<GeritDbContext>((serviceProvider, options) =>
         {
             options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));

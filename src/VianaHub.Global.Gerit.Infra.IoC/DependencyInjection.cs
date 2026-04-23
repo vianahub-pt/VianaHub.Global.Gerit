@@ -6,7 +6,6 @@ using VianaHub.Global.Gerit.Domain.Validators.Job;
 using VianaHub.Global.Gerit.Infra.Integration.Messaging;
 using VianaHub.Global.Gerit.Infra.Data.Context;
 using VianaHub.Global.Gerit.Infra.Data.Security;
-using System.Reflection;
 using VianaHub.Global.Gerit.Infra.Job.Services;
 using VianaHub.Global.Gerit.Infra.Job.HostedServices;
 using VianaHub.Global.Gerit.Domain.Interfaces.Job;
@@ -287,9 +286,6 @@ public static class DependencyInjection
 
         // Data Context
         services.AddScoped<GeritDbContext>();
-
-        // AutoMapper
-        services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
         // Secret provider (chave mestra gerenciada externamente) - por padrão lê variável de ambiente JWT_MASTER_KEY
         services.AddSingleton<ISecretProvider, SecretProviderEnvironment>();
