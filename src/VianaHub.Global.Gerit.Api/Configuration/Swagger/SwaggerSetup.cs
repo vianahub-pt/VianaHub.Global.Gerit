@@ -1,4 +1,5 @@
 ﻿using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.SwaggerUI;
 using VianaHub.Global.Gerit.Domain.Interfaces.Base;
 
 namespace VianaHub.Global.Gerit.Api.Configuration.Swagger;
@@ -140,6 +141,7 @@ public static class SwaggerSetup
             options.EnableFilter();
             options.ShowExtensions();
             options.EnableValidator();
+            options.DocExpansion(DocExpansion.None);
 
             // ✅ Injeta os arquivos CSS e JS customizados para o seletor de idiomas
             options.InjectStylesheet("/swagger-ui/custom.css");
