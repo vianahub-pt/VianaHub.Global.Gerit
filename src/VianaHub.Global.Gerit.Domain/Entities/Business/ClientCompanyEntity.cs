@@ -4,7 +4,7 @@ namespace VianaHub.Global.Gerit.Domain.Entities.Business;
 
 public class ClientCompanyEntity : Entity
 {
-    private readonly List<ClientCompanyFiscalDataEntity> _fiscalData = [];
+    private readonly List<ClientFiscalDataEntity> _fiscalData = [];
 
     public int TenantId { get; private set; }
     public int ClientId { get; private set; }
@@ -27,7 +27,7 @@ public class ClientCompanyEntity : Entity
     // Navigation Properties
     public ClientEntity Client { get; private set; } = null!;
 
-    public IReadOnlyCollection<ClientCompanyFiscalDataEntity> FiscalData => _fiscalData.AsReadOnly();
+    public IReadOnlyCollection<ClientFiscalDataEntity> FiscalData => _fiscalData.AsReadOnly();
 
     // Construtor protegido para EF Core
     protected ClientCompanyEntity() { }

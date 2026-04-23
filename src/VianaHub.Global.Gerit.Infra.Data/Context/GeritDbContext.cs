@@ -36,6 +36,7 @@ public class GeritDbContext : DbContext
     public DbSet<ClientEntity> Clients { get; set; }
     public DbSet<ClientContactEntity> ClientContacts { get; set; }
     public DbSet<ClientAddressEntity> ClientAddresses { get; set; }
+    public DbSet<ClientIndividualEntity> ClientIndividuals { get; set; }
     public DbSet<ClientFiscalDataEntity> ClientFiscalData { get; set; }
     public DbSet<TeamEntity> Teams { get; set; }
     public DbSet<EmployeeEntity> Employees { get; set; }
@@ -55,7 +56,7 @@ public class GeritDbContext : DbContext
     public DbSet<VisitTeamVehicleEntity> VisitTeamVehicles { get; set; }
     public DbSet<AttachmentCategoryEntity> AttachmentCategories { get; set; }
     public DbSet<VisitAttachmentEntity> VisitAttachments { get; set; }
-    public DbSet<ClientIndividualEntity> ClientIndividuals { get; set; }
+
     public DbSet<RefreshTokenEntity> RefreshTokens { get; set; }
     #endregion
 

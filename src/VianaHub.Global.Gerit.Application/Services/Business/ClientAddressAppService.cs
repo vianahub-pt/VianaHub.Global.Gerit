@@ -88,6 +88,7 @@ public class ClientAddressAppService : IClientAddressAppService
 
         var clientAddress = new ClientAddressEntity(
             TenantId,
+            clientId,
             request.AddressTypeId,
             request.CountryCode,
             request.Street,
@@ -287,6 +288,7 @@ public class ClientAddressAppService : IClientAddressAppService
 
             var entity = new ClientAddressEntity(
                 tenantId,
+                clientId,
                 item.AddressTypeId,
                 item.CountryCode,
                 item.Street,

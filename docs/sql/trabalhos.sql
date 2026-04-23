@@ -17,8 +17,6 @@ select * from dbo.TenantAddresses;
 select * from dbo.TenantFiscalData;
 select * from dbo.Subscriptions;
 
-
-
 select * from dbo.Users;				--
 select * from dbo.UserPreferences;		--
 select * from dbo.UserRoles;			-- T1, U1, R2 
@@ -26,6 +24,7 @@ select * from dbo.RolePermissions;		-- T1, R4, R1, A1
 select * from dbo.JwtKeys;
 select * from dbo.JobDefinitions;
 ------------------------------
+
 select * from dbo.Clients order by id desc;					--
 select * from dbo.ClientIndividuals order by id desc;
 select * from dbo.ClientCompanies order by id desc;

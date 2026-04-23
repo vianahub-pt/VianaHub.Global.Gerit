@@ -375,37 +375,6 @@ WHERE NOT EXISTS (
       AND ta.IsPrimary = 1
 );
 GO
-INSERT INTO dbo.TenantFiscalData (
-    TenantId,
-    TaxNumber,
-    VatNumber,
-    FiscalCountry,
-    IsVatRegistered,
-    IBAN,
-    FiscalEmail,
-    CreatedBy
-)
-SELECT *
-FROM (VALUES
-    (1, N'507123456', N'PT507123456', 'PT', 1, N'PT50000201231234567890154', N'finance@vianahub.pt', 1),
-    (2, N'508987654', N'PT508987654', 'PT', 1, N'PT50000201239876543210987', N'billing@gerit.pt', 1),
-    (3, N'509111222', NULL, 'PT', 0, NULL, N'teste@teste.pt', 1)
-) AS v(
-    TenantId,
-    TaxNumber,
-    VatNumber,
-    FiscalCountry,
-    IsVatRegistered,
-    IBAN,
-    FiscalEmail,
-    CreatedBy
-)
-WHERE NOT EXISTS (
-    SELECT 1 
-    FROM dbo.TenantFiscalData f 
-    WHERE f.TenantId = v.TenantId
-);
-GO
 INSERT INTO dbo.Subscriptions (
     TenantId,
     PlanId,
@@ -1181,90 +1150,6 @@ AND NOT EXISTS (
       AND existing.ClientId = c.Id
       AND existing.IsPrimary = 1
       AND existing.IsDeleted = 0
-);
-GO
-DECLARE @Now DATETIME2 = SYSDATETIME();
-INSERT INTO dbo.ClientIndividualFiscalData (
-    TenantId,
-    ClientIndividualId,
-    TaxNumber,
-    VatNumber,
-    FiscalCountry,
-    IsVatRegistered,
-    IBAN,
-    FiscalEmail,
-    IsActive,
-    IsDeleted,
-    CreatedBy,
-    CreatedAt
-)
-SELECT
-    ci.TenantId,
-    ci.Id,
-    CONCAT('1', RIGHT('00000000' + CAST(ci.Id + (ci.TenantId * 1000) AS VARCHAR), 8)),
-    NULL, -- VatNumber
-    'PT',
-    0,
-    CONCAT('PT50', RIGHT('000000000000000000000000' + CAST(ci.Id AS VARCHAR), 21)),
-    LOWER(
-        CONCAT(
-            ci.FirstName, '.', ci.LastName,
-            '@fiscal.pt'
-        )
-    ),
-    1,
-    0,
-    1,
-    @Now
-FROM dbo.ClientIndividuals ci
-WHERE ci.IsDeleted = 0
-AND NOT EXISTS (
-    SELECT 1
-    FROM dbo.ClientIndividualFiscalData f
-    WHERE f.ClientIndividualId = ci.Id
-      AND f.TenantId = ci.TenantId
-);
-GO
-DECLARE @Now DATETIME2 = SYSDATETIME();
-INSERT INTO dbo.ClientCompanyFiscalData (
-    TenantId,
-    ClientCompanyId,
-    TaxNumber,
-    VatNumber,
-    FiscalCountry,
-    IsVatRegistered,
-    IBAN,
-    FiscalEmail,
-    IsActive,
-    IsDeleted,
-    CreatedBy,
-    CreatedAt
-)
-SELECT
-    cc.TenantId,
-    cc.Id,
-    CONCAT('5', RIGHT('00000000' + CAST(cc.Id + (cc.TenantId * 1000) AS VARCHAR), 8)),
-    CONCAT('PT', CONCAT('5', RIGHT('00000000' + CAST(cc.Id + (cc.TenantId * 1000) AS VARCHAR), 8))),
-    'PT',
-    1, -- empresas normalmente com IVA
-    CONCAT('PT50', RIGHT('000000000000000000000000' + CAST(cc.Id AS VARCHAR), 21)),
-    LOWER(
-        CONCAT(
-            REPLACE(REPLACE(cc.TradeName, ' ', ''), '.', ''),
-            '@fiscal.pt'
-        )
-    ),
-    1,
-    0,
-    1,
-    @Now
-FROM dbo.ClientCompanies cc
-WHERE cc.IsDeleted = 0
-AND NOT EXISTS (
-    SELECT 1
-    FROM dbo.ClientCompanyFiscalData f
-    WHERE f.ClientCompanyId = cc.Id
-      AND f.TenantId = cc.TenantId
 );
 GO
 DECLARE @Now DATETIME2 = SYSDATETIME();

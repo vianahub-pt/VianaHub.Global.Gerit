@@ -31,10 +31,10 @@ namespace VianaHub.Global.Gerit.Domain.Entities.Business
         // Construtor protegido para EF Core
         protected ClientAddressEntity() { }
 
-        public ClientAddressEntity(int tenantId, int addressTypeId, string countryCode, string street, string streetNumber, string complement, string neighborhood, string city, string district, string postalCode, decimal? latitude, decimal? longitude, string note, bool isPrimary, int createdBy)
+        public ClientAddressEntity(int tenantId, int clientId, int addressTypeId, string countryCode, string street, string streetNumber, string complement, string neighborhood, string city, string district, string postalCode, decimal? latitude, decimal? longitude, string note, bool isPrimary, int createdBy)
         {
             TenantId = tenantId;
-            ClientId = Id;
+            ClientId = clientId;
             AddressTypeId = addressTypeId;
 
             CountryCode = countryCode;
