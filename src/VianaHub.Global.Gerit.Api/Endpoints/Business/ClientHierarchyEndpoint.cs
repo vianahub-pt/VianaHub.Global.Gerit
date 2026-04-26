@@ -29,7 +29,7 @@ public static class ClientHierarchyEndpoint
         groupV1.MapGet("/{id}", async ([FromRoute] int id, [FromServices] IClientHierarchyAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var response = await appService.GetByIdAsync(id, ct);
-            return notify.CustomResponse(response, 200);
+            return notify.CustomResponse(response);
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "ClientHierarchies", "GetBy")
         .WithName("GetClientHierarchyById")
@@ -41,7 +41,7 @@ public static class ClientHierarchyEndpoint
         groupV1.MapGet("/by-parent/{parentClientId}", async ([FromRoute] int parentClientId, [FromServices] IClientHierarchyAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var response = await appService.GetByParentClientIdAsync(parentClientId, ct);
-            return notify.CustomResponse(response, 200);
+            return notify.CustomResponse(response);
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "ClientHierarchies", "GetByParent")
         .WithName("GetClientHierarchyByParentClientId")
@@ -52,7 +52,7 @@ public static class ClientHierarchyEndpoint
         groupV1.MapGet("/by-child/{childClientId}", async ([FromRoute] int childClientId, [FromServices] IClientHierarchyAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var response = await appService.GetByChildClientIdAsync(childClientId, ct);
-            return notify.CustomResponse(response, 200);
+            return notify.CustomResponse(response);
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "ClientHierarchies", "GetByChild")
         .WithName("GetClientHierarchyByChildClientId")
@@ -63,7 +63,7 @@ public static class ClientHierarchyEndpoint
         groupV1.MapGet("/paged", async ([AsParameters] PagedFilterRequest request, [FromServices] IClientHierarchyAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var response = await appService.GetPagedAsync(request, ct);
-            return notify.CustomResponse(response, 200);
+            return notify.CustomResponse(response);
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "ClientHierarchies", "GetPaged")
         .WithName("GetClientHierarchiesPaged")
@@ -74,7 +74,7 @@ public static class ClientHierarchyEndpoint
         groupV1.MapPost("/", async ([FromBody] CreateClientHierarchyRequest request, [FromServices] IClientHierarchyAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var created = await appService.CreateAsync(request, ct);
-            return notify.CustomResponse(created ? 201 : 400);
+            return notify.CustomResponse(created, 201);
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "ClientHierarchies", "Create")
         .WithName("CreateClientHierarchy")
@@ -87,7 +87,7 @@ public static class ClientHierarchyEndpoint
         groupV1.MapPut("/{id}", async ([FromRoute] int id, [FromBody] UpdateClientHierarchyRequest request, [FromServices] IClientHierarchyAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var updated = await appService.UpdateAsync(id, request, ct);
-            return notify.CustomResponse(updated ? 204 : 400);
+            return notify.CustomResponse(updated);
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "ClientHierarchies", "Update")
         .WithName("UpdateClientHierarchy")

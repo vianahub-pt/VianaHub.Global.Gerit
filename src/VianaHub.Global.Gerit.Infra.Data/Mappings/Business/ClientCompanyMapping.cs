@@ -78,6 +78,7 @@ public class ClientCompanyMapping : IEntityTypeConfiguration<ClientCompanyEntity
             .HasPrincipalKey<ClientEntity>(nameof(ClientEntity.Id), nameof(ClientEntity.TenantId))
             .OnDelete(DeleteBehavior.Restrict);
 
+
         builder.HasIndex(x => new { x.TenantId, x.ClientId })
             .HasFilter("[IsDeleted] = 0")
             .IsUnique()

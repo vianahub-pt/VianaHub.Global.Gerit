@@ -27,10 +27,8 @@ public class CreateClientConsentsValidator : AbstractValidator<ClientConsentsEnt
         RuleFor(x => x.Origin)
             .NotEmpty()
             .WithMessage(localization.GetMessage("Domain.ClientConsents.OriginRequired"))
-            .MaximumLength(50)
-            .WithMessage(localization.GetMessage("Domain.ClientConsents.OriginMaxLength", 50))
-            .Must(origin => new[] { "Web", "Mobile", "Paper", "API" }.Contains(origin))
-            .WithMessage(localization.GetMessage("Domain.ClientConsents.OriginInvalid"));
+            .MaximumLength(200)
+            .WithMessage(localization.GetMessage("Domain.ClientConsents.OriginMaxLength", 200));
 
         RuleFor(x => x.IpAddress)
             .MaximumLength(50)

@@ -36,8 +36,6 @@ public class ClientContactAppService : IClientContactAppService
 
     public ClientContactAppService(IClientContactDataRepository repo, IClientContactDomainService domain, IMapper mapper, INotify notify, ILocalizationService localization, ICurrentUserService currentUser, IFileValidationService fileValidation, ILogger<ClientContactAppService> logger)
     {
-        TenantId = currentUser.GetTenantId();
-        UserId = currentUser.GetUserId();
         _repo = repo;
         _domain = domain;
         _mapper = mapper;
@@ -46,6 +44,8 @@ public class ClientContactAppService : IClientContactAppService
         _currentUser = currentUser;
         _fileValidation = fileValidation;
         _logger = logger;
+        TenantId = _currentUser.GetTenantId();
+        UserId = _currentUser.GetUserId();
     }
 
     public async Task<IEnumerable<ClientContactResponse>> GetAllAsync(int clientId, CancellationToken ct)
@@ -54,7 +54,7 @@ public class ClientContactAppService : IClientContactAppService
         return _mapper.Map<IEnumerable<ClientContactResponse>>(entities);
     }
 
-    public async Task<ClientContactResponse> GetByIdAsync(int clientId, int id, CancellationToken ct)
+    public async Task<ClientContactDetailResponse> GetByIdAsync(int clientId, int id, CancellationToken ct)
     {
         var entity = await _repo.GetByIdAsync(clientId, id, ct);
         if (entity == null || entity.IsDeleted || !entity.IsActive)
@@ -62,7 +62,7 @@ public class ClientContactAppService : IClientContactAppService
             _notify.Add(_localization.GetMessage("Application.Service.ClientContact.GetById.ResourceNotFound"), 410);
             return null;
         }
-        return _mapper.Map<ClientContactResponse>(entity);
+        return _mapper.Map<ClientContactDetailResponse>(entity);
     }
 
     public async Task<ListPageResponse<ClientContactResponse>> GetPagedAsync(int clientId, PagedFilterRequest request, CancellationToken ct)

@@ -11,7 +11,7 @@ namespace VianaHub.Global.Gerit.Application.Interfaces.Business;
 public interface IClientContactAppService
 {
     Task<IEnumerable<ClientContactResponse>> GetAllAsync(int clientId, CancellationToken ct);
-    Task<ClientContactResponse> GetByIdAsync(int clientId, int id, CancellationToken ct);
+    Task<ClientContactDetailResponse> GetByIdAsync(int clientId, int id, CancellationToken ct);
     Task<ListPageResponse<ClientContactResponse>> GetPagedAsync(int clientId, PagedFilterRequest request, CancellationToken ct);
     Task<bool> CreateAsync(int clientId, CreateClientContactRequest request, CancellationToken ct);
     Task<bool> UpdateAsync(int clientId, int id, UpdateClientContactRequest request, CancellationToken ct);

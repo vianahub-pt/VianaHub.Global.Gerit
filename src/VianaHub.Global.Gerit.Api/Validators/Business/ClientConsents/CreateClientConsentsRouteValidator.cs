@@ -7,9 +7,6 @@ public class CreateClientConsentsRouteValidator : AbstractValidator<CreateClient
 {
     public CreateClientConsentsRouteValidator()
     {
-        RuleFor(x => x.ClientId)
-            .GreaterThan(0).WithMessage("ClientId_Required");
-
         RuleFor(x => x.ConsentTypeId)
             .GreaterThan(0).WithMessage("ConsentTypeId_Required");
 

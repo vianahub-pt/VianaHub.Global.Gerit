@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using VianaHub.Global.Gerit.Domain.Entities.Business;
+using VianaHub.Global.Gerit.Domain.Entities.Billing;
 
 namespace VianaHub.Global.Gerit.Infra.Data.Mappings.Business;
 
@@ -20,6 +21,21 @@ public class ClientFiscalDataMapping : IEntityTypeConfiguration<ClientFiscalData
         
         builder.Property(x => x.ClientId)
             .IsRequired();
+
+        // Relacionamento com Client (FK composta)
+        builder.HasOne(x => x.Client)
+            .WithOne()
+            .HasForeignKey<VianaHub.Global.Gerit.Domain.Entities.Business.ClientFiscalDataEntity>(x => new { x.ClientId, x.TenantId })
+            .HasPrincipalKey<VianaHub.Global.Gerit.Domain.Entities.Business.ClientEntity>(c => new { c.Id, c.TenantId })
+            .OnDelete(DeleteBehavior.Restrict)
+            .HasConstraintName("FK_ClientFiscalData_Client");
+
+        // Relacionamento com Tenant
+        builder.HasOne(x => x.Tenant)
+            .WithMany()
+            .HasForeignKey(x => x.TenantId)
+            .HasConstraintName("FK_ClientFiscalData_Tenant")
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder.Property(x => x.TaxNumber)
             .HasColumnType("NVARCHAR(20)")
@@ -69,18 +85,12 @@ public class ClientFiscalDataMapping : IEntityTypeConfiguration<ClientFiscalData
             .HasColumnType("DATETIME2(7)")
             .IsRequired(false);
 
-        // Índices
-        builder.HasIndex(x => new { x.TenantId, x.ClientId })
-            .HasFilter("[IsActive] = 1 AND [IsDeleted] = 0")
+        // Índice único conforme banco
+        builder.HasIndex(x => new { x.ClientId, x.TenantId })
             .IsUnique()
-            .HasDatabaseName("UX_ClientFiscalData_Active");
+            .HasDatabaseName("UQ_ClientFiscalData_Client");
 
-        builder.HasIndex(x => new { x.TenantId, x.TaxNumber })
-            .HasFilter("[TaxNumber] IS NOT NULL AND [IsDeleted] = 0")
-            .IsUnique()
-            .HasDatabaseName("UX_ClientFiscalData_TaxNumber");
-
-        // Constraints
+        // Check constraint
         builder.HasCheckConstraint("CK_ClientFiscalData_Active_Deleted", "NOT ([IsActive] = 1 AND [IsDeleted] = 1)");
     }
 }

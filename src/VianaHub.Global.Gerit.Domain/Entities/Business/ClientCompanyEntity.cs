@@ -27,7 +27,7 @@ public class ClientCompanyEntity : Entity
     // Navigation Properties
     public ClientEntity Client { get; private set; } = null!;
 
-    public IReadOnlyCollection<ClientFiscalDataEntity> FiscalData => _fiscalData.AsReadOnly();
+
 
     // Construtor protegido para EF Core
     protected ClientCompanyEntity() { }

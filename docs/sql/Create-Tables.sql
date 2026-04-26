@@ -648,7 +648,7 @@ CREATE TABLE dbo.ClientConsents (
     Granted             BIT                 NOT NULL,                                   -- Indica se o consentimento foi concedido ou negado
     GrantedDate         DATETIME2(7)        NOT NULL,                                   -- Data de concess�o do consentimento
     RevokedDate         DATETIME2(7)            NULL,                                   -- Data de revoga��o do consentimento (null se ainda v�lido)
-    Origin              NVARCHAR(50)            NULL,                                   -- Web, Mobile, Paper, API
+    Origin              NVARCHAR(200)       NOT NULL,                                   -- Web, Mobile, Paper, API
     IpAddress           VARCHAR(45)             NULL,                                   -- Suporta IPv4 e IPv6
     UserAgent           NVARCHAR(500)           NULL,                                   -- Informa��es adicionais sobre o consentimento (ex: vers�o da pol�tica, etc.)
     IsActive            BIT                 NOT NULL DEFAULT 1,                         -- Flag de ativo
@@ -1064,6 +1064,8 @@ CREATE UNIQUE INDEX UX_JwtKeys_Active                                           
 CREATE UNIQUE INDEX UX_Employees_Tenant_TaxNumber                                   ON dbo.Employees (TenantId, TaxNumber) WHERE TaxNumber IS NOT NULL AND IsDeleted = 0;
 CREATE UNIQUE INDEX UX_EmployeeTeam_Active                                          ON dbo.EmployeeTeam (TenantId, TeamId, EmployeeId) WHERE EndDateTime IS NULL AND IsDeleted = 0;
 CREATE UNIQUE INDEX UX_UserPreferences_Tenant_User_Active                           ON dbo.UserPreferences (TenantId, UserId) WHERE IsDeleted = 0;
+CREATE UNIQUE INDEX UX_Users_TenantId_NormalizedEmail								ON dbo.Users (TenantId, NormalizedEmail) WHERE IsDeleted = 0;
+
 
 CREATE NONCLUSTERED INDEX IX_Clients_TenantId                                       ON dbo.Clients (TenantId) WHERE IsDeleted = 0;
 CREATE NONCLUSTERED INDEX IX_EmployeeContacts_EmployeeId		                    ON dbo.EmployeeContacts (TenantId, EmployeeId) WHERE IsDeleted = 0;
