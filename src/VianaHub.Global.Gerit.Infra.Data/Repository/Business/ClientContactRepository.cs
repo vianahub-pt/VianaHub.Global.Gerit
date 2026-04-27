@@ -20,7 +20,11 @@ public class ClientContactRepository : IClientContactDataRepository
     {
         return await _context.ClientContacts
             .AsNoTracking()
+            .AsSplitQuery()
             .Include(x => x.Client)
+            .ThenInclude(x => x.Individual)
+            .Include(x => x.Client)
+            .ThenInclude(x => x.Company)
             .Where(x => x.ClientId == clientId && !x.IsDeleted)
             .OrderBy(x => x.Name)
             .ToListAsync(ct);
@@ -30,7 +34,11 @@ public class ClientContactRepository : IClientContactDataRepository
     {
         return await _context.ClientContacts
             .AsNoTracking()
+            .AsSplitQuery()
             .Include(x => x.Client)
+            .ThenInclude(x => x.Individual)
+            .Include(x => x.Client)
+            .ThenInclude(x => x.Company)
             .FirstOrDefaultAsync(x => x.ClientId == clientId && x.Id == id && !x.IsDeleted, ct);
     }
 
@@ -38,7 +46,11 @@ public class ClientContactRepository : IClientContactDataRepository
     {
         var query = _context.ClientContacts
             .AsNoTracking()
+            .AsSplitQuery()
             .Include(x => x.Client)
+            .ThenInclude(x => x.Individual)
+            .Include(x => x.Client)
+            .ThenInclude(x => x.Company)
             .Where(x => x.ClientId == clientId && !x.IsDeleted);
 
         if (!string.IsNullOrWhiteSpace(filter.Search))

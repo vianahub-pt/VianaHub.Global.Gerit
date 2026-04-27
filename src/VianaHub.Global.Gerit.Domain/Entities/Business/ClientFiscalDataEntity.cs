@@ -1,4 +1,5 @@
 using VianaHub.Global.Gerit.Domain.Base;
+using VianaHub.Global.Gerit.Domain.Entities.Billing;
 
 namespace VianaHub.Global.Gerit.Domain.Entities.Business
 {
@@ -18,15 +19,16 @@ namespace VianaHub.Global.Gerit.Domain.Entities.Business
         public bool IsDeleted { get; private set; }
 
         // Navigation
-        public ClientIndividualEntity ClientIndividual { get; private set; } = null!;
+        public ClientEntity Client { get; private set; } = null!;
+        public TenantEntity Tenant { get; private set; } = null!;
 
         // EF
         protected ClientFiscalDataEntity() { }
 
-        public ClientFiscalDataEntity(int tenantId, int clientIndividualId, string taxNumber, string vatNumber, string fiscalCountry, bool isVatRegistered, string iban, string fiscalEmail, int createdBy)
+        public ClientFiscalDataEntity(int tenantId, int clientId, string taxNumber, string vatNumber, string fiscalCountry, bool isVatRegistered, string iban, string fiscalEmail, int createdBy)
         {
             TenantId = tenantId;
-            ClientId = clientIndividualId;
+            ClientId = clientId;
 
             TaxNumber = taxNumber;
             VatNumber = vatNumber;

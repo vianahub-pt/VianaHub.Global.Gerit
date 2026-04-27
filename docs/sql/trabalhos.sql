@@ -25,20 +25,17 @@ select * from dbo.JwtKeys;
 select * from dbo.JobDefinitions;
 ------------------------------
 
-select * from dbo.Clients order by id desc;					--
-select * from dbo.ClientIndividuals order by id desc;
-select * from dbo.ClientCompanies order by id desc;
-select * from dbo.ClientAddresses order by id desc;			--
-select * from dbo.ClientContacts order by id desc;			--
-select * from dbo.ClientIndividualFiscalData;
-select * from dbo.ClientCompanyFiscalData;
+select * from dbo.Clients;					--
+select * from dbo.ClientIndividuals;		--
+select * from dbo.ClientCompanies;			--
+select * from dbo.ClientAddresses;			--
+select * from dbo.ClientContacts;			--
+select * from dbo.ClientFiscalData;
 select * from dbo.ClientHierarchy;
 select * from dbo.ClientConsents;
 ------------------------------
 select * from dbo.Teams;			--
 select * from dbo.Functions;				--
-
-
 
 select * from dbo.EquipmentTypes;			--
 select * from dbo.Equipments;				--

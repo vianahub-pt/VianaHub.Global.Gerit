@@ -13,7 +13,7 @@ namespace VianaHub.Global.Gerit.Application.Services.Business;
 
 public class ClientFiscalDataAppService : IClientFiscalDataAppService
 {
-    private readonly IClientFiscalDataDataRepository _fiscalDataRepo;
+    private readonly IClientFiscalDataDataRepository _repo;
     private readonly IClientFiscalDataDomainService _domain;
     private readonly IMapper _mapper;
     private readonly INotify _notify;
@@ -21,14 +21,14 @@ public class ClientFiscalDataAppService : IClientFiscalDataAppService
     private readonly ICurrentUserService _currentUser;
 
     public ClientFiscalDataAppService(
-        IClientFiscalDataDataRepository fiscalDataRepo,
+        IClientFiscalDataDataRepository repo,
         IClientFiscalDataDomainService domain,
         IMapper mapper,
         INotify notify,
         ILocalizationService localization,
         ICurrentUserService currentUser)
     {
-        _fiscalDataRepo = fiscalDataRepo;
+        _repo = repo;
         _domain = domain;
         _mapper = mapper;
         _notify = notify;
@@ -38,43 +38,43 @@ public class ClientFiscalDataAppService : IClientFiscalDataAppService
 
     public async Task<IEnumerable<ClientFiscalDataResponse>> GetAllAsync(int clientId, CancellationToken ct)
     {
-        var entities = await _fiscalDataRepo.GetAllAsync(clientId, ct) ?? await _fiscalDataRepo.GetAllAsync(clientId, ct);
+        var entities = await _repo.GetAllAsync(clientId, ct);
         
         return _mapper.Map<IEnumerable<ClientFiscalDataResponse>>(entities);
     }
     
-    public async Task<ClientFiscalDataResponse> GetByIdAsync(int clientId, int id, CancellationToken ct)
+    public async Task<ClientFiscalDataDetailResponse> GetByIdAsync(int clientId, int id, CancellationToken ct)
     {
-        var entity = await _fiscalDataRepo.GetByIdAsync(clientId, id, ct);
+        var entity = await _repo.GetByIdAsync(clientId, id, ct);
         if (entity == null || entity.IsDeleted || !entity.IsActive)
         {
             _notify.Add(_localization.GetMessage("Application.Service.ClientFiscalData.GetById.ResourceNotFound"), 410);
             return null;
         }
-        return _mapper.Map<ClientFiscalDataResponse>(entity);
+        return _mapper.Map<ClientFiscalDataDetailResponse>(entity);
     }
     
     public async Task<ListPageResponse<ClientFiscalDataResponse>> GetPagedAsync(int clientId, PagedFilterRequest request, CancellationToken ct)
     {
         var filter = new PagedFilter(request.Search, request.IsActive, request.PageNumber, request.PageSize, request.SortBy, request.SortDirection);
-        var paged = await _fiscalDataRepo.GetPagedAsync(clientId, filter, ct);
+        var paged = await _repo.GetPagedAsync(clientId, filter, ct);
         return _mapper.Map<ListPageResponse<ClientFiscalDataResponse>>(paged);
     }
 
     public async Task<bool> ExistsByIdAsync(int clientId, CancellationToken ct = default)
     {
-        return await _fiscalDataRepo.ExistsByIdAsync(clientId, ct);
+        return await _repo.ExistsByIdAsync(clientId, ct);
     }
 
     public async Task<bool> ExistsByTaxNumberAsync(int clientId, string taxNumber, CancellationToken ct = default)
     {
-        return await _fiscalDataRepo.ExistsByTaxNumberAsync(clientId, taxNumber, ct);
+        return await _repo.ExistsByTaxNumberAsync(clientId, taxNumber, ct);
     }
 
     public async Task<bool> CreateAsync(int clientId, CreateClientFiscalDataRequest request, CancellationToken ct)
     {
         var tenantId = _currentUser.GetTenantId();
-        var exists = await _fiscalDataRepo.ExistsByIdAsync(clientId, ct);
+        var exists = await _repo.ExistsByIdAsync(clientId, ct);
         if (exists)
         {
             _notify.Add(_localization.GetMessage("Application.Service.ClientFiscalData.Create.ClientAlreadyHasFiscalData"), 409);
@@ -83,7 +83,7 @@ public class ClientFiscalDataAppService : IClientFiscalDataAppService
 
         if (!string.IsNullOrWhiteSpace(request.TaxNumber))
         {
-            var taxNumberExists = await _fiscalDataRepo.ExistsByTaxNumberAsync(clientId, request.TaxNumber, ct);
+            var taxNumberExists = await _repo.ExistsByTaxNumberAsync(clientId, request.TaxNumber, ct);
             if (taxNumberExists)
             {
                 _notify.Add(_localization.GetMessage("Application.Service.ClientFiscalData.Create.TaxNumberAlreadyExists"), 409);
@@ -97,7 +97,7 @@ public class ClientFiscalDataAppService : IClientFiscalDataAppService
 
     public async Task<bool> UpdateAsync(int clientId, int id, UpdateClientFiscalDataRequest request, CancellationToken ct)
     {
-        var entity = await _fiscalDataRepo.GetByIdAsync(clientId, id, ct);
+        var entity = await _repo.GetByIdAsync(clientId, id, ct);
         if (entity == null || entity.IsDeleted || !entity.IsActive)
         {
             _notify.Add(_localization.GetMessage("Application.Service.ClientFiscalData.Update.ResourceNotFound"), 410);
@@ -106,7 +106,7 @@ public class ClientFiscalDataAppService : IClientFiscalDataAppService
 
         if (!string.IsNullOrWhiteSpace(request.TaxNumber))
         {
-            var taxNumberExists = await _fiscalDataRepo.ExistsByTaxNumberAsync(clientId, request.TaxNumber, ct);
+            var taxNumberExists = await _repo.ExistsByTaxNumberAsync(clientId, request.TaxNumber, ct);
             if (taxNumberExists)
             {
                 _notify.Add(_localization.GetMessage("Application.Service.ClientFiscalData.Update.TaxNumberAlreadyExists"), 409);
@@ -121,7 +121,7 @@ public class ClientFiscalDataAppService : IClientFiscalDataAppService
 
     public async Task<bool> ActivateAsync(int clientId, int id, CancellationToken ct)
     {
-        var entity = await _fiscalDataRepo.GetByIdAsync(clientId, id, ct);
+        var entity = await _repo.GetByIdAsync(clientId, id, ct);
         if (entity == null || entity.IsDeleted)
         {
             _notify.Add(_localization.GetMessage("Application.Service.ClientFiscalData.Activate.ResourceNotFound"), 410);
@@ -134,7 +134,7 @@ public class ClientFiscalDataAppService : IClientFiscalDataAppService
 
     public async Task<bool> DeactivateAsync(int clientId, int id, CancellationToken ct)
     {
-        var entity = await _fiscalDataRepo.GetByIdAsync(clientId, id, ct);
+        var entity = await _repo.GetByIdAsync(clientId, id, ct);
         if (entity == null || entity.IsDeleted || !entity.IsActive)
         {
             _notify.Add(_localization.GetMessage("Application.Service.ClientFiscalData.Deactivate.ResourceNotFound"), 410);
@@ -147,7 +147,7 @@ public class ClientFiscalDataAppService : IClientFiscalDataAppService
 
     public async Task<bool> DeleteAsync(int clientId, int id, CancellationToken ct)
     {
-        var entity = await _fiscalDataRepo.GetByIdAsync(clientId, id, ct);
+        var entity = await _repo.GetByIdAsync(clientId, id, ct);
         if (entity == null || entity.IsDeleted)
         {
             _notify.Add(_localization.GetMessage("Application.Service.ClientFiscalData.Delete.ResourceNotFound"), 410);

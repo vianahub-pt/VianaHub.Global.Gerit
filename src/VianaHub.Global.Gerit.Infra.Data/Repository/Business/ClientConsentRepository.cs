@@ -16,97 +16,43 @@ public class ClientConsentRepository : IClientConsentsDataRepository
         _context = context;
     }
 
-    public async Task<ClientConsentsEntity?> GetByIdAsync(int id, CancellationToken ct = default)
+    public async Task<IEnumerable<ClientConsentsEntity>> GetAllAsync(int clientId, CancellationToken ct = default)
     {
         return await _context.Set<ClientConsentsEntity>()
             .AsNoTracking()
+            .AsSplitQuery()
             .Include(x => x.Client)
-            .Include(x => x.ConsentType)
-            .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted, ct);
-    }
-
-    public async Task<IEnumerable<ClientConsentsEntity>> GetByClientIdAsync(int clientId, CancellationToken ct = default)
-    {
-        return await _context.Set<ClientConsentsEntity>()
-            .AsNoTracking()
+            .ThenInclude(x => x.Individual)
             .Include(x => x.Client)
-            .Include(x => x.ConsentType)
+            .ThenInclude(x => x.Company)
             .Where(x => x.ClientId == clientId && !x.IsDeleted)
             .OrderByDescending(x => x.GrantedDate)
             .ToListAsync(ct);
     }
 
-    public async Task<IEnumerable<ClientConsentsEntity>> GetByConsentTypeIdAsync(int consentTypeId, CancellationToken ct = default)
+    public async Task<ClientConsentsEntity> GetByIdAsync(int clientId, int id, CancellationToken ct = default)
     {
         return await _context.Set<ClientConsentsEntity>()
             .AsNoTracking()
+            .AsSplitQuery()
             .Include(x => x.Client)
-            .Include(x => x.ConsentType)
-            .Where(x => x.ConsentTypeId == consentTypeId && !x.IsDeleted)
-            .OrderByDescending(x => x.GrantedDate)
-            .ToListAsync(ct);
+            .ThenInclude(x => x.Individual)
+            .Include(x => x.Client)
+            .ThenInclude(x => x.Company)
+            .Where(x => x.ClientId == clientId && x.Id == id && !x.IsDeleted)
+            .FirstOrDefaultAsync(ct);
     }
 
-    public async Task<ClientConsentsEntity?> GetByClientAndConsentTypeAsync(int clientId, int consentTypeId, CancellationToken ct = default)
-    {
-        return await _context.Set<ClientConsentsEntity>()
-            .AsNoTracking()
-            .Include(x => x.Client)
-            .Include(x => x.ConsentType)
-            .FirstOrDefaultAsync(x => x.ClientId == clientId && x.ConsentTypeId == consentTypeId && !x.IsDeleted, ct);
-    }
-
-    public async Task<IEnumerable<ClientConsentsEntity>> GetAllAsync(CancellationToken ct = default)
-    {
-        return await _context.Set<ClientConsentsEntity>()
-            .AsNoTracking()
-            .Include(x => x.Client)
-            .Include(x => x.ConsentType)
-            .Where(x => !x.IsDeleted)
-            .OrderByDescending(x => x.GrantedDate)
-            .ToListAsync(ct);
-    }
-
-    public async Task<IEnumerable<ClientConsentsEntity>> GetActiveAsync(CancellationToken ct = default)
-    {
-        return await _context.Set<ClientConsentsEntity>()
-            .AsNoTracking()
-            .Include(x => x.Client)
-            .Include(x => x.ConsentType)
-            .Where(x => x.IsActive && !x.IsDeleted)
-            .OrderByDescending(x => x.GrantedDate)
-            .ToListAsync(ct);
-    }
-
-    public async Task<IEnumerable<ClientConsentsEntity>> GetGrantedAsync(CancellationToken ct = default)
-    {
-        return await _context.Set<ClientConsentsEntity>()
-            .AsNoTracking()
-            .Include(x => x.Client)
-            .Include(x => x.ConsentType)
-            .Where(x => x.Granted && !x.IsDeleted)
-            .OrderByDescending(x => x.GrantedDate)
-            .ToListAsync(ct);
-    }
-
-    public async Task<IEnumerable<ClientConsentsEntity>> GetRevokedAsync(CancellationToken ct = default)
-    {
-        return await _context.Set<ClientConsentsEntity>()
-            .AsNoTracking()
-            .Include(x => x.Client)
-            .Include(x => x.ConsentType)
-            .Where(x => !x.Granted && x.RevokedDate != null && !x.IsDeleted)
-            .OrderByDescending(x => x.RevokedDate)
-            .ToListAsync(ct);
-    }
-
-    public async Task<ListPage<ClientConsentsEntity>> GetPagedAsync(PagedFilter filter, CancellationToken ct = default)
+    public async Task<ListPage<ClientConsentsEntity>> GetPagedAsync(int clientId, PagedFilter filter, CancellationToken ct = default)
     {
         var query = _context.Set<ClientConsentsEntity>()
             .AsNoTracking()
+            .AsSplitQuery()
             .Include(x => x.Client)
-            .Include(x => x.ConsentType)
-            .Where(x => !x.IsDeleted);
+            .ThenInclude(x => x.Individual)
+            .Include(x => x.Client)
+            .ThenInclude(x => x.Company)
+            .Where(x => x.ClientId == clientId && !x.IsDeleted);
 
         if (!string.IsNullOrWhiteSpace(filter.Search))
         {
@@ -136,10 +82,10 @@ public class ClientConsentRepository : IClientConsentsDataRepository
         };
     }
 
-    public async Task<bool> ExistsByIdAsync(int id, CancellationToken ct = default)
+    public async Task<bool> ExistsByIdAsync(int clientId, int id, CancellationToken ct = default)
     {
         return await _context.Set<ClientConsentsEntity>()
-            .AnyAsync(x => x.Id == id && !x.IsDeleted, ct);
+            .AnyAsync(x => x.ClientId == clientId && x.Id == id && !x.IsDeleted, ct);
     }
 
     public async Task<bool> ExistsByClientAndConsentTypeAsync(int clientId, int consentTypeId, CancellationToken ct = default)
@@ -147,7 +93,7 @@ public class ClientConsentRepository : IClientConsentsDataRepository
         return await _context.Set<ClientConsentsEntity>()
             .AnyAsync(x => x.ClientId == clientId && x.ConsentTypeId == consentTypeId && !x.IsDeleted, ct);
     }
-
+    
     public async Task<bool> AddAsync(ClientConsentsEntity entity, CancellationToken ct = default)
     {
         await _context.Set<ClientConsentsEntity>().AddAsync(entity, ct);

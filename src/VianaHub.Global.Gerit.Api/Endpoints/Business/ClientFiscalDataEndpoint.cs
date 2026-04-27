@@ -17,8 +17,8 @@ public static class ClientFiscalDataEndpoint
 
         groupV1.MapGet("/{clientId}/fiscal-data", async ([FromRoute] int clientId, [FromServices] IClientFiscalDataAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
-            var response = await appService.GetAllAsync(clientId, ct);
-            return notify.CustomResponse(response, 200);
+            var response = await appService.GetAllAsync(clientId,ct);
+            return notify.CustomResponse(response);
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "ClientFiscalData", "GetAll")
         .WithName("GetClientFiscalData")
@@ -26,11 +26,10 @@ public static class ClientFiscalDataEndpoint
         .Produces(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-
         groupV1.MapGet("/{clientId}/fiscal-data/{id}", async ([FromRoute] int clientId, [FromRoute] int id, [FromServices] IClientFiscalDataAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var response = await appService.GetByIdAsync(clientId, id, ct);
-            return notify.CustomResponse(response, 200);
+            return notify.CustomResponse(response);
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "ClientFiscalData", "GetBy")
         .WithName("GetClientFiscalDataById")
@@ -42,7 +41,7 @@ public static class ClientFiscalDataEndpoint
         groupV1.MapGet("/{clientId}/fiscal-data/paged", async ([FromRoute] int clientId, [AsParameters] PagedFilterRequest request, [FromServices] IClientFiscalDataAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var response = await appService.GetPagedAsync(clientId, request, ct);
-            return notify.CustomResponse(response, 200);
+            return notify.CustomResponse(response);
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "ClientFiscalData", "GetPaged")
         .WithName("GetClientFiscalDataPaged")
@@ -53,7 +52,7 @@ public static class ClientFiscalDataEndpoint
         groupV1.MapPost("/{clientId}/fiscal-data/", async ([FromRoute] int clientId, [FromBody] CreateClientFiscalDataRequest request, [FromServices] IClientFiscalDataAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var created = await appService.CreateAsync(clientId, request, ct);
-            return notify.CustomResponse(created ? 201 : 400);
+            return notify.CustomResponse(created, 201);
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "ClientFiscalData", "Create")
         .WithName("CreateClientFiscalData")
@@ -66,7 +65,7 @@ public static class ClientFiscalDataEndpoint
         groupV1.MapPut("/{clientId}/fiscal-data/{id}", async ([FromRoute] int clientId, [FromRoute] int id, [FromBody] UpdateClientFiscalDataRequest request, [FromServices] IClientFiscalDataAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var updated = await appService.UpdateAsync(clientId, id, request, ct);
-            return notify.CustomResponse(updated ? 204 : 400);
+            return notify.CustomResponse(updated);
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "ClientFiscalData", "Update")
         .WithName("UpdateClientFiscalData")

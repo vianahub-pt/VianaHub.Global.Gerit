@@ -21,9 +21,11 @@ public class ClientFiscalDataDataRepository : IClientFiscalDataDataRepository
         return await _context.ClientFiscalData
             .AsNoTracking()
             .AsSplitQuery()
-            .Include(x => x.ClientIndividual)
-            .ThenInclude(x => x.Client)
-            .Where(x => x.ClientIndividual.Client.Id == clientId && !x.IsDeleted)
+            .Include(x => x.Client)
+            .ThenInclude(x => x.Individual)
+            .Include(x => x.Client)
+            .ThenInclude(x => x.Company)
+            .Where(x => x.ClientId == clientId && !x.IsDeleted)
             .OrderBy(x => x.CreatedAt)
             .ToListAsync(ct);
     }
@@ -33,9 +35,12 @@ public class ClientFiscalDataDataRepository : IClientFiscalDataDataRepository
         return await _context.ClientFiscalData
             .AsNoTracking()
             .AsSplitQuery()
-            .Include(x => x.ClientIndividual)
-            .ThenInclude(x => x.Client)
-            .FirstOrDefaultAsync(x => x.ClientIndividual.Client.Id == clientId && x.Id == id && !x.IsDeleted, ct);
+            .Include(x => x.Client)
+            .ThenInclude(x => x.Individual)
+            .Include(x => x.Client)
+            .ThenInclude(x => x.Company)
+            .Where(x => x.ClientId == clientId && x.Id == id && !x.IsDeleted && !x.IsDeleted)
+            .FirstOrDefaultAsync(ct);
     }
 
     public async Task<ListPage<ClientFiscalDataEntity>> GetPagedAsync(int clientId, PagedFilter filter, CancellationToken ct = default)
@@ -43,9 +48,11 @@ public class ClientFiscalDataDataRepository : IClientFiscalDataDataRepository
         var query = _context.ClientFiscalData
             .AsNoTracking()
             .AsSplitQuery()
-            .Include(x => x.ClientIndividual)
-            .ThenInclude(x => x.Client)
-            .Where(x => x.ClientIndividual.Client.Id == clientId && !x.IsDeleted);
+            .Include(x => x.Client)
+            .ThenInclude(x => x.Individual)
+            .Include(x => x.Client)
+            .ThenInclude(x => x.Company)
+            .Where(x => x.ClientId == clientId && !x.IsDeleted);
 
         if (!string.IsNullOrWhiteSpace(filter.Search))
         {
@@ -84,22 +91,14 @@ public class ClientFiscalDataDataRepository : IClientFiscalDataDataRepository
     {
         return await _context.ClientFiscalData
             .AsNoTracking()
-            .AsSplitQuery()
-            .Include(x => x.ClientIndividual)
-            .ThenInclude(x => x.Client)
-            .AnyAsync(x => x.ClientIndividual.Client.Id == clientId && !x.IsDeleted, ct);
+            .AnyAsync(x => x.ClientId == clientId && !x.IsDeleted, ct);
     }
 
     public async Task<bool> ExistsByTaxNumberAsync(int clientId, string taxNumber, CancellationToken ct = default)
     {
-        var query = _context.ClientFiscalData
+        return await _context.ClientFiscalData
             .AsNoTracking()
-            .AsSplitQuery()
-            .Include(x => x.ClientIndividual)
-            .ThenInclude(x => x.Client)
-            .Where(x => x.ClientIndividual.Client.Id == clientId && x.TaxNumber == taxNumber && !x.IsDeleted);
-
-        return await query.AnyAsync(ct);
+            .AnyAsync(x => x.ClientId == clientId && x.TaxNumber == taxNumber && !x.IsDeleted, ct);
     }
 
     public async Task<bool> CreateAsync(ClientFiscalDataEntity entity, CancellationToken ct = default)

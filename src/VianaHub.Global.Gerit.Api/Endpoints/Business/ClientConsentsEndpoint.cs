@@ -9,15 +9,15 @@ using VianaHub.Global.Gerit.Domain.Tools.Notifications;
 namespace VianaHub.Global.Gerit.Api.Endpoints.Business;
 
 [EndpointMapper]
-public static class ClientConsentsEndpoint
+public static class ClientConsentEndpoint
 {
-    public static void MapClientConsentsEndpoints(this IEndpointRouteBuilder app)
+    public static void MapClientConsentEndpoints(this IEndpointRouteBuilder app)
     {
-        var groupV1 = app.MapGroup("/v1/clients/consents").WithTags("ClientConsents").WithGroupName("v1").RequireAuthorization();
+        var groupV1 = app.MapGroup("/v1/clients").WithTags("ClientConsents").WithGroupName("v1").RequireAuthorization();
 
-        groupV1.MapGet("/", async ([FromServices] IClientConsentsAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
+        groupV1.MapGet("/{clientId}/consents", async ([FromRoute] int clientId, [FromServices] IClientConsentsAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
-            var response = await appService.GetAllAsync(ct);
+            var response = await appService.GetAllAsync(clientId, ct);
             return notify.CustomResponse(response, 200);
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "ClientConsents", "GetAll")
@@ -26,9 +26,9 @@ public static class ClientConsentsEndpoint
         .Produces(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapGet("/{id}", async ([FromRoute] int id, [FromServices] IClientConsentsAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
+        groupV1.MapGet("/{clientId}/consents/{id}", async ([FromRoute] int clientId, [FromRoute] int id, [FromServices] IClientConsentsAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
-            var response = await appService.GetByIdAsync(id, ct);
+            var response = await appService.GetByIdAsync(clientId, id, ct);
             return notify.CustomResponse(response, 200);
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "ClientConsents", "GetBy")
@@ -38,43 +38,9 @@ public static class ClientConsentsEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapGet("/by-client/{clientId}", async ([FromRoute] int clientId, [FromServices] IClientConsentsAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
+        groupV1.MapGet("/{clientId}/consents/paged", async ([FromRoute] int clientId, [AsParameters] PagedFilterRequest request, [FromServices] IClientConsentsAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
-            var response = await appService.GetByClientIdAsync(clientId, ct);
-            return notify.CustomResponse(response, 200);
-        })
-        .CustomAuthorize("Admin,BackOffice,Manager", "ClientConsents", "GetBy")
-        .WithName("GetClientConsentsByClientId")
-        .WithSummary("Swagger.Endpoint.ClientConsents.GetByClientId.Summary")
-        .Produces(StatusCodes.Status200OK)
-        .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
-
-        groupV1.MapGet("/by-consent-type/{consentTypeId}", async ([FromRoute] int consentTypeId, [FromServices] IClientConsentsAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
-        {
-            var response = await appService.GetByConsentTypeIdAsync(consentTypeId, ct);
-            return notify.CustomResponse(response, 200);
-        })
-        .CustomAuthorize("Admin,BackOffice,Manager", "ClientConsents", "GetBy")
-        .WithName("GetClientConsentsByConsentTypeId")
-        .WithSummary("Swagger.Endpoint.ClientConsents.GetByConsentTypeId.Summary")
-        .Produces(StatusCodes.Status200OK)
-        .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
-
-        groupV1.MapGet("/by-client/{clientId}/consent-type/{consentTypeId}", async ([FromRoute] int clientId, [FromRoute] int consentTypeId, [FromServices] IClientConsentsAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
-        {
-            var response = await appService.GetByClientAndConsentTypeAsync(clientId, consentTypeId, ct);
-            return notify.CustomResponse(response, 200);
-        })
-        .CustomAuthorize("Admin,BackOffice,Manager", "ClientConsents", "GetBy")
-        .WithName("GetClientConsentsByClientAndConsentType")
-        .WithSummary("Swagger.Endpoint.ClientConsents.GetByClientAndConsentType.Summary")
-        .Produces(StatusCodes.Status200OK)
-        .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
-        .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
-
-        groupV1.MapGet("/paged", async ([AsParameters] PagedFilterRequest request, [FromServices] IClientConsentsAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
-        {
-            var response = await appService.GetPagedAsync(request, ct);
+            var response = await appService.GetPagedAsync(clientId, request, ct);
             return notify.CustomResponse(response, 200);
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "ClientConsents", "GetPaged")
@@ -83,9 +49,9 @@ public static class ClientConsentsEndpoint
         .Produces(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapPost("/", async ([FromBody] CreateClientConsentsRequest request, [FromServices] IClientConsentsAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
+        groupV1.MapPost("/{clientId}/consents", async ([FromRoute] int clientId, [FromBody] CreateClientConsentsRequest request, [FromServices] IClientConsentsAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
-            var created = await appService.CreateAsync(request, ct);
+            var created = await appService.CreateAsync(clientId, request, ct);
             return notify.CustomResponse(created ? 201 : 400);
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "ClientConsents", "Create")
@@ -97,9 +63,9 @@ public static class ClientConsentsEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError)
         .WithValidation<CreateClientConsentsRequest>();
 
-        groupV1.MapPut("/{id}", async ([FromRoute] int id, [FromBody] UpdateClientConsentsRequest request, [FromServices] IClientConsentsAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
+        groupV1.MapPut("/{clientId}/consents/{id}", async ([FromRoute] int clientId, [FromRoute] int id, [FromBody] UpdateClientConsentsRequest request, [FromServices] IClientConsentsAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
-            var updated = await appService.UpdateAsync(id, request, ct);
+            var updated = await appService.UpdateAsync(clientId, id, request, ct);
             return notify.CustomResponse(updated ? 204 : 400);
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "ClientConsents", "Update")
@@ -112,33 +78,9 @@ public static class ClientConsentsEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError)
         .WithValidation<UpdateClientConsentsRequest>();
 
-        groupV1.MapPatch("/{id}/revoke", async ([FromRoute] int id, [FromServices] IClientConsentsAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
+        groupV1.MapPatch("/{clientId}/consents/{id}/activate", async ([FromRoute] int clientId, [FromRoute] int id, [FromServices] IClientConsentsAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
-            var revoked = await appService.RevokeConsentAsync(id, ct);
-            return notify.CustomResponse(revoked ? 200 : 400);
-        })
-        .CustomAuthorize("Admin,BackOffice,Manager", "ClientConsents", "Revoke")
-        .WithName("RevokeClientConsent")
-        .WithSummary("Swagger.Endpoint.ClientConsents.Revoke.Summary")
-        .Produces(StatusCodes.Status200OK)
-        .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
-        .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
-
-        groupV1.MapPatch("/{id}/grant", async ([FromRoute] int id, [FromServices] IClientConsentsAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
-        {
-            var granted = await appService.GrantConsentAsync(id, ct);
-            return notify.CustomResponse(granted ? 200 : 400);
-        })
-        .CustomAuthorize("Admin,BackOffice,Manager", "ClientConsents", "Grant")
-        .WithName("GrantClientConsent")
-        .WithSummary("Swagger.Endpoint.ClientConsents.Grant.Summary")
-        .Produces(StatusCodes.Status200OK)
-        .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
-        .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
-
-        groupV1.MapPatch("/{id}/activate", async ([FromRoute] int id, [FromServices] IClientConsentsAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
-        {
-            var ok = await appService.ActivateAsync(id, ct);
+            var ok = await appService.ActivateAsync(clientId, id, ct);
             return notify.CustomResponse();
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "ClientConsents", "Activate")
@@ -148,9 +90,9 @@ public static class ClientConsentsEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapPatch("/{id}/deactivate", async ([FromRoute] int id, [FromServices] IClientConsentsAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
+        groupV1.MapPatch("/{clientId}/consents/{id}/deactivate", async ([FromRoute] int clientId, [FromRoute] int id, [FromServices] IClientConsentsAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
-            var ok = await appService.DeactivateAsync(id, ct);
+            var ok = await appService.DeactivateAsync(clientId, id, ct);
             return notify.CustomResponse();
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "ClientConsents", "Deactivate")
@@ -160,9 +102,9 @@ public static class ClientConsentsEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapDelete("/{id}", async ([FromRoute] int id, [FromServices] IClientConsentsAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
+        groupV1.MapDelete("/{clientId}/consents/{id}", async ([FromRoute] int clientId, [FromRoute] int id, [FromServices] IClientConsentsAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
-            var ok = await appService.DeleteAsync(id, ct);
+            var ok = await appService.DeleteAsync(clientId, id, ct);
             return notify.CustomResponse();
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "ClientConsents", "Delete")
