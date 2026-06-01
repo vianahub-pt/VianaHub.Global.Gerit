@@ -3,6 +3,7 @@ using VianaHub.Global.Gerit.Api.Endpoints.Base;
 using VianaHub.Global.Gerit.Api.Helpers;
 using VianaHub.Global.Gerit.Application.Dtos.Base;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Business.Client;
+using VianaHub.Global.Gerit.Application.Dtos.Response.Business.Client;
 using VianaHub.Global.Gerit.Application.Interfaces.Business;
 using VianaHub.Global.Gerit.Domain.Tools.Notifications;
 
@@ -23,7 +24,9 @@ public static class ClientEndpoint
         .CustomAuthorize("Admin,BackOffice,Manager", "Clients", "GetAll")
         .WithName("GetClients")
         .WithSummary("Swagger.Endpoint.Client.GetAll.Summary")
-        .Produces(StatusCodes.Status200OK)
+        .Produces<IEnumerable<ClientResponse>>(StatusCodes.Status200OK)
+        .Produces(StatusCodes.Status401Unauthorized)
+        .Produces(StatusCodes.Status403Forbidden)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
         groupV1.MapGet("/{id}", async ([FromRoute] int id, [FromServices] IClientAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
@@ -34,8 +37,10 @@ public static class ClientEndpoint
         .CustomAuthorize("Admin,BackOffice,Manager", "Clients", "GetBy")
         .WithName("GetClientById")
         .WithSummary("Swagger.Endpoint.Client.GetById.Summary")
-        .Produces(StatusCodes.Status200OK)
+        .Produces<ClientDetailResponse>(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status410Gone)
+        .Produces(StatusCodes.Status401Unauthorized)
+        .Produces(StatusCodes.Status403Forbidden)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
         groupV1.MapGet("/paged", async ([AsParameters] PagedFilterRequest request, [FromServices] IClientAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
@@ -46,7 +51,9 @@ public static class ClientEndpoint
         .CustomAuthorize("Admin,BackOffice,Manager", "Clients", "GetPaged")
         .WithName("GetClientsPaged")
         .WithSummary("Swagger.Endpoint.Client.GetPaged.Summary")
-        .Produces(StatusCodes.Status200OK)
+        .Produces<ListPageResponse<ClientResponse>>(StatusCodes.Status200OK)
+        .Produces(StatusCodes.Status401Unauthorized)
+        .Produces(StatusCodes.Status403Forbidden)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
         groupV1.MapPost("/", async ([FromBody] CreateClientRequest request, [FromServices] IClientAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
@@ -71,9 +78,10 @@ public static class ClientEndpoint
         .CustomAuthorize("Admin,BackOffice,Manager", "Clients", "Update")
         .WithName("UpdateClient")
         .WithSummary("Swagger.Endpoint.Client.Update.Summary")
-        .Produces(StatusCodes.Status204NoContent)
+        .Produces(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status400BadRequest)
-        .Produces<ErrorResponse>(StatusCodes.Status409Conflict)
+        .Produces(StatusCodes.Status401Unauthorized)
+        .Produces(StatusCodes.Status403Forbidden)
         .Produces<ErrorResponse>(StatusCodes.Status410Gone)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError)
         .WithValidation<UpdateClientRequest>();
@@ -86,7 +94,10 @@ public static class ClientEndpoint
         .CustomAuthorize("Admin,BackOffice,Manager", "Clients", "Activate")
         .WithName("ActivateClient")
         .WithSummary("Swagger.Endpoint.Client.Activate.Summary")
-        .Produces(StatusCodes.Status204NoContent)
+        .Produces(StatusCodes.Status200OK)
+        .Produces<ErrorResponse>(StatusCodes.Status400BadRequest)
+        .Produces(StatusCodes.Status401Unauthorized)
+        .Produces(StatusCodes.Status403Forbidden)
         .Produces<ErrorResponse>(StatusCodes.Status410Gone)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
@@ -98,7 +109,10 @@ public static class ClientEndpoint
         .CustomAuthorize("Admin,BackOffice,Manager", "Clients", "Deactivate")
         .WithName("DeactivateClient")
         .WithSummary("Swagger.Endpoint.Client.Deactivate.Summary")
-        .Produces(StatusCodes.Status204NoContent)
+        .Produces(StatusCodes.Status200OK)
+        .Produces<ErrorResponse>(StatusCodes.Status400BadRequest)
+        .Produces(StatusCodes.Status401Unauthorized)
+        .Produces(StatusCodes.Status403Forbidden)
         .Produces<ErrorResponse>(StatusCodes.Status410Gone)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
@@ -110,7 +124,10 @@ public static class ClientEndpoint
         .CustomAuthorize("Admin,BackOffice,Manager", "Clients", "Delete")
         .WithName("DeleteClient")
         .WithSummary("Swagger.Endpoint.Client.Delete.Summary")
-        .Produces(StatusCodes.Status204NoContent)
+        .Produces(StatusCodes.Status200OK)
+        .Produces<ErrorResponse>(StatusCodes.Status400BadRequest)
+        .Produces(StatusCodes.Status401Unauthorized)
+        .Produces(StatusCodes.Status403Forbidden)
         .Produces<ErrorResponse>(StatusCodes.Status410Gone)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
@@ -133,6 +150,7 @@ public static class ClientEndpoint
         .Accepts<IFormFile>("multipart/form-data")
         .Produces(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status400BadRequest)
+        .Produces<ErrorResponse>(StatusCodes.Status409Conflict)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
     }
 }
