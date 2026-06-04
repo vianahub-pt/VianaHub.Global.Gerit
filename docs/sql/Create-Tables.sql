@@ -503,7 +503,7 @@ CREATE TABLE dbo.ClientIndividuals (                                            
     Gender              NVARCHAR(20)            NULL,                                    -- G�nero (opcional)
     DocumentType        NVARCHAR(50)            NULL,                                    -- Tipo documento (CC, Passaporte, etc.)
     DocumentNumber      NVARCHAR(50)            NULL,                                    -- N�mero do documento
-    Nationality         CHAR(2)                 NULL,                                    -- Pa�s ISO (PT, ES, etc.)
+    Nationality         NVARCHAR(50)            NULL,                                    -- Nacionalidade (até 50 caracteres)
     IsActive            BIT                 NOT NULL DEFAULT 1,                          -- Flag de ativo
     IsDeleted           BIT                 NOT NULL DEFAULT 0,                          -- Soft delete
     CreatedBy           INT                 NOT NULL,                                    -- Usu�rio criador

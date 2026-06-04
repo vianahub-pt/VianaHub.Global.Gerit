@@ -67,8 +67,8 @@ public class ClientIndividualMapping : IEntityTypeConfiguration<ClientIndividual
             .HasMaxLength(50);
         
         builder.Property(x => x.Nationality)
-            .HasColumnType("CHAR(2)")
-            .HasMaxLength(2);
+            .HasColumnType("NVARCHAR(50)")
+            .HasMaxLength(50);
 
         builder.Property(x => x.IsActive)
             .HasDefaultValue(true)
