@@ -56,7 +56,7 @@ public class CreateClientIndividualRouteValidator : AbstractValidator<CreateClie
             .When(x => !string.IsNullOrWhiteSpace(x.DocumentNumber));
 
         RuleFor(x => x.Nationality)
-            .MaximumLength(50)
+            .MaximumLength(100)
             .WithMessage("client_individual.nationality.max_length")
             .When(x => !string.IsNullOrWhiteSpace(x.Nationality));
     }

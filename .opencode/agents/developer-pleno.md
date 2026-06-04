@@ -1,6 +1,7 @@
 ---
 description: Developer Pleno - implementa features backend .NET 8 intermediárias, CRUDs, endpoints, serviços, integrações com API existente e move cards no Kanban
 mode: subagent
+model: openai/gpt-4o
 temperature: 0.2
 tools:
   write: true

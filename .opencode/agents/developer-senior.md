@@ -1,6 +1,7 @@
 ---
 description: Developer Senior - implementa features complexas, refatorações, arquitetura backend .NET 8, segurança, multi-tenant e integrações críticas
 mode: subagent
+model: openai/gpt-5.1
 temperature: 0.1
 tools:
   write: true
