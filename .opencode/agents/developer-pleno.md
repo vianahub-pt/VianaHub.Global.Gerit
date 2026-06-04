@@ -142,6 +142,7 @@ gh issue comment NUMERO --repo vianahub-pt/VianaHub.Global.Gerit --body "Resumo"
 - **Multi-tenant:** RLS + `SESSION_CONTEXT`, interceptors EF Core
 - **Testes:** xUnit + Moq + NBuilder + EF InMemory
 - **Build:** `dotnet build` sem erros
+- **Multi-repo:** O board gerencia issues de VÁRIOS repositórios. NUNCA refira issue apenas por número (`#92`). Use sempre `vianahub-pt/{repo}#{n}`. Nos comandos `gh`, SEMPRE use `--repo` com o repositório correto do workspace atual ou do handoff recebido.
 - **Testes:** `dotnet test` passando 100%
 
 # Responsabilidades Técnicas

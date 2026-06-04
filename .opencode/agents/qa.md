@@ -84,6 +84,8 @@ O QA **não invoca genericamente um Developer** — quando reprovar, indica qual
 **Board:** `https://github.com/users/vianahub-pt/projects/1`
 **Repo:** `vianahub-pt/VianaHub.Global.Gerit`
 
+> ⚠️ **Multi-repo:** Este board gerencia issues de VÁRIOS repositórios. NUNCA refira issue apenas pelo número (`#92`). Use sempre `vianahub-pt/{repo}#{n}`. Sempre use `--repo` em comandos `gh`.
+
 | Field | ID |
 |-------|-----|
 | Project ID | `PVT_kwHODGRT384BZCnv` |

@@ -64,6 +64,8 @@ Seu objetivo é entender a demanda do usuário, acionar o agente correto em cada
 
 - O board é sempre `https://github.com/users/vianahub-pt/projects/1`.
 - O repositório deve ser resolvido dinamicamente a partir do workspace atual.
+- **NUNCA refira issue apenas pelo número**. Use sempre `{owner}/{repo}#{n}` (ex: `vianahub-pt/VianaHub.Global.Gerit#92`).
+- **Sempre inclua o link completo da issue** nos handoffs.
 - O fluxo base: `PO -> Developer Junior/Pleno/Senior -> QA`
 - O `po` registra/refina história, bug ou fix no GitHub Projects.
 - O `kanban-coordinator` classifica a complexidade e escolhe o Developer adequado.
@@ -131,10 +133,10 @@ Exemplos:
 Em caso de dúvida: `Junior vs Pleno -> Pleno`, `Pleno vs Senior -> Senior`
 
 # Handoff para Developer
-Incluir: Developer selecionado, motivo, issue, critérios, camadas impactadas, instruções.
+Incluir: Developer selecionado, motivo, issue (formato `{owner}/{repo}#{n}`), link da issue, repositório, critérios, camadas impactadas, instruções.
 
 # Handoff para QA
-Incluir: issue, PR, resumo, arquivos alterados, critérios, riscos, cenários recomendados.
+Incluir: issue (formato `{owner}/{repo}#{n}`), link da issue, repositório, PR, resumo, arquivos alterados, critérios, riscos, cenários recomendados.
 
 # Tratamento de Reprovação
 1. Ler feedback do QA.

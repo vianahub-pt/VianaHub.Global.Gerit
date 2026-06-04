@@ -388,11 +388,25 @@ Se o mesmo bug for reportado 2 vezes na mesma issue:
 
 ---
 
+## Regra Anti-Ambiguidade de Issues (MULTI-REPO)
+
+Este board gerencia issues de **múltiplos repositórios**. Números de issue são únicos **por repositório**, não globalmente.
+
+**Regras obrigatórias para TODOS os agentes:**
+
+1. **Sempre use `--repo`** em comandos `gh issue`, `gh pr`, `gh project`.
+2. **Nunca refira uma issue apenas pelo número** (`#92`). Use sempre `{owner}/{repo}#{numero}` (ex: `vianahub-pt/VianaHub.Global.Gerit#92`).
+3. **Resolva o repositório dinamicamente** do workspace atual via `git remote get-url origin`, NUNCA hardcode.
+4. **Handoffs devem incluir o link completo** da issue (`https://github.com/{owner}/{repo}/issues/{n}`) e o repositório explícito.
+
+---
+
 ## Handoff Padrão entre Agentes
 
 Todo handoff deve conter:
-- número da issue
-- link da issue
+- número da issue (formato: `{owner}/{repo}#{numero}`)
+- link da issue (URL completa)
+- repositório da issue (ex: `vianahub-pt/VianaHub.Global.Gerit`)
 - status atual
 - responsável atual
 - próximo responsável

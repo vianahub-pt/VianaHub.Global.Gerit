@@ -147,6 +147,7 @@ gh issue view NUMERO --repo vianahub-pt/VianaHub.Global.Gerit
 - **Stack:** .NET 8, ASP.NET Core 8 Minimal API, EF Core 8, SQL Server, FluentValidation, AutoMapper, Serilog, Hangfire, JWT RS256
 - **Arquitetura:** DDD + Clean Architecture + Hexagonal com 7 projetos
 - **Camadas:** Api (endpoints), Application (use-cases), Domain (entidades), Infra.Data (EF Core), Infra.IoC (DI), Infra.Integration, Infra.Job
+- **Issues multi-repo:** Este board gerencia issues de MÚLTIPLOS repositórios. NUNCA refira issue apenas pelo número. Use sempre `{owner}/{repo}#{n}` (ex: `vianahub-pt/VianaHub.Global.Gerit#92`). Sempre inclua `--repo owner/repo` em comandos `gh`.
 - **Endpoints:** `[EndpointMapper]` + `MapEndpointsFromAssembly()`, agrupados em `Endpoints/{Billing,Identity,Business,Job}/`, política `"BackOffice"`
 - **Multi-tenant:** RLS + `SESSION_CONTEXT` com interceptors EF Core
 - **Validação:** FluentValidation com suporte a localização (`Localization/**/*.json`)
@@ -241,8 +242,9 @@ Como [persona], quero [ação/funcionalidade], para que [benefício].
 ## Handoff para Kanban Coordinator
 
 ### Issue
-- Número: #NUMERO
-- Link: LINK_DA_ISSUE
+- Número: `vianahub-pt/NOME_DO_REPO#NUMERO`
+- Link: LINK_DA_ISSUE (URL completa)
+- Repositório: vianahub-pt/NOME_DO_REPO
 - Status atual: To do
 
 ### Classificação do PO
@@ -267,3 +269,4 @@ Kanban Coordinator deve validar a complexidade, escolher o Developer adequado e 
 - Após criar a issue, adicione ao projeto.
 - Quando mover para To do, faça handoff para o `kanban-coordinator`.
 - Não invoque diretamente Developers — entregue para o `kanban-coordinator`.
+- **Multi-repo:** NUNCA refira issue apenas por número. Use `vianahub-pt/{repo}#{n}` e o link completo. Sempre use `--repo` nos comandos `gh`.
