@@ -257,6 +257,43 @@ public class GlobalExceptionMiddleware
         {
             // Inspecionar inner exception em busca de indicadores de violação de restrições
             var innerMessage = dbEx.InnerException?.Message ?? string.Empty;
+            var innerEx = dbEx.InnerException;
+
+            // Verificar se é SqlException com erro 2628 (string/binary truncation)
+            if (innerEx is SqlException innerSqlEx && innerSqlEx.Number == 2628)
+            {
+                Log.Error(innerSqlEx,
+                    "[ERROR-{ErrorId}] Detailed SqlException 2628 (String/Binary Truncation):\n" +
+                    "   🔢 Error Number: {ErrorNumber}\n" +
+                    "   📝 Message: {Message}\n" +
+                    "   🔧 Procedure: {Procedure}",
+                    errorId,
+                    innerSqlEx.Number,
+                    innerSqlEx.Message,
+                    innerSqlEx.Procedure ?? "N/A");
+
+                // Extrair o nome da tabela e coluna da mensagem de erro
+                // Formato típico: "String or binary data would be truncated in table 'dbo.ClientIndividuals', column 'Nationality'."
+                var tableName = ExtractTableNameFromTruncationMessage(innerSqlEx.Message);
+                var columnName = ExtractColumnNameFromTruncationMessage(innerSqlEx.Message);
+
+                notify.Add("Api.Middleware.GlobalException.DbUpdateException.Error.FieldLabel.System", 400);
+
+                context.Response.StatusCode = 400;
+                context.Response.ContentType = "application/json; charset=utf-8";
+
+                var truncErrorResponse = new ErrorResponse(localization.GetMessage("Api.Middleware.GlobalException.StatusCode.Error.InvalidRequest"));
+                truncErrorResponse.AddError(
+                    localization.GetMessage("Api.Middleware.GlobalException.DbUpdateException.Error.FieldLabel.Error"),
+                    localization.GetMessage("Api.Middleware.GlobalException.DbUpdateException.Error.FieldTruncation", columnName ?? tableName ?? "unknown"));
+                truncErrorResponse.AddError(
+                    localization.GetMessage("Api.Middleware.GlobalException.DbUpdateException.Error.FieldLabel.ErrorId"),
+                    localization.GetMessage("Api.Middleware.GlobalException.DbUpdateException.Error.ContactSupport", errorId));
+
+                var jsonTrunc = JsonSerializer.Serialize(truncErrorResponse, GetJsonSerializerOptions());
+                await context.Response.WriteAsync(jsonTrunc);
+                return;
+            }
 
             // Logar detalhes completos internos para diagnóstico
             Log.Error(dbEx,
@@ -479,5 +516,62 @@ public class GlobalExceptionMiddleware
             500 => localization.GetMessage("Api.Middleware.GlobalException.StatusCode.Error.InternalServerError"),
             _ => localization.GetMessage("Api.Middleware.GlobalException.StatusCode.Error.GenericError")
         };
+    }
+
+    /// <summary>
+    /// Extrai o nome da coluna da mensagem de erro de truncamento do SQL Server (erro 2628).
+    /// Formato esperado: "String or binary data would be truncated in table 'dbo.ClientIndividuals', column 'Nationality'."
+    /// </summary>
+    private static string? ExtractColumnNameFromTruncationMessage(string message)
+    {
+        try
+        {
+            var columnMarker = "column '";
+            var columnIndex = message.IndexOf(columnMarker, StringComparison.OrdinalIgnoreCase);
+            if (columnIndex >= 0)
+            {
+                var start = columnIndex + columnMarker.Length;
+                var end = message.IndexOf("'", start);
+                if (end >= 0)
+                {
+                    return message.Substring(start, end - start);
+                }
+            }
+        }
+        catch
+        {
+            // Ignora erros de parsing
+        }
+        return null;
+    }
+
+    /// <summary>
+    /// Extrai o nome da tabela da mensagem de erro de truncamento do SQL Server (erro 2628).
+    /// Formato esperado: "String or binary data would be truncated in table 'dbo.ClientIndividuals', column 'Nationality'."
+    /// </summary>
+    private static string? ExtractTableNameFromTruncationMessage(string message)
+    {
+        try
+        {
+            var tableMarker = "table '";
+            var tableIndex = message.IndexOf(tableMarker, StringComparison.OrdinalIgnoreCase);
+            if (tableIndex >= 0)
+            {
+                var start = tableIndex + tableMarker.Length;
+                var end = message.IndexOf("'", start);
+                if (end >= 0)
+                {
+                    // Extrair apenas o nome da tabela sem o schema (dbo.)
+                    var fullName = message.Substring(start, end - start);
+                    var dotIndex = fullName.IndexOf('.');
+                    return dotIndex >= 0 ? fullName.Substring(dotIndex + 1) : fullName;
+                }
+            }
+        }
+        catch
+        {
+            // Ignora erros de parsing
+        }
+        return null;
     }
 }

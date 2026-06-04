@@ -141,6 +141,11 @@
   "Api.Validator.ConsentType.Update.Description": "A descrição é obrigatória",
   "Api.Validator.ConsentType.Update.Description.MaximumLength": "A descrição deve ter no máximo {0} caracteres",
 
+  "Api.Validator.Client.Create.ClientType": "O tipo de cliente é obrigatório",
+  "Api.Validator.Client.Create.OriginType": "A origem do cliente é obrigatória",
+  "Api.Validator.Client.Create.UrlImage.MaximumLength": "A URL da imagem deve ter no máximo {0} caracteres",
+  "Api.Validator.Client.Create.Note.MaximumLength": "A nota deve ter no máximo {0} caracteres",
+
   "Api.Validator.ClientAddress.Create.ClientId": "O ID do cliente é obrigatório",
   "Api.Validator.ClientAddress.Create.AddressTypeId": "O ID do tipo de morada é obrigatório",
   "Api.Validator.ClientAddress.Create.Street": "A rua é obrigatória",
@@ -204,6 +209,7 @@
   "Api.Middleware.GlobalException.DbUpdateException.Error.InternalServerError": "Erro interno do servidor",
   "Api.Middleware.GlobalException.DbUpdateException.Error.UnexpectedError.User": "Ocorreu um erro inesperado. A nossa equipa foi notificada e está a trabalhar numa solução",
   "Api.Middleware.GlobalException.DbUpdateException.Error.FieldLabel.System": "Sistema",
+  "Api.Middleware.GlobalException.DbUpdateException.Error.FieldTruncation": "O campo '{0}' excedeu o limite de caracteres permitido. Reduza o texto e tente novamente",
 
   "Api.Middleware.GlobalException.JsonException.Error.JsonFormatError": "Formato JSON inválido",
   "Api.Middleware.GlobalException.JsonException.Error.FieldLabel.Format": "Formato",

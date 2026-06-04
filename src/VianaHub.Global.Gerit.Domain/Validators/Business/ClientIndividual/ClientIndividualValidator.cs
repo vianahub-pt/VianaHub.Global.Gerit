@@ -104,8 +104,8 @@ public class ClientIndividualValidator : IEntityDomainValidator<ClientIndividual
         if (!string.IsNullOrWhiteSpace(entity.DocumentNumber) && entity.DocumentNumber.Length > 50)
             errors.Add(new ValidationFailure(nameof(entity.DocumentNumber), "client_individual.document_number.max_length"));
 
-        if (!string.IsNullOrWhiteSpace(entity.Nationality) && entity.Nationality.Length != 2)
-            errors.Add(new ValidationFailure(nameof(entity.Nationality), "client_individual.nationality.invalid_length"));
+        if (!string.IsNullOrWhiteSpace(entity.Nationality) && entity.Nationality.Length > 50)
+            errors.Add(new ValidationFailure(nameof(entity.Nationality), "client_individual.nationality.max_length"));
 
         return await Task.FromResult(new ValidationResult(errors));
     }
