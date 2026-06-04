@@ -105,6 +105,41 @@ Nesses casos, recomendar roteamento para `developer-pleno` ou `developer-senior`
 | In Progress | `47fc9ee4` |
 | For Tests | `a42b88c6` |
 
+---
+
+## Regra Obrigatória: Sempre usar `--repo` em comandos `gh`
+
+Todo comando `gh` que referencie número de issue (`gh issue`, `gh pr`, etc.) **deve** incluir o parâmetro `--repo vianahub-pt/VianaHub.Global.Gerit`.
+
+O repositório `vianahub-pt/VianaHub.Global.Gerit` deve ser validado dinamicamente no início da execução via `git remote get-url origin`. Se o remote apontar para outro repositório, usar o nome correto.
+
+**Exemplos obrigatórios para todos os comandos que referenciam issue:**
+- `gh issue view NUMERO --repo vianahub-pt/VianaHub.Global.Gerit`
+- `gh issue edit NUMERO --repo vianahub-pt/VianaHub.Global.Gerit --add-assignee @me`
+- `gh issue comment NUMERO --repo vianahub-pt/VianaHub.Global.Gerit --body "..."`
+- `gh pr create --repo vianahub-pt/VianaHub.Global.Gerit --base develop --title "..." --body "Closes #NUMERO"`
+- `gh pr view NUMERO --repo vianahub-pt/VianaHub.Global.Gerit`
+
+### Como obter o ITEM_ID do projeto com segurança
+
+O comando `gh project item-edit` não aceita `--repo`, mas o `ITEM_ID` deve ser obtido com cuidado para evitar mover acidentalmente cards de outro repositório.
+
+**Procedimento correto:**
+
+1. Obtenha o node ID global da issue no repositório correto:
+   ```bash
+   gh issue view NUMERO --repo vianahub-pt/VianaHub.Global.Gerit --json id
+   ```
+
+2. Use o node ID da issue para localizar o item correspondente no board:
+   ```bash
+   gh project item-list 1 --owner vianahub-pt --format json | ConvertFrom-Json | Where-Object { $_.content.id -eq "NODE_ID_DA_ISSUE" } | Select-Object -ExpandProperty id
+   ```
+
+**Nunca** use apenas o número da issue para localizar um item no board, pois o projeto pode conter issues de múltiplos repositórios com números repetidos. Sempre verifique pelo `content.id` (node ID) ou `content.url` completo.
+
+---
+
 # Comandos `gh`
 
 ```bash
@@ -121,6 +156,8 @@ git commit -m "fix(domain): describe fix - closes #NUMERO"
 git push origin fix/issue-NUMERO-slug
 gh pr create --repo vianahub-pt/VianaHub.Global.Gerit --base develop --title "fix: título" --body "Closes #NUMERO"
 gh issue comment NUMERO --repo vianahub-pt/VianaHub.Global.Gerit --body "Comentário"
+# Obter node ID de uma issue (usado para localizar item no board com segurança)
+gh issue view NUMERO --repo vianahub-pt/VianaHub.Global.Gerit --json id
 ```
 
 # Convenções do Projeto

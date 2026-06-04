@@ -132,13 +132,70 @@ Exemplos:
 # Regras de Decisão
 Em caso de dúvida: `Junior vs Pleno -> Pleno`, `Pleno vs Senior -> Senior`
 
+---
+
+## Regra Obrigatória: Sempre usar `--repo` em comandos `gh`
+
+Todo comando `gh` que referencie número de issue (`gh issue`, `gh pr`, etc.) **deve** incluir o parâmetro `--repo vianahub-pt/VianaHub.Global.Gerit`.
+
+O repositório `vianahub-pt/VianaHub.Global.Gerit` deve ser validado dinamicamente no início da execução via `git remote get-url origin`. Se o remote apontar para outro repositório, usar o nome correto.
+
+**Exemplos obrigatórios para todos os comandos que referenciam issue:**
+- `gh issue view NUMERO --repo vianahub-pt/VianaHub.Global.Gerit`
+- `gh issue edit NUMERO --repo vianahub-pt/VianaHub.Global.Gerit --add-assignee @me`
+- `gh issue comment NUMERO --repo vianahub-pt/VianaHub.Global.Gerit --body "..."`
+- `gh pr create --repo vianahub-pt/VianaHub.Global.Gerit --base develop --title "..." --body "Closes #NUMERO"`
+- `gh pr view NUMERO --repo vianahub-pt/VianaHub.Global.Gerit`
+
+### Como obter o ITEM_ID do projeto com segurança
+
+O comando `gh project item-edit` não aceita `--repo`, mas o `ITEM_ID` deve ser obtido com cuidado para evitar mover acidentalmente cards de outro repositório.
+
+**Procedimento correto:**
+
+1. Obtenha o node ID global da issue no repositório correto:
+   ```bash
+   gh issue view NUMERO --repo vianahub-pt/VianaHub.Global.Gerit --json id
+   ```
+
+2. Use o node ID da issue para localizar o item correspondente no board:
+   ```bash
+   gh project item-list 1 --owner vianahub-pt --format json | ConvertFrom-Json | Where-Object { $_.content.id -eq "NODE_ID_DA_ISSUE" } | Select-Object -ExpandProperty id
+   ```
+
+**Nunca** use apenas o número da issue para localizar um item no board, pois o projeto pode conter issues de múltiplos repositórios com números repetidos. Sempre verifique pelo `content.id` (node ID) ou `content.url` completo.
+
+---
+
+## Regra de Handoffs: Sempre usar URL completa da issue
+
+Em todos os handoffs entre agentes (PO → Coordinator → Developer → QA), o campo **Link** deve conter a URL completa da issue no GitHub, nunca apenas o número (`#NUMERO`).
+
+**Formato obrigatório:**
+```text
+https://github.com/vianahub-pt/VianaHub.Global.Gerit/issues/NUMERO
+```
+
+Isso elimina qualquer ambiguidade entre repositórios com números de issue semelhantes.
+
+---
+
 # Handoff para Developer
-Incluir: Developer selecionado, motivo, issue (formato `{owner}/{repo}#{n}`), link da issue, repositório, critérios, camadas impactadas, instruções.
+
+**Atenção:** o campo `Link` deve ser sempre a URL completa da issue no formato `https://github.com/vianahub-pt/VianaHub.Global.Gerit/issues/NUMERO`, nunca apenas o número.
+
+Incluir: Developer selecionado, motivo, issue (formato `vianahub-pt/VianaHub.Global.Gerit#NUMERO`), link completo (`https://github.com/vianahub-pt/VianaHub.Global.Gerit/issues/NUMERO`), repositório, critérios, camadas impactadas, instruções.
 
 # Handoff para QA
-Incluir: issue (formato `{owner}/{repo}#{n}`), link da issue, repositório, PR, resumo, arquivos alterados, critérios, riscos, cenários recomendados.
+
+**Atenção:** o campo `Link` deve ser sempre a URL completa da issue no formato `https://github.com/vianahub-pt/VianaHub.Global.Gerit/issues/NUMERO`, nunca apenas o número.
+
+Incluir: issue (formato `vianahub-pt/VianaHub.Global.Gerit#NUMERO`), link completo (`https://github.com/vianahub-pt/VianaHub.Global.Gerit/issues/NUMERO`), repositório, PR, resumo, arquivos alterados, critérios, riscos, cenários recomendados.
 
 # Tratamento de Reprovação
+
+**Atenção:** o campo `Link` deve ser sempre a URL completa da issue no formato `https://github.com/vianahub-pt/VianaHub.Global.Gerit/issues/NUMERO`, nunca apenas o número.
+
 1. Ler feedback do QA.
 2. Identificar severidade.
 3. Mover card para In Progress.
@@ -152,4 +209,14 @@ Incluir: issue (formato `{owner}/{repo}#{n}`), link da issue, repositório, PR, 
 | Arquitetura, segurança, auth, multi-tenant, regressão complexa | `developer-senior` |
 
 # Modelo de resposta ao usuário
+
 Sempre responder com estado atual do card, próximo responsável, complexidade, o que foi feito e o que falta.
+
+**Formato recomendado:**
+- Issue: `vianahub-pt/VianaHub.Global.Gerit#NUMERO`
+- Link: `https://github.com/vianahub-pt/VianaHub.Global.Gerit/issues/NUMERO`
+- Status atual: [coluna do board]
+- Responsável atual: [agente]
+- Próximo responsável: [agente]
+- O que foi feito: [resumo]
+- O que falta: [próximos passos]

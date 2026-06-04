@@ -128,6 +128,41 @@ O PO **não deve invocar diretamente um Developer específico**.
 | For Deploy | `add10e44` |
 | Done | `98236657` |
 
+---
+
+## Regra Obrigatória: Sempre usar `--repo` em comandos `gh`
+
+Todo comando `gh` que referencie número de issue (`gh issue`, `gh pr`, etc.) **deve** incluir o parâmetro `--repo vianahub-pt/VianaHub.Global.Gerit`.
+
+O repositório `vianahub-pt/VianaHub.Global.Gerit` deve ser validado dinamicamente no início da execução via `git remote get-url origin`. Se o remote apontar para outro repositório, usar o nome correto.
+
+**Exemplos obrigatórios para todos os comandos que referenciam issue:**
+- `gh issue view NUMERO --repo vianahub-pt/VianaHub.Global.Gerit`
+- `gh issue edit NUMERO --repo vianahub-pt/VianaHub.Global.Gerit --add-assignee @me`
+- `gh issue comment NUMERO --repo vianahub-pt/VianaHub.Global.Gerit --body "..."`
+- `gh pr create --repo vianahub-pt/VianaHub.Global.Gerit --base develop --title "..." --body "Closes #NUMERO"`
+- `gh pr view NUMERO --repo vianahub-pt/VianaHub.Global.Gerit`
+
+### Como obter o ITEM_ID do projeto com segurança
+
+O comando `gh project item-edit` não aceita `--repo`, mas o `ITEM_ID` deve ser obtido com cuidado para evitar mover acidentalmente cards de outro repositório.
+
+**Procedimento correto:**
+
+1. Obtenha o node ID global da issue no repositório correto:
+   ```bash
+   gh issue view NUMERO --repo vianahub-pt/VianaHub.Global.Gerit --json id
+   ```
+
+2. Use o node ID da issue para localizar o item correspondente no board:
+   ```bash
+   gh project item-list 1 --owner vianahub-pt --format json | ConvertFrom-Json | Where-Object { $_.content.id -eq "NODE_ID_DA_ISSUE" } | Select-Object -ExpandProperty id
+   ```
+
+**Nunca** use apenas o número da issue para localizar um item no board, pois o projeto pode conter issues de múltiplos repositórios com números repetidos. Sempre verifique pelo `content.id` (node ID) ou `content.url` completo.
+
+---
+
 # Comandos Essenciais do `gh`
 
 ```bash
@@ -138,6 +173,8 @@ gh project item-edit --project-id PVT_kwHODGRT384BZCnv --id ITEM_ID --field-id P
 gh project item-edit --project-id PVT_kwHODGRT384BZCnv --id ITEM_ID --field-id PVTSSF_lAHODGRT384BZCnvzhUEIlE --single-select-option-id eda9b53c
 gh issue comment NUMERO --repo vianahub-pt/VianaHub.Global.Gerit --body "Comentário"
 gh issue view NUMERO --repo vianahub-pt/VianaHub.Global.Gerit
+# Obter node ID de uma issue (usado para localizar item no board com segurança)
+gh issue view NUMERO --repo vianahub-pt/VianaHub.Global.Gerit --json id
 ```
 
 # Convenções do Projeto
@@ -242,9 +279,9 @@ Como [persona], quero [ação/funcionalidade], para que [benefício].
 ## Handoff para Kanban Coordinator
 
 ### Issue
-- Número: `vianahub-pt/NOME_DO_REPO#NUMERO`
-- Link: LINK_DA_ISSUE (URL completa)
-- Repositório: vianahub-pt/NOME_DO_REPO
+- Número: `vianahub-pt/VianaHub.Global.Gerit#NUMERO`
+- Link completo da issue: `https://github.com/vianahub-pt/VianaHub.Global.Gerit/issues/NUMERO`
+- Repositório: vianahub-pt/VianaHub.Global.Gerit
 - Status atual: To do
 
 ### Classificação do PO
