@@ -42,6 +42,10 @@ using VianaHub.Global.Gerit.Api.Validators.Business.VisitTeamVehicles;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Identity.UserPreferences;
 using VianaHub.Global.Gerit.Api.Validators.Identity.UserPreferences;
 
+// Client DTOs & Validators
+using VianaHub.Global.Gerit.Application.Dtos.Request.Business.Client;
+using VianaHub.Global.Gerit.Api.Validators.Business.Client;
+
 namespace VianaHub.Global.Gerit.Api.Configuration;
 
 /// <summary>
@@ -125,6 +129,9 @@ public static class RouteValidatorSetup
         // UserPreferences Route Validators
         services.AddScoped<IValidator<CreateUserPreferencesRequest>, CreateUserPreferencesRouteValidator>();
         services.AddScoped<IValidator<UpdateUserPreferencesRequest>, UpdateUserPreferencesRouteValidator>();
+
+        // Client Route Validators
+        services.AddScoped<IValidator<CreateClientRequest>, CreateClientRouteValidator>();
 
         return services;
     }
