@@ -1,76 +1,80 @@
-# Gerit API
+# Gerit API — Backend
 
 Construída com **.NET 8**, seguindo **Arquitetura Hexagonal**, **DDD**, **SOLID** e **Clean Architecture**.
 
-## Project
+## Projeto
 
 - **Solution**: `VianaHub.Global.Gerit.sln` — .NET 8 ASP.NET Core Minimal API
-- **Architecture**: DDD + Clean Architecture + Hexagonal, multi-tenant SaaS (Gerit)
-- **Stack**: EF Core 8 + SQL Server, FluentValidation 12, AutoMapper, Serilog, Hangfire, JWT RS256 (per-tenant keys), OpenTelemetry
+- **Arquitetura**: DDD + Clean Architecture + Hexagonal, multi-tenant SaaS (Gerit)
+- **Stack**: EF Core 8 + SQL Server, FluentValidation 12, AutoMapper, Serilog, Hangfire, JWT RS256 (chaves por tenant), OpenTelemetry
+- **Testes**: xUnit + Moq + NBuilder + coverlet
 
-## Solution structure
+## Estrutura da Solution
 
-| Project | Responsibility |
+| Projeto | Responsabilidade |
 |---|---|
 | `src/*.Api` | Minimal API endpoints (`[EndpointMapper]` + `MapEndpointsFromAssembly()`), Swagger, middleware |
-| `src/*.Application` | Use-case orchestration, DTOs, AutoMapper profiles, semantic HTTP codes (409, 410) |
-| `src/*.Domain` | Entities, domain services, validators, interfaces. Rich domain model. |
-| `src/*.Infra.Data` | EF Core DbContext, SQL Server, mappings, repositories, tenant interceptors |
-| `src/*.Infra.IoC` | Single `DependencyInjection.cs` — all DI registration |
-| `src/*.Infra.Integration` | External integrations (NoOpEmailSender) |
-| `src/*.Infra.Job` | Hangfire jobs, hosted services |
+| `src/*.Application` | Orquestração de use-cases, DTOs, perfis AutoMapper, códigos HTTP semânticos (409, 410) |
+| `src/*.Domain` | Entidades, serviços de domínio, validadores, interfaces. Rich domain model. |
+| `src/*.Infra.Data` | EF Core DbContext, SQL Server, mappings, repositórios, interceptors tenant |
+| `src/*.Infra.IoC` | `DependencyInjection.cs` — registro único de DI |
+| `src/*.Infra.Integration` | Integrações externas (NoOpEmailSender) |
+| `src/*.Infra.Job` | Jobs Hangfire, hosted services |
 | `tests/*.Tests` | xUnit + Moq + NBuilder + coverlet |
 
-Leftover folders (not .csproj projects): `Application.Services`, `Infra.Data.Repository.Business`, `Infra.Messaging` — may hold code in transition.
-
-## Commands
+## Comandos
 
 ```powershell
-dotnet build                      # build solution
-dotnet test                       # run all tests (xUnit)
+dotnet build                      # build da solution
+dotnet test                       # executa todos os testes (xUnit)
 dotnet test --filter "Category=Unit"
-dotnet run --project src/*.Api    # run API (launches Swagger at /swagger)
+dotnet run --project src/*.Api    # executa a API (Swagger em /swagger)
 ```
 
-## Endpoint conventions
+## Convenções de Endpoints
 
-- File: `{Entity}Endpoint.cs` (singular). Class: `{Entity}Endpoint` (singular).
-- Method: `Map{Entity}Endpoints` (plural), annotated with `[EndpointMapper]`.
-- Auto-discovered via `MapEndpointsFromAssembly()` in `Program.cs`.
-- Grouped in `Endpoints/{Billing,Identity,Business,Job}/`.
-- Auth policy: `"BackOffice"` (requires authenticated user).
+- Arquivo: `{Entidade}Endpoint.cs` (singular). Classe: `{Entidade}Endpoint` (singular).
+- Método: `Map{Entidade}Endpoints` (plural), anotado com `[EndpointMapper]`.
+- Auto-descoberta via `MapEndpointsFromAssembly()` em `Program.cs`.
+- Agrupados em `Endpoints/{Billing,Identity,Business,Job}/`.
+- Política de autorização: `"BackOffice"` (requer usuário autenticado).
 
-## Architecture rules (hard constraints)
+## Regras de Arquitetura (restrições rígidas)
 
-- **No `throw` for user-facing messages** — use `INotify` to accumulate messages + HTTP status. Exceptions are for technical failures only (captured by `GlobalExceptionMiddleware`).
-- **All user-facing strings must use localization keys** — never hardcode messages. Keys in `src/*.Api/Localization/` per language (pt-PT, en-US, es-ES). Culture from `Accept-Language` header, fallback pt-PT.
-- **410 Gone** for missing/deactivated resources by ID. **409 Conflict** for duplicate creation. Both handled in Application layer via `INotify`.
-- **Code in English**, comments in Portuguese (Brazilian Portuguese). Communication in Portuguese.
+- **Sem `throw` para mensagens ao usuário** — use `INotify` para acumular mensagens + status HTTP. Exceções são apenas para falhas técnicas (capturadas pelo `GlobalExceptionMiddleware`).
+- **Todas as strings para o usuário DEVEM usar chaves de localização** — nunca mensagens hardcoded. Chaves em `src/*.Api/Localization/` por idioma (pt-PT, en-US, es-ES). Cultura do header `Accept-Language`, fallback pt-PT.
+- **410 Gone** para recursos removidos/desativados por ID. **409 Conflict** para criação duplicada. Ambos tratados na camada Application via `INotify`.
+- **Código em inglês**, comentários em português. Comunicação em português.
 
 ## Multi-tenant
 
-- Row-Level Security (RLS) via SQL Server `SESSION_CONTEXT`.
-- Two EF Core interceptors: `TenantSessionConnectionInterceptor` + `TenantSessionCommandInterceptor`.
-- `IRequestTenantContext` for unauthenticated requests (login/register).
-- JWT per tenant with RSA key rotation. Master key from env var `JWT_MASTER_KEY`.
+- Row-Level Security (RLS) via `SESSION_CONTEXT` do SQL Server.
+- Dois interceptors EF Core: `TenantSessionConnectionInterceptor` + `TenantSessionCommandInterceptor`.
+- `IRequestTenantContext` para requisições não autenticadas (login/register).
+- JWT por tenant com rotação de chaves RSA. Master key da env var `JWT_MASTER_KEY`.
 
 ## DI
 
-- **Single entry point**: `VianaHub.Global.Gerit.Infra.IoC/DependencyInjection.cs`, method `AddGeritInfrastructure()`.
-- Named policy: `"BackOffice"` defined in `Program.cs`.
-- Notifications: `INotify` / `Notify` (Scoped).
-- Current user: `ICurrentUserService` → `CurrentUserApiService`.
-- Localization: `ILocalizationService` → `LocalizationService` (Singleton).
-- Secret provider: `ISecretProvider` → `SecretProviderEnvironment` (reads `JWT_MASTER_KEY` env var).
+- **Ponto único**: `VianaHub.Global.Gerit.Infra.IoC/DependencyInjection.cs`, método `AddGeritInfrastructure()`.
+- Política nomeada: `"BackOffice"` definida em `Program.cs`.
+- Notificações: `INotify` / `Notify` (Scoped).
+- Usuário corrente: `ICurrentUserService` → `CurrentUserApiService`.
+- Localização: `ILocalizationService` → `LocalizationService` (Singleton).
+- Provedor de segredos: `ISecretProvider` → `SecretProviderEnvironment` (lê env var `JWT_MASTER_KEY`).
 
-## Existing instruction files
+## Arquivos de Instrução
 
-- `.opencode/agents/developer.md` — dev workflow, layer conventions
-- `.opencode/agents/po.md` — user story format
-- `.opencode/agents/qa.md` — validation checklist
-- `docs/ARCHITECTURE.md` — full architecture guide
-- `docs/CONTEXTO_COMPLETO_APLICACAO.md` — comprehensive context document
-- `src/VianaHub.Global.Gerit.Infra.IoC/DependencyInjection.cs` — source of truth for DI wiring
+- `.opencode/opencode.json` — configuração principal do OpenCode
+- `.opencode/instructions/kanban-flow.md` — fluxo Kanban compartilhado entre agentes
+- `.opencode/agents/kanban-coordinator.md` — orquestrador do fluxo PO → Developer → QA
+- `.opencode/agents/po.md` — formato de histórias de usuário e issues
+- `.opencode/agents/developer-junior.md` — desenvolvedor de baixa complexidade
+- `.opencode/agents/developer-pleno.md` — desenvolvedor de média complexidade
+- `.opencode/agents/developer-senior.md` — desenvolvedor de alta complexidade/arquitetura
+- `.opencode/agents/qa.md` — checklist de validação e testes
+- `docs/ARCHITECTURE.md` — guia completo de arquitetura
+- `docs/CONTEXTO_COMPLETO_APLICACAO.md` — documento de contexto abrangente
+- `src/VianaHub.Global.Gerit.Infra.IoC/DependencyInjection.cs` — fonte da verdade para DI
 
 ---
 
@@ -79,17 +83,19 @@ dotnet run --project src/*.Api    # run API (launches Swagger at /swagger)
 **Board:** `https://github.com/users/vianahub-pt/projects/1`
 **Repo:** `vianahub-pt/VianaHub.Global.Gerit`
 
-### Project IDs (for `gh` commands)
+> ⚠️ **Multi-repo:** Este board gerencia issues de VÁRIOS repositórios. NUNCA refira issue apenas pelo número (`#92`). Use sempre `vianahub-pt/{repo}#{n}`. Sempre use `--repo` em comandos `gh`.
 
-| Field | ID |
+### Project IDs (para comandos `gh`)
+
+| Campo | ID |
 |-------|-----|
 | Project ID | `PVT_kwHODGRT384BZCnv` |
 | Status Field ID | `PVTSSF_lAHODGRT384BZCnvzhUEIlE` |
 
-### Status Option IDs (Kanban Columns)
+### Status Option IDs (Colunas Kanban)
 
-| Coluna | Option ID | Responsável | Quando card vai para cá | Ação |
-|--------|-----------|-------------|------------------------|------|
+| Coluna | Option ID | Responsável | Quando o card vai para cá | Ação |
+|--------|-----------|-------------|---------------------------|------|
 | **Backlog** | `f75ad846` | PO | Card criado | Cria issue no GitHub, documenta |
 | **To do** | `eda9b53c` | PO → Developer | Card pronto para dev | Developer cria branch e implementa |
 | **In Progress** | `47fc9ee4` | Developer | Developer pega o card | Implementa, testa, faz commit |
@@ -97,8 +103,6 @@ dotnet run --project src/*.Api    # run API (launches Swagger at /swagger)
 | **In Test** | `94a9d6f6` | QA | QA pega o card | Testa, valida, gera relatório |
 | **For Deploy** | `add10e44` | QA → DevOps | QA aprova | Passa para deploy |
 | **Done** | `98236657` | DevOps | Deploy completo | Card finalizado |
-
----
 
 ## Automação do Fluxo Kanban (REGRAS INVIOLÁVEIS)
 
@@ -114,7 +118,7 @@ Backlog → To do → In Progress → For Tests → In Test → Done → For Dep
 PO → DEVELOPER → QA → Done → Humano (só aprova PR)
 ```
 
-**REgra de ouro: O humano SÓ aprova o PR. NUNCA faz merge, NUNCA implementa, NUNCA testa.**
+**Regra de ouro: O humano SÓ aprova o PR. NUNCA faz merge, NUNCA implementa, NUNCA testa.**
 
 ### Regras de Automação (CRÍTICAS)
 
@@ -135,7 +139,7 @@ PO → DEVELOPER → QA → Done → Humano (só aprova PR)
 │  - NUNCA implementa código                                   │
 │  - NUNCA testa                                              │
 │  - NUNCA faz merge                                          │
-│  - NÚNCA move cards no board                                │
+│  - NUNCA move cards no board                                │
 │  - NUNCA invoca agentes                                     │
 │                                                             │
 │  TODO O RESTO É AUTOMÁTICO ENTRE AGENTES                    │
@@ -163,18 +167,19 @@ PO → DEVELOPER → QA → Done → Humano (só aprova PR)
 O workflow segue uma cadeia estrita através das colunas do Kanban. **A AUTOMAÇÃO É OBRIGATÓRIA** — os agentes devem invocar automaticamente o próximo agente da cadeia sem intervenção humana.
 
 ```
-PO → DEVELOPER → QA → Done → Human (PR Approval Only)
-Backlog → To do → In Progress → For Tests → In Test → Done → For Deploy → Done
+PO -> Kanban Coordinator -> Developer Junior | Developer Pleno | Developer Senior -> QA
+Backlog -> To do -> In Progress -> For Tests -> In Test -> For Deploy -> Done
 ```
-
-### Cadeia Automatizada de Agentes
 
 | Agente | Colunas | Ação | Automação |
 |--------|---------|------|-----------|
-| **PO** | Backlog → To do | Cria issue, documenta, move para To do | **AC automaticamente o DEVELOPER** |
-| **DEVELOPER** | To do → In Progress → For Tests | Implementa, testa, commita, cria PR | **AC automaticamente o QA** |
-| **QA** | For Tests → In Test → Done | Valida, testa, gera relatório | **Move para Done automaticamente** |
-| **Humano** | Done | **SÓ aprova o PR** (merge feature → develop) | **MANUAL — Nunca feito por agentes** |
+| **PO** | Backlog → To do | Cria issue, documenta, move para To do | Entrega para o Kanban Coordinator |
+| **Kanban Coordinator** | To do | Classifica complexidade, escolhe Developer | Aciona Developer Junior/Pleno/Senior |
+| **Developer Junior** | To do → In Progress → For Tests | Implementa tarefas simples | Aciona QA ao mover para For Tests |
+| **Developer Pleno** | To do → In Progress → For Tests | Implementa tarefas intermediárias | Aciona QA ao mover para For Tests |
+| **Developer Senior** | To do → In Progress → For Tests | Implementa tarefas complexas/arquiteturais | Aciona QA ao mover para For Tests |
+| **QA** | For Tests → In Test → For Deploy | Valida, testa, gera relatório | Move para For Deploy (aprovado) ou In Progress (reprovado) |
+| **Humano** | For Deploy | **SÓ aprova o PR** (merge feature → develop) | **MANUAL — Nunca feito por agentes** |
 
 ### Regras de Automação (CRÍTICAS)
 

@@ -141,6 +141,11 @@
   "Api.Validator.ConsentType.Update.Description": "Description is required",
   "Api.Validator.ConsentType.Update.Description.MaximumLength": "Description must be at most {0} characters",
 
+  "Api.Validator.Client.Create.ClientType": "Client type is required",
+  "Api.Validator.Client.Create.OriginType": "Client origin is required",
+  "Api.Validator.Client.Create.UrlImage.MaximumLength": "Image URL must be at most {0} characters",
+  "Api.Validator.Client.Create.Note.MaximumLength": "Note must be at most {0} characters",
+
   "Api.Validator.ClientAddress.Create.ClientId": "Client ID is required",
   "Api.Validator.ClientAddress.Create.AddressTypeId": "Address type ID is required",
   "Api.Validator.ClientAddress.Create.Street": "Street is required",
@@ -204,6 +209,7 @@
   "Api.Middleware.GlobalException.DbUpdateException.Error.InternalServerError": "Internal Server Error",
   "Api.Middleware.GlobalException.DbUpdateException.Error.UnexpectedError.User": "An unexpected error occurred. Our team has been notified and is working on a solution",
   "Api.Middleware.GlobalException.DbUpdateException.Error.FieldLabel.System": "System",
+  "Api.Middleware.GlobalException.DbUpdateException.Error.FieldTruncation": "The field '{0}' exceeded the allowed character limit. Please reduce the text and try again",
 
   "Api.Middleware.GlobalException.JsonException.Error.JsonFormatError": "Invalid JSON Format",
   "Api.Middleware.GlobalException.JsonException.Error.FieldLabel.Format": "Format",
