@@ -1,4 +1,4 @@
-﻿GO
+GO
 INSERT INTO dbo.AddressTypes (Name, Description, CreatedBy)
 SELECT v.Name, v.Description, 1
 FROM (VALUES
@@ -833,7 +833,430 @@ VALUES
 (1, 2, 47,6),
 (1, 2, 47,7),
 (1, 2, 47,8),
-(1, 2, 47,9)
+(1, 2, 47,9),
+(2, 8, 1,1),
+(2, 8, 1,2),
+(2, 8, 1,3),
+(2, 8, 1,4),
+(2, 8, 1,5),
+(2, 8, 1,6),
+(2, 8, 1,7),
+(2, 8, 1,8),
+(2, 8, 1,9),
+(2, 8, 2,1),
+(2, 8, 2,2),
+(2, 8, 2,3),
+(2, 8, 2,4),
+(2, 8, 2,5),
+(2, 8, 2,6),
+(2, 8, 2,7),
+(2, 8, 2,8),
+(2, 8, 2,9),
+(2, 8, 3,1),
+(2, 8, 3,2),
+(2, 8, 3,3),
+(2, 8, 3,4),
+(2, 8, 3,5),
+(2, 8, 3,6),
+(2, 8, 3,7),
+(2, 8, 3,8),
+(2, 8, 3,9),
+(2, 8, 4,1),
+(2, 8, 4,2),
+(2, 8, 4,3),
+(2, 8, 4,4),
+(2, 8, 4,5),
+(2, 8, 4,6),
+(2, 8, 4,7),
+(2, 8, 4,8),
+(2, 8, 4,9),
+(2, 8, 5,1),
+(2, 8, 5,2),
+(2, 8, 5,3),
+(2, 8, 5,4),
+(2, 8, 5,5),
+(2, 8, 5,6),
+(2, 8, 5,7),
+(2, 8, 5,8),
+(2, 8, 5,9),
+(2, 8, 6,1),
+(2, 8, 6,2),
+(2, 8, 6,3),
+(2, 8, 6,4),
+(2, 8, 6,5),
+(2, 8, 6,6),
+(2, 8, 6,7),
+(2, 8, 6,8),
+(2, 8, 6,9),
+(2, 8, 7,1),
+(2, 8, 7,2),
+(2, 8, 7,3),
+(2, 8, 7,4),
+(2, 8, 7,5),
+(2, 8, 7,6),
+(2, 8, 7,7),
+(2, 8, 7,8),
+(2, 8, 7,9),
+(2, 8, 8,1),
+(2, 8, 8,2),
+(2, 8, 8,3),
+(2, 8, 8,4),
+(2, 8, 8,5),
+(2, 8, 8,6),
+(2, 8, 8,7),
+(2, 8, 8,8),
+(2, 8, 8,9),
+(2, 8, 9,1),
+(2, 8, 9,2),
+(2, 8, 9,3),
+(2, 8, 9,4),
+(2, 8, 9,5),
+(2, 8, 9,6),
+(2, 8, 9,7),
+(2, 8, 9,8),
+(2, 8, 9,9),
+(2, 8, 10,1),
+(2, 8, 10,2),
+(2, 8, 10,3),
+(2, 8, 10,4),
+(2, 8, 10,5),
+(2, 8, 10,6),
+(2, 8, 10,7),
+(2, 8, 10,8),
+(2, 8, 10,9),
+(2, 8, 11,1),
+(2, 8, 11,2),
+(2, 8, 11,3),
+(2, 8, 11,4),
+(2, 8, 11,5),
+(2, 8, 11,6),
+(2, 8, 11,7),
+(2, 8, 11,8),
+(2, 8, 11,9),
+(2, 8, 12,1),
+(2, 8, 12,2),
+(2, 8, 12,3),
+(2, 8, 12,4),
+(2, 8, 12,5),
+(2, 8, 12,6),
+(2, 8, 12,7),
+(2, 8, 12,8),
+(2, 8, 12,9),
+(2, 8, 13,1),
+(2, 8, 13,2),
+(2, 8, 13,3),
+(2, 8, 13,4),
+(2, 8, 13,5),
+(2, 8, 13,6),
+(2, 8, 13,7),
+(2, 8, 13,8),
+(2, 8, 13,9),
+(2, 8, 14,1),
+(2, 8, 14,2),
+(2, 8, 14,3),
+(2, 8, 14,4),
+(2, 8, 14,5),
+(2, 8, 14,6),
+(2, 8, 14,7),
+(2, 8, 14,8),
+(2, 8, 14,9),
+(2, 8, 15,1),
+(2, 8, 15,2),
+(2, 8, 15,3),
+(2, 8, 15,4),
+(2, 8, 15,5),
+(2, 8, 15,6),
+(2, 8, 15,7),
+(2, 8, 15,8),
+(2, 8, 15,9),
+(2, 8, 16,1),
+(2, 8, 16,2),
+(2, 8, 16,3),
+(2, 8, 16,4),
+(2, 8, 16,5),
+(2, 8, 16,6),
+(2, 8, 16,7),
+(2, 8, 16,8),
+(2, 8, 16,9),
+(2, 8, 17,1),
+(2, 8, 17,2),
+(2, 8, 17,3),
+(2, 8, 17,4),
+(2, 8, 17,5),
+(2, 8, 17,6),
+(2, 8, 17,7),
+(2, 8, 17,8),
+(2, 8, 17,9),
+(2, 8, 18,1),
+(2, 8, 18,2),
+(2, 8, 18,3),
+(2, 8, 18,4),
+(2, 8, 18,5),
+(2, 8, 18,6),
+(2, 8, 18,7),
+(2, 8, 18,8),
+(2, 8, 18,9),
+(2, 8, 19,1),
+(2, 8, 19,2),
+(2, 8, 19,3),
+(2, 8, 19,4),
+(2, 8, 19,5),
+(2, 8, 19,6),
+(2, 8, 19,7),
+(2, 8, 19,8),
+(2, 8, 19,9),
+(2, 8, 20,1),
+(2, 8, 20,2),
+(2, 8, 20,3),
+(2, 8, 20,4),
+(2, 8, 20,5),
+(2, 8, 20,6),
+(2, 8, 20,7),
+(2, 8, 20,8),
+(2, 8, 20,9),
+(2, 8, 21,1),
+(2, 8, 21,2),
+(2, 8, 21,3),
+(2, 8, 21,4),
+(2, 8, 21,5),
+(2, 8, 21,6),
+(2, 8, 21,7),
+(2, 8, 21,8),
+(2, 8, 21,9),
+(2, 8, 22,1),
+(2, 8, 22,2),
+(2, 8, 22,3),
+(2, 8, 22,4),
+(2, 8, 22,5),
+(2, 8, 22,6),
+(2, 8, 22,7),
+(2, 8, 22,8),
+(2, 8, 22,9),
+(2, 8, 23,1),
+(2, 8, 23,2),
+(2, 8, 23,3),
+(2, 8, 23,4),
+(2, 8, 23,5),
+(2, 8, 23,6),
+(2, 8, 23,7),
+(2, 8, 23,8),
+(2, 8, 23,9),
+(2, 8, 24,1),
+(2, 8, 24,2),
+(2, 8, 24,3),
+(2, 8, 24,4),
+(2, 8, 24,5),
+(2, 8, 24,6),
+(2, 8, 24,7),
+(2, 8, 24,8),
+(2, 8, 24,9),
+(2, 8, 25,1),
+(2, 8, 25,2),
+(2, 8, 25,3),
+(2, 8, 25,4),
+(2, 8, 25,5),
+(2, 8, 25,6),
+(2, 8, 25,7),
+(2, 8, 25,8),
+(2, 8, 25,9),
+(2, 8, 26,1),
+(2, 8, 26,2),
+(2, 8, 26,3),
+(2, 8, 26,4),
+(2, 8, 26,5),
+(2, 8, 26,6),
+(2, 8, 26,7),
+(2, 8, 26,8),
+(2, 8, 26,9),
+(2, 8, 27,1),
+(2, 8, 27,2),
+(2, 8, 27,3),
+(2, 8, 27,4),
+(2, 8, 27,5),
+(2, 8, 27,6),
+(2, 8, 27,7),
+(2, 8, 27,8),
+(2, 8, 27,9),
+(2, 8, 28,1),
+(2, 8, 28,2),
+(2, 8, 28,3),
+(2, 8, 28,4),
+(2, 8, 28,5),
+(2, 8, 28,6),
+(2, 8, 28,7),
+(2, 8, 28,8),
+(2, 8, 28,9),
+(2, 8, 29,1),
+(2, 8, 29,2),
+(2, 8, 29,3),
+(2, 8, 29,4),
+(2, 8, 29,5),
+(2, 8, 29,6),
+(2, 8, 29,7),
+(2, 8, 29,8),
+(2, 8, 29,9),
+(2, 8, 30,1),
+(2, 8, 30,2),
+(2, 8, 30,3),
+(2, 8, 30,4),
+(2, 8, 30,5),
+(2, 8, 30,6),
+(2, 8, 30,7),
+(2, 8, 30,8),
+(2, 8, 30,9),
+(2, 8, 31,1),
+(2, 8, 31,2),
+(2, 8, 31,3),
+(2, 8, 31,4),
+(2, 8, 31,5),
+(2, 8, 31,6),
+(2, 8, 31,7),
+(2, 8, 31,8),
+(2, 8, 31,9),
+(2, 8, 32,1),
+(2, 8, 32,2),
+(2, 8, 32,3),
+(2, 8, 32,4),
+(2, 8, 32,5),
+(2, 8, 32,6),
+(2, 8, 32,7),
+(2, 8, 32,8),
+(2, 8, 32,9),
+(2, 8, 33,1),
+(2, 8, 33,2),
+(2, 8, 33,3),
+(2, 8, 33,4),
+(2, 8, 33,5),
+(2, 8, 33,6),
+(2, 8, 33,7),
+(2, 8, 33,8),
+(2, 8, 33,9),
+(2, 8, 34,1),
+(2, 8, 34,2),
+(2, 8, 34,3),
+(2, 8, 34,4),
+(2, 8, 34,5),
+(2, 8, 34,6),
+(2, 8, 34,7),
+(2, 8, 34,8),
+(2, 8, 34,9),
+(2, 8, 35,1),
+(2, 8, 35,2),
+(2, 8, 35,3),
+(2, 8, 35,4),
+(2, 8, 35,5),
+(2, 8, 35,6),
+(2, 8, 35,7),
+(2, 8, 35,8),
+(2, 8, 35,9),
+(2, 8, 36,1),
+(2, 8, 36,2),
+(2, 8, 36,3),
+(2, 8, 36,4),
+(2, 8, 36,5),
+(2, 8, 36,6),
+(2, 8, 36,7),
+(2, 8, 36,8),
+(2, 8, 36,9),
+(2, 8, 37,1),
+(2, 8, 37,2),
+(2, 8, 37,3),
+(2, 8, 37,4),
+(2, 8, 37,5),
+(2, 8, 37,6),
+(2, 8, 37,7),
+(2, 8, 37,8),
+(2, 8, 37,9),
+(2, 8, 38,1),
+(2, 8, 38,2),
+(2, 8, 38,3),
+(2, 8, 38,4),
+(2, 8, 38,5),
+(2, 8, 38,6),
+(2, 8, 38,7),
+(2, 8, 38,8),
+(2, 8, 38,9),
+(2, 8, 39,1),
+(2, 8, 39,2),
+(2, 8, 39,3),
+(2, 8, 39,4),
+(2, 8, 39,5),
+(2, 8, 39,6),
+(2, 8, 39,7),
+(2, 8, 39,8),
+(2, 8, 39,9),
+(2, 8, 40,1),
+(2, 8, 40,2),
+(2, 8, 40,3),
+(2, 8, 40,4),
+(2, 8, 40,5),
+(2, 8, 40,6),
+(2, 8, 40,7),
+(2, 8, 40,8),
+(2, 8, 40,9),
+(2, 8, 41,1),
+(2, 8, 41,2),
+(2, 8, 41,3),
+(2, 8, 41,4),
+(2, 8, 41,5),
+(2, 8, 41,6),
+(2, 8, 41,7),
+(2, 8, 41,8),
+(2, 8, 41,9),
+(2, 8, 42,1),
+(2, 8, 42,2),
+(2, 8, 42,3),
+(2, 8, 42,4),
+(2, 8, 42,5),
+(2, 8, 42,6),
+(2, 8, 42,7),
+(2, 8, 42,8),
+(2, 8, 42,9),
+(2, 8, 43,1),
+(2, 8, 43,2),
+(2, 8, 43,3),
+(2, 8, 43,4),
+(2, 8, 43,5),
+(2, 8, 43,6),
+(2, 8, 43,7),
+(2, 8, 43,8),
+(2, 8, 43,9),
+(2, 8, 44,1),
+(2, 8, 44,2),
+(2, 8, 44,3),
+(2, 8, 44,4),
+(2, 8, 44,5),
+(2, 8, 44,6),
+(2, 8, 44,7),
+(2, 8, 44,8),
+(2, 8, 44,9),
+(2, 8, 45,1),
+(2, 8, 45,2),
+(2, 8, 45,3),
+(2, 8, 45,4),
+(2, 8, 45,5),
+(2, 8, 45,6),
+(2, 8, 45,7),
+(2, 8, 45,8),
+(2, 8, 45,9),
+(2, 8, 46,1),
+(2, 8, 46,2),
+(2, 8, 46,3),
+(2, 8, 46,4),
+(2, 8, 46,5),
+(2, 8, 46,6),
+(2, 8, 46,7),
+(2, 8, 46,8),
+(2, 8, 46,9),
+(2, 8, 47,1),
+(2, 8, 47,2),
+(2, 8, 47,3),
+(2, 8, 47,4),
+(2, 8, 47,5),
+(2, 8, 47,6),
+(2, 8, 47,7),
+(2, 8, 47,8),
+(2, 8, 47,9)
 GO
 DECLARE @Now DATETIME2 = SYSDATETIME();
 WITH Seasons AS (
@@ -914,8 +1337,8 @@ INSERT INTO dbo.UserRoles (TenantId, UserId, RoleId )
 SELECT t.Id, u.Id, r.Id
 FROM (
     VALUES
-        (N'VianaHub Lda',   N'VIANA.DENER@GMAIL.COM', N'SuperAdmin'),
-        (N'Gerit Demo Lda', N'ADMIN@GERITAPP.COM',    N'Admin'),
+        (N'VianaHub Lda',   N'VIANA.DENER@GMAIL.COM', N'BackOffice'),
+        (N'Gerit Demo Lda', N'ADMIN@GERITAPP.COM',    N'BackOffice'),
         (N'Teste Lda',      N'USER@GERITAPP.COM',     N'User')
 ) AS x (TenantName, NormalizedEmail, RoleName
 )
@@ -934,5 +1357,306 @@ WHERE NOT EXISTS (
       AND ur.UserId = u.Id
       AND ur.RoleId = r.Id
 );
+GO
+
+/* ============================================================================
+   Seed de clientes para TenantId = 1
+   - 12 clientes no total
+   - 4 clientes pessoa física: ClientType 1, 2 e 3
+   - 8 clientes empresa: ClientType 4 e 5
+   - OriginType conforme enum informado
+   - Bloco idempotente usando Note com chave técnica [InitialSeed:Client-XXX]
+   ============================================================================ */
+GO
+DECLARE @TenantId INT = 1;
+DECLARE @CreatedBy INT = 1;
+
+DECLARE @ResidentialAddressTypeId INT = COALESCE(
+    (SELECT TOP 1 Id FROM dbo.AddressTypes WHERE Name = N'Morada residencial' AND IsDeleted = 0),
+    1
+);
+
+DECLARE @CommercialAddressTypeId INT = COALESCE(
+    (SELECT TOP 1 Id FROM dbo.AddressTypes WHERE Name = N'Morada comercial' AND IsDeleted = 0),
+    @ResidentialAddressTypeId
+);
+
+DECLARE @SeedClients TABLE
+(
+    SeedKey NVARCHAR(50) NOT NULL PRIMARY KEY,
+    ClientId INT NULL,
+    ClientType INT NOT NULL,
+    OriginType INT NOT NULL,
+    Note NVARCHAR(500) NOT NULL,
+
+    FirstName NVARCHAR(100) NULL,
+    LastName NVARCHAR(100) NULL,
+    LegalName NVARCHAR(200) NULL,
+    TradeName NVARCHAR(200) NULL,
+
+    PhoneNumber NVARCHAR(50) NULL,
+    CellPhoneNumber NVARCHAR(50) NULL,
+    IsWhatsapp BIT NOT NULL,
+    Email NVARCHAR(500) NULL,
+
+    BirthDate DATE NULL,
+    Gender NVARCHAR(20) NULL,
+    DocumentType NVARCHAR(50) NULL,
+    DocumentNumber NVARCHAR(50) NULL,
+    Nationality NVARCHAR(100) NULL,
+
+    Site NVARCHAR(500) NULL,
+    CompanyRegistration NVARCHAR(50) NULL,
+    CAE NVARCHAR(10) NULL,
+    NumberOfEmployee INT NULL,
+    LegalRepresentative NVARCHAR(150) NULL,
+
+    TaxNumber NVARCHAR(20) NOT NULL,
+    VatNumber NVARCHAR(20) NULL,
+    FiscalEmail NVARCHAR(255) NULL,
+    IsVatRegistered BIT NOT NULL,
+
+    AddressTypeId INT NOT NULL,
+    Street NVARCHAR(200) NOT NULL,
+    Neighborhood NVARCHAR(100) NOT NULL,
+    City NVARCHAR(100) NOT NULL,
+    District NVARCHAR(100) NULL,
+    PostalCode NVARCHAR(20) NOT NULL,
+    StreetNumber NVARCHAR(20) NULL,
+    Complement NVARCHAR(100) NULL,
+    ContactName NVARCHAR(150) NOT NULL
+);
+
+INSERT INTO @SeedClients
+(
+    SeedKey, ClientType, OriginType, Note,
+    FirstName, LastName, LegalName, TradeName,
+    PhoneNumber, CellPhoneNumber, IsWhatsapp, Email,
+    BirthDate, Gender, DocumentType, DocumentNumber, Nationality,
+    Site, CompanyRegistration, CAE, NumberOfEmployee, LegalRepresentative,
+    TaxNumber, VatNumber, FiscalEmail, IsVatRegistered,
+    AddressTypeId, Street, Neighborhood, City, District, PostalCode, StreetNumber, Complement, ContactName
+)
+VALUES
+-- 4 clientes pessoa física
+(N'Client-001', 1, 2, N'[InitialSeed:Client-001] Pessoa Singular - Mariana Costa',
+ N'Mariana', N'Costa', NULL, NULL,
+ N'289123401', N'934123401', 1, N'mariana.costa@example.pt',
+ '1992-04-18', N'Feminino', N'Cartão de Cidadão', N'12345678', N'Portugal',
+ NULL, NULL, NULL, NULL, NULL,
+ N'245789321', NULL, N'mariana.costa@example.pt', 0,
+ @ResidentialAddressTypeId, N'Rua de São Luís', N'Centro', N'Faro', N'Faro', N'8000-285', N'14', N'2.º Esq.', N'Mariana Costa'),
+
+(N'Client-002', 1, 8, N'[InitialSeed:Client-002] Pessoa Singular - João Martins',
+ N'João', N'Martins', NULL, NULL,
+ N'282123402', N'935123402', 1, N'joao.martins@example.pt',
+ '1987-09-03', N'Masculino', N'Cartão de Cidadão', N'23456789', N'Portugal',
+ NULL, NULL, NULL, NULL, NULL,
+ N'246789322', NULL, N'joao.martins@example.pt', 0,
+ @ResidentialAddressTypeId, N'Avenida da República', N'Centro', N'Portimão', N'Faro', N'8500-300', N'52', N'1.º Dt.', N'João Martins'),
+
+(N'Client-003', 2, 6, N'[InitialSeed:Client-003] Recibos Verdes - Sofia Almeida',
+ N'Sofia', N'Almeida', NULL, NULL,
+ N'213123403', N'936123403', 1, N'sofia.almeida@example.pt',
+ '1990-01-26', N'Feminino', N'Cartão de Cidadão', N'34567890', N'Portugal',
+ NULL, NULL, NULL, NULL, NULL,
+ N'247789323', N'PT247789323', N'sofia.almeida@example.pt', 1,
+ @ResidentialAddressTypeId, N'Rua do Alecrim', N'Misericórdia', N'Lisboa', N'Lisboa', N'1200-014', N'21', N'3.º', N'Sofia Almeida'),
+
+(N'Client-004', 3, 4, N'[InitialSeed:Client-004] Freelancer - Tiago Ferreira',
+ N'Tiago', N'Ferreira', NULL, NULL,
+ N'222123404', N'937123404', 1, N'tiago.ferreira@example.pt',
+ '1985-11-12', N'Masculino', N'Cartão de Cidadão', N'45678901', N'Portugal',
+ NULL, NULL, NULL, NULL, NULL,
+ N'248789324', N'PT248789324', N'tiago.ferreira@example.pt', 1,
+ @ResidentialAddressTypeId, N'Rua de Cedofeita', N'Cedofeita', N'Porto', N'Porto', N'4050-174', N'88', N'4.º Esq.', N'Tiago Ferreira'),
+
+-- 8 clientes empresa
+(N'Client-005', 4, 3, N'[InitialSeed:Client-005] Pessoa Jurídica - Algarve Tech Solutions Lda',
+ NULL, NULL, N'Algarve Tech Solutions Lda', N'Algarve Tech',
+ N'289123405', N'938123405', 1, N'geral@algarvetech.example.pt',
+ NULL, NULL, NULL, NULL, NULL,
+ N'https://algarvetech.example.pt', N'514789325', N'62010', 18, N'Ricardo Neves',
+ N'514789325', N'PT514789325', N'fiscal@algarvetech.example.pt', 1,
+ @CommercialAddressTypeId, N'Rua do Comércio', N'Baixa', N'Loulé', N'Faro', N'8100-536', N'7', N'Loja A', N'Ricardo Neves'),
+
+(N'Client-006', 4, 5, N'[InitialSeed:Client-006] Pessoa Jurídica - Lisboa Digital Services Lda',
+ NULL, NULL, N'Lisboa Digital Services Lda', N'Lisboa Digital',
+ N'211123406', N'939123406', 1, N'contacto@lisboadigital.example.pt',
+ NULL, NULL, NULL, NULL, NULL,
+ N'https://lisboadigital.example.pt', N'514789326', N'62020', 32, N'Patrícia Ramos',
+ N'514789326', N'PT514789326', N'fiscal@lisboadigital.example.pt', 1,
+ @CommercialAddressTypeId, N'Avenida da Liberdade', N'Santo António', N'Lisboa', N'Lisboa', N'1250-096', N'110', N'5.º', N'Patrícia Ramos'),
+
+(N'Client-007', 4, 7, N'[InitialSeed:Client-007] Pessoa Jurídica - Porto Creative Agency Lda',
+ NULL, NULL, N'Porto Creative Agency Lda', N'Porto Creative',
+ N'222123407', N'930123407', 1, N'hello@portocreative.example.pt',
+ NULL, NULL, NULL, NULL, NULL,
+ N'https://portocreative.example.pt', N'514789327', N'73110', 14, N'Helena Pinto',
+ N'514789327', N'PT514789327', N'fiscal@portocreative.example.pt', 1,
+ @CommercialAddressTypeId, N'Rua de Santa Catarina', N'Santo Ildefonso', N'Porto', N'Porto', N'4000-447', N'312', N'Sala 2', N'Helena Pinto'),
+
+(N'Client-008', 4, 14, N'[InitialSeed:Client-008] Pessoa Jurídica - Coimbra Business Consulting Lda',
+ NULL, NULL, N'Coimbra Business Consulting Lda', N'Coimbra Consulting',
+ N'239123408', N'931123408', 1, N'geral@coimbraconsulting.example.pt',
+ NULL, NULL, NULL, NULL, NULL,
+ N'https://coimbraconsulting.example.pt', N'514789328', N'70220', 22, N'Miguel Santos',
+ N'514789328', N'PT514789328', N'fiscal@coimbraconsulting.example.pt', 1,
+ @CommercialAddressTypeId, N'Rua Ferreira Borges', N'Baixa', N'Coimbra', N'Coimbra', N'3000-179', N'45', N'2.º', N'Miguel Santos'),
+
+(N'Client-009', 5, 2, N'[InitialSeed:Client-009] Sociedade Unipessoal por Quotas - Braga Web Studio Unipessoal Lda',
+ NULL, NULL, N'Braga Web Studio Unipessoal Lda', N'Braga Web Studio',
+ N'253123409', N'932123409', 1, N'geral@bragawebstudio.example.pt',
+ NULL, NULL, NULL, NULL, NULL,
+ N'https://bragawebstudio.example.pt', N'516789329', N'62010', 5, N'Inês Carvalho',
+ N'516789329', N'PT516789329', N'fiscal@bragawebstudio.example.pt', 1,
+ @CommercialAddressTypeId, N'Avenida Central', N'Centro', N'Braga', N'Braga', N'4710-229', N'91', N'Escritório 3', N'Inês Carvalho'),
+
+(N'Client-010', 5, 4, N'[InitialSeed:Client-010] Sociedade Unipessoal por Quotas - Aveiro Automation Unipessoal Lda',
+ NULL, NULL, N'Aveiro Automation Unipessoal Lda', N'Aveiro Automation',
+ N'234123410', N'933123410', 1, N'geral@aveiroautomation.example.pt',
+ NULL, NULL, NULL, NULL, NULL,
+ N'https://aveiroautomation.example.pt', N'516789330', N'71120', 7, N'Pedro Lima',
+ N'516789330', N'PT516789330', N'fiscal@aveiroautomation.example.pt', 1,
+ @CommercialAddressTypeId, N'Rua do Clube dos Galitos', N'Centro', N'Aveiro', N'Aveiro', N'3810-164', N'18', N'Sala 4', N'Pedro Lima'),
+
+(N'Client-011', 5, 8, N'[InitialSeed:Client-011] Sociedade Unipessoal por Quotas - Évora Design Lab Unipessoal Lda',
+ NULL, NULL, N'Évora Design Lab Unipessoal Lda', N'Évora Design Lab',
+ N'266123411', N'934123411', 1, N'geral@evoradesignlab.example.pt',
+ NULL, NULL, NULL, NULL, NULL,
+ N'https://evoradesignlab.example.pt', N'516789331', N'74100', 4, N'Carla Mendes',
+ N'516789331', N'PT516789331', N'fiscal@evoradesignlab.example.pt', 1,
+ @CommercialAddressTypeId, N'Rua da República', N'Centro Histórico', N'Évora', N'Évora', N'7000-656', N'27', N'Loja 1', N'Carla Mendes'),
+
+(N'Client-012', 5, 9, N'[InitialSeed:Client-012] Sociedade Unipessoal por Quotas - Viseu Data Services Unipessoal Lda',
+ NULL, NULL, N'Viseu Data Services Unipessoal Lda', N'Viseu Data',
+ N'232123412', N'935123412', 1, N'geral@viseudata.example.pt',
+ NULL, NULL, NULL, NULL, NULL,
+ N'https://viseudata.example.pt', N'516789332', N'63110', 6, N'André Rocha',
+ N'516789332', N'PT516789332', N'fiscal@viseudata.example.pt', 1,
+ @CommercialAddressTypeId, N'Rua Formosa', N'Centro', N'Viseu', N'Viseu', N'3500-135', N'60', N'1.º', N'André Rocha');
+
+INSERT INTO dbo.Clients (TenantId, ClientType, OriginType, UrlImage, Note, IsActive, IsDeleted, CreatedBy, CreatedAt)
+SELECT
+    @TenantId,
+    s.ClientType,
+    s.OriginType,
+    NULL,
+    s.Note,
+    1,
+    0,
+    @CreatedBy,
+    SYSDATETIME()
+FROM @SeedClients s
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM dbo.Clients c
+    WHERE c.TenantId = @TenantId
+      AND c.Note = s.Note
+);
+
+UPDATE s
+SET ClientId = c.Id
+FROM @SeedClients s
+INNER JOIN dbo.Clients c
+    ON c.TenantId = @TenantId
+   AND c.Note = s.Note;
+
+INSERT INTO dbo.ClientIndividuals
+(
+    TenantId, ClientId, FirstName, LastName, PhoneNumber, CellPhoneNumber, IsWhatsapp, Email,
+    BirthDate, Gender, DocumentType, DocumentNumber, Nationality,
+    IsActive, IsDeleted, CreatedBy, CreatedAt
+)
+SELECT
+    @TenantId, s.ClientId, s.FirstName, s.LastName, s.PhoneNumber, s.CellPhoneNumber, s.IsWhatsapp, s.Email,
+    s.BirthDate, s.Gender, s.DocumentType, s.DocumentNumber, s.Nationality,
+    1, 0, @CreatedBy, SYSDATETIME()
+FROM @SeedClients s
+WHERE s.ClientType IN (1, 2, 3)
+  AND s.ClientId IS NOT NULL
+  AND NOT EXISTS (
+      SELECT 1
+      FROM dbo.ClientIndividuals ci
+      WHERE ci.TenantId = @TenantId
+        AND ci.ClientId = s.ClientId
+  );
+
+INSERT INTO dbo.ClientCompanies
+(
+    TenantId, ClientId, LegalName, TradeName, PhoneNumber, CellPhoneNumber, IsWhatsapp, Email,
+    Site, CompanyRegistration, CAE, NumberOfEmployee, LegalRepresentative,
+    IsActive, IsDeleted, CreatedBy, CreatedAt
+)
+SELECT
+    @TenantId, s.ClientId, s.LegalName, s.TradeName, s.PhoneNumber, s.CellPhoneNumber, s.IsWhatsapp, s.Email,
+    s.Site, s.CompanyRegistration, s.CAE, s.NumberOfEmployee, s.LegalRepresentative,
+    1, 0, @CreatedBy, SYSDATETIME()
+FROM @SeedClients s
+WHERE s.ClientType IN (4, 5)
+  AND s.ClientId IS NOT NULL
+  AND NOT EXISTS (
+      SELECT 1
+      FROM dbo.ClientCompanies cc
+      WHERE cc.TenantId = @TenantId
+        AND cc.ClientId = s.ClientId
+  );
+
+INSERT INTO dbo.ClientFiscalData
+(
+    TenantId, ClientId, TaxNumber, VatNumber, FiscalCountry, IsVatRegistered, IBAN, FiscalEmail,
+    IsActive, IsDeleted, CreatedBy, CreatedAt
+)
+SELECT
+    @TenantId, s.ClientId, s.TaxNumber, s.VatNumber, 'PT', s.IsVatRegistered, NULL, s.FiscalEmail,
+    1, 0, @CreatedBy, SYSDATETIME()
+FROM @SeedClients s
+WHERE s.ClientId IS NOT NULL
+  AND NOT EXISTS (
+      SELECT 1
+      FROM dbo.ClientFiscalData fd
+      WHERE fd.TenantId = @TenantId
+        AND fd.ClientId = s.ClientId
+  );
+
+INSERT INTO dbo.ClientAddresses
+(
+    TenantId, ClientId, AddressTypeId, CountryCode, Street, Neighborhood, City, District, PostalCode,
+    StreetNumber, Complement, Latitude, Longitude, Note, IsPrimary,
+    IsActive, IsDeleted, CreatedBy, CreatedAt
+)
+SELECT
+    @TenantId, s.ClientId, s.AddressTypeId, 'PT', s.Street, s.Neighborhood, s.City, s.District, s.PostalCode,
+    s.StreetNumber, s.Complement, NULL, NULL, N'Endereço principal criado pelo seed inicial.', 1,
+    1, 0, @CreatedBy, SYSDATETIME()
+FROM @SeedClients s
+WHERE s.ClientId IS NOT NULL
+  AND NOT EXISTS (
+      SELECT 1
+      FROM dbo.ClientAddresses a
+      WHERE a.TenantId = @TenantId
+        AND a.ClientId = s.ClientId
+        AND a.IsPrimary = 1
+        AND a.IsDeleted = 0
+  );
+
+INSERT INTO dbo.ClientContacts
+(
+    TenantId, ClientId, Name, PhoneNumber, CellPhoneNumber, IsWhatsapp, Email, IsPrimary,
+    IsActive, IsDeleted, CreatedBy, CreatedAt
+)
+SELECT
+    @TenantId, s.ClientId, s.ContactName, s.PhoneNumber, s.CellPhoneNumber, s.IsWhatsapp, CONVERT(NVARCHAR(255), s.Email), 1,
+    1, 0, @CreatedBy, SYSDATETIME()
+FROM @SeedClients s
+WHERE s.ClientId IS NOT NULL
+  AND s.Email IS NOT NULL
+  AND NOT EXISTS (
+      SELECT 1
+      FROM dbo.ClientContacts ct
+      WHERE ct.TenantId = @TenantId
+        AND ct.ClientId = s.ClientId
+        AND ct.Email = CONVERT(NVARCHAR(255), s.Email)
+  );
 GO
 

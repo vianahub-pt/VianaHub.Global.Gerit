@@ -255,8 +255,7 @@ CREATE TABLE dbo.Users (                                                        
 	CONSTRAINT PK_Users PRIMARY KEY CLUSTERED (Id),
     CONSTRAINT CK_Users_Active_Deleted CHECK (NOT (IsActive = 1 AND IsDeleted = 1)),
     CONSTRAINT UQ_Users_Id_Tenant UNIQUE (Id, TenantId),
-    CONSTRAINT UQ_Users_Tenant_Email UNIQUE (TenantId, Email),			            -- Nome �nico por tenant
-    CONSTRAINT UQ_Users_Tenant_NormalizedEmail UNIQUE (TenantId, NormalizedEmail),	-- Email �nico por tenant
+    CONSTRAINT UQ_Users_NormalizedEmail UNIQUE (NormalizedEmail),	-- Email �nico por tenant
     CONSTRAINT FK_Users_Tenant FOREIGN KEY (TenantId) REFERENCES dbo.Tenants(Id)	-- FK para tenant
 );
 GO
@@ -496,14 +495,14 @@ CREATE TABLE dbo.ClientIndividuals (                                            
     FirstName           NVARCHAR(100)       NOT NULL,                                    -- Primeiro nome
     LastName            NVARCHAR(100)       NOT NULL,                                    -- Apelido
     PhoneNumber         NVARCHAR(50)            NULL,                                    -- Telefone (opcional)
-    CellPhoneNumber      NVARCHAR(50)            NULL,                                   -- Telem�vel (opcional)
-    IsWhatsapp            BIT                 NOT NULL DEFAULT 0,                        -- O n�mero de telefone � WhatsApp
+    CellPhoneNumber     NVARCHAR(50)            NULL,                                   -- Telem�vel (opcional)
+    IsWhatsapp          BIT                 NOT NULL DEFAULT 0,                        -- O n�mero de telefone � WhatsApp
     Email			    NVARCHAR(500)           NULL,                                    -- Email (opcional, pode ser usado para login)
     BirthDate           DATE                    NULL,                                    -- Data de nascimento
     Gender              NVARCHAR(20)            NULL,                                    -- G�nero (opcional)
     DocumentType        NVARCHAR(50)            NULL,                                    -- Tipo documento (CC, Passaporte, etc.)
     DocumentNumber      NVARCHAR(50)            NULL,                                    -- N�mero do documento
-    Nationality         NVARCHAR(50)            NULL,                                    -- Nacionalidade (até 50 caracteres)
+    Nationality         NVARCHAR(100)           NULL,                                    -- Nacionalidade (até 50 caracteres)
     IsActive            BIT                 NOT NULL DEFAULT 1,                          -- Flag de ativo
     IsDeleted           BIT                 NOT NULL DEFAULT 0,                          -- Soft delete
     CreatedBy           INT                 NOT NULL,                                    -- Usu�rio criador
@@ -1064,8 +1063,6 @@ CREATE UNIQUE INDEX UX_JwtKeys_Active                                           
 CREATE UNIQUE INDEX UX_Employees_Tenant_TaxNumber                                   ON dbo.Employees (TenantId, TaxNumber) WHERE TaxNumber IS NOT NULL AND IsDeleted = 0;
 CREATE UNIQUE INDEX UX_EmployeeTeam_Active                                          ON dbo.EmployeeTeam (TenantId, TeamId, EmployeeId) WHERE EndDateTime IS NULL AND IsDeleted = 0;
 CREATE UNIQUE INDEX UX_UserPreferences_Tenant_User_Active                           ON dbo.UserPreferences (TenantId, UserId) WHERE IsDeleted = 0;
-CREATE UNIQUE INDEX UX_Users_TenantId_NormalizedEmail								ON dbo.Users (TenantId, NormalizedEmail) WHERE IsDeleted = 0;
-
 
 CREATE NONCLUSTERED INDEX IX_Clients_TenantId                                       ON dbo.Clients (TenantId) WHERE IsDeleted = 0;
 CREATE NONCLUSTERED INDEX IX_EmployeeContacts_EmployeeId		                    ON dbo.EmployeeContacts (TenantId, EmployeeId) WHERE IsDeleted = 0;
@@ -1077,7 +1074,7 @@ CREATE NONCLUSTERED INDEX IX_Status_Tenant                                      
 CREATE NONCLUSTERED INDEX IX_RolePermissions_RoleId					                ON dbo.RolePermissions (TenantId, RoleId) INCLUDE (ResourceId, ActionId); 
 CREATE NONCLUSTERED INDEX IX_RolePermissions_ResourceId				                ON dbo.RolePermissions (TenantId, ResourceId) INCLUDE (RoleId, ActionId);
 CREATE NONCLUSTERED INDEX IX_RolePermissions_ActionId				                ON dbo.RolePermissions (TenantId, ActionId) INCLUDE (RoleId, ResourceId);
-CREATE NONCLUSTERED INDEX IX_Users_Login				                            ON dbo.Users (TenantId, NormalizedEmail) INCLUDE (Id, IsActive) WHERE IsDeleted = 0;
+CREATE NONCLUSTERED INDEX IX_Users_Login											ON dbo.Users (NormalizedEmail) INCLUDE (Id, TenantId, IsActive) WHERE IsDeleted = 0;
 CREATE NONCLUSTERED INDEX IX_RefreshTokens_User_Active                              ON dbo.RefreshTokens (TenantId, UserId) WHERE RevokedAt IS NULL;
 CREATE NONCLUSTERED INDEX IX_RefreshTokens_ExpiresAt                                ON dbo.RefreshTokens (TenantId, ExpiresAt) WHERE RevokedAt IS NULL;
 CREATE NONCLUSTERED INDEX IX_Visits_Dashboard                                       ON dbo.Visits (TenantId, StatusId, StartDateTime) INCLUDE (ClientId, EstimatedValue) WHERE IsDeleted = 0;
