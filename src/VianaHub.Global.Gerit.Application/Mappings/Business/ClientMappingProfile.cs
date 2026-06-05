@@ -16,7 +16,7 @@ public class ClientMappingProfile : Profile
             .ForMember(dest => dest.ClientType, opt => opt.MapFrom(src => (int)src.ClientType))
             .ForMember(dest => dest.ClientTypeDescription, opt => opt.MapFrom(src => src.ClientType.GetDescription()))
             .ForMember(dest => dest.Name, opt => opt.MapFrom(src => ResolveName(src)))
-            .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => ResolvePhoneNumber(src)))
+            .ForMember(dest => dest.CellPhoneNumber, opt => opt.MapFrom(src => ResolveCellPhoneNumber(src)))
             .ForMember(dest => dest.Email, opt => opt.MapFrom(src => ResolveEmail(src)))
             .ForMember(dest => dest.Contact, opt => opt.MapFrom(src => ResolvePrimaryContact(src)));
 
@@ -86,6 +86,19 @@ public class ClientMappingProfile : Profile
             ClientType.Freelancer => src.Individual?.PhoneNumber,
             ClientType.PessoaJuridica => src.Company?.PhoneNumber,
             ClientType.SociedadeUnipessoalQuotas => src.Company?.PhoneNumber,
+            _ => null
+        };
+    }
+
+    private static string? ResolveCellPhoneNumber(ClientEntity src)
+    {
+        return src.ClientType switch
+        {
+            ClientType.PessoaSingular => src.Individual?.CellPhoneNumber,
+            ClientType.RecibosVerdes => src.Individual?.CellPhoneNumber,
+            ClientType.Freelancer => src.Individual?.CellPhoneNumber,
+            ClientType.PessoaJuridica => src.Company?.CellPhoneNumber,
+            ClientType.SociedadeUnipessoalQuotas => src.Company?.CellPhoneNumber,
             _ => null
         };
     }
