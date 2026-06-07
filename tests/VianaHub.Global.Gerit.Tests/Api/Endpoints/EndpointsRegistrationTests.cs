@@ -10,6 +10,7 @@ using VianaHub.Global.Gerit.Application.Interfaces.Billing;
 using VianaHub.Global.Gerit.Application.Interfaces.Job;
 using VianaHub.Global.Gerit.Api.Endpoints.Job;
 using VianaHub.Global.Gerit.Domain.Interfaces.Base;
+using Xunit;
 
 namespace VianaHub.Global.Gerit.Tests.Api.Endpoints
 {
@@ -82,7 +83,7 @@ namespace VianaHub.Global.Gerit.Tests.Api.Endpoints
         }
 
         [Fact(DisplayName = "Endpoints - MapPlanEndpoints não lança exceção")]
-        [Trait("Layer", "Api")]
+        [Trait("Api", "")]
         public void MapPlanEndpoints_DoesNotThrow()
         {
             var routeBuilder = CreateRouteBuilder();
@@ -93,7 +94,7 @@ namespace VianaHub.Global.Gerit.Tests.Api.Endpoints
         }
 
         [Fact(DisplayName = "Endpoints - MapSubscriptionEndpoints não lança exceção")]
-        [Trait("Layer", "Api")]
+        [Trait("Api", "")]
         public void MapSubscriptionEndpoints_DoesNotThrow()
         {
             var routeBuilder = CreateRouteBuilder();
@@ -102,7 +103,7 @@ namespace VianaHub.Global.Gerit.Tests.Api.Endpoints
         }
 
         [Fact(DisplayName = "Endpoints - MapTenantEndpoints não lança exceção")]
-        [Trait("Layer", "Api")]
+        [Trait("Api", "")]
         public void MapTenantEndpoints_DoesNotThrow()
         {
             var routeBuilder = CreateRouteBuilder();
@@ -111,7 +112,7 @@ namespace VianaHub.Global.Gerit.Tests.Api.Endpoints
         }
 
         [Fact(DisplayName = "Endpoints - MapRoleEndpoints não lança exceção")]
-        [Trait("Layer", "Api")]
+        [Trait("Api", "")]
         public void MapRoleEndpoints_DoesNotThrow()
         {
             var routeBuilder = CreateRouteBuilder();
@@ -120,7 +121,7 @@ namespace VianaHub.Global.Gerit.Tests.Api.Endpoints
         }
 
         [Fact(DisplayName = "Endpoints - MapResourceEndpoints não lança exceção")]
-        [Trait("Layer", "Api")]
+        [Trait("Api", "")]
         public void MapResourceEndpoints_DoesNotThrow()
         {
             var routeBuilder = CreateRouteBuilder();
@@ -129,7 +130,7 @@ namespace VianaHub.Global.Gerit.Tests.Api.Endpoints
         }
 
         [Fact(DisplayName = "Endpoints - MapActionEndpoints não lança exceção")]
-        [Trait("Layer", "Api")]
+        [Trait("Api", "")]
         public void MapActionEndpoints_DoesNotThrow()
         {
             var routeBuilder = CreateRouteBuilder();
@@ -138,7 +139,7 @@ namespace VianaHub.Global.Gerit.Tests.Api.Endpoints
         }
 
         [Fact(DisplayName = "Endpoints - MapRolePermissionEndpoints não lança exceção")]
-        [Trait("Layer", "Api")]
+        [Trait("Api", "")]
         public void MapRolePermissionEndpoints_DoesNotThrow()
         {
             var routeBuilder = CreateRouteBuilder();
@@ -147,7 +148,7 @@ namespace VianaHub.Global.Gerit.Tests.Api.Endpoints
         }
 
         [Fact(DisplayName = "Endpoints - MapUserRoleEndpoints não lança exceção")]
-        [Trait("Layer", "Api")]
+        [Trait("Api", "")]
         public void MapUserRoleEndpoints_DoesNotThrow()
         {
             var routeBuilder = CreateRouteBuilder();
@@ -156,7 +157,7 @@ namespace VianaHub.Global.Gerit.Tests.Api.Endpoints
         }
 
         [Fact(DisplayName = "Endpoints - MapJobEndpoints não lança exceção")]
-        [Trait("Layer", "Api")]
+        [Trait("Api", "")]
         public void MapJobEndpoints_DoesNotThrow()
         {
             var routeBuilder = CreateRouteBuilder();
@@ -165,7 +166,7 @@ namespace VianaHub.Global.Gerit.Tests.Api.Endpoints
         }
 
         [Fact(DisplayName = "Endpoints - MapJwtKeyEndpoints não lança exceção")]
-        [Trait("Layer", "Api")]
+        [Trait("Api", "")]
         public void MapJwtKeyEndpoints_DoesNotThrow()
         {
             var routeBuilder = CreateRouteBuilder();
@@ -174,7 +175,7 @@ namespace VianaHub.Global.Gerit.Tests.Api.Endpoints
         }
 
         [Fact(DisplayName = "Endpoints - MapAuthEndpoints não lança exceção")]
-        [Trait("Layer", "Api")]
+        [Trait("Api", "")]
         public void MapAuthEndpoints_DoesNotThrow()
         {
             var routeBuilder = CreateRouteBuilder();

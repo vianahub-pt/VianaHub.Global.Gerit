@@ -10,14 +10,15 @@ using VianaHub.Global.Gerit.Application.Interfaces.Common;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Business.Vehicle;
 using VianaHub.Global.Gerit.Domain.Interfaces.Business;
 using VianaHub.Global.Gerit.Domain.Tools.Notifications;
-using Xunit;
 using VianaHub.Global.Gerit.Domain.Interfaces.Base;
+using Xunit;
 
 namespace VianaHub.Global.Gerit.Tests.Application.Services.Business
 {
     public class VehicleAppServiceTests
     {
-        [Fact]
+        [Fact(DisplayName = "VehicleAppService - BulkUpload retorna false sem ficheiro")]
+        [Trait("Application", "")]
         public async Task BulkUploadAsync_ShouldReturnFalse_WhenNoFile()
         {
             var repoMock = new Mock<IVehicleDataRepository>();
@@ -38,7 +39,8 @@ namespace VianaHub.Global.Gerit.Tests.Application.Services.Business
             fileValidationMock.Verify(f => f.ValidateFile(null), Times.Once);
         }
 
-        [Fact]
+        [Fact(DisplayName = "VehicleAppService - BulkUpload processa CSV valido")]
+        [Trait("Application", "")]
         public async Task BulkUploadAsync_ShouldProcessValidCsv()
         {
             var repoMock = new Mock<IVehicleDataRepository>();
@@ -68,7 +70,7 @@ namespace VianaHub.Global.Gerit.Tests.Application.Services.Business
 
             fileValidationMock.Setup(f => f.ValidateFile(It.IsAny<IFormFile>())).Returns(true);
             repoMock.Setup(r => r.ExistsByPlateAsync(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<CancellationToken>())).ReturnsAsync(false);
-            domainMock.Setup(d => d.CreateAsync(It.IsAny<Domain.Entities.Business.VehicleEntity>(), It.IsAny<CancellationToken>())).ReturnsAsync(true);
+            domainMock.Setup(d => d.CreateAsync(It.IsAny<VianaHub.Global.Gerit.Domain.Entities.Business.VehicleEntity>(), It.IsAny<CancellationToken>())).ReturnsAsync(true);
 
             var service = new VehicleAppService(repoMock.Object, domainMock.Object, mapperMock.Object, notifyMock.Object, localizationMock.Object, currentUserMock.Object, fileValidationMock.Object);
 
@@ -78,7 +80,7 @@ namespace VianaHub.Global.Gerit.Tests.Application.Services.Business
             fileValidationMock.Verify(f => f.ValidateFile(It.IsAny<IFormFile>()), Times.Once);
             repoMock.Verify(r => r.ExistsByPlateAsync(1, "ABC-1234", It.IsAny<CancellationToken>()), Times.Once);
             repoMock.Verify(r => r.ExistsByPlateAsync(1, "XYZ-9876", It.IsAny<CancellationToken>()), Times.Once);
-            domainMock.Verify(d => d.CreateAsync(It.IsAny<Domain.Entities.Business.VehicleEntity>(), It.IsAny<CancellationToken>()), Times.Exactly(2));
+            domainMock.Verify(d => d.CreateAsync(It.IsAny<VianaHub.Global.Gerit.Domain.Entities.Business.VehicleEntity>(), It.IsAny<CancellationToken>()), Times.Exactly(2));
         }
     }
 }

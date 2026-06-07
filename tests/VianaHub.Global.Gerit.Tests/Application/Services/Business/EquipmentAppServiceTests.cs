@@ -79,7 +79,7 @@ namespace VianaHub.Global.Gerit.Tests.Application.Services.Business
 
             fileValidationMock.Setup(f => f.ValidateFile(It.IsAny<IFormFile>())).Returns(true);
             repoMock.Setup(r => r.ExistsByNameAsync(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<CancellationToken>())).ReturnsAsync(false);
-            domainMock.Setup(d => d.CreateAsync(It.IsAny<Domain.Entities.Business.EquipmentEntity>(), It.IsAny<CancellationToken>())).ReturnsAsync(true);
+            domainMock.Setup(d => d.CreateAsync(It.IsAny<VianaHub.Global.Gerit.Domain.Entities.Business.EquipmentEntity>(), It.IsAny<CancellationToken>())).ReturnsAsync(true);
 
             var service = new EquipmentAppService(
                 equipmentTypeRepoMock.Object,
@@ -97,7 +97,7 @@ namespace VianaHub.Global.Gerit.Tests.Application.Services.Business
             fileValidationMock.Verify(f => f.ValidateFile(It.IsAny<IFormFile>()), Times.Once);
             repoMock.Verify(r => r.ExistsByNameAsync(1, "Equip1", It.IsAny<CancellationToken>()), Times.Once);
             repoMock.Verify(r => r.ExistsByNameAsync(1, "Equip2", It.IsAny<CancellationToken>()), Times.Once);
-            domainMock.Verify(d => d.CreateAsync(It.IsAny<Domain.Entities.Business.EquipmentEntity>(), It.IsAny<CancellationToken>()), Times.Exactly(2));
+            domainMock.Verify(d => d.CreateAsync(It.IsAny<VianaHub.Global.Gerit.Domain.Entities.Business.EquipmentEntity>(), It.IsAny<CancellationToken>()), Times.Exactly(2));
         }
     }
 }

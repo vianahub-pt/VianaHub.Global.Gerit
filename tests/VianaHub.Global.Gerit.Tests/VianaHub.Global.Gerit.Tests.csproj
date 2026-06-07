@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -10,39 +10,37 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Infra\Caching\**" />
-    <Compile Remove="Infra\Messaging\**" />
-    <Compile Remove="Validators\**" />
-    <EmbeddedResource Remove="Infra\Caching\**" />
-    <EmbeddedResource Remove="Infra\Messaging\**" />
-    <EmbeddedResource Remove="Validators\**" />
-    <None Remove="Infra\Caching\**" />
-    <None Remove="Infra\Messaging\**" />
-    <None Remove="Validators\**" />
+    <PackageReference Include="coverlet.collector" Version="6.0.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+    <PackageReference Include="xunit" Version="2.5.3" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.5.3" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="coverlet.collector" Version="6.0.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
-    <PackageReference Include="xunit" Version="2.9.3" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.5">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="Moq" Version="4.18.4" />
-    <PackageReference Include="NBuilder" Version="3.3.0" />
+    <!-- Testing helpers and libraries used by unit tests -->
+    <PackageReference Include="Moq" Version="4.20.3" />
+    <PackageReference Include="AutoMapper" Version="16.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Reference ASP.NET Core shared framework so Microsoft.AspNetCore.* types are available -->
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 
   <ItemGroup>
     <Using Include="Xunit" />
   </ItemGroup>
 
-  <ItemGroup> <Folder Include="Api\Validators\" /> <Folder Include="Domain\" />  <Folder Include="Infra\Data\" /> <Folder Include="Infra\Integration\" /> <Folder Include="Infra\Job\" /> <Folder Include="Infra\\Data\" /> <Folder Include="Infra\\Integration\" />  <Folder Include="Domain\" /> </ItemGroup>
-
   <ItemGroup>
-    <ProjectReference Include="..\..\src\VianaHub.Global.Gerit.Api\VianaHub.Global.Gerit.Api.csproj" />
+    <!-- Project references required by the tests -->
     <ProjectReference Include="..\..\src\VianaHub.Global.Gerit.Application\VianaHub.Global.Gerit.Application.csproj" />
     <ProjectReference Include="..\..\src\VianaHub.Global.Gerit.Domain\VianaHub.Global.Gerit.Domain.csproj" />
+    <ProjectReference Include="..\..\src\VianaHub.Global.Gerit.Api\VianaHub.Global.Gerit.Api.csproj" />
     <ProjectReference Include="..\..\src\VianaHub.Global.Gerit.Infra.Data\VianaHub.Global.Gerit.Infra.Data.csproj" />
-    <ProjectReference Include="..\..\src\VianaHub.Global.Gerit.Infra.IoC\VianaHub.Global.Gerit.Infra.IoC.csproj" />
-  </ItemGroup> </Project>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.0" />
+  </ItemGroup>
+
+</Project>

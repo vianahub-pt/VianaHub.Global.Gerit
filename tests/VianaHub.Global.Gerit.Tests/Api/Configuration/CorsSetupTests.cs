@@ -8,7 +8,7 @@ namespace VianaHub.Global.Gerit.Tests.Api.Configuration
     public class CorsSetupTests
     {
         [Fact(DisplayName = "CORS - Quando desabilitado não lança exceção")]
-        [Trait("Layer", "Api")]
+        [Trait("Api", "")]
         public void AddCorsConfiguration_WhenEnableCorsFalse_DoesNotThrow()
         {
             var inMemory = new Dictionary<string, string>
@@ -28,7 +28,7 @@ namespace VianaHub.Global.Gerit.Tests.Api.Configuration
         }
 
         [Fact(DisplayName = "CORS - AllowAnyOrigin em produção lança InvalidOperationException")]
-        [Trait("Layer", "Api")]
+        [Trait("Api", "")]
         public void AddCorsConfiguration_WithAllowAnyOriginInProduction_ThrowsInvalidOperationException()
         {
             var inMemory = new Dictionary<string, string>
@@ -48,7 +48,7 @@ namespace VianaHub.Global.Gerit.Tests.Api.Configuration
         }
 
         [Fact(DisplayName = "CORS - Quando origem específica adiciona policy")]
-        [Trait("Layer", "Api")]
+        [Trait("Api", "")]
         public void AddCorsConfiguration_WithSpecificOrigins_AddsPolicy()
         {
             var inMemory = new Dictionary<string, string>

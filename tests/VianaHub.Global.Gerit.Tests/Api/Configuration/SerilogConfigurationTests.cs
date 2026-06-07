@@ -9,7 +9,7 @@ namespace VianaHub.Global.Gerit.Tests.Api.Configuration
     public class SerilogConfigurationTests
     {
         [Fact(DisplayName = "Serilog - Configurar não lança exceção")]
-        [Trait("Layer", "Api")]
+        [Trait("Api", "")]
         public void ConfigureSerilog_DoesNotThrow()
         {
             var inMemory = new Dictionary<string, string>
@@ -33,7 +33,7 @@ namespace VianaHub.Global.Gerit.Tests.Api.Configuration
         }
 
         [Fact(DisplayName = "Serilog - Usar logging de requisição não lança exceção")]
-        [Trait("Layer", "Api")]
+        [Trait("Api", "")]
         public void UseSerilogRequestLogging_AddsMiddleware()
         {
             var builder = WebApplication.CreateBuilder(new WebApplicationOptions
