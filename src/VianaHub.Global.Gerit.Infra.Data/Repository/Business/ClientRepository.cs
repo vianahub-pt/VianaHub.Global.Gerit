@@ -56,7 +56,12 @@ public class ClientRepository : IClientRepository
             .AsSplitQuery()
             .Include(x => x.Individual)
             .Include(x => x.Company)
+            .Include(x => x.FiscalData)
             .Include(x => x.Contacts)
+            .Include(x => x.Addresses)
+            .Include(x => x.Consents)
+            .Include(x => x.ChildHierarchies)
+            .Include(x => x.ParentHierarchies)
             .Where(x => !x.IsDeleted);
 
         if (!string.IsNullOrWhiteSpace(request.Search))

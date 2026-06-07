@@ -1,4 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
+using System.Reflection;
 using VianaHub.Global.Gerit.Domain.Entities.Billing;
 using VianaHub.Global.Gerit.Domain.Entities.Business;
 using VianaHub.Global.Gerit.Domain.Entities.Identity;
@@ -69,5 +71,38 @@ public class GeritDbContext : DbContext
 
         // Configura o schema padrão
         modelBuilder.HasDefaultSchema("dbo");
+
+        // Apply a global query filter to all entities that expose an IsDeleted property
+        // (bool or nullable bool). This guarantees soft-deleted records are excluded
+        // from queries unless IgnoreQueryFilters() is explicitly used.
+        foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+        {
+            var clrType = entityType.ClrType;
+            if (clrType == null) continue;
+
+            var prop = clrType.GetProperty("IsDeleted", BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
+            if (prop == null) continue;
+
+            var propType = prop.PropertyType;
+            if (propType != typeof(bool) && propType != typeof(bool?)) continue;
+
+            var parameter = Expression.Parameter(clrType, "e");
+            var propAccess = Expression.Property(parameter, prop);
+            Expression predicate;
+
+            if (propType == typeof(bool))
+            {
+                predicate = Expression.Not(propAccess);
+            }
+            else
+            {
+                // nullable bool: e.IsDeleted == false
+                var falseConst = Expression.Constant(false, typeof(bool?));
+                predicate = Expression.Equal(propAccess, falseConst);
+            }
+
+            var lambda = Expression.Lambda(predicate, parameter);
+            modelBuilder.Entity(clrType).HasQueryFilter(lambda);
+        }
     }
 }
