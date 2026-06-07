@@ -145,6 +145,31 @@ public class ClientEntity : Entity, IAggregateRoot
                 break;
         }
 
+        foreach (var address in _addresses)
+        {
+            address.Delete(modifiedBy);
+        }
+
+        foreach (var contact in _contacts)
+        {
+            contact.Delete(modifiedBy);
+        }
+
+        foreach (var consent in _consents)
+        {
+            consent.Delete(modifiedBy);
+        }
+
+        foreach (var hierarchy in _childHierarchies)
+        {
+            hierarchy.Delete(modifiedBy);
+        }
+
+        foreach (var hierarchy in _parentHierarchies)
+        {
+            hierarchy.Delete(modifiedBy);
+        }
+
         ModifiedBy = modifiedBy;
         ModifiedAt = DateTime.UtcNow;
     }
