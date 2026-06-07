@@ -72,11 +72,6 @@ public class ClientContactMapping : IEntityTypeConfiguration<ClientContactEntity
             .HasDatabaseName("IX_ClientContacts_ClientId")
             .IncludeProperties(x => x.TenantId)
             .HasFilter("[IsDeleted] = 0");
-
-        // Relacionamentos
-
-
-        // Relacionamento com Client configurado no ClientMapping
     }
 }
 

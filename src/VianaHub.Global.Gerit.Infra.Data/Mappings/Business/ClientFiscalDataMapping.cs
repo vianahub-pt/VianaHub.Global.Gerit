@@ -24,9 +24,9 @@ public class ClientFiscalDataMapping : IEntityTypeConfiguration<ClientFiscalData
 
         // Relacionamento com Client (FK composta)
         builder.HasOne(x => x.Client)
-            .WithOne()
-            .HasForeignKey<VianaHub.Global.Gerit.Domain.Entities.Business.ClientFiscalDataEntity>(x => new { x.ClientId, x.TenantId })
-            .HasPrincipalKey<VianaHub.Global.Gerit.Domain.Entities.Business.ClientEntity>(c => new { c.Id, c.TenantId })
+            .WithOne(c => c.FiscalData)
+            .HasForeignKey<ClientFiscalDataEntity>(x => new { x.ClientId, x.TenantId })
+            .HasPrincipalKey<ClientEntity>(c => new { c.Id, c.TenantId })
             .OnDelete(DeleteBehavior.Restrict)
             .HasConstraintName("FK_ClientFiscalData_Client");
 
@@ -45,12 +45,13 @@ public class ClientFiscalDataMapping : IEntityTypeConfiguration<ClientFiscalData
         builder.Property(x => x.VatNumber)
             .HasColumnType("NVARCHAR(20)")
             .HasMaxLength(20);
-        
+
         builder.Property(x => x.FiscalCountry)
-            .HasColumnType("CHAR(2)").HasMaxLength(2)
+            .HasColumnType("CHAR(2)")
+            .HasMaxLength(2)
             .IsRequired()
             .HasDefaultValue("PT");
-        
+
         builder.Property(x => x.IsVatRegistered)
             .HasDefaultValue(false);
         
@@ -91,7 +92,9 @@ public class ClientFiscalDataMapping : IEntityTypeConfiguration<ClientFiscalData
             .HasDatabaseName("UQ_ClientFiscalData_Client");
 
         // Check constraint
-        builder.HasCheckConstraint("CK_ClientFiscalData_Active_Deleted", "NOT ([IsActive] = 1 AND [IsDeleted] = 1)");
+        builder.HasCheckConstraint(
+            "CK_ClientFiscalData_Active_Deleted",
+            "NOT ([IsActive] = 1 AND [IsDeleted] = 1)");
     }
 }
 

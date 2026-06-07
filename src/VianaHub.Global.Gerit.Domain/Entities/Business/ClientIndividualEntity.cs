@@ -10,15 +10,15 @@ public class ClientIndividualEntity : Entity
 
     public string FirstName { get; private set; }
     public string LastName { get; private set; }
-    public string PhoneNumber { get; private set; }
-    public string CellPhoneNumber { get; private set; }
+    public string? PhoneNumber { get; private set; }
+    public string? CellPhoneNumber { get; private set; }
     public bool IsWhatsapp { get; private set; }
-    public string Email { get; private set; }
-    public DateTime BirthDate { get; private set; }
-    public string Gender { get; private set; }
-    public string DocumentType { get; private set; }
-    public string DocumentNumber { get; private set; }
-    public string Nationality { get; private set; }
+    public string? Email { get; private set; }
+    public DateTime? BirthDate { get; private set; }
+    public string? Gender { get; private set; }
+    public string? DocumentType { get; private set; }
+    public string? DocumentNumber { get; private set; }
+    public string? Nationality { get; private set; }
 
     public bool IsActive { get; private set; }
     public bool IsDeleted { get; private set; }
@@ -29,22 +29,22 @@ public class ClientIndividualEntity : Entity
     // EF
     protected ClientIndividualEntity() { }
 
-    public ClientIndividualEntity(int tenantId, string firstName, string lastName, string phoneNumber, string cellPhoneNumber, bool isWhatsapp, string email, DateTime birthDate, string gender, string documentType, string documentNumber, string nationality, int createdBy)
+        public ClientIndividualEntity(int tenantId, string firstName, string lastName, string? phoneNumber, string? cellPhoneNumber, bool isWhatsapp, string? email, DateTime? birthDate, string? gender, string? documentType, string? documentNumber, string? nationality, int createdBy)
     {
         TenantId = tenantId;
-        ClientId = Id;
+            // ClientId is populated by the relationship when linked to a ClientEntity
 
-        FirstName = firstName;
-        LastName = lastName;
-        PhoneNumber = phoneNumber;
-        CellPhoneNumber = cellPhoneNumber;
-        IsWhatsapp = isWhatsapp;
-        Email = email;
-        BirthDate = birthDate;
-        Gender = gender;
-        DocumentType = documentType;
-        DocumentNumber = documentNumber;
-        Nationality = nationality;
+            FirstName = firstName;
+            LastName = lastName;
+            PhoneNumber = phoneNumber;
+            CellPhoneNumber = cellPhoneNumber;
+            IsWhatsapp = isWhatsapp;
+            Email = email;
+            BirthDate = birthDate;
+            Gender = gender;
+            DocumentType = documentType;
+            DocumentNumber = documentNumber;
+            Nationality = nationality;
 
         IsActive = true;
         IsDeleted = false;

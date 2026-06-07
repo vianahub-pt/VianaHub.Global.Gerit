@@ -8,10 +8,10 @@ namespace VianaHub.Global.Gerit.Domain.Entities.Business
         public int ClientId { get; private set; }
 
         public string Name { get; private set; } = null!;
-        public string PhoneNumber { get; private set; }
-        public string CellPhoneNumber { get; private set; }
+        public string? PhoneNumber { get; private set; }
+        public string? CellPhoneNumber { get; private set; }
         public bool IsWhatsapp { get; private set; }
-        public string Email { get; private set; } = null!;
+        public string? Email { get; private set; }
 
         public bool IsPrimary { get; private set; }
         public bool IsActive { get; private set; }
@@ -68,8 +68,8 @@ namespace VianaHub.Global.Gerit.Domain.Entities.Business
         public void Activate(int modifiedBy)
         {
             IsActive = true;
-            IsActive = false;
             ModifiedBy = modifiedBy;
+            ModifiedAt = DateTime.UtcNow;
         }
 
         public void Deactivate(int modifiedBy)
