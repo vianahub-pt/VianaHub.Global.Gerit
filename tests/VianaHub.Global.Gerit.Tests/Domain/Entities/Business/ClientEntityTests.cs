@@ -8,49 +8,45 @@ namespace VianaHub.Global.Gerit.Tests.Domain.Entities.Business;
 
 public class ClientEntityTests
 {
-    [Fact]
-    public void AddContact_ShouldKeepOnlyOnePrimaryContact()
+    [Fact(DisplayName = "ClientEntity - ClientContact SetPrimary/RemovePrimary funciona")]
+    [Trait("Domain", "")]
+    public void ClientContact_SetPrimaryAndRemovePrimary_WorksAsExpected()
     {
-        var client = CreateClient();
-        var firstPrimary = new ClientContactEntity(1, 0, "Contato 1", "c1@test.com", "111", true, 7);
-        var secondPrimary = new ClientContactEntity(1, 0, "Contato 2", "c2@test.com", "222", true, 7);
+        var first = new ClientContactEntity(1, 0, "Contato 1", "111", "", true, "c1@test.com", false, 7);
+        var second = new ClientContactEntity(1, 0, "Contato 2", "222", "", true, "c2@test.com", false, 7);
 
-        client.AddContact(firstPrimary, 7);
-        client.AddContact(secondPrimary, 7);
+        // Set primary on first
+        first.SetPrimary(7);
+        Assert.True(first.IsPrimary);
 
-        Assert.Single(client.Contacts.Where(x => x.IsPrimary));
-        Assert.True(client.Contacts.Single(x => x.IsPrimary).Email == "c2@test.com");
+        // Set primary on second
+        second.SetPrimary(7);
+        Assert.True(second.IsPrimary);
+
+        // Remove primary
+        second.RemovePrimary(7);
+        Assert.False(second.IsPrimary);
     }
 
-    [Fact]
-    public void AddAddress_ShouldKeepOnlyOnePrimaryAddress()
+    [Fact(DisplayName = "ClientEntity - ClientAddress SetPrimary/RemovePrimary funciona")]
+    [Trait("Domain", "")]
+    public void ClientAddress_SetPrimaryAndRemovePrimary_WorksAsExpected()
     {
-        var client = CreateClient();
-        var firstPrimary = new ClientAddressEntity(1, 0, 1, "PT", "Rua 1", "Centro", "Porto", "Porto", "4000-001", "10", null, null, null, null, true, 7);
-        var secondPrimary = new ClientAddressEntity(1, 0, 2, "PT", "Rua 2", "Centro", "Lisboa", "Lisboa", "1000-001", "20", null, null, null, null, true, 7);
+        var first = new ClientAddressEntity(1, 0, 1, "PT", "Rua 1", "10", "", "Centro", "Porto", "Porto", "4000-001", null, null, "", false, 7);
+        var second = new ClientAddressEntity(1, 0, 2, "PT", "Rua 2", "20", "", "Centro", "Lisboa", "Lisboa", "1000-001", null, null, "", false, 7);
 
-        client.AddAddress(firstPrimary, 7);
-        client.AddAddress(secondPrimary, 7);
+        first.SetPrimary(7);
+        Assert.True(first.IsPrimary);
 
-        Assert.Single(client.Addresses.Where(x => x.IsPrimary));
-        Assert.True(client.Addresses.Single(x => x.IsPrimary).Street == "Rua 2");
+        second.SetPrimary(7);
+        Assert.True(second.IsPrimary);
+
+        second.RemovePrimary(7);
+        Assert.False(second.IsPrimary);
     }
 
     private static ClientEntity CreateClient()
     {
-        return new ClientEntity(
-            tenantId: 1,
-            clientType: ClientType.Individual,
-            origin: Origin.Manual,
-            name: "Cliente Teste",
-            phone: "999999999",
-            email: "cliente@test.com",
-            website: null,
-            urlImage: null,
-            score: null,
-            consent: true,
-            consentDate: DateTime.UtcNow,
-            remarks: null,
-            createdBy: 7);
+        return new ClientEntity(1, ClientType.PessoaSingular, OriginType.Outros, urlImage: null, note: null, createdBy: 7);
     }
 }

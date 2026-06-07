@@ -53,7 +53,6 @@ public class ClientRepository : IClientRepository
     {
         var query = _context.Clients
             .AsNoTracking()
-            .AsSplitQuery()
             .Include(x => x.Individual)
             .Include(x => x.Company)
             .Include(x => x.FiscalData)
@@ -71,35 +70,37 @@ public class ClientRepository : IClientRepository
             var clientType = ClientTypeHelper.FromDescription(search);
             if (clientType.HasValue)
             {
-                query = query.Where(x => x.ClientType == clientType.Value);
+                query = query.Where(x => x.ClientType == clientType.Value && !x.IsDeleted);
             }
             else
             {
                 query = query.Where(x =>
-                    EF.Functions.Like(x.Individual.FirstName.ToLower(), $"%{search}%") ||
-                    EF.Functions.Like(x.Individual.LastName.ToLower(), $"%{search}%") ||
-                    EF.Functions.Like(x.Individual.Email.ToLower(), $"%{search}%") ||
-                    EF.Functions.Like(x.Individual.Gender.ToLower(), $"%{search}%") ||
-                    EF.Functions.Like(x.Individual.Nationality.ToLower(), $"%{search}%") ||
-                    EF.Functions.Like(x.Individual.PhoneNumber.ToLower(), $"%{search}%") ||
-                    EF.Functions.Like(x.Individual.CellPhoneNumber.ToLower(), $"%{search}%") ||
+                    EF.Functions.Like(x.Individual.FirstName.ToLower(), $"%{search}%") && !x.IsDeleted ||
+                    EF.Functions.Like(x.Individual.LastName.ToLower(), $"%{search}%") && !x.IsDeleted ||
+                    EF.Functions.Like(x.Individual.Email.ToLower(), $"%{search}%") && !x.IsDeleted ||
+                    EF.Functions.Like(x.Individual.Gender.ToLower(), $"%{search}%") && !x.IsDeleted ||
+                    EF.Functions.Like(x.Individual.Nationality.ToLower(), $"%{search}%") && !x.IsDeleted ||
+                    EF.Functions.Like(x.Individual.PhoneNumber.ToLower(), $"%{search}%") && !x.IsDeleted ||
+                    EF.Functions.Like(x.Individual.CellPhoneNumber.ToLower(), $"%{search}%") && !x.IsDeleted ||
 
-                    EF.Functions.Like(x.Company.LegalName.ToLower(), $"%{search}%") ||
-                    EF.Functions.Like(x.Company.TradeName.ToLower(), $"%{search}%") ||
-                    EF.Functions.Like(x.Company.PhoneNumber.ToLower(), $"%{search}%") ||
-                    EF.Functions.Like(x.Company.CellPhoneNumber.ToLower(), $"%{search}%") ||
-                    EF.Functions.Like(x.Company.Email.ToLower(), $"%{search}%") ||
-                    EF.Functions.Like(x.Company.Site.ToLower(), $"%{search}%") ||
-                    x.Contacts.Any(c => EF.Functions.Like(c.Name.ToLower(), $"%{search}%") ||
-                                        EF.Functions.Like(c.Email.ToLower(), $"%{search}%") ||
-                                        EF.Functions.Like(c.PhoneNumber.ToLower(), $"%{search}%")));
+                    EF.Functions.Like(x.Company.LegalName.ToLower(), $"%{search}%") && !x.IsDeleted ||
+                    EF.Functions.Like(x.Company.TradeName.ToLower(), $"%{search}%") && !x.IsDeleted ||
+                    EF.Functions.Like(x.Company.PhoneNumber.ToLower(), $"%{search}%") && !x.IsDeleted ||
+                    EF.Functions.Like(x.Company.CellPhoneNumber.ToLower(), $"%{search}%") && !x.IsDeleted ||
+                    EF.Functions.Like(x.Company.Email.ToLower(), $"%{search}%") && !x.IsDeleted ||
+                    EF.Functions.Like(x.Company.Site.ToLower(), $"%{search}%") && !x.IsDeleted ||
+                    x.Contacts.Any(c => EF.Functions.Like(c.Name.ToLower(), $"%{search}%") && !x.IsDeleted ||
+                                        EF.Functions.Like(c.Email.ToLower(), $"%{search}%") && !x.IsDeleted ||
+                                        EF.Functions.Like(c.PhoneNumber.ToLower(), $"%{search}%") && !x.IsDeleted));
             }
         }
 
         if (request.IsActive.HasValue)
         {
-            query = query.Where(x => x.IsActive == request.IsActive.Value);
+            query = query.Where(x => x.IsActive == request.IsActive.Value && !x.IsDeleted);
         }
+
+
 
         var count = await query.CountAsync(ct);
         var orderedQuery = CreateSort.ApplyOrdering(query, request);

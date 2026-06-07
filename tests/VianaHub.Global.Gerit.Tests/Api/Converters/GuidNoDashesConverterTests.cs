@@ -1,7 +1,6 @@
 using System;
 using System.Text;
 using System.Text.Json;
-using FizzWare.NBuilder;
 using VianaHub.Global.Gerit.Api.Converters;
 using Xunit;
 
@@ -12,11 +11,10 @@ namespace VianaHub.Global.Gerit.Tests.Api.Converters
         private class SimpleDto { public Guid Id { get; set; } }
 
         [Fact(DisplayName = "GuidNoDashesConverter - Write escreve Guid sem hífens")]
-        [Trait("Layer", "Api")]
+        [Trait("Api", "")]
         public void Write_WritesGuidWithoutDashes()
         {
-            var dto = Builder<SimpleDto>.CreateNew().Build();
-            if (dto.Id == Guid.Empty) dto.Id = Guid.NewGuid();
+            var dto = new SimpleDto { Id = Guid.NewGuid() };
 
             var converter = new GuidNoDashesConverter();
 
@@ -35,7 +33,7 @@ namespace VianaHub.Global.Gerit.Tests.Api.Converters
         [Theory(DisplayName = "GuidNoDashesConverter - Read aceita formatos com e sem hífens")]
         [InlineData("f3890433-c100-4470-a322-0a14f2868782")]
         [InlineData("f3890433c1004470a3220a14f2868782")]
-        [Trait("Layer", "Api")]
+        [Trait("Api", "")]
         public void Read_ReadsGuidWithOrWithoutDashes(string value)
         {
             var expected = Guid.Parse("f3890433-c100-4470-a322-0a14f2868782");

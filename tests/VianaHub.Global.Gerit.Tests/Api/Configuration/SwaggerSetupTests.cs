@@ -3,13 +3,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using VianaHub.Global.Gerit.Api.Configuration.Swagger;
 using Moq;
+using Xunit;
 
 namespace VianaHub.Global.Gerit.Tests.Api.Configuration
 {
     public class SwaggerSetupTests
     {
         [Fact(DisplayName = "Swagger - Adicionar não lança exceção")]
-        [Trait("Layer", "Api")]
+        [Trait("Api", "")]
         public void AddSwagger_DoesNotThrow()
         {
             var inMemory = new Dictionary<string, string>
