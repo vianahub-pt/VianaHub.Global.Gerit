@@ -27,6 +27,8 @@ public class ClientCompanyEntity : Entity
     // Navigation Properties
     public ClientEntity Client { get; private set; } = null!;
 
+    public IReadOnlyCollection<ClientFiscalDataEntity> FiscalData => _fiscalData.AsReadOnly();
+
 
 
     // Construtor protegido para EF Core
@@ -92,6 +94,12 @@ public class ClientCompanyEntity : Entity
     {
         IsActive = false;
         IsDeleted = true;
+
+        foreach (var fiscal in _fiscalData)
+        {
+            fiscal.Delete(modifiedBy);
+        }
+
         ModifiedBy = modifiedBy;
         ModifiedAt = DateTime.UtcNow;
     }
