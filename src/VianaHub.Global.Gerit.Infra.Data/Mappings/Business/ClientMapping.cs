@@ -81,13 +81,15 @@ public class ClientMapping : IEntityTypeConfiguration<ClientEntity>
 
         builder.HasMany(x => x.Contacts)
             .WithOne(cc => cc.Client)
-            .HasForeignKey(cc => cc.ClientId)
+            .HasForeignKey(cc => new { cc.ClientId, cc.TenantId })
+            .HasPrincipalKey(c => new { c.Id, c.TenantId })
             .HasConstraintName("FK_ClientContacts_Client")
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasMany(x => x.Addresses)
             .WithOne(ca => ca.Client)
-            .HasForeignKey(ca => ca.ClientId)
+            .HasForeignKey(ca => new { ca.ClientId, ca.TenantId })
+            .HasPrincipalKey(c => new { c.Id, c.TenantId })
             .HasConstraintName("FK_ClientAddresses_Client")
             .OnDelete(DeleteBehavior.Restrict);
 

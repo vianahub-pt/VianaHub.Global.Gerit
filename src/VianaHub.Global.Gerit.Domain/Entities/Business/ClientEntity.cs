@@ -6,11 +6,11 @@ namespace VianaHub.Global.Gerit.Domain.Entities.Business;
 
 public class ClientEntity : Entity, IAggregateRoot
 {
-    private readonly List<ClientAddressEntity> _addresses = [];
-    private readonly List<ClientContactEntity> _contacts = [];
-    private readonly List<ClientConsentsEntity> _consents = [];
-    private readonly List<ClientHierarchyEntity> _childHierarchies = [];
-    private readonly List<ClientHierarchyEntity> _parentHierarchies = [];
+    private readonly List<ClientAddressEntity> _addresses = new();
+    private readonly List<ClientContactEntity> _contacts = new();
+    private readonly List<ClientConsentsEntity> _consents = new();
+    private readonly List<ClientHierarchyEntity> _childHierarchies = new();
+    private readonly List<ClientHierarchyEntity> _parentHierarchies = new();
 
     public int TenantId { get; private set; }
     public ClientType ClientType { get; private set; }
@@ -21,9 +21,9 @@ public class ClientEntity : Entity, IAggregateRoot
     public bool IsDeleted { get; private set; }
 
     // Especializações do agregado
-    public ClientIndividualEntity Individual { get; private set; }
-    public ClientCompanyEntity Company { get; private set; }
-
+    public ClientIndividualEntity? Individual { get; private set; }
+    public ClientCompanyEntity? Company { get; private set; }
+    public ClientFiscalDataEntity? FiscalData { get; private set; }
 
     // Navigation Properties
     public TenantEntity Tenant { get; private set; } = null!;

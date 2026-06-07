@@ -8,26 +8,34 @@ public class ClientHierarchyMapping : IEntityTypeConfiguration<ClientHierarchyEn
 {
     public void Configure(EntityTypeBuilder<ClientHierarchyEntity> builder)
     {
-        builder.ToTable("ClientHierarchies");
+        // Table name in the database is singular: ClientHierarchy (dbo schema)
+        builder.ToTable("ClientHierarchy", "dbo");
 
         builder.HasKey(x => x.Id);
-        
+
         builder.Property(x => x.Id)
+            .UseIdentityColumn(1, 1)
+            .HasColumnName("Id")
             .IsRequired();
 
         builder.HasAlternateKey(x => new { x.Id, x.TenantId })
-            .HasName("UQ_ClientHierarchies_Id_Tenant");
+            .HasName("UQ_ClientHierarchy_Id_Tenant");
 
         builder.Property(x => x.TenantId)
+            .HasColumnName("TenantId")
             .IsRequired();
-        
+
+        // Columns in SQL are named ParentClientId / ChildClientId
         builder.Property(x => x.ParentId)
+            .HasColumnName("ParentClientId")
             .IsRequired();
-        
+
         builder.Property(x => x.ChildId)
+            .HasColumnName("ChildClientId")
             .IsRequired();
-        
+
         builder.Property(x => x.RelationshipType)
+            .HasColumnType("INT")
             .IsRequired();
 
         builder.Property(x => x.IsActive)

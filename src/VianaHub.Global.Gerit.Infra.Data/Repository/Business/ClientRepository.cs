@@ -40,7 +40,7 @@ public class ClientRepository : IClientRepository
             .AsSplitQuery()
             .Include(x => x.Individual)
             .Include(x => x.Company)
-                .ThenInclude(c => c.FiscalData)
+            .Include(x => x.FiscalData)
             .Include(x => x.Contacts)
             .Include(x => x.Addresses)
             .Include(x => x.Consents)

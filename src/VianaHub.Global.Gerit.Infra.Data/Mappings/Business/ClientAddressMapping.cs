@@ -124,9 +124,10 @@ public class ClientAddressMapping : IEntityTypeConfiguration<ClientAddressEntity
         // Relacionamentos
         builder.HasOne(x => x.Client)
             .WithMany(c => c.Addresses)
-            .HasForeignKey(x => x.ClientId)
+            .HasForeignKey(x => new { x.ClientId, x.TenantId })
+            .HasPrincipalKey(c => new { c.Id, c.TenantId })
             .HasConstraintName("FK_ClientAddresses_Client")
-            .OnDelete(DeleteBehavior.NoAction);
+            .OnDelete(DeleteBehavior.Restrict);
 
         // �ndices �nicos com filtro para endere�o prim�rio
         builder.HasIndex(x => x.ClientId)

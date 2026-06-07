@@ -12,9 +12,9 @@ namespace VianaHub.Global.Gerit.Domain.Entities.Business
         public DateTime GrantedDate { get; private set; }
         public DateTime? RevokedDate { get; private set; }
 
-        public string Origin { get; private set; }
-        public string IpAddress { get; private set; }
-        public string UserAgent { get; private set; }
+        public string Origin { get; private set; } = null!;
+        public string? IpAddress { get; private set; }
+        public string? UserAgent { get; private set; }
 
         public bool IsActive { get; private set; }
         public bool IsDeleted { get; private set; }
