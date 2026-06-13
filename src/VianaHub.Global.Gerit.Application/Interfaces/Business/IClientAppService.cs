@@ -13,7 +13,7 @@ public interface IClientAppService
     Task<IEnumerable<ClientResponse>> GetAllAsync(CancellationToken ct);
     Task<ClientDetailResponse> GetByIdAsync(int id, CancellationToken ct);
     Task<ListPageResponse<ClientResponse>> GetPagedAsync(PagedFilterRequest request, CancellationToken ct);
-    Task<bool> CreateAsync(CreateClientRequest request, CancellationToken ct);
+    Task<int> CreateAsync(CreateClientRequest request, CancellationToken ct);
     Task<bool> UpdateAsync(int id, UpdateClientRequest request, CancellationToken ct);
     Task<bool> ActivateAsync(int id, CancellationToken ct);
     Task<bool> DeactivateAsync(int id, CancellationToken ct);

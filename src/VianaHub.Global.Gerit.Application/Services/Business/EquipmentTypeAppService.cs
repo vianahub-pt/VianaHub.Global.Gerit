@@ -69,18 +69,19 @@ public class EquipmentTypeAppService : IEquipmentTypeAppService
         return _mapper.Map<ListPageResponse<EquipmentTypeResponse>>(paged);
     }
 
-    public async Task<bool> CreateAsync(CreateEquipmentTypeRequest request, CancellationToken ct)
+    public async Task<int> CreateAsync(CreateEquipmentTypeRequest request, CancellationToken ct)
     {
         var tenantId = _currentUser.GetTenantId();
         var exists = await _repo.ExistsByNameAsync(tenantId, request.Name, ct);
         if (exists)
         {
             _notify.Add(_localization.GetMessage("Application.Service.EquipmentType.Create.ResourceAlreadyExists"), 400);
-            return false;
+            return 0;
         }
 
         var entity = new EquipmentTypeEntity(tenantId, request.Name, request.Description, _currentUser.GetUserId());
-        return await _domain.CreateAsync(entity, ct);
+        var success = await _domain.CreateAsync(entity, ct);
+        return success ? entity.Id : 0;
     }
 
     public async Task<bool> UpdateAsync(int id, UpdateEquipmentTypeRequest request, CancellationToken ct)
@@ -138,11 +139,11 @@ public class EquipmentTypeAppService : IEquipmentTypeAppService
 
     public async Task<bool> BulkUploadAsync(IFormFile file, CancellationToken ct)
     {
-        // Valida arquivo usando serviço centralizado
+        // Valida arquivo usando serviï¿½o centralizado
         if (!_fileValidation.ValidateFile(file))
             return false;
 
-        // Lê itens do CSV
+        // Lï¿½ itens do CSV
         var items = ReadCsvFile(file);
         if (items == null)
             return false;
@@ -161,17 +162,17 @@ public class EquipmentTypeAppService : IEquipmentTypeAppService
     {
         try
         {
-            // Cria StreamReader com encoding UTF-8 forçado
+            // Cria StreamReader com encoding UTF-8 forï¿½ado
             using var reader = file.OpenReadStream().CreateUtf8StreamReader();
 
             var config = new CsvConfiguration(CultureInfo.InvariantCulture)
             {
                 HasHeaderRecord = true,
-                Delimiter = ";", // CSV usa ponto e vírgula como delimitador
+                Delimiter = ";", // CSV usa ponto e vï¿½rgula como delimitador
                 MissingFieldFound = null,
                 HeaderValidated = null,
                 TrimOptions = TrimOptions.Trim,
-                BadDataFound = null // Ignora linhas mal formatadas ao invés de lançar exceção
+                BadDataFound = null // Ignora linhas mal formatadas ao invï¿½s de lanï¿½ar exceï¿½ï¿½o
             };
 
             using var csv = new CsvReader(reader, config);
@@ -194,7 +195,7 @@ public class EquipmentTypeAppService : IEquipmentTypeAppService
                         record.Name = record.Name?.SanitizeCsvInput().NormalizeUtf8();
                         record.Description = record.Description?.SanitizeCsvInput().NormalizeUtf8();
 
-                        // Valida se os campos não contêm conteúdo perigoso
+                        // Valida se os campos nï¿½o contï¿½m conteï¿½do perigoso
                         if (!string.IsNullOrEmpty(record.Name) && !record.Name.IsSafeCsvValue())
                         {
                             _notify.Add(_localization.GetMessage("Application.Service.EquipmentType.ReadCsvFile.Name.IsSafeCsvValue", rowCount + 2), 400);
@@ -242,7 +243,7 @@ public class EquipmentTypeAppService : IEquipmentTypeAppService
 
         foreach (var item in items)
         {
-            // Valida campos obrigatórios
+            // Valida campos obrigatï¿½rios
             if (!ValidateBulkItem(item))
             {
                 hasErrors = true;
@@ -261,7 +262,7 @@ public class EquipmentTypeAppService : IEquipmentTypeAppService
             // Cria a entidade
             var entity = new EquipmentTypeEntity(tenantId, item.Name, item.Description, _currentUser.GetUserId());
 
-            // Tenta criar no domínio
+            // Tenta criar no domï¿½nio
             var success = await _domain.CreateAsync(entity, ct);
 
             if (!success)

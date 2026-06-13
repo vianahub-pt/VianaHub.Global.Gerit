@@ -89,14 +89,14 @@ public class SubscriptionAppService : ISubscriptionAppService
         return _mapper.Map<IEnumerable<SubscriptionResponse>>(entities);
     }
 
-    public async Task<bool> CreateAsync(CreateSubscriptionRequest request, CancellationToken ct)
+    public async Task<int> CreateAsync(CreateSubscriptionRequest request, CancellationToken ct)
     {
-        // Verifica se já existe uma subscription ativa para o tenant
+        // Verifica se jï¿½ existe uma subscription ativa para o tenant
         var exists = await _domain.ExistsByTenantIdAsync(request.TenantId, ct);
         if (exists)
         {
             _notify.Add(_localization.GetMessage("Application.Service.Subscription.Create.TenantAlreadyHasSubscription"), 400);
-            return false;
+            return 0;
         }
 
         var entity = new SubscriptionEntity(
@@ -110,7 +110,8 @@ public class SubscriptionAppService : ISubscriptionAppService
             _currentUser.GetUserId()
         );
 
-        return await _domain.CreateAsync(entity, ct);
+        var success = await _domain.CreateAsync(entity, ct);
+        return success ? entity.Id : 0;
     }
 
     public async Task<bool> UpdateAsync(int id, UpdateSubscriptionRequest request, CancellationToken ct)
@@ -201,11 +202,11 @@ public class SubscriptionAppService : ISubscriptionAppService
 
     public async Task<bool> BulkUploadAsync(IFormFile file, CancellationToken ct)
     {
-        // Valida arquivo usando serviço centralizado
+        // Valida arquivo usando serviï¿½o centralizado
         if (!_fileValidation.ValidateFile(file))
             return false;
 
-        // Lê itens do CSV
+        // Lï¿½ itens do CSV
         var items = ReadCsvFile(file);
         if (items == null)
             return false;
@@ -224,17 +225,17 @@ public class SubscriptionAppService : ISubscriptionAppService
     {
         try
         {
-            // Cria StreamReader com encoding UTF-8 forçado
+            // Cria StreamReader com encoding UTF-8 forï¿½ado
             using var reader = file.OpenReadStream().CreateUtf8StreamReader();
 
             var config = new CsvConfiguration(CultureInfo.InvariantCulture)
             {
                 HasHeaderRecord = true,
-                Delimiter = ";", // CSV usa ponto e vírgula como delimitador
+                Delimiter = ";", // CSV usa ponto e vï¿½rgula como delimitador
                 MissingFieldFound = null,
                 HeaderValidated = null,
                 TrimOptions = TrimOptions.Trim,
-                BadDataFound = null // Ignora linhas mal formatadas ao invés de lançar exceção
+                BadDataFound = null // Ignora linhas mal formatadas ao invï¿½s de lanï¿½ar exceï¿½ï¿½o
             };
 
             using var csv = new CsvReader(reader, config);
@@ -253,7 +254,7 @@ public class SubscriptionAppService : ISubscriptionAppService
                     var record = csv.GetRecord<BulkUploadSubscriptionItem>();
                     if (record != null)
                     {
-                        // Valida se os campos não contêm conteúdo perigoso
+                        // Valida se os campos nï¿½o contï¿½m conteï¿½do perigoso
                         if (record.TenantId <= 0 )
                         {
                             _notify.Add(_localization.GetMessage("Application.Service.Subscription.ReadCsvFile.TenantId.IsSafeCsvValue", rowCount + 2), 400);
@@ -317,7 +318,7 @@ public class SubscriptionAppService : ISubscriptionAppService
 
         foreach (var item in items)
         {
-            // Valida campos obrigatórios
+            // Valida campos obrigatï¿½rios
             if (!ValidateBulkItem(item))
             {
                 hasErrors = true;
@@ -336,7 +337,7 @@ public class SubscriptionAppService : ISubscriptionAppService
             // Cria a entidade
             var entity = new SubscriptionEntity(tenantId, item.PlanId, item.CurrentPeriodStart, item.CurrentPeriodEnd, item.TrialStart, item.TrialEnd, item.StripeCustomerId, _currentUser.GetUserId());
 
-            // Tenta criar no domínio
+            // Tenta criar no domï¿½nio
             var success = await _domain.CreateAsync(entity, ct);
 
             if (!success)

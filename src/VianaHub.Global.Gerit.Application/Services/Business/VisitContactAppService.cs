@@ -19,7 +19,7 @@ using VianaHub.Global.Gerit.Domain.Tools.Notifications;
 namespace VianaHub.Global.Gerit.Application.Services.Business;
 
 /// <summary>
-/// Serviço de aplicação para VisitContact
+/// Serviï¿½o de aplicaï¿½ï¿½o para VisitContact
 /// </summary>
 public class VisitContactAppService : IVisitContactAppService
 {
@@ -76,17 +76,17 @@ public class VisitContactAppService : IVisitContactAppService
         return _mapper.Map<ListPageResponse<VisitContactResponse>>(paged);
     }
 
-    public async Task<bool> CreateAsync(CreateVisitContactRequest request, CancellationToken ct)
+    public async Task<int> CreateAsync(CreateVisitContactRequest request, CancellationToken ct)
     {
         var tenantId = _currentUser.GetTenantId();
         var userId = _currentUser.GetUserId();
 
-        // Validar unicidade: Email único por Intervenção
+        // Validar unicidade: Email ï¿½nico por Intervenï¿½ï¿½o
         var exists = await _repo.ExistsByVisitAndEmailAsync(request.VisitId, request.Email, null, ct);
         if (exists)
         {
             _notify.Add(_localization.GetMessage("Application.Service.VisitContact.Create.ResourceAlreadyExists"), 409);
-            return false;
+            return 0;
         }
 
         var entity = new VisitContactEntity(
@@ -99,7 +99,8 @@ public class VisitContactAppService : IVisitContactAppService
             userId
         );
 
-        return await _domain.CreateAsync(entity, ct);
+        var success = await _domain.CreateAsync(entity, ct);
+        return success ? entity.Id : 0;
     }
 
     public async Task<bool> UpdateAsync(int id, UpdateVisitContactRequest request, CancellationToken ct)
@@ -111,7 +112,7 @@ public class VisitContactAppService : IVisitContactAppService
             return false;
         }
 
-        // Validar unicidade: Email único por Intervenção (excluindo o próprio registro)
+        // Validar unicidade: Email ï¿½nico por Intervenï¿½ï¿½o (excluindo o prï¿½prio registro)
         var exists = await _repo.ExistsByVisitAndEmailAsync(entity.VisitId, request.Email, id, ct);
         if (exists)
         {
@@ -164,11 +165,11 @@ public class VisitContactAppService : IVisitContactAppService
 
     public async Task<bool> BulkUploadAsync(IFormFile file, CancellationToken ct)
     {
-        // Valida arquivo usando serviço centralizado
+        // Valida arquivo usando serviï¿½o centralizado
         if (!_fileValidation.ValidateFile(file))
             return false;
 
-        // Lê itens do CSV
+        // Lï¿½ itens do CSV
         var items = ReadCsvFile(file);
         if (items == null)
             return false;
@@ -187,17 +188,17 @@ public class VisitContactAppService : IVisitContactAppService
     {
         try
         {
-            // Cria StreamReader com encoding UTF-8 forçado
+            // Cria StreamReader com encoding UTF-8 forï¿½ado
             using var reader = file.OpenReadStream().CreateUtf8StreamReader();
 
             var config = new CsvConfiguration(CultureInfo.InvariantCulture)
             {
                 HasHeaderRecord = true,
-                Delimiter = ";", // CSV usa ponto e vírgula como delimitador
+                Delimiter = ";", // CSV usa ponto e vï¿½rgula como delimitador
                 MissingFieldFound = null,
                 HeaderValidated = null,
                 TrimOptions = TrimOptions.Trim,
-                BadDataFound = null // Ignora linhas mal formatadas ao invés de lançar exceção
+                BadDataFound = null // Ignora linhas mal formatadas ao invï¿½s de lanï¿½ar exceï¿½ï¿½o
             };
 
             using var csv = new CsvReader(reader, config);
@@ -221,7 +222,7 @@ public class VisitContactAppService : IVisitContactAppService
                         record.Email = record.Email?.SanitizeCsvInput().NormalizeUtf8();
                         record.Phone = record.Phone?.SanitizeCsvInput().NormalizeUtf8();
 
-                        // Valida se os campos não contêm conteúdo perigoso
+                        // Valida se os campos nï¿½o contï¿½m conteï¿½do perigoso
                         if (!string.IsNullOrEmpty(record.Name) && !record.Name.IsSafeCsvValue())
                         {
                             _notify.Add(_localization.GetMessage("Application.Service.VisitContact.ReadCsvFile.Name.IsSafeCsvValue", rowCount + 2), 400);
@@ -278,14 +279,14 @@ public class VisitContactAppService : IVisitContactAppService
 
         foreach (var item in items)
         {
-            // Validação básica
+            // Validaï¿½ï¿½o bï¿½sica
             if (!ValidateBulkItem(item))
             {
                 hasErrors = true;
                 continue;
             }
 
-            // Verificar se já existe
+            // Verificar se jï¿½ existe
             var exists = await _repo.ExistsByVisitAndEmailAsync(item.VisitId, item.Email, null, ct);
             if (exists)
             {

@@ -10,7 +10,7 @@ public interface IOriginTypeAppService
     Task<IEnumerable<OriginTypeResponse>> GetAllAsync(CancellationToken ct);
     Task<OriginTypeResponse> GetByIdAsync(int id, CancellationToken ct);
     Task<ListPageResponse<OriginTypeResponse>> GetPagedAsync(PagedFilterRequest request, CancellationToken ct);
-    Task<bool> CreateAsync(CreateOriginTypeRequest request, CancellationToken ct);
+    Task<int> CreateAsync(CreateOriginTypeRequest request, CancellationToken ct);
     Task<bool> UpdateAsync(int id, UpdateOriginTypeRequest request, CancellationToken ct);
     Task<bool> ActivateAsync(int id, CancellationToken ct);
     Task<bool> DeactivateAsync(int id, CancellationToken ct);

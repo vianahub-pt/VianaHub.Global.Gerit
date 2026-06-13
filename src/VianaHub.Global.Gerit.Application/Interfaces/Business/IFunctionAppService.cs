@@ -10,7 +10,7 @@ public interface IFunctionAppService
     Task<IEnumerable<FunctionResponse>> GetAllAsync(CancellationToken ct);
     Task<FunctionResponse> GetByIdAsync(int id, CancellationToken ct);
     Task<ListPageResponse<FunctionResponse>> GetPagedAsync(PagedFilterRequest request, CancellationToken ct);
-    Task<bool> CreateAsync(CreateFunctionRequest request, CancellationToken ct);
+    Task<int> CreateAsync(CreateFunctionRequest request, CancellationToken ct);
     Task<bool> UpdateAsync(int id, UpdateFunctionRequest request, CancellationToken ct);
     Task<bool> ActivateAsync(int id, CancellationToken ct);
     Task<bool> DeactivateAsync(int id, CancellationToken ct);

@@ -18,7 +18,7 @@ using VianaHub.Global.Gerit.Domain.Tools.Notifications;
 namespace VianaHub.Global.Gerit.Application.Services.Business;
 
 /// <summary>
-/// Serviço de aplicação para VisitAddress
+/// Serviï¿½o de aplicaï¿½ï¿½o para VisitAddress
 /// </summary>
 public class VisitAddressAppService : IVisitAddressAppService
 {
@@ -75,14 +75,14 @@ public class VisitAddressAppService : IVisitAddressAppService
         return _mapper.Map<ListPageResponse<VisitAddressResponse>>(paged);
     }
 
-    public async Task<bool> CreateAsync(CreateVisitAddressRequest request, CancellationToken ct)
+    public async Task<int> CreateAsync(CreateVisitAddressRequest request, CancellationToken ct)
     {
         var tenantId = _currentUser.GetTenantId();
         var exists = await _repo.ExistsByVisitAndAddressAsync(tenantId, request.VisitId, request.Street, request.City, request.PostalCode, ct);
         if (exists)
         {
             _notify.Add(_localization.GetMessage("Application.Service.VisitAddress.Create.ResourceAlreadyExists"), 409);
-            return false;
+            return 0;
         }
 
         var entity = new VisitAddressEntity(
@@ -103,7 +103,8 @@ public class VisitAddressAppService : IVisitAddressAppService
             request.IsPrimary,
             _currentUser.GetUserId());
 
-        return await _domain.CreateAsync(entity, ct);
+        var success = await _domain.CreateAsync(entity, ct);
+        return success ? entity.Id : 0;
     }
 
     public async Task<bool> UpdateAsync(int id, UpdateVisitAddressRequest request, CancellationToken ct)

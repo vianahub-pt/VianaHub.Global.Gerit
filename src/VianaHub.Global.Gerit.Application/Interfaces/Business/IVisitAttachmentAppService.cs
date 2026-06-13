@@ -13,7 +13,7 @@ public interface IVisitAttachmentAppService
     Task<IEnumerable<VisitAttachmentResponse>> GetByCategoryIdAsync(int categoryId, CancellationToken ct);
     Task<VisitAttachmentResponse> GetPrimaryByVisitIdAsync(int visitId, CancellationToken ct);
     Task<ListPageResponse<VisitAttachmentResponse>> GetPagedAsync(PagedFilterRequest request, CancellationToken ct);
-    Task<bool> CreateAsync(CreateVisitAttachmentRequest request, CancellationToken ct);
+    Task<int> CreateAsync(CreateVisitAttachmentRequest request, CancellationToken ct);
     Task<bool> UpdateAsync(int id, UpdateVisitAttachmentRequest request, CancellationToken ct);
     Task<bool> SetAsPrimaryAsync(int id, CancellationToken ct);
     Task<bool> ActivateAsync(int id, CancellationToken ct);

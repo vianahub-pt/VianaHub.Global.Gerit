@@ -77,13 +77,13 @@ public class ClientAddressAppService : IClientAddressAppService
         return _mapper.Map<ListPageResponse<ClientAddressResponse>>(paged);
     }
 
-    public async Task<bool> CreateAsync(int clientId, CreateClientAddressRequest request, CancellationToken ct)
+    public async Task<int> CreateAsync(int clientId, CreateClientAddressRequest request, CancellationToken ct)
     {
         var exists = await _repo.ExistsByClientIdAsync(clientId, request.CountryCode, request.Street, request.StreetNumber, request.Neighborhood, request.City, request.District, request.PostalCode, ct);
         if (exists)
         {
             _notify.Add(_localization.GetMessage("Application.Service.ClientAddress.Create.ResourceAlreadyExists"), 409);
-            return false;
+            return 0;
         }
 
         var clientAddress = new ClientAddressEntity(
@@ -104,7 +104,8 @@ public class ClientAddressAppService : IClientAddressAppService
             request.IsPrimary,
             UserId);
 
-        return await _domain.CreateAsync(clientAddress, ct);
+        var success = await _domain.CreateAsync(clientAddress, ct);
+        return success ? clientAddress.Id : 0;
     }
 
     public async Task<bool> UpdateAsync(int clientId, int id, UpdateClientAddressRequest request, CancellationToken ct)

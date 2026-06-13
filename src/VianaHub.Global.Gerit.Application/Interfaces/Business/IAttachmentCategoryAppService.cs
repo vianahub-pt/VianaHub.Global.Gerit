@@ -11,7 +11,7 @@ public interface IAttachmentCategoryAppService
     Task<IEnumerable<AttachmentCategoryResponse>> GetAllAsync(CancellationToken ct);
     Task<IEnumerable<AttachmentCategoryResponse>> GetActiveAsync(CancellationToken ct);
     Task<ListPageResponse<AttachmentCategoryResponse>> GetPagedAsync(PagedFilterRequest request, CancellationToken ct);
-    Task<bool> CreateAsync(CreateAttachmentCategoryRequest request, CancellationToken ct);
+    Task<int> CreateAsync(CreateAttachmentCategoryRequest request, CancellationToken ct);
     Task<bool> UpdateAsync(int id, UpdateAttachmentCategoryRequest request, CancellationToken ct);
     Task<bool> ActivateAsync(int id, CancellationToken ct);
     Task<bool> DeactivateAsync(int id, CancellationToken ct);

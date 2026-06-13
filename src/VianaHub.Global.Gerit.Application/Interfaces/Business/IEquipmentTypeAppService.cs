@@ -10,7 +10,7 @@ public interface IEquipmentTypeAppService
     Task<IEnumerable<EquipmentTypeResponse>> GetAllAsync(CancellationToken ct);
     Task<EquipmentTypeResponse> GetByIdAsync(int id, CancellationToken ct);
     Task<ListPageResponse<EquipmentTypeResponse>> GetPagedAsync(PagedFilterRequest request, CancellationToken ct);
-    Task<bool> CreateAsync(CreateEquipmentTypeRequest request, CancellationToken ct);
+    Task<int> CreateAsync(CreateEquipmentTypeRequest request, CancellationToken ct);
     Task<bool> UpdateAsync(int id, UpdateEquipmentTypeRequest request, CancellationToken ct);
     Task<bool> ActivateAsync(int id, CancellationToken ct);
     Task<bool> DeactivateAsync(int id, CancellationToken ct);

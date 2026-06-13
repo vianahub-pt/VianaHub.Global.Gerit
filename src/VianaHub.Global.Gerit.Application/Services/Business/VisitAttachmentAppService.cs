@@ -108,32 +108,32 @@ public class VisitAttachmentAppService : IVisitAttachmentAppService
         return _mapper.Map<ListPageResponse<VisitAttachmentResponse>>(paged);
     }
 
-    public async Task<bool> CreateAsync(CreateVisitAttachmentRequest request, CancellationToken ct)
+    public async Task<int> CreateAsync(CreateVisitAttachmentRequest request, CancellationToken ct)
     {
         var tenantId = _currentUser.GetTenantId();
 
         if (!await _visitRepo.ExistsByIdAsync(request.VisitId, ct))
         {
             _notify.Add(_localization.GetMessage("Application.Service.VisitAttachment.Create.VisitNotFound"), 400);
-            return false;
+            return 0;
         }
 
         if (!await _fileTypeRepo.ExistsByIdAsync(request.FileTypeId, ct))
         {
             _notify.Add(_localization.GetMessage("Application.Service.VisitAttachment.Create.FileTypeNotFound"), 400);
-            return false;
+            return 0;
         }
 
         if (!await _categoryRepo.ExistsByIdAsync(request.AttachmentCategoryId, ct))
         {
             _notify.Add(_localization.GetMessage("Application.Service.VisitAttachment.Create.CategoryNotFound"), 400);
-            return false;
+            return 0;
         }
 
         if (await _repo.ExistsByS3KeyAsync(tenantId, request.S3Key, ct))
         {
             _notify.Add(_localization.GetMessage("Application.Service.VisitAttachment.Create.S3KeyAlreadyExists"), 409);
-            return false;
+            return 0;
         }
 
         if (request.IsPrimary)
@@ -145,7 +145,8 @@ public class VisitAttachmentAppService : IVisitAttachmentAppService
             request.AttachmentCategoryId, request.S3Key, request.FileName, request.FileSizeBytes, 
             request.DisplayOrder, request.IsPrimary, _currentUser.GetUserId());
 
-        return await _domain.CreateAsync(entity, ct);
+        var success = await _domain.CreateAsync(entity, ct);
+        return success ? entity.Id : 0;
     }
 
     public async Task<bool> UpdateAsync(int id, UpdateVisitAttachmentRequest request, CancellationToken ct)

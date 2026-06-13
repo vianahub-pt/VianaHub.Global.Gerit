@@ -74,17 +74,18 @@ public class FileTypeAppService : IFileTypeAppService
         return _mapper.Map<ListPageResponse<FileTypeResponse>>(paged);
     }
 
-    public async Task<bool> CreateAsync(CreateFileTypeRequest request, CancellationToken ct)
+    public async Task<int> CreateAsync(CreateFileTypeRequest request, CancellationToken ct)
     {
         var exists = await _repo.ExistsByMimeTypeAsync(request.MimeType, ct);
         if (exists)
         {
             _notify.Add(_localization.GetMessage("Application.Service.FileType.Create.ResourceAlreadyExists"), 409);
-            return false;
+            return 0;
         }
 
         var entity = new FileTypeEntity(request.MimeType, request.Extension, _currentUser.GetUserId());
-        return await _domain.CreateAsync(entity, ct);
+        var success = await _domain.CreateAsync(entity, ct);
+        return success ? entity.Id : 0;
     }
 
     public async Task<bool> UpdateAsync(int id, UpdateFileTypeRequest request, CancellationToken ct)

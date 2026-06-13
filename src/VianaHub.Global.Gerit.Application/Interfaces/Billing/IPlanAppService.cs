@@ -10,7 +10,7 @@ public interface IPlanAppService
     Task<IEnumerable<PlanResponse>> GetAllAsync(CancellationToken ct);
     Task<PlanResponse> GetByIdAsync(int id, CancellationToken ct);
     Task<ListPageResponse<PlanResponse>> GetPagedAsync(PagedFilterRequest request, CancellationToken ct);
-    Task<bool> CreateAsync(CreatePlanRequest request, CancellationToken ct);
+    Task<int> CreateAsync(CreatePlanRequest request, CancellationToken ct);
     Task<bool> UpdateAsync(int id, UpdatePlanRequest request, CancellationToken ct);
     Task<bool> ActivateAsync(int id, CancellationToken ct);
     Task<bool> DeactivateAsync(int id, CancellationToken ct);

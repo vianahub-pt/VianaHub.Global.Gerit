@@ -14,7 +14,7 @@ public interface ISubscriptionAppService
     Task<IEnumerable<SubscriptionResponse>> GetActiveSubscriptionsAsync(CancellationToken ct);
     Task<IEnumerable<SubscriptionResponse>> GetExpiringSubscriptionsAsync(int daysBeforeExpiration, CancellationToken ct);
     
-    Task<bool> CreateAsync(CreateSubscriptionRequest request, CancellationToken ct);
+    Task<int> CreateAsync(CreateSubscriptionRequest request, CancellationToken ct);
     Task<bool> UpdateAsync(int id, UpdateSubscriptionRequest request, CancellationToken ct);
     Task<bool> ActivateAsync(int id, CancellationToken ct);
     Task<bool> DeactivateAsync(int id, CancellationToken ct);

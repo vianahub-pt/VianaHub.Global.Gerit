@@ -12,7 +12,7 @@ public interface IVisitTeamEmployeeAppService
     Task<IEnumerable<VisitTeamEmployeeResponse>> GetByEmployeeIdAsync(int employeeId, CancellationToken ct);
     Task<IEnumerable<VisitTeamEmployeeResponse>> GetActiveByVisitTeamIdAsync(int visitTeamId, CancellationToken ct);
     Task<ListPageResponse<VisitTeamEmployeeResponse>> GetPagedAsync(PagedFilterRequest request, CancellationToken ct);
-    Task<bool> CreateAsync(CreateVisitTeamEmployeeRequest request, CancellationToken ct);
+    Task<int> CreateAsync(CreateVisitTeamEmployeeRequest request, CancellationToken ct);
     Task<bool> UpdateAsync(int id, UpdateVisitTeamEmployeeRequest request, CancellationToken ct);
     Task<bool> ActivateAsync(int id, CancellationToken ct);
     Task<bool> DeactivateAsync(int id, CancellationToken ct);

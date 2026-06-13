@@ -10,7 +10,7 @@ public interface IVisitTeamEquipmentsAppService
     Task<IEnumerable<VisitTeamEquipmentResponse>> GetAllAsync(CancellationToken ct);
     Task<VisitTeamEquipmentResponse> GetByIdAsync(int id, CancellationToken ct);
     Task<ListPageResponse<VisitTeamEquipmentResponse>> GetPagedAsync(PagedFilterRequest request, CancellationToken ct);
-    Task<bool> CreateAsync(CreateVisitTeamEquipmentRequest request, CancellationToken ct);
+    Task<int> CreateAsync(CreateVisitTeamEquipmentRequest request, CancellationToken ct);
     Task<bool> UpdateAsync(int id, UpdateVisitTeamEquipmentRequest request, CancellationToken ct);
     Task<bool> ActivateAsync(int id, CancellationToken ct);
     Task<bool> DeactivateAsync(int id, CancellationToken ct);

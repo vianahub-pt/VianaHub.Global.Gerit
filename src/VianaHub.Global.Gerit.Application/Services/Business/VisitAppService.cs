@@ -19,7 +19,7 @@ using VianaHub.Global.Gerit.Domain.Tools.Notifications;
 namespace VianaHub.Global.Gerit.Application.Services.Business;
 
 /// <summary>
-/// Serviço de aplicação para Visit
+/// Serviï¿½o de aplicaï¿½ï¿½o para Visit
 /// </summary>
 public class VisitAppService : IVisitAppService
 {
@@ -76,17 +76,17 @@ public class VisitAppService : IVisitAppService
         return _mapper.Map<ListPageResponse<VisitResponse>>(paged);
     }
 
-    public async Task<bool> CreateAsync(CreateVisitRequest request, CancellationToken ct)
+    public async Task<int> CreateAsync(CreateVisitRequest request, CancellationToken ct)
     {
         var tenantId = _currentUser.GetTenantId();
         var userId = _currentUser.GetUserId();
 
-        // Validar unicidade: Título único por Tenant
+        // Validar unicidade: Tï¿½tulo ï¿½nico por Tenant
         var exists = await _repo.ExistsByTenantAndTitleAsync(tenantId, request.Title, null, ct);
         if (exists)
         {
             _notify.Add(_localization.GetMessage("Application.Service.Visit.Create.ResourceAlreadyExists"), 409);
-            return false;
+            return 0;
         }
 
         var entity = new VisitEntity(
@@ -100,7 +100,8 @@ public class VisitAppService : IVisitAppService
             userId
         );
 
-        return await _domain.CreateAsync(entity, ct);
+        var success = await _domain.CreateAsync(entity, ct);
+        return success ? entity.Id : 0;
     }
 
     public async Task<bool> UpdateAsync(int id, UpdateVisitRequest request, CancellationToken ct)
@@ -114,7 +115,7 @@ public class VisitAppService : IVisitAppService
 
         var tenantId = _currentUser.GetTenantId();
 
-        // Validar unicidade: Título único por Tenant (excluindo o próprio registro)
+        // Validar unicidade: Tï¿½tulo ï¿½nico por Tenant (excluindo o prï¿½prio registro)
         var exists = await _repo.ExistsByTenantAndTitleAsync(tenantId, request.Title, id, ct);
         if (exists)
         {
@@ -178,11 +179,11 @@ public class VisitAppService : IVisitAppService
 
     public async Task<bool> BulkUploadAsync(IFormFile file, CancellationToken ct)
     {
-        // Valida arquivo usando serviço centralizado
+        // Valida arquivo usando serviï¿½o centralizado
         if (!_fileValidation.ValidateFile(file))
             return false;
 
-        // Lê itens do CSV
+        // Lï¿½ itens do CSV
         var items = ReadCsvFile(file);
         if (items == null)
             return false;

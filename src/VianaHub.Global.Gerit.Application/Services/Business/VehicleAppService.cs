@@ -69,18 +69,19 @@ public class VehicleAppService : IVehicleAppService
         return _mapper.Map<ListPageResponse<VehicleResponse>>(paged);
     }
 
-    public async Task<bool> CreateAsync(CreateVehicleRequest request, CancellationToken ct)
+    public async Task<int> CreateAsync(CreateVehicleRequest request, CancellationToken ct)
     {
         var tenantId = _currentUser.GetTenantId();
         var exists = await _repo.ExistsByPlateAsync(tenantId, request.Plate, ct);
         if (exists)
         {
             _notify.Add(_localization.GetMessage("Application.Service.Vehicle.Create.ResourceAlreadyExists"), 400);
-            return false;
+            return 0;
         }
 
         var entity = new VehicleEntity(tenantId, request.StatusId, request.Plate, request.Brand, request.Model, request.Year, request.Color, request.FuelType, _currentUser.GetUserId());
-        return await _domain.CreateAsync(entity, ct);
+        var success = await _domain.CreateAsync(entity, ct);
+        return success ? entity.Id : 0;
     }
 
     public async Task<bool> UpdateAsync(int id, UpdateVehicleRequest request, CancellationToken ct)
@@ -137,11 +138,11 @@ public class VehicleAppService : IVehicleAppService
 
     public async Task<bool> BulkUploadAsync(IFormFile file, CancellationToken ct)
     {
-        // Valida arquivo usando serviço centralizado
+        // Valida arquivo usando serviï¿½o centralizado
         if (!_fileValidation.ValidateFile(file))
             return false;
 
-        // Lê itens do CSV
+        // Lï¿½ itens do CSV
         var items = ReadCsvFile(file);
         if (items == null)
             return false;
@@ -160,17 +161,17 @@ public class VehicleAppService : IVehicleAppService
     {
         try
         {
-            // Cria StreamReader com encoding UTF-8 forçado
+            // Cria StreamReader com encoding UTF-8 forï¿½ado
             using var reader = file.OpenReadStream().CreateUtf8StreamReader();
 
             var config = new CsvConfiguration(CultureInfo.InvariantCulture)
             {
                 HasHeaderRecord = true,
-                Delimiter = ";", // CSV usa ponto e vírgula como delimitador
+                Delimiter = ";", // CSV usa ponto e vï¿½rgula como delimitador
                 MissingFieldFound = null,
                 HeaderValidated = null,
                 TrimOptions = TrimOptions.Trim,
-                BadDataFound = null // Ignora linhas mal formatadas ao invés de lançar exceção
+                BadDataFound = null // Ignora linhas mal formatadas ao invï¿½s de lanï¿½ar exceï¿½ï¿½o
             };
 
             using var csv = new CsvReader(reader, config);
@@ -196,7 +197,7 @@ public class VehicleAppService : IVehicleAppService
                         record.Color = record.Color?.SanitizeCsvInput().NormalizeUtf8();
                         record.FuelType = record.FuelType?.SanitizeCsvInput().NormalizeUtf8();
 
-                        // Valida se os campos não contêm conteúdo perigoso
+                        // Valida se os campos nï¿½o contï¿½m conteï¿½do perigoso
                         if (!string.IsNullOrEmpty(record.Plate) && !record.Plate.IsSafeCsvValue())
                         {
                             _notify.Add(_localization.GetMessage("Application.Service.Vehicle.ReadCsvFile.Plate.IsSafeCsvValue", rowCount + 2), 400);
@@ -250,7 +251,7 @@ public class VehicleAppService : IVehicleAppService
 
         foreach (var item in items)
         {
-            // Valida campos obrigatórios
+            // Valida campos obrigatï¿½rios
             if (!ValidateBulkItem(item))
             {
                 hasErrors = true;
@@ -269,7 +270,7 @@ public class VehicleAppService : IVehicleAppService
             // Cria a entidade
             var entity = new VehicleEntity(tenantId, item.StatusId, item.Plate, item.Brand, item.Model, item.Year, item.Color, item.FuelType, _currentUser.GetUserId());
 
-            // Tenta criar no domínio
+            // Tenta criar no domï¿½nio
             var success = await _domain.CreateAsync(entity, ct);
 
             if (!success)

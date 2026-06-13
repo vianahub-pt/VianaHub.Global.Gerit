@@ -79,7 +79,7 @@ public class UserPreferencesAppService : IUserPreferencesAppService
         return _mapper.Map<ListPageResponse<UserPreferencesResponse>>(paged);
     }
 
-    public async Task<bool> CreateAsync(CreateUserPreferencesRequest request, CancellationToken ct)
+    public async Task<int> CreateAsync(CreateUserPreferencesRequest request, CancellationToken ct)
     {
         var tenantId = _currentUser.GetTenantId();
         var userId = _currentUser.GetUserId();
@@ -88,7 +88,7 @@ public class UserPreferencesAppService : IUserPreferencesAppService
         if (exists)
         {
             _notify.Add(_localization.GetMessage("Application.Service.UserPreferences.Create.ResourceAlreadyExists"), 400);
-            return false;
+            return 0;
         }
 
         if (!TimeSpan.TryParse(request.DayStart, out var dayStart))
@@ -98,7 +98,8 @@ public class UserPreferencesAppService : IUserPreferencesAppService
 
         var entity = new UserPreferencesEntity(tenantId, userId, request.Appearance, request.CurrencyCode, request.Locale, request.Timezone, request.DateFormat, request.TimeFormat, dayStart, dayEnd, _currentUser.GetUserId());
 
-        return await _domain.CreateAsync(entity, ct);
+        var success = await _domain.CreateAsync(entity, ct);
+        return success ? entity.Id : 0;
     }
 
     public async Task<bool> UpdateAsync(int id, UpdateUserPreferencesRequest request, CancellationToken ct)
