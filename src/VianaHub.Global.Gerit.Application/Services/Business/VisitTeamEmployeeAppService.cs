@@ -85,26 +85,26 @@ public class VisitTeamEmployeeAppService : IVisitTeamEmployeeAppService
         return _mapper.Map<ListPageResponse<VisitTeamEmployeeResponse>>(paged);
     }
 
-    public async Task<bool> CreateAsync(CreateVisitTeamEmployeeRequest request, CancellationToken ct)
+    public async Task<int> CreateAsync(CreateVisitTeamEmployeeRequest request, CancellationToken ct)
     {
         var tenantId = _currentUser.GetTenantId();
 
         if (!await _employeeRepository.ExistsByIdAsync(request.EmployeeId, ct))
         {
             _notify.Add(_localization.GetMessage("Application.Service.VisitTeamEmployee.Create.EmployeeNotFound"), 400);
-            return false;
+            return 0;
         }
 
         if (!await _functionRepository.ExistsByIdAsync(request.FunctionId, ct))
         {
             _notify.Add(_localization.GetMessage("Application.Service.VisitTeamEmployee.Create.FunctionNotFound"), 400);
-            return false;
+            return 0;
         }
 
         if (await _repo.ExistsActiveAssignmentAsync(request.VisitTeamId, request.EmployeeId, ct))
         {
             _notify.Add(_localization.GetMessage("Application.Service.VisitTeamEmployee.Create.AlreadyAssigned"), 409);
-            return false;
+            return 0;
         }
 
         var entity = new VisitTeamEmployeeEntity(
@@ -117,7 +117,8 @@ public class VisitTeamEmployeeAppService : IVisitTeamEmployeeAppService
             _currentUser.GetUserId()
         );
 
-        return await _domain.CreateAsync(entity, ct);
+        var success = await _domain.CreateAsync(entity, ct);
+        return success ? entity.Id : 0;
     }
 
     public async Task<bool> UpdateAsync(int id, UpdateVisitTeamEmployeeRequest request, CancellationToken ct)

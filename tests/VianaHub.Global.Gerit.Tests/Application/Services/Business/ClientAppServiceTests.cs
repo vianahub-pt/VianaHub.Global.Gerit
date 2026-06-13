@@ -66,7 +66,16 @@ public class ClientAppServiceTests
         currentUserMock.Setup(x => x.GetUserId()).Returns(5);
         localizationMock.Setup(x => x.GetMessage("Application.Service.Client.Create.ResourceAlreadyExists")).Returns("duplicate-email");
         // The current implementation does not check for existing email before calling domain; adjust test accordingly.
-        domainMock.Setup(d => d.CreateAsync(It.IsAny<ClientEntity>(), It.IsAny<CancellationToken>())).ReturnsAsync(true);
+        // CreateAsync now returns int (entity ID), so we need to capture the entity and set its ID via reflection
+        ClientEntity capturedEntity = null;
+        domainMock.Setup(d => d.CreateAsync(It.IsAny<ClientEntity>(), It.IsAny<CancellationToken>()))
+            .Callback<ClientEntity, CancellationToken>((entity, _) => 
+            {
+                capturedEntity = entity;
+                // Set ID via reflection since it has a protected setter
+                typeof(ClientEntity).BaseType?.GetProperty("Id", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)?.SetValue(entity, 42);
+            })
+            .ReturnsAsync(true);
 
         var service = new ClientAppService(
             repoMock.Object,
@@ -102,7 +111,7 @@ public class ClientAppServiceTests
 
         var result = await service.CreateAsync(request, CancellationToken.None);
 
-        Assert.True(result);
+        Assert.True(result > 0);
         domainMock.Verify(x => x.CreateAsync(It.IsAny<ClientEntity>(), It.IsAny<CancellationToken>()), Times.Once);
     }
 }

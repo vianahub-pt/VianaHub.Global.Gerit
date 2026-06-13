@@ -53,8 +53,8 @@ public static class ActionEndpoint
 
         groupV1.MapPost("/", async ([FromBody] CreateActionRequest request, [FromServices] IActionAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
-            var created = await appService.CreateAsync(request, ct);
-            return notify.CustomResponse(201);
+            var id = await appService.CreateAsync(request, ct);
+            return notify.CustomResponse(new GenericResponse { Id = id }, 201);
         })
         .CustomAuthorize("Admin,BackOffice", "Actions", "Create")
         .AllowAnonymous()

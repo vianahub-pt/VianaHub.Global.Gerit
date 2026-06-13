@@ -64,8 +64,8 @@ public static class RolePermissionEndpoint
 
         groupV1.MapPost("/", async ([FromBody] CreateRolePermissionRequest request, [FromServices] IRolePermissionAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
-            var created = await appService.CreateAsync(request, ct);
-            return notify.CustomResponse(created != null ? 201 : 400);
+            var result = await appService.CreateAsync(request, ct);
+            return notify.CustomResponse(new GenericResponse { Id = result.Id }, 201);
         })
         //.CustomAuthorize("Admin,BackOffice,Manager", "RolePermissions", "Create")
         .AllowAnonymous()

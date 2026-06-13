@@ -10,7 +10,7 @@ public interface IEmployeeAppService
     Task<IEnumerable<EmployeeResponse>> GetAllAsync(CancellationToken ct);
     Task<EmployeeResponse> GetByIdAsync(int id, CancellationToken ct);
     Task<ListPageResponse<EmployeeResponse>> GetPagedAsync(PagedFilterRequest request, CancellationToken ct);
-    Task<bool> CreateAsync(CreateEmployeeRequest request, CancellationToken ct);
+    Task<int> CreateAsync(CreateEmployeeRequest request, CancellationToken ct);
     Task<bool> UpdateAsync(int id, UpdateEmployeeRequest request, CancellationToken ct);
     Task<bool> ActivateAsync(int id, CancellationToken ct);
     Task<bool> DeactivateAsync(int id, CancellationToken ct);

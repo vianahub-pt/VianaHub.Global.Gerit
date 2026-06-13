@@ -51,8 +51,8 @@ public static class VisitEndpoint
 
         groupV1.MapPost("/", async ([FromBody] CreateVisitRequest request, [FromServices] IVisitAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
-            var created = await appService.CreateAsync(request, ct);
-            return notify.CustomResponse(created, 201);
+            var id = await appService.CreateAsync(request, ct);
+            return notify.CustomResponse(new GenericResponse { Id = id }, 201);
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "Visits", "Create")
         .WithName("CreateVisit")

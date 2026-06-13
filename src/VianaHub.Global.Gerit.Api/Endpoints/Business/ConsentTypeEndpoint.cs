@@ -51,8 +51,8 @@ public static class ConsentTypeEndpoint
 
         groupV1.MapPost("/", async ([FromBody] CreateConsentTypeRequest request, [FromServices] IConsentTypeAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
-            var created = await appService.CreateAsync(request, ct);
-            return notify.CustomResponse(created, 201);
+            var id = await appService.CreateAsync(request, ct);
+            return notify.CustomResponse(new GenericResponse { Id = id }, 201);
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "ConsentTypes", "Create")
         .WithName("CreateConsentType")

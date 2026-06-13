@@ -13,7 +13,7 @@ public interface IEmployeeAddressAppService
     Task<IEnumerable<EmployeeAddressResponse>> GetAllAsync(CancellationToken ct);
     Task<EmployeeAddressResponse> GetByIdAsync(int id, CancellationToken ct);
     Task<ListPageResponse<EmployeeAddressResponse>> GetPagedAsync(PagedFilterRequest request, CancellationToken ct);
-    Task<bool> CreateAsync(CreateEmployeeAddressRequest request, CancellationToken ct);
+    Task<int> CreateAsync(CreateEmployeeAddressRequest request, CancellationToken ct);
     Task<bool> UpdateAsync(int id, UpdateEmployeeAddressRequest request, CancellationToken ct);
     Task<bool> ActivateAsync(int id, CancellationToken ct);
     Task<bool> DeactivateAsync(int id, CancellationToken ct);

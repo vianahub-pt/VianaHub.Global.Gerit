@@ -11,7 +11,7 @@ public interface IClientCompanyAppService
     Task<ClientCompanyResponse> GetByIdAsync(int id, CancellationToken ct);
     Task<ClientCompanyResponse> GetByClientIdAsync(int clientId, CancellationToken ct);
     Task<ListPageResponse<ClientCompanyResponse>> GetPagedAsync(PagedFilterRequest request, CancellationToken ct);
-    Task<bool> CreateAsync(CreateClientCompanyRequest request, CancellationToken ct);
+    Task<int> CreateAsync(CreateClientCompanyRequest request, CancellationToken ct);
     Task<bool> UpdateAsync(int id, UpdateClientCompanyRequest request, CancellationToken ct);
     Task<bool> ActivateAsync(int id, CancellationToken ct);
     Task<bool> DeactivateAsync(int id, CancellationToken ct);

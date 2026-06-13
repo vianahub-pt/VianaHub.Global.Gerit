@@ -80,7 +80,7 @@ public class ClientAppService : IClientAppService
         return _mapper.Map<ListPageResponse<ClientResponse>>(paged);
     }
 
-    public async Task<bool> CreateAsync(CreateClientRequest request, CancellationToken ct)
+    public async Task<int> CreateAsync(CreateClientRequest request, CancellationToken ct)
     {
         var client = new ClientEntity(TenantId, (ClientType)request.ClientType, (OriginType)request.OriginType, request.UrlImage, request.Note, UserId);
 
@@ -99,7 +99,8 @@ public class ClientAppService : IClientAppService
                 break;
         }
 
-        return await _domain.CreateAsync(client, ct);
+        var success = await _domain.CreateAsync(client, ct);
+        return success ? client.Id : 0;
     }
 
     public async Task<bool> UpdateAsync(int id, UpdateClientRequest request, CancellationToken ct)

@@ -84,14 +84,14 @@ public class TenantContactAppService : ITenantContactAppService
         return _mapper.Map<ListPageResponse<TenantContactResponse>>(paged);
     }
 
-    public async Task<bool> CreateAsync(CreateTenantContactRequest request, CancellationToken ct)
+    public async Task<int> CreateAsync(CreateTenantContactRequest request, CancellationToken ct)
     {
         var tenantId = _currentUser.GetTenantId();
 
         if (request.IsPrimary && await _repo.ExistsPrimaryContactAsync(tenantId, ct))
         {
             _notify.Add(_localization.GetMessage("Application.Service.TenantContact.Create.PrimaryAlreadyExists"), 409);
-            return false;
+            return 0;
         }
 
         var entity = new TenantContactEntity(
@@ -103,7 +103,8 @@ public class TenantContactAppService : ITenantContactAppService
             _currentUser.GetUserId()
         );
 
-        return await _domain.CreateAsync(entity, ct);
+        var success = await _domain.CreateAsync(entity, ct);
+        return success ? entity.Id : 0;
     }
 
     public async Task<bool> UpdateAsync(int id, UpdateTenantContactRequest request, CancellationToken ct)

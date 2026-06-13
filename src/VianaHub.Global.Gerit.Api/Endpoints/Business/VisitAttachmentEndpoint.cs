@@ -98,8 +98,8 @@ public static class VisitAttachmentEndpoint
 
         groupV1.MapPost("/", async ([FromBody] CreateVisitAttachmentRequest request, [FromServices] IVisitAttachmentAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
-            var created = await appService.CreateAsync(request, ct);
-            return notify.CustomResponse(created, 201);
+            var id = await appService.CreateAsync(request, ct);
+            return notify.CustomResponse(new GenericResponse { Id = id }, 201);
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "VisitAttachments", "Create")
         .WithName("CreateVisitAttachment")

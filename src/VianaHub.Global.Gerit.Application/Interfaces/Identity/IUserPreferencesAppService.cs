@@ -11,7 +11,7 @@ public interface IUserPreferencesAppService
     Task<UserPreferencesResponse> GetByIdAsync(int id, CancellationToken ct);
     Task<UserPreferencesResponse> GetByUserAsync(int userId, CancellationToken ct);
     Task<ListPageResponse<UserPreferencesResponse>> GetPagedAsync(PagedFilterRequest request, CancellationToken ct);
-    Task<bool> CreateAsync(CreateUserPreferencesRequest request, CancellationToken ct);
+    Task<int> CreateAsync(CreateUserPreferencesRequest request, CancellationToken ct);
     Task<bool> UpdateAsync(int id, UpdateUserPreferencesRequest request, CancellationToken ct);
     Task<bool> ActivateAsync(int id, CancellationToken ct);
     Task<bool> DeactivateAsync(int id, CancellationToken ct);

@@ -73,18 +73,19 @@ public class FunctionAppService : IFunctionAppService
         return _mapper.Map<ListPageResponse<FunctionResponse>>(paged);
     }
 
-    public async Task<bool> CreateAsync(CreateFunctionRequest request, CancellationToken ct)
+    public async Task<int> CreateAsync(CreateFunctionRequest request, CancellationToken ct)
     {
         var tenantId = _currentUser.GetTenantId();
         var exists = await _repo.ExistsByNameAsync(tenantId, request.Name, ct);
         if (exists)
         {
             _notify.Add(_localization.GetMessage("Application.Service.Function.Create.ResourceAlreadyExists"), 400);
-            return false;
+            return 0;
         }
 
         var entity = new FunctionEntity(tenantId, request.Name, request.Description, _currentUser.GetUserId());
-        return await _domain.CreateAsync(entity, ct);
+        var success = await _domain.CreateAsync(entity, ct);
+        return success ? entity.Id : 0;
     }
 
     public async Task<bool> UpdateAsync(int id, UpdateFunctionRequest request, CancellationToken ct)

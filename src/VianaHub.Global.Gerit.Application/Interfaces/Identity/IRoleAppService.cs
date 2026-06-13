@@ -10,7 +10,7 @@ public interface IRoleAppService
     Task<IEnumerable<RoleResponse>> GetAllAsync(CancellationToken ct);
     Task<RoleResponse> GetByIdAsync(int id, CancellationToken ct);
     Task<ListPageResponse<RoleResponse>> GetPagedAsync(PagedFilterRequest request, CancellationToken ct);
-    Task<bool> CreateAsync(CreateRoleRequest request, CancellationToken ct);
+    Task<int> CreateAsync(CreateRoleRequest request, CancellationToken ct);
     Task<bool> UpdateAsync(int id, UpdateRoleRequest request, CancellationToken ct);
     Task<bool> ActivateAsync(int id, CancellationToken ct);
     Task<bool> DeactivateAsync(int id, CancellationToken ct);

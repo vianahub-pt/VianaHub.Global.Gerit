@@ -67,14 +67,14 @@ public class AttachmentCategoryAppService : IAttachmentCategoryAppService
         return _mapper.Map<ListPageResponse<AttachmentCategoryResponse>>(paged);
     }
 
-    public async Task<bool> CreateAsync(CreateAttachmentCategoryRequest request, CancellationToken ct)
+    public async Task<int> CreateAsync(CreateAttachmentCategoryRequest request, CancellationToken ct)
     {
         var tenantId = _currentUser.GetTenantId();
 
         if (await _repo.ExistsByNameAsync(tenantId, request.Name, ct))
         {
             _notify.Add(_localization.GetMessage("Application.Service.AttachmentCategory.Create.NameAlreadyExists"), 409);
-            return false;
+            return 0;
         }
 
         var entity = new AttachmentCategoryEntity(
@@ -86,7 +86,8 @@ public class AttachmentCategoryAppService : IAttachmentCategoryAppService
             _currentUser.GetUserId()
         );
 
-        return await _domain.CreateAsync(entity, ct);
+        var success = await _domain.CreateAsync(entity, ct);
+        return success ? entity.Id : 0;
     }
 
     public async Task<bool> UpdateAsync(int id, UpdateAttachmentCategoryRequest request, CancellationToken ct)

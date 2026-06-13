@@ -52,8 +52,8 @@ public static class VehicleEndpoint
 
         groupV1.MapPost("/", async ([FromBody] CreateVehicleRequest request, [FromServices] IVehicleAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
-            var created = await appService.CreateAsync(request, ct);
-            return notify.CustomResponse(created, 201);
+            var id = await appService.CreateAsync(request, ct);
+            return notify.CustomResponse(new GenericResponse { Id = id }, 201);
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "Vehicles", "Create")
         .WithName("CreateVehicle")
@@ -117,7 +117,7 @@ public static class VehicleEndpoint
         {
             if (!request.HasFormContentType || request.Form.Files.Count == 0)
             {
-                // Chave de tradução para mensagem de erro quando nenhum arquivo for enviado
+                // Chave de traduï¿½ï¿½o para mensagem de erro quando nenhum arquivo for enviado
                 notify.Add("Api.Upload.NoFileProvided", 400);
                 return notify.CustomResponse();
             }

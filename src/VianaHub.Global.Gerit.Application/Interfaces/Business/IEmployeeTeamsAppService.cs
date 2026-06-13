@@ -10,7 +10,7 @@ public interface IEmployeeTeamsAppService
     Task<IEnumerable<EmployeeTeamResponse>> GetAllAsync(CancellationToken ct);
     Task<EmployeeTeamResponse> GetByIdAsync(int id, CancellationToken ct);
     Task<ListPageResponse<EmployeeTeamResponse>> GetPagedAsync(PagedFilterRequest request, CancellationToken ct);
-    Task<bool> CreateAsync(CreateEmployeeTeamRequest request, CancellationToken ct);
+    Task<int> CreateAsync(CreateEmployeeTeamRequest request, CancellationToken ct);
     Task<bool> UpdateAsync(int id, UpdateEmployeeTeamRequest request, CancellationToken ct);
     Task<bool> ActivateAsync(int id, CancellationToken ct);
     Task<bool> DeactivateAsync(int id, CancellationToken ct);

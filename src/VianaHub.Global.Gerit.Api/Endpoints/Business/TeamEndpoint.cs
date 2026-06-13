@@ -51,8 +51,8 @@ public static class TeamEndpoint
 
         groupV1.MapPost("/", async ([FromBody] CreateTeamRequest request, [FromServices] ITeamAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
-            var created = await appService.CreateAsync(request, ct);
-            return notify.CustomResponse(created ? 201 : 400);
+            var id = await appService.CreateAsync(request, ct);
+            return notify.CustomResponse(new GenericResponse { Id = id }, 201);
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "Teams", "Create")
         .WithName("CreateTeam")
@@ -116,7 +116,7 @@ public static class TeamEndpoint
         {
             if (!request.HasFormContentType || request.Form.Files.Count == 0)
             {
-                // Utiliza chave de tradução para mensagem
+                // Utiliza chave de traduï¿½ï¿½o para mensagem
                 notify.Add("Api.Upload.NoFileProvided", 400);
                 return notify.CustomResponse();
             }

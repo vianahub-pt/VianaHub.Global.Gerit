@@ -55,8 +55,8 @@ public static class UserEndpoint
 
         groupV1.MapPost("/", async ([FromBody] CreateUserRequest request, [FromServices] IUserAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
-            var created = await appService.CreateAsync(request, ct);
-            return notify.CustomResponse(201);
+            var id = await appService.CreateAsync(request, ct);
+            return notify.CustomResponse(new GenericResponse { Id = id }, 201);
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "Users", "Create")
         .AllowAnonymous()

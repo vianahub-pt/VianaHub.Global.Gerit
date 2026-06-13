@@ -6,14 +6,14 @@ using VianaHub.Global.Gerit.Application.Dtos.Response.Business.Status;
 namespace VianaHub.Global.Gerit.Application.Interfaces.Business;
 
 /// <summary>
-/// Interface para serviço de aplicação de Status
+/// Interface para serviï¿½o de aplicaï¿½ï¿½o de Status
 /// </summary>
 public interface IStatusAppService
 {
     Task<IEnumerable<StatusResponse>> GetAllAsync(CancellationToken ct);
     Task<StatusResponse> GetByIdAsync(int id, CancellationToken ct);
     Task<ListPageResponse<StatusResponse>> GetPagedAsync(PagedFilterRequest request, CancellationToken ct);
-    Task<bool> CreateAsync(CreateStatusRequest request, CancellationToken ct);
+    Task<int> CreateAsync(CreateStatusRequest request, CancellationToken ct);
     Task<bool> UpdateAsync(int id, UpdateStatusRequest request, CancellationToken ct);
     Task<bool> ActivateAsync(int id, CancellationToken ct);
     Task<bool> DeactivateAsync(int id, CancellationToken ct);

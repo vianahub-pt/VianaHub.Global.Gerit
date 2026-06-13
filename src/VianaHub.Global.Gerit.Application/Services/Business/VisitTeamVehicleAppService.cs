@@ -69,19 +69,20 @@ public class VisitTeamVehicleAppService : IVisitTeamVehiclesAppService
         return _mapper.Map<ListPageResponse<VisitTeamVehicleResponse>>(paged);
     }
 
-    public async Task<bool> CreateAsync(CreateVisitTeamVehicleRequest request, CancellationToken ct)
+    public async Task<int> CreateAsync(CreateVisitTeamVehicleRequest request, CancellationToken ct)
     {
         var tenantId = _currentUser.GetTenantId();
         var exists = await _repo.ExistsByIdAsync(tenantId, request.VisitTeamId, request.VehicleId, ct);
         if (exists)
         {
             _notify.Add(_localization.GetMessage("Application.Service.VisitTeamVehicle.Create.ResourceAlreadyExists", request.VisitTeamId, request.VehicleId), 409);
-            return false;
+            return 0;
         }
 
         var entity = new VisitTeamVehicleEntity(tenantId, request.VisitTeamId, request.VehicleId, _currentUser.GetUserId());
         entity.Update(request.VisitTeamId, request.VehicleId, _currentUser.GetUserId());
-        return await _domain.CreateAsync(entity, ct);
+        var success = await _domain.CreateAsync(entity, ct);
+        return success ? entity.Id : 0;
     }
 
     public async Task<bool> UpdateAsync(int id, UpdateVisitTeamVehicleRequest request, CancellationToken ct)

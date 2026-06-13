@@ -19,7 +19,7 @@ using VianaHub.Global.Gerit.Domain.Tools.Notifications;
 namespace VianaHub.Global.Gerit.Application.Services.Business;
 
 /// <summary>
-/// Serviço de aplicação para Status
+/// Serviï¿½o de aplicaï¿½ï¿½o para Status
 /// </summary>
 public class StatusAppService : IStatusAppService
 {
@@ -76,18 +76,19 @@ public class StatusAppService : IStatusAppService
         return _mapper.Map<ListPageResponse<StatusResponse>>(paged);
     }
 
-    public async Task<bool> CreateAsync(CreateStatusRequest request, CancellationToken ct)
+    public async Task<int> CreateAsync(CreateStatusRequest request, CancellationToken ct)
     {
         var tenantId = _currentUser.GetTenantId();
         var exists = await _repo.ExistsByNameAsync(tenantId, request.Name, ct);
         if (exists)
         {
             _notify.Add(_localization.GetMessage("Application.Service.Status.Create.ResourceAlreadyExists"), 409);
-            return false;
+            return 0;
         }
 
         var entity = new StatusEntity(tenantId, request.StatusTypeId, request.Name, request.Description, _currentUser.GetUserId());
-        return await _domain.CreateAsync(entity, ct);
+        var success = await _domain.CreateAsync(entity, ct);
+        return success ? entity.Id : 0;
     }
 
     public async Task<bool> UpdateAsync(int id, UpdateStatusRequest request, CancellationToken ct)
@@ -99,7 +100,7 @@ public class StatusAppService : IStatusAppService
             return false;
         }
 
-        // Verifica se já existe outro com o mesmo nome no mesmo tenant
+        // Verifica se jï¿½ existe outro com o mesmo nome no mesmo tenant
         var exists = await _repo.ExistsByNameForUpdateAsync(entity.TenantId, request.Name, id, ct);
         if (exists)
         {
@@ -152,11 +153,11 @@ public class StatusAppService : IStatusAppService
 
     public async Task<bool> BulkUploadAsync(IFormFile file, CancellationToken ct)
     {
-        // Valida arquivo usando serviço centralizado
+        // Valida arquivo usando serviï¿½o centralizado
         if (!_fileValidation.ValidateFile(file))
             return false;
 
-        // Lê itens do CSV
+        // Lï¿½ itens do CSV
         var items = ReadCsvFile(file);
         if (items == null)
             return false;
@@ -175,17 +176,17 @@ public class StatusAppService : IStatusAppService
     {
         try
         {
-            // Cria StreamReader com encoding UTF-8 forçado
+            // Cria StreamReader com encoding UTF-8 forï¿½ado
             using var reader = file.OpenReadStream().CreateUtf8StreamReader();
 
             var config = new CsvConfiguration(CultureInfo.InvariantCulture)
             {
                 HasHeaderRecord = true,
-                Delimiter = ";", // CSV usa ponto e vírgula como delimitador
+                Delimiter = ";", // CSV usa ponto e vï¿½rgula como delimitador
                 MissingFieldFound = null,
                 HeaderValidated = null,
                 TrimOptions = TrimOptions.Trim,
-                BadDataFound = null // Ignora linhas mal formatadas ao invés de lançar exceção
+                BadDataFound = null // Ignora linhas mal formatadas ao invï¿½s de lanï¿½ar exceï¿½ï¿½o
             };
 
             using var csv = new CsvReader(reader, config);
@@ -208,7 +209,7 @@ public class StatusAppService : IStatusAppService
                         record.Name = record.Name?.SanitizeCsvInput().NormalizeUtf8();
                         record.Description = record.Description?.SanitizeCsvInput().NormalizeUtf8();
 
-                        // Valida se os campos não contém conteúdo perigoso
+                        // Valida se os campos nï¿½o contï¿½m conteï¿½do perigoso
                         if (!string.IsNullOrEmpty(record.Name) && !record.Name.IsSafeCsvValue())
                         {
                             _notify.Add(_localization.GetMessage("Application.Service.Status.ReadCsvFile.Name.IsSafeCsvValue", rowCount + 2), 400);
@@ -258,7 +259,7 @@ public class StatusAppService : IStatusAppService
 
         foreach (var item in items)
         {
-            // Valida campos obrigatórios
+            // Valida campos obrigatï¿½rios
             if (!ValidateBulkItem(item))
             {
                 hasErrors = true;
@@ -277,7 +278,7 @@ public class StatusAppService : IStatusAppService
             // Cria a entidade
             var entity = new StatusEntity(tenantId, item.StatusTypeId, item.Name, item.Description, _currentUser.GetUserId());
 
-            // Tenta criar no domínio
+            // Tenta criar no domï¿½nio
             var success = await _domain.CreateAsync(entity, ct);
 
             if (!success)

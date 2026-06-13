@@ -67,20 +67,21 @@ public class UserAppService : IUserAppService
         return _mapper.Map<ListPageResponse<UserResponse>>(paged);
     }
 
-    public async Task<bool> CreateAsync(CreateUserRequest request, CancellationToken ct)
+    public async Task<int> CreateAsync(CreateUserRequest request, CancellationToken ct)
     {
         var exists = await _repo.ExistsByEmailAsync(request.Email, ct);
         if (exists)
         {
             _notify.Add(_localization.GetMessage("Application.Service.User.Create.ResourceAlreadyExists"), 400);
-            return false;
+            return 0;
         }
 
         var passwordHash = DomainExtensions.HashClientSecret(request.Password);
         var tenantId = _currentUser.GetTenantId();
         var entity = new UserEntity(tenantId, request.Name, request.Email, passwordHash, null, _currentUser.GetUserId());
         
-        return await _domain.CreateAsync(entity, ct);
+        var success = await _domain.CreateAsync(entity, ct);
+        return success ? entity.Id : 0;
     }
 
     public async Task<bool> UpdateAsync(int id, UpdateUserRequest request, CancellationToken ct)
@@ -112,7 +113,7 @@ public class UserAppService : IUserAppService
             return false;
         }
 
-        // A validação de senha forte já é feita no validador de rota (UpdatePasswordRouteValidator)
+        // A validaï¿½ï¿½o de senha forte jï¿½ ï¿½ feita no validador de rota (UpdatePasswordRouteValidator)
         var newPasswordHash = DomainExtensions.HashClientSecret(request.NewPassword);
         entity.UpdatePassword(newPasswordHash, _currentUser.GetUserId());
         
@@ -160,11 +161,11 @@ public class UserAppService : IUserAppService
 
     public async Task<bool> BulkUploadAsync(IFormFile file, CancellationToken ct)
     {
-        // Valida arquivo usando serviço centralizado
+        // Valida arquivo usando serviï¿½o centralizado
         if (!_fileValidation.ValidateFile(file))
             return false;
 
-        // Lê itens do CSV
+        // Lï¿½ itens do CSV
         var items = ReadCsvFile(file);
         if (items == null)
             return false;
@@ -183,17 +184,17 @@ public class UserAppService : IUserAppService
     {
         try
         {
-            // Cria StreamReader com encoding UTF-8 forçado
+            // Cria StreamReader com encoding UTF-8 forï¿½ado
             using var reader = file.OpenReadStream().CreateUtf8StreamReader();
 
             var config = new CsvConfiguration(CultureInfo.InvariantCulture)
             {
                 HasHeaderRecord = true,
-                Delimiter = ";", // CSV usa ponto e vírgula como delimitador
+                Delimiter = ";", // CSV usa ponto e vï¿½rgula como delimitador
                 MissingFieldFound = null,
                 HeaderValidated = null,
                 TrimOptions = TrimOptions.Trim,
-                BadDataFound = null // Ignora linhas mal formatadas ao invés de lançar exceção
+                BadDataFound = null // Ignora linhas mal formatadas ao invï¿½s de lanï¿½ar exceï¿½ï¿½o
             };
 
             using var csv = new CsvReader(reader, config);
@@ -218,7 +219,7 @@ public class UserAppService : IUserAppService
                         record.Password = record.Password?.SanitizeCsvInput().NormalizeUtf8();
                         record.PhoneNumber = record.PhoneNumber?.SanitizeCsvInput().NormalizeUtf8();
 
-                        // Valida se os campos não contêm conteúdo perigoso
+                        // Valida se os campos nï¿½o contï¿½m conteï¿½do perigoso
                         if (!string.IsNullOrEmpty(record.Name) && !record.Name.IsSafeCsvValue())
                         {
                             _notify.Add(_localization.GetMessage("Application.Service.User.ReadCsvFile.Name.IsSafeCsvValue", rowCount + 2), 400);
@@ -267,7 +268,7 @@ public class UserAppService : IUserAppService
 
         foreach (var item in items)
         {
-            // Valida campos obrigatórios
+            // Valida campos obrigatï¿½rios
             if (!ValidateBulkItem(item))
             {
                 hasErrors = true;
@@ -287,7 +288,7 @@ public class UserAppService : IUserAppService
             var passwordHash = DomainExtensions.HashClientSecret(item.Password);
             var entity = new UserEntity(tenantId, item.Name, item.Email, passwordHash, item.PhoneNumber, _currentUser.GetUserId());
 
-            // Tenta criar no domínio
+            // Tenta criar no domï¿½nio
             var success = await _domain.CreateAsync(entity, ct);
 
             if (!success)
@@ -320,10 +321,10 @@ public class UserAppService : IUserAppService
             return false;
         }
 
-        // A validação de senha forte deveria ser feita aqui, mas como bulk upload
-        // não passa pelos validadores de rota, precisamos validar manualmente
-        // Por ora, apenas validamos se a senha não está vazia
-        // TODO: Considerar adicionar validação de senha forte aqui ou criar um validador compartilhado
+        // A validaï¿½ï¿½o de senha forte deveria ser feita aqui, mas como bulk upload
+        // nï¿½o passa pelos validadores de rota, precisamos validar manualmente
+        // Por ora, apenas validamos se a senha nï¿½o estï¿½ vazia
+        // TODO: Considerar adicionar validaï¿½ï¿½o de senha forte aqui ou criar um validador compartilhado
 
         return true;
     }

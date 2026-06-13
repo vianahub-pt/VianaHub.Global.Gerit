@@ -71,13 +71,13 @@ public class PlanAppService : IPlanAppService
         return _mapper.Map<ListPageResponse<PlanResponse>>(paged);
     }
 
-    public async Task<bool> CreateAsync(CreatePlanRequest request, CancellationToken ct)
+    public async Task<int> CreateAsync(CreatePlanRequest request, CancellationToken ct)
     {
         var exists = await _repo.ExistsByNameAsync(request.Name, ct);
         if (exists)
         {
             _notify.Add(_localization.GetMessage("Application.Service.Plan.Create.ResourceAlreadyExists"), 400);
-            return false;
+            return 0;
         }
 
         var entity = new PlanEntity(
@@ -92,7 +92,8 @@ public class PlanAppService : IPlanAppService
             request.MaxPhotosPerVisits,
             _currentUser.GetUserId());
 
-        return await _domain.CreateAsync(entity, ct);
+        var success = await _domain.CreateAsync(entity, ct);
+        return success ? entity.Id : 0;
     }
 
     public async Task<bool> UpdateAsync(int id, UpdatePlanRequest request, CancellationToken ct)
@@ -160,11 +161,11 @@ public class PlanAppService : IPlanAppService
 
     public async Task<bool> BulkUploadAsync(IFormFile file, CancellationToken ct)
     {
-        // Valida arquivo usando serviço centralizado
+        // Valida arquivo usando serviï¿½o centralizado
         if (!_fileValidation.ValidateFile(file))
             return false;
 
-        // Lê itens do CSV
+        // Lï¿½ itens do CSV
         var items = ReadCsvFile(file);
         if (items == null)
             return false;
@@ -183,17 +184,17 @@ public class PlanAppService : IPlanAppService
     {
         try
         {
-            // Cria StreamReader com encoding UTF-8 forçado
+            // Cria StreamReader com encoding UTF-8 forï¿½ado
             using var reader = file.OpenReadStream().CreateUtf8StreamReader();
 
             var config = new CsvConfiguration(CultureInfo.InvariantCulture)
             {
                 HasHeaderRecord = true,
-                Delimiter = ";", // CSV usa ponto e vírgula como delimitador
+                Delimiter = ";", // CSV usa ponto e vï¿½rgula como delimitador
                 MissingFieldFound = null,
                 HeaderValidated = null,
                 TrimOptions = TrimOptions.Trim,
-                BadDataFound = null // Ignora linhas mal formatadas ao invés de lançar exceção
+                BadDataFound = null // Ignora linhas mal formatadas ao invï¿½s de lanï¿½ar exceï¿½ï¿½o
             };
 
             using var csv = new CsvReader(reader, config);
@@ -223,7 +224,7 @@ public class PlanAppService : IPlanAppService
                         record.MaxUsers = record.MaxUsers;
                         record.MaxPhotosPerVisits = record.MaxPhotosPerVisits;
 
-                        // Valida se os campos não contêm conteúdo perigoso
+                        // Valida se os campos nï¿½o contï¿½m conteï¿½do perigoso
                         if (!string.IsNullOrEmpty(record.Name) && !record.Name.IsSafeCsvValue())
                         {
                             _notify.Add(_localization.GetMessage("Application.Service.Plan.ReadCsvFile.Name.IsSafeCsvValue", rowCount + 2), 400);
@@ -273,7 +274,7 @@ public class PlanAppService : IPlanAppService
 
         foreach (var item in items)
         {
-            // Valida campos obrigatórios
+            // Valida campos obrigatï¿½rios
             if (!ValidateBulkItem(item))
             {
                 hasErrors = true;
@@ -292,7 +293,7 @@ public class PlanAppService : IPlanAppService
             // Cria a entidade
             var entity = new PlanEntity(item.Name, item.Description, item.PricePerHour, item.PricePerDay, item.PricePerMonth, item.PricePerYear, item.Currency, item.MaxUsers, item.MaxPhotosPerVisits, _currentUser.GetUserId());
 
-            // Tenta criar no domínio
+            // Tenta criar no domï¿½nio
             var success = await _domain.CreateAsync(entity, ct);
 
             if (!success)
