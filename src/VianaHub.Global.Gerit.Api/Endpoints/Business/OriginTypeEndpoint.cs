@@ -51,8 +51,8 @@ public static class OriginTypeEndpoint
 
         groupV1.MapPost("/", async ([FromBody] CreateOriginTypeRequest request, [FromServices] IOriginTypeAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
-            var created = await appService.CreateAsync(request, ct);
-            return notify.CustomResponse(created ? 201 : 400);
+            var id = await appService.CreateAsync(request, ct);
+            return notify.CustomResponse(new GenericResponse { Id = id }, 201);
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "OriginTypes", "Create")
         .WithName("CreateOriginType")

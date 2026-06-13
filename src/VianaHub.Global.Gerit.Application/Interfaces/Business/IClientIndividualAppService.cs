@@ -12,7 +12,7 @@ public interface IClientIndividualAppService
     Task<IEnumerable<ClientIndividualResponse>> GetAllAsync(CancellationToken ct);
     Task<IEnumerable<ClientIndividualResponse>> GetActiveAsync(CancellationToken ct);
     Task<ListPageResponse<ClientIndividualResponse>> GetPagedAsync(PagedFilterRequest request, CancellationToken ct);
-    Task<bool> CreateAsync(CreateClientIndividualRequest request, CancellationToken ct);
+    Task<int> CreateAsync(CreateClientIndividualRequest request, CancellationToken ct);
     Task<bool> UpdateAsync(int id, UpdateClientIndividualRequest request, CancellationToken ct);
     Task<bool> ActivateAsync(int id, CancellationToken ct);
     Task<bool> DeactivateAsync(int id, CancellationToken ct);

@@ -51,8 +51,8 @@ public static class ClientConsentEndpoint
 
         groupV1.MapPost("/{clientId}/consents", async ([FromRoute] int clientId, [FromBody] CreateClientConsentsRequest request, [FromServices] IClientConsentsAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
-            var created = await appService.CreateAsync(clientId, request, ct);
-            return notify.CustomResponse(created ? 201 : 400);
+            var id = await appService.CreateAsync(clientId, request, ct);
+            return notify.CustomResponse(new GenericResponse { Id = id }, 201);
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "ClientConsents", "Create")
         .WithName("CreateClientConsents")

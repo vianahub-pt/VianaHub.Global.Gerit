@@ -51,8 +51,8 @@ public static class ClientContactEndpoint
 
         groupV1.MapPost("/{clientId}/contacts/", async ([FromRoute] int clientId, [FromBody] CreateClientContactRequest request, [FromServices] IClientContactAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
-            var created = await appService.CreateAsync(clientId, request, ct);
-            return notify.CustomResponse(created, 201);
+            var id = await appService.CreateAsync(clientId, request, ct);
+            return notify.CustomResponse(new GenericResponse { Id = id }, 201);
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "ClientContacts", "Create")
         .WithName("CreateClientContact")

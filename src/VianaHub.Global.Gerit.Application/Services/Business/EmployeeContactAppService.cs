@@ -69,14 +69,14 @@ public class EmployeeContactAppService : IEmployeeContactAppService
         return _mapper.Map<ListPageResponse<EmployeeContactResponse>>(paged);
     }
 
-    public async Task<bool> CreateAsync(CreateEmployeeContactRequest request, CancellationToken ct)
+    public async Task<int> CreateAsync(CreateEmployeeContactRequest request, CancellationToken ct)
     {
         var tenantId = _currentUser.GetTenantId();
         var exists = await _repo.ExistsByEmailAsync(tenantId, request.EmployeeId, request.Email, ct);
         if (exists)
         {
             _notify.Add(_localization.GetMessage("Application.Service.EmployeeContact.Create.ResourceAlreadyExists"), 409);
-            return false;
+            return 0;
         }
 
         var entity = new EmployeeContactEntity(
@@ -88,7 +88,8 @@ public class EmployeeContactAppService : IEmployeeContactAppService
             request.IsPrimary, 
             _currentUser.GetUserId());
 
-        return await _domain.CreateAsync(entity, ct);
+        var success = await _domain.CreateAsync(entity, ct);
+        return success ? entity.Id : 0;
     }
 
     public async Task<bool> UpdateAsync(int id, UpdateEmployeeContactRequest request, CancellationToken ct)

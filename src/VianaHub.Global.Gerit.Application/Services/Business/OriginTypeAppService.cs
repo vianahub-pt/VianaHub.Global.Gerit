@@ -73,18 +73,19 @@ public class OriginTypeAppService : IOriginTypeAppService
         return _mapper.Map<ListPageResponse<OriginTypeResponse>>(paged);
     }
 
-    public async Task<bool> CreateAsync(CreateOriginTypeRequest request, CancellationToken ct)
+    public async Task<int> CreateAsync(CreateOriginTypeRequest request, CancellationToken ct)
     {
         var tenantId = _currentUser.GetTenantId();
         var exists = await _repo.ExistsByNameAsync(tenantId, request.Name, ct);
         if (exists)
         {
             _notify.Add(_localization.GetMessage("Application.Service.OriginType.Create.ResourceAlreadyExists"), 409);
-            return false;
+            return 0;
         }
 
         var entity = new OriginTypeEntity(tenantId, request.Name, request.Description, _currentUser.GetUserId());
-        return await _domain.CreateAsync(entity, ct);
+        var success = await _domain.CreateAsync(entity, ct);
+        return success ? entity.Id : 0;
     }
 
     public async Task<bool> UpdateAsync(int id, UpdateOriginTypeRequest request, CancellationToken ct)

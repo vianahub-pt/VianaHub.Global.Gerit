@@ -66,17 +66,18 @@ public class TenantAppService : ITenantAppService
         return _mapper.Map<ListPageResponse<TenantResponse>>(paged);
     }
 
-    public async Task<bool> CreateAsync(CreateTenantRequest request, CancellationToken ct)
+    public async Task<int> CreateAsync(CreateTenantRequest request, CancellationToken ct)
     {
         var exists = await _repo.ExistsByNameAsync(request.Name, ct);
         if (exists)
         {
             _notify.Add(_localization.GetMessage("Application.Service.Tenant.Create.ResourceAlreadyExists"), 400);
-            return false;
+            return 0;
         }
 
         var entity = new TenantEntity((TenantType)request.TenantType, (OriginType)request.OriginType, request.Name, request.Email, request.Website, request.UrlImage, request.Note, _currentUser.GetUserId());
-        return await _domain.CreateAsync(entity, ct);
+        var success = await _domain.CreateAsync(entity, ct);
+        return success ? entity.Id : 0;
     }
     
     public async Task<bool> UpdateAsync(int id, UpdateTenantRequest request, CancellationToken ct)
@@ -133,11 +134,11 @@ public class TenantAppService : ITenantAppService
     
     public async Task<bool> BulkUploadAsync(IFormFile file, CancellationToken ct)
     {
-        // Valida arquivo usando serviço centralizado
+        // Valida arquivo usando serviï¿½o centralizado
         if (!_fileValidation.ValidateFile(file))
             return false;
 
-        // Lê itens do CSV
+        // Lï¿½ itens do CSV
         var items = ReadCsvFile(file);
         if (items == null)
             return false;
@@ -156,17 +157,17 @@ public class TenantAppService : ITenantAppService
     {
         try
         {
-            // Cria StreamReader com encoding UTF-8 forçado
+            // Cria StreamReader com encoding UTF-8 forï¿½ado
             using var reader = file.OpenReadStream().CreateUtf8StreamReader();
 
             var config = new CsvConfiguration(CultureInfo.InvariantCulture)
             {
                 HasHeaderRecord = true,
-                Delimiter = ";", // CSV usa ponto e vírgula como delimitador
+                Delimiter = ";", // CSV usa ponto e vï¿½rgula como delimitador
                 MissingFieldFound = null,
                 HeaderValidated = null,
                 TrimOptions = TrimOptions.Trim,
-                BadDataFound = null // Ignora linhas mal formatadas ao invés de lançar exceção
+                BadDataFound = null // Ignora linhas mal formatadas ao invï¿½s de lanï¿½ar exceï¿½ï¿½o
             };
 
             using var csv = new CsvReader(reader, config);
@@ -188,7 +189,7 @@ public class TenantAppService : ITenantAppService
                         // Sanitiza e normaliza campos
                         record.Name = record.Name?.SanitizeCsvInput().NormalizeUtf8();
 
-                        // Valida se os campos não contêm conteúdo perigoso
+                        // Valida se os campos nï¿½o contï¿½m conteï¿½do perigoso
                         if (!string.IsNullOrEmpty(record.Name) && !record.Name.IsSafeCsvValue())
                         {
                             _notify.Add(_localization.GetMessage("Application.Service.Tenant.ReadCsvFile.Name.IsSafeCsvValue", rowCount + 2), 400);
@@ -229,7 +230,7 @@ public class TenantAppService : ITenantAppService
 
         foreach (var item in items)
         {
-            // Valida campos obrigatórios
+            // Valida campos obrigatï¿½rios
             if (!ValidateBulkItem(item))
             {
                 hasErrors = true;
@@ -248,7 +249,7 @@ public class TenantAppService : ITenantAppService
             // Cria a entidade
             var entity = new TenantEntity((TenantType)item.TenantType, (OriginType)item.OriginType, item.Name, item.Email, item.Website, item.UrlImage, item.Note, _currentUser.GetUserId());
 
-            // Tenta criar no domínio
+            // Tenta criar no domï¿½nio
             var success = await _domain.CreateAsync(entity, ct);
 
             if (!success)

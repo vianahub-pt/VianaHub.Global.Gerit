@@ -43,6 +43,7 @@ namespace VianaHub.Global.Gerit.Tests.Infra.Data.Repository.Business
                 Assert.Single(result.Items);
                 Assert.DoesNotContain(result.Items, i => i.Individual != null && i.Individual.Email == "deleted@test.local");
             }
+        }
 
         [Fact(DisplayName = "GetPagedAsync: search excludes deleted records")]
         [Trait("Layer", "Infra.Data")]

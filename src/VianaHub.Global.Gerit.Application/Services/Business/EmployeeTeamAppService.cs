@@ -69,18 +69,19 @@ public class EmployeeTeamAppService : IEmployeeTeamsAppService
         return _mapper.Map<ListPageResponse<EmployeeTeamResponse>>(paged);
     }
 
-    public async Task<bool> CreateAsync(CreateEmployeeTeamRequest request, CancellationToken ct)
+    public async Task<int> CreateAsync(CreateEmployeeTeamRequest request, CancellationToken ct)
     {
         var tenantId = _currentUser.GetTenantId();
         var exists = await _repo.ExistsByTeamAndMemberAsync(tenantId, request.TeamId, request.EmployeeId, ct);
         if (exists)
         {
             _notify.Add(_localization.GetMessage("Application.Service.EmployeeTeam.Create.ResourceAlreadyExists"), 409);
-            return false;
+            return 0;
         }
 
         var entity = new EmployeeTeamEntity(tenantId, request.TeamId, request.EmployeeId, _currentUser.GetUserId());
-        return await _domain.CreateAsync(entity, ct);
+        var success = await _domain.CreateAsync(entity, ct);
+        return success ? entity.Id : 0;
     }
 
     public async Task<bool> UpdateAsync(int id, UpdateEmployeeTeamRequest request, CancellationToken ct)

@@ -10,7 +10,7 @@ public interface IUserAppService
     Task<IEnumerable<UserResponse>> GetAllAsync(CancellationToken ct);
     Task<UserResponse> GetByIdAsync(int id, CancellationToken ct);
     Task<ListPageResponse<UserResponse>> GetPagedAsync(PagedFilterRequest request, CancellationToken ct);
-    Task<bool> CreateAsync(CreateUserRequest request, CancellationToken ct);
+    Task<int> CreateAsync(CreateUserRequest request, CancellationToken ct);
     Task<bool> UpdateAsync(int id, UpdateUserRequest request, CancellationToken ct);
     Task<bool> UpdatePasswordAsync(int id, UpdatePasswordRequest request, CancellationToken ct);
     Task<bool> ActivateAsync(int id, CancellationToken ct);

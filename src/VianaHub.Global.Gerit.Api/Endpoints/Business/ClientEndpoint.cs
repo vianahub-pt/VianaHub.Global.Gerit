@@ -58,8 +58,8 @@ public static class ClientEndpoint
 
         groupV1.MapPost("/", async ([FromBody] CreateClientRequest request, [FromServices] IClientAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
-            var created = await appService.CreateAsync(request, ct);
-            return notify.CustomResponse(created, 201);
+            var id = await appService.CreateAsync(request, ct);
+            return notify.CustomResponse(new GenericResponse { Id = id }, 201);
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "Clients", "Create")
         .WithName("CreateClient")

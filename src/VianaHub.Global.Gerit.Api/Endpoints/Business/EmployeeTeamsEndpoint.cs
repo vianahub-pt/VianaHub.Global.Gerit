@@ -51,8 +51,8 @@ public static class EmployeeTeamsEndpoint
 
         groupV1.MapPost("/", async ([FromBody] CreateEmployeeTeamRequest request, [FromServices] IEmployeeTeamsAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
-            var created = await appService.CreateAsync(request, ct);
-            return notify.CustomResponse(created, 201);
+            var id = await appService.CreateAsync(request, ct);
+            return notify.CustomResponse(new GenericResponse { Id = id }, 201);
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "EmployeeTeams", "Create")
         .WithName("CreateEmployeeTeam")

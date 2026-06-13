@@ -10,7 +10,7 @@ public interface IVisitAppService
     Task<IEnumerable<VisitResponse>> GetAllAsync(CancellationToken ct);
     Task<VisitResponse> GetByIdAsync(int id, CancellationToken ct);
     Task<ListPageResponse<VisitResponse>> GetPagedAsync(PagedFilterRequest request, CancellationToken ct);
-    Task<bool> CreateAsync(CreateVisitRequest request, CancellationToken ct);
+    Task<int> CreateAsync(CreateVisitRequest request, CancellationToken ct);
     Task<bool> UpdateAsync(int id, UpdateVisitRequest request, CancellationToken ct);
     Task<bool> ActivateAsync(int id, CancellationToken ct);
     Task<bool> DeactivateAsync(int id, CancellationToken ct);

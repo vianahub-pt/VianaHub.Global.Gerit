@@ -51,8 +51,8 @@ public static class EmployeeContactEndpoint
 
         groupV1.MapPost("/", async ([FromBody] CreateEmployeeContactRequest request, [FromServices] IEmployeeContactAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
-            var created = await appService.CreateAsync(request, ct);
-            return notify.CustomResponse(created, 201);
+            var id = await appService.CreateAsync(request, ct);
+            return notify.CustomResponse(new GenericResponse { Id = id }, 201);
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "EmployeeContacts", "Create")
         .WithName("CreateEmployeeContact")

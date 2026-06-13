@@ -10,7 +10,7 @@ public interface IConsentTypeAppService
     Task<IEnumerable<ConsentTypeResponse>> GetAllAsync(CancellationToken ct);
     Task<ConsentTypeResponse> GetByIdAsync(int id, CancellationToken ct);
     Task<ListPageResponse<ConsentTypeResponse>> GetPagedAsync(PagedFilterRequest request, CancellationToken ct);
-    Task<bool> CreateAsync(CreateConsentTypeRequest request, CancellationToken ct);
+    Task<int> CreateAsync(CreateConsentTypeRequest request, CancellationToken ct);
     Task<bool> UpdateAsync(int id, UpdateConsentTypeRequest request, CancellationToken ct);
     Task<bool> ActivateAsync(int id, CancellationToken ct);
     Task<bool> DeactivateAsync(int id, CancellationToken ct);

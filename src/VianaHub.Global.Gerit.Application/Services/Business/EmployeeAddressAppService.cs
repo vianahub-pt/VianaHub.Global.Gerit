@@ -69,14 +69,14 @@ public class EmployeeAddressAppService : IEmployeeAddressAppService
         return _mapper.Map<ListPageResponse<EmployeeAddressResponse>>(paged);
     }
 
-    public async Task<bool> CreateAsync(CreateEmployeeAddressRequest request, CancellationToken ct)
+    public async Task<int> CreateAsync(CreateEmployeeAddressRequest request, CancellationToken ct)
     {
         var tenantId = _currentUser.GetTenantId();
         var exists = await _repo.ExistsByEmployeeAndAddressAsync(tenantId, request.EmployeeId, request.Street, request.City, request.PostalCode, ct);
         if (exists)
         {
             _notify.Add(_localization.GetMessage("Application.Service.EmployeeAddress.Create.ResourceAlreadyExists"), 409);
-            return false;
+            return 0;
         }
 
         var entity = new EmployeeAddressEntity(
@@ -97,7 +97,8 @@ public class EmployeeAddressAppService : IEmployeeAddressAppService
             request.IsPrimary,
             _currentUser.GetUserId());
 
-        return await _domain.CreateAsync(entity, ct);
+        var success = await _domain.CreateAsync(entity, ct);
+        return success ? entity.Id : 0;
     }
 
     public async Task<bool> UpdateAsync(int id, UpdateEmployeeAddressRequest request, CancellationToken ct)

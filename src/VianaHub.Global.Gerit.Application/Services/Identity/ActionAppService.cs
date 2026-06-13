@@ -72,17 +72,18 @@ public class ActionAppService : IActionAppService
     }
 
 
-    public async Task<bool> CreateAsync(CreateActionRequest request, CancellationToken ct)
+    public async Task<int> CreateAsync(CreateActionRequest request, CancellationToken ct)
     {
         var exists = await _repo.ExistsByNameAsync(request.Name, ct);
         if (exists)
         {
             _notify.Add(_localization.GetMessage("Application.Service.Action.Create.ResourceAlreadyExists"), 400);
-            return false;
+            return 0;
         }
 
         var entity = new ActionEntity(request.Name, request.Description, _currentUser.GetUserId());
-        return await _domain.CreateAsync(entity, ct);
+        var success = await _domain.CreateAsync(entity, ct);
+        return success ? entity.Id : 0;
     }
     public async Task<bool> UpdateAsync(int id, UpdateActionRequest request, CancellationToken ct)
     {

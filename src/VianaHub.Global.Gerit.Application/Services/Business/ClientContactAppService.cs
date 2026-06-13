@@ -72,13 +72,13 @@ public class ClientContactAppService : IClientContactAppService
         return _mapper.Map<ListPageResponse<ClientContactResponse>>(paged);
     }
 
-    public async Task<bool> CreateAsync(int clientId, CreateClientContactRequest request, CancellationToken ct)
+    public async Task<int> CreateAsync(int clientId, CreateClientContactRequest request, CancellationToken ct)
     {
         var exists = await _repo.ExistsByClientAndEmailAsync(clientId, request.Name, request.Email, ct);
         if (exists)
         {
             _notify.Add(_localization.GetMessage("Application.Service.ClientContact.Create.ResourceAlreadyExists"), 409);
-            return false;
+            return 0;
         }
 
         var clientContact = new ClientContactEntity(
@@ -93,7 +93,8 @@ public class ClientContactAppService : IClientContactAppService
             UserId
         );
 
-        return await _domain.CreateAsync(clientContact, ct);
+        var success = await _domain.CreateAsync(clientContact, ct);
+        return success ? clientContact.Id : 0;
     }
 
     public async Task<bool> UpdateAsync(int clientId, int id, UpdateClientContactRequest request, CancellationToken ct)

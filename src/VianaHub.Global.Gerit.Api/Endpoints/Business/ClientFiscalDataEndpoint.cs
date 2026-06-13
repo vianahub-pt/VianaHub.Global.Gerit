@@ -51,8 +51,8 @@ public static class ClientFiscalDataEndpoint
 
         groupV1.MapPost("/{clientId}/fiscal-data/", async ([FromRoute] int clientId, [FromBody] CreateClientFiscalDataRequest request, [FromServices] IClientFiscalDataAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
-            var created = await appService.CreateAsync(clientId, request, ct);
-            return notify.CustomResponse(created, 201);
+            var id = await appService.CreateAsync(clientId, request, ct);
+            return notify.CustomResponse(new GenericResponse { Id = id }, 201);
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "ClientFiscalData", "Create")
         .WithName("CreateClientFiscalData")

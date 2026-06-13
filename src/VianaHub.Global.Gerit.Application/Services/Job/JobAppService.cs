@@ -58,14 +58,14 @@ public class JobAppService : IJobAppService
         return _mapper.Map<ListPageResponse<JobResponse>>(paged);
     }
 
-    public async Task<bool> CreateAsync(CreateJobRequest request, CancellationToken ct)
+    public async Task<int> CreateAsync(CreateJobRequest request, CancellationToken ct)
     {
         // Unicidade
         var exists = await _repo.ExistsByNameAsync(request.JobName, ct);
         if (exists)
         {
             _notify.Add(_localization.GetMessage("Application.Service.Job.Create.ResourceAlreadyExists"), 409);
-            return false;
+            return 0;
         }
 
         var entity = new JobDefinitionEntity(
@@ -87,16 +87,17 @@ public class JobAppService : IJobAppService
             request.IsSystemJob
         );
 
-        // Validação de domínio
+        // Validaï¿½ï¿½o de domï¿½nio
         var vr = await _validator.ValidateForCreateAsync(entity);
         if (!vr.IsValid)
         {
             foreach (var error in vr.Errors)
                 _notify.Add(error.ErrorMessage, 400);
-            return false;
+            return 0;
         }
 
-        return await _repo.CreateAsync(entity, ct);
+        var success = await _repo.CreateAsync(entity, ct);
+        return success ? entity.Id : 0;
     }
 
     public async Task<bool> UpdateAsync(int id, UpdateJobRequest request, CancellationToken ct)
@@ -110,8 +111,8 @@ public class JobAppService : IJobAppService
 
         var oldHangfireId = entity.HangfireJobId;
 
-        // Não permitir alterar JobName ou IsSystemJob
-        // Campos permitidos são atualizados via método Update na entidade
+        // Nï¿½o permitir alterar JobName ou IsSystemJob
+        // Campos permitidos sï¿½o atualizados via mï¿½todo Update na entidade
         entity.Update(
             request.Description,
             request.JobPurpose,

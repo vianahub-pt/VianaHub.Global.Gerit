@@ -10,7 +10,7 @@ public interface IResourceAppService
     Task<IEnumerable<ResourceResponse>> GetAllAsync(CancellationToken ct);
     Task<ResourceResponse> GetByIdAsync(int id, CancellationToken ct);
     Task<ListPageResponse<ResourceResponse>> GetPagedAsync(PagedFilterRequest request, CancellationToken ct);
-    Task<bool> CreateAsync(CreateResourceRequest request, CancellationToken ct);
+    Task<int> CreateAsync(CreateResourceRequest request, CancellationToken ct);
     Task<bool> UpdateAsync(int id, UpdateResourceRequest request, CancellationToken ct);
     Task<bool> ActivateAsync(int id, CancellationToken ct);
     Task<bool> DeactivateAsync(int id, CancellationToken ct);

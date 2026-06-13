@@ -62,8 +62,8 @@ public static class AttachmentCategoryEndpoint
 
         groupV1.MapPost("/", async ([FromBody] CreateAttachmentCategoryRequest request, [FromServices] IAttachmentCategoryAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
-            var created = await appService.CreateAsync(request, ct);
-            return notify.CustomResponse(created, 201);
+            var id = await appService.CreateAsync(request, ct);
+            return notify.CustomResponse(new GenericResponse { Id = id }, 201);
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "AttachmentCategories", "Create")
         .WithName("CreateAttachmentCategory")
