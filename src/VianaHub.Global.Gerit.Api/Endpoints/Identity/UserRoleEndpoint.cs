@@ -68,8 +68,8 @@ public static class UserRoleEndpoint
 
         groupV1.MapPost("/", async ([FromBody] CreateUserRoleRequest request, [FromServices] IUserRoleAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
-            var created = await appService.CreateAsync(request, ct);
-            return notify.CustomResponse(201);
+            var result = await appService.CreateAsync(request, ct);
+            return notify.CustomResponse(new GenericResponse { Id = result.Id }, 201);
         })
         .CustomAuthorize("Admin,Manager", "UserRoles", "Create")
         .AllowAnonymous()

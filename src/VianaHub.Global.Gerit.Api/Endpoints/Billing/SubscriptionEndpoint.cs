@@ -86,8 +86,8 @@ public static class SubscriptionEndpoint
 
         groupV1.MapPost("/", async ([FromBody] CreateSubscriptionRequest request, [FromServices] ISubscriptionAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
-            var ok = await appService.CreateAsync(request, ct);
-            return notify.CustomResponse(201);
+            var id = await appService.CreateAsync(request, ct);
+            return notify.CustomResponse(new GenericResponse { Id = id }, 201);
         })
         .CustomAuthorize("Admin,BackOffice", "Subscriptions", "Create")
         .WithName("CreateSubscription")
@@ -174,7 +174,7 @@ public static class SubscriptionEndpoint
         {
             if (!request.HasFormContentType || request.Form.Files.Count == 0)
             {
-                // Utiliza chave de tradução para mensagem
+                // Utiliza chave de traduï¿½ï¿½o para mensagem
                 notify.Add("Api.Upload.NoFileProvided", 400);
                 return notify.CustomResponse();
             }

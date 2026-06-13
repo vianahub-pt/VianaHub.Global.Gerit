@@ -73,8 +73,8 @@ public static class ClientHierarchyEndpoint
 
         groupV1.MapPost("/", async ([FromBody] CreateClientHierarchyRequest request, [FromServices] IClientHierarchyAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
-            var created = await appService.CreateAsync(request, ct);
-            return notify.CustomResponse(created, 201);
+            var id = await appService.CreateAsync(request, ct);
+            return notify.CustomResponse(new GenericResponse { Id = id }, 201);
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "ClientHierarchies", "Create")
         .WithName("CreateClientHierarchy")

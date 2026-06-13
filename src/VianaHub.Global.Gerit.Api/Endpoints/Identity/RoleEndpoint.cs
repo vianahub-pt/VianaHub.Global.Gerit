@@ -56,8 +56,8 @@ public static class RoleEndpoint
 
         groupV1.MapPost("/", async ([FromBody] CreateRoleRequest request, [FromServices] IRoleAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
-            var created = await appService.CreateAsync(request, ct);
-            return notify.CustomResponse(201);
+            var id = await appService.CreateAsync(request, ct);
+            return notify.CustomResponse(new GenericResponse { Id = id }, 201);
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "Roles", "Create")
         .WithName("CreateRole")

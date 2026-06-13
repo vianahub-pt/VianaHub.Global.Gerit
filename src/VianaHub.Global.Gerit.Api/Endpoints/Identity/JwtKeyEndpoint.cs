@@ -47,7 +47,7 @@ public static class JwtKeyEndpoint
         {
             var ok = await service.CreateInitialIfNotExistsAsync(tenantId, ct);
             if (!ok) return notify.CustomResponse();
-            return notify.CustomResponse(StatusCodes.Status201Created);
+            return notify.CustomResponse(new GenericResponse { Id = tenantId }, 201);
         })
         //.CustomAuthorize("Admin,BackOffice", "JwtKeys", "Create")
         .AllowAnonymous()

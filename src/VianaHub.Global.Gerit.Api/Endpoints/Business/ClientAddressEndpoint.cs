@@ -54,8 +54,8 @@ public static class ClientAddressEndpoint
 
         groupV1.MapPost("/{clientId}/addresses/", async ([FromRoute] int clientId, [FromBody] CreateClientAddressRequest request, [FromServices] IClientAddressAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
-            var created = await appService.CreateAsync(clientId, request, ct);
-            return notify.CustomResponse(created, 201);
+            var id = await appService.CreateAsync(clientId, request, ct);
+            return notify.CustomResponse(new GenericResponse { Id = id }, 201);
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "ClientAddresses", "Create")
         .WithName("CreateClientAddress")
