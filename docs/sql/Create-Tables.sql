@@ -604,7 +604,7 @@ CREATE TABLE dbo.ClientFiscalData (                                             
     FiscalCountry           CHAR(2)             NOT NULL DEFAULT 'PT',                          -- Pa�s fiscal
     IsVatRegistered         BIT                 NOT NULL DEFAULT 0,                             -- Sujeito a IVA
     IBAN                    NVARCHAR(34)            NULL,                                       -- IBAN para fatura��o
-    FiscalEmail             NVARCHAR(255)           NULL,                                       -- Email para envio de faturas, recibos, etc.
+    FiscalEmail             NVARCHAR(255)       NOT NULL,                                       -- Email para envio de faturas, recibos, etc.
     IsActive                BIT                 NOT NULL DEFAULT 1,                             -- Flag de ativo
     IsDeleted               BIT                 NOT NULL DEFAULT 0,                             -- Soft delete
     CreatedBy               INT                 NOT NULL,                                       -- Usu�rio criador
