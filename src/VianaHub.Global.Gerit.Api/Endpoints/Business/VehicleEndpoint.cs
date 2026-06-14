@@ -58,7 +58,7 @@ public static class VehicleEndpoint
         .CustomAuthorize("Admin,BackOffice,Manager", "Vehicles", "Create")
         .WithName("CreateVehicle")
         .WithSummary("Swagger.Endpoint.Vehicle.Create.Summary")
-        .Produces(StatusCodes.Status201Created)
+        .Produces<GenericResponse>(StatusCodes.Status201Created)
         .Produces<ErrorResponse>(StatusCodes.Status400BadRequest)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError)
         .WithValidation<CreateVehicleRequest>();

@@ -50,7 +50,7 @@ public static class JobEndpoint
         .AllowAnonymous()
         .WithName("CreateJob")
         .WithSummary("Swagger.Endpoint.Job.Create.Summary")
-        .Produces(StatusCodes.Status201Created)
+        .Produces<GenericResponse>(StatusCodes.Status201Created)
         .Produces<ErrorResponse>(StatusCodes.Status400BadRequest)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError)
         .WithValidation<CreateJobRequest>();

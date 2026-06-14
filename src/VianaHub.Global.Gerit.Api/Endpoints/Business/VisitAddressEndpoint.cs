@@ -60,7 +60,7 @@ public static class VisitAddressEndpoint
         .CustomAuthorize("Admin,BackOffice,Manager", "VisitAddresses", "Create")
         .WithName("CreateVisitAddress")
         .WithSummary("Swagger.Endpoint.VisitAddress.Create.Summary")
-        .Produces(StatusCodes.Status201Created)
+        .Produces<GenericResponse>(StatusCodes.Status201Created)
         .Produces<ErrorResponse>(StatusCodes.Status400BadRequest)
         .Produces<ErrorResponse>(StatusCodes.Status409Conflict)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError)

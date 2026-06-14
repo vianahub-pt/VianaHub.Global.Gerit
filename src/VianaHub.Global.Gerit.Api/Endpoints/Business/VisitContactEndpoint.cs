@@ -57,7 +57,7 @@ public static class VisitContactEndpoint
         .CustomAuthorize("Admin,BackOffice,Manager", "VisitContacts", "Create")
         .WithName("CreateVisitContact")
         .WithSummary("Swagger.Endpoint.VisitContact.Create.Summary")
-        .Produces(StatusCodes.Status201Created)
+        .Produces<GenericResponse>(StatusCodes.Status201Created)
         .Produces<ErrorResponse>(StatusCodes.Status400BadRequest)
         .Produces<ErrorResponse>(StatusCodes.Status409Conflict)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError)

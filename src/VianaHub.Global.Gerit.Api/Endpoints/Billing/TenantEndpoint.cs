@@ -61,7 +61,7 @@ public static class TenantEndpoint
         .CustomAuthorize("Admin,BackOffice", "Tenants", "Create")
         .WithName("CreateTenant")
         .WithSummary("Swagger.Endpoint.Tenant.Create.Summary")
-        .Produces(StatusCodes.Status201Created)
+        .Produces<GenericResponse>(StatusCodes.Status201Created)
         .Produces<ErrorResponse>(StatusCodes.Status400BadRequest)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError)
         .WithValidation<CreateTenantRequest>();

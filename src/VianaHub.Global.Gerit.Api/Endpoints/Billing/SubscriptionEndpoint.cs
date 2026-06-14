@@ -92,7 +92,7 @@ public static class SubscriptionEndpoint
         .CustomAuthorize("Admin,BackOffice", "Subscriptions", "Create")
         .WithName("CreateSubscription")
         .WithSummary("Swagger.Endpoint.Subscription.Create.Summary")
-        .Produces(StatusCodes.Status201Created)
+        .Produces<GenericResponse>(StatusCodes.Status201Created)
         .Produces<ErrorResponse>(StatusCodes.Status400BadRequest)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 

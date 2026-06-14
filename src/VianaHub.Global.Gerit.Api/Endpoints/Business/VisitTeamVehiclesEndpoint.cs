@@ -57,7 +57,7 @@ public static class VisitTeamVehiclesEndpoint
         .CustomAuthorize("Admin,BackOffice,Manager", "VisitTeamVehicles", "Create")
         .WithName("CreateVisitTeamVehicle")
         .WithSummary("Swagger.Endpoint.VisitTeamVehicle.Create.Summary")
-        .Produces(StatusCodes.Status201Created)
+        .Produces<GenericResponse>(StatusCodes.Status201Created)
         .Produces<ErrorResponse>(StatusCodes.Status400BadRequest)
         .Produces<ErrorResponse>(StatusCodes.Status409Conflict)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError)

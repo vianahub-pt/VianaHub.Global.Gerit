@@ -104,7 +104,7 @@ public static class VisitAttachmentEndpoint
         .CustomAuthorize("Admin,BackOffice,Manager", "VisitAttachments", "Create")
         .WithName("CreateVisitAttachment")
         .WithSummary("Swagger.Endpoint.VisitAttachment.Create.Summary")
-        .Produces(StatusCodes.Status201Created)
+        .Produces<GenericResponse>(StatusCodes.Status201Created)
         .Produces<ErrorResponse>(StatusCodes.Status400BadRequest)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError)
         .WithValidation<CreateVisitAttachmentRequest>();

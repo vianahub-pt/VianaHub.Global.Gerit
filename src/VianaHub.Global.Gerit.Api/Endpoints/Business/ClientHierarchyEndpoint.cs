@@ -79,7 +79,7 @@ public static class ClientHierarchyEndpoint
         .CustomAuthorize("Admin,BackOffice,Manager", "ClientHierarchies", "Create")
         .WithName("CreateClientHierarchy")
         .WithSummary("Swagger.Endpoint.ClientHierarchy.Create.Summary")
-        .Produces(StatusCodes.Status201Created)
+        .Produces<GenericResponse>(StatusCodes.Status201Created)
         .Produces<ErrorResponse>(StatusCodes.Status400BadRequest)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError)
         .WithValidation<CreateClientHierarchyRequest>();

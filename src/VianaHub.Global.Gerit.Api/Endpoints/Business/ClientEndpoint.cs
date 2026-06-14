@@ -64,7 +64,7 @@ public static class ClientEndpoint
         .CustomAuthorize("Admin,BackOffice,Manager", "Clients", "Create")
         .WithName("CreateClient")
         .WithSummary("Swagger.Endpoint.Client.Create.Summary")
-        .Produces(StatusCodes.Status201Created)
+        .Produces<GenericResponse>(StatusCodes.Status201Created)
         .Produces<ErrorResponse>(StatusCodes.Status400BadRequest)
         .Produces<ErrorResponse>(StatusCodes.Status409Conflict)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError)
