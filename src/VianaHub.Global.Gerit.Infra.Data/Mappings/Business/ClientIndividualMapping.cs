@@ -24,6 +24,11 @@ public class ClientIndividualMapping : IEntityTypeConfiguration<ClientIndividual
         builder.Property(x => x.ClientId)
             .IsRequired();
 
+        builder.Property(x => x.FullName)
+            .HasColumnType("NVARCHAR(500)")
+            .HasMaxLength(500)
+            .IsRequired();
+
         builder.Property(x => x.FirstName)
             .HasColumnType("NVARCHAR(100)")
             .HasMaxLength(100)

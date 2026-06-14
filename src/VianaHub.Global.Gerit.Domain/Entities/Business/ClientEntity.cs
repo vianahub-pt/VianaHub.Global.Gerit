@@ -72,9 +72,9 @@ public class ClientEntity : Entity, IAggregateRoot
         ModifiedAt = DateTime.UtcNow;
     }
 
-    public void UpdateIndividual(string firstName, string lastName, string phoneNumber, string cellPhoneNumber, bool isWhatsapp, string email, DateTime birthDate, string gender, string documentType, string documentNumber, string nationality, int modifiedBy)
+    public void UpdateIndividual(string fullName, string firstName, string lastName, string phoneNumber, string cellPhoneNumber, bool isWhatsapp, string email, DateTime birthDate, string gender, string documentType, string documentNumber, string nationality, int modifiedBy)
     {
-        Individual.Update(firstName, lastName, phoneNumber, cellPhoneNumber, isWhatsapp, email, birthDate, gender, documentType, documentNumber, nationality, modifiedBy);
+        Individual.Update(fullName, firstName, lastName, phoneNumber, cellPhoneNumber, isWhatsapp, email, birthDate, gender, documentType, documentNumber, nationality, modifiedBy);
     }
     public void UpdateCompany(string legalName, string tradeName, string phoneMumber, string cellPhoneNumber, bool isWhatsapp, string email, string site, string companyRegistration, string cae, int? numberOfEmployee, string legalRepresentative, int modifiedBy)
     {

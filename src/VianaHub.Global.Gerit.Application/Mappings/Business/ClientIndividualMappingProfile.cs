@@ -10,7 +10,7 @@ public class ClientIndividualMappingProfile : Profile
     public ClientIndividualMappingProfile()
     {
         CreateMap<ClientIndividualEntity, ClientIndividualResponse>()
-            .ForMember(dest => dest.ClientName, opt => opt.MapFrom(src => src.Client.Individual.DisplayName));
+            .ForMember(dest => dest.ClientName, opt => opt.MapFrom(src => src.Client.Individual.FullName));
 
         CreateMap<CreateClientIndividualRequest, ClientIndividualEntity>();
         CreateMap<UpdateClientIndividualRequest, ClientIndividualEntity>();

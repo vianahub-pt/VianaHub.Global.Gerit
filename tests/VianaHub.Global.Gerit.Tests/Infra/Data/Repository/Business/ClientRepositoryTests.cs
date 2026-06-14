@@ -1,13 +1,9 @@
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using VianaHub.Global.Gerit.Domain.Entities.Business;
 using VianaHub.Global.Gerit.Domain.Enums;
 using VianaHub.Global.Gerit.Domain.ReadModels;
 using VianaHub.Global.Gerit.Infra.Data.Context;
 using VianaHub.Global.Gerit.Infra.Data.Repository.Business;
-using Xunit;
 
 namespace VianaHub.Global.Gerit.Tests.Infra.Data.Repository.Business
 {
@@ -24,10 +20,10 @@ namespace VianaHub.Global.Gerit.Tests.Infra.Data.Repository.Business
             await using (var context = new GeritDbContext(options))
             {
                 var active = new ClientEntity(1, ClientType.PessoaSingular, OriginType.Outros, urlImage: null, note: null, createdBy: 1);
-                active.AddIndividual(new ClientIndividualEntity(1, "Active", "User", "", "", false, "active@test.local", null, null, null, null, null, 1));
+                active.AddIndividual(new ClientIndividualEntity(1, "Teste Active User", "Active", "User", "", "", false, "active@test.local", null, null, null, null, null, 1));
 
                 var deleted = new ClientEntity(1, ClientType.PessoaSingular, OriginType.Outros, urlImage: null, note: null, createdBy: 1);
-                deleted.AddIndividual(new ClientIndividualEntity(1, "Deleted", "User", "", "", false, "deleted@test.local", null, null, null, null, null, 1));
+                deleted.AddIndividual(new ClientIndividualEntity(1, "Teste Deleted User", "Deleted", "User", "", "", false, "deleted@test.local", null, null, null, null, null, 1));
                 deleted.Delete(ClientType.PessoaSingular, 1);
 
                 await context.Clients.AddRangeAsync(active, deleted);
@@ -56,10 +52,10 @@ namespace VianaHub.Global.Gerit.Tests.Infra.Data.Repository.Business
             await using (var context = new GeritDbContext(options))
             {
                 var active = new ClientEntity(1, ClientType.PessoaSingular, OriginType.Outros, urlImage: null, note: null, createdBy: 1);
-                active.AddIndividual(new ClientIndividualEntity(1, "Alice", "Active", "", "", false, "alice.active@test.local", null, null, null, null, null, 1));
+                active.AddIndividual(new ClientIndividualEntity(1, "Teste Alice Active", "Alice", "Active", "", "", false, "alice.active@test.local", null, null, null, null, null, 1));
 
                 var deleted = new ClientEntity(1, ClientType.PessoaSingular, OriginType.Outros, urlImage: null, note: null, createdBy: 1);
-                deleted.AddIndividual(new ClientIndividualEntity(1, "Alice", "Deleted", "", "", false, "alice.deleted@test.local", null, null, null, null, null, 1));
+                deleted.AddIndividual(new ClientIndividualEntity(1, "Teste Alice Deleted", "Alice", "Deleted", "", "", false, "alice.deleted@test.local", null, null, null, null, null, 1));
                 deleted.Delete(ClientType.PessoaSingular, 1);
 
                 await context.Clients.AddRangeAsync(active, deleted);
@@ -88,11 +84,11 @@ namespace VianaHub.Global.Gerit.Tests.Infra.Data.Repository.Business
             await using (var context = new GeritDbContext(options))
             {
                 var deleted1 = new ClientEntity(1, ClientType.PessoaSingular, OriginType.Outros, urlImage: null, note: null, createdBy: 1);
-                deleted1.AddIndividual(new ClientIndividualEntity(1, "Del1", "User", "", "", false, "del1@test.local", null, null, null, null, null, 1));
+                deleted1.AddIndividual(new ClientIndividualEntity(1, "Del1 User", "Del1", "User", "", "", false, "del1@test.local", null, null, null, null, null, 1));
                 deleted1.Delete(ClientType.PessoaSingular, 1);
 
                 var deleted2 = new ClientEntity(1, ClientType.PessoaSingular, OriginType.Outros, urlImage: null, note: null, createdBy: 1);
-                deleted2.AddIndividual(new ClientIndividualEntity(1, "Del2", "User", "", "", false, "del2@test.local", null, null, null, null, null, 1));
+                deleted2.AddIndividual(new ClientIndividualEntity(1, "Del2 User", "Del2", "User", "", "", false, "del2@test.local", null, null, null, null, null, 1));
                 deleted2.Delete(ClientType.PessoaSingular, 1);
 
                 await context.Clients.AddRangeAsync(deleted1, deleted2);

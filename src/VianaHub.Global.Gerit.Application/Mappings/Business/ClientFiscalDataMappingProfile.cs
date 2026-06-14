@@ -29,9 +29,9 @@ public class ClientFiscalDataMappingProfile : Profile
     {
         return src.ClientType switch
         {
-            ClientType.PessoaSingular => src.Individual?.DisplayName,
-            ClientType.RecibosVerdes => src.Individual?.DisplayName,
-            ClientType.Freelancer => src.Individual?.DisplayName,
+            ClientType.PessoaSingular => src.Individual?.FullName,
+            ClientType.RecibosVerdes => src.Individual?.FullName,
+            ClientType.Freelancer => src.Individual?.FullName,
             ClientType.PessoaJuridica => src.Company?.DisplayName,
             ClientType.SociedadeUnipessoalQuotas => src.Company?.DisplayName,
             _ => null

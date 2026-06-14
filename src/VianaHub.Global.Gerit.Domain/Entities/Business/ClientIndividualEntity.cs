@@ -1,5 +1,4 @@
 using VianaHub.Global.Gerit.Domain.Base;
-using VianaHub.Global.Gerit.Domain.Interfaces.Base;
 
 namespace VianaHub.Global.Gerit.Domain.Entities.Business;
 
@@ -7,7 +6,7 @@ public class ClientIndividualEntity : Entity
 {
     public int TenantId { get; private set; }
     public int ClientId { get; private set; }
-
+    public string FullName { get; private set; }
     public string FirstName { get; private set; }
     public string LastName { get; private set; }
     public string? PhoneNumber { get; private set; }
@@ -29,22 +28,23 @@ public class ClientIndividualEntity : Entity
     // EF
     protected ClientIndividualEntity() { }
 
-        public ClientIndividualEntity(int tenantId, string firstName, string lastName, string? phoneNumber, string? cellPhoneNumber, bool isWhatsapp, string? email, DateTime? birthDate, string? gender, string? documentType, string? documentNumber, string? nationality, int createdBy)
+    public ClientIndividualEntity(int tenantId, string fullName, string firstName, string lastName, string? phoneNumber, string? cellPhoneNumber, bool isWhatsapp, string? email, DateTime? birthDate, string? gender, string? documentType, string? documentNumber, string? nationality, int createdBy)
     {
         TenantId = tenantId;
-            // ClientId is populated by the relationship when linked to a ClientEntity
+        // ClientId is populated by the relationship when linked to a ClientEntity
 
-            FirstName = firstName;
-            LastName = lastName;
-            PhoneNumber = phoneNumber;
-            CellPhoneNumber = cellPhoneNumber;
-            IsWhatsapp = isWhatsapp;
-            Email = email;
-            BirthDate = birthDate;
-            Gender = gender;
-            DocumentType = documentType;
-            DocumentNumber = documentNumber;
-            Nationality = nationality;
+        FullName = fullName;
+        FirstName = firstName;
+        LastName = lastName;
+        PhoneNumber = phoneNumber;
+        CellPhoneNumber = cellPhoneNumber;
+        IsWhatsapp = isWhatsapp;
+        Email = email;
+        BirthDate = birthDate;
+        Gender = gender;
+        DocumentType = documentType;
+        DocumentNumber = documentNumber;
+        Nationality = nationality;
 
         IsActive = true;
         IsDeleted = false;
@@ -52,10 +52,9 @@ public class ClientIndividualEntity : Entity
         CreatedAt = DateTime.UtcNow;
     }
 
-    public string DisplayName => $"{FirstName} {LastName}".Trim();
-
-    public void Update(string firstName, string lastName, string phoneNumber, string cellPhoneNumber, bool isWhatsapp, string email, DateTime birthDate, string gender, string documentType, string documentNumber, string nationality, int modifiedBy)
+    public void Update(string fullName, string firstName, string lastName, string phoneNumber, string cellPhoneNumber, bool isWhatsapp, string email, DateTime birthDate, string gender, string documentType, string documentNumber, string nationality, int modifiedBy)
     {
+        FullName = fullName;
         FirstName = firstName;
         LastName = lastName;
         PhoneNumber = phoneNumber;
