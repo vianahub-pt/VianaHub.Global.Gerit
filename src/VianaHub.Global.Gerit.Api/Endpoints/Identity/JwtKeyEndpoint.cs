@@ -53,7 +53,7 @@ public static class JwtKeyEndpoint
         .AllowAnonymous()
         .WithName("CreateInitialJwtKey")
         .WithSummary("Swagger.Endpoint.JwtKey.CreateInitialJwtKey.Summary")
-        .Produces(StatusCodes.Status201Created)
+        .Produces<GenericResponse>(StatusCodes.Status201Created)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
         groupV1.MapPatch("/{id}/revoke", async ([FromRoute] int id, [FromBody] RevokeRequest req, [FromServices] IJwtKeyAppService service, [FromServices] INotify notify, CancellationToken ct) =>

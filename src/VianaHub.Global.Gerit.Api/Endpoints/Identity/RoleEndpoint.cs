@@ -62,7 +62,7 @@ public static class RoleEndpoint
         .CustomAuthorize("Admin,BackOffice,Manager", "Roles", "Create")
         .WithName("CreateRole")
         .WithSummary("Swagger.Endpoint.Role.Create.Summary")
-        .Produces(StatusCodes.Status201Created)
+        .Produces<GenericResponse>(StatusCodes.Status201Created)
         .Produces<ErrorResponse>(StatusCodes.Status400BadRequest)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError)
         .WithValidation<CreateRoleRequest>();

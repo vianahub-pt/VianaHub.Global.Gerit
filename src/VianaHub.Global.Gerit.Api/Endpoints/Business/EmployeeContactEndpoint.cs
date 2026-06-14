@@ -57,7 +57,7 @@ public static class EmployeeContactEndpoint
         .CustomAuthorize("Admin,BackOffice,Manager", "EmployeeContacts", "Create")
         .WithName("CreateEmployeeContact")
         .WithSummary("Swagger.Endpoint.EmployeeContact.Create.Summary")
-        .Produces(StatusCodes.Status201Created)
+        .Produces<GenericResponse>(StatusCodes.Status201Created)
         .Produces<ErrorResponse>(StatusCodes.Status400BadRequest)
         .Produces<ErrorResponse>(StatusCodes.Status409Conflict)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError)

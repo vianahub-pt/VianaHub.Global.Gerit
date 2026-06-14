@@ -57,7 +57,7 @@ public static class FunctionEndpoint
         .CustomAuthorize("Admin,BackOffice,Manager", "Functions", "Create")
         .WithName("CreateFunction")
         .WithSummary("Swagger.Endpoint.Function.Create.Summary")
-        .Produces(StatusCodes.Status201Created)
+        .Produces<GenericResponse>(StatusCodes.Status201Created)
         .Produces<ErrorResponse>(StatusCodes.Status400BadRequest)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError)
         .WithValidation<CreateFunctionRequest>();

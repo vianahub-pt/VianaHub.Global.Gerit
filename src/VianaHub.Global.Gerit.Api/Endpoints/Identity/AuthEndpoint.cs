@@ -1,9 +1,10 @@
-using VianaHub.Global.Gerit.Api.Helpers;
-using VianaHub.Global.Gerit.Domain.Tools.Notifications;
-using VianaHub.Global.Gerit.Application.Interfaces.Identity;
-using VianaHub.Global.Gerit.Application.Dtos.Request.Identity.Auth;
-using VianaHub.Global.Gerit.Api.Endpoints.Base;
 using Microsoft.AspNetCore.Mvc;
+using VianaHub.Global.Gerit.Api.Endpoints.Base;
+using VianaHub.Global.Gerit.Api.Helpers;
+using VianaHub.Global.Gerit.Application.Dtos.Request.Identity.Auth;
+using VianaHub.Global.Gerit.Application.Dtos.Response.Identity.Auth;
+using VianaHub.Global.Gerit.Application.Interfaces.Identity;
+using VianaHub.Global.Gerit.Domain.Tools.Notifications;
 
 namespace VianaHub.Global.Gerit.Api.Endpoints.Identity;
 
@@ -26,7 +27,7 @@ public static class AuthEndpoint
         .RequireRateLimiting("authentication")
         .WithValidation<RegisterRequest>()
         .WithSummary("Swagger.Endpoint.Auth.Register.Summary")
-        .Produces(StatusCodes.Status200OK)
+        .Produces<AuthResponse>(StatusCodes.Status201Created)
         .Produces(StatusCodes.Status400BadRequest)
         .Produces(StatusCodes.Status409Conflict);
 

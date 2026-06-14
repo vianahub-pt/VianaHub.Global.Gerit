@@ -58,7 +58,7 @@ public static class ResourceEndpoint
         .CustomAuthorize("Admin,BackOffice,Manager", "Resources", "Create")
         .WithName("CreateResource")
         .WithSummary("Swagger.Endpoint.Resource.Create.Summary")
-        .Produces(StatusCodes.Status201Created)
+        .Produces<GenericResponse>(StatusCodes.Status201Created)
         .Produces<ErrorResponse>(StatusCodes.Status400BadRequest)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError)
         .WithValidation<CreateResourceRequest>();

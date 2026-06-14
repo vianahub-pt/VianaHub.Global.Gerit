@@ -57,7 +57,7 @@ public static class StatusEndpoint
         .CustomAuthorize("Admin,BackOffice,Manager", "Status", "Create")
         .WithName("CreateStatus")
         .WithSummary("Swagger.Endpoint.Status.Create.Summary")
-        .Produces(StatusCodes.Status201Created)
+        .Produces<GenericResponse>(StatusCodes.Status201Created)
         .Produces<ErrorResponse>(StatusCodes.Status400BadRequest)
         .Produces<ErrorResponse>(StatusCodes.Status409Conflict)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError)

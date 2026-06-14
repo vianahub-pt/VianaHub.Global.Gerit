@@ -57,7 +57,7 @@ public static class VisitTeamEndpoint
         .CustomAuthorize("Admin,BackOffice,Manager", "VisitTeams", "Create")
         .WithName("CreateVisitTeam")
         .WithSummary("Swagger.Endpoint.VisitTeams.Create.Summary")
-        .Produces(StatusCodes.Status201Created)
+        .Produces<GenericResponse>(StatusCodes.Status201Created)
         .Produces<ErrorResponse>(StatusCodes.Status400BadRequest)
         .Produces<ErrorResponse>(StatusCodes.Status409Conflict)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError)

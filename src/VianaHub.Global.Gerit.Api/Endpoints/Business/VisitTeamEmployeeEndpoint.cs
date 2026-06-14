@@ -90,7 +90,7 @@ public static class VisitTeamEmployeeEndpoint
         .CustomAuthorize("Admin,BackOffice,Manager", "VisitTeamEmployees", "Create")
         .WithName("CreateVisitTeamEmployee")
         .WithSummary("Swagger.Endpoint.VisitTeamEmployee.Create.Summary")
-        .Produces(StatusCodes.Status201Created)
+        .Produces<GenericResponse>(StatusCodes.Status201Created)
         .Produces<ErrorResponse>(StatusCodes.Status400BadRequest)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError)
         .WithValidation<CreateVisitTeamEmployeeRequest>();

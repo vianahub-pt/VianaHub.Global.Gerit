@@ -60,7 +60,7 @@ public static class ClientAddressEndpoint
         .CustomAuthorize("Admin,BackOffice,Manager", "ClientAddresses", "Create")
         .WithName("CreateClientAddress")
         .WithSummary("Swagger.Endpoint.ClientAddress.Create.Summary")
-        .Produces(StatusCodes.Status201Created)
+        .Produces<GenericResponse>(StatusCodes.Status201Created)
         .Produces<ErrorResponse>(StatusCodes.Status400BadRequest)
         .Produces<ErrorResponse>(StatusCodes.Status409Conflict)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError)

@@ -58,7 +58,7 @@ public static class EquipmentTypeEndpoint
         .CustomAuthorize("Admin,BackOffice,Manager", "EquipmentTypes", "Create")
         .WithName("CreateEquipmentType")
         .WithSummary("Swagger.Endpoint.EquipmentType.Create.Summary")
-        .Produces(StatusCodes.Status201Created)
+        .Produces<GenericResponse>(StatusCodes.Status201Created)
         .Produces<ErrorResponse>(StatusCodes.Status400BadRequest)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError)
         .WithValidation<CreateEquipmentTypeRequest>();

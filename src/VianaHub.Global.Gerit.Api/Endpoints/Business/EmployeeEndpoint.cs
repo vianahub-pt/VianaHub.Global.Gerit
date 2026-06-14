@@ -57,7 +57,7 @@ public static class EmployeeEndpoint
         .CustomAuthorize("Admin,BackOffice,Manager", "Employees", "Create")
         .WithName("CreateEmployee")
         .WithSummary("Swagger.Endpoint.Employee.Create.Summary")
-        .Produces(StatusCodes.Status201Created)
+        .Produces<GenericResponse>(StatusCodes.Status201Created)
         .Produces<ErrorResponse>(StatusCodes.Status400BadRequest)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError)
         .WithValidation<CreateEmployeeRequest>();

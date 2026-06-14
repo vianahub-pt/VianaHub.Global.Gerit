@@ -57,7 +57,7 @@ public static class ConsentTypeEndpoint
         .CustomAuthorize("Admin,BackOffice,Manager", "ConsentTypes", "Create")
         .WithName("CreateConsentType")
         .WithSummary("Swagger.Endpoint.ConsentType.Create.Summary")
-        .Produces(StatusCodes.Status201Created)
+        .Produces<GenericResponse>(StatusCodes.Status201Created)
         .Produces<ErrorResponse>(StatusCodes.Status400BadRequest)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError)
         .WithValidation<CreateConsentTypeRequest>();
