@@ -85,6 +85,11 @@ public class ClientIndividualValidator : IEntityDomainValidator<ClientIndividual
         if (entity.ClientId <= 0)
             errors.Add(new ValidationFailure(nameof(entity.ClientId), "client_individual.client_id.invalid"));
 
+        if (string.IsNullOrWhiteSpace(entity.FullName))
+            errors.Add(new ValidationFailure(nameof(entity.FullName), "client_individual.full_name.required"));
+        else if (entity.FullName.Length > 500)
+            errors.Add(new ValidationFailure(nameof(entity.FullName), "client_individual.full_name.max_length"));
+
         if (string.IsNullOrWhiteSpace(entity.FirstName))
             errors.Add(new ValidationFailure(nameof(entity.FirstName), "client_individual.first_name.required"));
         else if (entity.FirstName.Length > 100)

@@ -492,14 +492,15 @@ CREATE TABLE dbo.ClientIndividuals (                                            
     Id                  INT IDENTITY(1,1)   NOT NULL,						             -- Identificador do cliente, chave prim�ria
     TenantId            INT                 NOT NULL,                                    -- Tenant dono
     ClientId            INT                 NOT NULL,                                    -- FK para Clients
+	FullName			NVARCHAR(500)       NOT NULL,									 -- Nome completo
     FirstName           NVARCHAR(100)       NOT NULL,                                    -- Primeiro nome
     LastName            NVARCHAR(100)       NOT NULL,                                    -- Apelido
     PhoneNumber         NVARCHAR(50)            NULL,                                    -- Telefone (opcional)
-    CellPhoneNumber     NVARCHAR(50)            NULL,                                   -- Telem�vel (opcional)
-    IsWhatsapp          BIT                 NOT NULL DEFAULT 0,                        -- O n�mero de telefone � WhatsApp
-    Email			    NVARCHAR(500)           NULL,                                    -- Email (opcional, pode ser usado para login)
-    BirthDate           DATE                    NULL,                                    -- Data de nascimento
-    Gender              NVARCHAR(20)            NULL,                                    -- G�nero (opcional)
+    CellPhoneNumber     NVARCHAR(50)        NOT NULL,                                    -- Telem�vel (opcional)
+    IsWhatsapp          BIT                 NOT NULL DEFAULT 0,                          -- O n�mero de telefone � WhatsApp
+    Email			    NVARCHAR(500)       NOT NULL,                                    -- Email (opcional, pode ser usado para login)
+    BirthDate           DATE                NOT NULL,                                    -- Data de nascimento
+    Gender              NVARCHAR(20)        NOT NULL,                                    -- G�nero (opcional)
     DocumentType        NVARCHAR(50)            NULL,                                    -- Tipo documento (CC, Passaporte, etc.)
     DocumentNumber      NVARCHAR(50)            NULL,                                    -- N�mero do documento
     Nationality         NVARCHAR(100)           NULL,                                    -- Nacionalidade (até 50 caracteres)
@@ -520,16 +521,16 @@ CREATE TABLE dbo.ClientCompanies (                                              
     TenantId                INT                 NOT NULL,                                -- Tenant dono
     ClientId                INT                 NOT NULL,                                -- FK para Clients
     LegalName               NVARCHAR(200)       NOT NULL,                                -- Raz�o Social
-    TradeName               NVARCHAR(200)           NULL,                                -- Nome Fantasia
+    TradeName               NVARCHAR(200)       NOT NULL,                                -- Nome Fantasia
     PhoneNumber             NVARCHAR(50)            NULL,                                -- Telefone (opcional)
-    CellPhoneNumber         NVARCHAR(50)            NULL,                                -- Telem�vel (opcional)
+    CellPhoneNumber         NVARCHAR(50)        NOT NULL,                                -- Telem�vel (opcional)
     IsWhatsapp              BIT                 NOT NULL DEFAULT 0,                      -- O n�mero de telefone � WhatsApp
-    Email                   NVARCHAR(500)           NULL,                                -- Email (opcional, pode ser usado para login)
+    Email                   NVARCHAR(500)       NOT NULL,                                -- Email (opcional, pode ser usado para login)
     Site					NVARCHAR(500)           NULL,                                -- Website
     CompanyRegistration     NVARCHAR(50)            NULL,                                -- N�mero registro comercial
     CAE                     NVARCHAR(10)            NULL,                                -- C�digo CAE (Portugal)
-    NumberOfEmployee        INT                     NULL,                                -- N�mero funcion�rios
-    LegalRepresentative     NVARCHAR(150)           NULL,                                -- Representante legal
+    NumberOfEmployee        INT                 NOT NULL,                                -- N�mero funcion�rios
+    LegalRepresentative     NVARCHAR(150)       NOT NULL,                                -- Representante legal
     IsActive                BIT                 NOT NULL DEFAULT 1,                      -- Flag de ativo
     IsDeleted               BIT                 NOT NULL DEFAULT 0,                      -- Soft delete
     CreatedBy               INT                 NOT NULL,                                -- Usu�rio criador
@@ -604,7 +605,7 @@ CREATE TABLE dbo.ClientFiscalData (                                             
     FiscalCountry           CHAR(2)             NOT NULL DEFAULT 'PT',                          -- Pa�s fiscal
     IsVatRegistered         BIT                 NOT NULL DEFAULT 0,                             -- Sujeito a IVA
     IBAN                    NVARCHAR(34)            NULL,                                       -- IBAN para fatura��o
-    FiscalEmail             NVARCHAR(255)           NULL,                                       -- Email para envio de faturas, recibos, etc.
+    FiscalEmail             NVARCHAR(255)       NOT NULL,                                       -- Email para envio de faturas, recibos, etc.
     IsActive                BIT                 NOT NULL DEFAULT 1,                             -- Flag de ativo
     IsDeleted               BIT                 NOT NULL DEFAULT 0,                             -- Soft delete
     CreatedBy               INT                 NOT NULL,                                       -- Usu�rio criador

@@ -89,7 +89,7 @@ public class ClientAppService : IClientAppService
             case ClientType.PessoaSingular:
             case ClientType.RecibosVerdes:
             case ClientType.Freelancer:
-                client.AddIndividual(new ClientIndividualEntity(TenantId, request.Individual.FirstName, request.Individual.LastName, request.Individual.PhoneNumber, request.Individual.CellPhoneNumber, request.Individual.IsWhatsapp, request.Individual.Email, request.Individual.BirthDate, request.Individual.Gender, request.Individual.DocumentType, request.Individual.DocumentNumber, request.Individual.Nationality, UserId));
+                client.AddIndividual(new ClientIndividualEntity(TenantId, request.Individual.FullName, request.Individual.FirstName, request.Individual.LastName, request.Individual.PhoneNumber, request.Individual.CellPhoneNumber, request.Individual.IsWhatsapp, request.Individual.Email, request.Individual.BirthDate, request.Individual.Gender, request.Individual.DocumentType, request.Individual.DocumentNumber, request.Individual.Nationality, UserId));
                 break;
             case ClientType.PessoaJuridica:
             case ClientType.SociedadeUnipessoalQuotas:
@@ -120,7 +120,7 @@ public class ClientAppService : IClientAppService
             case ClientType.PessoaSingular:
             case ClientType.RecibosVerdes:
             case ClientType.Freelancer:
-                client.UpdateIndividual(request.Individual.FirstName, request.Individual.LastName, request.Individual.PhoneNumber, request.Individual.CellPhoneNumber, request.Individual.IsWhatsapp, request.Individual.Email, request.Individual.BirthDate, request.Individual.Gender, request.Individual.DocumentType, request.Individual.DocumentNumber, request.Individual.Nationality, UserId);
+                client.UpdateIndividual(request.Individual.FullName, request.Individual.FirstName, request.Individual.LastName, request.Individual.PhoneNumber, request.Individual.CellPhoneNumber, request.Individual.IsWhatsapp, request.Individual.Email, request.Individual.BirthDate, request.Individual.Gender, request.Individual.DocumentType, request.Individual.DocumentNumber, request.Individual.Nationality, UserId);
                 break;
             case ClientType.PessoaJuridica:
             case ClientType.SociedadeUnipessoalQuotas:

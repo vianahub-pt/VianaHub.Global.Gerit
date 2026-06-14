@@ -32,7 +32,7 @@ public class ClientMappingProfile : Profile
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
             .ForMember(dest => dest.TenantId, opt => opt.MapFrom(src => src.TenantId))
             .ForMember(dest => dest.ClientId, opt => opt.MapFrom(src => src.ClientId))
-            .ForMember(dest => dest.DisplayName, opt => opt.MapFrom(src => src.DisplayName))
+            .ForMember(dest => dest.DisplayName, opt => opt.MapFrom(src => src.FullName))
             .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.FirstName))
             .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.LastName))
             .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.PhoneNumber))
@@ -68,9 +68,9 @@ public class ClientMappingProfile : Profile
     {
         return src.ClientType switch
         {
-            ClientType.PessoaSingular => src.Individual?.DisplayName,
-            ClientType.RecibosVerdes => src.Individual?.DisplayName,
-            ClientType.Freelancer => src.Individual?.DisplayName,
+            ClientType.PessoaSingular => src.Individual?.FullName,
+            ClientType.RecibosVerdes => src.Individual?.FullName,
+            ClientType.Freelancer => src.Individual?.FullName,
             ClientType.PessoaJuridica => src.Company?.DisplayName,
             ClientType.SociedadeUnipessoalQuotas => src.Company?.DisplayName,
             _ => null
