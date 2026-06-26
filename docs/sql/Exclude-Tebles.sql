@@ -1,16 +1,33 @@
 /* =========================================================
+   EXCLUDE / DROP SCRIPT - ajustado com base no Create-Tables.sql
+   Observação: remove primeiro a RLS, depois função e tabelas em ordem reversa de dependência.
+   ========================================================= */
+
+/* =========================================================
    1. DESATIVAR E REMOVER ROW LEVEL SECURITY
    ========================================================= */
 
-IF EXISTS (SELECT 1 FROM sys.security_policies WHERE name = 'TenantSecurityPolicy')
+IF EXISTS (
+    SELECT 1
+    FROM sys.security_policies
+    WHERE name = N'TenantSecurityPolicy'
+      AND schema_id = SCHEMA_ID(N'dbo')
+)
 BEGIN
     DROP SECURITY POLICY dbo.TenantSecurityPolicy;
 END
 GO
-DROP SECURITY POLICY IF EXISTS dbo.TenantSecurityPolicy;
+
+IF OBJECT_ID(N'dbo.fn_TenantAccessPredicate', N'IF') IS NOT NULL
+BEGIN
+    DROP FUNCTION dbo.fn_TenantAccessPredicate;
+END
 GO
-DROP FUNCTION IF EXISTS dbo.fn_TenantAccessPredicate;
-GO
+
+/* =========================================================
+   2. REMOVER TABELAS EM ORDEM REVERSA DE CRIAÇÃO / DEPENDÊNCIA
+   ========================================================= */
+
 DROP TABLE IF EXISTS dbo.VisitAttachments;
 DROP TABLE IF EXISTS dbo.AttachmentCategories;
 DROP TABLE IF EXISTS dbo.VisitTeamEquipment;
@@ -56,11 +73,9 @@ DROP TABLE IF EXISTS dbo.Tenants;
 DROP TABLE IF EXISTS dbo.PlanFileRules;
 DROP TABLE IF EXISTS dbo.Plans;
 DROP TABLE IF EXISTS dbo.StatusTypes;
-DROP TABLE IF EXISTS dbo.OriginTypes;
 DROP TABLE IF EXISTS dbo.ConsentTypes;
 DROP TABLE IF EXISTS dbo.FileTypes;
+DROP TABLE IF EXISTS dbo.ConsentOriginTypes;
 DROP TABLE IF EXISTS dbo.AddressTypes;
-
-
-
+DROP TABLE IF EXISTS dbo.AcquisitionSourceTypes;
 GO
