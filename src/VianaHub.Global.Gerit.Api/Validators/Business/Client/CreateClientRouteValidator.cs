@@ -15,9 +15,9 @@ public class CreateClientRouteValidator : AbstractValidator<CreateClientRequest>
             .GreaterThan(0)
             .WithMessage(localization.GetMessage("Api.Validator.Client.Create.ClientType"));
 
-        RuleFor(x => x.OriginType)
+        RuleFor(x => x.AcquisitionSourceTypeId)
             .GreaterThan(0)
-            .WithMessage(localization.GetMessage("Api.Validator.Client.Create.OriginType"));
+            .WithMessage(localization.GetMessage("Api.Validator.Client.Create.AcquisitionSourceTypeId"));
 
         RuleFor(x => x.UrlImage)
             .MaximumLength(500)

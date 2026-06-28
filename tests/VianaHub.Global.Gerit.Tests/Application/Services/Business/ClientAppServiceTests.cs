@@ -90,7 +90,7 @@ public class ClientAppServiceTests
         var request = new CreateClientRequest
         {
             ClientType = (int)ClientType.PessoaSingular,
-            OriginType = (int)OriginType.Outros,
+            AcquisitionSourceTypeId = (int)OriginType.Outros,
             UrlImage = null,
             Note = null,
             Individual = new VianaHub.Global.Gerit.Application.Dtos.Request.Business.Client.CreateClientIndividualRequest

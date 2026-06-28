@@ -35,7 +35,7 @@ public class ClientMapping : IEntityTypeConfiguration<ClientEntity>
             .HasColumnType("INT")
             .IsRequired(true);
 
-        builder.Property(x => x.OriginType)
+        builder.Property(x => x.AcquisitionSourceTypeId)
             .HasColumnType("INT")
             .IsRequired(true);
 
@@ -77,6 +77,12 @@ public class ClientMapping : IEntityTypeConfiguration<ClientEntity>
             .WithMany()
             .HasForeignKey(x => x.TenantId)
             .HasConstraintName("FK_Clients_Tenant")
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasOne(x => x.AcquisitionSourceType)
+            .WithMany()
+            .HasForeignKey(x => x.AcquisitionSourceTypeId)
+            .HasConstraintName("FK_Clients_AcquisitionSourceType")
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasMany(x => x.Contacts)

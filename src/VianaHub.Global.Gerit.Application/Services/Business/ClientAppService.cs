@@ -82,7 +82,7 @@ public class ClientAppService : IClientAppService
 
     public async Task<int> CreateAsync(CreateClientRequest request, CancellationToken ct)
     {
-        var client = new ClientEntity(TenantId, (ClientType)request.ClientType, (OriginType)request.OriginType, request.UrlImage, request.Note, UserId);
+        var client = new ClientEntity(TenantId, (ClientType)request.ClientType, request.AcquisitionSourceTypeId, request.UrlImage, request.Note, UserId);
 
         switch (client.ClientType)
         {
@@ -113,7 +113,7 @@ public class ClientAppService : IClientAppService
             return false;
         }
 
-        client.Update((ClientType)request.ClientType, (OriginType)request.OriginType, request.UrlImage, request.Note, UserId);
+        client.Update((ClientType)request.ClientType, request.AcquisitionSourceTypeId, request.UrlImage, request.Note, UserId);
 
         switch ((ClientType)request.ClientType)
         {
@@ -280,7 +280,7 @@ public class ClientAppService : IClientAppService
             //}
 
             // Cria a entidade
-            var entity = new ClientEntity(_currentUser.GetTenantId(), (ClientType)item.ClientType, (OriginType)item.OriginType, item.UrlImage, item.Note, _currentUser.GetUserId());
+            var entity = new ClientEntity(_currentUser.GetTenantId(), (ClientType)item.ClientType, item.AcquisitionSourceTypeId, item.UrlImage, item.Note, _currentUser.GetUserId());
 
             // Tenta criar no dom�nio
             var success = await _domain.CreateAsync(entity, ct);
@@ -303,9 +303,9 @@ public class ClientAppService : IClientAppService
             return false;
         }
 
-        if (item.OriginType <= 0)
+        if (item.AcquisitionSourceTypeId <= 0)
         {
-            _notify.Add(_localization.GetMessage("Application.Service.Client.ValidateBulkItem.OriginType"), 400);
+            _notify.Add(_localization.GetMessage("Application.Service.Client.ValidateBulkItem.AcquisitionSourceTypeId"), 400);
             return false;
         }
 

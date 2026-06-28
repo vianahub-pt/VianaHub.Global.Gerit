@@ -15,8 +15,8 @@ public class UpdateClientRouteValidator : AbstractValidator<UpdateClientRequest>
             .NotEmpty()
             .WithMessage(localization.GetMessage("Api.Validator.Client.Update.ClientType"));
 
-        RuleFor(x => x.OriginType)
-            .NotEmpty()
-            .WithMessage(localization.GetMessage("Api.Validator.Client.Update.OriginType"));
+        RuleFor(x => x.AcquisitionSourceTypeId)
+            .GreaterThan(0)
+            .WithMessage(localization.GetMessage("Api.Validator.Client.Update.AcquisitionSourceTypeId"));
     }
 }
