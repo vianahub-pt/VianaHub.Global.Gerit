@@ -5,7 +5,7 @@ using VianaHub.Global.Gerit.Domain.Interfaces.Base;
 namespace VianaHub.Global.Gerit.Domain.Validators.Business.Client;
 
 /// <summary>
-/// Validador para criação de Client
+/// Validador para criaï¿½ï¿½o de Client
 /// </summary>
 public class CreateClientValidator : AbstractValidator<ClientEntity>
 {
@@ -18,5 +18,9 @@ public class CreateClientValidator : AbstractValidator<ClientEntity>
         RuleFor(x => x.CreatedBy)
             .GreaterThan(0)
             .WithMessage(localization.GetMessage("Domain.Client.CreatedByRequired"));
+
+        RuleFor(x => x.AcquisitionSourceTypeId)
+            .GreaterThan(0)
+            .WithMessage(localization.GetMessage("Domain.Client.AcquisitionSourceTypeIdRequired"));
     }
 }

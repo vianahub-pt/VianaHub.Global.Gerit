@@ -19,10 +19,10 @@ namespace VianaHub.Global.Gerit.Tests.Infra.Data.Repository.Business
 
             await using (var context = new GeritDbContext(options))
             {
-                var active = new ClientEntity(1, ClientType.PessoaSingular, OriginType.Outros, urlImage: null, note: null, createdBy: 1);
+                var active = new ClientEntity(1, ClientType.PessoaSingular, (int)OriginType.Outros, urlImage: null, note: null, createdBy: 1);
                 active.AddIndividual(new ClientIndividualEntity(1, "Teste Active User", "Active", "User", "", "", false, "active@test.local", null, null, null, null, null, 1));
 
-                var deleted = new ClientEntity(1, ClientType.PessoaSingular, OriginType.Outros, urlImage: null, note: null, createdBy: 1);
+                var deleted = new ClientEntity(1, ClientType.PessoaSingular, (int)OriginType.Outros, urlImage: null, note: null, createdBy: 1);
                 deleted.AddIndividual(new ClientIndividualEntity(1, "Teste Deleted User", "Deleted", "User", "", "", false, "deleted@test.local", null, null, null, null, null, 1));
                 deleted.Delete(ClientType.PessoaSingular, 1);
 
@@ -51,10 +51,10 @@ namespace VianaHub.Global.Gerit.Tests.Infra.Data.Repository.Business
 
             await using (var context = new GeritDbContext(options))
             {
-                var active = new ClientEntity(1, ClientType.PessoaSingular, OriginType.Outros, urlImage: null, note: null, createdBy: 1);
+                var active = new ClientEntity(1, ClientType.PessoaSingular, (int)OriginType.Outros, urlImage: null, note: null, createdBy: 1);
                 active.AddIndividual(new ClientIndividualEntity(1, "Teste Alice Active", "Alice", "Active", "", "", false, "alice.active@test.local", null, null, null, null, null, 1));
 
-                var deleted = new ClientEntity(1, ClientType.PessoaSingular, OriginType.Outros, urlImage: null, note: null, createdBy: 1);
+                var deleted = new ClientEntity(1, ClientType.PessoaSingular, (int)OriginType.Outros, urlImage: null, note: null, createdBy: 1);
                 deleted.AddIndividual(new ClientIndividualEntity(1, "Teste Alice Deleted", "Alice", "Deleted", "", "", false, "alice.deleted@test.local", null, null, null, null, null, 1));
                 deleted.Delete(ClientType.PessoaSingular, 1);
 
@@ -83,11 +83,11 @@ namespace VianaHub.Global.Gerit.Tests.Infra.Data.Repository.Business
 
             await using (var context = new GeritDbContext(options))
             {
-                var deleted1 = new ClientEntity(1, ClientType.PessoaSingular, OriginType.Outros, urlImage: null, note: null, createdBy: 1);
+                var deleted1 = new ClientEntity(1, ClientType.PessoaSingular, (int)OriginType.Outros, urlImage: null, note: null, createdBy: 1);
                 deleted1.AddIndividual(new ClientIndividualEntity(1, "Del1 User", "Del1", "User", "", "", false, "del1@test.local", null, null, null, null, null, 1));
                 deleted1.Delete(ClientType.PessoaSingular, 1);
 
-                var deleted2 = new ClientEntity(1, ClientType.PessoaSingular, OriginType.Outros, urlImage: null, note: null, createdBy: 1);
+                var deleted2 = new ClientEntity(1, ClientType.PessoaSingular, (int)OriginType.Outros, urlImage: null, note: null, createdBy: 1);
                 deleted2.AddIndividual(new ClientIndividualEntity(1, "Del2 User", "Del2", "User", "", "", false, "del2@test.local", null, null, null, null, null, 1));
                 deleted2.Delete(ClientType.PessoaSingular, 1);
 
