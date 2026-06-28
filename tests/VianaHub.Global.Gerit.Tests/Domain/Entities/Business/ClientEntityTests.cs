@@ -47,6 +47,6 @@ public class ClientEntityTests
 
     private static ClientEntity CreateClient()
     {
-        return new ClientEntity(1, ClientType.PessoaSingular, (int)OriginType.Outros, urlImage: null, note: null, createdBy: 7);
+        return new ClientEntity(1, ClientType.PessoaSingular, 1, urlImage: null, note: null, createdBy: 7);
     }
 }
