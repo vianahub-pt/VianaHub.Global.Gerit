@@ -24,11 +24,9 @@ public class CreateClientConsentsValidator : AbstractValidator<ClientConsentsEnt
             .NotEmpty()
             .WithMessage(localization.GetMessage("Domain.ClientConsents.GrantedDateRequired"));
 
-        RuleFor(x => x.Origin)
-            .NotEmpty()
-            .WithMessage(localization.GetMessage("Domain.ClientConsents.OriginRequired"))
-            .MaximumLength(200)
-            .WithMessage(localization.GetMessage("Domain.ClientConsents.OriginMaxLength", 200));
+        RuleFor(x => x.ConsentOriginTypeId)
+            .GreaterThan(0)
+            .WithMessage(localization.GetMessage("Domain.ClientConsents.ConsentOriginTypeIdRequired"));
 
         RuleFor(x => x.IpAddress)
             .MaximumLength(50)

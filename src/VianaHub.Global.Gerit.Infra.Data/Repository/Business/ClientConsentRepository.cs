@@ -25,6 +25,7 @@ public class ClientConsentRepository : IClientConsentsDataRepository
             .ThenInclude(x => x.Individual)
             .Include(x => x.Client)
             .ThenInclude(x => x.Company)
+            .Include(x => x.ConsentOriginType)
             .Where(x => x.ClientId == clientId && !x.IsDeleted)
             .OrderByDescending(x => x.GrantedDate)
             .ToListAsync(ct);
@@ -39,6 +40,7 @@ public class ClientConsentRepository : IClientConsentsDataRepository
             .ThenInclude(x => x.Individual)
             .Include(x => x.Client)
             .ThenInclude(x => x.Company)
+            .Include(x => x.ConsentOriginType)
             .Where(x => x.ClientId == clientId && x.Id == id && !x.IsDeleted)
             .FirstOrDefaultAsync(ct);
     }
@@ -52,13 +54,14 @@ public class ClientConsentRepository : IClientConsentsDataRepository
             .ThenInclude(x => x.Individual)
             .Include(x => x.Client)
             .ThenInclude(x => x.Company)
+            .Include(x => x.ConsentOriginType)
             .Where(x => x.ClientId == clientId && !x.IsDeleted);
 
         if (!string.IsNullOrWhiteSpace(filter.Search))
         {
             query = query.Where(x =>
                 x.ConsentType.Name.Contains(filter.Search) ||
-                x.Origin.Contains(filter.Search));
+                x.ConsentOriginType.Name.Contains(filter.Search));
         }
 
         var totalCount = await query.CountAsync(ct);
