@@ -1,3 +1,5 @@
+select * from dbo.AcquisitionSourceTypes;
+select * from dbo.ConsentOriginTypes;
 select * from dbo.AddressTypes;
 select * from dbo.FileTypes;
 select * from dbo.ConsentTypes;
@@ -26,14 +28,14 @@ select * from dbo.JwtKeys;
 select * from dbo.JobDefinitions;
 ------------------------------
 
-select * from dbo.Clients;					--
-select * from dbo.ClientIndividuals;		--
-select * from dbo.ClientCompanies;			--
-select * from dbo.ClientAddresses;			--
-select * from dbo.ClientContacts;			--
+select * from dbo.Clients;
+select * from dbo.ClientIndividuals;
+select * from dbo.ClientCompanies;
+select * from dbo.ClientContacts;
+select * from dbo.ClientAddresses;
 select * from dbo.ClientFiscalData;
-select * from dbo.ClientHierarchy;
 select * from dbo.ClientConsents;
+select * from dbo.ClientHierarchy;
 ------------------------------
 select * from dbo.Teams;			--
 select * from dbo.Functions;				--
