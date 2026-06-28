@@ -33,6 +33,11 @@ public class GeritDbContext : DbContext
     public DbSet<JwtKeyEntity> JwtKeys { get; set; }
     #endregion
 
+    #region DbSets - Global Catalog Tables
+    public DbSet<AcquisitionSourceTypeEntity> AcquisitionSourceTypes { get; set; }
+    public DbSet<ConsentOriginTypeEntity> ConsentOriginTypes { get; set; }
+    #endregion
+
     #region DbSets - Domain Tables
     public DbSet<AddressTypeEntity> AddressTypes { get; set; }
     public DbSet<ClientEntity> Clients { get; set; }
@@ -66,10 +71,10 @@ public class GeritDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
-        // Aplica todas as configurações de mapeamento do assembly
+        // Aplica todas as configuraï¿½ï¿½es de mapeamento do assembly
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(GeritDbContext).Assembly);
 
-        // Configura o schema padrão
+        // Configura o schema padrï¿½o
         modelBuilder.HasDefaultSchema("dbo");
 
         // Apply a global query filter to all entities that expose an IsDeleted property
