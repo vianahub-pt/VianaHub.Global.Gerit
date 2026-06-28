@@ -13,7 +13,7 @@ public class CreateClientConsentsRouteValidator : AbstractValidator<CreateClient
         RuleFor(x => x.GrantedDate)
             .NotEmpty().WithMessage("GrantedDate_Required");
 
-        RuleFor(x => x.Origin)
-            .NotEmpty().WithMessage("Origin_Required");
+        RuleFor(x => x.ConsentOriginTypeId)
+            .GreaterThan(0).WithMessage("ConsentOriginTypeId_Required");
     }
 }

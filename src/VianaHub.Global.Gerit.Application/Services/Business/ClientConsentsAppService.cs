@@ -77,9 +77,9 @@ public class ClientConsentsAppService : IClientConsentsAppService
             TenantId,
             clientId,
             request.ConsentTypeId,
+            request.ConsentOriginTypeId,
             request.Granted,
             request.GrantedDate,
-            request.Origin,
             request.IpAddress,
             request.UserAgent,
             UserId);

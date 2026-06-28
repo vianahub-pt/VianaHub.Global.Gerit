@@ -24,7 +24,10 @@ public class ClientConsentsMapping : IEntityTypeConfiguration<ClientConsentsEnti
         
         builder.Property(x => x.ConsentTypeId)
             .IsRequired();
-        
+
+        builder.Property(x => x.ConsentOriginTypeId)
+            .IsRequired();
+
         builder.Property(x => x.Granted)
             .HasDefaultValue(false);
         
@@ -34,11 +37,6 @@ public class ClientConsentsMapping : IEntityTypeConfiguration<ClientConsentsEnti
         
         builder.Property(x => x.RevokedDate)
             .HasColumnType("DATETIME2(7)");
-        
-        builder.Property(x => x.Origin)
-            .HasColumnType("NVARCHAR(50)")
-            .HasMaxLength(50)
-            .IsRequired();
         
         builder.Property(x => x.IpAddress)
             .HasColumnType("NVARCHAR(50)")
@@ -82,7 +80,12 @@ public class ClientConsentsMapping : IEntityTypeConfiguration<ClientConsentsEnti
             .HasForeignKey(x => x.ConsentTypeId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder.HasIndex(x => new { x.ClientId, x.ConsentTypeId, x.TenantId })
+        builder.HasOne(x => x.ConsentOriginType)
+            .WithMany()
+            .HasForeignKey(x => x.ConsentOriginTypeId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasIndex(x => new { x.ClientId, x.ConsentTypeId, x.ConsentOriginTypeId, x.TenantId })
             .HasDatabaseName("IX_ClientConsents_Client_ConsentType_Tenant");
 
         builder.HasIndex(x => x.TenantId)

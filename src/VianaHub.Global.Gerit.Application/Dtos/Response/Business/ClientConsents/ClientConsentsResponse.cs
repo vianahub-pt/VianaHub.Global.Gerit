@@ -6,12 +6,12 @@ public class ClientConsentsResponse
     public int TenantId { get; set; }
     public int ClientId { get; set; }
     public int ConsentTypeId { get; set; }
+    public int ConsentOriginTypeId { get; set; }
     public bool Granted { get; set; }
     public DateTime GrantedDate { get; set; }
     public DateTime? RevokedDate { get; set; }
-    public string Origin { get; set; }
-    public string IpAddress { get; set; }
-    public string UserAgent { get; set; }
+    public string? IpAddress { get; set; }
+    public string? UserAgent { get; set; }
     public bool IsActive { get; set; }
     public bool IsDeleted { get; set; }
     public int CreatedBy { get; set; }
