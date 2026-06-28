@@ -13,5 +13,9 @@ public class CreateTenantValidator : AbstractValidator<TenantEntity>
             .WithMessage(localization.GetMessage("Domain.Tenant.NameRequired"))
             .MaximumLength(200)
             .WithMessage(localization.GetMessage("Domain.Tenant.NameMaxLength", 200));
+
+        RuleFor(x => x.AcquisitionSourceTypeId)
+            .GreaterThan(0)
+            .WithMessage(localization.GetMessage("Domain.Tenant.AcquisitionSourceTypeIdRequired"));
     }
 }

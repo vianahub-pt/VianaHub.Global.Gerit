@@ -14,5 +14,8 @@ public class UpdateTenantRouteValidator : AbstractValidator<UpdateTenantRequest>
 
         RuleFor(x => x.Name)
             .MaximumLength(200).WithMessage(_localization.GetMessage("Api.Validator.Tenant.Update.Name.MaximumLength", 200));
+
+        RuleFor(x => x.AcquisitionSourceTypeId)
+            .GreaterThan(0).WithMessage(_localization.GetMessage("Api.Validator.Tenant.Update.AcquisitionSourceTypeId"));
     }
 }
