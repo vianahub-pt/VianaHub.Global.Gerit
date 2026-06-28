@@ -6,4 +6,5 @@ public class TenantResponse
     public string Name { get; set; }
     public bool Consent { get; set; }
     public bool IsActive { get; set; }
+    public int AcquisitionSourceTypeId { get; set; }
 }

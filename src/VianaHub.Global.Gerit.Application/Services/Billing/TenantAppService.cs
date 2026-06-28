@@ -75,7 +75,7 @@ public class TenantAppService : ITenantAppService
             return 0;
         }
 
-        var entity = new TenantEntity((TenantType)request.TenantType, (OriginType)request.OriginType, request.Name, request.Email, request.Website, request.UrlImage, request.Note, _currentUser.GetUserId());
+        var entity = new TenantEntity((TenantType)request.TenantType, request.AcquisitionSourceTypeId, request.Name, request.Email, request.Website, request.UrlImage, request.Note, _currentUser.GetUserId());
         var success = await _domain.CreateAsync(entity, ct);
         return success ? entity.Id : 0;
     }
@@ -89,7 +89,7 @@ public class TenantAppService : ITenantAppService
             return false;
         }
 
-        entity.Update((TenantType)request.TenantType, (OriginType)request.OriginType, request.Name, request.Email, request.Website, request.UrlImage, request.Note, _currentUser.GetUserId());
+        entity.Update((TenantType)request.TenantType, request.AcquisitionSourceTypeId, request.Name, request.Email, request.Website, request.UrlImage, request.Note, _currentUser.GetUserId());
         return await _domain.UpdateAsync(entity, ct);
     }
     
@@ -247,7 +247,7 @@ public class TenantAppService : ITenantAppService
             }
 
             // Cria a entidade
-            var entity = new TenantEntity((TenantType)item.TenantType, (OriginType)item.OriginType, item.Name, item.Email, item.Website, item.UrlImage, item.Note, _currentUser.GetUserId());
+            var entity = new TenantEntity((TenantType)item.TenantType, item.AcquisitionSourceTypeId, item.Name, item.Email, item.Website, item.UrlImage, item.Note, _currentUser.GetUserId());
 
             // Tenta criar no dom�nio
             var success = await _domain.CreateAsync(entity, ct);

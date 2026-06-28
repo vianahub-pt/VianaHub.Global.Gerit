@@ -1,4 +1,5 @@
 using VianaHub.Global.Gerit.Domain.Base;
+using VianaHub.Global.Gerit.Domain.Entities.Business;
 using VianaHub.Global.Gerit.Domain.Entities.Identity;
 using VianaHub.Global.Gerit.Domain.Enums;
 
@@ -16,7 +17,8 @@ public class TenantEntity : Entity, IAggregateRoot
     private readonly List<UserEntity> _users = [];
 
     public TenantType TenantType { get; private set; }
-    public OriginType OriginType { get; private set; }
+    public int AcquisitionSourceTypeId { get; private set; }
+    public AcquisitionSourceTypeEntity AcquisitionSourceType { get; private set; }
     public string Name { get; private set; }
     public string Email { get; private set; }
     public string Website { get; private set; }
@@ -35,12 +37,12 @@ public class TenantEntity : Entity, IAggregateRoot
     protected TenantEntity() { }
 
     /// <summary>
-    /// Construtor para criação de um novo Tenant
+    /// Construtor para criaï¿½ï¿½o de um novo Tenant
     /// </summary>
-    public TenantEntity(TenantType tenantType, OriginType originType, string name, string email, string website, string urlImage, string note, int createdBy)
+    public TenantEntity(TenantType tenantType, int acquisitionSourceTypeId, string name, string email, string website, string urlImage, string note, int createdBy)
     {
         TenantType = tenantType;
-        OriginType = originType;
+        AcquisitionSourceTypeId = acquisitionSourceTypeId;
         Name = name;
         Email = email;
         Website = website;
@@ -52,10 +54,10 @@ public class TenantEntity : Entity, IAggregateRoot
         CreatedAt = DateTime.UtcNow;
     }
 
-    public void Update(TenantType tenantType, OriginType originType, string name, string email, string website, string urlImage, string note, int modifiedBy)
+    public void Update(TenantType tenantType, int acquisitionSourceTypeId, string name, string email, string website, string urlImage, string note, int modifiedBy)
     {
         TenantType = tenantType;
-        OriginType = originType;
+        AcquisitionSourceTypeId = acquisitionSourceTypeId;
         Name = name;
         Email = email;
         Website = website;
