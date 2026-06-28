@@ -39,7 +39,6 @@
   "Swagger.Tag.Auth": "Authentication",
   "Swagger.Tag.AddressTypes": "Address Types",
   "Swagger.Tag.FileTypes": "File Types",
-  "Swagger.Tag.OriginTypes": "Origin Types",
   "Swagger.Tag.AttachmentCategories": "Attachment Categories",
   "Swagger.Tag.Clients": "Clients",
   "Swagger.Tag.ClientTypes": "Client Types",
@@ -529,15 +528,6 @@
   "Swagger.Endpoint.FileType.Activate.Summary": "Activate file type",
   "Swagger.Endpoint.FileType.Deactivate.Summary": "Deactivate file type",
   "Swagger.Endpoint.FileType.BulkUpload.Summary": "Bulk upload file types",
-
-  "Swagger.Endpoint.OriginType.GetAll.Summary": "Get all origin types",
-  "Swagger.Endpoint.OriginType.GetById.Summary": "Get origin type by ID",
-  "Swagger.Endpoint.OriginType.GetPaged.Summary": "Get origin types paged",
-  "Swagger.Endpoint.OriginType.Create.Summary": "Create new origin type",
-  "Swagger.Endpoint.OriginType.Update.Summary": "Update origin type",
-  "Swagger.Endpoint.OriginType.Delete.Summary": "Delete origin type",
-  "Swagger.Endpoint.OriginType.Activate.Summary": "Activate origin type",
-  "Swagger.Endpoint.OriginType.Deactivate.Summary": "Deactivate origin type",
 
   "Swagger.Endpoint.VisitAttachment.GetAll.Summary": "Get all visit attachments",
   "Swagger.Endpoint.VisitAttachment.GetById.Summary": "Get visit attachment by ID",
