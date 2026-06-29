@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using VianaHub.Global.Gerit.Domain.Entities.Billing;
+using VianaHub.Global.Gerit.Domain.Entities.Business;
 
 namespace VianaHub.Global.Gerit.Infra.Data.Mappings.Billing;
 
@@ -14,7 +15,7 @@ public class TenantMapping : IEntityTypeConfiguration<TenantEntity>
     {
         builder.ToTable("Tenants", "dbo");
 
-        // Chave Primária
+        // Chave Primï¿½ria
         builder.HasKey(x => x.Id)
             .HasName("PK_Tenants");
 
@@ -68,7 +69,16 @@ public class TenantMapping : IEntityTypeConfiguration<TenantEntity>
             .HasColumnType("DATETIME2")
             .IsRequired(false);
 
+        builder.Property(x => x.AcquisitionSourceTypeId)
+            .HasColumnType("INT")
+            .IsRequired();
+
         // Relacionamentos
+        builder.HasOne(x => x.AcquisitionSourceType)
+            .WithMany()
+            .HasForeignKey(x => x.AcquisitionSourceTypeId)
+            .HasConstraintName("FK_Tenants_AcquisitionSourceType")
+            .OnDelete(DeleteBehavior.Restrict);
         builder.HasMany(x => x.Contacts)
             .WithOne(tc => tc.Tenant)
             .HasForeignKey(tc => tc.TenantId)

@@ -1,4 +1,28 @@
-﻿GO
+GO
+INSERT INTO dbo.AcquisitionSourceTypes (Code, Name, Description, CreatedBy)
+SELECT v.Code, v.Name, v.Description, 1
+FROM (VALUES
+    (N'OTHER',     N'Outros',     N'Origem não especificada ou não classificada.'),
+    (N'INSTAGRAM', N'Instagram',  N'Cliente ou tenant originado através do Instagram.'),
+    (N'FACEBOOK',  N'Facebook',   N'Cliente ou tenant originado através do Facebook.'),
+    (N'LINKEDIN',  N'LinkedIn',   N'Cliente ou tenant originado através do LinkedIn.'),
+    (N'YOUTUBE',   N'YouTube',    N'Cliente ou tenant originado através do YouTube.'),
+    (N'WHATSAPP',  N'WhatsApp',   N'Cliente ou tenant originado através de contacto por WhatsApp.'),
+    (N'TIKTOK',    N'TikTok',     N'Cliente ou tenant originado através do TikTok.'),
+    (N'GOOGLE',    N'Google',     N'Cliente ou tenant originado através de pesquisa ou anúncio no Google.'),
+    (N'FRIENDS',   N'Amigos',     N'Cliente ou tenant originado por indicação de amigos ou conhecidos.'),
+    (N'TV',        N'TV',         N'Cliente ou tenant originado através de publicidade ou menção em televisão.'),
+    (N'RADIO',     N'Rádio',      N'Cliente ou tenant originado através de rádio.'),
+    (N'NEWSPAPER', N'Jornal',     N'Cliente ou tenant originado através de jornal.'),
+    (N'MAGAZINE',  N'Revista',    N'Cliente ou tenant originado através de revista.'),
+    (N'EVENTS',    N'Eventos',    N'Cliente ou tenant originado através de eventos.')
+) AS v(Code, Name, Description)
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM dbo.AcquisitionSourceTypes ast
+    WHERE ast.Code = v.Code
+);
+
 INSERT INTO dbo.AddressTypes (Name, Description, CreatedBy)
 SELECT v.Name, v.Description, 1
 FROM (VALUES
@@ -63,6 +87,25 @@ WHERE NOT EXISTS (
     SELECT 1 FROM dbo.ConsentTypes c WHERE c.Name = v.Name
 );
 GO
+INSERT INTO dbo.ConsentOriginTypes (Code, Name, Description, CreatedBy)
+SELECT v.Code, v.Name, v.Description, 1
+FROM (VALUES
+    (N'WEB',        N'Web',        N'Consentimento capturado através da aplicação web ou site.'),
+    (N'MOBILE',     N'Mobile',     N'Consentimento capturado através da aplicação mobile.'),
+    (N'PAPER',      N'Paper',      N'Consentimento capturado através de documento físico.'),
+    (N'API',        N'API',        N'Consentimento recebido através de integração/API.'),
+    (N'BACKOFFICE', N'Backoffice', N'Consentimento registado manualmente por utilizador interno.'),
+    (N'EMAIL',      N'Email',      N'Consentimento capturado através de comunicação por e-mail.'),
+    (N'SMS',        N'Sms',        N'Consentimento capturado através de SMS.'),
+    (N'WHATSAPP',   N'WhatsApp',   N'Consentimento capturado através de comunicação por WhatsApp.'),
+    (N'CALLCENTER', N'CallCenter', N'Consentimento capturado através de atendimento telefónico.')
+) AS v(Code, Name, Description)
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM dbo.ConsentOriginTypes cot
+    WHERE cot.Code = v.Code
+);
+
 INSERT INTO dbo.StatusTypes (Name, Description, CreatedBy)
 SELECT v.Name, v.Description, 1
 FROM (VALUES
@@ -163,53 +206,56 @@ GO
 INSERT INTO dbo.Resources (Name, Description, CreatedBy)
 SELECT v.Name, v.Description, 1
 FROM (VALUES
-    (N'Actions', N'Recursos relacionados às ações do sistema.'),
+    (N'AcquisitionSourceTypes', N'Tipos de origem de aquisição comercial.'),
     (N'AddressTypes', N'Tipos de endereços disponíveis.'),
-    (N'AttachmentCategories', N'Categorias de anexos.'),
-    (N'ClientAddresses', N'Endereços dos clientes.'),
+    (N'ConsentOriginTypes', N'Tipos de origem/canal de captura de consentimentos.'),
+    (N'FileTypes', N'Tipos de arquivos.'),
+    (N'ConsentTypes', N'Tipos de consentimento.'),
+    (N'StatusTypes', N'Tipos de status.'),
+    (N'Plans', N'Planos do sistema.'),
+    (N'PlanFileRules', N'Regras de arquivos por plano.'),
+    (N'Tenants', N'Tenants do sistema.'),
+    (N'Status', N'Status das entidades.'),
+    (N'TenantContacts', N'Contatos dos tenants.'),
+    (N'TenantAddresses', N'Endereços dos tenants.'),
+    (N'TenantFiscalData', N'Dados fiscais dos tenants.'),
+    (N'Subscriptions', N'Assinaturas dos tenants.'),
+    (N'Users', N'Usuários do sistema.'),
+    (N'UserPreferences', N'Preferências dos usuários.'),
+    (N'Roles', N'Papéis/perfis de acesso.'),
+    (N'Resources', N'Recursos do sistema.'),
+    (N'Actions', N'Ações do sistema.'),
+    (N'RolePermissions', N'Permissões associadas a roles.'),
+    (N'UserRoles', N'Papéis dos usuários.'),
+    (N'RefreshTokens', N'Tokens de atualização.'),
+    (N'JwtKeys', N'Chaves JWT.'),
+    (N'JobDefinitions', N'Definições de jobs/processos.'),
+    (N'Functions', N'Funções do sistema.'),
+    (N'Clients', N'Clientes do sistema.'),
+    (N'ClientIndividuals', N'Dados de clientes individuais.'),
     (N'ClientCompanies', N'Dados de empresas clientes.'),
-    (N'ClientConsents', N'Consentimentos dos clientes.'),
+    (N'ClientAddresses', N'Endereços dos clientes.'),
     (N'ClientContacts', N'Contatos dos clientes.'),
     (N'ClientFiscalData', N'Dados fiscais dos clientes.'),
     (N'ClientHierarchy', N'Hierarquia entre clientes.'),
-    (N'ClientIndividuals', N'Dados de clientes individuais.'),
-    (N'Clients', N'Clientes do sistema.'),
-    (N'ConsentTypes', N'Tipos de consentimento.'),
-    (N'Equipments', N'Equipamentos.'),
-    (N'EquipmentTypes', N'Tipos de equipamentos.'),
-    (N'FileTypes', N'Tipos de arquivos.'),
-    (N'Functions', N'Funções do sistema.'),
-    (N'InterventionAddresses', N'Endereços das intervenções.'),
-    (N'InterventionAttachments', N'Anexos das intervenções.'),
-    (N'InterventionContacts', N'Contatos das intervenções.'),
-    (N'Interventions', N'Intervenções realizadas.'),
-    (N'InterventionTeamEquipments', N'Equipamentos das equipas nas intervenções.'),
-    (N'InterventionTeams', N'Equipas das intervenções.'),
-    (N'InterventionTeamVehicles', N'Veículos das equipas nas intervenções.'),
-    (N'JobDefinitions', N'Definições de jobs/processos.'),
-    (N'JwtKeys', N'Chaves JWT.'),
-    (N'PlanFileRules', N'Regras de arquivos por plano.'),
-    (N'Plans', N'Planos do sistema.'),
-    (N'RefreshTokens', N'Tokens de atualização.'),
-    (N'Resources', N'Recursos do sistema.'),
-    (N'RolePermissions', N'Permissões associadas a roles.'),
-    (N'Roles', N'Papéis/perfis de acesso.'),
-    (N'Status', N'Status das entidades.'),
-    (N'StatusTypes', N'Tipos de status.'),
-    (N'Subscriptions', N'Assinaturas dos tenants.'),
-    (N'TeamMemberAddresses', N'Endereços dos membros da equipa.'),
-    (N'TeamMemberContacts', N'Contatos dos membros da equipa.'),
-    (N'TeamMembers', N'Membros da equipa.'),
-    (N'TeamMembersTeams', N'Relação entre membros e equipas.'),
+    (N'ClientConsents', N'Consentimentos dos clientes.'),
     (N'Teams', N'Equipas.'),
-    (N'TenantAddresses', N'Endereços dos tenants.'),
-    (N'TenantContacts', N'Contatos dos tenants.'),
-    (N'TenantFiscalData', N'Dados fiscais dos tenants.'),
-    (N'Tenants', N'Tenants do sistema.'),
-    (N'UserPreferences', N'Preferências dos usuários.'),
-    (N'UserRoles', N'Papéis dos usuários.'),
-    (N'Users', N'Usuários do sistema.'),
-    (N'Vehicles', N'Veículos.')
+    (N'Employees', N'Colaboradores/membros da equipa.'),
+    (N'EmployeeContacts', N'Contatos dos colaboradores.'),
+    (N'EmployeeAddresses', N'Endereços dos colaboradores.'),
+    (N'EmployeeTeam', N'Relação entre colaboradores e equipas.'),
+    (N'EquipmentTypes', N'Tipos de equipamentos.'),
+    (N'Equipments', N'Equipamentos.'),
+    (N'Vehicles', N'Veículos.'),
+    (N'Visits', N'Visitas/intervenções realizadas.'),
+    (N'VisitContacts', N'Contatos das visitas.'),
+    (N'VisitAddresses', N'Endereços das visitas.'),
+    (N'VisitTeam', N'Equipas associadas às visitas.'),
+    (N'VisitTeamEmployee', N'Colaboradores associados às equipas das visitas.'),
+    (N'VisitTeamVehicle', N'Veículos associados às equipas das visitas.'),
+    (N'VisitTeamEquipment', N'Equipamentos associados às equipas das visitas.'),
+    (N'AttachmentCategories', N'Categorias de anexos.'),
+    (N'VisitAttachments', N'Anexos das visitas.')
 ) AS v(Name, Description)
 WHERE NOT EXISTS (
     SELECT 1 FROM dbo.Resources r WHERE r.Name = v.Name
@@ -217,7 +263,7 @@ WHERE NOT EXISTS (
 GO
 INSERT INTO dbo.Tenants (
     TenantType,
-    OriginType,
+    AcquisitionSourceTypeId,
     Name,
     Email,
     Website,
@@ -225,14 +271,22 @@ INSERT INTO dbo.Tenants (
     Note,
     CreatedBy
 )
-SELECT *
+SELECT
+    v.TenantType,
+    ast.Id,
+    v.Name,
+    v.Email,
+    v.Website,
+    v.UrlImage,
+    v.Note,
+    v.CreatedBy
 FROM (VALUES
-    (2, 1, N'VianaHub Lda', N'contact@vianahub.pt', N'https://vianahub.pt', NULL, N'Tenant principal', 1),
-    (2, 1, N'Gerit Demo Lda', N'demo@gerit.pt', N'https://demo.gerit.pt', NULL, N'Ambiente de demonstração', 1),
-    (2, 1, N'Teste Lda', N'teste@teste.pt', NULL, NULL, N'Tenant para testes internos', 1)
+    (2, N'OTHER', N'VianaHub Lda', N'contact@vianahub.pt', N'https://vianahub.pt', NULL, N'Tenant principal', 1),
+    (2, N'OTHER', N'Gerit Demo Lda', N'demo@gerit.pt', N'https://demo.gerit.pt', NULL, N'Ambiente de demonstração', 1),
+    (2, N'OTHER', N'Teste Lda', N'teste@teste.pt', NULL, NULL, N'Tenant para testes internos', 1)
 ) AS v(
     TenantType,
-    OriginType,
+    AcquisitionSourceTypeCode,
     Name,
     Email,
     Website,
@@ -240,6 +294,9 @@ FROM (VALUES
     Note,
     CreatedBy
 )
+INNER JOIN dbo.AcquisitionSourceTypes ast
+    ON ast.Code = v.AcquisitionSourceTypeCode
+   AND ast.IsDeleted = 0
 WHERE NOT EXISTS (
     SELECT 1 FROM dbo.Tenants t WHERE t.Name = v.Name
 );
@@ -306,13 +363,22 @@ INSERT INTO dbo.TenantContacts (
     IsPrimary,
     CreatedBy
 )
-SELECT *
+SELECT
+    t.Id,
+    v.Name,
+    v.Email,
+    v.Phone,
+    v.PhoneIsWhatsapp,
+    v.CellPhone,
+    v.CellPhoneIsWhatsapp,
+    v.IsPrimary,
+    v.CreatedBy
 FROM (VALUES
-    (1, N'João Silva', N'contact@vianahub.pt', N'+351210000001', 0, N'+351910000001', 1, 1, 1),
-    (2, N'Maria Costa', N'demo@gerit.pt', N'+351210000002', 0, N'+351920000002', 1, 1, 1),
-    (3, N'Carlos Teste', N'teste@teste.pt', NULL, 0, N'+351930000003', 1, 1, 1)
+    (N'VianaHub Lda', N'João Silva', N'contact@vianahub.pt', N'+351210000001', 0, N'+351910000001', 1, 1, 1),
+    (N'Gerit Demo Lda', N'Maria Costa', N'demo@gerit.pt', N'+351210000002', 0, N'+351920000002', 1, 1, 1),
+    (N'Teste Lda', N'Carlos Teste', N'teste@teste.pt', NULL, 0, N'+351930000003', 1, 1, 1)
 ) AS v(
-    TenantId,
+    TenantName,
     Name,
     Email,
     Phone,
@@ -322,10 +388,13 @@ FROM (VALUES
     IsPrimary,
     CreatedBy
 )
+INNER JOIN dbo.Tenants t
+    ON t.Name = v.TenantName
+   AND t.IsDeleted = 0
 WHERE NOT EXISTS (
     SELECT 1 
     FROM dbo.TenantContacts tc 
-    WHERE tc.TenantId = v.TenantId 
+    WHERE tc.TenantId = t.Id
       AND tc.Email = v.Email
 );
 GO
@@ -346,14 +415,29 @@ INSERT INTO dbo.TenantAddresses (
     IsPrimary,
     CreatedBy
 )
-SELECT *
+SELECT
+    t.Id,
+    atp.Id,
+    v.CountryCode,
+    v.Street,
+    v.Neighborhood,
+    v.City,
+    v.District,
+    v.PostalCode,
+    v.StreetNumber,
+    v.Complement,
+    v.Latitude,
+    v.Longitude,
+    v.Note,
+    v.IsPrimary,
+    v.CreatedBy
 FROM (VALUES
-    (1, 2, 'PT', N'Avenida da Liberdade', N'Santo António', N'Lisboa', N'Lisboa', N'1250-140', N'100', N'3º Andar', 38.7223, -9.1393, N'Sede principal', 1, 1),
-    (2, 2, 'PT', N'Rua de Santa Catarina', N'Baixa', N'Porto', N'Porto', N'4000-447', N'200', NULL, 41.1496, -8.6110, N'Escritório demo', 1, 1),
-    (3, 2, 'PT', N'Avenida Central', N'Sé', N'Braga', N'Braga', N'4700-000', N'50', NULL, 41.5454, -8.4265, N'Endereço de teste', 1, 1)
+    (N'VianaHub Lda', N'Morada comercial', 'PT', N'Avenida da Liberdade', N'Santo António', N'Lisboa', N'Lisboa', N'1250-140', N'100', N'3º Andar', 38.7223, -9.1393, N'Sede principal', 1, 1),
+    (N'Gerit Demo Lda', N'Morada comercial', 'PT', N'Rua de Santa Catarina', N'Baixa', N'Porto', N'Porto', N'4000-447', N'200', NULL, 41.1496, -8.6110, N'Escritório demo', 1, 1),
+    (N'Teste Lda', N'Morada comercial', 'PT', N'Avenida Central', N'Sé', N'Braga', N'Braga', N'4700-000', N'50', NULL, 41.5454, -8.4265, N'Endereço de teste', 1, 1)
 ) AS v(
-    TenantId,
-    AddressTypeId,
+    TenantName,
+    AddressTypeName,
     CountryCode,
     Street,
     Neighborhood,
@@ -368,11 +452,18 @@ FROM (VALUES
     IsPrimary,
     CreatedBy
 )
+INNER JOIN dbo.Tenants t
+    ON t.Name = v.TenantName
+   AND t.IsDeleted = 0
+INNER JOIN dbo.AddressTypes atp
+    ON atp.Name = v.AddressTypeName
+   AND atp.IsDeleted = 0
 WHERE NOT EXISTS (
     SELECT 1
     FROM dbo.TenantAddresses ta
-    WHERE ta.TenantId = v.TenantId
+    WHERE ta.TenantId = t.Id
       AND ta.IsPrimary = 1
+      AND ta.IsDeleted = 0
 );
 GO
 INSERT INTO dbo.Subscriptions (
@@ -389,7 +480,7 @@ INSERT INTO dbo.Subscriptions (
 )
 SELECT 
     t.Id,
-    1,
+    p.Id,
     NULL,
     SYSDATETIME(),
     DATEADD(MONTH, 1, SYSDATETIME()),
@@ -399,6 +490,9 @@ SELECT
     NULL,
     1
 FROM dbo.Tenants t
+INNER JOIN dbo.Plans p
+    ON p.Name = N'Free'
+   AND p.IsDeleted = 0
 WHERE NOT EXISTS (
     SELECT 1 
     FROM dbo.Subscriptions s 
@@ -672,8 +766,18 @@ WHERE NOT EXISTS (
 );
 
 GO
-DECLARE @TenantId INT = 1;
+DECLARE @TenantId INT;
 DECLARE @CreatedBy INT = 1;
+
+SELECT @TenantId = t.Id
+FROM dbo.Tenants t
+WHERE t.Name = N'VianaHub Lda'
+  AND t.IsDeleted = 0;
+
+IF @TenantId IS NULL
+BEGIN
+    THROW 51000, 'Tenant VianaHub Lda não encontrado. Execute primeiro o seed de Tenants.', 1;
+END;
 
 DECLARE @ResidentialAddressTypeId INT = COALESCE(
     (SELECT TOP 1 Id FROM dbo.AddressTypes WHERE Name = N'Morada residencial' AND IsDeleted = 0),
@@ -690,7 +794,7 @@ DECLARE @SeedClients TABLE
     SeedKey NVARCHAR(50) NOT NULL PRIMARY KEY,
     ClientId INT NULL,
     ClientType INT NOT NULL,
-    OriginType INT NOT NULL,
+    AcquisitionSourceTypeCode NVARCHAR(50) NOT NULL,
     Note NVARCHAR(500) NOT NULL,
 
     FullName NVARCHAR(500) NULL,
@@ -734,7 +838,7 @@ DECLARE @SeedClients TABLE
 
 INSERT INTO @SeedClients
 (
-    SeedKey, ClientType, OriginType, Note,
+    SeedKey, ClientType, AcquisitionSourceTypeCode, Note,
     FullName, FirstName, LastName, LegalName, TradeName,
     PhoneNumber, CellPhoneNumber, IsWhatsapp, Email,
     BirthDate, Gender, DocumentType, DocumentNumber, Nationality,
@@ -744,7 +848,7 @@ INSERT INTO @SeedClients
 )
 VALUES
 -- 4 clientes pessoa física
-(N'Client-001', 1, 2, N'[InitialSeed:Client-001] Pessoa Singular - Mariana Costa',
+(N'Client-001', 1, N'INSTAGRAM', N'[InitialSeed:Client-001] Pessoa Singular - Mariana Costa',
  N'Mariana Costa', N'Mariana', N'Costa', NULL, NULL,
  N'289123401', N'934123401', 1, N'mariana.costa@example.pt',
  '1992-04-18', N'Feminino', N'Cartão de Cidadão', N'12345678', N'Portugal',
@@ -752,7 +856,7 @@ VALUES
  N'245789321', NULL, N'mariana.costa@example.pt', 0,
  @ResidentialAddressTypeId, N'Rua de São Luís', N'Centro', N'Faro', N'Faro', N'8000-285', N'14', N'2.º Esq.', N'Mariana Costa'),
 
-(N'Client-002', 1, 8, N'[InitialSeed:Client-002] Pessoa Singular - João Martins',
+(N'Client-002', 1, N'GOOGLE', N'[InitialSeed:Client-002] Pessoa Singular - João Martins',
  N'João Martins', N'João', N'Martins', NULL, NULL,
  N'282123402', N'935123402', 1, N'joao.martins@example.pt',
  '1987-09-03', N'Masculino', N'Cartão de Cidadão', N'23456789', N'Portugal',
@@ -760,7 +864,7 @@ VALUES
  N'246789322', NULL, N'joao.martins@example.pt', 0,
  @ResidentialAddressTypeId, N'Avenida da República', N'Centro', N'Portimão', N'Faro', N'8500-300', N'52', N'1.º Dt.', N'João Martins'),
 
-(N'Client-003', 2, 6, N'[InitialSeed:Client-003] Recibos Verdes - Sofia Almeida',
+(N'Client-003', 2, N'WHATSAPP', N'[InitialSeed:Client-003] Recibos Verdes - Sofia Almeida',
  N'Sofia Almeida', N'Sofia', N'Almeida', NULL, NULL,
  N'213123403', N'936123403', 1, N'sofia.almeida@example.pt',
  '1990-01-26', N'Feminino', N'Cartão de Cidadão', N'34567890', N'Portugal',
@@ -768,7 +872,7 @@ VALUES
  N'247789323', N'PT247789323', N'sofia.almeida@example.pt', 1,
  @ResidentialAddressTypeId, N'Rua do Alecrim', N'Misericórdia', N'Lisboa', N'Lisboa', N'1200-014', N'21', N'3.º', N'Sofia Almeida'),
 
-(N'Client-004', 3, 4, N'[InitialSeed:Client-004] Freelancer - Tiago Ferreira',
+(N'Client-004', 3, N'LINKEDIN', N'[InitialSeed:Client-004] Freelancer - Tiago Ferreira',
  N'Tiago Ferreira', N'Tiago', N'Ferreira', NULL, NULL,
  N'222123404', N'937123404', 1, N'tiago.ferreira@example.pt',
  '1985-11-12', N'Masculino', N'Cartão de Cidadão', N'45678901', N'Portugal',
@@ -777,7 +881,7 @@ VALUES
  @ResidentialAddressTypeId, N'Rua de Cedofeita', N'Cedofeita', N'Porto', N'Porto', N'4050-174', N'88', N'4.º Esq.', N'Tiago Ferreira'),
 
 -- 8 clientes empresa
-(N'Client-005', 4, 3, N'[InitialSeed:Client-005] Pessoa Jurídica - Algarve Tech Solutions Lda',
+(N'Client-005', 4, N'FACEBOOK', N'[InitialSeed:Client-005] Pessoa Jurídica - Algarve Tech Solutions Lda',
  NULL, NULL, NULL, N'Algarve Tech Solutions Lda', N'Algarve Tech',
  N'289123405', N'938123405', 1, N'geral@algarvetech.example.pt',
  NULL, NULL, NULL, NULL, NULL,
@@ -785,7 +889,7 @@ VALUES
  N'514789325', N'PT514789325', N'fiscal@algarvetech.example.pt', 1,
  @CommercialAddressTypeId, N'Rua do Comércio', N'Baixa', N'Loulé', N'Faro', N'8100-536', N'7', N'Loja A', N'Ricardo Neves'),
 
-(N'Client-006', 4, 5, N'[InitialSeed:Client-006] Pessoa Jurídica - Lisboa Digital Services Lda',
+(N'Client-006', 4, N'YOUTUBE', N'[InitialSeed:Client-006] Pessoa Jurídica - Lisboa Digital Services Lda',
  NULL, NULL, NULL, N'Lisboa Digital Services Lda', N'Lisboa Digital',
  N'211123406', N'939123406', 1, N'contacto@lisboadigital.example.pt',
  NULL, NULL, NULL, NULL, NULL,
@@ -793,7 +897,7 @@ VALUES
  N'514789326', N'PT514789326', N'fiscal@lisboadigital.example.pt', 1,
  @CommercialAddressTypeId, N'Avenida da Liberdade', N'Santo António', N'Lisboa', N'Lisboa', N'1250-096', N'110', N'5.º', N'Patrícia Ramos'),
 
-(N'Client-007', 4, 7, N'[InitialSeed:Client-007] Pessoa Jurídica - Porto Creative Agency Lda',
+(N'Client-007', 4, N'TIKTOK', N'[InitialSeed:Client-007] Pessoa Jurídica - Porto Creative Agency Lda',
  NULL, NULL, NULL, N'Porto Creative Agency Lda', N'Porto Creative',
  N'222123407', N'930123407', 1, N'hello@portocreative.example.pt',
  NULL, NULL, NULL, NULL, NULL,
@@ -801,7 +905,7 @@ VALUES
  N'514789327', N'PT514789327', N'fiscal@portocreative.example.pt', 1,
  @CommercialAddressTypeId, N'Rua de Santa Catarina', N'Santo Ildefonso', N'Porto', N'Porto', N'4000-447', N'312', N'Sala 2', N'Helena Pinto'),
 
-(N'Client-008', 4, 14, N'[InitialSeed:Client-008] Pessoa Jurídica - Coimbra Business Consulting Lda',
+(N'Client-008', 4, N'EVENTS', N'[InitialSeed:Client-008] Pessoa Jurídica - Coimbra Business Consulting Lda',
  NULL, NULL, NULL, N'Coimbra Business Consulting Lda', N'Coimbra Consulting',
  N'239123408', N'931123408', 1, N'geral@coimbraconsulting.example.pt',
  NULL, NULL, NULL, NULL, NULL,
@@ -809,7 +913,7 @@ VALUES
  N'514789328', N'PT514789328', N'fiscal@coimbraconsulting.example.pt', 1,
  @CommercialAddressTypeId, N'Rua Ferreira Borges', N'Baixa', N'Coimbra', N'Coimbra', N'3000-179', N'45', N'2.º', N'Miguel Santos'),
 
-(N'Client-009', 5, 2, N'[InitialSeed:Client-009] Sociedade Unipessoal por Quotas - Braga Web Studio Unipessoal Lda',
+(N'Client-009', 5, N'INSTAGRAM', N'[InitialSeed:Client-009] Sociedade Unipessoal por Quotas - Braga Web Studio Unipessoal Lda',
  NULL, NULL, NULL, N'Braga Web Studio Unipessoal Lda', N'Braga Web Studio',
  N'253123409', N'932123409', 1, N'geral@bragawebstudio.example.pt',
  NULL, NULL, NULL, NULL, NULL,
@@ -817,7 +921,7 @@ VALUES
  N'516789329', N'PT516789329', N'fiscal@bragawebstudio.example.pt', 1,
  @CommercialAddressTypeId, N'Avenida Central', N'Centro', N'Braga', N'Braga', N'4710-229', N'91', N'Escritório 3', N'Inês Carvalho'),
 
-(N'Client-010', 5, 4, N'[InitialSeed:Client-010] Sociedade Unipessoal por Quotas - Aveiro Automation Unipessoal Lda',
+(N'Client-010', 5, N'LINKEDIN', N'[InitialSeed:Client-010] Sociedade Unipessoal por Quotas - Aveiro Automation Unipessoal Lda',
  NULL, NULL, NULL, N'Aveiro Automation Unipessoal Lda', N'Aveiro Automation',
  N'234123410', N'933123410', 1, N'geral@aveiroautomation.example.pt',
  NULL, NULL, NULL, NULL, NULL,
@@ -825,7 +929,7 @@ VALUES
  N'516789330', N'PT516789330', N'fiscal@aveiroautomation.example.pt', 1,
  @CommercialAddressTypeId, N'Rua do Clube dos Galitos', N'Centro', N'Aveiro', N'Aveiro', N'3810-164', N'18', N'Sala 4', N'Pedro Lima'),
 
-(N'Client-011', 5, 8, N'[InitialSeed:Client-011] Sociedade Unipessoal por Quotas - Évora Design Lab Unipessoal Lda',
+(N'Client-011', 5, N'GOOGLE', N'[InitialSeed:Client-011] Sociedade Unipessoal por Quotas - Évora Design Lab Unipessoal Lda',
  NULL, NULL, NULL, N'Évora Design Lab Unipessoal Lda', N'Évora Design Lab',
  N'266123411', N'934123411', 1, N'geral@evoradesignlab.example.pt',
  NULL, NULL, NULL, NULL, NULL,
@@ -833,7 +937,7 @@ VALUES
  N'516789331', N'PT516789331', N'fiscal@evoradesignlab.example.pt', 1,
  @CommercialAddressTypeId, N'Rua da República', N'Centro Histórico', N'Évora', N'Évora', N'7000-656', N'27', N'Loja 1', N'Carla Mendes'),
 
-(N'Client-012', 5, 9, N'[InitialSeed:Client-012] Sociedade Unipessoal por Quotas - Viseu Data Services Unipessoal Lda',
+(N'Client-012', 5, N'FRIENDS', N'[InitialSeed:Client-012] Sociedade Unipessoal por Quotas - Viseu Data Services Unipessoal Lda',
  NULL, NULL, NULL, N'Viseu Data Services Unipessoal Lda', N'Viseu Data',
  N'232123412', N'935123412', 1, N'geral@viseudata.example.pt',
  NULL, NULL, NULL, NULL, NULL,
@@ -841,11 +945,11 @@ VALUES
  N'516789332', N'PT516789332', N'fiscal@viseudata.example.pt', 1,
  @CommercialAddressTypeId, N'Rua Formosa', N'Centro', N'Viseu', N'Viseu', N'3500-135', N'60', N'1.º', N'André Rocha');
 
-INSERT INTO dbo.Clients (TenantId, ClientType, OriginType, UrlImage, Note, IsActive, IsDeleted, CreatedBy, CreatedAt)
+INSERT INTO dbo.Clients (TenantId, AcquisitionSourceTypeId, ClientType, UrlImage, Note, IsActive, IsDeleted, CreatedBy, CreatedAt)
 SELECT
     @TenantId,
+    ast.Id,
     s.ClientType,
-    s.OriginType,
     NULL,
     s.Note,
     1,
@@ -853,6 +957,9 @@ SELECT
     @CreatedBy,
     SYSDATETIME()
 FROM @SeedClients s
+INNER JOIN dbo.AcquisitionSourceTypes ast
+    ON ast.Code = s.AcquisitionSourceTypeCode
+   AND ast.IsDeleted = 0
 WHERE NOT EXISTS (
     SELECT 1
     FROM dbo.Clients c
@@ -995,7 +1102,7 @@ DECLARE @SeedClients TABLE
     SeedKey NVARCHAR(50) NOT NULL PRIMARY KEY,
     ClientId INT NULL,
     ClientType INT NOT NULL,
-    OriginType INT NOT NULL,
+    AcquisitionSourceTypeCode NVARCHAR(50) NOT NULL,
     Note NVARCHAR(500) NOT NULL,
 
 	FullName NVARCHAR(500) NULL,
@@ -1039,7 +1146,7 @@ DECLARE @SeedClients TABLE
 
 INSERT INTO @SeedClients
 (
-    SeedKey, ClientType, OriginType, Note,
+    SeedKey, ClientType, AcquisitionSourceTypeCode, Note,
     FullName, FirstName, LastName, LegalName, TradeName,
     PhoneNumber, CellPhoneNumber, IsWhatsapp, Email,
     BirthDate, Gender, DocumentType, DocumentNumber, Nationality,
@@ -1048,49 +1155,49 @@ INSERT INTO @SeedClients
     AddressTypeId, Street, Neighborhood, City, District, PostalCode, StreetNumber, Complement, ContactName
 )
 VALUES
-(N'GD-001', 1, 2, N'[GeritDemoSeed:GD-001] Pessoa Singular - Ana Ribeiro', N'Ana Ribeiro', N'Ana', N'Ribeiro', NULL, NULL, N'218100001', N'910100001', 1, N'ana.ribeiro.demo@gerit.pt', '1991-03-14', N'Feminino', N'Cartão de Cidadão', N'GD100001', N'Portugal', NULL, NULL, NULL, NULL, NULL, N'245900001', NULL, N'ana.ribeiro.demo@gerit.pt', 0, @ResidentialAddressTypeId, N'Rua das Flores', N'Centro', N'Lisboa', N'Lisboa', N'1200-195', N'10', N'2.º Esq.', N'Ana Ribeiro'),
-(N'GD-002', 1, 8, N'[GeritDemoSeed:GD-002] Pessoa Singular - Miguel Correia', N'Miguel Correia', N'Miguel', N'Correia', NULL, NULL, N'222100002', N'910100002', 1, N'miguel.correia.demo@gerit.pt', '1986-07-22', N'Masculino', N'Cartão de Cidadão', N'GD100002', N'Portugal', NULL, NULL, NULL, NULL, NULL, N'245900002', NULL, N'miguel.correia.demo@gerit.pt', 0, @ResidentialAddressTypeId, N'Rua de Cedofeita', N'Cedofeita', N'Porto', N'Porto', N'4050-174', N'84', N'3.º Dt.', N'Miguel Correia'),
-(N'GD-003', 2, 6, N'[GeritDemoSeed:GD-003] Recibos Verdes - Catarina Lopes', N'Catarina Lopes', N'Catarina', N'Lopes', NULL, NULL, N'239100003', N'910100003', 1, N'catarina.lopes.demo@gerit.pt', '1990-11-05', N'Feminino', N'Cartão de Cidadão', N'GD100003', N'Portugal', NULL, NULL, NULL, NULL, NULL, N'245900003', N'PT245900003', N'catarina.lopes.demo@gerit.pt', 1, @ResidentialAddressTypeId, N'Rua Ferreira Borges', N'Baixa', N'Coimbra', N'Coimbra', N'3000-179', N'36', N'1.º', N'Catarina Lopes'),
-(N'GD-004', 3, 4, N'[GeritDemoSeed:GD-004] Freelancer - Rui Fernandes', N'Rui Fernandes', N'Rui', N'Fernandes', NULL, NULL, N'253100004', N'910100004', 1, N'rui.fernandes.demo@gerit.pt', '1988-01-19', N'Masculino', N'Cartão de Cidadão', N'GD100004', N'Portugal', NULL, NULL, NULL, NULL, NULL, N'245900004', N'PT245900004', N'rui.fernandes.demo@gerit.pt', 1, @ResidentialAddressTypeId, N'Avenida Central', N'Centro', N'Braga', N'Braga', N'4710-229', N'75', N'Sala 2', N'Rui Fernandes'),
-(N'GD-005', 1, 9, N'[GeritDemoSeed:GD-005] Pessoa Singular - Beatriz Sousa', N'Beatriz Sousa', N'Beatriz', N'Sousa', NULL, NULL, N'289100005', N'910100005', 1, N'beatriz.sousa.demo@gerit.pt', '1995-05-30', N'Feminino', N'Cartão de Cidadão', N'GD100005', N'Portugal', NULL, NULL, NULL, NULL, NULL, N'245900005', NULL, N'beatriz.sousa.demo@gerit.pt', 0, @ResidentialAddressTypeId, N'Rua de Santo António', N'Centro', N'Faro', N'Faro', N'8000-283', N'18', N'R/C', N'Beatriz Sousa'),
-(N'GD-006', 2, 3, N'[GeritDemoSeed:GD-006] Recibos Verdes - Diogo Matos', N'Diogo Matos', N'Diogo', N'Matos', NULL, NULL, N'234100006', N'910100006', 1, N'diogo.matos.demo@gerit.pt', '1984-10-11', N'Masculino', N'Cartão de Cidadão', N'GD100006', N'Portugal', NULL, NULL, NULL, NULL, NULL, N'245900006', N'PT245900006', N'diogo.matos.demo@gerit.pt', 1, @ResidentialAddressTypeId, N'Rua Direita', N'Centro', N'Aveiro', N'Aveiro', N'3810-005', N'25', N'2.º', N'Diogo Matos'),
-(N'GD-007', 3, 7, N'[GeritDemoSeed:GD-007] Freelancer - Inês Carvalho', N'Inês Carvalho', N'Inês', N'Carvalho', NULL, NULL, N'266100007', N'910100007', 1, N'ines.carvalho.demo@gerit.pt', '1993-12-08', N'Feminino', N'Cartão de Cidadão', N'GD100007', N'Portugal', NULL, NULL, NULL, NULL, NULL, N'245900007', N'PT245900007', N'ines.carvalho.demo@gerit.pt', 1, @ResidentialAddressTypeId, N'Rua da República', N'Centro Histórico', N'Évora', N'Évora', N'7000-656', N'42', N'1.º Esq.', N'Inês Carvalho'),
-(N'GD-008', 1, 5, N'[GeritDemoSeed:GD-008] Pessoa Singular - Pedro Nunes', N'Pedro Nunes', N'Pedro', N'Nunes', NULL, NULL, N'232100008', N'910100008', 1, N'pedro.nunes.demo@gerit.pt', '1982-06-27', N'Masculino', N'Cartão de Cidadão', N'GD100008', N'Portugal', NULL, NULL, NULL, NULL, NULL, N'245900008', NULL, N'pedro.nunes.demo@gerit.pt', 0, @ResidentialAddressTypeId, N'Rua Formosa', N'Centro', N'Viseu', N'Viseu', N'3500-135', N'61', N'4.º', N'Pedro Nunes'),
-(N'GD-009', 4, 4, N'[GeritDemoSeed:GD-009] Empresa real em Portugal - EDP - Energias de Portugal, S.A. (dados de contacto/fiscais sintéticos para demo)', NULL, NULL, NULL, N'EDP - Energias de Portugal, S.A.', N'EDP', N'351210009', N'911100009', 1, N'demo+edp@gerit.pt', NULL, NULL, NULL, NULL, NULL, N'https://www.edp.com', N'500900009', N'35110', 12000, N'Responsável Demo EDP', N'507900009', N'PT507900009', N'fiscal+edp@gerit.pt', 1, @CommercialAddressTypeId, N'Avenida 24 de Julho', N'Santos', N'Lisboa', N'Lisboa', N'1200-868', N'12', N'Edifício Demo', N'Responsável Demo EDP'),
-(N'GD-010', 4, 8, N'[GeritDemoSeed:GD-010] Empresa real em Portugal - Galp Energia, SGPS, S.A. (dados de contacto/fiscais sintéticos para demo)', NULL, NULL, NULL, N'Galp Energia, SGPS, S.A.', N'Galp', N'351210010', N'911100010', 1, N'demo+galp@gerit.pt', NULL, NULL, NULL, NULL, NULL, N'https://www.galp.com', N'500900010', N'46711', 6000, N'Responsável Demo Galp', N'507900010', N'PT507900010', N'fiscal+galp@gerit.pt', 1, @CommercialAddressTypeId, N'Rua Tomás da Fonseca', N'São Domingos de Benfica', N'Lisboa', N'Lisboa', N'1600-209', N'15', N'Torre Demo', N'Responsável Demo Galp'),
-(N'GD-011', 4, 14, N'[GeritDemoSeed:GD-011] Empresa real em Portugal - Jerónimo Martins, SGPS, S.A. (dados de contacto/fiscais sintéticos para demo)', NULL, NULL, NULL, N'Jerónimo Martins, SGPS, S.A.', N'Jerónimo Martins', N'351210011', N'911100011', 1, N'demo+jeronimo.martins@gerit.pt', NULL, NULL, NULL, NULL, NULL, N'https://www.jeronimomartins.com', N'500900011', N'70100', 30000, N'Responsável Demo JM', N'507900011', N'PT507900011', N'fiscal+jeronimo.martins@gerit.pt', 1, @CommercialAddressTypeId, N'Rua Actor António Silva', N'Alta de Lisboa', N'Lisboa', N'Lisboa', N'1600-404', N'7', N'Piso Demo', N'Responsável Demo JM'),
-(N'GD-012', 4, 4, N'[GeritDemoSeed:GD-012] Empresa real em Portugal - Sonae, SGPS, S.A. (dados de contacto/fiscais sintéticos para demo)', NULL, NULL, NULL, N'Sonae, SGPS, S.A.', N'Sonae', N'351220012', N'911100012', 1, N'demo+sonae@gerit.pt', NULL, NULL, NULL, NULL, NULL, N'https://www.sonae.pt', N'500900012', N'70100', 45000, N'Responsável Demo Sonae', N'507900012', N'PT507900012', N'fiscal+sonae@gerit.pt', 1, @CommercialAddressTypeId, N'Lugar do Espido', N'Via Norte', N'Maia', N'Porto', N'4470-177', N'0', N'Bloco Demo', N'Responsável Demo Sonae'),
-(N'GD-013', 4, 8, N'[GeritDemoSeed:GD-013] Empresa real em Portugal - NOS, SGPS, S.A. (dados de contacto/fiscais sintéticos para demo)', NULL, NULL, NULL, N'NOS, SGPS, S.A.', N'NOS', N'351210013', N'911100013', 1, N'demo+nos@gerit.pt', NULL, NULL, NULL, NULL, NULL, N'https://www.nos.pt', N'500900013', N'64202', 2000, N'Responsável Demo NOS', N'507900013', N'PT507900013', N'fiscal+nos@gerit.pt', 1, @CommercialAddressTypeId, N'Rua Actor António Silva', N'Lumiar', N'Lisboa', N'Lisboa', N'1600-404', N'9', N'Edifício Demo', N'Responsável Demo NOS'),
-(N'GD-014', 4, 14, N'[GeritDemoSeed:GD-014] Empresa real em Portugal - Mota-Engil, SGPS, S.A. (dados de contacto/fiscais sintéticos para demo)', NULL, NULL, NULL, N'Mota-Engil, SGPS, S.A.', N'Mota-Engil', N'351220014', N'911100014', 1, N'demo+mota.engil@gerit.pt', NULL, NULL, NULL, NULL, NULL, N'https://www.mota-engil.com', N'500900014', N'42990', 10000, N'Responsável Demo Mota-Engil', N'507900014', N'PT507900014', N'fiscal+mota.engil@gerit.pt', 1, @CommercialAddressTypeId, N'Rua do Rego Lameiro', N'Campanhã', N'Porto', N'Porto', N'4300-454', N'38', N'Piso Demo', N'Responsável Demo Mota-Engil'),
-(N'GD-015', 4, 8, N'[GeritDemoSeed:GD-015] Empresa real em Portugal - REN - Redes Energéticas Nacionais, SGPS, S.A. (dados de contacto/fiscais sintéticos para demo)', NULL, NULL, NULL, N'REN - Redes Energéticas Nacionais, SGPS, S.A.', N'REN', N'351210015', N'911100015', 1, N'demo+ren@gerit.pt', NULL, NULL, NULL, NULL, NULL, N'https://www.ren.pt', N'500900015', N'35120', 700, N'Responsável Demo REN', N'507900015', N'PT507900015', N'fiscal+ren@gerit.pt', 1, @CommercialAddressTypeId, N'Avenida dos Estados Unidos da América', N'Alvalade', N'Lisboa', N'Lisboa', N'1749-061', N'55', N'Piso Demo', N'Responsável Demo REN'),
-(N'GD-016', 4, 6, N'[GeritDemoSeed:GD-016] Empresa real em Portugal - CTT - Correios de Portugal, S.A. (dados de contacto/fiscais sintéticos para demo)', NULL, NULL, NULL, N'CTT - Correios de Portugal, S.A.', N'CTT', N'351210016', N'911100016', 1, N'demo+ctt@gerit.pt', NULL, NULL, NULL, NULL, NULL, N'https://www.ctt.pt', N'500900016', N'53100', 12000, N'Responsável Demo CTT', N'507900016', N'PT507900016', N'fiscal+ctt@gerit.pt', 1, @CommercialAddressTypeId, N'Avenida D. João II', N'Parque das Nações', N'Lisboa', N'Lisboa', N'1999-001', N'13', N'Torre Demo', N'Responsável Demo CTT'),
-(N'GD-017', 4, 3, N'[GeritDemoSeed:GD-017] Empresa real em Portugal - Banco Comercial Português, S.A. (dados de contacto/fiscais sintéticos para demo)', NULL, NULL, NULL, N'Banco Comercial Português, S.A.', N'Millennium bcp', N'351210017', N'911100017', 1, N'demo+bcp@gerit.pt', NULL, NULL, NULL, NULL, NULL, N'https://www.millenniumbcp.pt', N'500900017', N'64190', 7000, N'Responsável Demo BCP', N'507900017', N'PT507900017', N'fiscal+bcp@gerit.pt', 1, @CommercialAddressTypeId, N'Praça D. João I', N'Baixa', N'Porto', N'Porto', N'4000-295', N'28', N'Agência Demo', N'Responsável Demo BCP'),
-(N'GD-018', 4, 4, N'[GeritDemoSeed:GD-018] Empresa real em Portugal - Corticeira Amorim, SGPS, S.A. (dados de contacto/fiscais sintéticos para demo)', NULL, NULL, NULL, N'Corticeira Amorim, SGPS, S.A.', N'Corticeira Amorim', N'351220018', N'911100018', 1, N'demo+amorim@gerit.pt', NULL, NULL, NULL, NULL, NULL, N'https://www.amorim.com', N'500900018', N'16294', 4000, N'Responsável Demo Amorim', N'507900018', N'PT507900018', N'fiscal+amorim@gerit.pt', 1, @CommercialAddressTypeId, N'Rua de Meladas', N'Mozelos', N'Santa Maria da Feira', N'Aveiro', N'4535-186', N'260', N'Unidade Demo', N'Responsável Demo Amorim'),
-(N'GD-019', 4, 8, N'[GeritDemoSeed:GD-019] Empresa real em Portugal - The Navigator Company, S.A. (dados de contacto/fiscais sintéticos para demo)', NULL, NULL, NULL, N'The Navigator Company, S.A.', N'The Navigator Company', N'351210019', N'911100019', 1, N'demo+navigator@gerit.pt', NULL, NULL, NULL, NULL, NULL, N'https://www.thenavigatorcompany.com', N'500900019', N'17120', 3000, N'Responsável Demo Navigator', N'507900019', N'PT507900019', N'fiscal+navigator@gerit.pt', 1, @CommercialAddressTypeId, N'Avenida Fontes Pereira de Melo', N'Avenidas Novas', N'Lisboa', N'Lisboa', N'1050-120', N'27', N'Escritório Demo', N'Responsável Demo Navigator'),
-(N'GD-020', 4, 14, N'[GeritDemoSeed:GD-020] Empresa real em Portugal - Semapa - Sociedade de Investimento e Gestão, SGPS, S.A. (dados de contacto/fiscais sintéticos para demo)', NULL, NULL, NULL, N'Semapa - Sociedade de Investimento e Gestão, SGPS, S.A.', N'Semapa', N'351210020', N'911100020', 1, N'demo+semapa@gerit.pt', NULL, NULL, NULL, NULL, NULL, N'https://www.semapa.pt', N'500900020', N'64202', 200, N'Responsável Demo Semapa', N'507900020', N'PT507900020', N'fiscal+semapa@gerit.pt', 1, @CommercialAddressTypeId, N'Avenida Fontes Pereira de Melo', N'Avenidas Novas', N'Lisboa', N'Lisboa', N'1050-121', N'14', N'Piso Demo', N'Responsável Demo Semapa'),
-(N'GD-021', 4, 4, N'[GeritDemoSeed:GD-021] Empresa real em Portugal - Altri, SGPS, S.A. (dados de contacto/fiscais sintéticos para demo)', NULL, NULL, NULL, N'Altri, SGPS, S.A.', N'Altri', N'351220021', N'911100021', 1, N'demo+altri@gerit.pt', NULL, NULL, NULL, NULL, NULL, N'https://www.altri.pt', N'500900021', N'17110', 800, N'Responsável Demo Altri', N'507900021', N'PT507900021', N'fiscal+altri@gerit.pt', 1, @CommercialAddressTypeId, N'Rua Manuel Pinto de Azevedo', N'Ramalde', N'Porto', N'Porto', N'4100-320', N'818', N'Escritório Demo', N'Responsável Demo Altri'),
-(N'GD-022', 4, 8, N'[GeritDemoSeed:GD-022] Empresa real em Portugal - Ibersol, SGPS, S.A. (dados de contacto/fiscais sintéticos para demo)', NULL, NULL, NULL, N'Ibersol, SGPS, S.A.', N'Ibersol', N'351220022', N'911100022', 1, N'demo+ibersol@gerit.pt', NULL, NULL, NULL, NULL, NULL, N'https://www.ibersol.pt', N'500900022', N'56101', 6000, N'Responsável Demo Ibersol', N'507900022', N'PT507900022', N'fiscal+ibersol@gerit.pt', 1, @CommercialAddressTypeId, N'Praça do Bom Sucesso', N'Boavista', N'Porto', N'Porto', N'4150-146', N'105', N'Loja Demo', N'Responsável Demo Ibersol'),
-(N'GD-023', 4, 6, N'[GeritDemoSeed:GD-023] Empresa real em Portugal - EDP Renováveis, S.A. (dados de contacto/fiscais sintéticos para demo)', NULL, NULL, NULL, N'EDP Renováveis, S.A.', N'EDP Renováveis', N'351210023', N'911100023', 1, N'demo+edpr@gerit.pt', NULL, NULL, NULL, NULL, NULL, N'https://www.edpr.com', N'500900023', N'35113', 2500, N'Responsável Demo EDPR', N'507900023', N'PT507900023', N'fiscal+edpr@gerit.pt', 1, @CommercialAddressTypeId, N'Avenida da Boavista', N'Boavista', N'Porto', N'Porto', N'4100-130', N'3433', N'Piso Demo', N'Responsável Demo EDPR'),
-(N'GD-024', 4, 14, N'[GeritDemoSeed:GD-024] Empresa real em Portugal - TAP - Transportes Aéreos Portugueses, S.A. (dados de contacto/fiscais sintéticos para demo)', NULL, NULL, NULL, N'TAP - Transportes Aéreos Portugueses, S.A.', N'TAP Air Portugal', N'351210024', N'911100024', 1, N'demo+tap@gerit.pt', NULL, NULL, NULL, NULL, NULL, N'https://www.flytap.com', N'500900024', N'51100', 8000, N'Responsável Demo TAP', N'507900024', N'PT507900024', N'fiscal+tap@gerit.pt', 1, @CommercialAddressTypeId, N'Aeroporto Humberto Delgado', N'Olivais', N'Lisboa', N'Lisboa', N'1700-008', N'0', N'Terminal Demo', N'Responsável Demo TAP'),
-(N'GD-025', 4, 8, N'[GeritDemoSeed:GD-025] Empresa real em Portugal - Caixa Geral de Depósitos, S.A. (dados de contacto/fiscais sintéticos para demo)', NULL, NULL, NULL, N'Caixa Geral de Depósitos, S.A.', N'CGD', N'351210025', N'911100025', 1, N'demo+cgd@gerit.pt', NULL, NULL, NULL, NULL, NULL, N'https://www.cgd.pt', N'500900025', N'64190', 6000, N'Responsável Demo CGD', N'507900025', N'PT507900025', N'fiscal+cgd@gerit.pt', 1, @CommercialAddressTypeId, N'Avenida João XXI', N'Areeiro', N'Lisboa', N'Lisboa', N'1000-300', N'63', N'Sede Demo', N'Responsável Demo CGD'),
-(N'GD-026', 4, 4, N'[GeritDemoSeed:GD-026] Empresa real em Portugal - Vodafone Portugal - Comunicações Pessoais, S.A. (dados de contacto/fiscais sintéticos para demo)', NULL, NULL, NULL, N'Vodafone Portugal - Comunicações Pessoais, S.A.', N'Vodafone Portugal', N'351210026', N'911100026', 1, N'demo+vodafone@gerit.pt', NULL, NULL, NULL, NULL, NULL, N'https://www.vodafone.pt', N'500900026', N'61200', 1500, N'Responsável Demo Vodafone', N'507900026', N'PT507900026', N'fiscal+vodafone@gerit.pt', 1, @CommercialAddressTypeId, N'Avenida D. João II', N'Parque das Nações', N'Lisboa', N'Lisboa', N'1998-017', N'36', N'Piso Demo', N'Responsável Demo Vodafone'),
-(N'GD-027', 4, 8, N'[GeritDemoSeed:GD-027] Empresa real em Portugal - Altice Portugal, S.A. (dados de contacto/fiscais sintéticos para demo)', NULL, NULL, NULL, N'Altice Portugal, S.A.', N'Altice Portugal', N'351210027', N'911100027', 1, N'demo+altice@gerit.pt', NULL, NULL, NULL, NULL, NULL, N'https://www.telecom.pt', N'500900027', N'61100', 8000, N'Responsável Demo Altice', N'507900027', N'PT507900027', N'fiscal+altice@gerit.pt', 1, @CommercialAddressTypeId, N'Avenida Fontes Pereira de Melo', N'Avenidas Novas', N'Lisboa', N'Lisboa', N'1069-300', N'40', N'Escritório Demo', N'Responsável Demo Altice'),
-(N'GD-028', 4, 3, N'[GeritDemoSeed:GD-028] Empresa real em Portugal - Super Bock Bebidas, S.A. (dados de contacto/fiscais sintéticos para demo)', NULL, NULL, NULL, N'Super Bock Bebidas, S.A.', N'Super Bock Group', N'351220028', N'911100028', 1, N'demo+superbock@gerit.pt', NULL, NULL, NULL, NULL, NULL, N'https://www.superbockgroup.com', N'500900028', N'11050', 1200, N'Responsável Demo Super Bock', N'507900028', N'PT507900028', N'fiscal+superbock@gerit.pt', 1, @CommercialAddressTypeId, N'Via Norte', N'Leça do Balio', N'Matosinhos', N'Porto', N'4465-764', N'0', N'Unidade Demo', N'Responsável Demo Super Bock'),
-(N'GD-029', 4, 14, N'[GeritDemoSeed:GD-029] Empresa real em Portugal - Delta Cafés, S.A. (dados de contacto/fiscais sintéticos para demo)', NULL, NULL, NULL, N'Delta Cafés, S.A.', N'Delta Cafés', N'351245029', N'911100029', 1, N'demo+delta@gerit.pt', NULL, NULL, NULL, NULL, NULL, N'https://www.deltacafes.pt', N'500900029', N'10830', 3000, N'Responsável Demo Delta', N'507900029', N'PT507900029', N'fiscal+delta@gerit.pt', 1, @CommercialAddressTypeId, N'Avenida Calouste Gulbenkian', N'Campo Maior', N'Campo Maior', N'Portalegre', N'7370-025', N'0', N'Unidade Demo', N'Responsável Demo Delta'),
-(N'GD-030', 4, 9, N'[GeritDemoSeed:GD-030] Empresa real em Portugal - Sumol+Compal Marcas, S.A. (dados de contacto/fiscais sintéticos para demo)', NULL, NULL, NULL, N'Sumol+Compal Marcas, S.A.', N'Sumol Compal', N'351210030', N'911100030', 1, N'demo+sumolcompal@gerit.pt', NULL, NULL, NULL, NULL, NULL, N'https://www.sumolcompal.pt', N'500900030', N'11070', 1200, N'Responsável Demo Sumol Compal', N'507900030', N'PT507900030', N'fiscal+sumolcompal@gerit.pt', 1, @CommercialAddressTypeId, N'Estrada da Portela', N'Carnaxide', N'Oeiras', N'Lisboa', N'2790-124', N'9', N'Escritório Demo', N'Responsável Demo Sumol Compal'),
-(N'GD-031', 4, 4, N'[GeritDemoSeed:GD-031] Empresa real em Portugal - Vista Alegre Atlantis, S.A. (dados de contacto/fiscais sintéticos para demo)', NULL, NULL, NULL, N'Vista Alegre Atlantis, S.A.', N'Vista Alegre', N'351234031', N'911100031', 1, N'demo+vistaalegre@gerit.pt', NULL, NULL, NULL, NULL, NULL, N'https://vistaalegre.com', N'500900031', N'23410', 900, N'Responsável Demo Vista Alegre', N'507900031', N'PT507900031', N'fiscal+vistaalegre@gerit.pt', 1, @CommercialAddressTypeId, N'Lugar da Vista Alegre', N'Ílhavo', N'Ílhavo', N'Aveiro', N'3830-292', N'0', N'Fábrica Demo', N'Responsável Demo Vista Alegre'),
-(N'GD-032', 4, 8, N'[GeritDemoSeed:GD-032] Empresa real em Portugal - Critical Software, S.A. (dados de contacto/fiscais sintéticos para demo)', NULL, NULL, NULL, N'Critical Software, S.A.', N'Critical Software', N'351239032', N'911100032', 1, N'demo+criticalsoftware@gerit.pt', NULL, NULL, NULL, NULL, NULL, N'https://www.criticalsoftware.com', N'500900032', N'62010', 1200, N'Responsável Demo Critical', N'507900032', N'PT507900032', N'fiscal+criticalsoftware@gerit.pt', 1, @CommercialAddressTypeId, N'Parque Industrial de Taveiro', N'Taveiro', N'Coimbra', N'Coimbra', N'3045-504', N'0', N'Edifício Demo', N'Responsável Demo Critical'),
-(N'GD-033', 4, 14, N'[GeritDemoSeed:GD-033] Empresa real em Portugal - Farfetch Portugal, Unipessoal Lda (dados de contacto/fiscais sintéticos para demo)', NULL, NULL, NULL, N'Farfetch Portugal, Unipessoal Lda', N'Farfetch Portugal', N'351220033', N'911100033', 1, N'demo+farfetch@gerit.pt', NULL, NULL, NULL, NULL, NULL, N'https://www.farfetch.com', N'500900033', N'62010', 2500, N'Responsável Demo Farfetch', N'507900033', N'PT507900033', N'fiscal+farfetch@gerit.pt', 1, @CommercialAddressTypeId, N'Rua da Lionesa', N'Leça do Balio', N'Matosinhos', N'Porto', N'4465-671', N'446', N'Hub Demo', N'Responsável Demo Farfetch'),
-(N'GD-034', 4, 4, N'[GeritDemoSeed:GD-034] Empresa real em Portugal - OutSystems - Software em Rede, S.A. (dados de contacto/fiscais sintéticos para demo)', NULL, NULL, NULL, N'OutSystems - Software em Rede, S.A.', N'OutSystems', N'351210034', N'911100034', 1, N'demo+outsystems@gerit.pt', NULL, NULL, NULL, NULL, NULL, N'https://www.outsystems.com', N'500900034', N'62010', 2000, N'Responsável Demo OutSystems', N'507900034', N'PT507900034', N'fiscal+outsystems@gerit.pt', 1, @CommercialAddressTypeId, N'Rua Central Park', N'Linda-a-Velha', N'Oeiras', N'Lisboa', N'2795-242', N'2', N'Escritório Demo', N'Responsável Demo OutSystems'),
-(N'GD-035', 4, 8, N'[GeritDemoSeed:GD-035] Empresa real em Portugal - Feedzai - Consultadoria e Inovação Tecnológica, S.A. (dados de contacto/fiscais sintéticos para demo)', NULL, NULL, NULL, N'Feedzai - Consultadoria e Inovação Tecnológica, S.A.', N'Feedzai', N'351239035', N'911100035', 1, N'demo+feedzai@gerit.pt', NULL, NULL, NULL, NULL, NULL, N'https://feedzai.com', N'500900035', N'62010', 600, N'Responsável Demo Feedzai', N'507900035', N'PT507900035', N'fiscal+feedzai@gerit.pt', 1, @CommercialAddressTypeId, N'Rua Pedro Nunes', N'Coimbra', N'Coimbra', N'Coimbra', N'3030-199', N'0', N'Escritório Demo', N'Responsável Demo Feedzai'),
-(N'GD-036', 4, 6, N'[GeritDemoSeed:GD-036] Empresa real em Portugal - Unbabel, Unipessoal Lda (dados de contacto/fiscais sintéticos para demo)', NULL, NULL, NULL, N'Unbabel, Unipessoal Lda', N'Unbabel', N'351210036', N'911100036', 1, N'demo+unbabel@gerit.pt', NULL, NULL, NULL, NULL, NULL, N'https://unbabel.com', N'500900036', N'62020', 400, N'Responsável Demo Unbabel', N'507900036', N'PT507900036', N'fiscal+unbabel@gerit.pt', 1, @CommercialAddressTypeId, N'Avenida da República', N'Avenidas Novas', N'Lisboa', N'Lisboa', N'1050-191', N'45', N'Escritório Demo', N'Responsável Demo Unbabel');
+(N'GD-001', 1, N'INSTAGRAM', N'[GeritDemoSeed:GD-001] Pessoa Singular - Ana Ribeiro', N'Ana Ribeiro', N'Ana', N'Ribeiro', NULL, NULL, N'218100001', N'910100001', 1, N'ana.ribeiro.demo@gerit.pt', '1991-03-14', N'Feminino', N'Cartão de Cidadão', N'GD100001', N'Portugal', NULL, NULL, NULL, NULL, NULL, N'245900001', NULL, N'ana.ribeiro.demo@gerit.pt', 0, @ResidentialAddressTypeId, N'Rua das Flores', N'Centro', N'Lisboa', N'Lisboa', N'1200-195', N'10', N'2.º Esq.', N'Ana Ribeiro'),
+(N'GD-002', 1, N'GOOGLE', N'[GeritDemoSeed:GD-002] Pessoa Singular - Miguel Correia', N'Miguel Correia', N'Miguel', N'Correia', NULL, NULL, N'222100002', N'910100002', 1, N'miguel.correia.demo@gerit.pt', '1986-07-22', N'Masculino', N'Cartão de Cidadão', N'GD100002', N'Portugal', NULL, NULL, NULL, NULL, NULL, N'245900002', NULL, N'miguel.correia.demo@gerit.pt', 0, @ResidentialAddressTypeId, N'Rua de Cedofeita', N'Cedofeita', N'Porto', N'Porto', N'4050-174', N'84', N'3.º Dt.', N'Miguel Correia'),
+(N'GD-003', 2, N'WHATSAPP', N'[GeritDemoSeed:GD-003] Recibos Verdes - Catarina Lopes', N'Catarina Lopes', N'Catarina', N'Lopes', NULL, NULL, N'239100003', N'910100003', 1, N'catarina.lopes.demo@gerit.pt', '1990-11-05', N'Feminino', N'Cartão de Cidadão', N'GD100003', N'Portugal', NULL, NULL, NULL, NULL, NULL, N'245900003', N'PT245900003', N'catarina.lopes.demo@gerit.pt', 1, @ResidentialAddressTypeId, N'Rua Ferreira Borges', N'Baixa', N'Coimbra', N'Coimbra', N'3000-179', N'36', N'1.º', N'Catarina Lopes'),
+(N'GD-004', 3, N'LINKEDIN', N'[GeritDemoSeed:GD-004] Freelancer - Rui Fernandes', N'Rui Fernandes', N'Rui', N'Fernandes', NULL, NULL, N'253100004', N'910100004', 1, N'rui.fernandes.demo@gerit.pt', '1988-01-19', N'Masculino', N'Cartão de Cidadão', N'GD100004', N'Portugal', NULL, NULL, NULL, NULL, NULL, N'245900004', N'PT245900004', N'rui.fernandes.demo@gerit.pt', 1, @ResidentialAddressTypeId, N'Avenida Central', N'Centro', N'Braga', N'Braga', N'4710-229', N'75', N'Sala 2', N'Rui Fernandes'),
+(N'GD-005', 1, N'FRIENDS', N'[GeritDemoSeed:GD-005] Pessoa Singular - Beatriz Sousa', N'Beatriz Sousa', N'Beatriz', N'Sousa', NULL, NULL, N'289100005', N'910100005', 1, N'beatriz.sousa.demo@gerit.pt', '1995-05-30', N'Feminino', N'Cartão de Cidadão', N'GD100005', N'Portugal', NULL, NULL, NULL, NULL, NULL, N'245900005', NULL, N'beatriz.sousa.demo@gerit.pt', 0, @ResidentialAddressTypeId, N'Rua de Santo António', N'Centro', N'Faro', N'Faro', N'8000-283', N'18', N'R/C', N'Beatriz Sousa'),
+(N'GD-006', 2, N'FACEBOOK', N'[GeritDemoSeed:GD-006] Recibos Verdes - Diogo Matos', N'Diogo Matos', N'Diogo', N'Matos', NULL, NULL, N'234100006', N'910100006', 1, N'diogo.matos.demo@gerit.pt', '1984-10-11', N'Masculino', N'Cartão de Cidadão', N'GD100006', N'Portugal', NULL, NULL, NULL, NULL, NULL, N'245900006', N'PT245900006', N'diogo.matos.demo@gerit.pt', 1, @ResidentialAddressTypeId, N'Rua Direita', N'Centro', N'Aveiro', N'Aveiro', N'3810-005', N'25', N'2.º', N'Diogo Matos'),
+(N'GD-007', 3, N'TIKTOK', N'[GeritDemoSeed:GD-007] Freelancer - Inês Carvalho', N'Inês Carvalho', N'Inês', N'Carvalho', NULL, NULL, N'266100007', N'910100007', 1, N'ines.carvalho.demo@gerit.pt', '1993-12-08', N'Feminino', N'Cartão de Cidadão', N'GD100007', N'Portugal', NULL, NULL, NULL, NULL, NULL, N'245900007', N'PT245900007', N'ines.carvalho.demo@gerit.pt', 1, @ResidentialAddressTypeId, N'Rua da República', N'Centro Histórico', N'Évora', N'Évora', N'7000-656', N'42', N'1.º Esq.', N'Inês Carvalho'),
+(N'GD-008', 1, N'YOUTUBE', N'[GeritDemoSeed:GD-008] Pessoa Singular - Pedro Nunes', N'Pedro Nunes', N'Pedro', N'Nunes', NULL, NULL, N'232100008', N'910100008', 1, N'pedro.nunes.demo@gerit.pt', '1982-06-27', N'Masculino', N'Cartão de Cidadão', N'GD100008', N'Portugal', NULL, NULL, NULL, NULL, NULL, N'245900008', NULL, N'pedro.nunes.demo@gerit.pt', 0, @ResidentialAddressTypeId, N'Rua Formosa', N'Centro', N'Viseu', N'Viseu', N'3500-135', N'61', N'4.º', N'Pedro Nunes'),
+(N'GD-009', 4, N'LINKEDIN', N'[GeritDemoSeed:GD-009] Empresa real em Portugal - EDP - Energias de Portugal, S.A. (dados de contacto/fiscais sintéticos para demo)', NULL, NULL, NULL, N'EDP - Energias de Portugal, S.A.', N'EDP', N'351210009', N'911100009', 1, N'demo+edp@gerit.pt', NULL, NULL, NULL, NULL, NULL, N'https://www.edp.com', N'500900009', N'35110', 12000, N'Responsável Demo EDP', N'507900009', N'PT507900009', N'fiscal+edp@gerit.pt', 1, @CommercialAddressTypeId, N'Avenida 24 de Julho', N'Santos', N'Lisboa', N'Lisboa', N'1200-868', N'12', N'Edifício Demo', N'Responsável Demo EDP'),
+(N'GD-010', 4, N'GOOGLE', N'[GeritDemoSeed:GD-010] Empresa real em Portugal - Galp Energia, SGPS, S.A. (dados de contacto/fiscais sintéticos para demo)', NULL, NULL, NULL, N'Galp Energia, SGPS, S.A.', N'Galp', N'351210010', N'911100010', 1, N'demo+galp@gerit.pt', NULL, NULL, NULL, NULL, NULL, N'https://www.galp.com', N'500900010', N'46711', 6000, N'Responsável Demo Galp', N'507900010', N'PT507900010', N'fiscal+galp@gerit.pt', 1, @CommercialAddressTypeId, N'Rua Tomás da Fonseca', N'São Domingos de Benfica', N'Lisboa', N'Lisboa', N'1600-209', N'15', N'Torre Demo', N'Responsável Demo Galp'),
+(N'GD-011', 4, N'EVENTS', N'[GeritDemoSeed:GD-011] Empresa real em Portugal - Jerónimo Martins, SGPS, S.A. (dados de contacto/fiscais sintéticos para demo)', NULL, NULL, NULL, N'Jerónimo Martins, SGPS, S.A.', N'Jerónimo Martins', N'351210011', N'911100011', 1, N'demo+jeronimo.martins@gerit.pt', NULL, NULL, NULL, NULL, NULL, N'https://www.jeronimomartins.com', N'500900011', N'70100', 30000, N'Responsável Demo JM', N'507900011', N'PT507900011', N'fiscal+jeronimo.martins@gerit.pt', 1, @CommercialAddressTypeId, N'Rua Actor António Silva', N'Alta de Lisboa', N'Lisboa', N'Lisboa', N'1600-404', N'7', N'Piso Demo', N'Responsável Demo JM'),
+(N'GD-012', 4, N'LINKEDIN', N'[GeritDemoSeed:GD-012] Empresa real em Portugal - Sonae, SGPS, S.A. (dados de contacto/fiscais sintéticos para demo)', NULL, NULL, NULL, N'Sonae, SGPS, S.A.', N'Sonae', N'351220012', N'911100012', 1, N'demo+sonae@gerit.pt', NULL, NULL, NULL, NULL, NULL, N'https://www.sonae.pt', N'500900012', N'70100', 45000, N'Responsável Demo Sonae', N'507900012', N'PT507900012', N'fiscal+sonae@gerit.pt', 1, @CommercialAddressTypeId, N'Lugar do Espido', N'Via Norte', N'Maia', N'Porto', N'4470-177', N'0', N'Bloco Demo', N'Responsável Demo Sonae'),
+(N'GD-013', 4, N'GOOGLE', N'[GeritDemoSeed:GD-013] Empresa real em Portugal - NOS, SGPS, S.A. (dados de contacto/fiscais sintéticos para demo)', NULL, NULL, NULL, N'NOS, SGPS, S.A.', N'NOS', N'351210013', N'911100013', 1, N'demo+nos@gerit.pt', NULL, NULL, NULL, NULL, NULL, N'https://www.nos.pt', N'500900013', N'64202', 2000, N'Responsável Demo NOS', N'507900013', N'PT507900013', N'fiscal+nos@gerit.pt', 1, @CommercialAddressTypeId, N'Rua Actor António Silva', N'Lumiar', N'Lisboa', N'Lisboa', N'1600-404', N'9', N'Edifício Demo', N'Responsável Demo NOS'),
+(N'GD-014', 4, N'EVENTS', N'[GeritDemoSeed:GD-014] Empresa real em Portugal - Mota-Engil, SGPS, S.A. (dados de contacto/fiscais sintéticos para demo)', NULL, NULL, NULL, N'Mota-Engil, SGPS, S.A.', N'Mota-Engil', N'351220014', N'911100014', 1, N'demo+mota.engil@gerit.pt', NULL, NULL, NULL, NULL, NULL, N'https://www.mota-engil.com', N'500900014', N'42990', 10000, N'Responsável Demo Mota-Engil', N'507900014', N'PT507900014', N'fiscal+mota.engil@gerit.pt', 1, @CommercialAddressTypeId, N'Rua do Rego Lameiro', N'Campanhã', N'Porto', N'Porto', N'4300-454', N'38', N'Piso Demo', N'Responsável Demo Mota-Engil'),
+(N'GD-015', 4, N'GOOGLE', N'[GeritDemoSeed:GD-015] Empresa real em Portugal - REN - Redes Energéticas Nacionais, SGPS, S.A. (dados de contacto/fiscais sintéticos para demo)', NULL, NULL, NULL, N'REN - Redes Energéticas Nacionais, SGPS, S.A.', N'REN', N'351210015', N'911100015', 1, N'demo+ren@gerit.pt', NULL, NULL, NULL, NULL, NULL, N'https://www.ren.pt', N'500900015', N'35120', 700, N'Responsável Demo REN', N'507900015', N'PT507900015', N'fiscal+ren@gerit.pt', 1, @CommercialAddressTypeId, N'Avenida dos Estados Unidos da América', N'Alvalade', N'Lisboa', N'Lisboa', N'1749-061', N'55', N'Piso Demo', N'Responsável Demo REN'),
+(N'GD-016', 4, N'WHATSAPP', N'[GeritDemoSeed:GD-016] Empresa real em Portugal - CTT - Correios de Portugal, S.A. (dados de contacto/fiscais sintéticos para demo)', NULL, NULL, NULL, N'CTT - Correios de Portugal, S.A.', N'CTT', N'351210016', N'911100016', 1, N'demo+ctt@gerit.pt', NULL, NULL, NULL, NULL, NULL, N'https://www.ctt.pt', N'500900016', N'53100', 12000, N'Responsável Demo CTT', N'507900016', N'PT507900016', N'fiscal+ctt@gerit.pt', 1, @CommercialAddressTypeId, N'Avenida D. João II', N'Parque das Nações', N'Lisboa', N'Lisboa', N'1999-001', N'13', N'Torre Demo', N'Responsável Demo CTT'),
+(N'GD-017', 4, N'FACEBOOK', N'[GeritDemoSeed:GD-017] Empresa real em Portugal - Banco Comercial Português, S.A. (dados de contacto/fiscais sintéticos para demo)', NULL, NULL, NULL, N'Banco Comercial Português, S.A.', N'Millennium bcp', N'351210017', N'911100017', 1, N'demo+bcp@gerit.pt', NULL, NULL, NULL, NULL, NULL, N'https://www.millenniumbcp.pt', N'500900017', N'64190', 7000, N'Responsável Demo BCP', N'507900017', N'PT507900017', N'fiscal+bcp@gerit.pt', 1, @CommercialAddressTypeId, N'Praça D. João I', N'Baixa', N'Porto', N'Porto', N'4000-295', N'28', N'Agência Demo', N'Responsável Demo BCP'),
+(N'GD-018', 4, N'LINKEDIN', N'[GeritDemoSeed:GD-018] Empresa real em Portugal - Corticeira Amorim, SGPS, S.A. (dados de contacto/fiscais sintéticos para demo)', NULL, NULL, NULL, N'Corticeira Amorim, SGPS, S.A.', N'Corticeira Amorim', N'351220018', N'911100018', 1, N'demo+amorim@gerit.pt', NULL, NULL, NULL, NULL, NULL, N'https://www.amorim.com', N'500900018', N'16294', 4000, N'Responsável Demo Amorim', N'507900018', N'PT507900018', N'fiscal+amorim@gerit.pt', 1, @CommercialAddressTypeId, N'Rua de Meladas', N'Mozelos', N'Santa Maria da Feira', N'Aveiro', N'4535-186', N'260', N'Unidade Demo', N'Responsável Demo Amorim'),
+(N'GD-019', 4, N'GOOGLE', N'[GeritDemoSeed:GD-019] Empresa real em Portugal - The Navigator Company, S.A. (dados de contacto/fiscais sintéticos para demo)', NULL, NULL, NULL, N'The Navigator Company, S.A.', N'The Navigator Company', N'351210019', N'911100019', 1, N'demo+navigator@gerit.pt', NULL, NULL, NULL, NULL, NULL, N'https://www.thenavigatorcompany.com', N'500900019', N'17120', 3000, N'Responsável Demo Navigator', N'507900019', N'PT507900019', N'fiscal+navigator@gerit.pt', 1, @CommercialAddressTypeId, N'Avenida Fontes Pereira de Melo', N'Avenidas Novas', N'Lisboa', N'Lisboa', N'1050-120', N'27', N'Escritório Demo', N'Responsável Demo Navigator'),
+(N'GD-020', 4, N'EVENTS', N'[GeritDemoSeed:GD-020] Empresa real em Portugal - Semapa - Sociedade de Investimento e Gestão, SGPS, S.A. (dados de contacto/fiscais sintéticos para demo)', NULL, NULL, NULL, N'Semapa - Sociedade de Investimento e Gestão, SGPS, S.A.', N'Semapa', N'351210020', N'911100020', 1, N'demo+semapa@gerit.pt', NULL, NULL, NULL, NULL, NULL, N'https://www.semapa.pt', N'500900020', N'64202', 200, N'Responsável Demo Semapa', N'507900020', N'PT507900020', N'fiscal+semapa@gerit.pt', 1, @CommercialAddressTypeId, N'Avenida Fontes Pereira de Melo', N'Avenidas Novas', N'Lisboa', N'Lisboa', N'1050-121', N'14', N'Piso Demo', N'Responsável Demo Semapa'),
+(N'GD-021', 4, N'LINKEDIN', N'[GeritDemoSeed:GD-021] Empresa real em Portugal - Altri, SGPS, S.A. (dados de contacto/fiscais sintéticos para demo)', NULL, NULL, NULL, N'Altri, SGPS, S.A.', N'Altri', N'351220021', N'911100021', 1, N'demo+altri@gerit.pt', NULL, NULL, NULL, NULL, NULL, N'https://www.altri.pt', N'500900021', N'17110', 800, N'Responsável Demo Altri', N'507900021', N'PT507900021', N'fiscal+altri@gerit.pt', 1, @CommercialAddressTypeId, N'Rua Manuel Pinto de Azevedo', N'Ramalde', N'Porto', N'Porto', N'4100-320', N'818', N'Escritório Demo', N'Responsável Demo Altri'),
+(N'GD-022', 4, N'GOOGLE', N'[GeritDemoSeed:GD-022] Empresa real em Portugal - Ibersol, SGPS, S.A. (dados de contacto/fiscais sintéticos para demo)', NULL, NULL, NULL, N'Ibersol, SGPS, S.A.', N'Ibersol', N'351220022', N'911100022', 1, N'demo+ibersol@gerit.pt', NULL, NULL, NULL, NULL, NULL, N'https://www.ibersol.pt', N'500900022', N'56101', 6000, N'Responsável Demo Ibersol', N'507900022', N'PT507900022', N'fiscal+ibersol@gerit.pt', 1, @CommercialAddressTypeId, N'Praça do Bom Sucesso', N'Boavista', N'Porto', N'Porto', N'4150-146', N'105', N'Loja Demo', N'Responsável Demo Ibersol'),
+(N'GD-023', 4, N'WHATSAPP', N'[GeritDemoSeed:GD-023] Empresa real em Portugal - EDP Renováveis, S.A. (dados de contacto/fiscais sintéticos para demo)', NULL, NULL, NULL, N'EDP Renováveis, S.A.', N'EDP Renováveis', N'351210023', N'911100023', 1, N'demo+edpr@gerit.pt', NULL, NULL, NULL, NULL, NULL, N'https://www.edpr.com', N'500900023', N'35113', 2500, N'Responsável Demo EDPR', N'507900023', N'PT507900023', N'fiscal+edpr@gerit.pt', 1, @CommercialAddressTypeId, N'Avenida da Boavista', N'Boavista', N'Porto', N'Porto', N'4100-130', N'3433', N'Piso Demo', N'Responsável Demo EDPR'),
+(N'GD-024', 4, N'EVENTS', N'[GeritDemoSeed:GD-024] Empresa real em Portugal - TAP - Transportes Aéreos Portugueses, S.A. (dados de contacto/fiscais sintéticos para demo)', NULL, NULL, NULL, N'TAP - Transportes Aéreos Portugueses, S.A.', N'TAP Air Portugal', N'351210024', N'911100024', 1, N'demo+tap@gerit.pt', NULL, NULL, NULL, NULL, NULL, N'https://www.flytap.com', N'500900024', N'51100', 8000, N'Responsável Demo TAP', N'507900024', N'PT507900024', N'fiscal+tap@gerit.pt', 1, @CommercialAddressTypeId, N'Aeroporto Humberto Delgado', N'Olivais', N'Lisboa', N'Lisboa', N'1700-008', N'0', N'Terminal Demo', N'Responsável Demo TAP'),
+(N'GD-025', 4, N'GOOGLE', N'[GeritDemoSeed:GD-025] Empresa real em Portugal - Caixa Geral de Depósitos, S.A. (dados de contacto/fiscais sintéticos para demo)', NULL, NULL, NULL, N'Caixa Geral de Depósitos, S.A.', N'CGD', N'351210025', N'911100025', 1, N'demo+cgd@gerit.pt', NULL, NULL, NULL, NULL, NULL, N'https://www.cgd.pt', N'500900025', N'64190', 6000, N'Responsável Demo CGD', N'507900025', N'PT507900025', N'fiscal+cgd@gerit.pt', 1, @CommercialAddressTypeId, N'Avenida João XXI', N'Areeiro', N'Lisboa', N'Lisboa', N'1000-300', N'63', N'Sede Demo', N'Responsável Demo CGD'),
+(N'GD-026', 4, N'LINKEDIN', N'[GeritDemoSeed:GD-026] Empresa real em Portugal - Vodafone Portugal - Comunicações Pessoais, S.A. (dados de contacto/fiscais sintéticos para demo)', NULL, NULL, NULL, N'Vodafone Portugal - Comunicações Pessoais, S.A.', N'Vodafone Portugal', N'351210026', N'911100026', 1, N'demo+vodafone@gerit.pt', NULL, NULL, NULL, NULL, NULL, N'https://www.vodafone.pt', N'500900026', N'61200', 1500, N'Responsável Demo Vodafone', N'507900026', N'PT507900026', N'fiscal+vodafone@gerit.pt', 1, @CommercialAddressTypeId, N'Avenida D. João II', N'Parque das Nações', N'Lisboa', N'Lisboa', N'1998-017', N'36', N'Piso Demo', N'Responsável Demo Vodafone'),
+(N'GD-027', 4, N'GOOGLE', N'[GeritDemoSeed:GD-027] Empresa real em Portugal - Altice Portugal, S.A. (dados de contacto/fiscais sintéticos para demo)', NULL, NULL, NULL, N'Altice Portugal, S.A.', N'Altice Portugal', N'351210027', N'911100027', 1, N'demo+altice@gerit.pt', NULL, NULL, NULL, NULL, NULL, N'https://www.telecom.pt', N'500900027', N'61100', 8000, N'Responsável Demo Altice', N'507900027', N'PT507900027', N'fiscal+altice@gerit.pt', 1, @CommercialAddressTypeId, N'Avenida Fontes Pereira de Melo', N'Avenidas Novas', N'Lisboa', N'Lisboa', N'1069-300', N'40', N'Escritório Demo', N'Responsável Demo Altice'),
+(N'GD-028', 4, N'FACEBOOK', N'[GeritDemoSeed:GD-028] Empresa real em Portugal - Super Bock Bebidas, S.A. (dados de contacto/fiscais sintéticos para demo)', NULL, NULL, NULL, N'Super Bock Bebidas, S.A.', N'Super Bock Group', N'351220028', N'911100028', 1, N'demo+superbock@gerit.pt', NULL, NULL, NULL, NULL, NULL, N'https://www.superbockgroup.com', N'500900028', N'11050', 1200, N'Responsável Demo Super Bock', N'507900028', N'PT507900028', N'fiscal+superbock@gerit.pt', 1, @CommercialAddressTypeId, N'Via Norte', N'Leça do Balio', N'Matosinhos', N'Porto', N'4465-764', N'0', N'Unidade Demo', N'Responsável Demo Super Bock'),
+(N'GD-029', 4, N'EVENTS', N'[GeritDemoSeed:GD-029] Empresa real em Portugal - Delta Cafés, S.A. (dados de contacto/fiscais sintéticos para demo)', NULL, NULL, NULL, N'Delta Cafés, S.A.', N'Delta Cafés', N'351245029', N'911100029', 1, N'demo+delta@gerit.pt', NULL, NULL, NULL, NULL, NULL, N'https://www.deltacafes.pt', N'500900029', N'10830', 3000, N'Responsável Demo Delta', N'507900029', N'PT507900029', N'fiscal+delta@gerit.pt', 1, @CommercialAddressTypeId, N'Avenida Calouste Gulbenkian', N'Campo Maior', N'Campo Maior', N'Portalegre', N'7370-025', N'0', N'Unidade Demo', N'Responsável Demo Delta'),
+(N'GD-030', 4, N'FRIENDS', N'[GeritDemoSeed:GD-030] Empresa real em Portugal - Sumol+Compal Marcas, S.A. (dados de contacto/fiscais sintéticos para demo)', NULL, NULL, NULL, N'Sumol+Compal Marcas, S.A.', N'Sumol Compal', N'351210030', N'911100030', 1, N'demo+sumolcompal@gerit.pt', NULL, NULL, NULL, NULL, NULL, N'https://www.sumolcompal.pt', N'500900030', N'11070', 1200, N'Responsável Demo Sumol Compal', N'507900030', N'PT507900030', N'fiscal+sumolcompal@gerit.pt', 1, @CommercialAddressTypeId, N'Estrada da Portela', N'Carnaxide', N'Oeiras', N'Lisboa', N'2790-124', N'9', N'Escritório Demo', N'Responsável Demo Sumol Compal'),
+(N'GD-031', 4, N'LINKEDIN', N'[GeritDemoSeed:GD-031] Empresa real em Portugal - Vista Alegre Atlantis, S.A. (dados de contacto/fiscais sintéticos para demo)', NULL, NULL, NULL, N'Vista Alegre Atlantis, S.A.', N'Vista Alegre', N'351234031', N'911100031', 1, N'demo+vistaalegre@gerit.pt', NULL, NULL, NULL, NULL, NULL, N'https://vistaalegre.com', N'500900031', N'23410', 900, N'Responsável Demo Vista Alegre', N'507900031', N'PT507900031', N'fiscal+vistaalegre@gerit.pt', 1, @CommercialAddressTypeId, N'Lugar da Vista Alegre', N'Ílhavo', N'Ílhavo', N'Aveiro', N'3830-292', N'0', N'Fábrica Demo', N'Responsável Demo Vista Alegre'),
+(N'GD-032', 4, N'GOOGLE', N'[GeritDemoSeed:GD-032] Empresa real em Portugal - Critical Software, S.A. (dados de contacto/fiscais sintéticos para demo)', NULL, NULL, NULL, N'Critical Software, S.A.', N'Critical Software', N'351239032', N'911100032', 1, N'demo+criticalsoftware@gerit.pt', NULL, NULL, NULL, NULL, NULL, N'https://www.criticalsoftware.com', N'500900032', N'62010', 1200, N'Responsável Demo Critical', N'507900032', N'PT507900032', N'fiscal+criticalsoftware@gerit.pt', 1, @CommercialAddressTypeId, N'Parque Industrial de Taveiro', N'Taveiro', N'Coimbra', N'Coimbra', N'3045-504', N'0', N'Edifício Demo', N'Responsável Demo Critical'),
+(N'GD-033', 4, N'EVENTS', N'[GeritDemoSeed:GD-033] Empresa real em Portugal - Farfetch Portugal, Unipessoal Lda (dados de contacto/fiscais sintéticos para demo)', NULL, NULL, NULL, N'Farfetch Portugal, Unipessoal Lda', N'Farfetch Portugal', N'351220033', N'911100033', 1, N'demo+farfetch@gerit.pt', NULL, NULL, NULL, NULL, NULL, N'https://www.farfetch.com', N'500900033', N'62010', 2500, N'Responsável Demo Farfetch', N'507900033', N'PT507900033', N'fiscal+farfetch@gerit.pt', 1, @CommercialAddressTypeId, N'Rua da Lionesa', N'Leça do Balio', N'Matosinhos', N'Porto', N'4465-671', N'446', N'Hub Demo', N'Responsável Demo Farfetch'),
+(N'GD-034', 4, N'LINKEDIN', N'[GeritDemoSeed:GD-034] Empresa real em Portugal - OutSystems - Software em Rede, S.A. (dados de contacto/fiscais sintéticos para demo)', NULL, NULL, NULL, N'OutSystems - Software em Rede, S.A.', N'OutSystems', N'351210034', N'911100034', 1, N'demo+outsystems@gerit.pt', NULL, NULL, NULL, NULL, NULL, N'https://www.outsystems.com', N'500900034', N'62010', 2000, N'Responsável Demo OutSystems', N'507900034', N'PT507900034', N'fiscal+outsystems@gerit.pt', 1, @CommercialAddressTypeId, N'Rua Central Park', N'Linda-a-Velha', N'Oeiras', N'Lisboa', N'2795-242', N'2', N'Escritório Demo', N'Responsável Demo OutSystems'),
+(N'GD-035', 4, N'GOOGLE', N'[GeritDemoSeed:GD-035] Empresa real em Portugal - Feedzai - Consultadoria e Inovação Tecnológica, S.A. (dados de contacto/fiscais sintéticos para demo)', NULL, NULL, NULL, N'Feedzai - Consultadoria e Inovação Tecnológica, S.A.', N'Feedzai', N'351239035', N'911100035', 1, N'demo+feedzai@gerit.pt', NULL, NULL, NULL, NULL, NULL, N'https://feedzai.com', N'500900035', N'62010', 600, N'Responsável Demo Feedzai', N'507900035', N'PT507900035', N'fiscal+feedzai@gerit.pt', 1, @CommercialAddressTypeId, N'Rua Pedro Nunes', N'Coimbra', N'Coimbra', N'Coimbra', N'3030-199', N'0', N'Escritório Demo', N'Responsável Demo Feedzai'),
+(N'GD-036', 4, N'WHATSAPP', N'[GeritDemoSeed:GD-036] Empresa real em Portugal - Unbabel, Unipessoal Lda (dados de contacto/fiscais sintéticos para demo)', NULL, NULL, NULL, N'Unbabel, Unipessoal Lda', N'Unbabel', N'351210036', N'911100036', 1, N'demo+unbabel@gerit.pt', NULL, NULL, NULL, NULL, NULL, N'https://unbabel.com', N'500900036', N'62020', 400, N'Responsável Demo Unbabel', N'507900036', N'PT507900036', N'fiscal+unbabel@gerit.pt', 1, @CommercialAddressTypeId, N'Avenida da República', N'Avenidas Novas', N'Lisboa', N'Lisboa', N'1050-191', N'45', N'Escritório Demo', N'Responsável Demo Unbabel');
 
 
-INSERT INTO dbo.Clients (TenantId, ClientType, OriginType, UrlImage, Note, IsActive, IsDeleted, CreatedBy, CreatedAt)
+INSERT INTO dbo.Clients (TenantId, AcquisitionSourceTypeId, ClientType, UrlImage, Note, IsActive, IsDeleted, CreatedBy, CreatedAt)
 SELECT
     @TenantId,
+    ast.Id,
     s.ClientType,
-    s.OriginType,
     NULL,
     s.Note,
     1,
@@ -1098,6 +1205,9 @@ SELECT
     @CreatedBy,
     SYSDATETIME()
 FROM @SeedClients s
+INNER JOIN dbo.AcquisitionSourceTypes ast
+    ON ast.Code = s.AcquisitionSourceTypeCode
+   AND ast.IsDeleted = 0
 WHERE NOT EXISTS (
     SELECT 1
     FROM dbo.Clients c

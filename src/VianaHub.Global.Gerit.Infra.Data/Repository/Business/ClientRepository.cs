@@ -53,6 +53,7 @@ public class ClientRepository : IClientRepository
     {
         var query = _context.Clients
             .AsNoTracking()
+            .AsSplitQuery()
             .Include(x => x.Individual)
             .Include(x => x.Company)
             .Include(x => x.FiscalData)
@@ -100,13 +101,14 @@ public class ClientRepository : IClientRepository
             query = query.Where(x => x.IsActive == request.IsActive.Value && !x.IsDeleted);
         }
 
-
-
         var count = await query.CountAsync(ct);
         var orderedQuery = CreateSort.ApplyOrdering(query, request);
+        
         var pageNumber = request.PageNumber ?? 1;
         var pageSize = request.PageSize ?? Paging.MinPageSize();
-        var result = await orderedQuery.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync(ct);
+        var skip = (pageNumber - 1) * pageSize;
+
+        var result = await orderedQuery.Skip(skip).Take(pageSize).ToListAsync(ct);
 
         return new ListPage<ClientEntity>
         {

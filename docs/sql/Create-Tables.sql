@@ -1,3 +1,22 @@
+CREATE TABLE dbo.AcquisitionSourceTypes (													-- Instagram, Facebook, LinkedIn, Google, WhatsApp, Amigos, Eventos, TV, Rádio, Jornal, Revista, Outros
+    Id 			INT IDENTITY(1,1) 	NOT NULL,
+    Code 		NVARCHAR(50) 		NOT NULL,
+    Name 		NVARCHAR(100) 		NOT NULL,
+    Description NVARCHAR(300) 			NULL,
+    IsActive 	BIT 				NOT NULL DEFAULT 1,
+    IsDeleted 	BIT 				NOT NULL DEFAULT 0,
+    CreatedBy 	INT 				NOT NULL,
+    CreatedAt 	DATETIME2(7) 		NOT NULL DEFAULT SYSDATETIME(),
+    ModifiedBy 	INT 					NULL,
+    ModifiedAt 	DATETIME2(7) 			NULL,
+
+    CONSTRAINT PK_AcquisitionSourceTypes PRIMARY KEY CLUSTERED (Id),
+    CONSTRAINT UQ_AcquisitionSourceTypes_Code UNIQUE (Code),
+    CONSTRAINT UQ_AcquisitionSourceTypes_Name UNIQUE (Name),
+    CONSTRAINT CK_AcquisitionSourceTypes_Active_Deleted 
+        CHECK (NOT (IsActive = 1 AND IsDeleted = 1))
+);
+GO
 CREATE TABLE dbo.AddressTypes (									                            -- Tipos de endere�o (residencial, comercial, etc)
     Id			INT IDENTITY(1,1)	NOT NULL,						                        -- Identificador �nico do tenant, chave prim�ria
     Name	    NVARCHAR(200)		NOT NULL,						                        -- Nome do tipo de endere�o
@@ -11,6 +30,24 @@ CREATE TABLE dbo.AddressTypes (									                            -- Tipos de 
 	CONSTRAINT PK_AddressesType PRIMARY KEY CLUSTERED (Id),                                 -- PK
     CONSTRAINT UQ_AddressesTypes_Name UNIQUE (Name),                                        -- Garantir que cada tipo de endere�o � �nico
     CONSTRAINT CK_AddressesType_Active_Deleted CHECK (NOT (IsActive = 1 AND IsDeleted = 1)) -- Garantir que um tipo de endere�o n�o pode ser ativo e deletado ao mesmo tempo
+);
+CREATE TABLE dbo.ConsentOriginTypes (														-- Web, Mobile, Paper, Api, Backoffice, Email, Sms, Whatsapp, CallCenter
+    Id 			INT IDENTITY(1,1) 	NOT NULL,
+    Code 		NVARCHAR(50) 		NOT NULL,
+    Name 		NVARCHAR(100) 		NOT NULL,
+    Description NVARCHAR(300) 			NULL,
+    IsActive 	BIT 				NOT NULL DEFAULT 1,
+    IsDeleted 	BIT 				NOT NULL DEFAULT 0,
+    CreatedBy 	INT 				NOT NULL,
+    CreatedAt 	DATETIME2(7) 		NOT NULL DEFAULT SYSDATETIME(),
+    ModifiedBy 	INT 					NULL,
+    ModifiedAt 	DATETIME2(7) 			NULL,
+
+    CONSTRAINT PK_ConsentOriginTypes PRIMARY KEY CLUSTERED (Id),
+    CONSTRAINT UQ_ConsentOriginTypes_Code UNIQUE (Code),
+    CONSTRAINT UQ_ConsentOriginTypes_Name UNIQUE (Name),
+    CONSTRAINT CK_ConsentOriginTypes_Active_Deleted 
+        CHECK (NOT (IsActive = 1 AND IsDeleted = 1))
 );
 GO
 CREATE TABLE dbo.FileTypes (                                                            -- Cat�logo global de tipos de arquivo
@@ -100,7 +137,7 @@ GO
 CREATE TABLE dbo.Tenants (											                        -- Tabela principal de tenants
     Id			            INT IDENTITY(1,1)	NOT NULL,				                    -- Identificador �nico do tenant, chave prim�ria
     TenantType              INT                 NOT NULL,				                    -- Tipo do tenant (residencial, comercial, etc.)
-    OriginType              INT                 NOT NULL,						            -- Origem do tenant (para tracking de marketing)
+    AcquisitionSourceTypeId INT                 NOT NULL,						            -- Origem do tenant (para tracking de marketing)
     Name	                NVARCHAR(200)		NOT NULL,				                    -- Raz�o social
     Email		            NVARCHAR(255)		NOT NULL,				                    -- Email do contato
     Website		            NVARCHAR(255)		    NULL,				                    -- Website do tenant
@@ -113,7 +150,8 @@ CREATE TABLE dbo.Tenants (											                        -- Tabela principal
     ModifiedBy	            INT         		NULL,							            -- Usu�rio modificador
     ModifiedAt	            DATETIME2(7)		NULL,							            -- Data de modifica��o
 	CONSTRAINT PK_Tenants PRIMARY KEY CLUSTERED (Id),                                       -- PK
-    CONSTRAINT CK_Tenants_Active_Deleted CHECK (NOT (IsActive = 1 AND IsDeleted = 1))      -- Garantir que um tenant n�o pode ser ativo e deletado ao mesmo tempo
+    CONSTRAINT CK_Tenants_Active_Deleted CHECK (NOT (IsActive = 1 AND IsDeleted = 1)),      -- Garantir que um tenant n�o pode ser ativo e deletado ao mesmo tempo
+	CONSTRAINT FK_Tenants_AcquisitionSourceType FOREIGN KEY (AcquisitionSourceTypeId) REFERENCES dbo.AcquisitionSourceTypes(Id)
 );
 
 GO
@@ -144,7 +182,7 @@ CREATE TABLE dbo.TenantContacts (									        -- Contatos do tenant
     Email		        NVARCHAR(255)		NOT NULL,						-- Email do contato
     Phone		        NVARCHAR(30)		    NULL,				        -- Telefone
     PhoneIsWhatsapp     BIT					    NULL DEFAULT 0,		        -- O telefone � WhatsApp?
-    CellPhone	        NVARCHAR(30)		    NULL,				        -- Telem�vel
+    CellPhone	        NVARCHAR(30)		NOT NULL,				        -- Telem�vel
     CellPhoneIsWhatsapp BIT					    NULL DEFAULT 0,		        -- O telem�vel � WhatsApp?
     IsPrimary	        BIT					NOT NULL DEFAULT 0,				-- Contato principal
     IsActive	        BIT					NOT NULL DEFAULT 1,				-- Flag de ativo
@@ -239,7 +277,7 @@ CREATE TABLE dbo.Users (                                                        
     TenantId		        INT					NOT NULL,                           -- Tenant do usu�rio
     Name		            NVARCHAR(150)		NOT NULL,                           -- Nome completo
     Email                   NVARCHAR(256)       NOT NULL,                           -- Email original
-    NormalizedEmail         NVARCHAR(256)       NOT NULL,                           -- Email normalizado (case-insensitive)
+    NormalizedEmail         NVARCHAR(256)       NOT NULL,                           -- NormalizedEmail normalizado (case-insensitive)
     EmailConfirmed          BIT                 NOT NULL DEFAULT 0,                 -- Confirma��o de email
     PhoneNumber             NVARCHAR(50)            NULL,                           -- Telefone (opcional)
     PhoneNumberConfirmed    BIT                 NOT NULL DEFAULT 0,                 -- Confirma��o de telefone
@@ -249,13 +287,13 @@ CREATE TABLE dbo.Users (                                                        
     IsActive		        BIT					NOT NULL DEFAULT 1,				    -- Flag de ativo
     IsDeleted		        BIT					NOT NULL DEFAULT 0,				    -- Soft delete
     CreatedBy		        INT         		NOT NULL,						    -- Usu�rio criador
-    CreatedAt		        DATETIME2(7)		NOT NULL DEFAULT SYSDATETIME(),	-- Data de cria��o
+    CreatedAt		        DATETIME2(7)		NOT NULL DEFAULT SYSDATETIME(),		-- Data de cria��o
     ModifiedBy	            INT         		    NULL,						    -- Usu�rio modificador
-    ModifiedAt		        DATETIME2(7)		NULL,                           -- Data de modifica��o
+    ModifiedAt		        DATETIME2(7)		NULL,                           	-- Data de modifica��o
 	CONSTRAINT PK_Users PRIMARY KEY CLUSTERED (Id),
     CONSTRAINT CK_Users_Active_Deleted CHECK (NOT (IsActive = 1 AND IsDeleted = 1)),
     CONSTRAINT UQ_Users_Id_Tenant UNIQUE (Id, TenantId),
-    CONSTRAINT UQ_Users_NormalizedEmail UNIQUE (NormalizedEmail),	-- Email �nico por tenant
+    CONSTRAINT UQ_Users_Tenant_NormalizedEmail UNIQUE (TenantId, NormalizedEmail),	-- NormalizedEmail único por tenant
     CONSTRAINT FK_Users_Tenant FOREIGN KEY (TenantId) REFERENCES dbo.Tenants(Id)	-- FK para tenant
 );
 GO
@@ -311,7 +349,7 @@ CREATE TABLE dbo.Roles (												-- Roles por tenant
 GO
 CREATE TABLE dbo.Resources (											-- Recursos do sistema
     Id				INT IDENTITY(1,1)	NOT NULL,						-- Identificador do recurso, chave prim�ria
-    Name			NVARCHAR(100)		NOT NULL UNIQUE,				-- Nome �nico do recurso
+    Name			NVARCHAR(100)		NOT NULL,						-- Nome �nico do recurso
     Description     NVARCHAR(500)		NOT NULL,						-- Descri��o do recurso
     IsActive		BIT					NOT NULL DEFAULT 1,             -- Flag de ativo
     IsDeleted		BIT					NOT NULL DEFAULT 0,             -- Soft delete
@@ -470,22 +508,23 @@ CREATE TABLE dbo.Functions (
 )
 GO
 CREATE TABLE dbo.Clients (                                                              -- Clientes do tenant
-    Id				    INT IDENTITY(1,1)	NOT NULL,						            -- Identificador do cliente, chave prim�ria
-    TenantId		    INT					NOT NULL,						            -- Tenant dono do cliente
-    ClientType          INT				    NOT NULL,						            -- Tipo do cliente (1=Individual, 2=Empresa, etc.)
-    OriginType          INT                 NOT NULL DEFAULT 1,						    -- Origem do cliente (Instagram, Facebook, Outros.)
-    UrlImage    	    NVARCHAR(500)			NULL,						            -- URL da imagem/avatar do cliente
-    Note                NVARCHAR(500)           NULL,						            -- Observa��es adicionais sobre o cliente
-    IsActive		    BIT					NOT NULL DEFAULT 1,                         -- Flag de ativo
-    IsDeleted		    BIT					NOT NULL DEFAULT 0,                         -- Soft delete
-    CreatedBy		    INT         		NOT NULL,						            -- Usu�rio criador
-    CreatedAt		    DATETIME2(7)		NOT NULL DEFAULT SYSDATETIME(),	            -- Data de cria��o
-    ModifiedBy	        INT         		    NULL,						            -- Usu�rio modificador
-    ModifiedAt		    DATETIME2(7)			NULL,                                   -- Data de modifica��o
+    Id				    	INT IDENTITY(1,1)	NOT NULL,						            -- Identificador do cliente, chave prim�ria
+    TenantId		    	INT					NOT NULL,						            -- Tenant dono do cliente
+    AcquisitionSourceTypeId INT 				NOT NULL,				    				-- Instagram, Facebook, LinkedIn, Google, WhatsApp, Amigos, Eventos, TV, Rádio, Jornal, Revista, Outros
+    ClientType          	INT				    NOT NULL,						            -- Tipo do cliente (1=Individual, 2=Empresa, etc.)
+    UrlImage    	    	NVARCHAR(500)			NULL,						            -- URL da imagem/avatar do cliente
+    Note                	NVARCHAR(500)           NULL,						            -- Observa��es adicionais sobre o cliente
+    IsActive		    	BIT					NOT NULL DEFAULT 1,                         -- Flag de ativo
+    IsDeleted		    	BIT					NOT NULL DEFAULT 0,                         -- Soft delete
+    CreatedBy		    	INT         		NOT NULL,						            -- Usu�rio criador
+    CreatedAt		    	DATETIME2(7)		NOT NULL DEFAULT SYSDATETIME(),	            -- Data de cria��o
+    ModifiedBy	        	INT         		    NULL,						            -- Usu�rio modificador
+    ModifiedAt		    	DATETIME2(7)			NULL,                                   -- Data de modifica��o
 	CONSTRAINT PK_Clients PRIMARY KEY CLUSTERED (Id),                                   -- PK
     CONSTRAINT CK_Clients_Active_Deleted CHECK (NOT (IsActive = 1 AND IsDeleted = 1)),  -- Garantir que um cliente n�o pode ser ativo e deletado ao mesmo tempo
     CONSTRAINT UQ_Clients_Id_Tenant UNIQUE (Id, TenantId),                              -- Garantir que o Id � �nico dentro do tenant (para FKs compostas)
-    CONSTRAINT FK_Clients_Tenant FOREIGN KEY (TenantId) REFERENCES dbo.Tenants(Id)      -- FK para tenant
+    CONSTRAINT FK_Clients_Tenant FOREIGN KEY (TenantId) REFERENCES dbo.Tenants(Id),      -- FK para tenant
+	CONSTRAINT FK_Clients_AcquisitionSourceType FOREIGN KEY (AcquisitionSourceTypeId) REFERENCES dbo.AcquisitionSourceTypes(Id)
 );
 GO
 CREATE TABLE dbo.ClientIndividuals (                                                     -- Dados espec�ficos de clientes individuais (Pessoa F�sica)
@@ -552,7 +591,7 @@ CREATE TABLE dbo.ClientAddresses (															-- Endere�os do client
     Street			NVARCHAR(200)		NOT NULL,						                    -- Rua
     Neighborhood    NVARCHAR(100)       NOT NULL,						                    -- Bairro
     City			NVARCHAR(100)		NOT NULL,						                    -- Cidade
-    District		NVARCHAR(100)			NULL,						                    -- Distrito
+    District		NVARCHAR(100)		NOT	NULL,						                    -- Distrito
     PostalCode		NVARCHAR(20)		NOT NULL,						                    -- C�digo postal
     StreetNumber    NVARCHAR(20)            NULL,                                           -- N�mero da porta
     Complement      NVARCHAR(100)           NULL,                                           -- Apto, bloco, andar, etc.
@@ -580,7 +619,7 @@ CREATE TABLE dbo.ClientContacts (													 -- Contatos do client
 	ClientId	        INT					NOT NULL,						         -- Client dono do contato
     Name		        NVARCHAR(150)		NOT NULL,						         -- Nome do contato
     PhoneNumber         NVARCHAR(50)            NULL,                                -- Telefone (opcional)
-    CellPhoneNumber     NVARCHAR(50)            NULL,                                -- Telem�vel (opcional)
+    CellPhoneNumber     NVARCHAR(50)        NOT NULL,                                -- Telem�vel (opcional)
     IsWhatsapp          BIT                 NOT NULL DEFAULT 0,                      -- O n�mero de telefone � WhatsApp
     Email		        NVARCHAR(255)		NOT NULL,						         -- Email do contato
     IsPrimary	        BIT					NOT NULL DEFAULT 0,				         -- Contato principal
@@ -634,7 +673,6 @@ CREATE TABLE dbo.ClientHierarchy (                                              
     CONSTRAINT PK_ClientHierarchy PRIMARY KEY CLUSTERED (Id),                           -- PK
     CONSTRAINT CK_ClientHierarchy_Active_Deleted CHECK (NOT (IsActive = 1 AND IsDeleted = 1)),                          -- Garantir que uma rela��o n�o pode ser ativa e deletada ao mesmo tempo
     CONSTRAINT UQ_ClientHierarchy_Id_Tenant UNIQUE (Id, TenantId),                                                      -- Garantir que o Id � �nico dentro do tenant (para FKs compostas)
-    CONSTRAINT UQ_ClientHierarchy_Relationship UNIQUE (TenantId, ParentClientId, ChildClientId),                        -- Garantir que a mesma rela��o pai-filho n�o pode ser duplicada dentro do tenant
     CONSTRAINT FK_ClientHierarchy_Tenant FOREIGN KEY (TenantId) REFERENCES dbo.Tenants(Id),                             -- FK para tenant
     CONSTRAINT FK_ClientHierarchy_Parent FOREIGN KEY (ParentClientId, TenantId) REFERENCES dbo.Clients(Id, TenantId),   -- FK para cliente pai
     CONSTRAINT FK_ClientHierarchy_Child FOREIGN KEY (ChildClientId, TenantId) REFERENCES dbo.Clients(Id, TenantId)      -- FK para cliente filho
@@ -644,11 +682,11 @@ CREATE TABLE dbo.ClientConsents (
     Id                  INT IDENTITY(1,1)   NOT NULL,                                   -- Identificador do consentimento, chave prim�ria
     TenantId            INT                 NOT NULL,                                   -- Tenant dono
     ClientId            INT                 NOT NULL,                                   -- Cliente dono do consentimento
-    ConsentTypeId       INT                 NOT NULL,                                   -- 1 = PrivacyPolicy, 2 = Marketing, 3 = TermsOfService, 4 = DataProcessing, 5 = Cookies
+	ConsentTypeId		INT					NOT NULL,									-- Marketing, PrivacyPolicy, Cookies, TermsOfService 
+    ConsentOriginTypeId INT                 NOT NULL,                                   -- Web, Mobile, Paper, Api, Backoffice, Email, Sms, Whatsapp, CallCenter
     Granted             BIT                 NOT NULL,                                   -- Indica se o consentimento foi concedido ou negado
     GrantedDate         DATETIME2(7)        NOT NULL,                                   -- Data de concess�o do consentimento
     RevokedDate         DATETIME2(7)            NULL,                                   -- Data de revoga��o do consentimento (null se ainda v�lido)
-    Origin              NVARCHAR(200)       NOT NULL,                                   -- Web, Mobile, Paper, API
     IpAddress           VARCHAR(45)             NULL,                                   -- Suporta IPv4 e IPv6
     UserAgent           NVARCHAR(500)           NULL,                                   -- Informa��es adicionais sobre o consentimento (ex: vers�o da pol�tica, etc.)
     IsActive            BIT                 NOT NULL DEFAULT 1,                         -- Flag de ativo
@@ -658,9 +696,11 @@ CREATE TABLE dbo.ClientConsents (
     ModifiedBy          INT                     NULL,                                   -- Usu�rio modificador
     ModifiedAt          DATETIME2(7)            NULL,                                   -- Data de modifica��o
     CONSTRAINT PK_ClientConsents PRIMARY KEY CLUSTERED (Id),
+	CONSTRAINT CK_ClientConsents_Active_Deleted CHECK (NOT (IsActive = 1 AND IsDeleted = 1)),
     CONSTRAINT FK_ClientConsents_Client FOREIGN KEY (ClientId, TenantId) REFERENCES dbo.Clients(Id, TenantId),
     CONSTRAINT FK_ClientConsents_Tenant FOREIGN KEY (TenantId) REFERENCES dbo.Tenants(Id),
-    CONSTRAINT FK_ClientConsents_ConsentType FOREIGN KEY (ConsentTypeId) REFERENCES dbo.ConsentTypes(Id)
+	CONSTRAINT FK_ClientConsents_ConsentType FOREIGN KEY (ConsentTypeId) REFERENCES dbo.ConsentTypes(Id),
+    CONSTRAINT FK_ClientConsents_ConsentOriginType FOREIGN KEY (ConsentOriginTypeId) REFERENCES dbo.ConsentOriginTypes(Id)
 );
 GO
 CREATE TABLE dbo.Teams (                                                                    -- Times de trabalho, projetos, squads, etc.
@@ -727,7 +767,7 @@ CREATE TABLE dbo.EmployeeAddresses (									                    -- Endere�os 
     Street			NVARCHAR(200)		NOT NULL,						                    -- Rua
     Neighborhood    NVARCHAR(100)       NOT NULL,						                    -- Bairro
     City			NVARCHAR(100)		NOT NULL,						                    -- Cidade
-    District		NVARCHAR(100)			NULL,						                    -- Distrito
+    District		NVARCHAR(100)		NOT NULL,						                    -- Distrito
     PostalCode		NVARCHAR(20)		NOT NULL,						                    -- C�digo postal
     StreetNumber    NVARCHAR(20)            NULL,                                           -- N�mero da porta
     Complement      NVARCHAR(100)           NULL,                                           -- Apto, bloco, andar, etc.
@@ -889,7 +929,7 @@ CREATE TABLE dbo.VisitAddresses (								                                       
     Street			    NVARCHAR(200)		NOT NULL,						                                            -- Rua
     Neighborhood        NVARCHAR(100)       NOT NULL,						                                            -- Bairro
     City			    NVARCHAR(100)		NOT NULL,						                                            -- Cidade
-    District		    NVARCHAR(100)			NULL,						                                            -- Distrito
+    District		    NVARCHAR(100)		NOT NULL,						                                            -- Distrito
     PostalCode		    NVARCHAR(20)		NOT NULL,						                                            -- C�digo postal
     StreetNumber        NVARCHAR(20)            NULL,                                                                   -- N�mero da porta
     Complement          NVARCHAR(100)           NULL,                                                                   -- Apto, bloco, andar, etc.
@@ -930,6 +970,7 @@ CREATE TABLE dbo.VisitTeam (
     CONSTRAINT FK_VisitTeam_Visit FOREIGN KEY (VisitId, TenantId) REFERENCES dbo.Visits(Id, TenantId), -- FK para interven��o
     CONSTRAINT FK_VisitTeam_Team FOREIGN KEY (TeamId, TenantId) REFERENCES dbo.Teams(Id, TenantId)  -- FK para time (tenant-safe
 );
+GO
 CREATE TABLE dbo.VisitTeamEmployee (                                                                        -- Associa��o entre equipes de interven��o e membros do time (uma equipe pode ter v�rios membros e um membro pode participar de v�rias equipes em interven��es diferentes)
     Id                      INT IDENTITY(1,1)   NOT NULL,                                                   -- Identificador, chave prim�ria
     TenantId                INT                 NOT NULL,                                                   -- Tenant dono
@@ -952,7 +993,7 @@ CREATE TABLE dbo.VisitTeamEmployee (                                            
     CONSTRAINT FK_VisitTeamEmployee_VisitTeam FOREIGN KEY (VisitTeamId, TenantId) REFERENCES dbo.VisitTeam(Id, TenantId),   -- FK para equipe de interven��o
     CONSTRAINT FK_VisitTeamEmployee_Employee FOREIGN KEY (EmployeeId, TenantId) REFERENCES dbo.Employees(Id, TenantId),     -- FK para membro do time (tenant-safe)
     CONSTRAINT FK_VisitTeamEmployee_Function FOREIGN KEY (FunctionId, TenantId) REFERENCES dbo.Functions(Id, TenantId)      -- FK para fun��o (tenant-safe
-)
+);
 GO
 CREATE TABLE dbo.VisitTeamVehicle (                                                                             -- Associa��o entre equipes de interven��o e ve�culos utilizados (uma equipe pode usar v�rios ve�culos e um ve�culo pode ser usado por v�rias equipes em interven��es diferentes)
     Id                  INT IDENTITY(1,1)   NOT NULL,                                                           -- Identificador, chave prim�ria
@@ -1139,15 +1180,18 @@ ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.ClientFiscalD
 ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.ClientHierarchy,                             -- Aplica RLS em ClientHierarchy
 ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.ClientContacts,			                    -- Aplica RLS em ClientContacts
 ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.ClientAddresses,			                    -- Aplica RLS em ClientAddresses
+ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.ClientConsents,								-- Aplica RLS em ClientConsents
 ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.Employees,				                    -- Aplica RLS em Employees
 ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.EmployeeContacts,		                    -- Aplica RLS em EmployeeContacts
 ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.EmployeeAddresses,                           -- Aplica RLS em EmployeeAddresses
 ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.EmployeeTeam,                                -- Aplica RLS em EmployeeTeam
+ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.EquipmentTypes,								-- Aplica RLS em EquipmentTypes
 ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.Visits,                                      -- Aplica RLS em Visits
 ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.VisitContacts,                               -- Aplica RLS em VisitContacts
 ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.VisitAddresses,                              -- Aplica RLS em VisitAddresses
 ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.VisitTeam,                                   -- Aplica RLS em VisitTeam
 ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.VisitTeamVehicle,                            -- Aplica RLS em VisitTeamVehicle
+ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.VisitTeamEmployee,							-- Aplica RLS em VisitTeamEmployee
 ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.VisitTeamEquipment,                          -- Aplica RLS em VisitTeamEquipment
 ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.VisitAttachments,                            -- Aplica RLS em VisitAttachments
 ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.Status,                                      -- Aplica RLS em Status
@@ -1202,6 +1246,9 @@ ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.ClientCompanie
 ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.ClientFiscalData AFTER INSERT,                -- Bloqueia INSERT fora do Tenant
 ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.ClientFiscalData AFTER UPDATE,                -- Bloqueia UPDATE fora do Tenant
 ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.ClientFiscalData BEFORE DELETE,               -- Bloqueia DELETE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.ClientConsents AFTER INSERT,					-- Bloqueia DELETE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.ClientConsents AFTER UPDATE,					-- Bloqueia DELETE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.ClientConsents BEFORE DELETE,					-- Bloqueia DELETE fora do Tenant
 ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.ClientHierarchy AFTER INSERT,                 -- Bloqueia INSERT fora do Tenant
 ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.ClientHierarchy AFTER UPDATE,                 -- Bloqueia UPDATE fora do Tenant
 ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.ClientHierarchy BEFORE DELETE,                -- Bloqueia DELETE fora do Tenant
@@ -1259,6 +1306,9 @@ ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.VisitTeamVehic
 ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.VisitTeamEquipment AFTER INSERT,              -- Bloqueia INSERT fora do Tenant
 ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.VisitTeamEquipment AFTER UPDATE,              -- Bloqueia UPDATE fora do Tenant
 ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.VisitTeamEquipment BEFORE DELETE,             -- Bloqueia DELETE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.VisitTeamEmployee AFTER INSERT,				-- Bloqueia DELETE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.VisitTeamEmployee AFTER UPDATE,               -- Bloqueia DELETE fora do Tenant
+ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.VisitTeamEmployee BEFORE DELETE,              -- Bloqueia DELETE fora do Tenant
 ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.RefreshTokens AFTER INSERT,                   -- Bloqueia INSERT fora do Tenant
 ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.RefreshTokens AFTER UPDATE,                   -- Bloqueia UPDATE fora do Tenant
 ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.RefreshTokens BEFORE DELETE,                  -- Bloqueia DELETE fora do Tenant

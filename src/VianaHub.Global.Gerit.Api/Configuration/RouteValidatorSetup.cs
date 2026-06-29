@@ -42,6 +42,14 @@ using VianaHub.Global.Gerit.Api.Validators.Business.VisitTeamVehicles;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Identity.UserPreferences;
 using VianaHub.Global.Gerit.Api.Validators.Identity.UserPreferences;
 
+// AcquisitionSourceType DTOs & Validators
+using VianaHub.Global.Gerit.Application.Dtos.Request.Business.AcquisitionSourceType;
+using VianaHub.Global.Gerit.Api.Validators.Business.AcquisitionSourceType;
+
+// ConsentOriginType DTOs & Validators
+using VianaHub.Global.Gerit.Application.Dtos.Request.Business.ConsentOriginType;
+using VianaHub.Global.Gerit.Api.Validators.Business.ConsentOriginType;
+
 // Client DTOs & Validators
 using VianaHub.Global.Gerit.Application.Dtos.Request.Business.Client;
 using VianaHub.Global.Gerit.Api.Validators.Business.Client;
@@ -111,6 +119,14 @@ public static class RouteValidatorSetup
         // ConsentType Route Validators
         services.AddScoped<IValidator<CreateConsentTypeRequest>, CreateConsentTypeRouteValidator>();
         services.AddScoped<IValidator<UpdateConsentTypeRequest>, UpdateConsentTypeRouteValidator>();
+
+        // AcquisitionSourceType Route Validators
+        services.AddScoped<IValidator<CreateAcquisitionSourceTypeRequest>, CreateAcquisitionSourceTypeRouteValidator>();
+        services.AddScoped<IValidator<UpdateAcquisitionSourceTypeRequest>, UpdateAcquisitionSourceTypeRouteValidator>();
+
+        // ConsentOriginType Route Validators
+        services.AddScoped<IValidator<CreateConsentOriginTypeRequest>, CreateConsentOriginTypeRouteValidator>();
+        services.AddScoped<IValidator<UpdateConsentOriginTypeRequest>, UpdateConsentOriginTypeRouteValidator>();
 
         // EmployeeTeams Route Validators
         services.AddScoped<IValidator<CreateEmployeeTeamRequest>, CreateEmployeeTeamRouteValidator>();

@@ -23,8 +23,7 @@ public class ClientMappingProfile : Profile
         CreateMap<ClientEntity, ClientDetailResponse>()
             .ForMember(dest => dest.ClientType, opt => opt.MapFrom(src => (int)src.ClientType))
             .ForMember(dest => dest.ClientTypeDescription, opt => opt.MapFrom(src => src.ClientType.GetDescription()))
-            .ForMember(dest => dest.OriginType, opt => opt.MapFrom(src => (int)src.OriginType))
-            .ForMember(dest => dest.OriginTypeDescription, opt => opt.MapFrom(src => src.OriginType.GetDescription()))
+            .ForMember(dest => dest.AcquisitionSourceTypeId, opt => opt.MapFrom(src => src.AcquisitionSourceTypeId))
             .ForMember(dest => dest.UrlImage, opt => opt.MapFrom(src => src.UrlImage))
             .ForMember(dest => dest.Note, opt => opt.MapFrom(src => src.Note));
 

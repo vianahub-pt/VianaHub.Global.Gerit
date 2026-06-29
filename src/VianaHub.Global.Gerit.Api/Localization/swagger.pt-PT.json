@@ -38,7 +38,6 @@
   "Swagger.Tag.Auth": "Autenticação",
   "Swagger.Tag.AddressTypes": "Tipos de Morada",
   "Swagger.Tag.FileTypes": "Tipos de Ficheiro",
-  "Swagger.Tag.OriginTypes": "Tipos de Origem",
   "Swagger.Tag.AttachmentCategories": "Categorias de Anexos",
   "Swagger.Tag.Clients": "Clientes",
   "Swagger.Tag.ClientTypes": "Tipos de Cliente",
@@ -527,15 +526,6 @@
   "Swagger.Endpoint.FileType.Activate.Summary": "Ativar tipo de ficheiro",
   "Swagger.Endpoint.FileType.Deactivate.Summary": "Desativar tipo de ficheiro",
   "Swagger.Endpoint.FileType.BulkUpload.Summary": "Carregamento em massa de tipos de ficheiro",
-
-  "Swagger.Endpoint.OriginType.GetAll.Summary": "Obter todos os tipos de origem",
-  "Swagger.Endpoint.OriginType.GetById.Summary": "Obter tipo de origem por ID",
-  "Swagger.Endpoint.OriginType.GetPaged.Summary": "Obter tipos de origem paginados",
-  "Swagger.Endpoint.OriginType.Create.Summary": "Criar novo tipo de origem",
-  "Swagger.Endpoint.OriginType.Update.Summary": "Atualizar tipo de origem",
-  "Swagger.Endpoint.OriginType.Delete.Summary": "Eliminar tipo de origem",
-  "Swagger.Endpoint.OriginType.Activate.Summary": "Ativar tipo de origem",
-  "Swagger.Endpoint.OriginType.Deactivate.Summary": "Desativar tipo de origem",
 
   "Swagger.Endpoint.VisitAttachment.GetAll.Summary": "Obter todos os anexos de visitas",
   "Swagger.Endpoint.VisitAttachment.GetById.Summary": "Obter anexo de visita por ID",

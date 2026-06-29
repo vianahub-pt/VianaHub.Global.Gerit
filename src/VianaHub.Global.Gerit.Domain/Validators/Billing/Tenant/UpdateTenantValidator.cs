@@ -21,5 +21,9 @@ public class UpdateTenantValidator : AbstractValidator<TenantEntity>
         RuleFor(x => x.IsDeleted)
             .Equal(false)
             .WithMessage(localization.GetMessage("Domain.Tenant.CannotUpdateDeleted"));
+
+        RuleFor(x => x.AcquisitionSourceTypeId)
+            .GreaterThan(0)
+            .WithMessage(localization.GetMessage("Domain.Tenant.AcquisitionSourceTypeIdRequired"));
     }
 }

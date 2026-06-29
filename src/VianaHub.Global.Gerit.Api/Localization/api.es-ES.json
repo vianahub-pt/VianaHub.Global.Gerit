@@ -142,7 +142,6 @@
   "Api.Validator.ConsentType.Update.Description.MaximumLength": "La descripción debe tener como máximo {0} caracteres",
 
   "Api.Validator.Client.Create.ClientType": "El tipo de cliente es obligatorio",
-  "Api.Validator.Client.Create.OriginType": "El origen del cliente es obligatorio",
   "Api.Validator.Client.Create.UrlImage.MaximumLength": "La URL de la imagen debe tener como máximo {0} caracteres",
   "Api.Validator.Client.Create.Note.MaximumLength": "La nota debe tener como máximo {0} caracteres",
 

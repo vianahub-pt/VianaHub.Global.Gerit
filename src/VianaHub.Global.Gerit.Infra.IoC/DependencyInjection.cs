@@ -69,6 +69,8 @@ using VianaHub.Global.Gerit.Domain.Validators.Business.VisitTeamVehicle;
 using VianaHub.Global.Gerit.Domain.Validators.Business.VisitTeamEquipment;
 using VianaHub.Global.Gerit.Domain.Validators.Identity.UserPreferences;
 using VianaHub.Global.Gerit.Domain.Validators.Business.ConsentType;
+using VianaHub.Global.Gerit.Domain.Validators.Business.AcquisitionSourceType;
+using VianaHub.Global.Gerit.Domain.Validators.Business.ConsentOriginType;
 using VianaHub.Global.Gerit.Domain.Validators.Business.FileType;
 using VianaHub.Global.Gerit.Domain.Validators.Business.AttachmentCategory;
 using VianaHub.Global.Gerit.Domain.Validators.Business.VisitAttachment;
@@ -122,6 +124,8 @@ public static class DependencyInjection
         services.AddScoped<IEntityDomainValidator<AddressTypeEntity>, AddressTypeValidator>();
         services.AddScoped<IEntityDomainValidator<FileTypeEntity>, FileTypeValidator>();
         services.AddScoped<IEntityDomainValidator<ConsentTypeEntity>, ConsentTypeValidator>();
+        services.AddScoped<IEntityDomainValidator<AcquisitionSourceTypeEntity>, AcquisitionSourceTypeValidator>();
+        services.AddScoped<IEntityDomainValidator<ConsentOriginTypeEntity>, ConsentOriginTypeValidator>();
         services.AddScoped<IEntityDomainValidator<ClientEntity>, ClientValidator>();
         services.AddScoped<IEntityDomainValidator<ClientAddressEntity>, ClientAddressValidator>();
         services.AddScoped<IEntityDomainValidator<ClientContactEntity>, ClientContactValidator>();
@@ -154,6 +158,8 @@ public static class DependencyInjection
         services.AddScoped<IAddressTypeAppService, AddressTypeAppService>();
         services.AddScoped<IFileTypeAppService, FileTypeAppService>();
         services.AddScoped<IConsentTypeAppService, ConsentTypeAppService>();
+        services.AddScoped<IAcquisitionSourceTypeAppService, AcquisitionSourceTypeAppService>();
+        services.AddScoped<IConsentOriginTypeAppService, ConsentOriginTypeAppService>();
         services.AddScoped<IFunctionAppService, FunctionAppService>();
         services.AddScoped<ITeamAppService, TeamAppService>();
         services.AddScoped<IVehicleAppService, VehicleAppService>();
@@ -197,6 +203,8 @@ public static class DependencyInjection
         services.AddScoped<IAddressTypeDomainService, AddressTypeDomainService>();
         services.AddScoped<IFileTypeDomainService, FileTypeDomainService>();
         services.AddScoped<IConsentTypeDomainService, ConsentTypeDomainService>();
+        services.AddScoped<IAcquisitionSourceTypeDomainService, AcquisitionSourceTypeDomainService>();
+        services.AddScoped<IConsentOriginTypeDomainService, ConsentOriginTypeDomainService>();
         services.AddScoped<IRoleDomainService, RoleDomainService>();
         services.AddScoped<IPlanDomainService, PlanDomainService>();
         services.AddScoped<ITenantDomainService, TenantDomainService>();
@@ -233,6 +241,8 @@ public static class DependencyInjection
         services.AddScoped<IAddressTypeDataRepository, AddressTypeDataRepository>();
         services.AddScoped<IFileTypeDataRepository, FileTypeDataRepository>();
         services.AddScoped<IConsentTypeDataRepository, ConsentTypeDataRepository>();
+        services.AddScoped<IAcquisitionSourceTypeDataRepository, AcquisitionSourceTypeDataRepository>();
+        services.AddScoped<IConsentOriginTypeDataRepository, ConsentOriginTypeDataRepository>();
         services.AddScoped<IFunctionDataRepository, FunctionDataRepository>();
         services.AddScoped<ITeamDataRepository, TeamDataRepository>();
         services.AddScoped<IVehicleDataRepository, VehicleDataRepository>();
