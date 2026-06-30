@@ -72,13 +72,6 @@ public class ConsentOriginTypeAppService : IConsentOriginTypeAppService
 
     public async Task<int> CreateAsync(CreateConsentOriginTypeRequest request, CancellationToken ct)
     {
-        var exists = await _repo.ExistsByCodeAsync(request.Code, ct);
-        if (exists)
-        {
-            _notify.Add(_localization.GetMessage("Application.Service.ConsentOriginType.Create.CodeAlreadyExists"), 409);
-            return 0;
-        }
-
         var nameExists = await _repo.ExistsByNameAsync(request.Name, ct);
         if (nameExists)
         {
@@ -86,7 +79,7 @@ public class ConsentOriginTypeAppService : IConsentOriginTypeAppService
             return 0;
         }
 
-        var entity = new ConsentOriginTypeEntity(request.Code, request.Name, request.Description, _currentUser.GetUserId());
+        var entity = new ConsentOriginTypeEntity(request.Name, request.Description, _currentUser.GetUserId());
         var success = await _domain.CreateAsync(entity, ct);
         return success ? entity.Id : 0;
     }
@@ -100,14 +93,7 @@ public class ConsentOriginTypeAppService : IConsentOriginTypeAppService
             return false;
         }
 
-        var exists = await _repo.ExistsByCodeAsync(request.Code, ct);
-        if (exists && entity.Code != request.Code)
-        {
-            _notify.Add(_localization.GetMessage("Application.Service.ConsentOriginType.Update.CodeAlreadyExists"), 409);
-            return false;
-        }
-
-        entity.Update(request.Code, request.Name, request.Description, _currentUser.GetUserId());
+        entity.Update(request.Name, request.Description, _currentUser.GetUserId());
         return await _domain.UpdateAsync(entity, ct);
     }
 

@@ -17,15 +17,6 @@ public class ConsentOriginTypeMapping : IEntityTypeConfiguration<ConsentOriginTy
             .UseIdentityColumn(1, 1)
             .IsRequired();
 
-        builder.Property(x => x.Code)
-            .HasColumnType("NVARCHAR(50)")
-            .HasMaxLength(50)
-            .IsRequired();
-
-        builder.HasIndex(x => x.Code)
-            .HasDatabaseName("UQ_ConsentOriginTypes_Code")
-            .IsUnique();
-
         builder.Property(x => x.Name)
             .HasColumnType("NVARCHAR(100)")
             .HasMaxLength(100)

@@ -42,7 +42,6 @@ public class AcquisitionSourceTypeDataRepository : IAcquisitionSourceTypeDataRep
         {
             var search = request.Search.Trim().ToLower();
             query = query.Where(x =>
-                EF.Functions.Like(x.Code.ToLower(), $"%{search}%") ||
                 EF.Functions.Like(x.Name.ToLower(), $"%{search}%") ||
                 EF.Functions.Like(x.Description.ToLower(), $"%{search}%")
             );
@@ -76,13 +75,6 @@ public class AcquisitionSourceTypeDataRepository : IAcquisitionSourceTypeDataRep
         return await _context.Set<AcquisitionSourceTypeEntity>()
             .AsNoTracking()
             .AnyAsync(x => x.Id == id && !x.IsDeleted, ct);
-    }
-
-    public async Task<bool> ExistsByCodeAsync(string code, CancellationToken ct)
-    {
-        return await _context.Set<AcquisitionSourceTypeEntity>()
-            .AsNoTracking()
-            .AnyAsync(x => x.Code == code && !x.IsDeleted, ct);
     }
 
     public async Task<bool> ExistsByNameAsync(string name, CancellationToken ct)

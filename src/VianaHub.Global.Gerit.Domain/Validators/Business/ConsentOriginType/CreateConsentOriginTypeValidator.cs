@@ -8,10 +8,6 @@ public class CreateConsentOriginTypeValidator : AbstractValidator<ConsentOriginT
 {
     public CreateConsentOriginTypeValidator(ILocalizationService localization)
     {
-        RuleFor(x => x.Code)
-            .NotEmpty().WithMessage(localization.GetMessage("Domain.ConsentOriginType.CodeRequired"))
-            .MaximumLength(50).WithMessage(localization.GetMessage("Domain.ConsentOriginType.CodeMaxLength", 50));
-
         RuleFor(x => x.Name)
             .NotEmpty().WithMessage(localization.GetMessage("Domain.ConsentOriginType.NameRequired"))
             .MaximumLength(100).WithMessage(localization.GetMessage("Domain.ConsentOriginType.NameMaxLength", 100));

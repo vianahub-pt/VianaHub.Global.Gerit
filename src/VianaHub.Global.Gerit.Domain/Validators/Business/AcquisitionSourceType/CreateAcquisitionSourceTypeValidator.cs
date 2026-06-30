@@ -8,10 +8,6 @@ public class CreateAcquisitionSourceTypeValidator : AbstractValidator<Acquisitio
 {
     public CreateAcquisitionSourceTypeValidator(ILocalizationService localization)
     {
-        RuleFor(x => x.Code)
-            .NotEmpty().WithMessage(localization.GetMessage("Domain.AcquisitionSourceType.CodeRequired"))
-            .MaximumLength(50).WithMessage(localization.GetMessage("Domain.AcquisitionSourceType.CodeMaxLength", 50));
-
         RuleFor(x => x.Name)
             .NotEmpty().WithMessage(localization.GetMessage("Domain.AcquisitionSourceType.NameRequired"))
             .MaximumLength(100).WithMessage(localization.GetMessage("Domain.AcquisitionSourceType.NameMaxLength", 100));

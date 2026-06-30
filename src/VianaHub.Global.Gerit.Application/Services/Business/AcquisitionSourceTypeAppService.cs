@@ -72,13 +72,6 @@ public class AcquisitionSourceTypeAppService : IAcquisitionSourceTypeAppService
 
     public async Task<int> CreateAsync(CreateAcquisitionSourceTypeRequest request, CancellationToken ct)
     {
-        var exists = await _repo.ExistsByCodeAsync(request.Code, ct);
-        if (exists)
-        {
-            _notify.Add(_localization.GetMessage("Application.Service.AcquisitionSourceType.Create.CodeAlreadyExists"), 409);
-            return 0;
-        }
-
         var nameExists = await _repo.ExistsByNameAsync(request.Name, ct);
         if (nameExists)
         {
@@ -86,7 +79,7 @@ public class AcquisitionSourceTypeAppService : IAcquisitionSourceTypeAppService
             return 0;
         }
 
-        var entity = new AcquisitionSourceTypeEntity(request.Code, request.Name, request.Description, _currentUser.GetUserId());
+        var entity = new AcquisitionSourceTypeEntity(request.Name, request.Description, _currentUser.GetUserId());
         var success = await _domain.CreateAsync(entity, ct);
         return success ? entity.Id : 0;
     }
@@ -100,14 +93,7 @@ public class AcquisitionSourceTypeAppService : IAcquisitionSourceTypeAppService
             return false;
         }
 
-        var exists = await _repo.ExistsByCodeAsync(request.Code, ct);
-        if (exists && entity.Code != request.Code)
-        {
-            _notify.Add(_localization.GetMessage("Application.Service.AcquisitionSourceType.Update.CodeAlreadyExists"), 409);
-            return false;
-        }
-
-        entity.Update(request.Code, request.Name, request.Description, _currentUser.GetUserId());
+        entity.Update(request.Name, request.Description, _currentUser.GetUserId());
         return await _domain.UpdateAsync(entity, ct);
     }
 
