@@ -1,7 +1,7 @@
 ---
 description: Coordena o fluxo PO -> Developer Junior/Pleno/Senior -> QA no board compartilhado
 mode: primary
-model: opencode/deepseek-v4-flash-free
+model: opencode-go/deepseek-v4-flash
 temperature: 0.2
 ---
 

@@ -4,5 +4,13 @@
   "instructions": [
     "AGENTS.md",
     ".opencode/instructions/kanban-flow.md"
-  ]
+  ],
+  "agents": {
+    "kanban-coordinator": { "model": "opencode-go/deepseek-v4-flash" },
+    "po": { "model": "opencode-go/deepseek-v4-flash" },
+    "developer-junior": { "model": "opencode-go/minimax-m3" },
+    "developer-pleno": { "model": "opencode-go/qwen3.7-plus" },
+    "developer-senior": { "model": "opencode-go/deepseek-v4-pro" },
+    "qa": { "model": "opencode-go/deepseek-v4-flash" }
+  }
 }
