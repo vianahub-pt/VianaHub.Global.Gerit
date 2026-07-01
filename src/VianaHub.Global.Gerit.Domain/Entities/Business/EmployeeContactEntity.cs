@@ -12,7 +12,7 @@ public class EmployeeContactEntity : Entity
     public int EmployeeId { get; private set; }
     public string Name { get; private set; }
     public string Email { get; private set; }
-    public string Phone { get; private set; }
+    public string? Phone { get; private set; }
     public bool IsPrimary { get; private set; }
     public bool IsActive { get; private set; }
     public bool IsDeleted { get; private set; }
@@ -28,7 +28,7 @@ public class EmployeeContactEntity : Entity
     /// Construtor para criação de um novo contato do Funcionário
     /// </summary>
     public EmployeeContactEntity(int tenantId, int employeeId, string name, string email, 
-        string phone, bool isPrimary, int createdBy)
+        string? phone, bool isPrimary, int createdBy)
     {
         TenantId = tenantId;
         EmployeeId = employeeId;
@@ -42,7 +42,7 @@ public class EmployeeContactEntity : Entity
         CreatedAt = DateTime.UtcNow;
     }
 
-    public void UpdateContactInfo(string name, string email, string phone, int modifiedBy)
+    public void UpdateContactInfo(string name, string email, string? phone, int modifiedBy)
     {
         Name = name;
         Email = email;

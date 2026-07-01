@@ -11,7 +11,7 @@ public class EmployeeEntity : Entity, IAggregateRoot
 {
     public int TenantId { get; private set; }
     public string Name { get; private set; }
-    public string TaxNumber { get; private set; }
+    public string? TaxNumber { get; private set; }
     public bool IsActive { get; private set; }
     public bool IsDeleted { get; private set; }
 
@@ -30,7 +30,7 @@ public class EmployeeEntity : Entity, IAggregateRoot
     /// <summary>
     /// Construtor para criação de um novo Funcionário
     /// </summary>
-    public EmployeeEntity(int tenantId, string name, string taxNumber, int createdBy)
+    public EmployeeEntity(int tenantId, string name, string? taxNumber, int createdBy)
     {
         TenantId = tenantId;
         Name = name;
@@ -41,7 +41,7 @@ public class EmployeeEntity : Entity, IAggregateRoot
         CreatedAt = DateTime.UtcNow;
     }
 
-    public void Update(string name, string taxNumber, int modifiedBy)
+    public void Update(string name, string? taxNumber, int modifiedBy)
     {
         Name = name;
         TaxNumber = taxNumber;

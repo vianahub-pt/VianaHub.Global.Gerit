@@ -11,7 +11,7 @@ public class AttachmentCategoryEntity : Entity, IAggregateRoot
 {
     public int TenantId { get; private set; }
     public string Name { get; private set; }
-    public string Description { get; private set; }
+    public string? Description { get; private set; }
     public int DisplayOrder { get; private set; }
     public bool IsSystem { get; private set; }
     public bool IsActive { get; private set; }
@@ -25,7 +25,7 @@ public class AttachmentCategoryEntity : Entity, IAggregateRoot
     /// <summary>
     /// Construtor para criação de uma nova categoria de anexo
     /// </summary>
-    public AttachmentCategoryEntity(int tenantId, string name, string description, int displayOrder, bool isSystem, int createdBy)
+    public AttachmentCategoryEntity(int tenantId, string name, string? description, int displayOrder, bool isSystem, int createdBy)
     {
         TenantId = tenantId;
         Name = name;
@@ -38,7 +38,7 @@ public class AttachmentCategoryEntity : Entity, IAggregateRoot
         CreatedAt = DateTime.UtcNow;
     }
 
-    public void Update(string name, string description, int displayOrder, int modifiedBy)
+    public void Update(string name, string? description, int displayOrder, int modifiedBy)
     {
         if (IsSystem)
             throw new InvalidOperationException("attachment_category.system_category_cannot_be_modified");
