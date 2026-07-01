@@ -4,7 +4,7 @@ using VianaHub.Global.Gerit.Domain.Entities.Billing;
 namespace VianaHub.Global.Gerit.Domain.Entities.Identity;
 
 /// <summary>
-/// Entidade que representa um usuário do sistema
+/// Entidade que representa um usuï¿½rio do sistema
 /// </summary>
 public class UserEntity : Entity
 {
@@ -13,7 +13,7 @@ public class UserEntity : Entity
     public string Email { get; private set; }
     public string NormalizedEmail { get; private set; }
     public bool EmailConfirmed { get; private set; }
-    public string PhoneNumber { get; private set; }
+    public string? PhoneNumber { get; private set; }
     public bool PhoneNumberConfirmed { get; private set; }
     public DateTime? LastAccessAt { get; private set; }
     public string PasswordHash { get; private set; }
@@ -30,9 +30,9 @@ public class UserEntity : Entity
     protected UserEntity() { }
 
     /// <summary>
-    /// Construtor para criação de um novo usuário
+    /// Construtor para criaï¿½ï¿½o de um novo usuï¿½rio
     /// </summary>
-    public UserEntity(int tenantId, string name, string email, string passwordHash, string phoneNumber, int createdBy)
+    public UserEntity(int tenantId, string name, string email, string passwordHash, string? phoneNumber, int createdBy)
     {
         TenantId = tenantId;
         Name = name;
@@ -47,7 +47,7 @@ public class UserEntity : Entity
         CreatedBy = createdBy;
     }
 
-    public void Update(string name, string phoneNumber, int modifiedBy)
+    public void Update(string name, string? phoneNumber, int modifiedBy)
     {
         Name = name;
         PhoneNumber = phoneNumber;
