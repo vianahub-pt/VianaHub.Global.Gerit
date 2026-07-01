@@ -87,7 +87,7 @@ Repositories:
 - atualizar includes e joins necessários;
 - substituir busca por OriginType enum em Client;
 - substituir busca por Origin string em ClientConsents;
-- usar Code/Name dos catálogos quando houver busca por origem.
+- usar Name dos catálogos quando houver busca por origem.
 
 Seeders:
 - criar seeder idempotente para AcquisitionSourceTypes;

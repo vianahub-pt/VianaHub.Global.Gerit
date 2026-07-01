@@ -102,7 +102,7 @@ Application:
 - adicionar ConsentOriginTypeId;
 - atualizar responses;
 - retornar ConsentOriginTypeId;
-- retornar ConsentOriginTypeCode/Name se esse for o padrão;
+- retornar ConsentOriginTypeName se esse for o padrão;
 - atualizar MappingProfile;
 - atualizar ClientConsentsAppService;
 - validar ClientId dentro do Tenant;

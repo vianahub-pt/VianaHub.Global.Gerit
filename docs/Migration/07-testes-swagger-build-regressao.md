@@ -81,14 +81,14 @@ Cobrir testes de:
 
 Validar AcquisitionSourceTypes:
 - cria com sucesso;
-- rejeita Code duplicado;
+- rejeita Name duplicado;
 - rejeita Name duplicado;
 - lista conforme regra de ativo/inativo;
 - executa soft delete conforme padrão.
 
 Validar ConsentOriginTypes:
 - cria com sucesso;
-- rejeita Code duplicado;
+- rejeita Name duplicado;
 - rejeita Name duplicado;
 - lista conforme regra de ativo/inativo;
 - executa soft delete conforme padrão.

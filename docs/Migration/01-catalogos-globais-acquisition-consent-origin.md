@@ -86,7 +86,7 @@ Valide o escopo funcional dos novos catálogos globais:
 Defina, de forma objetiva:
 - operações esperadas na API;
 - campos obrigatórios;
-- mensagens de erro esperadas para Code/Name duplicados;
+- mensagens de erro esperadas para Name duplicado;
 - comportamento de ativo/inativo;
 - comportamento de soft delete;
 - se a API deve expor CRUD completo ou apenas listagem/consulta.

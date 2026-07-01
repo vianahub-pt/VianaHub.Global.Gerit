@@ -87,7 +87,7 @@ Infra.Data:
 - configurar FK para AcquisitionSourceTypes;
 - atualizar ClientRepository;
 - ajustar includes para retornar origem quando necessário;
-- ajustar busca por origem para usar AcquisitionSourceType.Code ou AcquisitionSourceType.Name.
+- ajustar busca por origem para usar AcquisitionSourceType.Name.
 
 Application:
 - atualizar requests de Client;
@@ -95,7 +95,7 @@ Application:
 - adicionar acquisitionSourceTypeId;
 - atualizar ClientResponse e ClientDetailResponse;
 - retornar AcquisitionSourceTypeId;
-- retornar AcquisitionSourceTypeCode/Name se esse for o padrão;
+- retornar AcquisitionSourceTypeName se esse for o padrão;
 - atualizar MappingProfile;
 - atualizar ClientAppService;
 - validar AcquisitionSourceTypeId existente, ativo e não deletado.
@@ -138,7 +138,7 @@ Verifique:
 - Client exige AcquisitionSourceTypeId;
 - Client rejeita AcquisitionSourceTypeId inexistente/inativo/deletado;
 - criação, edição, detalhe e listagem funcionam;
-- busca por origem usa Code/Name do catálogo;
+- busca por origem usa Name do catálogo;
 - contratos HTTP não exigem originType antigo;
 - não houve remoção indevida de OriginTypeEntity se ela ainda for usada fora de Clients;
 - dotnet build passa;
