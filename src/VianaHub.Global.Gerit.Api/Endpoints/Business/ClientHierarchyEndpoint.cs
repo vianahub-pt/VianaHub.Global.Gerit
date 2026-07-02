@@ -20,7 +20,7 @@ public static class ClientHierarchyEndpoint
             var response = await appService.GetAllAsync(ct);
             return notify.CustomResponse(response, 200);
         })
-        .CustomAuthorize("Admin,BackOffice,Manager", "ClientHierarchies", "GetAll")
+        .CustomAuthorize("Admin,BackOffice,Manager", "ClientHierarchy", "GetAll")
         .WithName("GetClientHierarchies")
         .WithSummary("Swagger.Endpoint.ClientHierarchy.GetAll.Summary")
         .Produces(StatusCodes.Status200OK)
@@ -31,7 +31,7 @@ public static class ClientHierarchyEndpoint
             var response = await appService.GetByIdAsync(id, ct);
             return notify.CustomResponse(response);
         })
-        .CustomAuthorize("Admin,BackOffice,Manager", "ClientHierarchies", "GetBy")
+        .CustomAuthorize("Admin,BackOffice,Manager", "ClientHierarchy", "GetBy")
         .WithName("GetClientHierarchyById")
         .WithSummary("Swagger.Endpoint.ClientHierarchy.GetById.Summary")
         .Produces(StatusCodes.Status200OK)
@@ -43,7 +43,7 @@ public static class ClientHierarchyEndpoint
             var response = await appService.GetByParentClientIdAsync(parentClientId, ct);
             return notify.CustomResponse(response);
         })
-        .CustomAuthorize("Admin,BackOffice,Manager", "ClientHierarchies", "GetByParent")
+        .CustomAuthorize("Admin,BackOffice,Manager", "ClientHierarchy", "GetByParent")
         .WithName("GetClientHierarchyByParentClientId")
         .WithSummary("Swagger.Endpoint.ClientHierarchy.GetByParentClientId.Summary")
         .Produces(StatusCodes.Status200OK)
@@ -54,7 +54,7 @@ public static class ClientHierarchyEndpoint
             var response = await appService.GetByChildClientIdAsync(childClientId, ct);
             return notify.CustomResponse(response);
         })
-        .CustomAuthorize("Admin,BackOffice,Manager", "ClientHierarchies", "GetByChild")
+        .CustomAuthorize("Admin,BackOffice,Manager", "ClientHierarchy", "GetByChild")
         .WithName("GetClientHierarchyByChildClientId")
         .WithSummary("Swagger.Endpoint.ClientHierarchy.GetByChildClientId.Summary")
         .Produces(StatusCodes.Status200OK)
@@ -65,7 +65,7 @@ public static class ClientHierarchyEndpoint
             var response = await appService.GetPagedAsync(request, ct);
             return notify.CustomResponse(response);
         })
-        .CustomAuthorize("Admin,BackOffice,Manager", "ClientHierarchies", "GetPaged")
+        .CustomAuthorize("Admin,BackOffice,Manager", "ClientHierarchy", "GetPaged")
         .WithName("GetClientHierarchiesPaged")
         .WithSummary("Swagger.Endpoint.ClientHierarchy.GetPaged.Summary")
         .Produces(StatusCodes.Status200OK)
@@ -76,7 +76,7 @@ public static class ClientHierarchyEndpoint
             var id = await appService.CreateAsync(request, ct);
             return notify.CustomResponse(new GenericResponse { Id = id }, 201);
         })
-        .CustomAuthorize("Admin,BackOffice,Manager", "ClientHierarchies", "Create")
+        .CustomAuthorize("Admin,BackOffice,Manager", "ClientHierarchy", "Create")
         .WithName("CreateClientHierarchy")
         .WithSummary("Swagger.Endpoint.ClientHierarchy.Create.Summary")
         .Produces<GenericResponse>(StatusCodes.Status201Created)
@@ -89,7 +89,7 @@ public static class ClientHierarchyEndpoint
             var updated = await appService.UpdateAsync(id, request, ct);
             return notify.CustomResponse(updated);
         })
-        .CustomAuthorize("Admin,BackOffice,Manager", "ClientHierarchies", "Update")
+        .CustomAuthorize("Admin,BackOffice,Manager", "ClientHierarchy", "Update")
         .WithName("UpdateClientHierarchy")
         .WithSummary("Swagger.Endpoint.ClientHierarchy.Update.Summary")
         .Produces(StatusCodes.Status204NoContent)
@@ -102,7 +102,7 @@ public static class ClientHierarchyEndpoint
             var ok = await appService.ActivateAsync(id, ct);
             return notify.CustomResponse();
         })
-        .CustomAuthorize("Admin,BackOffice,Manager", "ClientHierarchies", "Activate")
+        .CustomAuthorize("Admin,BackOffice,Manager", "ClientHierarchy", "Activate")
         .WithName("ActivateClientHierarchy")
         .WithSummary("Swagger.Endpoint.ClientHierarchy.Activate.Summary")
         .Produces(StatusCodes.Status204NoContent)
@@ -114,7 +114,7 @@ public static class ClientHierarchyEndpoint
             var ok = await appService.DeactivateAsync(id, ct);
             return notify.CustomResponse();
         })
-        .CustomAuthorize("Admin,BackOffice,Manager", "ClientHierarchies", "Deactivate")
+        .CustomAuthorize("Admin,BackOffice,Manager", "ClientHierarchy", "Deactivate")
         .WithName("DeactivateClientHierarchy")
         .WithSummary("Swagger.Endpoint.ClientHierarchy.Deactivate.Summary")
         .Produces(StatusCodes.Status204NoContent)
@@ -126,7 +126,7 @@ public static class ClientHierarchyEndpoint
             var ok = await appService.DeleteAsync(id, ct);
             return notify.CustomResponse();
         })
-        .CustomAuthorize("Admin,BackOffice,Manager", "ClientHierarchies", "Delete")
+        .CustomAuthorize("Admin,BackOffice,Manager", "ClientHierarchy", "Delete")
         .WithName("DeleteClientHierarchy")
         .WithSummary("Swagger.Endpoint.ClientHierarchy.Delete.Summary")
         .Produces(StatusCodes.Status204NoContent)
