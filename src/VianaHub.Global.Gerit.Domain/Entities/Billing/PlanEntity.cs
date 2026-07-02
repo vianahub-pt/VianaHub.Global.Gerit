@@ -8,7 +8,7 @@ namespace VianaHub.Global.Gerit.Domain.Entities.Billing;
 public class PlanEntity : Entity
 {
     public string Name { get; private set; }
-    public string Description { get; set; }
+    public string? Description { get; set; }
     public decimal? PricePerHour { get; set; }
     public decimal? PricePerDay { get; set; }
     public decimal? PricePerMonth { get; set; }
@@ -27,11 +27,11 @@ public class PlanEntity : Entity
     protected PlanEntity() { }
 
     /// <summary>
-    /// Construtor para criação de um novo plano
+    /// Construtor para criaï¿½ï¿½o de um novo plano
     /// </summary>
     public PlanEntity(
         string name, 
-        string description, 
+        string? description, 
         decimal? pricePerHour,
         decimal? pricePerDay,
         decimal? pricePerMonth,
@@ -57,7 +57,7 @@ public class PlanEntity : Entity
 
     public void Update(
         string name, 
-        string description,
+        string? description,
         decimal? pricePerHour,
         decimal? pricePerDay,
         decimal? pricePerMonth,

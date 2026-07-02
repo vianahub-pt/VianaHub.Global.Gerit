@@ -4,7 +4,7 @@ using VianaHub.Global.Gerit.Domain.Entities.Billing;
 namespace VianaHub.Global.Gerit.Domain.Entities.Business;
 
 /// <summary>
-/// Entidade que representa um contato da Intervenção
+/// Entidade que representa um contato da Intervenï¿½ï¿½o
 /// </summary>
 public class VisitContactEntity : Entity
 {
@@ -12,7 +12,7 @@ public class VisitContactEntity : Entity
     public int VisitId { get; private set; }
     public string Name { get; private set; }
     public string Email { get; private set; }
-    public string Phone { get; private set; }
+    public string? Phone { get; private set; }
     public bool IsPrimary { get; private set; }
     public bool IsActive { get; private set; }
     public bool IsDeleted { get; private set; }
@@ -25,9 +25,9 @@ public class VisitContactEntity : Entity
     protected VisitContactEntity() { }
 
     /// <summary>
-    /// Construtor para criação de um novo contato da Intervenção
+    /// Construtor para criaï¿½ï¿½o de um novo contato da Intervenï¿½ï¿½o
     /// </summary>
-    public VisitContactEntity(int tenantId, int interventionId, string name, string email, string phone,
+    public VisitContactEntity(int tenantId, int interventionId, string name, string email, string? phone,
         bool isPrimary, int createdBy)
     {
         TenantId = tenantId;
@@ -42,7 +42,7 @@ public class VisitContactEntity : Entity
         CreatedAt = DateTime.UtcNow;
     }
 
-    public void Update(string name, string email, string phone, bool isPrimary, int modifiedBy)
+    public void Update(string name, string email, string? phone, bool isPrimary, int modifiedBy)
     {
         Name = name;
         Email = email;

@@ -16,8 +16,8 @@ public class ClientEntity : Entity, IAggregateRoot
     public ClientType ClientType { get; private set; }
     public int AcquisitionSourceTypeId { get; private set; }
     public AcquisitionSourceTypeEntity AcquisitionSourceType { get; private set; }
-    public string UrlImage { get; private set; }
-    public string Note { get; private set; }
+    public string? UrlImage { get; private set; }
+    public string? Note { get; private set; }
     public bool IsActive { get; private set; }
     public bool IsDeleted { get; private set; }
 
@@ -40,7 +40,7 @@ public class ClientEntity : Entity, IAggregateRoot
     // Construtor protegido para o EF Core
     protected ClientEntity() { }
 
-    public ClientEntity(int tenantId, ClientType clientType, int acquisitionSourceTypeId, string urlImage, string note, int createdBy)
+    public ClientEntity(int tenantId, ClientType clientType, int acquisitionSourceTypeId, string? urlImage, string? note, int createdBy)
     {
         TenantId = tenantId;
         ClientType = clientType;
@@ -63,7 +63,7 @@ public class ClientEntity : Entity, IAggregateRoot
         Company = clientCompany;
     }
 
-    public void Update(ClientType clientType, int acquisitionSourceTypeId, string urlImage, string note, int modifiedBy)
+    public void Update(ClientType clientType, int acquisitionSourceTypeId, string? urlImage, string? note, int modifiedBy)
     {
         ClientType = clientType;
         AcquisitionSourceTypeId = acquisitionSourceTypeId;
