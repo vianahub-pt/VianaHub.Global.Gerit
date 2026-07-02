@@ -9,15 +9,15 @@ public class ClientIndividualEntity : Entity
     public string? FullName { get; private set; }
     public string? FirstName { get; private set; }
     public string? LastName { get; private set; }
-    public string?? PhoneNumber { get; private set; }
-    public string?? CellPhoneNumber { get; private set; }
+    public string? PhoneNumber { get; private set; }
+    public string? CellPhoneNumber { get; private set; }
     public bool IsWhatsapp { get; private set; }
-    public string?? Email { get; private set; }
+    public string? Email { get; private set; }
     public DateTime? BirthDate { get; private set; }
-    public string?? Gender { get; private set; }
-    public string?? DocumentType { get; private set; }
-    public string?? DocumentNumber { get; private set; }
-    public string?? Nationality { get; private set; }
+    public string? Gender { get; private set; }
+    public string? DocumentType { get; private set; }
+    public string? DocumentNumber { get; private set; }
+    public string? Nationality { get; private set; }
 
     public bool IsActive { get; private set; }
     public bool IsDeleted { get; private set; }

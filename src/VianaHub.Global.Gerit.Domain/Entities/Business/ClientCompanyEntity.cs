@@ -10,16 +10,16 @@ public class ClientCompanyEntity : Entity
     public int ClientId { get; private set; }
 
     public string? LegalName { get; private set; } = null!;
-    public string?? TradeName { get; private set; }
-    public string?? PhoneNumber { get; private set; }
-    public string?? CellPhoneNumber { get; private set; }
+    public string? TradeName { get; private set; }
+    public string? PhoneNumber { get; private set; }
+    public string? CellPhoneNumber { get; private set; }
     public bool IsWhatsapp { get; private set; } = false;
-    public string?? Email { get; private set; }
-    public string?? Site { get; private set; }
-    public string?? CompanyRegistration { get; private set; }
-    public string?? CAE { get; private set; }
+    public string? Email { get; private set; }
+    public string? Site { get; private set; }
+    public string? CompanyRegistration { get; private set; }
+    public string? CAE { get; private set; }
     public int? NumberOfEmployee { get; private set; }
-    public string?? LegalRepresentative { get; private set; }
+    public string? LegalRepresentative { get; private set; }
 
     public bool IsActive { get; private set; }
     public bool IsDeleted { get; private set; }
