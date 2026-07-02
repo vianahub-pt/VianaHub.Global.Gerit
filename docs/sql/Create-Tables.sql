@@ -102,7 +102,7 @@ CREATE TABLE dbo.Plans (                                                        
     PricePerYear                    DECIMAL(10,2)           NULL,                           -- Pre�o por ano
     Currency                        NVARCHAR(3)         NOT NULL DEFAULT N'USD',            -- ISO currency
     MaxUsers                        INT                 NOT NULL,                           -- Limite de usu�rios
-    MaxPhotosPerVisits   INT			        NOT NULL,                           -- Limite de fotos por ordem de servi�o
+    MaxPhotosPerVisits              INT			        NOT NULL,                           -- Limite de fotos por ordem de servi�o
     IsActive	                    BIT					NOT NULL DEFAULT 1,                 -- Flag de ativo
     IsDeleted	                    BIT					NOT NULL DEFAULT 0,                 -- Soft delete
     CreatedBy	                    INT         		NOT NULL,						    -- Usu�rio criador
@@ -178,9 +178,9 @@ CREATE TABLE dbo.TenantContacts (									        -- Contatos do tenant
     Name		        NVARCHAR(150)		NOT NULL,						-- Nome do contato
     Email		        NVARCHAR(255)		NOT NULL,						-- Email do contato
     Phone		        NVARCHAR(30)		    NULL,				        -- Telefone
-    PhoneIsWhatsapp     BIT					    NULL DEFAULT 0,		        -- O telefone � WhatsApp?
+    PhoneIsWhatsapp     BIT					NOT NULL DEFAULT 0,		        -- O telefone � WhatsApp?
     CellPhone	        NVARCHAR(30)		NOT NULL,				        -- Telem�vel
-    CellPhoneIsWhatsapp BIT					    NULL DEFAULT 0,		        -- O telem�vel � WhatsApp?
+    CellPhoneIsWhatsapp BIT					NOT NULL DEFAULT 0,		        -- O telem�vel � WhatsApp?
     IsPrimary	        BIT					NOT NULL DEFAULT 0,				-- Contato principal
     IsActive	        BIT					NOT NULL DEFAULT 1,				-- Flag de ativo
     IsDeleted	        BIT					NOT NULL DEFAULT 0,				-- Soft delete
@@ -429,12 +429,12 @@ CREATE TABLE dbo.JwtKeys (
     KeyType 				NVARCHAR(50) 		NOT NULL DEFAULT 'RSA',
     RevokedReason 			NVARCHAR(500) 			NULL,
     UsageCount 				BIGINT 				NOT NULL DEFAULT 0,
-    ActivatedAt 			DATETIME2(7) 				NULL,
-    ExpiresAt 				DATETIME2(7) 			NOT NULL,
-    LastUsedAt 				DATETIME2(7) 				NULL,
-    NextRotationAt 			DATETIME2(7) 			NOT NULL,
-    RevokedAt 				DATETIME2(7) 				NULL,
-    LastValidatedAt 		DATETIME2(7) 				NULL,
+    ActivatedAt 			DATETIME2(7) 			NULL,
+    ExpiresAt 				DATETIME2(7) 		NOT NULL,
+    LastUsedAt 				DATETIME2(7) 			NULL,
+    NextRotationAt 			DATETIME2(7) 		NOT NULL,
+    RevokedAt 				DATETIME2(7) 			NULL,
+    LastValidatedAt 		DATETIME2(7) 			NULL,
     ValidationCount 		BIGINT 				NOT NULL DEFAULT 0,
     RotationPolicyDays 		INT 				NOT NULL DEFAULT 90,
     OverlapPeriodDays 		INT 				NOT NULL DEFAULT 7,
@@ -815,8 +815,8 @@ CREATE TABLE dbo.EquipmentTypes (									                        -- Tipos de eq
     IsDeleted	BIT					NOT NULL DEFAULT 0,                                     -- Soft delete
     CreatedBy	INT         		NOT NULL,						                        -- Usu�rio criador
     CreatedAt	DATETIME2(7)		NOT NULL DEFAULT SYSDATETIME(),	                        -- Data de cria��o
-    ModifiedBy	INT         		NULL,							                        -- Usu�rio modificador
-    ModifiedAt	DATETIME2(7)		NULL,							                        -- Data de modifica��o
+    ModifiedBy	INT         		    NULL,						                        -- Usu�rio modificador
+    ModifiedAt	DATETIME2(7)		    NULL,						                        -- Data de modifica��o
 	CONSTRAINT PK_EquipmentTypes PRIMARY KEY CLUSTERED (Id),                                -- PK
     CONSTRAINT CK_EquipmentTypes_Active_Deleted CHECK (NOT (IsActive = 1 AND IsDeleted = 1)),
     CONSTRAINT UQ_EquipmentTypes_Id_Tenant UNIQUE (Id, TenantId),                           -- Garantir que o Id � �nico dentro do tenant (para FKs compostas)

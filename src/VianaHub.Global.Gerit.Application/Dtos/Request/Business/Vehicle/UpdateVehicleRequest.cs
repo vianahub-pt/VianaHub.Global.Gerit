@@ -3,10 +3,10 @@ namespace VianaHub.Global.Gerit.Application.Dtos.Request.Business.Vehicle;
 public class UpdateVehicleRequest
 {
     public int StatusId { get; set; }
-    public string Plate { get; set; }
-    public string Brand { get; set; }
-    public string Model { get; set; }
+    public string? Plate { get; set; }
+    public string? Brand { get; set; }
+    public string? Model { get; set; }
     public int Year { get; set; }
-    public string Color { get; set; }
-    public string FuelType { get; set; }
+    public string? Color { get; set; }
+    public string? FuelType { get; set; }
 }

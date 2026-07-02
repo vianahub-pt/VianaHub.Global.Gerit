@@ -12,7 +12,7 @@ public class SecretProviderEnvironment : ISecretProvider
         _configuration = configuration;
     }
 
-    public string? GetMasterKey()
+    public string?? GetMasterKey()
     {
         // Ler apenas de configuração (appsettings / providers adicionados ao IConfiguration)
         // Prioridade: JwtKeyManagement:EncryptionKey, Jwt:MasterKey, fallback JWT_MASTER_KEY

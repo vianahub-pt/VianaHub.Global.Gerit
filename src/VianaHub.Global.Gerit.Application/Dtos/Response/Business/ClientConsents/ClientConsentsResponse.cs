@@ -10,8 +10,8 @@ public class ClientConsentsResponse
     public bool Granted { get; set; }
     public DateTime GrantedDate { get; set; }
     public DateTime? RevokedDate { get; set; }
-    public string? IpAddress { get; set; }
-    public string? UserAgent { get; set; }
+    public string?? IpAddress { get; set; }
+    public string?? UserAgent { get; set; }
     public bool IsActive { get; set; }
     public bool IsDeleted { get; set; }
     public int CreatedBy { get; set; }

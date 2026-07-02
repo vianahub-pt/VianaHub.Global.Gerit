@@ -11,8 +11,8 @@ public class EquipmentEntity : Entity
     public int TenantId { get; private set; }
     public int EquipmentTypeId { get; set; }
     public int StatusId { get; set; }
-    public string Name { get; private set; }
-    public string? SerialNumber { get; private set; }
+    public string? Name { get; private set; }
+    public string?? SerialNumber { get; private set; }
     public bool IsActive { get; private set; }
     public bool IsDeleted { get; private set; }
 

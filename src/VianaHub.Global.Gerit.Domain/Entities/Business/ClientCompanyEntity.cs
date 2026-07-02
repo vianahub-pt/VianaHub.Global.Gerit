@@ -9,17 +9,17 @@ public class ClientCompanyEntity : Entity
     public int TenantId { get; private set; }
     public int ClientId { get; private set; }
 
-    public string LegalName { get; private set; } = null!;
-    public string? TradeName { get; private set; }
-    public string? PhoneNumber { get; private set; }
-    public string? CellPhoneNumber { get; private set; }
+    public string? LegalName { get; private set; } = null!;
+    public string?? TradeName { get; private set; }
+    public string?? PhoneNumber { get; private set; }
+    public string?? CellPhoneNumber { get; private set; }
     public bool IsWhatsapp { get; private set; } = false;
-    public string? Email { get; private set; }
-    public string? Site { get; private set; }
-    public string? CompanyRegistration { get; private set; }
-    public string? CAE { get; private set; }
+    public string?? Email { get; private set; }
+    public string?? Site { get; private set; }
+    public string?? CompanyRegistration { get; private set; }
+    public string?? CAE { get; private set; }
     public int? NumberOfEmployee { get; private set; }
-    public string? LegalRepresentative { get; private set; }
+    public string?? LegalRepresentative { get; private set; }
 
     public bool IsActive { get; private set; }
     public bool IsDeleted { get; private set; }
@@ -53,7 +53,7 @@ public class ClientCompanyEntity : Entity
         CreatedAt = DateTime.UtcNow;
     }
 
-    public string DisplayName => TradeName ?? LegalName;
+    public string? DisplayName => TradeName ?? LegalName;
 
     public void Update(string legalName, string tradeName, string phoneMumber, string cellPhoneNumber, bool isWhatsapp, string email, string site, string companyRegistration, string cae, int? numberOfEmployee, string legalRepresentative, int modifiedBy)
     {

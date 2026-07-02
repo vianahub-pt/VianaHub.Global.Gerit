@@ -14,8 +14,8 @@ public class VisitAttachmentEntity : Entity
     public int VisitId { get; private set; }
     public int AttachmentCategoryId { get; private set; }
     public Guid PublicId { get; private set; }
-    public string S3Key { get; private set; }
-    public string FileName { get; private set; }
+    public string? S3Key { get; private set; }
+    public string? FileName { get; private set; }
     public long FileSizeBytes { get; private set; }
     public int DisplayOrder { get; private set; }
     public bool IsPrimary { get; private set; }
@@ -117,12 +117,12 @@ public class VisitAttachmentEntity : Entity
     /// <summary>
     /// Obtém a URL de download segura usando o PublicId
     /// </summary>
-    public string GetDownloadUrl(string baseUrl) => $"{baseUrl}/attachments/{PublicId}";
+    public string? GetDownloadUrl(string baseUrl) => $"{baseUrl}/attachments/{PublicId}";
 
     /// <summary>
     /// Formata o tamanho do ficheiro de forma legível
     /// </summary>
-    public string GetFormattedFileSize()
+    public string? GetFormattedFileSize()
     {
         string[] sizes = { "B", "KB", "MB", "GB", "TB" };
         double len = FileSizeBytes;

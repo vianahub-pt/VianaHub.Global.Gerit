@@ -6,6 +6,6 @@ namespace VianaHub.Global.Gerit.Application.Dtos.Request.Business.Status;
 public class UpdateStatusRequest
 {
     public int StatusTypeId { get; set; }
-    public string Name { get; set; }
-    public string Description { get; set; }
+    public string? Name { get; set; }
+    public string? Description { get; set; }
 }

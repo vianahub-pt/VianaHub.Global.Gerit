@@ -5,10 +5,10 @@ public class EquipmentResponse
     public int Id { get; set; }
     public int TenantId { get; set; }
     public int EquipmentTypeId { get; set; }
-    public string EquipmentType { get; set; }
+    public string? EquipmentType { get; set; }
     public int StatusId { get; set; }
-    public string Status { get; set; }
-    public string Name { get; set; }
-    public string SerialNumber { get; set; }
+    public string? Status { get; set; }
+    public string? Name { get; set; }
+    public string? SerialNumber { get; set; }
     public bool IsActive { get; set; }
 }

@@ -7,11 +7,11 @@ public class JwtKeyResponse
     public int Id { get; set; }
     public int TenantId { get; set; }
     public Guid KeyId { get; set; }
-    public string PublicKey { get; set; } = string.Empty;
-    public string Algorithm { get; set; } = "RS256";
+    public string? PublicKey { get; set; } = string.Empty;
+    public string? Algorithm { get; set; } = "RS256";
     public int KeySize { get; set; }
-    public string KeyType { get; set; } = "RSA";
-    public string RevokedReason { get; set; } = string.Empty;
+    public string? KeyType { get; set; } = "RSA";
+    public string? RevokedReason { get; set; } = string.Empty;
     public long UsageCount { get; set; }
     public DateTime? ActivatedAt { get; set; }
     public DateTime ExpiresAt { get; set; }

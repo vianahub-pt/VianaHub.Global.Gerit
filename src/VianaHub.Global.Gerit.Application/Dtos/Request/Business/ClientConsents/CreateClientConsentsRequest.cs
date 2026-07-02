@@ -6,6 +6,6 @@ public class CreateClientConsentsRequest
     public int ConsentOriginTypeId { get; set; }
     public bool Granted { get; set; }
     public DateTime GrantedDate { get; set; }
-    public string? IpAddress { get; set; }
-    public string? UserAgent { get; set; }
+    public string?? IpAddress { get; set; }
+    public string?? UserAgent { get; set; }
 }
