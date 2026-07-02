@@ -13,7 +13,7 @@ public class UserEntity : Entity
     public string? Email { get; private set; }
     public string? NormalizedEmail { get; private set; }
     public bool EmailConfirmed { get; private set; }
-    public string?? PhoneNumber { get; private set; }
+    public string? PhoneNumber { get; private set; }
     public bool PhoneNumberConfirmed { get; private set; }
     public DateTime? LastAccessAt { get; private set; }
     public string? PasswordHash { get; private set; }

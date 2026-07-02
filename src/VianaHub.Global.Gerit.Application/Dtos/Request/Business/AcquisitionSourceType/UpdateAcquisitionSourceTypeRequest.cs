@@ -3,5 +3,5 @@ namespace VianaHub.Global.Gerit.Application.Dtos.Request.Business.AcquisitionSou
 public class UpdateAcquisitionSourceTypeRequest
 {
     public string? Name { get; set; }
-    public string?? Description { get; set; }
+    public string? Description { get; set; }
 }

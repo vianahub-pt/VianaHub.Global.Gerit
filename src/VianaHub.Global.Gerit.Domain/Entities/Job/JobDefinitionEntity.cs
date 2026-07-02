@@ -7,20 +7,20 @@ public class JobDefinitionEntity : Entity, IAggregateRoot
     // Propriedades principais
     public string? JobCategory { get; private set; }
     public string? JobName { get; private set; }
-    public string?? Description { get; private set; }
-    public string?? JobPurpose { get; private set; }
+    public string? Description { get; private set; }
+    public string? JobPurpose { get; private set; }
     public string? JobType { get; private set; }
     public string? JobMethod { get; private set; }
-    public string?? CronExpression { get; private set; }
+    public string? CronExpression { get; private set; }
     public string? TimeZoneId { get; private set; }
     public bool ExecuteOnlyOnce { get; private set; }
     public int TimeoutMinutes { get; private set; }
     public int Priority { get; private set; }
     public string? Queue { get; private set; }
     public int MaxRetries { get; private set; }
-    public string?? JobConfiguration { get; private set; }
+    public string? JobConfiguration { get; private set; }
     public bool IsSystemJob { get; private set; }
-    public string?? HangfireJobId { get; private set; }
+    public string? HangfireJobId { get; private set; }
     public DateTime? LastRegisteredAt { get; private set; }
 
     // Estado l�gico

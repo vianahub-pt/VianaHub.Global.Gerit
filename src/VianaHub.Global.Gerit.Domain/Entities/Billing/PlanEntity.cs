@@ -8,7 +8,7 @@ namespace VianaHub.Global.Gerit.Domain.Entities.Billing;
 public class PlanEntity : Entity
 {
     public string? Name { get; private set; }
-    public string?? Description { get; set; }
+    public string? Description { get; set; }
     public decimal? PricePerHour { get; set; }
     public decimal? PricePerDay { get; set; }
     public decimal? PricePerMonth { get; set; }

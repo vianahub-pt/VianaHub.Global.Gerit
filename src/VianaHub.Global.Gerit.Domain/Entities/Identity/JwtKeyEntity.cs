@@ -12,7 +12,7 @@ public class JwtKeyEntity : Entity
     public string? Algorithm { get; private set; }
     public int KeySize { get; private set; }
     public string? KeyType { get; private set; }
-    public string?? RevokedReason { get; private set; }
+    public string? RevokedReason { get; private set; }
     public long UsageCount { get; private set; }
     public DateTime? ActivatedAt { get; private set; }
     public DateTime ExpiresAt { get; private set; }

@@ -9,10 +9,10 @@ namespace VianaHub.Global.Gerit.Domain.Entities.Business
         public int ClientId { get; private set; }
 
         public string? TaxNumber { get; private set; } = null!;
-        public string?? VatNumber { get; private set; }
+        public string? VatNumber { get; private set; }
         public string? FiscalCountry { get; private set; } = "PT";
         public bool IsVatRegistered { get; private set; }
-        public string?? IBAN { get; private set; }
+        public string? IBAN { get; private set; }
         public string? FiscalEmail { get; private set; }
 
         public bool IsActive { get; private set; }

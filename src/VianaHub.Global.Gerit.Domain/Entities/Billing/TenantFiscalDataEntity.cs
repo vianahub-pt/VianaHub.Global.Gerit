@@ -9,7 +9,7 @@ public class TenantFiscalDataEntity : Entity
 {
     public int TenantId { get; private set; }
     public string? NIF { get; private set; }
-    public string?? VATNumber { get; private set; }
+    public string? VATNumber { get; private set; }
     public string? CAE { get; private set; }
     public string? FiscalCountry { get; private set; }
     public bool IsVATRegistered { get; private set; }

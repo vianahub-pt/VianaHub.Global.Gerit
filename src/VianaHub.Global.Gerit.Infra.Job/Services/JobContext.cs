@@ -11,8 +11,8 @@ public static class JobContext
 {
     private sealed class Holder
     {
-        public string?? JobName { get; set; }
-        public string?? ExecutionId { get; set; }
+        public string? JobName { get; set; }
+        public string? ExecutionId { get; set; }
     }
 
     private static readonly AsyncLocal<Holder?> _current = new();

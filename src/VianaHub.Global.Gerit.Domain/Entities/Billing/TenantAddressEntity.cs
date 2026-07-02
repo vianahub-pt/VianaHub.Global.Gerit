@@ -14,13 +14,13 @@ public class TenantAddressEntity : Entity
     public string? Street { get; private set; }
     public string? Neighborhood { get; private set; }
     public string? City { get; private set; }
-    public string?? District { get; private set; }
+    public string? District { get; private set; }
     public string? PostalCode { get; private set; }
-    public string?? StreetNumber { get; private set; }
-    public string?? Complement { get; private set; }
+    public string? StreetNumber { get; private set; }
+    public string? Complement { get; private set; }
     public decimal? Latitude { get; private set; }
     public decimal? Longitude { get; private set; }
-    public string?? Note { get; private set; }
+    public string? Note { get; private set; }
     public bool IsPrimary { get; private set; }
     public bool IsActive { get; private set; }
     public bool IsDeleted { get; private set; }

@@ -21,9 +21,9 @@ public class TenantEntity : Entity, IAggregateRoot
     public AcquisitionSourceTypeEntity AcquisitionSourceType { get; private set; }
     public string? Name { get; private set; }
     public string? Email { get; private set; }
-    public string?? Website { get; private set; }
-    public string?? UrlImage { get; private set; }
-    public string?? Note { get; private set; }
+    public string? Website { get; private set; }
+    public string? UrlImage { get; private set; }
+    public string? Note { get; private set; }
     public bool IsActive { get; private set; }
     public bool IsDeleted { get; private set; }
 
