@@ -1,7 +1,7 @@
 ---
 description: Developer Junior - implementa tarefas backend .NET 8 simples, correções localizadas, ajustes de localização/validação e move cards no Kanban
 mode: subagent
-model: openai/gpt-4o-mini
+model: opencode-go/minimax-m3
 temperature: 0.2
 tools:
   write: true

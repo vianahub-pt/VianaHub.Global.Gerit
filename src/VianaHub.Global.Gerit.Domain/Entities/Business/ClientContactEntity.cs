@@ -7,7 +7,7 @@ namespace VianaHub.Global.Gerit.Domain.Entities.Business
         public int TenantId { get; private set; }
         public int ClientId { get; private set; }
 
-        public string Name { get; private set; } = null!;
+        public string? Name { get; private set; } = null!;
         public string? PhoneNumber { get; private set; }
         public string? CellPhoneNumber { get; private set; }
         public bool IsWhatsapp { get; private set; }

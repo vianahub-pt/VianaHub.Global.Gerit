@@ -1,7 +1,7 @@
 ---
 description: QA - valida implementações backend .NET 8, recomenda correções por senioridade e move cards no Kanban
 mode: subagent
-model: openai/gpt-4.1
+model: opencode-go/deepseek-v4-flash
 temperature: 0.1
 tools:
   write: true

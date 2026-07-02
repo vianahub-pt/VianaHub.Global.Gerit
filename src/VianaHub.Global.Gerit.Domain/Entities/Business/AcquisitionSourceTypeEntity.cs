@@ -4,17 +4,15 @@ namespace VianaHub.Global.Gerit.Domain.Entities.Business;
 
 public class AcquisitionSourceTypeEntity : Entity
 {
-    public string Code { get; private set; }
-    public string Name { get; private set; }
+    public string? Name { get; private set; }
     public string? Description { get; private set; }
     public bool IsActive { get; private set; }
     public bool IsDeleted { get; private set; }
 
     protected AcquisitionSourceTypeEntity() { }
 
-    public AcquisitionSourceTypeEntity(string code, string name, string? description, int createdBy)
+    public AcquisitionSourceTypeEntity(string name, string? description, int createdBy)
     {
-        Code = code;
         Name = name;
         Description = description;
         IsActive = true;
@@ -23,9 +21,8 @@ public class AcquisitionSourceTypeEntity : Entity
         CreatedAt = DateTime.UtcNow;
     }
 
-    public void Update(string code, string name, string? description, int modifiedBy)
+    public void Update(string name, string? description, int modifiedBy)
     {
-        Code = code;
         Name = name;
         Description = description;
         ModifiedBy = modifiedBy;

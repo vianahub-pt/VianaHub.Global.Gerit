@@ -32,18 +32,18 @@ public class DatabaseSeeder
 
         var seeds = new List<AcquisitionSourceTypeEntity>
         {
-            new("INSTAGRAM", "Instagram", "Aquisição via Instagram", 1),
-            new("FACEBOOK", "Facebook", "Aquisição via Facebook", 1),
-            new("LINKEDIN", "LinkedIn", "Aquisição via LinkedIn", 1),
-            new("GOOGLE", "Google", "Aquisição via Google", 1),
-            new("WHATSAPP", "WhatsApp", "Aquisição via WhatsApp", 1),
-            new("FRIENDS", "Amigos", "Indicação de amigos", 1),
-            new("EVENTS", "Eventos", "Aquisição em eventos", 1),
-            new("TV", "Televisão", "Aquisição via televisão", 1),
-            new("RADIO", "Rádio", "Aquisição via rádio", 1),
-            new("NEWSPAPER", "Jornal", "Aquisição via jornal", 1),
-            new("MAGAZINE", "Revista", "Aquisição via revista", 1),
-            new("OTHER", "Outro", "Outras formas de aquisição", 1),
+            new("Instagram", "Aquisição via Instagram", 1),
+            new("Facebook", "Aquisição via Facebook", 1),
+            new("LinkedIn", "Aquisição via LinkedIn", 1),
+            new("Google", "Aquisição via Google", 1),
+            new("WhatsApp", "Aquisição via WhatsApp", 1),
+            new("Amigos", "Indicação de amigos", 1),
+            new("Eventos", "Aquisição em eventos", 1),
+            new("Televisão", "Aquisição via televisão", 1),
+            new("Rádio", "Aquisição via rádio", 1),
+            new("Jornal", "Aquisição via jornal", 1),
+            new("Revista", "Aquisição via revista", 1),
+            new("Outro", "Outras formas de aquisição", 1),
         };
 
         _context.Set<AcquisitionSourceTypeEntity>().AddRange(seeds);
@@ -62,15 +62,15 @@ public class DatabaseSeeder
 
         var seeds = new List<ConsentOriginTypeEntity>
         {
-            new("WEB", "Web", "Consentimento obtido via website", 1),
-            new("MOBILE", "Mobile", "Consentimento obtido via aplicativo móvel", 1),
-            new("PAPER", "Papel", "Consentimento obtido em formulário físico", 1),
-            new("API", "API", "Consentimento obtido via integração de API", 1),
-            new("BACKOFFICE", "Backoffice", "Consentimento registrado pelo backoffice", 1),
-            new("EMAIL", "E-mail", "Consentimento obtido via e-mail", 1),
-            new("SMS", "SMS", "Consentimento obtido via SMS", 1),
-            new("WHATSAPP", "WhatsApp", "Consentimento obtido via WhatsApp", 1),
-            new("CALLCENTER", "Call Center", "Consentimento obtido via call center", 1),
+            new("Web", "Consentimento obtido via website", 1),
+            new("Mobile", "Consentimento obtido via aplicativo móvel", 1),
+            new("Papel", "Consentimento obtido em formulário físico", 1),
+            new("API", "Consentimento obtido via integração de API", 1),
+            new("Backoffice", "Consentimento registrado pelo backoffice", 1),
+            new("E-mail", "Consentimento obtido via e-mail", 1),
+            new("SMS", "Consentimento obtido via SMS", 1),
+            new("WhatsApp", "Consentimento obtido via WhatsApp", 1),
+            new("Call Center", "Consentimento obtido via call center", 1),
         };
 
         _context.Set<ConsentOriginTypeEntity>().AddRange(seeds);

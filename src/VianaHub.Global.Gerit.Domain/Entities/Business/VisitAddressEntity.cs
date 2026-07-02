@@ -4,24 +4,24 @@ using VianaHub.Global.Gerit.Domain.Entities.Billing;
 namespace VianaHub.Global.Gerit.Domain.Entities.Business;
 
 /// <summary>
-/// Entidade que representa um endereço da Intervenção
+/// Entidade que representa um endereï¿½o da Intervenï¿½ï¿½o
 /// </summary>
 public class VisitAddressEntity : Entity
 {
     public int TenantId { get; private set; }
     public int VisitId { get; private set; }
     public int AddressTypeId { get; private set; }
-    public string CountryCode { get; private set; }
-    public string Street { get; private set; }
-    public string StreetNumber { get; private set; }
-    public string Complement { get; private set; }
-    public string Neighborhood { get; private set; }
-    public string City { get; private set; }
-    public string District { get; private set; }
-    public string PostalCode { get; private set; }
+    public string? CountryCode { get; private set; }
+    public string? Street { get; private set; }
+    public string? StreetNumber { get; private set; }
+    public string? Complement { get; private set; }
+    public string? Neighborhood { get; private set; }
+    public string? City { get; private set; }
+    public string? District { get; private set; }
+    public string? PostalCode { get; private set; }
     public decimal? Latitude { get; private set; }
     public decimal? Longitude { get; private set; }
-    public string Note { get; private set; }
+    public string? Note { get; private set; }
     public bool IsPrimary { get; private set; }
     public bool IsActive { get; private set; }
     public bool IsDeleted { get; private set; }
@@ -35,7 +35,7 @@ public class VisitAddressEntity : Entity
     protected VisitAddressEntity() { }
 
     /// <summary>
-    /// Construtor para criação de um novo endereço da Intervenção
+    /// Construtor para criaï¿½ï¿½o de um novo endereï¿½o da Intervenï¿½ï¿½o
     /// </summary>
     public VisitAddressEntity(
         int tenantId,
@@ -43,15 +43,15 @@ public class VisitAddressEntity : Entity
         int addressTypeId,
         string countryCode,
         string street,
-        string streetNumber,
-        string complement,
+        string? streetNumber,
+        string? complement,
         string neighborhood,
         string city,
         string district,
         string postalCode,
         decimal? latitude,
         decimal? longitude,
-        string note,
+        string? note,
         bool isPrimary,
         int createdBy)
     {
@@ -80,15 +80,15 @@ public class VisitAddressEntity : Entity
         int addressTypeId,
         string countryCode,
         string street,
-        string streetNumber,
-        string complement,
+        string? streetNumber,
+        string? complement,
         string neighborhood,
         string city,
         string district,
         string postalCode,
         decimal? latitude,
         decimal? longitude,
-        string note,
+        string? note,
         int modifiedBy)
     {
         AddressTypeId = addressTypeId;

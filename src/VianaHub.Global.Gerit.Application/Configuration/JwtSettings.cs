@@ -10,23 +10,23 @@ public class JwtSettings
     /// Emissor do token (issuer).
     /// Identifica quem emitiu o token.
     /// </summary>
-    public string Issuer { get; set; } = "VianaHub.VianaID";
+    public string? Issuer { get; set; } = "VianaHub.VianaID";
 
     /// <summary>
     /// Audiência do token (audience).
     /// Identifica para quem o token foi emitido.
     /// </summary>
-    public string Audience { get; set; } = "VianaHub.VianaID.Api";
+    public string? Audience { get; set; } = "VianaHub.VianaID.Api";
 
     /// <summary>
     /// Múltiplos emissores válidos (para suporte a múltiplos ambientes).
     /// </summary>
-    public string[]? ValidIssuers { get; set; }
+    public string?[]? ValidIssuers { get; set; }
 
     /// <summary>
     /// Múltiplas audiências válidas.
     /// </summary>
-    public string[]? ValidAudiences { get; set; }
+    public string?[]? ValidAudiences { get; set; }
 
     /// <summary>
     /// Tempo de expiração do Access Token em minutos (padrão: 15 minutos).

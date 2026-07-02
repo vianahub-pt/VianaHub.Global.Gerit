@@ -8,12 +8,12 @@ public class UserPreferencesEntity : Entity
     public int TenantId { get; private set; }
     public int UserId { get; private set; }
 
-    public string Appearance { get; private set; }
-    public string CurrencyCode { get; private set; }
-    public string Locale { get; private set; }
-    public string Timezone { get; private set; }
-    public string DateFormat { get; private set; }
-    public string TimeFormat { get; private set; }
+    public string? Appearance { get; private set; }
+    public string? CurrencyCode { get; private set; }
+    public string? Locale { get; private set; }
+    public string? Timezone { get; private set; }
+    public string? DateFormat { get; private set; }
+    public string? TimeFormat { get; private set; }
     public TimeSpan DayStart { get; private set; }
     public TimeSpan DayEnd { get; private set; }
 

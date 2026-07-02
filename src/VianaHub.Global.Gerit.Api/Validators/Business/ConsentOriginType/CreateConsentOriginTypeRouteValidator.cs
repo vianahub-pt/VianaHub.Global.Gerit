@@ -8,10 +8,6 @@ public class CreateConsentOriginTypeRouteValidator : AbstractValidator<CreateCon
 {
     public CreateConsentOriginTypeRouteValidator(ILocalizationService localization)
     {
-        RuleFor(x => x.Code)
-            .NotEmpty().WithMessage(localization.GetMessage("Api.Validator.ConsentOriginType.Create.Code"))
-            .MaximumLength(50).WithMessage(localization.GetMessage("Api.Validator.ConsentOriginType.Create.Code.MaximumLength", 50));
-
         RuleFor(x => x.Name)
             .NotEmpty().WithMessage(localization.GetMessage("Api.Validator.ConsentOriginType.Create.Name"))
             .MaximumLength(100).WithMessage(localization.GetMessage("Api.Validator.ConsentOriginType.Create.Name.MaximumLength", 100));

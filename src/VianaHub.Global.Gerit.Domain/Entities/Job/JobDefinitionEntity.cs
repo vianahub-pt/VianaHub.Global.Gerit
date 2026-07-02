@@ -5,48 +5,48 @@ namespace VianaHub.Global.Gerit.Domain.Entities.Job;
 public class JobDefinitionEntity : Entity, IAggregateRoot
 {
     // Propriedades principais
-    public string JobCategory { get; private set; }
-    public string JobName { get; private set; }
-    public string Description { get; private set; }
-    public string JobPurpose { get; private set; }
-    public string JobType { get; private set; }
-    public string JobMethod { get; private set; }
-    public string CronExpression { get; private set; }
-    public string TimeZoneId { get; private set; }
+    public string? JobCategory { get; private set; }
+    public string? JobName { get; private set; }
+    public string? Description { get; private set; }
+    public string? JobPurpose { get; private set; }
+    public string? JobType { get; private set; }
+    public string? JobMethod { get; private set; }
+    public string? CronExpression { get; private set; }
+    public string? TimeZoneId { get; private set; }
     public bool ExecuteOnlyOnce { get; private set; }
     public int TimeoutMinutes { get; private set; }
     public int Priority { get; private set; }
-    public string Queue { get; private set; }
+    public string? Queue { get; private set; }
     public int MaxRetries { get; private set; }
-    public string JobConfiguration { get; private set; }
+    public string? JobConfiguration { get; private set; }
     public bool IsSystemJob { get; private set; }
-    public string HangfireJobId { get; private set; }
+    public string? HangfireJobId { get; private set; }
     public DateTime? LastRegisteredAt { get; private set; }
 
-    // Estado lógico
+    // Estado lï¿½gico
     public bool IsActive { get; private set; }
     public bool IsDeleted { get; private set; }
 
     // Construtor protegido para EF
     protected JobDefinitionEntity() { }
 
-    // Fábrica de criação com valores padrão conforme regras de negócio
+    // Fï¿½brica de criaï¿½ï¿½o com valores padrï¿½o conforme regras de negï¿½cio
     public JobDefinitionEntity(
         string jobCategory,
         string jobName,
         string jobType,
         int createdBy,
-        string description = null,
-        string jobPurpose = null,
+        string? description = null,
+        string? jobPurpose = null,
         string jobMethod = "Execute",
-        string cronExpression = null,
+        string? cronExpression = null,
         string timeZoneId = "GMT Standard Time",
         bool executeOnlyOnce = false,
         int timeoutMinutes = 5,
         int priority = 5,
         string queue = "default",
         int maxRetries = 3,
-        string jobConfiguration = null,
+        string? jobConfiguration = null,
         bool isSystemJob = false)
         : base()
     {
@@ -74,15 +74,15 @@ public class JobDefinitionEntity : Entity, IAggregateRoot
     }
 
     public void Update(
-        string description,
-        string jobPurpose,
-        string cronExpression,
+        string? description,
+        string? jobPurpose,
+        string? cronExpression,
         string timeZoneId,
         int timeoutMinutes,
         int priority,
         string queue,
         int maxRetries,
-        string jobConfiguration,
+        string? jobConfiguration,
         bool isActive,
         int? modifiedBy)
     {

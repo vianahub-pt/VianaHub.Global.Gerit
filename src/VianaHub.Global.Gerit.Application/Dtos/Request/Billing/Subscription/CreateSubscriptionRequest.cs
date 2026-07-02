@@ -8,5 +8,5 @@ public class CreateSubscriptionRequest
     public DateTime CurrentPeriodEnd { get; set; }
     public DateTime? TrialStart { get; set; }
     public DateTime? TrialEnd { get; set; }
-    public string StripeCustomerId { get; set; }
+    public string? StripeCustomerId { get; set; }
 }

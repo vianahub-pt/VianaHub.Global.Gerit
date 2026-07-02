@@ -4,23 +4,23 @@ using VianaHub.Global.Gerit.Domain.Entities.Business;
 namespace VianaHub.Global.Gerit.Domain.Entities.Billing;
 
 /// <summary>
-/// Entidade que representa um endereço do Tenant
+/// Entidade que representa um endereï¿½o do Tenant
 /// </summary>
 public class TenantAddressEntity : Entity
 {
     public int TenantId { get; private set; }
     public int AddressTypeId { get; private set; }
-    public string CountryCode { get; private set; }
-    public string Street { get; private set; }
-    public string Neighborhood { get; private set; }
-    public string City { get; private set; }
-    public string District { get; private set; }
-    public string PostalCode { get; private set; }
-    public string StreetNumber { get; private set; }
-    public string Complement { get; private set; }
+    public string? CountryCode { get; private set; }
+    public string? Street { get; private set; }
+    public string? Neighborhood { get; private set; }
+    public string? City { get; private set; }
+    public string? District { get; private set; }
+    public string? PostalCode { get; private set; }
+    public string? StreetNumber { get; private set; }
+    public string? Complement { get; private set; }
     public decimal? Latitude { get; private set; }
     public decimal? Longitude { get; private set; }
-    public string Note { get; private set; }
+    public string? Note { get; private set; }
     public bool IsPrimary { get; private set; }
     public bool IsActive { get; private set; }
     public bool IsDeleted { get; private set; }
@@ -33,7 +33,7 @@ public class TenantAddressEntity : Entity
     protected TenantAddressEntity() { }
 
     /// <summary>
-    /// Construtor para criação de um novo endereço do Tenant
+    /// Construtor para criaï¿½ï¿½o de um novo endereï¿½o do Tenant
     /// </summary>
     public TenantAddressEntity(
         int tenantId, 
@@ -42,13 +42,13 @@ public class TenantAddressEntity : Entity
         string street,
         string neighborhood,
         string city, 
-        string district,
+        string? district,
         string postalCode, 
-        string streetNumber,
-        string complement,
+        string? streetNumber,
+        string? complement,
         decimal? latitude,
         decimal? longitude,
-        string note,
+        string? note,
         bool isPrimary, 
         int createdBy)
     {
@@ -78,13 +78,13 @@ public class TenantAddressEntity : Entity
         string street,
         string neighborhood,
         string city, 
-        string district,
+        string? district,
         string postalCode, 
-        string streetNumber,
-        string complement,
+        string? streetNumber,
+        string? complement,
         decimal? latitude,
         decimal? longitude,
-        string note,
+        string? note,
         int modifiedBy)
     {
         AddressTypeId = addressTypeId;

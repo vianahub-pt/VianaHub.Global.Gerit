@@ -4,8 +4,8 @@ public class CreateClientRequest
 {
     public int ClientType { get; set; }
     public int AcquisitionSourceTypeId { get; set; }
-    public string UrlImage { get; set; }
-    public string Note { get; set; }
+    public string? UrlImage { get; set; }
+    public string? Note { get; set; }
 
     public CreateClientIndividualRequest? Individual { get; set; }
     public CreateClientCompanyRequest? Company { get; set; }

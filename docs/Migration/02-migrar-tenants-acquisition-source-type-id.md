@@ -130,7 +130,7 @@ Verifique:
 - Tenant não aceita origem inexistente, inativa ou deletada;
 - TenantType está presente no request/response;
 - response retorna AcquisitionSourceTypeId;
-- se implementado, retorna também Code/Name da origem;
+- se implementado, retorna também Name da origem;
 - mappings EF estão compatíveis;
 - seeders/testes não quebram FK;
 - dotnet build passa;

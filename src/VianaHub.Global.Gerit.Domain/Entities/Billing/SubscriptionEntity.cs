@@ -9,15 +9,15 @@ public class SubscriptionEntity : Entity
 {
     public int TenantId { get; private set; }
     public int PlanId { get; private set; }
-    public string StripeId { get; private set; }
+    public string? StripeId { get; private set; }
     public DateTime CurrentPeriodStart { get; private set; }
     public DateTime CurrentPeriodEnd { get; private set; }
     public DateTime? TrialStart { get; private set; }
     public DateTime? TrialEnd { get; private set; }
     public bool CancelAtPeriodEnd { get; private set; }
     public DateTime? CanceledAt { get; private set; }
-    public string CancellationReason { get; private set; }
-    public string StripeCustomerId { get; private set; }
+    public string? CancellationReason { get; private set; }
+    public string? StripeCustomerId { get; private set; }
     public bool IsActive { get; private set; }
     public bool IsDeleted { get; private set; }
 
@@ -29,7 +29,7 @@ public class SubscriptionEntity : Entity
     protected SubscriptionEntity() { }
 
     /// <summary>
-    /// Construtor para criação de uma nova assinatura
+    /// Construtor para criaï¿½ï¿½o de uma nova assinatura
     /// </summary>
     public SubscriptionEntity(
         int tenantId,
@@ -38,7 +38,7 @@ public class SubscriptionEntity : Entity
         DateTime currentPeriodEnd,
         DateTime? trialStart,
         DateTime? trialEnd,
-        string stripeCustomerId,
+        string? stripeCustomerId,
         int createdBy)
     {
         TenantId = tenantId;

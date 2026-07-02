@@ -20,7 +20,6 @@ Essas tabelas são globais, não possuem `TenantId` e não devem receber filtro 
 Campos esperados:
 
 - `Id`
-- `Code`
 - `Name`
 - `Description`
 - `IsActive`
@@ -32,7 +31,6 @@ Campos esperados:
 
 Tamanhos esperados:
 
-- `Code`: 50
 - `Name`: 100
 - `Description`: 300
 
@@ -88,7 +86,7 @@ Valide o escopo funcional dos novos catálogos globais:
 Defina, de forma objetiva:
 - operações esperadas na API;
 - campos obrigatórios;
-- mensagens de erro esperadas para Code/Name duplicados;
+- mensagens de erro esperadas para Name duplicado;
 - comportamento de ativo/inativo;
 - comportamento de soft delete;
 - se a API deve expor CRUD completo ou apenas listagem/consulta.
@@ -118,7 +116,6 @@ Regras:
 - entidades globais;
 - sem TenantId;
 - sem filtro global por TenantId;
-- Code obrigatório, max 50, único;
 - Name obrigatório, max 100, único;
 - Description max 300;
 - IsActive e IsDeleted conforme padrão do projeto;
@@ -140,29 +137,29 @@ seguindo o padrão da aplicação.
 
 Criar seeders idempotentes:
 AcquisitionSourceTypes:
-- INSTAGRAM
-- FACEBOOK
-- LINKEDIN
-- GOOGLE
-- WHATSAPP
-- FRIENDS
-- EVENTS
-- TV
-- RADIO
-- NEWSPAPER
-- MAGAZINE
-- OTHER
+- Instagram
+- Facebook
+- LinkedIn
+- Google
+- WhatsApp
+- Amigos
+- Eventos
+- Televisão
+- Rádio
+- Jornal
+- Revista
+- Outro
 
 ConsentOriginTypes:
-- WEB
-- MOBILE
-- PAPER
+- Web
+- Mobile
+- Papel
 - API
-- BACKOFFICE
-- EMAIL
+- Backoffice
+- E-mail
 - SMS
-- WHATSAPP
-- CALLCENTER
+- WhatsApp
+- Call Center
 
 Atualizar testes.
 
@@ -180,7 +177,6 @@ Valide o Módulo 1.
 Verifique:
 - endpoints dos catálogos aparecem no Swagger, se aplicável;
 - é possível criar/listar/consultar/atualizar/desativar/remover conforme escopo definido;
-- Code duplicado é rejeitado;
 - Name duplicado é rejeitado;
 - entidades não exigem TenantId;
 - entidades não recebem filtro tenant-scoped;

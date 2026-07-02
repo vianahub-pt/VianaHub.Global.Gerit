@@ -8,17 +8,17 @@ namespace VianaHub.Global.Gerit.Domain.Entities.Business
         public int ClientId { get; private set; }
         public int AddressTypeId { get; private set; }
 
-        public string CountryCode { get; private set; } = null!;
-        public string Street { get; private set; } = null!;
-        public string StreetNumber { get; private set; }
-        public string Complement { get; private set; }
-        public string Neighborhood { get; private set; } = null!;
-        public string City { get; private set; } = null!;
-        public string District { get; private set; }
-        public string PostalCode { get; private set; } = null!;
+        public string? CountryCode { get; private set; } = null!;
+        public string? Street { get; private set; } = null!;
+        public string? StreetNumber { get; private set; }
+        public string? Complement { get; private set; }
+        public string? Neighborhood { get; private set; } = null!;
+        public string? City { get; private set; } = null!;
+        public string? District { get; private set; }
+        public string? PostalCode { get; private set; } = null!;
         public decimal? Latitude { get; private set; }
         public decimal? Longitude { get; private set; }
-        public string Note { get; private set; }
+        public string? Note { get; private set; }
 
         public bool IsPrimary { get; private set; }
         public bool IsActive { get; private set; }
@@ -31,7 +31,7 @@ namespace VianaHub.Global.Gerit.Domain.Entities.Business
         // Construtor protegido para EF Core
         protected ClientAddressEntity() { }
 
-        public ClientAddressEntity(int tenantId, int clientId, int addressTypeId, string countryCode, string street, string streetNumber, string complement, string neighborhood, string city, string district, string postalCode, decimal? latitude, decimal? longitude, string note, bool isPrimary, int createdBy)
+        public ClientAddressEntity(int tenantId, int clientId, int addressTypeId, string countryCode, string street, string? streetNumber, string? complement, string neighborhood, string city, string district, string postalCode, decimal? latitude, decimal? longitude, string? note, bool isPrimary, int createdBy)
         {
             TenantId = tenantId;
             ClientId = clientId;
@@ -56,7 +56,7 @@ namespace VianaHub.Global.Gerit.Domain.Entities.Business
             CreatedAt = DateTime.UtcNow;
         }
 
-        public void Update(int addressTypeId, string countryCode, string street, string streetNumber, string complement, string neighborhood, string city, string district, string postalCode, decimal? latitude, decimal? longitude, string note, bool isPrimary, int modifiedBy)
+        public void Update(int addressTypeId, string countryCode, string street, string? streetNumber, string? complement, string neighborhood, string city, string district, string postalCode, decimal? latitude, decimal? longitude, string? note, bool isPrimary, int modifiedBy)
         {
             AddressTypeId = addressTypeId;
             CountryCode = countryCode;

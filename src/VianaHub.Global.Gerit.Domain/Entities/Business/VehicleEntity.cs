@@ -4,18 +4,18 @@ using VianaHub.Global.Gerit.Domain.Entities.Billing;
 namespace VianaHub.Global.Gerit.Domain.Entities.Business;
 
 /// <summary>
-/// Entidade que representa um Veículo
+/// Entidade que representa um Veï¿½culo
 /// </summary>
 public class VehicleEntity : Entity
 {
     public int TenantId { get; private set; }
     public int StatusId { get; private set; }
-    public string Plate { get; private set; }
-    public string Brand { get; private set; }
-    public string Model { get; private set; }
+    public string? Plate { get; private set; }
+    public string? Brand { get; private set; }
+    public string? Model { get; private set; }
     public int Year { get; private set; }
-    public string Color { get; private set; }
-    public string FuelType { get; private set; }
+    public string? Color { get; private set; }
+    public string? FuelType { get; private set; }
     public bool IsActive { get; private set; }
     public bool IsDeleted { get; private set; }
 
@@ -27,9 +27,9 @@ public class VehicleEntity : Entity
     protected VehicleEntity() { }
 
     /// <summary>
-    /// Construtor para criação de um novo Veículo
+    /// Construtor para criaï¿½ï¿½o de um novo Veï¿½culo
     /// </summary>
-    public VehicleEntity(int tenantId, int statusId, string plate, string brand, string model, int year, string color, string fuelType, int createdBy)
+    public VehicleEntity(int tenantId, int statusId, string plate, string brand, string model, int year, string? color, string? fuelType, int createdBy)
     {
         TenantId = tenantId;
         StatusId = statusId;
@@ -45,7 +45,7 @@ public class VehicleEntity : Entity
         CreatedAt = DateTime.UtcNow;
     }
 
-    public void Update(int statusId, string plate, string brand, string model, int year, string color, string fuelType, int modifiedBy)
+    public void Update(int statusId, string plate, string brand, string model, int year, string? color, string? fuelType, int modifiedBy)
     {
         StatusId = statusId;
         Plate = plate;

@@ -12,8 +12,8 @@ public class VisitEntity : Entity, IAggregateRoot
     public int TenantId { get; private set; }
     public int ClientId { get; private set; }
     public int StatusId { get; private set; }
-    public string Title { get; private set; }
-    public string Description { get; private set; }
+    public string? Title { get; private set; }
+    public string? Description { get; private set; }
     public DateTime StartDateTime { get; private set; }
     public DateTime? EndDateTime { get; private set; }
     public decimal EstimatedValue { get; private set; }

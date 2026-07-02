@@ -19,11 +19,11 @@ public class TenantEntity : Entity, IAggregateRoot
     public TenantType TenantType { get; private set; }
     public int AcquisitionSourceTypeId { get; private set; }
     public AcquisitionSourceTypeEntity AcquisitionSourceType { get; private set; }
-    public string Name { get; private set; }
-    public string Email { get; private set; }
-    public string Website { get; private set; }
-    public string UrlImage { get; private set; }
-    public string Note { get; private set; }
+    public string? Name { get; private set; }
+    public string? Email { get; private set; }
+    public string? Website { get; private set; }
+    public string? UrlImage { get; private set; }
+    public string? Note { get; private set; }
     public bool IsActive { get; private set; }
     public bool IsDeleted { get; private set; }
 
@@ -39,7 +39,7 @@ public class TenantEntity : Entity, IAggregateRoot
     /// <summary>
     /// Construtor para cria��o de um novo Tenant
     /// </summary>
-    public TenantEntity(TenantType tenantType, int acquisitionSourceTypeId, string name, string email, string website, string urlImage, string note, int createdBy)
+    public TenantEntity(TenantType tenantType, int acquisitionSourceTypeId, string name, string email, string? website, string? urlImage, string? note, int createdBy)
     {
         TenantType = tenantType;
         AcquisitionSourceTypeId = acquisitionSourceTypeId;
@@ -54,7 +54,7 @@ public class TenantEntity : Entity, IAggregateRoot
         CreatedAt = DateTime.UtcNow;
     }
 
-    public void Update(TenantType tenantType, int acquisitionSourceTypeId, string name, string email, string website, string urlImage, string note, int modifiedBy)
+    public void Update(TenantType tenantType, int acquisitionSourceTypeId, string name, string email, string? website, string? urlImage, string? note, int modifiedBy)
     {
         TenantType = tenantType;
         AcquisitionSourceTypeId = acquisitionSourceTypeId;

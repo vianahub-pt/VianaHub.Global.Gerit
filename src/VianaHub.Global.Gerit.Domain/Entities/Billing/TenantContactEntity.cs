@@ -8,9 +8,9 @@ namespace VianaHub.Global.Gerit.Domain.Entities.Billing;
 public class TenantContactEntity : Entity
 {
     public int TenantId { get; private set; }
-    public string Name { get; private set; }
-    public string Email { get; private set; }
-    public string Phone { get; private set; }
+    public string? Name { get; private set; }
+    public string? Email { get; private set; }
+    public string? Phone { get; private set; }
     public bool IsPrimary { get; private set; }
     public bool IsActive { get; private set; }
     public bool IsDeleted { get; private set; }
@@ -22,9 +22,9 @@ public class TenantContactEntity : Entity
     protected TenantContactEntity() { }
 
     /// <summary>
-    /// Construtor para criação de um novo contato do Tenant
+    /// Construtor para criaï¿½ï¿½o de um novo contato do Tenant
     /// </summary>
-    public TenantContactEntity(int tenantId, string name, string email, string phone, bool isPrimary, int createdBy)
+    public TenantContactEntity(int tenantId, string name, string email, string? phone, bool isPrimary, int createdBy)
     {
         TenantId = tenantId;
         Name = name;
@@ -37,7 +37,7 @@ public class TenantContactEntity : Entity
         CreatedAt = DateTime.UtcNow;
     }
 
-    public void Update(string name, string email, string phone, int modifiedBy)
+    public void Update(string name, string email, string? phone, int modifiedBy)
     {
         Name = name;
         Email = email;

@@ -11,17 +11,17 @@ public class EmployeeAddressEntity : Entity
     public int TenantId { get; private set; }
     public int EmployeeId { get; private set; }
     public int AddressTypeId { get; private set; }
-    public string CountryCode { get; private set; }
-    public string Street { get; private set; }
-    public string Neighborhood { get; private set; }
-    public string City { get; private set; }
-    public string District { get; private set; }
-    public string PostalCode { get; private set; }
-    public string StreetNumber { get; private set; }
-    public string Complement { get; private set; }
+    public string? CountryCode { get; private set; }
+    public string? Street { get; private set; }
+    public string? Neighborhood { get; private set; }
+    public string? City { get; private set; }
+    public string? District { get; private set; }
+    public string? PostalCode { get; private set; }
+    public string? StreetNumber { get; private set; }
+    public string? Complement { get; private set; }
     public decimal? Latitude { get; private set; }
     public decimal? Longitude { get; private set; }
-    public string Note { get; private set; }
+    public string? Note { get; private set; }
     public bool IsPrimary { get; private set; }
     public bool IsActive { get; private set; }
     public bool IsDeleted { get; private set; }
@@ -43,15 +43,15 @@ public class EmployeeAddressEntity : Entity
         int addressTypeId,
         string countryCode,
         string street,
-        string streetNumber,
-        string complement,
+        string? streetNumber,
+        string? complement,
         string neighborhood,
         string city, 
         string district,
         string postalCode,
         decimal? latitude,
         decimal? longitude,
-        string note,
+        string? note,
         bool isPrimary, 
         int createdBy)
     {
@@ -80,15 +80,15 @@ public class EmployeeAddressEntity : Entity
         int addressTypeId,
         string countryCode,
         string street,
-        string streetNumber,
-        string complement,
+        string? streetNumber,
+        string? complement,
         string neighborhood,
         string city,
         string district,
         string postalCode,
         decimal? latitude,
         decimal? longitude,
-        string note,
+        string? note,
         int modifiedBy)
     {
         AddressTypeId = addressTypeId;

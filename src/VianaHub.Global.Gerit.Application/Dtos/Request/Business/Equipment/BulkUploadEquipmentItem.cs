@@ -6,6 +6,6 @@ public class BulkUploadEquipmentItem
 {
     public int EquipmentTypeId { get; set; }
     public int StatusId { get; set; }
-    public string Name { get; set; }
-    public string SerialNumber { get; set; }
+    public string? Name { get; set; }
+    public string? SerialNumber { get; set; }
 }
