@@ -2,7 +2,7 @@ namespace VianaHub.Global.Gerit.Application.Dtos.Request.Business.AttachmentCate
 
 public record UpdateAttachmentCategoryRequest
 {
-    public string Name { get; init; }
-    public string Description { get; init; }
+    public string? Name { get; init; }
+    public string? Description { get; init; }
     public int DisplayOrder { get; init; }
 }

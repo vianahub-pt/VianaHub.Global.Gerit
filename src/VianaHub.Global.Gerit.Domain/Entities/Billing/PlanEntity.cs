@@ -7,13 +7,13 @@ namespace VianaHub.Global.Gerit.Domain.Entities.Billing;
 /// </summary>
 public class PlanEntity : Entity
 {
-    public string Name { get; private set; }
+    public string? Name { get; private set; }
     public string? Description { get; set; }
     public decimal? PricePerHour { get; set; }
     public decimal? PricePerDay { get; set; }
     public decimal? PricePerMonth { get; set; }
     public decimal? PricePerYear { get; set; }
-    public string Currency { get; private set; }
+    public string? Currency { get; private set; }
     public int MaxUsers { get; private set; }
     public int MaxPhotosPerVisits { get; private set; }
     public bool IsActive { get; private set; }

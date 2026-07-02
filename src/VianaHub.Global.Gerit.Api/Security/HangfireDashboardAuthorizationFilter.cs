@@ -24,12 +24,12 @@ public class HangfireDashboardSettings
     /// <summary>
     /// Utilizador para Basic Auth.
     /// </summary>
-    public string Username { get; set; } = "hangfire";
+    public string? Username { get; set; } = "hangfire";
 
     /// <summary>
     /// Password para Basic Auth.
     /// </summary>
-    public string Password { get; set; } = "changeme";
+    public string? Password { get; set; } = "changeme";
 }
 
 /// <summary>

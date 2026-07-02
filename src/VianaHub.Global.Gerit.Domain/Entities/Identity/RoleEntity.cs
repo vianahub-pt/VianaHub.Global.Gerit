@@ -9,8 +9,8 @@ namespace VianaHub.Global.Gerit.Domain.Entities.Identity;
 public class RoleEntity : Entity
 {
     public int TenantId { get; private set; }
-    public string Name { get; private set; }
-    public string Description { get; private set; }
+    public string? Name { get; private set; }
+    public string? Description { get; private set; }
     public bool IsActive { get; private set; }
     public bool IsDeleted { get; private set; }
 

@@ -9,7 +9,7 @@ public class RefreshTokenEntity : Entity
 {
     public int TenantId { get; private set; }
     public int UserId { get; private set; }
-    public string Token { get; private set; }
+    public string? Token { get; private set; }
     public DateTime ExpiresAt { get; private set; }
     public DateTime? RevokedAt { get; private set; }
     public int? RevokedBy { get; private set; }

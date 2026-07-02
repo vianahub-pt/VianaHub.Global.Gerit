@@ -8,7 +8,7 @@ public class ErrorResponse
     /// <summary>
     /// Título do erro
     /// </summary>
-    public string Title { get; set; } = string.Empty;
+    public string? Title { get; set; } = string.Empty;
 
     /// <summary>
     /// Dicionário de erros agrupados por campo/propriedade

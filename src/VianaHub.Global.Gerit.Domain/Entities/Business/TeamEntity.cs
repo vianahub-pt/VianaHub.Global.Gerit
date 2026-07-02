@@ -6,8 +6,8 @@ namespace VianaHub.Global.Gerit.Domain.Entities.Business;
 public class TeamEntity : Entity
 {
     public int TenantId { get; private set; }
-    public string Name { get; private set; }
-    public string Description { get; private set; }
+    public string? Name { get; private set; }
+    public string? Description { get; private set; }
     public bool IsActive { get; private set; }
     public bool IsDeleted { get; private set; }
 

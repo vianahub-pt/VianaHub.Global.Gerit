@@ -13,5 +13,5 @@ public class ImportActionFileRequest
     /// <summary>
     /// Content Type do request
     /// </summary>
-    public string ContentType { get; set; }
+    public string? ContentType { get; set; }
 }

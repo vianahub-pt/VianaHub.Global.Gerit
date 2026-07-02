@@ -7,11 +7,11 @@ public class JwtKeyEntity : Entity
 {
     public int TenantId { get; private set; }
     public Guid KeyId { get; private set; }
-    public string PublicKey { get; private set; }
-    public string PrivateKeyEncrypted { get; private set; }
-    public string Algorithm { get; private set; }
+    public string? PublicKey { get; private set; }
+    public string? PrivateKeyEncrypted { get; private set; }
+    public string? Algorithm { get; private set; }
     public int KeySize { get; private set; }
-    public string KeyType { get; private set; }
+    public string? KeyType { get; private set; }
     public string? RevokedReason { get; private set; }
     public long UsageCount { get; private set; }
     public DateTime? ActivatedAt { get; private set; }
@@ -28,7 +28,7 @@ public class JwtKeyEntity : Entity
     public bool IsDeleted { get; private set; }
 
     // Propriedade temporária para retornar a chave privada descriptografada (nunca persiste)
-    public string PlainPrivateKey { get; private set; }
+    public string? PlainPrivateKey { get; private set; }
 
     private JwtKeyEntity()
     {

@@ -6,9 +6,9 @@ public class ClientIndividualEntity : Entity
 {
     public int TenantId { get; private set; }
     public int ClientId { get; private set; }
-    public string FullName { get; private set; }
-    public string FirstName { get; private set; }
-    public string LastName { get; private set; }
+    public string? FullName { get; private set; }
+    public string? FirstName { get; private set; }
+    public string? LastName { get; private set; }
     public string? PhoneNumber { get; private set; }
     public string? CellPhoneNumber { get; private set; }
     public bool IsWhatsapp { get; private set; }

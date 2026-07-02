@@ -4,8 +4,8 @@ namespace VianaHub.Global.Gerit.Domain.Entities.Business;
 
 public class FileTypeEntity : Entity
 {
-    public string MimeType { get; private set; }
-    public string Extension { get; private set; }
+    public string? MimeType { get; private set; }
+    public string? Extension { get; private set; }
     public bool IsActive { get; private set; }
     public bool IsDeleted { get; private set; }
 
