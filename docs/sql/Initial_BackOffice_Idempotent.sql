@@ -197,7 +197,16 @@ FROM (VALUES
     (N'GetActivate', N'Obter registros ativos.'),
     (N'GetExpiring', N'Obter registros expirando.'),
     (N'Cancel', N'Cancelar operação ou entidade.'),
-    (N'Renew', N'Renovar contrato, assinatura ou entidade.')
+    (N'Renew', N'Renovar contrato, assinatura ou entidade.'),
+    (N'GetByParent', N'Obter registros por identificador do pai.'),
+    (N'GetByChild', N'Obter registros por identificador do filho.'),
+    (N'GetByEmployee', N'Obter registros por identificador do colaborador.'),
+    (N'GetByVisitTeam', N'Obter registros por equipa da visita.'),
+    (N'GetActiveByVisitTeam', N'Obter registros ativos por equipa da visita.'),
+    (N'GetActive', N'Obter registros ativos.'),
+    (N'Read', N'Ler registro ou recurso.'),
+    (N'Revoke', N'Revogar token, chave ou permissão.'),
+    (N'SetPrimary', N'Definir como registro primário.')
 ) AS v(Name, Description)
 WHERE NOT EXISTS (
     SELECT 1 FROM dbo.Actions a WHERE a.Name = v.Name
