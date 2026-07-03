@@ -43,7 +43,7 @@ public static class ClientHierarchyEndpoint
             var response = await appService.GetByParentClientIdAsync(parentClientId, ct);
             return notify.CustomResponse(response);
         })
-        .CustomAuthorize("Admin,BackOffice,Manager", "ClientHierarchy", "GetByParent")
+        .CustomAuthorize("Admin,BackOffice,Manager", "ClientHierarchy", "GetBy")
         .WithName("GetClientHierarchyByParentClientId")
         .WithSummary("Swagger.Endpoint.ClientHierarchy.GetByParentClientId.Summary")
         .Produces(StatusCodes.Status200OK)
@@ -54,7 +54,7 @@ public static class ClientHierarchyEndpoint
             var response = await appService.GetByChildClientIdAsync(childClientId, ct);
             return notify.CustomResponse(response);
         })
-        .CustomAuthorize("Admin,BackOffice,Manager", "ClientHierarchy", "GetByChild")
+        .CustomAuthorize("Admin,BackOffice,Manager", "ClientHierarchy", "GetBy")
         .WithName("GetClientHierarchyByChildClientId")
         .WithSummary("Swagger.Endpoint.ClientHierarchy.GetByChildClientId.Summary")
         .Produces(StatusCodes.Status200OK)
