@@ -3,6 +3,8 @@ using VianaHub.Global.Gerit.Api.Endpoints.Base;
 using VianaHub.Global.Gerit.Api.Helpers;
 using VianaHub.Global.Gerit.Application.Dtos.Base;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Business.ClientConsents;
+using VianaHub.Global.Gerit.Application.Dtos.Response.Business.Client;
+using VianaHub.Global.Gerit.Application.Dtos.Response.Business.ClientConsents;
 using VianaHub.Global.Gerit.Application.Interfaces.Business;
 using VianaHub.Global.Gerit.Domain.Tools.Notifications;
 
@@ -23,7 +25,7 @@ public static class ClientConsentEndpoint
         .CustomAuthorize("Admin,BackOffice,Manager", "ClientConsents", "GetAll")
         .WithName("GetClientConsents")
         .WithSummary("Swagger.Endpoint.ClientConsents.GetAll.Summary")
-        .Produces(StatusCodes.Status200OK)
+        .Produces<IEnumerable<ClientConsentResponse>>(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
         groupV1.MapGet("/{clientId}/consents/{id}", async ([FromRoute] int clientId, [FromRoute] int id, [FromServices] IClientConsentsAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
@@ -34,7 +36,7 @@ public static class ClientConsentEndpoint
         .CustomAuthorize("Admin,BackOffice,Manager", "ClientConsents", "GetBy")
         .WithName("GetClientConsentsById")
         .WithSummary("Swagger.Endpoint.ClientConsents.GetById.Summary")
-        .Produces(StatusCodes.Status200OK)
+        .Produces<ClientConsentDetailResponse>(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
@@ -46,7 +48,7 @@ public static class ClientConsentEndpoint
         .CustomAuthorize("Admin,BackOffice,Manager", "ClientConsents", "GetPaged")
         .WithName("GetClientConsentsPaged")
         .WithSummary("Swagger.Endpoint.ClientConsents.GetPaged.Summary")
-        .Produces(StatusCodes.Status200OK)
+        .Produces<ListPageResponse<ClientConsentResponse>>(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
         groupV1.MapPost("/{clientId}/consents", async ([FromRoute] int clientId, [FromBody] CreateClientConsentsRequest request, [FromServices] IClientConsentsAppService appService, [FromServices] INotify notify, CancellationToken ct) =>

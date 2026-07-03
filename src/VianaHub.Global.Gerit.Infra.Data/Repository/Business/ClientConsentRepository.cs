@@ -25,13 +25,14 @@ public class ClientConsentRepository : IClientConsentsDataRepository
             .ThenInclude(x => x.Individual)
             .Include(x => x.Client)
             .ThenInclude(x => x.Company)
+            .Include(x => x.ConsentType)
             .Include(x => x.ConsentOriginType)
             .Where(x => x.ClientId == clientId && !x.IsDeleted)
             .OrderByDescending(x => x.GrantedDate)
             .ToListAsync(ct);
     }
 
-    public async Task<ClientConsentsEntity> GetByIdAsync(int clientId, int id, CancellationToken ct = default)
+    public async Task<ClientConsentsEntity?> GetByIdAsync(int clientId, int id, CancellationToken ct = default)
     {
         return await _context.Set<ClientConsentsEntity>()
             .AsNoTracking()
@@ -40,6 +41,7 @@ public class ClientConsentRepository : IClientConsentsDataRepository
             .ThenInclude(x => x.Individual)
             .Include(x => x.Client)
             .ThenInclude(x => x.Company)
+            .Include(x => x.ConsentType)
             .Include(x => x.ConsentOriginType)
             .Where(x => x.ClientId == clientId && x.Id == id && !x.IsDeleted)
             .FirstOrDefaultAsync(ct);
@@ -54,14 +56,16 @@ public class ClientConsentRepository : IClientConsentsDataRepository
             .ThenInclude(x => x.Individual)
             .Include(x => x.Client)
             .ThenInclude(x => x.Company)
+            .Include(x => x.ConsentType)
             .Include(x => x.ConsentOriginType)
             .Where(x => x.ClientId == clientId && !x.IsDeleted);
 
         if (!string.IsNullOrWhiteSpace(filter.Search))
         {
+            var search = filter.Search.Trim().ToLower();
             query = query.Where(x =>
-                x.ConsentType.Name.Contains(filter.Search) ||
-                x.ConsentOriginType.Name.Contains(filter.Search));
+                (EF.Functions.Like(x.ConsentType.Name, $"%{search}%")) ||
+                (EF.Functions.Like(x.ConsentOriginType.Name, $"%{search}%")));
         }
 
         var totalCount = await query.CountAsync(ct);

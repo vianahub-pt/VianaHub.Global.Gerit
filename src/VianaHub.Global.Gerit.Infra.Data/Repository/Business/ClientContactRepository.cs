@@ -30,7 +30,7 @@ public class ClientContactRepository : IClientContactDataRepository
             .ToListAsync(ct);
     }
 
-    public async Task<ClientContactEntity> GetByIdAsync(int clientId, int id, CancellationToken ct)
+    public async Task<ClientContactEntity?> GetByIdAsync(int clientId, int id, CancellationToken ct)
     {
         return await _context.ClientContacts
             .AsNoTracking()
