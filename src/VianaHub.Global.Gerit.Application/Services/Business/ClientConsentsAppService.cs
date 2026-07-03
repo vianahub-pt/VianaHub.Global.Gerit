@@ -40,13 +40,13 @@ public class ClientConsentsAppService : IClientConsentsAppService
         UserId = _currentUser.GetUserId();
     }
 
-    public async Task<IEnumerable<ClientConsentsResponse>> GetAllAsync(int clientId, CancellationToken ct)
+    public async Task<IEnumerable<ClientConsentResponse>> GetAllAsync(int clientId, CancellationToken ct)
     {
         var entities = await _repo.GetAllAsync(clientId, ct);
-        return _mapper.Map<IEnumerable<ClientConsentsResponse>>(entities);
+        return _mapper.Map<IEnumerable<ClientConsentResponse>>(entities);
     }
 
-    public async Task<ClientConsentsResponse> GetByIdAsync(int clientId, int id, CancellationToken ct)
+    public async Task<ClientConsentDetailResponse> GetByIdAsync(int clientId, int id, CancellationToken ct)
     {
         var entity = await _repo.GetByIdAsync(clientId, id, ct);
         if (entity == null || entity.IsDeleted || !entity.IsActive)
@@ -54,14 +54,14 @@ public class ClientConsentsAppService : IClientConsentsAppService
             _notify.Add(_localization.GetMessage("Application.Service.ClientConsents.GetById.ResourceNotFound"), 410);
             return null;
         }
-        return _mapper.Map<ClientConsentsResponse>(entity);
+        return _mapper.Map<ClientConsentDetailResponse>(entity);
     }
 
-    public async Task<ListPageResponse<ClientConsentsResponse>> GetPagedAsync(int clientId, PagedFilterRequest request, CancellationToken ct)
+    public async Task<ListPageResponse<ClientConsentResponse>> GetPagedAsync(int clientId, PagedFilterRequest request, CancellationToken ct)
     {
         var filter = new PagedFilter(request.Search, request.IsActive, request.PageNumber, request.PageSize, request.SortBy, request.SortDirection);
         var paged = await _repo.GetPagedAsync(clientId, filter, ct);
-        return _mapper.Map<ListPageResponse<ClientConsentsResponse>>(paged);
+        return _mapper.Map<ListPageResponse<ClientConsentResponse>>(paged);
     }
 
     public async Task<int> CreateAsync(int clientId, CreateClientConsentsRequest request, CancellationToken ct)
