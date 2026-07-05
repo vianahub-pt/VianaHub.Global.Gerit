@@ -76,7 +76,6 @@ using VianaHub.Global.Gerit.Domain.Validators.Business.AttachmentCategory;
 using VianaHub.Global.Gerit.Domain.Validators.Business.VisitAttachment;
 using VianaHub.Global.Gerit.Domain.Validators.Business.ClientIndividual;
 using VianaHub.Global.Gerit.Domain.Validators.Business.ClientCompany;
-using VianaHub.Global.Gerit.Domain.Validators.Business.ClientHierarchy;
 using VianaHub.Global.Gerit.Domain.Validators.Business.ClientConsents;
 using VianaHub.Global.Gerit.Domain.Validators.Business.ClientFiscalData;
 
@@ -143,7 +142,6 @@ public static class DependencyInjection
         services.AddScoped<IEntityDomainValidator<VisitAttachmentEntity>, VisitAttachmentValidator>();
         services.AddScoped<IEntityDomainValidator<ClientIndividualEntity>, ClientIndividualValidator>();
         services.AddScoped<IEntityDomainValidator<ClientCompanyEntity>, ClientCompanyValidator>();
-        services.AddScoped<IEntityDomainValidator<ClientHierarchyEntity>, ClientHierarchyValidator>();
         services.AddScoped<IEntityDomainValidator<ClientConsentsEntity>, ClientConsentsValidator>();
         services.AddScoped<IEntityDomainValidator<ClientFiscalDataEntity>, ClientFiscalDataValidator>();
 
@@ -172,7 +170,6 @@ public static class DependencyInjection
         services.AddScoped<IVisitTeamEmployeeAppService, VisitTeamEmployeeAppService>();
         services.AddScoped<IAttachmentCategoryAppService, AttachmentCategoryAppService>();
         services.AddScoped<IVisitAttachmentAppService, VisitAttachmentAppService>();
-        services.AddScoped<IClientHierarchyAppService, ClientHierarchyAppService>();
         services.AddScoped<IClientAppService, ClientAppService>();
         services.AddScoped<IClientAddressAppService, ClientAddressAppService>();
         services.AddScoped<IClientContactAppService, ClientContactAppService>();
@@ -233,7 +230,6 @@ public static class DependencyInjection
         services.AddScoped<IVisitTeamEquipmentDomainService, VisitTeamEquipmentDomainService>();
         services.AddScoped<IAttachmentCategoryDomainService, AttachmentCategoryDomainService>();
         services.AddScoped<IVisitAttachmentDomainService, VisitAttachmentDomainService>();
-        services.AddScoped<IClientHierarchyDomainService, ClientHierarchyDomainService>();
         services.AddScoped<IClientConsentsDomainService, ClientConsentsDomainService>();
         services.AddScoped<IClientFiscalDataDomainService, ClientFiscalDataDomainService>();
 
@@ -257,7 +253,6 @@ public static class DependencyInjection
         services.AddScoped<IClientAddressDataRepository, ClientAddressRepository>();
         services.AddScoped<IClientFiscalDataDataRepository, ClientFiscalDataDataRepository>();
         services.AddScoped<IClientConsentsDataRepository, ClientConsentRepository>();
-        services.AddScoped<IClientHierarchyDataRepository, ClientHierarchyRepository>();
         services.AddScoped<IVisitContactDataRepository, VisitContactDataRepository>();
         services.AddScoped<IVisitAddressDataRepository, VisitAddressDataRepository>();
         services.AddScoped<IStatusDataRepository, StatusDataRepository>();

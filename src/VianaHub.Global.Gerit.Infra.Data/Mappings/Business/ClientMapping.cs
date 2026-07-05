@@ -119,20 +119,6 @@ public class ClientMapping : IEntityTypeConfiguration<ClientEntity>
             .HasPrincipalKey(c => new { c.Id, c.TenantId })
             .HasConstraintName("FK_ClientConsents_Client")
             .OnDelete(DeleteBehavior.Restrict);
-
-        builder.HasMany(x => x.ChildHierarchies)
-            .WithOne(h => h.ParentClient)
-            .HasForeignKey(h => new { h.ParentId, h.TenantId })
-            .HasPrincipalKey(c => new { c.Id, c.TenantId })
-            .HasConstraintName("FK_ClientHierarchies_ParentClient")
-            .OnDelete(DeleteBehavior.Restrict);
-
-        builder.HasMany(x => x.ParentHierarchies)
-            .WithOne(h => h.ChildClient)
-            .HasForeignKey(h => new { h.ChildId, h.TenantId })
-            .HasPrincipalKey(c => new { c.Id, c.TenantId })
-            .HasConstraintName("FK_ClientHierarchies_ChildClient")
-            .OnDelete(DeleteBehavior.Restrict);
     }
 }
 

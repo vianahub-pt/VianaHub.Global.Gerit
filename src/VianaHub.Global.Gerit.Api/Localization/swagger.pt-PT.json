@@ -506,17 +506,6 @@
   "Swagger.Endpoint.ClientConsents.Revoke.Summary": "Revogar consentimento de cliente",
   "Swagger.Endpoint.ClientConsents.Grant.Summary": "Conceder consentimento de cliente",
 
-  "Swagger.Endpoint.ClientHierarchy.GetAll.Summary": "Obter todas as hierarquias de clientes",
-  "Swagger.Endpoint.ClientHierarchy.GetById.Summary": "Obter hierarquia de clientes por ID",
-  "Swagger.Endpoint.ClientHierarchy.GetByParentClientId.Summary": "Obter hierarquias por ID de cliente pai",
-  "Swagger.Endpoint.ClientHierarchy.GetByChildClientId.Summary": "Obter hierarquias por ID de cliente filho",
-  "Swagger.Endpoint.ClientHierarchy.GetPaged.Summary": "Obter hierarquias de clientes paginadas",
-  "Swagger.Endpoint.ClientHierarchy.Create.Summary": "Criar nova hierarquia de clientes",
-  "Swagger.Endpoint.ClientHierarchy.Update.Summary": "Atualizar hierarquia de clientes",
-  "Swagger.Endpoint.ClientHierarchy.Delete.Summary": "Eliminar hierarquia de clientes",
-  "Swagger.Endpoint.ClientHierarchy.Activate.Summary": "Ativar hierarquia de clientes",
-  "Swagger.Endpoint.ClientHierarchy.Deactivate.Summary": "Desativar hierarquia de clientes",
-
   "Swagger.Endpoint.FileType.GetAll.Summary": "Obter todos os tipos de ficheiro",
   "Swagger.Endpoint.FileType.GetById.Summary": "Obter tipo de ficheiro por ID",
   "Swagger.Endpoint.FileType.GetPaged.Summary": "Obter tipos de ficheiro paginados",

@@ -508,17 +508,6 @@
   "Swagger.Endpoint.ClientConsents.Revoke.Summary": "Revoke client consent",
   "Swagger.Endpoint.ClientConsents.Grant.Summary": "Grant client consent",
 
-  "Swagger.Endpoint.ClientHierarchy.GetAll.Summary": "Get all client hierarchies",
-  "Swagger.Endpoint.ClientHierarchy.GetById.Summary": "Get client hierarchy by ID",
-  "Swagger.Endpoint.ClientHierarchy.GetByParentClientId.Summary": "Get hierarchies by parent client ID",
-  "Swagger.Endpoint.ClientHierarchy.GetByChildClientId.Summary": "Get hierarchies by child client ID",
-  "Swagger.Endpoint.ClientHierarchy.GetPaged.Summary": "Get client hierarchies paged",
-  "Swagger.Endpoint.ClientHierarchy.Create.Summary": "Create new client hierarchy",
-  "Swagger.Endpoint.ClientHierarchy.Update.Summary": "Update client hierarchy",
-  "Swagger.Endpoint.ClientHierarchy.Delete.Summary": "Delete client hierarchy",
-  "Swagger.Endpoint.ClientHierarchy.Activate.Summary": "Activate client hierarchy",
-  "Swagger.Endpoint.ClientHierarchy.Deactivate.Summary": "Deactivate client hierarchy",
-
   "Swagger.Endpoint.FileType.GetAll.Summary": "Get all file types",
   "Swagger.Endpoint.FileType.GetById.Summary": "Get file type by ID",
   "Swagger.Endpoint.FileType.GetPaged.Summary": "Get file types paged",
