@@ -655,26 +655,6 @@ CREATE TABLE dbo.ClientFiscalData (                                             
     CONSTRAINT FK_ClientFiscalData_Client FOREIGN KEY (ClientId, TenantId) REFERENCES dbo.Clients(Id, TenantId) -- FK para Clients
 );
 GO
-CREATE TABLE dbo.ClientHierarchy (                                                      -- Hierarquia entre clientes
-    Id                  INT IDENTITY(1,1)   NOT NULL,                                   -- Identificador da rela��o, chave prim�ria
-    TenantId            INT                 NOT NULL,                                   -- Tenant dono
-    ParentClientId      INT                 NOT NULL,                                   -- Cliente pai
-    ChildClientId       INT                 NOT NULL,                                   -- Cliente filho
-    RelationshipType    INT                 NOT NULL,                                   -- 1=Branch,2=Subsidiary
-    IsActive            BIT                 NOT NULL DEFAULT 1,                         -- Flag de ativo
-    IsDeleted           BIT                 NOT NULL DEFAULT 0,                         -- Soft delete
-    CreatedBy           INT                 NOT NULL,                                   -- Usu�rio criador
-    CreatedAt           DATETIME2(7)        NOT NULL DEFAULT SYSDATETIME(),             -- Data de cria��o
-    ModifiedBy          INT                     NULL,                                   -- Usu�rio modificador
-    ModifiedAt          DATETIME2(7)            NULL,                                   -- Data de modifica��o
-    CONSTRAINT PK_ClientHierarchy PRIMARY KEY CLUSTERED (Id),                           -- PK
-    CONSTRAINT CK_ClientHierarchy_Active_Deleted CHECK (NOT (IsActive = 1 AND IsDeleted = 1)),                          -- Garantir que uma rela��o n�o pode ser ativa e deletada ao mesmo tempo
-    CONSTRAINT UQ_ClientHierarchy_Id_Tenant UNIQUE (Id, TenantId),                                                      -- Garantir que o Id � �nico dentro do tenant (para FKs compostas)
-    CONSTRAINT FK_ClientHierarchy_Tenant FOREIGN KEY (TenantId) REFERENCES dbo.Tenants(Id),                             -- FK para tenant
-    CONSTRAINT FK_ClientHierarchy_Parent FOREIGN KEY (ParentClientId, TenantId) REFERENCES dbo.Clients(Id, TenantId),   -- FK para cliente pai
-    CONSTRAINT FK_ClientHierarchy_Child FOREIGN KEY (ChildClientId, TenantId) REFERENCES dbo.Clients(Id, TenantId)      -- FK para cliente filho
-);
-GO
 CREATE TABLE dbo.ClientConsents (
     Id                  INT IDENTITY(1,1)   NOT NULL,                                   -- Identificador do consentimento, chave prim�ria
     TenantId            INT                 NOT NULL,                                   -- Tenant dono
@@ -1082,7 +1062,6 @@ CREATE UNIQUE INDEX UX_ClientContacts_Email_Active                              
 CREATE UNIQUE INDEX UX_ClientCompanies_Client                                       ON dbo.ClientCompanies (TenantId, ClientId) WHERE IsDeleted = 0;
 CREATE UNIQUE INDEX UX_ClientFiscalData_TaxNumber                                   ON dbo.ClientFiscalData (TenantId, TaxNumber) WHERE TaxNumber IS NOT NULL AND IsDeleted = 0;
 CREATE UNIQUE INDEX UX_ClientFiscalData_Active                                      ON dbo.ClientFiscalData (TenantId, ClientId) WHERE IsActive = 1 AND IsDeleted = 0;
-CREATE UNIQUE INDEX UX_ClientHierarchy_Unique                                       ON dbo.ClientHierarchy (TenantId, ParentClientId, ChildClientId) WHERE IsDeleted = 0;
 CREATE UNIQUE INDEX UX_ClientContacts_Primary                                       ON dbo.ClientContacts (TenantId, ClientId) WHERE IsPrimary = 1 AND IsDeleted = 0;
 CREATE UNIQUE INDEX UX_ClientAddresses_Primary						                ON dbo.ClientAddresses (ClientId, TenantId) WHERE IsPrimary = 1 AND IsDeleted = 0;
 CREATE UNIQUE INDEX UX_TenantContacts_Email_Active                                  ON dbo.TenantContacts (TenantId, Email) WHERE IsDeleted = 0;
@@ -1174,7 +1153,6 @@ ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.Clients,					
 ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.ClientIndividuals,                           -- Aplica RLS em ClientIndividuals
 ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.ClientCompanies,                             -- Aplica RLS em ClientCompanies
 ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.ClientFiscalData,                            -- Aplica RLS em ClientFiscalData
-ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.ClientHierarchy,                             -- Aplica RLS em ClientHierarchy
 ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.ClientContacts,			                    -- Aplica RLS em ClientContacts
 ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.ClientAddresses,			                    -- Aplica RLS em ClientAddresses
 ADD FILTER PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.ClientConsents,								-- Aplica RLS em ClientConsents
@@ -1246,9 +1224,6 @@ ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.ClientFiscalDa
 ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.ClientConsents AFTER INSERT,					-- Bloqueia DELETE fora do Tenant
 ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.ClientConsents AFTER UPDATE,					-- Bloqueia DELETE fora do Tenant
 ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.ClientConsents BEFORE DELETE,					-- Bloqueia DELETE fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.ClientHierarchy AFTER INSERT,                 -- Bloqueia INSERT fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.ClientHierarchy AFTER UPDATE,                 -- Bloqueia UPDATE fora do Tenant
-ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.ClientHierarchy BEFORE DELETE,                -- Bloqueia DELETE fora do Tenant
 ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.ClientContacts AFTER INSERT,                  -- Bloqueia INSERT fora do Tenant
 ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.ClientContacts AFTER UPDATE,                  -- Bloqueia UPDATE fora do Tenant
 ADD BLOCK PREDICATE dbo.fn_TenantAccessPredicate(TenantId) ON dbo.ClientContacts BEFORE DELETE,                 -- Bloqueia DELETE fora do Tenant
