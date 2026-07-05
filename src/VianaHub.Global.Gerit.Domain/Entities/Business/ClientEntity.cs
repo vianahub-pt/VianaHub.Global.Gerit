@@ -9,8 +9,6 @@ public class ClientEntity : Entity, IAggregateRoot
     private readonly List<ClientAddressEntity> _addresses = new();
     private readonly List<ClientContactEntity> _contacts = new();
     private readonly List<ClientConsentsEntity> _consents = new();
-    private readonly List<ClientHierarchyEntity> _childHierarchies = new();
-    private readonly List<ClientHierarchyEntity> _parentHierarchies = new();
 
     public int TenantId { get; private set; }
     public ClientType ClientType { get; private set; }
@@ -33,9 +31,6 @@ public class ClientEntity : Entity, IAggregateRoot
     public IReadOnlyCollection<ClientAddressEntity> Addresses => _addresses.AsReadOnly();
     public IReadOnlyCollection<ClientContactEntity> Contacts => _contacts.AsReadOnly();
     public IReadOnlyCollection<ClientConsentsEntity> Consents => _consents.AsReadOnly();
-    public IReadOnlyCollection<ClientHierarchyEntity> ChildHierarchies => _childHierarchies.AsReadOnly();
-    public IReadOnlyCollection<ClientHierarchyEntity> ParentHierarchies => _parentHierarchies.AsReadOnly();
-
 
     // Construtor protegido para o EF Core
     protected ClientEntity() { }
@@ -159,16 +154,6 @@ public class ClientEntity : Entity, IAggregateRoot
         foreach (var consent in _consents)
         {
             consent.Delete(modifiedBy);
-        }
-
-        foreach (var hierarchy in _childHierarchies)
-        {
-            hierarchy.Delete(modifiedBy);
-        }
-
-        foreach (var hierarchy in _parentHierarchies)
-        {
-            hierarchy.Delete(modifiedBy);
         }
 
         ModifiedBy = modifiedBy;

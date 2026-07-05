@@ -33,7 +33,7 @@ public class ClientRepository : IClientRepository
             .ToListAsync(ct);
     }
 
-    public async Task<ClientEntity> GetByIdAsync(int id, CancellationToken ct)
+    public async Task<ClientEntity?> GetByIdAsync(int id, CancellationToken ct)
     {
         return await _context.Clients
             .AsNoTracking()
@@ -44,8 +44,6 @@ public class ClientRepository : IClientRepository
             .Include(x => x.Contacts)
             .Include(x => x.Addresses)
             .Include(x => x.Consents)
-            .Include(x => x.ChildHierarchies)
-            .Include(x => x.ParentHierarchies)
             .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted, ct);
     }
 
@@ -60,8 +58,6 @@ public class ClientRepository : IClientRepository
             .Include(x => x.Contacts)
             .Include(x => x.Addresses)
             .Include(x => x.Consents)
-            .Include(x => x.ChildHierarchies)
-            .Include(x => x.ParentHierarchies)
             .Where(x => !x.IsDeleted);
 
         if (!string.IsNullOrWhiteSpace(request.Search))

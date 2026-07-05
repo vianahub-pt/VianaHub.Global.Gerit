@@ -378,13 +378,6 @@
   "Application.Service.ClientContact.ValidateBulkItem.ClientId": "O ID do cliente é obrigatório para o cliente {0}",
   "Application.Service.ClientContact.ValidateBulkItem.Email": "O e-mail é obrigatório para o cliente {0}",
 
-  "Application.Service.ClientHierarchy.Activate.ResourceNotFound": "Hierarquia de cliente não encontrada",
-  "Application.Service.ClientHierarchy.Create.ResourceAlreadyExists": "Já existe uma hierarquia para este cliente",
-  "Application.Service.ClientHierarchy.Deactivate.ResourceNotFound": "Hierarquia de cliente não encontrada",
-  "Application.Service.ClientHierarchy.Delete.ResourceNotFound": "Hierarquia de cliente não encontrada",
-  "Application.Service.ClientHierarchy.GetById.ResourceNotFound": "Hierarquia de cliente não encontrada ou inativa",
-  "Application.Service.ClientHierarchy.Update.ResourceNotFound": "Hierarquia de cliente não encontrada",
-
   "Application.Service.ClientIndividual.Activate.ResourceNotFound": "Cliente individual não encontrado",
   "Application.Service.ClientIndividual.Create.ResourceAlreadyExists": "Já existe um cliente individual com este e-mail",
   "Application.Service.ClientIndividual.Deactivate.ResourceNotFound": "Cliente individual não encontrado",
