@@ -46,7 +46,6 @@ DROP TABLE IF EXISTS dbo.EmployeeContacts;
 DROP TABLE IF EXISTS dbo.Employees;
 DROP TABLE IF EXISTS dbo.Teams;
 DROP TABLE IF EXISTS dbo.ClientConsents;
-DROP TABLE IF EXISTS dbo.ClientHierarchy;
 DROP TABLE IF EXISTS dbo.ClientFiscalData;
 DROP TABLE IF EXISTS dbo.ClientContacts;
 DROP TABLE IF EXISTS dbo.ClientAddresses;
