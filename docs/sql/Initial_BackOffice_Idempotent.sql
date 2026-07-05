@@ -237,7 +237,6 @@ FROM (VALUES
     (N'ClientAddresses', N'Endereços dos clientes.'),
     (N'ClientContacts', N'Contatos dos clientes.'),
     (N'ClientFiscalData', N'Dados fiscais dos clientes.'),
-    (N'ClientHierarchy', N'Hierarquia entre clientes.'),
     (N'ClientConsents', N'Consentimentos dos clientes.'),
     (N'Teams', N'Equipas.'),
     (N'Employees', N'Colaboradores/membros da equipa.'),
@@ -1120,55 +1119,6 @@ WHERE s.ClientId IS NOT NULL
         AND cc.ConsentTypeId = ct.Id
         AND cc.ConsentOriginTypeId = cot.Id
         AND cc.IsDeleted = 0
-  );
-
-/*
-    ClientHierarchy - VianaHub Lda
-    - ParentClientId representa a Matriz.
-    - ChildClientId representa a Filial.
-    - RelationshipType = 1 conforme comentário da tabela: 1=Branch/Filial.
-    - Garante pelo menos 2 filiais para algumas matrizes.
-*/
-;WITH HierarchySeed AS
-(
-    SELECT v.ParentSeedKey, v.ChildSeedKey, v.RelationshipType
-    FROM (VALUES
-        (N'Client-005', N'Client-006', 1), -- Algarve Tech Solutions Lda -> Lisboa Digital Services Lda
-        (N'Client-005', N'Client-007', 1), -- Algarve Tech Solutions Lda -> Porto Creative Agency Lda
-        (N'Client-008', N'Client-009', 1), -- Coimbra Business Consulting Lda -> Braga Web Studio Unipessoal Lda
-        (N'Client-008', N'Client-010', 1)  -- Coimbra Business Consulting Lda -> Aveiro Automation Unipessoal Lda
-    ) AS v(ParentSeedKey, ChildSeedKey, RelationshipType)
-)
-INSERT INTO dbo.ClientHierarchy
-(
-    TenantId, ParentClientId, ChildClientId, RelationshipType,
-    IsActive, IsDeleted, CreatedBy, CreatedAt
-)
-SELECT
-    @TenantId,
-    parent.ClientId,
-    child.ClientId,
-    h.RelationshipType,
-    1,
-    0,
-    @CreatedBy,
-    SYSDATETIME()
-FROM HierarchySeed h
-INNER JOIN @SeedClients parent
-    ON parent.SeedKey = h.ParentSeedKey
-INNER JOIN @SeedClients child
-    ON child.SeedKey = h.ChildSeedKey
-WHERE parent.ClientId IS NOT NULL
-  AND child.ClientId IS NOT NULL
-  AND parent.ClientId <> child.ClientId
-  AND NOT EXISTS (
-      SELECT 1
-      FROM dbo.ClientHierarchy ch
-      WHERE ch.TenantId = @TenantId
-        AND ch.ParentClientId = parent.ClientId
-        AND ch.ChildClientId = child.ClientId
-        AND ch.RelationshipType = h.RelationshipType
-        AND ch.IsDeleted = 0
   );
 
 GO
