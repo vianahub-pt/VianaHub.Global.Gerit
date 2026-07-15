@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using VianaHub.Global.Gerit.Domain.Entities.Business;
-using VianaHub.Global.Gerit.Domain.Enums;
 using Xunit;
 
 namespace VianaHub.Global.Gerit.Tests.Domain.Entities.Business;
@@ -47,6 +46,26 @@ public class ClientEntityTests
 
     private static ClientEntity CreateClient()
     {
-        return new ClientEntity(1, ClientType.PessoaSingular, 1, urlImage: null, note: null, createdBy: 7);
+        return new ClientEntity(
+            tenantId: 1,
+            partyTypeId: 1,
+            acquisitionSourceTypeId: 1,
+            urlImage: null,
+            note: null,
+            name: "Test Client",
+            phoneNumber: null,
+            cellPhoneNumber: null,
+            isCellPhoneWhatsapp: false,
+            email: null,
+            websiteUrl: null,
+            birthDate: null,
+            gender: null,
+            nationality: null,
+            companyRegistrationNumber: null,
+            economicActivityCode: null,
+            numberOfEmployees: null,
+            statusDefinitionId: null,
+            statusDomainId: null,
+            createdBy: 7);
     }
 }

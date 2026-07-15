@@ -5,8 +5,11 @@ namespace VianaHub.Global.Gerit.Application.Dtos.Request.Business.Client;
 /// </summary>
 public class BulkUploadClientItem
 {
-    public int ClientType { get; set; }
+    public byte PartyTypeId { get; set; }
     public int AcquisitionSourceTypeId { get; set; }
     public string? UrlImage { get; set; }
     public string? Note { get; set; }
+    public string? Name { get; set; }
+    public string? Email { get; set; }
+    public string? PhoneNumber { get; set; }
 }
