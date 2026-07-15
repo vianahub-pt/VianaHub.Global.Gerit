@@ -61,7 +61,7 @@ Nenhum desses agentes precisa de informações sobre o GitHub Projects. Toda int
 | **Developer Junior** | Implementar tarefas de baixa complexidade (modelo leve: minimax-m3) |
 | **Developer Pleno** | Implementar tarefas de média complexidade (modelo intermédio: qwen3.7-plus) |
 | **Developer Senior** | Implementar tarefas de alta complexidade (modelo potente: deepseek-v4-pro) |
-| **QA** | Validar implementações, testar critérios de aceite, reportar resultado |
+| **QA** | Validar implementações, testar critérios de aceite, anexar relatório como comment na issue |
 
 ---
 
@@ -96,3 +96,18 @@ Isso inclui:
 - Arquivo `.opencode/opencode.json`
 
 A única exceção é quando o usuário solicitar **expressamente e explicitamente** a alteração desses arquivos.
+
+
+# Regra de Documentação do QA
+
+O relatório de validação do QA deve ser **anexado como comment na issue** do GitHub, e NÃO salvo em ficheiro local.
+
+**Porquê:** Manter toda a documentação (descrição, critérios de aceite, relatórios) centralizada na issue, facilitando o acompanhamento por PO, stakeholders e developers.
+
+**Como:**
+```bash
+gh issue comment NUMERO --repo vianahub-pt/VianaHub.Global.Gerit --body "conteúdo do relatório"
+```
+
+> ⚠️ A pasta docs/reviews/ NÃO deve mais ser utilizada para relatórios de QA.
+
