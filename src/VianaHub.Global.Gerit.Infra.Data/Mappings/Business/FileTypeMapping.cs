@@ -27,6 +27,18 @@ public class FileTypeMapping : IEntityTypeConfiguration<FileTypeEntity>
             .HasMaxLength(20)
             .IsRequired();
 
+        builder.Property(x => x.Code)
+            .HasColumnType("NVARCHAR(50)")
+            .HasMaxLength(50)
+            .IsRequired();
+
+        // FK para a tabela de traduções FileTypeTranslations
+        builder.HasMany(x => x.Translations)
+            .WithOne(x => x.FileType)
+            .HasForeignKey(x => x.FileTypeId)
+            .OnDelete(DeleteBehavior.Cascade)
+            .HasConstraintName("FK_FileTypeTranslations_FileTypes_FileTypeId");
+
         builder.Property(x => x.IsActive)
             .HasDefaultValue(true)
             .IsRequired();
@@ -53,6 +65,11 @@ public class FileTypeMapping : IEntityTypeConfiguration<FileTypeEntity>
         builder.HasIndex(x => x.MimeType)
             .IsUnique()
             .HasDatabaseName("UQ_FileTypes_Mime");
+
+        // Constraint único no Code — apenas registos não removidos
+        builder.HasIndex(x => x.Code)
+            .IsUnique()
+            .HasFilter("[IsDeleted] = 0")
+            .HasDatabaseName("UX_FileTypes_Code");
     }
 }
-
