@@ -5,7 +5,7 @@ using VianaHub.Global.Gerit.Domain.Entities.Business;
 namespace VianaHub.Global.Gerit.Infra.Data.Mappings.Business;
 
 /// <summary>
-/// Mapeamento da entidade AddressType Tipos de endereço (residencial, comercial, etc)
+/// Mapeamento da entidade AddressType Tipos de endereï¿½o (residencial, comercial, etc)
 /// </summary>
 public class AddressTypeMapping : IEntityTypeConfiguration<AddressTypeEntity>
 {
@@ -13,7 +13,7 @@ public class AddressTypeMapping : IEntityTypeConfiguration<AddressTypeEntity>
     {
         builder.ToTable("AddressTypes", "dbo");
 
-        // Chave Primária
+        // Chave Primï¿½ria
         builder.HasKey(x => x.Id)
             .HasName("PK_AddressTypes");
 
@@ -31,6 +31,18 @@ public class AddressTypeMapping : IEntityTypeConfiguration<AddressTypeEntity>
             .HasColumnType("NVARCHAR(500)")
             .HasMaxLength(500)
             .IsRequired();
+
+        builder.Property(x => x.Code)
+            .HasColumnType("NVARCHAR(50)")
+            .HasMaxLength(50)
+            .IsRequired();
+
+        // FK para a tabela de traduÃ§Ãµes AddressTypeTranslations
+        builder.HasMany(x => x.Translations)
+            .WithOne(x => x.AddressType)
+            .HasForeignKey(x => x.AddressTypeId)
+            .OnDelete(DeleteBehavior.Cascade)
+            .HasConstraintName("FK_AddressTypeTranslations_AddressTypes_AddressTypeId");
 
         builder.Property(x => x.IsActive)
             .HasColumnType("BIT")
