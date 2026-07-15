@@ -137,6 +137,8 @@ Seguir o template definido no `kanban-flow.md`:
 4. **SEMPRE** garantir que o agente invocado tem instruções claras sobre o que NÃO fazer
 5. **SEMPRE** incluir Metadata (Agente + Complexidade) no corpo de cada Issue criada
 6. Se um agente invocado reportar confusão ou desvio, **parar e reavaliar o handoff** antes de continuar
+7. **SEMPRE** usar `--body-file` com ficheiro UTF-8 (sem BOM) para criar/atualizar issues — **NUNCA** passar body como string inline no PowerShell, pois corrói caracteres acentuados
+8. Para escrever o body em ficheiro, usar `[System.IO.File]::WriteAllText($path, $content, [System.Text.UTF8Encoding]::new($false))` — isto garante UTF-8 sem BOM
 
 ---
 
@@ -147,3 +149,24 @@ Seguir o template definido no `kanban-flow.md`:
 - Conteúdo excessivo no prompt faz o LLM perder foco e ir por caminhos errados
 - Issues sem Metadata (Agente/Complexidade) deixam o utilizador sem saber quem vai implementar
 - Causa retrabalho, loops, e intervenção manual desnecessária
+
+---
+
+## Encoding ao Criar Issues
+
+**Problema:** PowerShell corrompe caracteres acentuados (ã, ç, é, etc.) ao passar strings para comandos externos como `gh`.
+
+**Solução:** Sempre usar ficheiros temporários com UTF-8 sem BOM:
+
+```powershell
+# CORRETO
+$tempDir = "$env:TEMP\gh-issues"
+$body = "conteúdo com acentos..."
+[System.IO.File]::WriteAllText("$tempDir\169.md", $body, [System.Text.UTF8Encoding]::new($false))
+gh issue edit 169 --repo vianahub-pt/VianaHub.Global.Gerit --body-file "$tempDir\169.md"
+
+# ERRADO - PowerShell corrompe UTF-8
+gh issue edit 169 --body "conteúdo com acentos..."
+```
+
+**Alternativa válida:** Usar texto simplificado sem acentos (ex: "Entao" em vez de "Então") quando o conteúdo é curto e compreensível.
