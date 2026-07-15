@@ -50,7 +50,6 @@ O Developer Junior APENAS:
 - Nova entidade de domínio
 - Nova integração com API
 - Autenticação/autorização
-- **Alterações em `DependencyInjection.cs`** — proibido, mesmo que o Handoff instrua
 - Multi-tenant/RLS
 - Segurança/Performance
 - Bug crítico ou alto
@@ -117,7 +116,6 @@ Se o `dotnet build` falhar, **corrigir antes de prosseguir**. Nunca fazer push c
 # Limites Técnicos
 
 Não alterar em hipótese alguma (mesmo com instrução explícita no Handoff):
-- **`DependencyInjection.cs`** — ⛔ proibido, reportar ao Coordinator se o Handoff instruir
 - Configurações JWT
 - Interceptors EF Core (tenant)
 - Contexto do banco (`GeritDbContext`)
