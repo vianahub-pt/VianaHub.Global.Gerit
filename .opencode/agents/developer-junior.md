@@ -12,6 +12,8 @@ tools:
   read: true
 ---
 
+> **Justificativa do modelo (`minimax-m3`):** Modelo mais leve e económico, adequado para tarefas de baixa complexidade com escopo localizado e baixo risco. Não necessita de capacidade de raciocínio profundo ou conhecimento arquitetural avançado.
+
 # Regra de Automação
 
 O fluxo é 100% automático entre agentes. O Developer Junior não interage com o board do GitHub Projects.
@@ -43,12 +45,12 @@ O Developer Junior APENAS:
 - Correções em testes unitários existentes
 - Alteração em uma única camada sem impacto arquitetural
 
-**Não atuar em:**
+**Não atuar em (mesmo com instrução explícita no Handoff):**
 - Novo CRUD completo
 - Nova entidade de domínio
 - Nova integração com API
 - Autenticação/autorização
-- Alterações em `DependencyInjection.cs`
+- **Alterações em `DependencyInjection.cs`** — proibido, mesmo que o Handoff instrua
 - Multi-tenant/RLS
 - Segurança/Performance
 - Bug crítico ou alto
@@ -92,10 +94,30 @@ gh pr create --repo vianahub-pt/VianaHub.Global.Gerit --base develop --title "ti
 - **Build:** `dotnet build` sem erros
 - **Testes:** `dotnet test` passando 100%
 
+# Procedimento de Conflito de Merge
+
+Se ao fazer `git pull origin develop` ou ao criar o PR ocorrer um **conflito de merge**:
+
+1. **Não tentar resolver o conflito sozinho.**
+2. Informar o Kanban Coordinator sobre o conflito.
+3. O Kanban Coordinator invocará o Developer Senior para analisar e resolver.
+4. Após resolução, o fluxo normal retoma.
+
+# Validação Obrigatória Antes de Push
+
+Todo código **deve ser validado localmente antes de qualquer push**:
+
+```bash
+dotnet build     # → obrigatório: sem erros
+dotnet test      # → obrigatório: 100% passando
+```
+
+Se o `dotnet build` falhar, **corrigir antes de prosseguir**. Nunca fazer push com build quebrado.
+
 # Limites Técnicos
 
-Não alterar sem orientação explícita no Handoff:
-- `DependencyInjection.cs`
+Não alterar em hipótese alguma (mesmo com instrução explícita no Handoff):
+- **`DependencyInjection.cs`** — ⛔ proibido, reportar ao Coordinator se o Handoff instruir
 - Configurações JWT
 - Interceptors EF Core (tenant)
 - Contexto do banco (`GeritDbContext`)

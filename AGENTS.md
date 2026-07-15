@@ -96,22 +96,9 @@ Usuário → Kanban Coordinator → PO → Kanban Coordinator → Developer → 
 | **QA** | Valida implementações e reporta resultados | ❌ Não |
 | **Usuário** | Solicita demandas, revisa, aprova e mergea PRs | ❌ Não (via GitHub) |
 
-### Fluxo Completo
-
-```text
-Backlog → To do → In Progress → For Tests → In Test → For Deploy → Done
-```
-
-1. **Usuário** solicita demanda ao **Kanban Coordinator**
-2. **Kanban Coordinator** invoca **PO** via task tool
-3. **PO** analisa, escreve Task em BDD, define classificação/complexidade
-4. **Kanban Coordinator** recebe a Task, cria issue, adiciona ao board (Backlog), move para **To do**
-5. **Kanban Coordinator** valida classificação e invoca **Developer** (Junior/Pleno/Senior) via task tool
-6. **Developer** faz pull da develop, cria branch, implementa, build, test, commit, push, PR
-7. **Kanban Coordinator** move card para **For Tests** e invoca **QA** via task tool
-8. **QA** testa e retorna resultado:
-   - ✅ **Aprovado:** Coordinator move para **For Deploy** → Usuário revisa, aprova e mergea PR → Coordinator move para **Done**
-   - ❌ **Reprovado:** Coordinator move para **In Progress** → envia handoff de correção ao Developer
+> 📌 **O fluxo detalhado (passo a passo, com comandos e regras operacionais) está centralizado em:**
+> **`.opencode/agents/kanban-coordinator.md`** — fonte da verdade.
+> **`.opencode/instructions/kanban-flow.md`** — regras transversais partilhadas.
 
 ### GitHub Projects
 

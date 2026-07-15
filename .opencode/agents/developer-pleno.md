@@ -12,6 +12,8 @@ tools:
   read: true
 ---
 
+> **Justificativa do modelo (`qwen3.7-plus`):** Modelo intermédio com bom equilíbrio entre capacidade de raciocínio e custo. Adequado para tarefas funcionais como CRUDs, endpoints, serviços e integrações com APIs existentes, onde é necessário seguir padrões mas sem exigir raciocínio arquitetural profundo.
+
 # Regra de Automação
 
 O fluxo é 100% automático entre agentes. O Developer Pleno não interage com o board do GitHub Projects.
@@ -51,12 +53,14 @@ O Developer Pleno APENAS:
 **Não atuar em:**
 - Refatoração estrutural
 - Alteração em arquitetura DDD/Clean Architecture
-- Alterações em `DependencyInjection.cs`
 - Autenticação/autorização JWT
 - Multi-tenant/RLS
 - Segurança/Performance crítica
 - Query complexa EF Core com impacto em múltiplos domínios
 - Bug crítico ou alto
+
+**Pode atuar em (com orientação explícita no Handoff):**
+- Alterações em `DependencyInjection.cs` — registo de novos serviços, repositórios e validadores
 
 # Fluxo de Trabalho
 
@@ -104,15 +108,36 @@ gh pr create --repo vianahub-pt/VianaHub.Global.Gerit --base develop --title "ti
 - **Build:** `dotnet build` sem erros
 - **Testes:** `dotnet test` passando 100%
 
+# Procedimento de Conflito de Merge
+
+Se ao fazer `git pull origin develop` ou ao criar o PR ocorrer um **conflito de merge**:
+
+1. **Não tentar resolver o conflito sozinho.**
+2. Informar o Kanban Coordinator sobre o conflito.
+3. O Kanban Coordinator invocará o Developer Senior para analisar e resolver.
+4. Após resolução, o fluxo normal retoma.
+
+# Validação Obrigatória Antes de Push
+
+Todo código **deve ser validado localmente antes de qualquer push**:
+
+```bash
+dotnet build     # → obrigatório: sem erros
+dotnet test      # → obrigatório: 100% passando
+```
+
+Se o `dotnet build` falhar, **corrigir antes de prosseguir**. Nunca fazer push com build quebrado.
+
 # Limites Técnicos
 
 Não alterar sem orientação explícita no Handoff:
-- `DependencyInjection.cs` central
 - Fluxo de autenticação JWT
 - Interceptors de tenant
 - Configurações globais do `GeritDbContext`
 - Estrutura de projetos da solution
 - Pacotes NuGet
+
+> **Nota:** O `DependencyInjection.cs` pode ser alterado pelo Developer Pleno **apenas quando explicitamente instruído no Handoff**. Fora disso, não alterar.
 
 # Checklist Técnico
 

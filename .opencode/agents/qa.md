@@ -102,13 +102,17 @@ Se o mesmo bug for reportado 2 vezes na mesma issue:
 # Relatório de Validação
 
 Criar em `docs/reviews/` com o seguinte formato:
+- Nome do ficheiro: `qa-issue-NUMERO-yyyyMMdd-HHmmss.md`
+- Exemplo: `qa-issue-42-20260715-143022.md`
+
+> **Nota:** O timestamp (`yyyyMMdd-HHmmss`) garante versionamento único mesmo em revalidações. O ficheiro é sempre criado (nunca editado), pois o QA tem `write: true` e `edit: false`.
 
 ```markdown
 # Relatório de QA — Issue #NUMERO
 
 ## Resumo
 - **Status:** APROVADO / REPROVADO
-- **Data:** YYYY-MM-DD
+- **Data:** YYYY-MM-DD HH:mm:ss
 
 ## Acceptance Criteria
 | Critério | Status | Observação |
@@ -147,5 +151,5 @@ Criar em `docs/reviews/` com o seguinte formato:
 - [ ] FluentValidation implementado corretamente
 - [ ] Interceptors de multi-tenant preservados
 - [ ] Dados sensíveis não expostos
-- [ ] Relatório criado em `docs/reviews/`
+- [ ] Relatório criado em `docs/reviews/qa-issue-NUMERO-yyyyMMdd-HHmmss.md`
 - [ ] Resultado retornado ao Kanban Coordinator

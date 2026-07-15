@@ -1,8 +1,15 @@
 # Shared Kanban Flow — Gerit API
 
-Este documento define o fluxo Kanban compartilhado para os agentes de IA do projeto **VianaHub.Global.Gerit** (backend .NET 8).
+Este documento define as regras compartilhadas do fluxo Kanban para os agentes de IA do projeto **VianaHub.Global.Gerit** (backend .NET 8).
 
 Toda comunicação com o usuário, issues, comentários e relatórios do GitHub Projects serão em **português do Brasil**.
+
+---
+
+> **ℹ️ O fluxo detalhado (completo, com todos os passos e comandos) está centralizado no ficheiro do agente orquestrador:**
+> **`.opencode/agents/kanban-coordinator.md`** — fonte da verdade para o fluxo operacional.
+>
+> Este ficheiro contém apenas as **regras transversais** que todos os agentes devem respeitar.
 
 ---
 
@@ -18,6 +25,8 @@ A **única** intervenção humana permitida em todo o ciclo de vida de uma issue
 5. Fazer o merge do PR para a branch de destino.
 
 Nenhum agente deve pedir confirmação para atividades operacionais normais.
+
+Todos os agentes, ao terminarem o seu trabalho, **devem informar o Kanban Coordinator** para que o fluxo prossiga.
 
 ---
 
@@ -43,93 +52,16 @@ Nenhum desses agentes precisa de informações sobre o GitHub Projects. Toda int
 
 ---
 
-# Fluxo Oficial
-
-```
-Usuário solicita demanda
-       ↓
-Kanban Coordinator recebe a solicitação
-       ↓
-PO analisa, escreve Task em BDD, define classificação/complexidade
-       ↓
-Kanban Coordinator recebe a Task
-       ↓
-Cria issue → Adiciona ao board → Backlog
-       ↓
-Move card para To do
-       ↓
-Valida classificação e invoca Developer Junior/Pleno/Senior
-       ↓
-Developer implementa: pull develop → branch → código → build → test → commit → push → PR
-       ↓
-Kanban Coordinator move card para For Tests e invoca QA
-       ↓
-QA testa (build + test + critérios de aceite)
-       ↓
-  ├── ✅ Aprovado
-  │      ↓
-  │   Coordinator move para For Deploy
-  │      ↓
-  │   Usuário revisa, aprova e faz merge do PR
-  │      ↓
-  │   Coordinator move para Done
-  │
-  └── ❌ Reprovado
-         ↓
-      Coordinator move para In Progress
-         ↓
-      Coordinator envia handoff de correção para o mesmo Developer
-```
-
----
-
 # Responsabilidades por Agente
 
 | Agente | Responsabilidade |
 |--------|-----------------|
 | **Kanban Coordinator** | Criar/mover cards no board, invocar agentes, enviar handoffs compactos |
 | **PO** | Analisar demanda, escrever Task em BDD, definir classificação/complexidade |
-| **Developer Junior** | Implementar tarefas de baixa complexidade |
-| **Developer Pleno** | Implementar tarefas de média complexidade |
-| **Developer Senior** | Implementar tarefas de alta complexidade |
+| **Developer Junior** | Implementar tarefas de baixa complexidade (modelo leve: minimax-m3) |
+| **Developer Pleno** | Implementar tarefas de média complexidade (modelo intermédio: qwen3.7-plus) |
+| **Developer Senior** | Implementar tarefas de alta complexidade (modelo potente: deepseek-v4-pro) |
 | **QA** | Validar implementações, testar critérios de aceite, reportar resultado |
-
----
-
-# Handoff Padrão
-
-Todos os handoffs são **compactos**, contendo apenas:
-- Issue (formato `owner/repo#numero`)
-- Task (descrição objetiva)
-- Critérios de Aceite (BDD)
-- Instruções Técnicas (branch, camadas, commit, PR)
-- Verificação Obrigatória (build, test)
-
-O Kanban Coordinator usa dois templates de handoff:
-1. **Handoff de Desenvolvimento** → para Developer Junior/Pleno/Senior
-2. **Handoff de Validação** → para QA
-
----
-
-# Classificação de Complexidade
-
-| Complexidade | Agente | Critério |
-|-------------|--------|----------|
-| **Baixa** | `developer-junior` | Tarefa simples, localizada, sem impacto arquitetural |
-| **Média** | `developer-pleno` | CRUD, endpoints, serviços, integrações existentes |
-| **Alta** | `developer-senior` | Refatoração, arquitetura, segurança, multi-tenant, bugs críticos |
-
-Regra de decisão: `Junior vs Pleno → Pleno`, `Pleno vs Senior → Senior`.
-
----
-
-# Reprovação pelo QA
-
-Se o QA reprovar:
-1. Kanban Coordinator move o card para `In Progress`.
-2. Kanban Coordinator envia novo Handoff de correção para o mesmo Developer.
-3. Developer corrige e sinaliza pronto.
-4. Kanban Coordinator move para `For Tests` e invoca QA novamente.
 
 ---
 
@@ -138,6 +70,18 @@ Se o QA reprovar:
 Se o mesmo bug for reportado 2 vezes na mesma issue:
 1. Não insistir em correção automática.
 2. Escalar para o usuário com histórico das tentativas.
+
+---
+
+# Reporte de Bugs nos Próprios Agentes
+
+Se for detetado um bug no comportamento de qualquer agente (incluindo erros nos ficheiros de instrução, ambiguidades, mau funcionamento), o agente que detetou o problema deve:
+
+1. Documentar o bug com detalhes (comportamento esperado vs. observado).
+2. Informar o usuário de forma explícita, clara e objetiva.
+3. Aguardar decisão do usuário sobre como proceder.
+
+> ⛔ **Não alterar** ficheiros em `.opencode/agents/`, `.opencode/instructions/` ou `AGENTS.md` por iniciativa própria — a menos que o usuário autorize explicitamente.
 
 ---
 

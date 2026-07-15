@@ -1,0 +1,69 @@
+{
+  "$schema": "https://opencode.ai/opencode.schema.json",
+  "version": 1,
+  "primary_agent": "kanban-coordinator",
+  "agents": {
+    "kanban-coordinator": {
+      "description": "Orquestrador central do Kanban — cria/move cards no board e invoca agentes especializados via task tool",
+      "model": "opencode-go/deepseek-v4-flash",
+      "temperature": 0.2,
+      "tools": ["bash", "read", "write", "edit", "glob", "grep", "task", "webfetch", "skill"],
+      "mode": "primary",
+      "instructions": ".opencode/agents/kanban-coordinator.md"
+    },
+    "po": {
+      "description": "Product Owner — analisa demandas, escreve Tasks em BDD e define classificação/complexidade",
+      "model": "opencode-go/deepseek-v4-flash",
+      "temperature": 0.2,
+      "tools": ["write", "bash", "glob", "grep", "read"],
+      "mode": "subagent",
+      "instructions": ".opencode/agents/po.md"
+    },
+    "developer-junior": {
+      "description": "Developer Junior — implementa tarefas backend .NET 8 de baixa complexidade",
+      "model": "opencode-go/minimax-m3",
+      "temperature": 0.2,
+      "tools": ["write", "edit", "bash", "glob", "grep", "read"],
+      "mode": "subagent",
+      "instructions": ".opencode/agents/developer-junior.md"
+    },
+    "developer-pleno": {
+      "description": "Developer Pleno — implementa tarefas backend .NET 8 de complexidade média",
+      "model": "opencode-go/qwen3.7-plus",
+      "temperature": 0.2,
+      "tools": ["write", "edit", "bash", "glob", "grep", "read"],
+      "mode": "subagent",
+      "instructions": ".opencode/agents/developer-pleno.md"
+    },
+    "developer-senior": {
+      "description": "Developer Senior — implementa tarefas backend .NET 8 de alta complexidade, arquitetura, segurança e multi-tenant",
+      "model": "opencode-go/deepseek-v4-pro",
+      "temperature": 0.1,
+      "tools": ["write", "edit", "bash", "glob", "grep", "read"],
+      "mode": "subagent",
+      "instructions": ".opencode/agents/developer-senior.md"
+    },
+    "qa": {
+      "description": "QA — valida implementações backend .NET 8, testa critérios de aceite e reporta resultado",
+      "model": "opencode-go/deepseek-v4-flash",
+      "temperature": 0.1,
+      "tools": ["write", "bash", "glob", "grep", "read"],
+      "mode": "subagent",
+      "instructions": ".opencode/agents/qa.md"
+    }
+  },
+  "agent_routing": {
+    "kanban-coordinator": {
+      "subagents": ["po", "developer-junior", "developer-pleno", "developer-senior", "qa"],
+      "allowed_commands": [
+        "gh issue create",
+        "gh project item-add",
+        "gh project item-list",
+        "gh project item-edit",
+        "gh issue view",
+        "gh issue comment",
+        "gh pr view"
+      ]
+    }
+  }
+}

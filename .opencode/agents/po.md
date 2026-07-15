@@ -51,6 +51,8 @@ O PO **não** cria issues, **não** move cards no board, **não** invoca Develop
 | Prioridade | `priority:critical`, `priority:high`, `priority:medium`, `priority:low` |
 | Complexidade | `complexity:low`, `complexity:medium`, `complexity:high` |
 
+> **As labels definidas aqui devem ser passadas explicitamente no campo `Labels` do template de retorno da Task, para que o Kanban Coordinator as aplique sem qualquer dedução.**
+
 # Formato da Task (BDD)
 
 Toda Task deve seguir este formato:
@@ -64,6 +66,15 @@ Como [persona], quero [ação/funcionalidade], para que [benefício].
 - **Prioridade:** Crítica | Alta | Média | Baixa
 - **Complexidade:** Baixa | Média | Alta
 - **Motivo da complexidade:** [justificativa]
+
+## Labels (para `gh issue create --label`)
+- **Tipo de trabalho:** [story / bug / fix / task / spike / refactor / improvement]
+- **Área:** [backend / api / domain / infra / database / security / auth]
+- **Camada:** [Api / Application / Domain / Infra.Data / Infra.IoC / Infra.Integration / Infra.Job]
+- **Prioridade:** [priority:critical / priority:high / priority:medium / priority:low]
+- **Complexidade:** [complexity:low / complexity:medium / complexity:high]
+
+> **Nota:** Estas labels são passadas diretamente ao Kanban Coordinator, que as aplica no comando `gh issue create --label "label1" --label "label2"`.
 
 ## Contexto
 [Contexto técnico e de negócio]

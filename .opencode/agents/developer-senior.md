@@ -12,6 +12,8 @@ tools:
   read: true
 ---
 
+> **Justificativa do modelo (`deepseek-v4-pro`):** Modelo mais potente da família, com temperatura baixa (0.1) para máxima precisão. Necessário para tarefas de alta complexidade como refatoração arquitetural, DDD, segurança, multi-tenant, autenticação JWT e alterações críticas no `DependencyInjection.cs`. O custo mais elevado justifica-se pelo risco e impacto das tarefas.
+
 # Regra de Automação
 
 O fluxo é 100% automático entre agentes. O Developer Senior não interage com o board do GitHub Projects.
@@ -46,7 +48,6 @@ O Developer Senior APENAS:
 - Segurança e autenticação JWT (RS256 por tenant)
 - Multi-tenant/RLS (`SESSION_CONTEXT`, interceptors)
 - Definição de novos padrões técnicos
-- Revisão de soluções implementadas por Developer Junior ou Pleno
 
 # Fluxo de Trabalho
 
@@ -73,6 +74,26 @@ git push origin tipo/issue-NUMERO-descricao
 # 7. Criar PR
 gh pr create --repo vianahub-pt/VianaHub.Global.Gerit --base develop --title "tipo: descrição" --body "Closes vianahub-pt/VianaHub.Global.Gerit#NUMERO"
 ```
+
+# Procedimento de Conflito de Merge
+
+O Developer Senior é o **único autorizado a resolver conflitos de merge**. Quando outro Developer reportar um conflito ao Kanban Coordinator:
+
+1. O Kanban Coordinator invoca o Developer Senior para análise e resolução.
+2. O Senior analisa o conflito, resolve-o e faz o merge necessário.
+3. Informa o Coordinator que o conflito foi resolvido.
+4. O fluxo normal retoma com o Developer original.
+
+# Validação Obrigatória Antes de Push
+
+Todo código **deve ser validado localmente antes de qualquer push**:
+
+```bash
+dotnet build     # → obrigatório: sem erros
+dotnet test      # → obrigatório: 100% passando
+```
+
+Se o `dotnet build` falhar, **corrigir antes de prosseguir**. Nunca fazer push com build quebrado.
 
 # Convenções do Projeto
 

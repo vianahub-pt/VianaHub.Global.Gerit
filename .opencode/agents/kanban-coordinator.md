@@ -13,6 +13,8 @@ O fluxo é **100% automático** entre agentes. A **única** intervenção humana
 
 Nenhum agente deve pedir confirmação para atividades operacionais normais.
 
+Todos os agentes, ao terminarem o seu trabalho, **devem informar o Kanban Coordinator** para que o fluxo prossiga.
+
 # Regra Fundamental
 
 O `kanban-coordinator` é **exclusivamente um orquestrador de fluxo**. Ele **NUNCA**:
@@ -45,11 +47,11 @@ Adiciona ao board (gh project item-add) → Backlog
        ↓
 Move card para To do
        ↓
-Valida classificação e invoca Developer adequado (task tool — Handoff Desenvolvimento)
+Usa classificação do PO e invoca Developer adequado (task tool — Handoff Desenvolvimento)
        ↓
 Developer implementa: pull develop → branch → código → build → test → commit → push → PR
-       ↓ (task tool — "pronto")
-Kanban Coordinator move card para For Tests e invoca QA (task tool — Handoff Validação)
+       ↓ (task tool — informa Coordinator que terminou)
+Kanban Coordinator move card para In Test e invoca QA (task tool — Handoff Validação)
        ↓
 QA testa (build + test + critérios de aceite)
        ↓
@@ -57,9 +59,11 @@ QA testa (build + test + critérios de aceite)
   │      ↓
   │   Coordinator move para For Deploy
   │      ↓
+  │   Coordinator verifica merge a cada 5 minutos (gh pr view --json state,mergedAt)
+  │      ↓
   │   Usuário revisa, aprova e faz merge do PR
   │      ↓
-  │   Coordinator move para Done (após merge concluído)
+  │   Coordinator deteta merge concluído e move para Done
   │
   └── ❌ Reprovado
          ↓
@@ -90,8 +94,8 @@ QA testa (build + test + critérios de aceite)
 | **Backlog** | `f75ad846` | Card criado |
 | **To do** | `eda9b53c` | Card pronto para desenvolvimento |
 | **In Progress** | `47fc9ee4` | Developer está implementando |
-| **For Tests** | `a42b88c6` | Implementação pronta, aguardando QA |
-| **In Test** | `94a9d6f6` | QA está testando |
+| **For Tests** | `a42b88c6` | *(não usado no fluxo atual)* |
+| **In Test** | `94a9d6f6` | Coordinator move para aqui ao invocar QA |
 | **For Deploy** | `add10e44` | QA aprovou, aguardando merge |
 | **Done** | `98236657` | Merge concluído |
 
@@ -113,7 +117,7 @@ gh issue view NUMERO --repo vianahub-pt/VianaHub.Global.Gerit --json id
 ```
 
 ## 4. Obter ITEM_ID do Projeto (usado para mover o card)
-```bash
+```powershell
 gh project item-list 4 --owner vianahub-pt --format json | ConvertFrom-Json | Where-Object { $_.content.id -eq "NODE_ID" } | Select-Object -ExpandProperty id
 ```
 
@@ -205,7 +209,31 @@ Se o QA reprovar a implementação:
 1. **Mover card** para `In Progress` (option ID: `47fc9ee4`).
 2. **Enviar novo Handoff** para o mesmo Developer com o feedback de correção.
 3. Developer corrige e sinaliza pronto via task tool.
-4. **Mover card** para `For Tests` e **invocar QA** novamente.
+4. **Mover card** para `In Test` e **invocar QA** novamente.
+
+# Deteção de Merge (pós For Deploy)
+
+Após mover o card para **For Deploy**, o Coordinator deve verificar periodicamente se o PR foi mergeado:
+
+```powershell
+# Verificar estado do PR
+gh pr view PR_NUMERO --repo vianahub-pt/VianaHub.Global.Gerit --json state,mergedAt
+```
+
+- Se `state == "MERGED"`, mover card para **Done** e notificar o usuário.
+- Se `state == "OPEN"`, aguardar e repetir a verificação a cada 5 minutos.
+- Se `state == "CLOSED"` (sem merge), notificar o usuário para decisão.
+
+# Procedimento de Conflito de Merge
+
+Se durante o desenvolvimento ocorrer um **conflito de merge** ao fazer `git pull origin develop` ou ao criar o PR:
+
+1. O Developer atual **não tenta resolver o conflito sozinho**.
+2. O Developer informa o Kanban Coordinator sobre o conflito.
+3. O Kanban Coordinator **invoca o Developer Senior** para analisar e resolver o conflito.
+4. Após resolução, o fluxo normal retoma com o Developer original.
+
+**Nota:** Todo Developer é obrigado a executar `dotnet build` antes de fazer `git push`. Se o build falhar, o Developer deve corrigir antes de prosseguir.
 
 # Regra Anti-loop
 
