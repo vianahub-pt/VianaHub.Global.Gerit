@@ -32,18 +32,18 @@ public class DatabaseSeeder
 
         var seeds = new List<AcquisitionSourceTypeEntity>
         {
-            new("Instagram", "Aquisição via Instagram", 1),
-            new("Facebook", "Aquisição via Facebook", 1),
-            new("LinkedIn", "Aquisição via LinkedIn", 1),
-            new("Google", "Aquisição via Google", 1),
-            new("WhatsApp", "Aquisição via WhatsApp", 1),
-            new("Amigos", "Indicação de amigos", 1),
-            new("Eventos", "Aquisição em eventos", 1),
-            new("Televisão", "Aquisição via televisão", 1),
-            new("Rádio", "Aquisição via rádio", 1),
-            new("Jornal", "Aquisição via jornal", 1),
-            new("Revista", "Aquisição via revista", 1),
-            new("Outro", "Outras formas de aquisição", 1),
+            new("INSTAGRAM", "Instagram", "Aquisição via Instagram", 1),
+            new("FACEBOOK", "Facebook", "Aquisição via Facebook", 1),
+            new("LINKEDIN", "LinkedIn", "Aquisição via LinkedIn", 1),
+            new("GOOGLE", "Google", "Aquisição via Google", 1),
+            new("WHATSAPP", "WhatsApp", "Aquisição via WhatsApp", 1),
+            new("FRIENDS", "Amigos", "Indicação de amigos", 1),
+            new("EVENTS", "Eventos", "Aquisição em eventos", 1),
+            new("TELEVISION", "Televisão", "Aquisição via televisão", 1),
+            new("RADIO", "Rádio", "Aquisição via rádio", 1),
+            new("NEWSPAPER", "Jornal", "Aquisição via jornal", 1),
+            new("MAGAZINE", "Revista", "Aquisição via revista", 1),
+            new("OTHER", "Outro", "Outras formas de aquisição", 1),
         };
 
         _context.Set<AcquisitionSourceTypeEntity>().AddRange(seeds);

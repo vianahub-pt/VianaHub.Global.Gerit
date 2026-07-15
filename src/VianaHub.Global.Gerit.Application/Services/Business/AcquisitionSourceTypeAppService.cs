@@ -79,7 +79,7 @@ public class AcquisitionSourceTypeAppService : IAcquisitionSourceTypeAppService
             return 0;
         }
 
-        var entity = new AcquisitionSourceTypeEntity(request.Name, request.Description, _currentUser.GetUserId());
+        var entity = new AcquisitionSourceTypeEntity(request.Code, request.Name, request.Description, _currentUser.GetUserId());
         var success = await _domain.CreateAsync(entity, ct);
         return success ? entity.Id : 0;
     }
