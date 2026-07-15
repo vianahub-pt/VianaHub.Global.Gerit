@@ -277,6 +277,8 @@ public static class DependencyInjection
         services.AddScoped<IVisitTeamEquipmentDataRepository, VisitTeamEquipmentDataRepository>();
         services.AddScoped<IAttachmentCategoryDataRepository, AttachmentCategoryDataRepository>();
         services.AddScoped<IVisitAttachmentDataRepository, VisitAttachmentDataRepository>();
+        services.AddScoped<IPartyTypeDataRepository, PartyTypeDataRepository>();
+        services.AddScoped<IPartyTypeTranslationDataRepository, PartyTypeTranslationDataRepository>();
 
         // Infra.Messaging (Email sender no-op por enquanto)
         services.AddScoped<IEmailSender, NoOpEmailSender>();
