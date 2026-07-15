@@ -157,17 +157,17 @@ public class ClientMapping : IEntityTypeConfiguration<ClientEntity>
             .HasConstraintName("FK_Clients_PartyType")
             .OnDelete(DeleteBehavior.Restrict);
 
+        // FK composta para StatusDefinition: (StatusDefinitionId, TenantId, StatusDomainId)
+        // StatusDomainId é desnormalizado no Client para participar na FK composta
         builder.HasOne(x => x.StatusDefinition)
             .WithMany()
-            .HasForeignKey(x => x.StatusDefinitionId)
+            .HasForeignKey(x => new { x.StatusDefinitionId, x.TenantId, x.StatusDomainId })
+            .HasPrincipalKey(x => new { x.Id, x.TenantId, x.StatusDomainId })
             .HasConstraintName("FK_Clients_StatusDefinition")
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder.HasOne(x => x.StatusDomain)
-            .WithMany()
-            .HasForeignKey(x => x.StatusDomainId)
-            .HasConstraintName("FK_Clients_StatusDomain")
-            .OnDelete(DeleteBehavior.Restrict);
+        // Nota: StatusDomain não tem relação direta — acede-se via StatusDefinition.StatusDomain
+        builder.Ignore(x => x.StatusDomain);
 
         builder.HasMany(x => x.Contacts)
             .WithOne(cc => cc.Client)
