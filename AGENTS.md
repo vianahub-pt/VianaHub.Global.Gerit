@@ -64,7 +64,7 @@ dotnet run --project src/*.Api    # executa a API (Swagger em /swagger)
 
 ## Arquivos de Instrução
 
-- `.opencode/opencode.json` — configuração principal do OpenCode
+- `.opencode/agents/*.md` — configuração dos agentes OpenCode via frontmatter YAML (modelos, tools, mode)
 - `.opencode/instructions/kanban-flow.md` — fluxo Kanban compartilhado entre agentes
 - `.opencode/agents/kanban-coordinator.md` — orquestrador central do fluxo (cria/move cards e invoca agentes)
 - `.opencode/agents/po.md` — analisa demandas e escreve Tasks em BDD

@@ -1,8 +1,15 @@
 ---
 description: Orquestrador central do Kanban — cria/move cards no board e invoca agentes especializados via task tool
 mode: primary
-model: opencode-go/deepseek-v4-flash
+model: opencode-go/mimo-v2.5
 temperature: 0.2
+tools:
+  write: false
+  edit: false
+  bash: true
+  glob: true
+  grep: true
+  read: true
 ---
 
 # Regra de Automação

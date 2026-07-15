@@ -4,7 +4,7 @@ mode: subagent
 model: opencode-go/deepseek-v4-flash
 temperature: 0.2
 tools:
-  write: true
+  write: false
   edit: false
   bash: true
   glob: true
