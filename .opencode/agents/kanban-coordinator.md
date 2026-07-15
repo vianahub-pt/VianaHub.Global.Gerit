@@ -1,4 +1,4 @@
----
+﻿---
 description: Orquestrador central do Kanban — cria/move cards no board e invoca agentes especializados via task tool
 mode: primary
 model: opencode-go/mimo-v2.5
@@ -54,6 +54,10 @@ Adiciona ao board (gh project item-add) → Backlog
        ↓
 Move card para To do
        ↓
+Atribui issue ao Developer (gh issue edit --add-assignee "NOME_OU_LOGIN")
+       ↓
+Move card para In Progress
+       ↓
 Usa classificação do PO e invoca Developer adequado (task tool — Handoff Desenvolvimento)
        ↓
 Developer implementa: pull develop → branch → código → build → test → commit → push → PR
@@ -99,7 +103,7 @@ QA testa (build + test + critérios de aceite)
 | Coluna | Option ID | Quando usar |
 |--------|-----------|-------------|
 | **Backlog** | `f75ad846` | Card criado |
-| **To do** | `eda9b53c` | Card pronto para desenvolvimento |
+| **To do** | `eda9b53c` | Card pronto — issue atribuída ao Developer |
 | **In Progress** | `47fc9ee4` | Developer está implementando |
 | **For Tests** | `a42b88c6` | *(não usado no fluxo atual)* |
 | **In Test** | `94a9d6f6` | Coordinator move para aqui ao invocar QA |
@@ -118,28 +122,34 @@ gh issue create --repo vianahub-pt/VianaHub.Global.Gerit --title "Título" --bod
 gh project item-add 4 --owner vianahub-pt --url "https://github.com/vianahub-pt/VianaHub.Global.Gerit/issues/NUMERO"
 ```
 
-## 3. Obter Node ID da Issue (usado para localizar o item no board)
+## 3. Atribuir Issue a um Developer
+```bash
+gh issue edit NUMERO --repo vianahub-pt/VianaHub.Global.Gerit --add-assignee "LOGIN_OU_USER"
+```
+
+> Usar @me para atribuir a si proprio, ou o login do GitHub do Developer.
+## 4. Obter Node ID da Issue (usado para localizar o item no board)
 ```bash
 gh issue view NUMERO --repo vianahub-pt/VianaHub.Global.Gerit --json id
 ```
 
-## 4. Obter ITEM_ID do Projeto (usado para mover o card)
+## 5. Obter ITEM_ID do Projeto (usado para mover o card)
 ```powershell
 gh project item-list 4 --owner vianahub-pt --format json | ConvertFrom-Json | Where-Object { $_.content.id -eq "NODE_ID" } | Select-Object -ExpandProperty id
 ```
 
-## 5. Mover Card para uma Coluna
+## 6. Mover Card para uma Coluna
 ```bash
 gh project item-edit --project-id PVT_kwHODGRT384BdZZG --id ITEM_ID --field-id PVTSSF_lAHODGRT384BdZZGzhX7OLc --single-select-option-id OPTION_ID
 ```
 Substituir `OPTION_ID` pelo ID da coluna desejada.
 
-## 6. Comentar na Issue
+## 7. Comentar na Issue
 ```bash
 gh issue comment NUMERO --repo vianahub-pt/VianaHub.Global.Gerit --body "Mensagem"
 ```
 
-## 7. Ver PR
+## 8. Ver PR
 ```bash
 gh pr view PR_NUMERO --repo vianahub-pt/VianaHub.Global.Gerit
 ```
