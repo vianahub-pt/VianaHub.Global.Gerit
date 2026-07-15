@@ -8,7 +8,7 @@ using VianaHub.Global.Gerit.Infra.Data.Context;
 namespace VianaHub.Global.Gerit.Infra.Data.Repository.Business;
 
 /// <summary>
-/// Repositório de dados para ClientAddress
+/// Repositï¿½rio de dados para ClientAddress
 /// </summary>
 public class ClientAddressRepository : IClientAddressDataRepository
 {
@@ -48,8 +48,6 @@ public class ClientAddressRepository : IClientAddressDataRepository
             .AsNoTracking()
             .Include(x => x.Client)
             .Include(x => x.AddressType)
-            .Include(x => x.Client.Individual)
-            .Include(x => x.Client.Company)
             .Where(x => x.Client.Id == clientId && !x.IsDeleted);
 
         // Aplicar busca
@@ -62,9 +60,7 @@ public class ClientAddressRepository : IClientAddressDataRepository
                 EF.Functions.Like(x.PostalCode.ToLower(), $"%{search}%") ||
                 EF.Functions.Like(x.District.ToLower(), $"%{search}%") ||
                 EF.Functions.Like(x.Neighborhood.ToLower(), $"%{search}%") ||
-                EF.Functions.Like(x.Client.Individual.FirstName.ToLower(), $"%{search}%") ||
-                EF.Functions.Like(x.Client.Individual.LastName.ToLower(), $"%{search}%") ||
-                EF.Functions.Like(x.Client.Company.LegalName.ToLower(), $"%{search}%") ||
+                EF.Functions.Like(x.Client.Name.ToLower(), $"%{search}%") ||
                 EF.Functions.Like(x.AddressType.Name.ToLower(), $"%{search}%"));
         }
 
@@ -76,13 +72,13 @@ public class ClientAddressRepository : IClientAddressDataRepository
         // Total de registros
         var count = await query.CountAsync(ct);
 
-        // Aplicar ordenação
+        // Aplicar ordenaï¿½ï¿½o
         var orderedQuery = CreateSort.ApplyOrdering(query, request);
         
         var pageNumber = request.PageNumber ?? 1;
         var pageSize = request.PageSize ?? Paging.MinPageSize();
 
-        // Aplicar paginação
+        // Aplicar paginaï¿½ï¿½o
         var result = await orderedQuery
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)

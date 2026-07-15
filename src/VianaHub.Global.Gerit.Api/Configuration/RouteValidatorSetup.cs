@@ -5,7 +5,6 @@ using VianaHub.Global.Gerit.Api.Validators.Billing.Tenant;
 using VianaHub.Global.Gerit.Api.Validators.Business.Equipment;
 using VianaHub.Global.Gerit.Api.Validators.Business.Function;
 using VianaHub.Global.Gerit.Api.Validators.Business.Vehicle;
-using VianaHub.Global.Gerit.Api.Validators.Business.ConsentType;
 using VianaHub.Global.Gerit.Api.Validators.Identity.Action;
 using VianaHub.Global.Gerit.Api.Validators.Identity.Auth;
 using VianaHub.Global.Gerit.Api.Validators.Identity.Resource;
@@ -19,7 +18,6 @@ using VianaHub.Global.Gerit.Application.Dtos.Request.Business.Equipment;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Business.Function;
 // Vehicle DTOs & Validators
 using VianaHub.Global.Gerit.Application.Dtos.Request.Business.Vehicle;
-using VianaHub.Global.Gerit.Application.Dtos.Request.Business.ConsentType;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Identity.Action;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Identity.Auth;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Identity.Resource;
@@ -45,10 +43,6 @@ using VianaHub.Global.Gerit.Api.Validators.Identity.UserPreferences;
 // AcquisitionSourceType DTOs & Validators
 using VianaHub.Global.Gerit.Application.Dtos.Request.Business.AcquisitionSourceType;
 using VianaHub.Global.Gerit.Api.Validators.Business.AcquisitionSourceType;
-
-// ConsentOriginType DTOs & Validators
-using VianaHub.Global.Gerit.Application.Dtos.Request.Business.ConsentOriginType;
-using VianaHub.Global.Gerit.Api.Validators.Business.ConsentOriginType;
 
 // Client DTOs & Validators
 using VianaHub.Global.Gerit.Application.Dtos.Request.Business.Client;
@@ -116,17 +110,9 @@ public static class RouteValidatorSetup
         services.AddScoped<IValidator<CreateEquipmentRequest>, CreateEquipmentRouteValidator>();
         services.AddScoped<IValidator<UpdateEquipmentRequest>, UpdateEquipmentRouteValidator>();
 
-        // ConsentType Route Validators
-        services.AddScoped<IValidator<CreateConsentTypeRequest>, CreateConsentTypeRouteValidator>();
-        services.AddScoped<IValidator<UpdateConsentTypeRequest>, UpdateConsentTypeRouteValidator>();
-
         // AcquisitionSourceType Route Validators
         services.AddScoped<IValidator<CreateAcquisitionSourceTypeRequest>, CreateAcquisitionSourceTypeRouteValidator>();
         services.AddScoped<IValidator<UpdateAcquisitionSourceTypeRequest>, UpdateAcquisitionSourceTypeRouteValidator>();
-
-        // ConsentOriginType Route Validators
-        services.AddScoped<IValidator<CreateConsentOriginTypeRequest>, CreateConsentOriginTypeRouteValidator>();
-        services.AddScoped<IValidator<UpdateConsentOriginTypeRequest>, UpdateConsentOriginTypeRouteValidator>();
 
         // EmployeeTeams Route Validators
         services.AddScoped<IValidator<CreateEmployeeTeamRequest>, CreateEmployeeTeamRouteValidator>();

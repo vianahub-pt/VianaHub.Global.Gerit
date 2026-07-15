@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using VianaHub.Global.Gerit.Domain.Entities.Business;
-using VianaHub.Global.Gerit.Domain.Helpers;
 using VianaHub.Global.Gerit.Domain.Interfaces.Business;
 using VianaHub.Global.Gerit.Domain.ReadModels;
 using VianaHub.Global.Gerit.Domain.Tools.Pagination;
@@ -9,7 +8,7 @@ using VianaHub.Global.Gerit.Infra.Data.Context;
 namespace VianaHub.Global.Gerit.Infra.Data.Repository.Business;
 
 /// <summary>
-/// Repositório principal do agregado Client.
+/// Repositório principal do agregado Client unificado.
 /// </summary>
 public class ClientRepository : IClientRepository
 {
@@ -25,8 +24,6 @@ public class ClientRepository : IClientRepository
         return await _context.Clients
             .AsNoTracking()
             .AsSplitQuery()
-            .Include(x => x.Individual)
-            .Include(x => x.Company)
             .Include(x => x.Contacts)
             .Where(x => !x.IsDeleted)
             .OrderBy(x => x.CreatedAt)
@@ -38,12 +35,9 @@ public class ClientRepository : IClientRepository
         return await _context.Clients
             .AsNoTracking()
             .AsSplitQuery()
-            .Include(x => x.Individual)
-            .Include(x => x.Company)
             .Include(x => x.FiscalData)
             .Include(x => x.Contacts)
             .Include(x => x.Addresses)
-            .Include(x => x.Consents)
             .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted, ct);
     }
 
@@ -52,44 +46,29 @@ public class ClientRepository : IClientRepository
         var query = _context.Clients
             .AsNoTracking()
             .AsSplitQuery()
-            .Include(x => x.Individual)
-            .Include(x => x.Company)
             .Include(x => x.FiscalData)
             .Include(x => x.Contacts)
             .Include(x => x.Addresses)
-            .Include(x => x.Consents)
             .Where(x => !x.IsDeleted);
 
         if (!string.IsNullOrWhiteSpace(request.Search))
         {
             var search = request.Search.Trim().ToLower();
 
-            var clientType = ClientTypeHelper.FromDescription(search);
-            if (clientType.HasValue)
-            {
-                query = query.Where(x => x.ClientType == clientType.Value && !x.IsDeleted);
-            }
-            else
-            {
-                query = query.Where(x =>
-                    EF.Functions.Like(x.Individual.FirstName.ToLower(), $"%{search}%") && !x.IsDeleted ||
-                    EF.Functions.Like(x.Individual.LastName.ToLower(), $"%{search}%") && !x.IsDeleted ||
-                    EF.Functions.Like(x.Individual.Email.ToLower(), $"%{search}%") && !x.IsDeleted ||
-                    EF.Functions.Like(x.Individual.Gender.ToLower(), $"%{search}%") && !x.IsDeleted ||
-                    EF.Functions.Like(x.Individual.Nationality.ToLower(), $"%{search}%") && !x.IsDeleted ||
-                    EF.Functions.Like(x.Individual.PhoneNumber.ToLower(), $"%{search}%") && !x.IsDeleted ||
-                    EF.Functions.Like(x.Individual.CellPhoneNumber.ToLower(), $"%{search}%") && !x.IsDeleted ||
-
-                    EF.Functions.Like(x.Company.LegalName.ToLower(), $"%{search}%") && !x.IsDeleted ||
-                    EF.Functions.Like(x.Company.TradeName.ToLower(), $"%{search}%") && !x.IsDeleted ||
-                    EF.Functions.Like(x.Company.PhoneNumber.ToLower(), $"%{search}%") && !x.IsDeleted ||
-                    EF.Functions.Like(x.Company.CellPhoneNumber.ToLower(), $"%{search}%") && !x.IsDeleted ||
-                    EF.Functions.Like(x.Company.Email.ToLower(), $"%{search}%") && !x.IsDeleted ||
-                    EF.Functions.Like(x.Company.Site.ToLower(), $"%{search}%") && !x.IsDeleted ||
-                    x.Contacts.Any(c => EF.Functions.Like(c.Name.ToLower(), $"%{search}%") && !x.IsDeleted ||
-                                        EF.Functions.Like(c.Email.ToLower(), $"%{search}%") && !x.IsDeleted ||
-                                        EF.Functions.Like(c.PhoneNumber.ToLower(), $"%{search}%") && !x.IsDeleted));
-            }
+            query = query.Where(x =>
+                EF.Functions.Like(x.Name.ToLower(), $"%{search}%") ||
+                EF.Functions.Like(x.Email.ToLower(), $"%{search}%") ||
+                EF.Functions.Like(x.PhoneNumber.ToLower(), $"%{search}%") ||
+                EF.Functions.Like(x.CellPhoneNumber.ToLower(), $"%{search}%") ||
+                EF.Functions.Like(x.Gender.ToLower(), $"%{search}%") ||
+                EF.Functions.Like(x.Nationality.ToLower(), $"%{search}%") ||
+                EF.Functions.Like(x.CompanyRegistrationNumber.ToLower(), $"%{search}%") ||
+                EF.Functions.Like(x.EconomicActivityCode.ToLower(), $"%{search}%") ||
+                EF.Functions.Like(x.WebsiteUrl.ToLower(), $"%{search}%") ||
+                x.Contacts.Any(c =>
+                    EF.Functions.Like(c.Name.ToLower(), $"%{search}%") ||
+                    EF.Functions.Like(c.Email.ToLower(), $"%{search}%") ||
+                    EF.Functions.Like(c.PhoneNumber.ToLower(), $"%{search}%")));
         }
 
         if (request.IsActive.HasValue)

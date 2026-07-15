@@ -22,9 +22,6 @@ public class ClientFiscalDataDataRepository : IClientFiscalDataDataRepository
             .AsNoTracking()
             .AsSplitQuery()
             .Include(x => x.Client)
-            .ThenInclude(x => x.Individual)
-            .Include(x => x.Client)
-            .ThenInclude(x => x.Company)
             .Where(x => x.ClientId == clientId && !x.IsDeleted)
             .OrderBy(x => x.CreatedAt)
             .ToListAsync(ct);
@@ -36,10 +33,7 @@ public class ClientFiscalDataDataRepository : IClientFiscalDataDataRepository
             .AsNoTracking()
             .AsSplitQuery()
             .Include(x => x.Client)
-            .ThenInclude(x => x.Individual)
-            .Include(x => x.Client)
-            .ThenInclude(x => x.Company)
-            .Where(x => x.ClientId == clientId && x.Id == id && !x.IsDeleted && !x.IsDeleted)
+            .Where(x => x.ClientId == clientId && x.Id == id && !x.IsDeleted)
             .FirstOrDefaultAsync(ct);
     }
 
@@ -49,9 +43,6 @@ public class ClientFiscalDataDataRepository : IClientFiscalDataDataRepository
             .AsNoTracking()
             .AsSplitQuery()
             .Include(x => x.Client)
-            .ThenInclude(x => x.Individual)
-            .Include(x => x.Client)
-            .ThenInclude(x => x.Company)
             .Where(x => x.ClientId == clientId && !x.IsDeleted);
 
         if (!string.IsNullOrWhiteSpace(filter.Search))
