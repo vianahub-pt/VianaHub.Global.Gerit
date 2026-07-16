@@ -8,9 +8,10 @@ namespace VianaHub.Global.Gerit.Domain.Entities.Billing;
 public class TenantFiscalDataEntity : Entity
 {
     public int TenantId { get; private set; }
-    public string? NIF { get; private set; }
-    public string? VATNumber { get; private set; }
-    public string? CAE { get; private set; }
+    public string? TaxNumber { get; private set; }
+    public string? VatNumber { get; private set; }
+    public string? IBAN { get; private set; }
+    public string? FiscalEmail { get; private set; }
     public string? FiscalCountry { get; private set; }
     public bool IsVATRegistered { get; private set; }
     public bool IsActive { get; private set; }
@@ -25,12 +26,13 @@ public class TenantFiscalDataEntity : Entity
     /// <summary>
     /// Construtor para cria��o de novos dados fiscais do Tenant
     /// </summary>
-    public TenantFiscalDataEntity(int tenantId, string nif, string? vatNumber, string cae, string fiscalCountry, bool isVATRegistered, int createdBy)
+    public TenantFiscalDataEntity(int tenantId, string taxNumber, string? vatNumber, string? iban, string? fiscalEmail, string fiscalCountry, bool isVATRegistered, int createdBy)
     {
         TenantId = tenantId;
-        NIF = nif;
-        VATNumber = vatNumber;
-        CAE = cae;
+        TaxNumber = taxNumber;
+        VatNumber = vatNumber;
+        IBAN = iban;
+        FiscalEmail = fiscalEmail;
         FiscalCountry = fiscalCountry;
         IsVATRegistered = isVATRegistered;
         IsActive = true;
@@ -39,11 +41,12 @@ public class TenantFiscalDataEntity : Entity
         CreatedAt = DateTime.UtcNow;
     }
 
-    public void UpdateFiscalData(string nif, string? vatNumber, string cae, string fiscalCountry, bool isVATRegistered, int modifiedBy)
+    public void UpdateFiscalData(string taxNumber, string? vatNumber, string? iban, string? fiscalEmail, string fiscalCountry, bool isVATRegistered, int modifiedBy)
     {
-        NIF = nif;
-        VATNumber = vatNumber;
-        CAE = cae;
+        TaxNumber = taxNumber;
+        VatNumber = vatNumber;
+        IBAN = iban;
+        FiscalEmail = fiscalEmail;
         FiscalCountry = fiscalCountry;
         IsVATRegistered = isVATRegistered;
         ModifiedBy = modifiedBy;
