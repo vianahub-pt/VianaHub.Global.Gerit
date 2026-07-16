@@ -141,11 +141,13 @@ public class SubscriptionEntityMapping : IEntityTypeConfiguration<SubscriptionEn
         // Chave alternativa (TenantId, Id)
         builder.HasIndex(x => new { x.TenantId, x.Id })
             .IsUnique()
+            .HasFilter("[IsDeleted] = 0")
             .HasDatabaseName("UQ_Subscriptions_TenantId_Id");
 
         // Constraint nica: Garantir que s pode haver um registro ativo por tenant
         builder.HasIndex(x => new { x.TenantId, x.IsActive })
             .IsUnique()
+            .HasFilter("[IsDeleted] = 0")
             .HasDatabaseName("UQ_Subscriptions_Tenant_Active");
 
         // ndice para performance em consultas por SubscriptionPlanId

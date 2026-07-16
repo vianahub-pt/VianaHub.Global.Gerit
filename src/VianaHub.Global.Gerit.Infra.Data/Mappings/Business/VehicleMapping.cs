@@ -92,6 +92,7 @@ public class VehicleMapping : IEntityTypeConfiguration<VehicleEntity>
         // Constraints únicos
         builder.HasIndex(v => new { v.TenantId, v.Plate })
             .IsUnique()
+            .HasFilter("[IsDeleted] = 0")
             .HasDatabaseName("UQ_Vehicles_Tenant_Plate");
 
         // Relacionamentos
