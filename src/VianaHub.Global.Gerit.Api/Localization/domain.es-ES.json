@@ -97,6 +97,8 @@
   "Domain.Function.AlreadyDeleted": "La función ya fue eliminada",
 
   "Domain.Vehicle.TenantIdRequired": "El ID del inquilino es obligatorio para el vehículo",
+  "Domain.Vehicle.StatusDefinitionIdRequired": "La definición de estado es obligatoria",
+  "Domain.Vehicle.StatusDomainIdRequired": "El dominio de estado es obligatorio",
   "Domain.Vehicle.PlateRequired": "La matrícula es obligatoria",
   "Domain.Vehicle.PlateMaxLength": "La matrícula debe tener como máximo {0} caracteres",
   "Domain.Vehicle.ModelMaxLength": "El modelo debe tener como máximo {0} caracteres",

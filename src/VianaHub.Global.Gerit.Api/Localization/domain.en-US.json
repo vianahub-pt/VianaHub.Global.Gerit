@@ -97,6 +97,8 @@
   "Domain.Function.AlreadyDeleted": "Function already deleted",
 
   "Domain.Vehicle.TenantIdRequired": "Tenant ID is required for vehicle",
+  "Domain.Vehicle.StatusDefinitionIdRequired": "Status definition is required",
+  "Domain.Vehicle.StatusDomainIdRequired": "Status domain is required",
   "Domain.Vehicle.PlateRequired": "License plate is required",
   "Domain.Vehicle.PlateMaxLength": "License plate must be at most {0} characters",
   "Domain.Vehicle.ModelMaxLength": "Model must be at most {0} characters",

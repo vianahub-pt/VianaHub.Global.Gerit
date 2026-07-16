@@ -20,7 +20,7 @@ public class VehicleDataRepository : IVehicleDataRepository
     {
         return await _context.Set<VehicleEntity>()
             .AsNoTracking()
-            .Include(x => x.Status)
+            .Include(x => x.StatusDefinition)
             .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted, ct);
     }
 
@@ -28,7 +28,7 @@ public class VehicleDataRepository : IVehicleDataRepository
     {
         return await _context.Set<VehicleEntity>()
             .AsNoTracking()
-            .Include(x => x.Status)
+            .Include(x => x.StatusDefinition)
             .Where(x => !x.IsDeleted).OrderBy(x => x.Plate).ToListAsync(ct);
     }
 
@@ -36,7 +36,7 @@ public class VehicleDataRepository : IVehicleDataRepository
     {
         var query = _context.Set<VehicleEntity>()
             .AsNoTracking()
-            .Include(x => x.Status)
+            .Include(x => x.StatusDefinition)
             .Where(x => !x.IsDeleted);
 
         if (!string.IsNullOrWhiteSpace(request.Search))
@@ -44,7 +44,7 @@ public class VehicleDataRepository : IVehicleDataRepository
             var rawSearch = request.Search.Trim();
             var searchLower = rawSearch.ToLower();
 
-            // Se for um número válido, permite busca exata por ano
+            // Se for um nÃºmero vÃ¡lido, permite busca exata por ano
             if (int.TryParse(rawSearch, out var searchYear))
             {
                 query = query.Where(x => EF.Functions.Like(x.Plate.ToLower(), $"%{searchLower}%") ||
@@ -52,8 +52,7 @@ public class VehicleDataRepository : IVehicleDataRepository
                                          x.Year == searchYear ||
                                          EF.Functions.Like(x.Model.ToLower(), $"%{searchLower}%") ||
                                          EF.Functions.Like(x.Color.ToLower(), $"%{searchLower}%") ||
-                                         EF.Functions.Like(x.FuelType.ToLower(), $"%{searchLower}%") ||
-                                         EF.Functions.Like(x.Status.Name.ToLower(), $"%{searchLower}%"));
+                                         EF.Functions.Like(x.FuelType.ToLower(), $"%{searchLower}%"));
             }
             else
             {
@@ -61,8 +60,7 @@ public class VehicleDataRepository : IVehicleDataRepository
                                          EF.Functions.Like(x.Brand.ToLower(), $"%{searchLower}%") ||
                                          EF.Functions.Like(x.Model.ToLower(), $"%{searchLower}%") ||
                                          EF.Functions.Like(x.Color.ToLower(), $"%{searchLower}%") ||
-                                         EF.Functions.Like(x.FuelType.ToLower(), $"%{searchLower}%") ||
-                                         EF.Functions.Like(x.Status.Name.ToLower(), $"%{searchLower}%"));
+                                         EF.Functions.Like(x.FuelType.ToLower(), $"%{searchLower}%"));
             }
         }
 
