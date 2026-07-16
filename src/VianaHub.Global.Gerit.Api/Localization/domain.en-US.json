@@ -107,8 +107,12 @@
   "Domain.Vehicle.AlreadyDeleted": "Vehicle already deleted",
 
   "Domain.Equipment.TenantIdRequired": "Tenant ID is required for equipment",
+  "Domain.Equipment.EquipmentTypeIdRequired": "Equipment type ID is required",
+  "Domain.Equipment.StatusDefinitionIdRequired": "Status definition ID is required",
+  "Domain.Equipment.StatusDomainIdRequired": "Status domain ID is required",
   "Domain.Equipment.NameRequired": "Equipment name is required",
   "Domain.Equipment.NameMaxLength": "Equipment name must be at most {0} characters",
+  "Domain.Equipment.UrlImageMaxLength": "Equipment image URL must be at most {0} characters",
   "Domain.Equipment.InvalidId": "Invalid equipment ID",
   "Domain.Equipment.CannotUpdateDeleted": "Cannot update deleted equipment",
   "Domain.Equipment.CannotActivateDeleted": "Cannot activate deleted equipment",

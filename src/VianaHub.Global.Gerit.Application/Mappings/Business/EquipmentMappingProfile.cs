@@ -15,10 +15,12 @@ public class EquipmentMappingProfile : Profile
             .ForMember(dest => dest.TenantId, opt => opt.MapFrom(src => src.TenantId))
             .ForMember(dest => dest.EquipmentTypeId, opt => opt.MapFrom(src => src.EquipmentTypeId))
             .ForMember(dest => dest.EquipmentType, opt => opt.MapFrom(src => src.EquipmentType != null ? src.EquipmentType.Name : string.Empty))
-            .ForMember(dest => dest.StatusId, opt => opt.MapFrom(src => src.StatusId))
-            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status != null ? src.Status.Name : string.Empty))
+            .ForMember(dest => dest.StatusDefinitionId, opt => opt.MapFrom(src => src.StatusDefinitionId))
+            .ForMember(dest => dest.StatusDomainId, opt => opt.MapFrom(src => src.StatusDomainId))
+            .ForMember(dest => dest.StatusDefinition, opt => opt.MapFrom(src => src.StatusDefinition != null ? src.StatusDefinition.Code : string.Empty))
             .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
             .ForMember(dest => dest.SerialNumber, opt => opt.MapFrom(src => src.SerialNumber))
+            .ForMember(dest => dest.UrlImage, opt => opt.MapFrom(src => src.UrlImage))
             .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsActive));
 
         CreateMap<ListPage<EquipmentEntity>, ListPageResponse<EquipmentResponse>>()

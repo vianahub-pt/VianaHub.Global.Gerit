@@ -14,7 +14,7 @@ public class EquipmentMapping : IEntityTypeConfiguration<EquipmentEntity>
     {
         builder.ToTable("Equipments", "dbo");
 
-        // Chave Primária
+        // Chave Primï¿½ria
         builder.HasKey(x => x.Id)
             .HasName("PK_Equipments");
 
@@ -30,7 +30,11 @@ public class EquipmentMapping : IEntityTypeConfiguration<EquipmentEntity>
             .HasColumnType("INT")
             .IsRequired();
 
-        builder.Property(x => x.StatusId)
+        builder.Property(x => x.StatusDefinitionId)
+            .HasColumnType("INT")
+            .IsRequired();
+
+        builder.Property(x => x.StatusDomainId)
             .HasColumnType("INT")
             .IsRequired();
 
@@ -42,6 +46,11 @@ public class EquipmentMapping : IEntityTypeConfiguration<EquipmentEntity>
         builder.Property(x => x.SerialNumber)
             .HasColumnType("NVARCHAR(100)")
             .HasMaxLength(100)
+            .IsRequired(false);
+
+        builder.Property(x => x.UrlImage)
+            .HasColumnType("NVARCHAR(500)")
+            .HasMaxLength(500)
             .IsRequired(false);
 
         builder.Property(x => x.IsActive)
@@ -81,11 +90,11 @@ public class EquipmentMapping : IEntityTypeConfiguration<EquipmentEntity>
             .HasConstraintName("FK_Equipments_EquipamentType")
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder.HasOne(x => x.Status)
+        builder.HasOne(x => x.StatusDefinition)
             .WithMany()
-            .HasForeignKey(x => new { x.StatusId, x.TenantId })
-            .HasPrincipalKey(x => new { x.Id, x.TenantId })
-            .HasConstraintName("FK_Equipments_Status")
+            .HasForeignKey(x => new { x.StatusDefinitionId, x.TenantId, x.StatusDomainId })
+            .HasPrincipalKey(s => new { s.Id, s.TenantId, s.StatusDomainId })
+            .HasConstraintName("FK_Equipments_StatusDefinitions")
             .OnDelete(DeleteBehavior.Restrict);
     }
 }

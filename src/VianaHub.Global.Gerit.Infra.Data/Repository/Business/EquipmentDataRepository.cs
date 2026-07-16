@@ -21,7 +21,7 @@ public class EquipmentDataRepository : IEquipmentDataRepository
         return await _context.Set<EquipmentEntity>()
             .AsNoTracking()
             .Include(x => x.EquipmentType)
-            .Include(x => x.Status)
+            .Include(x => x.StatusDefinition)
             .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted, ct);
     }
 
@@ -30,7 +30,7 @@ public class EquipmentDataRepository : IEquipmentDataRepository
         return await _context.Set<EquipmentEntity>()
             .AsNoTracking()
             .Include(x => x.EquipmentType)
-            .Include(x => x.Status)
+            .Include(x => x.StatusDefinition)
             .Where(x => !x.IsDeleted).OrderBy(x => x.Name).ToListAsync(ct);
     }
 
@@ -39,7 +39,7 @@ public class EquipmentDataRepository : IEquipmentDataRepository
         var query = _context.Set<EquipmentEntity>()
             .AsNoTracking()
             .Include(x => x.EquipmentType)
-            .Include(x => x.Status)
+            .Include(x => x.StatusDefinition)
             .Where(x => !x.IsDeleted);
 
         if (!string.IsNullOrWhiteSpace(request.Search))
@@ -48,7 +48,7 @@ public class EquipmentDataRepository : IEquipmentDataRepository
             query = query.Where(x => EF.Functions.Like(x.Name.ToLower(), $"%{search}%") || 
                                      EF.Functions.Like(x.SerialNumber.ToLower(), $"%{search}%") ||
                                      EF.Functions.Like(x.EquipmentType.Name.ToLower(), $"%{search}%") ||
-                                     EF.Functions.Like(x.Status.Name.ToLower(), $"%{search}%"));
+                                     EF.Functions.Like(x.StatusDefinition.Code.ToLower(), $"%{search}%"));
         }
 
         if (request.IsActive.HasValue)

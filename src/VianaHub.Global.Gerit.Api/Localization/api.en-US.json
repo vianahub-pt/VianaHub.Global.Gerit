@@ -323,5 +323,20 @@
   "Api.Validator.UserPreferences.Update.TimeFormat": "Time format is required",
   "Api.Validator.UserPreferences.Update.TimeFormat.MaximumLength": "Time format must be at most {0} characters",
   "Api.Validator.UserPreferences.Update.DayStart": "Day start is required",
-  "Api.Validator.UserPreferences.Update.DayStart.Format": "Day start must be in format HH:mm"
+  "Api.Validator.UserPreferences.Update.DayStart.Format": "Day start must be in format HH:mm",
+
+  "Api.Validator.Equipment.Create.EquipmentTypeId": "Equipment type ID is required",
+  "Api.Validator.Equipment.Create.StatusDefinitionId": "Status definition ID is required",
+  "Api.Validator.Equipment.Create.StatusDomainId": "Status domain ID is required",
+  "Api.Validator.Equipment.Create.Name": "Equipment name is required",
+  "Api.Validator.Equipment.Create.Name.MaximumLength": "Equipment name must be at most {0} characters",
+  "Api.Validator.Equipment.Create.SerialNumber.MaximumLength": "Serial number must be at most {0} characters",
+  "Api.Validator.Equipment.Create.UrlImage.MaximumLength": "Image URL must be at most {0} characters",
+  "Api.Validator.Equipment.Update.EquipmentTypeId": "Equipment type ID is required",
+  "Api.Validator.Equipment.Update.StatusDefinitionId": "Status definition ID is required",
+  "Api.Validator.Equipment.Update.StatusDomainId": "Status domain ID is required",
+  "Api.Validator.Equipment.Update.Name": "Equipment name is required",
+  "Api.Validator.Equipment.Update.Name.MaximumLength": "Equipment name must be at most {0} characters",
+  "Api.Validator.Equipment.Update.SerialNumber.MaximumLength": "Serial number must be at most {0} characters",
+  "Api.Validator.Equipment.Update.UrlImage.MaximumLength": "Image URL must be at most {0} characters"
 }

@@ -292,5 +292,20 @@
   "Api.Validator.VisitContact.Update.Email": "O email é obrigatório",
   "Api.Validator.VisitContact.Update.Email.MaximumLength": "O email deve ter no máximo {0} caracteres",
   "Api.Validator.VisitContact.Update.Email.Invalid": "Endereço de email inválido",
-  "Api.Validator.VisitContact.Update.Phone.MaximumLength": "O telefone deve ter no máximo {0} caracteres"
+  "Api.Validator.VisitContact.Update.Phone.MaximumLength": "O telefone deve ter no máximo {0} caracteres",
+
+  "Api.Validator.Equipment.Create.EquipmentTypeId": "O ID do tipo de equipamento é obrigatório",
+  "Api.Validator.Equipment.Create.StatusDefinitionId": "O ID da definição de estado é obrigatório",
+  "Api.Validator.Equipment.Create.StatusDomainId": "O ID do domínio de estado é obrigatório",
+  "Api.Validator.Equipment.Create.Name": "O nome do equipamento é obrigatório",
+  "Api.Validator.Equipment.Create.Name.MaximumLength": "O nome do equipamento deve ter no máximo {0} caracteres",
+  "Api.Validator.Equipment.Create.SerialNumber.MaximumLength": "O número de série deve ter no máximo {0} caracteres",
+  "Api.Validator.Equipment.Create.UrlImage.MaximumLength": "O URL da imagem deve ter no máximo {0} caracteres",
+  "Api.Validator.Equipment.Update.EquipmentTypeId": "O ID do tipo de equipamento é obrigatório",
+  "Api.Validator.Equipment.Update.StatusDefinitionId": "O ID da definição de estado é obrigatório",
+  "Api.Validator.Equipment.Update.StatusDomainId": "O ID do domínio de estado é obrigatório",
+  "Api.Validator.Equipment.Update.Name": "O nome do equipamento é obrigatório",
+  "Api.Validator.Equipment.Update.Name.MaximumLength": "O nome do equipamento deve ter no máximo {0} caracteres",
+  "Api.Validator.Equipment.Update.SerialNumber.MaximumLength": "O número de série deve ter no máximo {0} caracteres",
+  "Api.Validator.Equipment.Update.UrlImage.MaximumLength": "O URL da imagem deve ter no máximo {0} caracteres"
 }
