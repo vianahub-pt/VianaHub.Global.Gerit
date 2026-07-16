@@ -815,7 +815,6 @@
   "Application.Service.VisitAttachment.GetById.ResourceNotFound": "Adjunto de la visita no encontrado o inactivo",
   "Application.Service.VisitAttachment.Update.ResourceAlreadyExists": "Ya existe otro adjunto con este nombre para esta visita",
   "Application.Service.VisitAttachment.Update.ResourceNotFound": "Adjunto de la visita no encontrado",
-  "Application.Service.VisitAttachment.ValidateBulkItem.AttachmentCategoryId": "El ID de la categoría de adjunto es obligatorio en la carga masiva",
   "Application.Service.VisitAttachment.ValidateBulkItem.FileName": "El nombre del archivo es obligatorio en la carga masiva",
   "Application.Service.VisitAttachment.ValidateBulkItem.FileTypeId": "El ID del tipo de archivo es obligatorio en la carga masiva",
   "Application.Service.VisitAttachment.ValidateBulkItem.FilePath": "La ruta del archivo es obligatoria en la carga masiva",

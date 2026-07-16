@@ -21,7 +21,6 @@ public class VisitAttachmentDataRepository : IVisitAttachmentDataRepository
         return await _context.Set<VisitAttachmentEntity>()
             .AsNoTracking()
             .Include(x => x.FileType)
-            .Include(x => x.AttachmentCategory)
             .Include(x => x.Visit)
             .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted, ct);
     }
@@ -31,7 +30,6 @@ public class VisitAttachmentDataRepository : IVisitAttachmentDataRepository
         return await _context.Set<VisitAttachmentEntity>()
             .AsNoTracking()
             .Include(x => x.FileType)
-            .Include(x => x.AttachmentCategory)
             .FirstOrDefaultAsync(x => x.PublicId == publicId && !x.IsDeleted, ct);
     }
 
@@ -40,7 +38,6 @@ public class VisitAttachmentDataRepository : IVisitAttachmentDataRepository
         return await _context.Set<VisitAttachmentEntity>()
             .AsNoTracking()
             .Include(x => x.FileType)
-            .Include(x => x.AttachmentCategory)
             .Where(x => !x.IsDeleted)
             .OrderByDescending(x => x.IsPrimary)
             .ThenBy(x => x.DisplayOrder)
@@ -52,22 +49,10 @@ public class VisitAttachmentDataRepository : IVisitAttachmentDataRepository
         return await _context.Set<VisitAttachmentEntity>()
             .AsNoTracking()
             .Include(x => x.FileType)
-            .Include(x => x.AttachmentCategory)
             .Where(x => x.VisitId == visitId && !x.IsDeleted)
             .OrderByDescending(x => x.IsPrimary)
             .ThenBy(x => x.DisplayOrder)
             .ThenBy(x => x.FileName)
-            .ToListAsync(ct);
-    }
-
-    public async Task<IEnumerable<VisitAttachmentEntity>> GetByCategoryIdAsync(int categoryId, CancellationToken ct)
-    {
-        return await _context.Set<VisitAttachmentEntity>()
-            .AsNoTracking()
-            .Include(x => x.FileType)
-            .Include(x => x.Visit)
-            .Where(x => x.AttachmentCategoryId == categoryId && !x.IsDeleted)
-            .OrderBy(x => x.DisplayOrder)
             .ToListAsync(ct);
     }
 
@@ -76,7 +61,6 @@ public class VisitAttachmentDataRepository : IVisitAttachmentDataRepository
         return await _context.Set<VisitAttachmentEntity>()
             .AsNoTracking()
             .Include(x => x.FileType)
-            .Include(x => x.AttachmentCategory)
             .FirstOrDefaultAsync(x => x.VisitId == visitId && x.IsPrimary && x.IsActive && !x.IsDeleted, ct);
     }
 
@@ -85,7 +69,6 @@ public class VisitAttachmentDataRepository : IVisitAttachmentDataRepository
         var query = _context.Set<VisitAttachmentEntity>()
             .AsNoTracking()
             .Include(x => x.FileType)
-            .Include(x => x.AttachmentCategory)
             .Include(x => x.Visit)
             .Where(x => !x.IsDeleted);
 

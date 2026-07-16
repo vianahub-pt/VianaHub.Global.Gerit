@@ -62,17 +62,6 @@ public static class VisitAttachmentEndpoint
         .Produces(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapGet("/category/{categoryId}", async ([FromRoute] int categoryId, [FromServices] IVisitAttachmentAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
-        {
-            var response = await appService.GetByCategoryIdAsync(categoryId, ct);
-            return notify.CustomResponse(response, 200);
-        })
-        .CustomAuthorize("Admin,BackOffice,Manager", "VisitAttachments", "GetBy")
-        .WithName("GetVisitAttachmentsByCategoryId")
-        .WithSummary("Swagger.Endpoint.VisitAttachment.GetByCategoryId.Summary")
-        .Produces(StatusCodes.Status200OK)
-        .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
-
         groupV1.MapGet("/visit/{visitId}/primary", async ([FromRoute] int visitId, [FromServices] IVisitAttachmentAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var response = await appService.GetPrimaryByVisitIdAsync(visitId, ct);

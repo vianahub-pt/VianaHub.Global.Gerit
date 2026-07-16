@@ -522,7 +522,6 @@
   "Swagger.Endpoint.VisitAttachment.GetById.Summary": "Get visit attachment by ID",
   "Swagger.Endpoint.VisitAttachment.GetByPublicId.Summary": "Get visit attachment by public ID",
   "Swagger.Endpoint.VisitAttachment.GetByVisitId.Summary": "Get attachments by visit ID",
-  "Swagger.Endpoint.VisitAttachment.GetByCategoryId.Summary": "Get attachments by category ID",
   "Swagger.Endpoint.VisitAttachment.GetPrimaryByVisitId.Summary": "Get primary attachment by visit ID",
   "Swagger.Endpoint.VisitAttachment.GetPaged.Summary": "Get visit attachments paged",
   "Swagger.Endpoint.VisitAttachment.Create.Summary": "Create new visit attachment",

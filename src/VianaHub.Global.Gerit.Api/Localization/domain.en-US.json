@@ -332,8 +332,6 @@
   "visit_attachment.file_type_id.required": "File type is required",
   "visit_attachment.visit_id.invalid": "Invalid visit ID",
   "visit_attachment.visit_id.required": "Visit is required",
-  "visit_attachment.attachment_category_id.invalid": "Invalid attachment category ID",
-  "visit_attachment.attachment_category_id.required": "Attachment category is required",
   "visit_attachment.s3_key.required": "File S3 key is required",
   "visit_attachment.s3_key.max_length": "S3 key must be at most 500 characters",
   "visit_attachment.file_name.required": "File name is required",
@@ -345,7 +343,6 @@
   "visit_attachment.primary_not_found": "Primary visit attachment not found",
   "visit_attachment.visit.not_found": "Visit not found",
   "visit_attachment.file_type.not_found": "File type not found",
-  "visit_attachment.attachment_category.not_found": "Attachment category not found",
   "visit_attachment.s3_key.already_exists": "An attachment with this S3 key already exists",
 
   "client_individual.entity.null": "Individual client cannot be null",

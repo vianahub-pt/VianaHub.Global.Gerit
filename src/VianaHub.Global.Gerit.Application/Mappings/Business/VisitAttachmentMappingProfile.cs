@@ -12,7 +12,6 @@ public class VisitAttachmentMappingProfile : Profile
         CreateMap<VisitAttachmentEntity, VisitAttachmentResponse>()
             .ForMember(dest => dest.FileTypeName, opt => opt.MapFrom(src => src.FileType.Extension))
             .ForMember(dest => dest.MimeType, opt => opt.MapFrom(src => src.FileType.MimeType))
-            .ForMember(dest => dest.AttachmentCategoryName, opt => opt.MapFrom(src => src.AttachmentCategory.Name))
             .ForMember(dest => dest.FormattedFileSize, opt => opt.MapFrom(src => src.GetFormattedFileSize()));
 
         CreateMap<CreateVisitAttachmentRequest, VisitAttachmentEntity>();

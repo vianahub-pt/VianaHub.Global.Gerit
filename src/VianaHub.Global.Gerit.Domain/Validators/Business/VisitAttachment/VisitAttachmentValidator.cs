@@ -67,9 +67,6 @@ public class VisitAttachmentValidator : IEntityDomainValidator<VisitAttachmentEn
         if (entity.VisitId <= 0)
             errors.Add(new ValidationFailure(nameof(entity.VisitId), "visit_attachment.visit_id.invalid"));
 
-        if (entity.AttachmentCategoryId <= 0)
-            errors.Add(new ValidationFailure(nameof(entity.AttachmentCategoryId), "visit_attachment.attachment_category_id.invalid"));
-
         if (string.IsNullOrWhiteSpace(entity.S3Key))
             errors.Add(new ValidationFailure(nameof(entity.S3Key), "visit_attachment.s3_key.required"));
         else if (entity.S3Key.Length > 500)

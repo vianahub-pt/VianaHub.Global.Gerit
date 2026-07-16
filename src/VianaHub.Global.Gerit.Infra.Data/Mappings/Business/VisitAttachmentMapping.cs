@@ -28,9 +28,6 @@ public class VisitAttachmentMapping : IEntityTypeConfiguration<VisitAttachmentEn
         builder.Property(x => x.VisitId)
             .IsRequired();
 
-        builder.Property(x => x.AttachmentCategoryId)
-            .IsRequired();
-
         builder.Property(x => x.PublicId)
             .HasDefaultValueSql("NEWID()")
             .IsRequired();
@@ -96,17 +93,11 @@ public class VisitAttachmentMapping : IEntityTypeConfiguration<VisitAttachmentEn
             .HasPrincipalKey(x => new { x.Id, x.TenantId })
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder.HasOne(x => x.AttachmentCategory)
-            .WithMany()
-            .HasForeignKey(x => new { x.AttachmentCategoryId, x.TenantId })
-            .HasPrincipalKey(x => new { x.Id, x.TenantId })
-            .OnDelete(DeleteBehavior.Restrict);
-
         // Índices
         builder.HasIndex(x => new { x.TenantId, x.VisitId })
             .HasFilter("[IsDeleted] = 0")
             .HasDatabaseName("IX_VisitAttachments_Tenant_Visit")
-            .IncludeProperties(x => new { x.AttachmentCategoryId, x.DisplayOrder, x.IsPrimary, x.FileTypeId });
+            .IncludeProperties(x => new { x.DisplayOrder, x.IsPrimary, x.FileTypeId });
 
         builder.HasIndex(x => new { x.TenantId, x.FileTypeId })
             .HasFilter("[IsDeleted] = 0")

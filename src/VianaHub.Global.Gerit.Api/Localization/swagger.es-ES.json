@@ -520,7 +520,6 @@
   "Swagger.Endpoint.VisitAttachment.GetById.Summary": "Obtener archivo adjunto de visita por ID",
   "Swagger.Endpoint.VisitAttachment.GetByPublicId.Summary": "Obtener archivo adjunto de visita por ID público",
   "Swagger.Endpoint.VisitAttachment.GetByVisitId.Summary": "Obtener archivos adjuntos por ID de visita",
-  "Swagger.Endpoint.VisitAttachment.GetByCategoryId.Summary": "Obtener archivos adjuntos por ID de categoría",
   "Swagger.Endpoint.VisitAttachment.GetPrimaryByVisitId.Summary": "Obtener archivo adjunto principal por ID de visita",
   "Swagger.Endpoint.VisitAttachment.GetPaged.Summary": "Obtener archivos adjuntos de visitas paginados",
   "Swagger.Endpoint.VisitAttachment.Create.Summary": "Crear nuevo archivo adjunto de visita",
