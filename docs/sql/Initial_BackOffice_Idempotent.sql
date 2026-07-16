@@ -131,7 +131,7 @@ WHERE NOT EXISTS (
 GO
 INSERT INTO dbo.Plans (
     Name, Description, PricePerHour, PricePerDay, PricePerMonth, PricePerYear,
-    Currency, MaxUsers, MaxPhotosPerVisits, CreatedBy
+    Currency, MaxUsers, MaxPhotosPerVisit, CreatedBy
 )
 SELECT *
 FROM (VALUES
@@ -144,7 +144,7 @@ FROM (VALUES
     (N'Pay-as-you-go Daily', N'Plano baseado em consumo por dia.', NULL, 25.00, NULL, NULL, N'EUR', 10, 100, 1)
 ) AS v(
     Name, Description, PricePerHour, PricePerDay, PricePerMonth, PricePerYear,
-    Currency, MaxUsers, MaxPhotosPerVisits, CreatedBy
+    Currency, MaxUsers, MaxPhotosPerVisit, CreatedBy
 )
 WHERE NOT EXISTS (
     SELECT 1 FROM dbo.Plans p WHERE p.Name = v.Name

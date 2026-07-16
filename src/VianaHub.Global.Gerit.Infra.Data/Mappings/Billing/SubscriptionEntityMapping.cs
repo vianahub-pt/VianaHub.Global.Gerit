@@ -123,7 +123,7 @@ public class SubscriptionEntityMapping : IEntityTypeConfiguration<SubscriptionEn
             .HasConstraintName("FK_Subscriptions_Tenant")
             .OnDelete(DeleteBehavior.Restrict);
 
-        // Navegao - Relacionamento com SubscriptionPlan (PlanEntity)
+        // Navegao - Relacionamento com SubscriptionPlan (SubscriptionPlanEntity)
         builder.HasOne(x => x.SubscriptionPlan)
             .WithMany(p => p.Subscriptions)
             .HasForeignKey(x => x.SubscriptionPlanId)

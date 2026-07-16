@@ -10,5 +10,5 @@ public class BulkUploadPlanItem
     public decimal? PricePerYear { get; set; }
     public string? Currency { get; set; }
     public int MaxUsers { get; set; }
-    public int MaxPhotosPerVisits { get; set; }
+    public int MaxPhotosPerVisit { get; set; }
 }

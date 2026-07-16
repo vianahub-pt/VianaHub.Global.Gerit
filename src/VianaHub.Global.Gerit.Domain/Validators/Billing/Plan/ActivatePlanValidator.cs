@@ -4,7 +4,7 @@ using VianaHub.Global.Gerit.Domain.Interfaces.Base;
 
 namespace VianaHub.Global.Gerit.Domain.Validators.Billing.Plan;
 
-public class ActivatePlanValidator : AbstractValidator<PlanEntity>
+public class ActivatePlanValidator : AbstractValidator<SubscriptionPlanEntity>
 {
     public ActivatePlanValidator(ILocalizationService localization)
     {

@@ -11,12 +11,12 @@ namespace VianaHub.Global.Gerit.Domain.Services.Billing;
 public class PlanDomainService : IPlanDomainService
 {
     private readonly IPlanDataRepository _repo;
-    private readonly IEntityDomainValidator<PlanEntity> _validator;
+    private readonly IEntityDomainValidator<SubscriptionPlanEntity> _validator;
     private readonly INotify _notify;
 
     public PlanDomainService(
         IPlanDataRepository repo,
-        IEntityDomainValidator<PlanEntity> validator,
+        IEntityDomainValidator<SubscriptionPlanEntity> validator,
         INotify notify)
     {
         _repo = repo;
@@ -24,15 +24,15 @@ public class PlanDomainService : IPlanDomainService
         _notify = notify;
     }
 
-    public async Task<PlanEntity> GetByIdAsync(int id, CancellationToken ct)
+    public async Task<SubscriptionPlanEntity> GetByIdAsync(int id, CancellationToken ct)
     {
         return await _repo.GetByIdAsync(id, ct);
     }
-    public async Task<IEnumerable<PlanEntity>> GetAllAsync(CancellationToken ct)
+    public async Task<IEnumerable<SubscriptionPlanEntity>> GetAllAsync(CancellationToken ct)
     {
         return await _repo.GetAllAsync(ct);
     }
-    public async Task<ListPage<PlanEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct)
+    public async Task<ListPage<SubscriptionPlanEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct)
     {
         return await _repo.GetPagedAsync(request, ct);
     }
@@ -45,7 +45,7 @@ public class PlanDomainService : IPlanDomainService
         return await _repo.ExistsByNameAsync(name, ct);
     }
 
-    public async Task<bool> CreateAsync(PlanEntity entity, CancellationToken ct)
+    public async Task<bool> CreateAsync(SubscriptionPlanEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForCreateAsync(entity);
         if (!validationResult.IsValid)
@@ -59,7 +59,7 @@ public class PlanDomainService : IPlanDomainService
         
         return await _repo.AddAsync(entity, ct);
     }
-    public async Task<bool> UpdateAsync(PlanEntity entity, CancellationToken ct)
+    public async Task<bool> UpdateAsync(SubscriptionPlanEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForUpdateAsync(entity);
         if (!validationResult.IsValid)
@@ -73,7 +73,7 @@ public class PlanDomainService : IPlanDomainService
         
         return await _repo.UpdateAsync(entity, ct);
     }
-    public async Task<bool> ActivateAsync(PlanEntity entity, CancellationToken ct)
+    public async Task<bool> ActivateAsync(SubscriptionPlanEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForActivateAsync(entity);
         if (!validationResult.IsValid)
@@ -87,7 +87,7 @@ public class PlanDomainService : IPlanDomainService
         
         return await _repo.UpdateAsync(entity, ct);
     }
-    public async Task<bool> DeactivateAsync(PlanEntity entity, CancellationToken ct)
+    public async Task<bool> DeactivateAsync(SubscriptionPlanEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForDeactivateAsync(entity);
         if (!validationResult.IsValid)
@@ -101,7 +101,7 @@ public class PlanDomainService : IPlanDomainService
         
         return await _repo.UpdateAsync(entity, ct);
     }
-    public async Task<bool> DeleteAsync(PlanEntity entity, CancellationToken ct)
+    public async Task<bool> DeleteAsync(SubscriptionPlanEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForDeleteAsync(entity);
         if (!validationResult.IsValid)

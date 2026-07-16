@@ -29,7 +29,7 @@ public class SubscriptionEntity : Entity
 
     // Navigation Properties
     public TenantEntity Tenant { get; private set; } = null!;
-    public PlanEntity SubscriptionPlan { get; private set; } = null!;
+    public SubscriptionPlanEntity SubscriptionPlan { get; private set; } = null!;
     public StatusDefinitionEntity StatusDefinition { get; private set; } = null!;
 
     // Construtor protegido para o EF Core

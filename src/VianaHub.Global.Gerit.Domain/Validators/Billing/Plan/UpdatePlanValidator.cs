@@ -4,7 +4,7 @@ using VianaHub.Global.Gerit.Domain.Interfaces.Base;
 
 namespace VianaHub.Global.Gerit.Domain.Validators.Billing.Plan;
 
-public class UpdatePlanValidator : AbstractValidator<PlanEntity>
+public class UpdatePlanValidator : AbstractValidator<SubscriptionPlanEntity>
 {
     public UpdatePlanValidator(ILocalizationService localization)
     {
@@ -33,7 +33,7 @@ public class UpdatePlanValidator : AbstractValidator<PlanEntity>
             .GreaterThan(0)
             .WithMessage(localization.GetMessage("Domain.Plan.MaxUsersRequired"));
 
-        RuleFor(x => x.MaxPhotosPerVisits)
+        RuleFor(x => x.MaxPhotosPerVisit)
             .GreaterThan(0)
             .WithMessage(localization.GetMessage("Domain.Plan.MaxPhotosRequired"));
 
