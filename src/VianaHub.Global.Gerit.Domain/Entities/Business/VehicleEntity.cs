@@ -4,12 +4,13 @@ using VianaHub.Global.Gerit.Domain.Entities.Billing;
 namespace VianaHub.Global.Gerit.Domain.Entities.Business;
 
 /// <summary>
-/// Entidade que representa um Ve�culo
+/// Entidade que representa um Veículo
 /// </summary>
 public class VehicleEntity : Entity
 {
     public int TenantId { get; private set; }
-    public int StatusId { get; private set; }
+    public int StatusDefinitionId { get; private set; }
+    public int StatusDomainId { get; private set; }
     public string? Plate { get; private set; }
     public string? Brand { get; private set; }
     public string? Model { get; private set; }
@@ -19,20 +20,21 @@ public class VehicleEntity : Entity
     public bool IsActive { get; private set; }
     public bool IsDeleted { get; private set; }
 
-    // Navigation Property
+    // Navigation Properties
     public TenantEntity Tenant { get; private set; }
-    public StatusEntity Status { get; private set; }
+    public StatusDefinitionEntity StatusDefinition { get; private set; }
 
     // Construtor protegido para o EF Core
     protected VehicleEntity() { }
 
     /// <summary>
-    /// Construtor para cria��o de um novo Ve�culo
+    /// Construtor para criação de um novo Veículo
     /// </summary>
-    public VehicleEntity(int tenantId, int statusId, string plate, string brand, string model, int year, string? color, string? fuelType, int createdBy)
+    public VehicleEntity(int tenantId, int statusDefinitionId, int statusDomainId, string plate, string brand, string model, int year, string? color, string? fuelType, int createdBy)
     {
         TenantId = tenantId;
-        StatusId = statusId;
+        StatusDefinitionId = statusDefinitionId;
+        StatusDomainId = statusDomainId;
         Plate = plate;
         Brand = brand;
         Model = model;
@@ -45,9 +47,10 @@ public class VehicleEntity : Entity
         CreatedAt = DateTime.UtcNow;
     }
 
-    public void Update(int statusId, string plate, string brand, string model, int year, string? color, string? fuelType, int modifiedBy)
+    public void Update(int statusDefinitionId, int statusDomainId, string plate, string brand, string model, int year, string? color, string? fuelType, int modifiedBy)
     {
-        StatusId = statusId;
+        StatusDefinitionId = statusDefinitionId;
+        StatusDomainId = statusDomainId;
         Plate = plate;
         Brand = brand;
         Model = model;
@@ -57,6 +60,7 @@ public class VehicleEntity : Entity
         ModifiedBy = modifiedBy;
         ModifiedAt = DateTime.UtcNow;
     }
+
     public void Activate(int modifiedBy)
     {
         IsActive = true;
