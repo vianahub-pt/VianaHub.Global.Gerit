@@ -787,7 +787,8 @@
   "Application.Service.Visit.Update.ResourceNotFound": "Visit not found",
   "Application.Service.Visit.ValidateBulkItem.Code": "Code is required for line {0}",
   "Application.Service.Visit.ValidateBulkItem.InterventionId": "Intervention ID is required for line {0}",
-  "Application.Service.Visit.ValidateBulkItem.StatusId": "Status ID is required for line {0}",
+  "Application.Service.Visit.ValidateBulkItem.StatusDefinitionId": "Status definition ID is required for line {0}",
+  "Application.Service.Visit.ValidateBulkItem.StatusDomainId": "Status domain ID is required for line {0}",
 
   "Application.Service.VisitAttachment.Activate.ResourceNotFound": "Visit attachment not found",
   "Application.Service.VisitAttachment.Create.ResourceAlreadyExists": "An attachment with this name already exists for this visit",

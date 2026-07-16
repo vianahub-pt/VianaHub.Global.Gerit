@@ -6,7 +6,7 @@ namespace VianaHub.Global.Gerit.Infra.Data.Mappings.Business;
 
 /// <summary>
 /// Mapeamento da entidade Visit
-/// Intervenções do tenant com suporte a Row Level Security
+/// Intervenï¿½ï¿½es do tenant com suporte a Row Level Security
 /// </summary>
 public class VisitMapping : IEntityTypeConfiguration<VisitEntity>
 {
@@ -14,7 +14,7 @@ public class VisitMapping : IEntityTypeConfiguration<VisitEntity>
     {
         builder.ToTable("Visits", "dbo");
 
-        // Chave Primária
+        // Chave Primï¿½ria
         builder.HasKey(x => x.Id)
             .HasName("PK_Visits");
 
@@ -29,7 +29,16 @@ public class VisitMapping : IEntityTypeConfiguration<VisitEntity>
         builder.Property(x => x.ClientId)
             .IsRequired();
 
-        builder.Property(x => x.StatusId)
+        builder.Property(x => x.StatusDefinitionId)
+            .IsRequired();
+
+        builder.Property(x => x.StatusDomainId)
+            .IsRequired();
+
+        builder.Property(x => x.CurrencyCode)
+            .HasColumnType("CHAR(3)")
+            .HasMaxLength(3)
+            .HasDefaultValue("EUR")
             .IsRequired();
 
         builder.Property(x => x.Title)
@@ -105,11 +114,11 @@ public class VisitMapping : IEntityTypeConfiguration<VisitEntity>
             .HasConstraintName("FK_Visits_Clients")
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder.HasOne(x => x.Status)
+        builder.HasOne(x => x.StatusDefinition)
             .WithMany()
-            .HasForeignKey(x => new { x.StatusId, x.TenantId })
-            .HasPrincipalKey(s => new { s.Id, s.TenantId })
-            .HasConstraintName("FK_Visits_Status")
+            .HasForeignKey(x => new { x.StatusDefinitionId, x.TenantId, x.StatusDomainId })
+            .HasPrincipalKey(s => new { s.Id, s.TenantId, s.StatusDomainId })
+            .HasConstraintName("FK_Visits_StatusDefinitions")
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasMany(x => x.Contacts)

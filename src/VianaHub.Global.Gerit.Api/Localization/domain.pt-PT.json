@@ -354,6 +354,10 @@
 
   "Domain.Visit.TenantIdRequired": "O ID do inquilino é obrigatório para a intervenção",
   "Domain.Visit.ClientIdRequired": "O ID do cliente é obrigatório para a intervenção",
+  "Domain.Visit.StatusDefinitionIdRequired": "O ID da definição de estado é obrigatório para a intervenção",
+  "Domain.Visit.StatusDomainIdRequired": "O ID do domínio de estado é obrigatório para a intervenção",
+  "Domain.Visit.CurrencyCodeRequired": "O código de moeda é obrigatório para a intervenção",
+  "Domain.Visit.CurrencyCodeMaxLength": "O código de moeda deve ter no máximo {0} caracteres",
   "Domain.Visit.TitleRequired": "O título da intervenção é obrigatório",
   "Domain.Visit.TitleMaxLength": "O título da intervenção deve ter no máximo {0} caracteres",
   "Domain.Visit.DescriptionRequired": "A descrição da intervenção é obrigatória",
