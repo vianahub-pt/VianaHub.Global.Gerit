@@ -107,8 +107,12 @@
   "Domain.Vehicle.AlreadyDeleted": "O veículo já foi eliminado",
 
   "Domain.Equipment.TenantIdRequired": "O ID do inquilino é obrigatório para o equipamento",
+  "Domain.Equipment.EquipmentTypeIdRequired": "O ID do tipo de equipamento é obrigatório",
+  "Domain.Equipment.StatusDefinitionIdRequired": "O ID da definição de estado é obrigatório",
+  "Domain.Equipment.StatusDomainIdRequired": "O ID do domínio de estado é obrigatório",
   "Domain.Equipment.NameRequired": "O nome do equipamento é obrigatório",
   "Domain.Equipment.NameMaxLength": "O nome do equipamento deve ter no máximo {0} caracteres",
+  "Domain.Equipment.UrlImageMaxLength": "O URL da imagem do equipamento deve ter no máximo {0} caracteres",
   "Domain.Equipment.InvalidId": "ID do equipamento inválido",
   "Domain.Equipment.CannotUpdateDeleted": "Não é possível atualizar um equipamento eliminado",
   "Domain.Equipment.CannotActivateDeleted": "Não é possível ativar um equipamento eliminado",
