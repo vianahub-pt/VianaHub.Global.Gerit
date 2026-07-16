@@ -70,7 +70,6 @@ using VianaHub.Global.Gerit.Domain.Validators.Business.VisitTeamEquipment;
 using VianaHub.Global.Gerit.Domain.Validators.Identity.UserPreferences;
 using VianaHub.Global.Gerit.Domain.Validators.Business.AcquisitionSourceType;
 using VianaHub.Global.Gerit.Domain.Validators.Business.FileType;
-using VianaHub.Global.Gerit.Domain.Validators.Business.AttachmentCategory;
 using VianaHub.Global.Gerit.Domain.Validators.Business.VisitAttachment;
 using VianaHub.Global.Gerit.Domain.Validators.Business.ClientFiscalData;
 
@@ -131,7 +130,6 @@ public static class DependencyInjection
         services.AddScoped<IEntityDomainValidator<VisitTeamEmployeeEntity>, VisitTeamEmployeeValidator>();
         services.AddScoped<IEntityDomainValidator<VisitTeamVehicleEntity>, VisitTeamVehicleValidator>();
         services.AddScoped<IEntityDomainValidator<VisitTeamEquipmentEntity>, VisitTeamEquipmentValidator>();
-        services.AddScoped<IEntityDomainValidator<AttachmentCategoryEntity>, AttachmentCategoryValidator>();
         services.AddScoped<IEntityDomainValidator<VisitAttachmentEntity>, VisitAttachmentValidator>();
         services.AddScoped<IEntityDomainValidator<ClientFiscalDataEntity>, ClientFiscalDataValidator>();
 
@@ -156,7 +154,6 @@ public static class DependencyInjection
         services.AddScoped<IVisitTeamsAppService, VisitTeamAppService>();
         services.AddScoped<IVisitTeamDataRepository, VisitTeamDataRepository>();
         services.AddScoped<IVisitTeamEmployeeAppService, VisitTeamEmployeeAppService>();
-        services.AddScoped<IAttachmentCategoryAppService, AttachmentCategoryAppService>();
         services.AddScoped<IVisitAttachmentAppService, VisitAttachmentAppService>();
         services.AddScoped<IClientAppService, ClientAppService>();
         services.AddScoped<IClientAddressAppService, ClientAddressAppService>();
@@ -213,7 +210,6 @@ public static class DependencyInjection
         services.AddScoped<IStatusTypeDomainService, StatusTypeDomainService>();
         services.AddScoped<IVisitTeamVehicleDomainService, VisitTeamVehicleDomainService>();
         services.AddScoped<IVisitTeamEquipmentDomainService, VisitTeamEquipmentDomainService>();
-        services.AddScoped<IAttachmentCategoryDomainService, AttachmentCategoryDomainService>();
         services.AddScoped<IVisitAttachmentDomainService, VisitAttachmentDomainService>();
         services.AddScoped<IClientFiscalDataDomainService, ClientFiscalDataDomainService>();
 
@@ -256,7 +252,6 @@ public static class DependencyInjection
         services.AddScoped<IVisitTeamEmployeeDataRepository, VisitTeamEmployeeDataRepository>();
         services.AddScoped<IVisitTeamVehicleDataRepository, VisitTeamVehicleDataRepository>();
         services.AddScoped<IVisitTeamEquipmentDataRepository, VisitTeamEquipmentDataRepository>();
-        services.AddScoped<IAttachmentCategoryDataRepository, AttachmentCategoryDataRepository>();
         services.AddScoped<IVisitAttachmentDataRepository, VisitAttachmentDataRepository>();
         services.AddScoped<IPartyTypeDataRepository, PartyTypeDataRepository>();
         services.AddScoped<IPartyTypeTranslationDataRepository, PartyTypeTranslationDataRepository>();

@@ -551,16 +551,5 @@
   "Swagger.Endpoint.VisitTeams.Delete.Summary": "Delete visit team",
   "Swagger.Endpoint.VisitTeams.Activate.Summary": "Activate visit team",
   "Swagger.Endpoint.VisitTeams.Deactivate.Summary": "Deactivate visit team",
-  "Swagger.Endpoint.VisitTeams.BulkUpload.Summary": "Bulk upload visit teams",
-
-  "Swagger.Endpoint.AttachmentCategory.GetAll.Summary": "Get all attachment categories",
-  "Swagger.Endpoint.AttachmentCategory.GetActive.Summary": "Get active attachment categories",
-  "Swagger.Endpoint.AttachmentCategory.GetById.Summary": "Get attachment category by ID",
-  "Swagger.Endpoint.AttachmentCategory.GetPaged.Summary": "Get attachment categories paged",
-  "Swagger.Endpoint.AttachmentCategory.Create.Summary": "Create new attachment category",
-  "Swagger.Endpoint.AttachmentCategory.Update.Summary": "Update attachment category",
-  "Swagger.Endpoint.AttachmentCategory.Delete.Summary": "Delete attachment category",
-  "Swagger.Endpoint.AttachmentCategory.Activate.Summary": "Activate attachment category",
-  "Swagger.Endpoint.AttachmentCategory.Deactivate.Summary": "Deactivate attachment category",
-  "Swagger.Endpoint.AttachmentCategory.BulkUpload.Summary": "Bulk upload attachment categories"
+  "Swagger.Endpoint.VisitTeams.BulkUpload.Summary": "Bulk upload visit teams"
 }

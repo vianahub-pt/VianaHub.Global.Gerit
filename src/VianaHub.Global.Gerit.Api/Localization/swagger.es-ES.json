@@ -549,16 +549,5 @@
   "Swagger.Endpoint.VisitTeams.Delete.Summary": "Eliminar equipo de visita",
   "Swagger.Endpoint.VisitTeams.Activate.Summary": "Activar equipo de visita",
   "Swagger.Endpoint.VisitTeams.Deactivate.Summary": "Desactivar equipo de visita",
-  "Swagger.Endpoint.VisitTeams.BulkUpload.Summary": "Carga masiva de equipos de visita",
-
-  "Swagger.Endpoint.AttachmentCategory.GetAll.Summary": "Obtener todas las categorías de archivos adjuntos",
-  "Swagger.Endpoint.AttachmentCategory.GetActive.Summary": "Obtener categorías de archivos adjuntos activas",
-  "Swagger.Endpoint.AttachmentCategory.GetById.Summary": "Obtener categoría de archivo adjunto por ID",
-  "Swagger.Endpoint.AttachmentCategory.GetPaged.Summary": "Obtener categorías de archivos adjuntos paginadas",
-  "Swagger.Endpoint.AttachmentCategory.Create.Summary": "Crear nueva categoría de archivo adjunto",
-  "Swagger.Endpoint.AttachmentCategory.Update.Summary": "Actualizar categoría de archivo adjunto",
-  "Swagger.Endpoint.AttachmentCategory.Delete.Summary": "Eliminar categoría de archivo adjunto",
-  "Swagger.Endpoint.AttachmentCategory.Activate.Summary": "Activar categoría de archivo adjunto",
-  "Swagger.Endpoint.AttachmentCategory.Deactivate.Summary": "Desactivar categoría de archivo adjunto",
-  "Swagger.Endpoint.AttachmentCategory.BulkUpload.Summary": "Carga masiva de categorías de archivos adjuntos"
+  "Swagger.Endpoint.VisitTeams.BulkUpload.Summary": "Carga masiva de equipos de visita"
 }
