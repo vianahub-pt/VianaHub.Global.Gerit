@@ -349,5 +349,26 @@
   "Api.Validator.Vehicle.Update.Model.MaximumLength": "O modelo deve ter no máximo {0} caracteres",
   "Api.Validator.Vehicle.Update.Year": "O ano deve ser superior a 1885",
   "Api.Validator.Vehicle.Update.Color.MaximumLength": "A cor deve ter no máximo {0} caracteres",
-  "Api.Validator.Vehicle.Update.FuelType.MaximumLength": "O tipo de combustível deve ter no máximo {0} caracteres"
+  "Api.Validator.Vehicle.Update.FuelType.MaximumLength": "O tipo de combustível deve ter no máximo {0} caracteres",
+
+  "Api.Validator.Subscription.Create.TenantId": "O ID do inquilino é obrigatório",
+  "Api.Validator.Subscription.Create.SubscriptionPlanId": "O ID do plano de subscrição é obrigatório",
+  "Api.Validator.Subscription.Create.StatusDefinitionId": "O ID da definição de status é obrigatório",
+  "Api.Validator.Subscription.Create.StatusDomainId": "O ID do domínio de status é obrigatório",
+  "Api.Validator.Subscription.Create.AgreedAmountNonNegative": "O valor acordado deve ser maior ou igual a zero",
+  "Api.Validator.Subscription.Create.CurrentPeriodStart": "A data de início do período é obrigatória",
+  "Api.Validator.Subscription.Create.CurrentPeriodEnd": "A data de fim do período é obrigatória",
+  "Api.Validator.Subscription.Create.CurrentPeriodEnd.AfterStart": "A data de fim do período deve ser posterior à data de início",
+  "Api.Validator.Subscription.Create.TrialEnd.AfterStart": "A data de fim do período de teste deve ser posterior à data de início",
+  "Api.Validator.Subscription.Create.StripeCustomerId.MaximumLength": "O ID do cliente Stripe deve ter no máximo {0} caracteres",
+  "Api.Validator.Subscription.Create.BillingInterval.MaximumLength": "O intervalo de faturação deve ter no máximo {0} caracteres",
+  "Api.Validator.Subscription.Create.CurrencyCode.Length": "O código da moeda deve ter exatamente {0} caracteres",
+  "Api.Validator.Subscription.Update.SubscriptionPlanId": "O ID do plano de subscrição é obrigatório",
+  "Api.Validator.Subscription.Update.StatusDefinitionId": "O ID da definição de status é obrigatório",
+  "Api.Validator.Subscription.Update.StatusDomainId": "O ID do domínio de status é obrigatório",
+  "Api.Validator.Subscription.Update.AgreedAmountNonNegative": "O valor acordado deve ser maior ou igual a zero",
+  "Api.Validator.Subscription.Update.CurrentPeriodStart": "A data de início do período é obrigatória",
+  "Api.Validator.Subscription.Update.CurrentPeriodEnd": "A data de fim do período é obrigatória",
+  "Api.Validator.Subscription.Update.CurrentPeriodEnd.AfterStart": "A data de fim do período deve ser posterior à data de início",
+  "Api.Validator.Subscription.Update.TrialEnd.AfterStart": "A data de fim do período de teste deve ser posterior à data de início"
 }

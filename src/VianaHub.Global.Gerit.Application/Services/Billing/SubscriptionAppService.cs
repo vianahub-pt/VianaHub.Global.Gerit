@@ -101,7 +101,12 @@ public class SubscriptionAppService : ISubscriptionAppService
 
         var entity = new SubscriptionEntity(
             request.TenantId,
-            request.PlanId,
+            request.SubscriptionPlanId,
+            request.StatusDefinitionId,
+            request.StatusDomainId,
+            request.AgreedAmount,
+            request.BillingInterval,
+            request.CurrencyCode,
             request.CurrentPeriodStart,
             request.CurrentPeriodEnd,
             request.TrialStart,
@@ -124,7 +129,12 @@ public class SubscriptionAppService : ISubscriptionAppService
         }
 
         entity.Update(
-            request.PlanId,
+            request.SubscriptionPlanId,
+            request.StatusDefinitionId,
+            request.StatusDomainId,
+            request.AgreedAmount,
+            request.BillingInterval,
+            request.CurrencyCode,
             request.CurrentPeriodStart,
             request.CurrentPeriodEnd,
             request.TrialStart,
@@ -260,9 +270,24 @@ public class SubscriptionAppService : ISubscriptionAppService
                             _notify.Add(_localization.GetMessage("Application.Service.Subscription.ReadCsvFile.TenantId.IsSafeCsvValue", rowCount + 2), 400);
                             continue;
                         }
-                        if (record.PlanId <= 0)
+                        if (record.SubscriptionPlanId <= 0)
                         {
-                            _notify.Add(_localization.GetMessage("Application.Service.Subscription.ReadCsvFile.PlanId.IsSafeCsvValue", rowCount + 2), 400);
+                            _notify.Add(_localization.GetMessage("Application.Service.Subscription.ReadCsvFile.SubscriptionPlanId.IsSafeCsvValue", rowCount + 2), 400);
+                            continue;
+                        }
+                        if (record.StatusDefinitionId <= 0)
+                        {
+                            _notify.Add(_localization.GetMessage("Application.Service.Subscription.ReadCsvFile.StatusDefinitionId.IsSafeCsvValue", rowCount + 2), 400);
+                            continue;
+                        }
+                        if (record.StatusDomainId <= 0)
+                        {
+                            _notify.Add(_localization.GetMessage("Application.Service.Subscription.ReadCsvFile.StatusDomainId.IsSafeCsvValue", rowCount + 2), 400);
+                            continue;
+                        }
+                        if (record.AgreedAmount < 0)
+                        {
+                            _notify.Add(_localization.GetMessage("Application.Service.Subscription.ReadCsvFile.AgreedAmount.IsSafeCsvValue", rowCount + 2), 400);
                             continue;
                         }
                         if (record.CurrentPeriodStart <= DateTime.MinValue)
@@ -335,7 +360,7 @@ public class SubscriptionAppService : ISubscriptionAppService
             }
 
             // Cria a entidade
-            var entity = new SubscriptionEntity(tenantId, item.PlanId, item.CurrentPeriodStart, item.CurrentPeriodEnd, item.TrialStart, item.TrialEnd, item.StripeCustomerId, _currentUser.GetUserId());
+            var entity = new SubscriptionEntity(tenantId, item.SubscriptionPlanId, item.StatusDefinitionId, item.StatusDomainId, item.AgreedAmount, item.BillingInterval, item.CurrencyCode, item.CurrentPeriodStart, item.CurrentPeriodEnd, item.TrialStart, item.TrialEnd, item.StripeCustomerId, _currentUser.GetUserId());
 
             // Tenta criar no dom�nio
             var success = await _domain.CreateAsync(entity, ct);
@@ -357,9 +382,24 @@ public class SubscriptionAppService : ISubscriptionAppService
             _notify.Add(_localization.GetMessage("Application.Service.Subscription.ValidateBulkItem.TenantId", item.TenantId), 400);
             return false;
         }
-        if (item.PlanId <= 0)
+        if (item.SubscriptionPlanId <= 0)
         {
-            _notify.Add(_localization.GetMessage("Application.Service.Subscription.ValidateBulkItem.PlanId", item.PlanId), 400);
+            _notify.Add(_localization.GetMessage("Application.Service.Subscription.ValidateBulkItem.SubscriptionPlanId", item.SubscriptionPlanId), 400);
+            return false;
+        }
+        if (item.StatusDefinitionId <= 0)
+        {
+            _notify.Add(_localization.GetMessage("Application.Service.Subscription.ValidateBulkItem.StatusDefinitionId", item.StatusDefinitionId), 400);
+            return false;
+        }
+        if (item.StatusDomainId <= 0)
+        {
+            _notify.Add(_localization.GetMessage("Application.Service.Subscription.ValidateBulkItem.StatusDomainId", item.StatusDomainId), 400);
+            return false;
+        }
+        if (item.AgreedAmount < 0)
+        {
+            _notify.Add(_localization.GetMessage("Application.Service.Subscription.ValidateBulkItem.AgreedAmountNonNegative"), 400);
             return false;
         }
         return true;

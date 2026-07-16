@@ -349,5 +349,26 @@
   "Api.Validator.Vehicle.Update.Model.MaximumLength": "El modelo debe tener como máximo {0} caracteres",
   "Api.Validator.Vehicle.Update.Year": "El año debe ser mayor que 1885",
   "Api.Validator.Vehicle.Update.Color.MaximumLength": "El color debe tener como máximo {0} caracteres",
-  "Api.Validator.Vehicle.Update.FuelType.MaximumLength": "El tipo de combustible debe tener como máximo {0} caracteres"
+  "Api.Validator.Vehicle.Update.FuelType.MaximumLength": "El tipo de combustible debe tener como máximo {0} caracteres",
+
+  "Api.Validator.Subscription.Create.TenantId": "El ID del inquilino es obligatorio",
+  "Api.Validator.Subscription.Create.SubscriptionPlanId": "El ID del plan de suscripción es obligatorio",
+  "Api.Validator.Subscription.Create.StatusDefinitionId": "El ID de la definición de estado es obligatorio",
+  "Api.Validator.Subscription.Create.StatusDomainId": "El ID del dominio de estado es obligatorio",
+  "Api.Validator.Subscription.Create.AgreedAmountNonNegative": "El importe acordado debe ser mayor o igual a cero",
+  "Api.Validator.Subscription.Create.CurrentPeriodStart": "La fecha de inicio del período es obligatoria",
+  "Api.Validator.Subscription.Create.CurrentPeriodEnd": "La fecha de fin del período es obligatoria",
+  "Api.Validator.Subscription.Create.CurrentPeriodEnd.AfterStart": "La fecha de fin del período debe ser posterior a la fecha de inicio",
+  "Api.Validator.Subscription.Create.TrialEnd.AfterStart": "La fecha de fin del período de prueba debe ser posterior a la fecha de inicio",
+  "Api.Validator.Subscription.Create.StripeCustomerId.MaximumLength": "El ID del cliente Stripe debe tener como máximo {0} caracteres",
+  "Api.Validator.Subscription.Create.BillingInterval.MaximumLength": "El intervalo de facturación debe tener como máximo {0} caracteres",
+  "Api.Validator.Subscription.Create.CurrencyCode.Length": "El código de moneda debe tener exactamente {0} caracteres",
+  "Api.Validator.Subscription.Update.SubscriptionPlanId": "El ID del plan de suscripción es obligatorio",
+  "Api.Validator.Subscription.Update.StatusDefinitionId": "El ID de la definición de estado es obligatorio",
+  "Api.Validator.Subscription.Update.StatusDomainId": "El ID del dominio de estado es obligatorio",
+  "Api.Validator.Subscription.Update.AgreedAmountNonNegative": "El importe acordado debe ser mayor o igual a cero",
+  "Api.Validator.Subscription.Update.CurrentPeriodStart": "La fecha de inicio del período es obligatoria",
+  "Api.Validator.Subscription.Update.CurrentPeriodEnd": "La fecha de fin del período es obligatoria",
+  "Api.Validator.Subscription.Update.CurrentPeriodEnd.AfterStart": "La fecha de fin del período debe ser posterior a la fecha de inicio",
+  "Api.Validator.Subscription.Update.TrialEnd.AfterStart": "La fecha de fin del período de prueba debe ser posterior a la fecha de inicio"
 }
