@@ -105,6 +105,7 @@ public class VisitAttachmentMapping : IEntityTypeConfiguration<VisitAttachmentEn
 
         builder.HasIndex(x => new { x.TenantId, x.PublicId })
             .IsUnique()
+            .HasFilter("[IsDeleted] = 0")
             .HasDatabaseName("UX_VisitAttachments_PublicId");
 
         builder.HasIndex(x => new { x.TenantId, x.S3Key })

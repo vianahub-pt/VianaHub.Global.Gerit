@@ -107,13 +107,15 @@ public class EmployeeMapping : IEntityTypeConfiguration<EmployeeEntity>
 
         builder.HasMany(tm => tm.Contacts)
             .WithOne(tmc => tmc.Employee)
-            .HasForeignKey(tmc => tmc.EmployeeId)
+            .HasForeignKey(tmc => new { tmc.EmployeeId, tmc.TenantId })
+            .HasPrincipalKey(tm => new { tm.Id, tm.TenantId })
             .HasConstraintName("FK_EmployeeContacts_Employee")
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasMany(tm => tm.Addresses)
             .WithOne(x => x.Employee)
-            .HasForeignKey(x => x.EmployeeId)
+            .HasForeignKey(x => new { x.EmployeeId, x.TenantId })
+            .HasPrincipalKey(tm => new { tm.Id, tm.TenantId })
             .HasConstraintName("FK_EmployeeAddresses_Employee")
             .OnDelete(DeleteBehavior.Restrict);
     }

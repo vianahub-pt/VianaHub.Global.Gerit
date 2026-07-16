@@ -112,5 +112,14 @@ public class TenantMapping : IEntityTypeConfiguration<TenantEntity>
             .HasForeignKey(u => u.TenantId)
             .HasConstraintName("FK_Users_Tenant")
             .OnDelete(DeleteBehavior.Restrict);
+
+        // Indices filtrados
+        builder.HasIndex(x => x.Name)
+            .HasFilter("[IsDeleted] = 0")
+            .HasDatabaseName("IX_Tenants_Name");
+
+        builder.HasIndex(x => x.Email)
+            .HasFilter("[IsDeleted] = 0")
+            .HasDatabaseName("IX_Tenants_Email");
     }
 }

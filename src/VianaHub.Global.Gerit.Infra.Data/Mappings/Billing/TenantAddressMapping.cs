@@ -6,7 +6,7 @@ namespace VianaHub.Global.Gerit.Infra.Data.Mappings.Billing;
 
 /// <summary>
 /// Mapeamento da entidade TenantAddress
-/// Endereços do tenant com suporte a Row Level Security
+/// Enderecos do tenant com suporte a Row Level Security
 /// </summary>
 public class TenantAddressMapping : IEntityTypeConfiguration<TenantAddressEntity>
 {
@@ -14,7 +14,7 @@ public class TenantAddressMapping : IEntityTypeConfiguration<TenantAddressEntity
     {
         builder.ToTable("TenantAddresses", "dbo");
 
-        // Chave Primária
+        // Chave Primaria
         builder.HasKey(x => x.Id)
             .HasName("PK_TenantAddresses");
 
@@ -124,9 +124,10 @@ public class TenantAddressMapping : IEntityTypeConfiguration<TenantAddressEntity
             .HasConstraintName("FK_TenantAddresses_Tenant")
             .OnDelete(DeleteBehavior.NoAction);
 
-        // Constraint Única: Garantir que o Id é único dentro do tenant (para FKs compostas)
+        // Constraint unica: Garantir que o Id e unico dentro do tenant (para FKs compostas)
         builder.HasIndex(x => new { x.Id, x.TenantId })
             .IsUnique()
+            .HasFilter("[IsDeleted] = 0")
             .HasDatabaseName("UQ_TenantAddresses_Id_Tenant");
     }
 }

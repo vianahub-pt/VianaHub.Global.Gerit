@@ -75,13 +75,15 @@ public class SubscriptionPlanEntityMapping : IEntityTypeConfiguration<Subscripti
             .HasColumnType("DATETIME2")
             .IsRequired(false);
 
-        // Constraint: Se IsDeleted = 1, ent�o IsActive = 0
+        // Constraint: Se IsDeleted = 1, entao IsActive = 0
         builder.HasCheckConstraint("CK_SubscriptionPlans_DeletedImpliesInactive", "[IsDeleted] = 0 OR [IsActive] = 0");
 
-        // Navega��o
-        builder.HasMany(x => x.Subscriptions)
-            .WithOne()
-            .HasForeignKey("PlanId")
-            .OnDelete(DeleteBehavior.Restrict);
+        // Indice filtrado para planos ativos
+        builder.HasIndex(x => x.Name)
+            .HasFilter("[IsDeleted] = 0")
+            .HasDatabaseName("IX_SubscriptionPlans_Name");
+
+        // Navegacao: o relacionamento com Subscriptions ja esta configurado
+        // em SubscriptionEntityMapping via SubscriptionPlanId
     }
 }

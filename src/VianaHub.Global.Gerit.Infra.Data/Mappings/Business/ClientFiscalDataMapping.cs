@@ -89,6 +89,7 @@ public class ClientFiscalDataMapping : IEntityTypeConfiguration<ClientFiscalData
         // Índice único conforme banco
         builder.HasIndex(x => new { x.ClientId, x.TenantId })
             .IsUnique()
+            .HasFilter("[IsDeleted] = 0")
             .HasDatabaseName("UQ_ClientFiscalData_Client");
 
         // Check constraint

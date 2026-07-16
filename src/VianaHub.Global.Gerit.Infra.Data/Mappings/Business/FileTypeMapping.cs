@@ -64,6 +64,7 @@ public class FileTypeMapping : IEntityTypeConfiguration<FileTypeEntity>
 
         builder.HasIndex(x => x.MimeType)
             .IsUnique()
+            .HasFilter("[IsDeleted] = 0")
             .HasDatabaseName("UQ_FileTypes_Mime");
 
         // Constraint único no Code — apenas registos não removidos

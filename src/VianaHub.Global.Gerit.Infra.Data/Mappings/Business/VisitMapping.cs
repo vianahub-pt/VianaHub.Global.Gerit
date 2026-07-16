@@ -96,9 +96,9 @@ public class VisitMapping : IEntityTypeConfiguration<VisitEntity>
         builder.ToTable(t => t.HasCheckConstraint("CK_Visits_EndDateTime", "[EndDateTime] IS NULL OR [EndDateTime] >= [StartDateTime]"));
 
 
-        builder.HasIndex(v => new { v.Id, v.TenantId })
-            .HasDatabaseName("UQ_Visits_Id_Tenant")
-            .IsUnique();
+        // Chave alternativa para suportar FKs compostas com TenantId
+        builder.HasAlternateKey(v => new { v.Id, v.TenantId })
+            .HasName("UQ_Visits_Id_Tenant");
 
         // Relacionamentos
         builder.HasOne(x => x.Tenant)
@@ -123,13 +123,15 @@ public class VisitMapping : IEntityTypeConfiguration<VisitEntity>
 
         builder.HasMany(x => x.Contacts)
             .WithOne(ic => ic.Visit)
-            .HasForeignKey(ic => ic.VisitId)
+            .HasForeignKey(ic => new { ic.VisitId, ic.TenantId })
+            .HasPrincipalKey(x => new { x.Id, x.TenantId })
             .HasConstraintName("FK_VisitContacts_Visit")
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasMany(x => x.Addresses)
             .WithOne(ia => ia.Visit)
-            .HasForeignKey(ia => ia.VisitId)
+            .HasForeignKey(ia => new { ia.VisitId, ia.TenantId })
+            .HasPrincipalKey(x => new { x.Id, x.TenantId })
             .HasConstraintName("FK_VisitAddresses_Visit")
             .OnDelete(DeleteBehavior.Restrict);
     }

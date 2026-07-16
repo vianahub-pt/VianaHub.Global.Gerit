@@ -100,10 +100,12 @@ public class UserMapping : IEntityTypeConfiguration<UserEntity>
 
         builder.HasIndex(x => new { x.TenantId, x.Email })
             .IsUnique()
+            .HasFilter("[IsDeleted] = 0")
             .HasDatabaseName("UQ_Users_Tenant_Email");
 
         builder.HasIndex(x => new { x.TenantId, x.NormalizedEmail })
             .IsUnique()
+            .HasFilter("[IsDeleted] = 0")
             .HasDatabaseName("UQ_Users_Tenant_NormalizedEmail");
 
         // �ndices

@@ -14,7 +14,7 @@ public class TenantFiscalDataMapping : IEntityTypeConfiguration<TenantFiscalData
     {
         builder.ToTable("TenantFiscalData", "dbo");
 
-        // Chave Prim�ria
+        // Chave Primaria
         builder.HasKey(x => x.Id)
             .HasName("PK_TenantFiscalData");
 
@@ -92,14 +92,20 @@ public class TenantFiscalDataMapping : IEntityTypeConfiguration<TenantFiscalData
             .HasConstraintName("FK_TenantFiscalData_Tenant")
             .OnDelete(DeleteBehavior.NoAction);
 
-        // Constraint �nica: TaxNumber �nico
+        // Constraint unica: TaxNumber unico
         builder.HasIndex(x => x.TaxNumber)
             .IsUnique()
             .HasDatabaseName("UQ_TenantFiscalData_TaxNumber");
 
-        // Constraint �nica: Garantir que s� pode haver um registro ativo por tenant (soft delete)
+        // Constraint unica: Garantir que so pode haver um registro ativo por tenant (soft delete)
         builder.HasIndex(x => new { x.TenantId, x.IsActive })
             .IsUnique()
+            .HasFilter("[IsDeleted] = 0")
             .HasDatabaseName("UQ_TenantFiscalData_Tenant_Active");
+
+        // Indice filtrado para consultas por tenant
+        builder.HasIndex(x => x.TenantId)
+            .HasFilter("[IsDeleted] = 0")
+            .HasDatabaseName("IX_TenantFiscalData_TenantId");
     }
 }
