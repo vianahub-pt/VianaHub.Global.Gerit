@@ -99,6 +99,10 @@ public class TenantContactAppService : ITenantContactAppService
             request.Name,
             request.Email,
             request.Phone,
+            request.JobTitle,
+            request.Department,
+            request.CellPhoneNumber,
+            request.IsCellPhoneWhatsapp,
             request.IsPrimary,
             _currentUser.GetUserId()
         );
@@ -116,7 +120,16 @@ public class TenantContactAppService : ITenantContactAppService
             return false;
         }
 
-        entity.Update(request.Name, request.Email, request.Phone, _currentUser.GetUserId());
+        entity.Update(
+            request.Name,
+            request.Email,
+            request.Phone,
+            request.JobTitle,
+            request.Department,
+            request.CellPhoneNumber,
+            request.IsCellPhoneWhatsapp,
+            _currentUser.GetUserId()
+        );
 
         return await _domain.UpdateAsync(entity, ct);
     }
