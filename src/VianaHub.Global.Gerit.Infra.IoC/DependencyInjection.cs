@@ -73,6 +73,10 @@ using VianaHub.Global.Gerit.Domain.Validators.Business.ClientFiscalData;
 using VianaHub.Global.Gerit.Domain.Validators.Billing.TenantContact;
 using VianaHub.Global.Gerit.Domain.Validators.Billing.TenantAddress;
 using VianaHub.Global.Gerit.Domain.Validators.Business.ClientDocument;
+using VianaHub.Global.Gerit.Domain.Validators.Business.PartyType;
+using VianaHub.Global.Gerit.Domain.Validators.Business.StatusDomain;
+using VianaHub.Global.Gerit.Domain.Validators.Business.StatusDefinition;
+using VianaHub.Global.Gerit.Domain.Validators.Business.DocumentType;
 
 namespace VianaHub.Global.Gerit.Infra.IoC;
 
@@ -134,6 +138,10 @@ public static class DependencyInjection
         services.AddScoped<IEntityDomainValidator<TenantContactEntity>, TenantContactValidator>();
         services.AddScoped<IEntityDomainValidator<TenantAddressEntity>, TenantAddressValidator>();
         services.AddScoped<IEntityDomainValidator<ClientDocumentEntity>, ClientDocumentValidator>();
+        services.AddScoped<IEntityDomainValidator<PartyTypeEntity>, PartyTypeValidator>();
+        services.AddScoped<IEntityDomainValidator<StatusDomainEntity>, StatusDomainValidator>();
+        services.AddScoped<IEntityDomainValidator<StatusDefinitionEntity>, StatusDefinitionValidator>();
+        services.AddScoped<IEntityDomainValidator<DocumentTypeEntity>, DocumentTypeValidator>();
 
 
         // Application - Common Services
@@ -210,6 +218,10 @@ public static class DependencyInjection
         services.AddScoped<IVisitTeamEquipmentDomainService, VisitTeamEquipmentDomainService>();
         services.AddScoped<IVisitAttachmentDomainService, VisitAttachmentDomainService>();
         services.AddScoped<IClientFiscalDataDomainService, ClientFiscalDataDomainService>();
+        services.AddScoped<IPartyTypeDomainService, PartyTypeDomainService>();
+        services.AddScoped<IStatusDomainDomainService, StatusDomainDomainService>();
+        services.AddScoped<IStatusDefinitionDomainService, StatusDefinitionDomainService>();
+        services.AddScoped<IDocumentTypeDomainService, DocumentTypeDomainService>();
 
         // Infra.Data - Repositories
         services.AddScoped<IAddressTypeDataRepository, AddressTypeDataRepository>();
