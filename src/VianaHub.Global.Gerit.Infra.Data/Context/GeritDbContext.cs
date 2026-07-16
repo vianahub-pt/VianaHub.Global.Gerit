@@ -78,6 +78,7 @@ public class GeritDbContext : DbContext
     public DbSet<TenantDocumentEntity> TenantDocuments { get; set; }
     public DbSet<ClientDocumentEntity> ClientDocuments { get; set; }
 
+    public DbSet<UserPreferencesEntity> UserPreferences { get; set; }
     public DbSet<RefreshTokenEntity> RefreshTokens { get; set; }
     #endregion
 
