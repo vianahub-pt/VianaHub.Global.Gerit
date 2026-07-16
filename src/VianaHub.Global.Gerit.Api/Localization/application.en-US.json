@@ -804,7 +804,6 @@
   "Application.Service.VisitAttachment.GetById.ResourceNotFound": "Visit attachment not found or inactive",
   "Application.Service.VisitAttachment.Update.ResourceAlreadyExists": "Another attachment with this name already exists for this visit",
   "Application.Service.VisitAttachment.Update.ResourceNotFound": "Visit attachment not found",
-  "Application.Service.VisitAttachment.ValidateBulkItem.AttachmentCategoryId": "Attachment category ID is required in bulk upload",
   "Application.Service.VisitAttachment.ValidateBulkItem.FileName": "File name is required in bulk upload",
   "Application.Service.VisitAttachment.ValidateBulkItem.FileTypeId": "File type ID is required in bulk upload",
   "Application.Service.VisitAttachment.ValidateBulkItem.FilePath": "File path is required in bulk upload",

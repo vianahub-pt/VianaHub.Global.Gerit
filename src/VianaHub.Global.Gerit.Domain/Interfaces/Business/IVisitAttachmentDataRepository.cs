@@ -10,7 +10,6 @@ public interface IVisitAttachmentDataRepository
     Task<VisitAttachmentEntity> GetByPublicIdAsync(Guid publicId, CancellationToken ct);
     Task<IEnumerable<VisitAttachmentEntity>> GetAllAsync(CancellationToken ct);
     Task<IEnumerable<VisitAttachmentEntity>> GetByVisitIdAsync(int visitId, CancellationToken ct);
-    Task<IEnumerable<VisitAttachmentEntity>> GetByCategoryIdAsync(int categoryId, CancellationToken ct);
     Task<VisitAttachmentEntity> GetPrimaryByVisitIdAsync(int visitId, CancellationToken ct);
     Task<ListPage<VisitAttachmentEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct);
     Task<bool> ExistsByIdAsync(int id, CancellationToken ct);

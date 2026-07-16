@@ -332,8 +332,6 @@
   "visit_attachment.file_type_id.required": "O tipo de ficheiro é obrigatório",
   "visit_attachment.visit_id.invalid": "O ID da visita é inválido",
   "visit_attachment.visit_id.required": "A visita é obrigatória",
-  "visit_attachment.attachment_category_id.invalid": "O ID da categoria de anexo é inválido",
-  "visit_attachment.attachment_category_id.required": "A categoria de anexo é obrigatória",
   "visit_attachment.s3_key.required": "A chave S3 do ficheiro é obrigatória",
   "visit_attachment.s3_key.max_length": "A chave S3 deve ter no máximo 500 caracteres",
   "visit_attachment.file_name.required": "O nome do ficheiro é obrigatório",
@@ -345,7 +343,6 @@
   "visit_attachment.primary_not_found": "Anexo principal da visita não encontrado",
   "visit_attachment.visit.not_found": "Visita não encontrada",
   "visit_attachment.file_type.not_found": "Tipo de ficheiro não encontrado",
-  "visit_attachment.attachment_category.not_found": "Categoria de anexo não encontrada",
   "visit_attachment.s3_key.already_exists": "Já existe um anexo com esta chave S3",
 
   "client_individual.entity.null": "O cliente individual não pode ser nulo",

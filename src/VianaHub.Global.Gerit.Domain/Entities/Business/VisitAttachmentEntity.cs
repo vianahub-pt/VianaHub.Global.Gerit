@@ -12,7 +12,6 @@ public class VisitAttachmentEntity : Entity
     public int TenantId { get; private set; }
     public int FileTypeId { get; private set; }
     public int VisitId { get; private set; }
-    public int AttachmentCategoryId { get; private set; }
     public Guid PublicId { get; private set; }
     public string? S3Key { get; private set; }
     public string? FileName { get; private set; }
@@ -26,14 +25,13 @@ public class VisitAttachmentEntity : Entity
     public TenantEntity Tenant { get; private set; }
     public FileTypeEntity FileType { get; private set; }
     public VisitEntity Visit { get; private set; }
-    public AttachmentCategoryEntity AttachmentCategory { get; private set; }
 
     protected VisitAttachmentEntity() { }
 
     /// <summary>
     /// Construtor para criação de um novo anexo de visita
     /// </summary>
-    public VisitAttachmentEntity(int tenantId, int fileTypeId, int visitId, int attachmentCategoryId,
+    public VisitAttachmentEntity(int tenantId, int fileTypeId, int visitId,
         string s3Key, string fileName, long fileSizeBytes, int displayOrder, bool isPrimary, int createdBy)
     {
         if (fileSizeBytes <= 0)
@@ -48,7 +46,6 @@ public class VisitAttachmentEntity : Entity
         TenantId = tenantId;
         FileTypeId = fileTypeId;
         VisitId = visitId;
-        AttachmentCategoryId = attachmentCategoryId;
         PublicId = Guid.NewGuid();
         S3Key = s3Key;
         FileName = fileName;
@@ -61,9 +58,8 @@ public class VisitAttachmentEntity : Entity
         CreatedAt = DateTime.UtcNow;
     }
 
-    public void Update(int attachmentCategoryId, string fileName, int displayOrder, bool isPrimary, int modifiedBy)
+    public void Update(string fileName, int displayOrder, bool isPrimary, int modifiedBy)
     {
-        AttachmentCategoryId = attachmentCategoryId;
         FileName = fileName;
         DisplayOrder = displayOrder;
         IsPrimary = isPrimary;
