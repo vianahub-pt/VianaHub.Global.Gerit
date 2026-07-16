@@ -10,7 +10,6 @@ using VianaHub.Global.Gerit.Application.Dtos.Response.Billing.Tenant;
 using VianaHub.Global.Gerit.Application.Interfaces.Billing;
 using VianaHub.Global.Gerit.Application.Interfaces.Common;
 using VianaHub.Global.Gerit.Domain.Entities.Billing;
-using VianaHub.Global.Gerit.Domain.Enums;
 using VianaHub.Global.Gerit.Domain.Helpers;
 using VianaHub.Global.Gerit.Domain.Interfaces.Base;
 using VianaHub.Global.Gerit.Domain.Interfaces.Billing;
@@ -75,7 +74,7 @@ public class TenantAppService : ITenantAppService
             return 0;
         }
 
-        var entity = new TenantEntity((TenantType)request.TenantType, request.AcquisitionSourceTypeId, request.Name, request.Email, request.Website, request.UrlImage, request.Note, _currentUser.GetUserId());
+        var entity = new TenantEntity(request.PartyTypeId, request.AcquisitionSourceTypeId, request.Name, request.Email, request.Website, request.UrlImage, request.Note, _currentUser.GetUserId());
         var success = await _domain.CreateAsync(entity, ct);
         return success ? entity.Id : 0;
     }
@@ -89,7 +88,7 @@ public class TenantAppService : ITenantAppService
             return false;
         }
 
-        entity.Update((TenantType)request.TenantType, request.AcquisitionSourceTypeId, request.Name, request.Email, request.Website, request.UrlImage, request.Note, _currentUser.GetUserId());
+        entity.Update(request.PartyTypeId, request.AcquisitionSourceTypeId, request.Name, request.Email, request.Website, request.UrlImage, request.Note, _currentUser.GetUserId());
         return await _domain.UpdateAsync(entity, ct);
     }
     
@@ -247,7 +246,7 @@ public class TenantAppService : ITenantAppService
             }
 
             // Cria a entidade
-            var entity = new TenantEntity((TenantType)item.TenantType, item.AcquisitionSourceTypeId, item.Name, item.Email, item.Website, item.UrlImage, item.Note, _currentUser.GetUserId());
+            var entity = new TenantEntity(item.PartyTypeId, item.AcquisitionSourceTypeId, item.Name, item.Email, item.Website, item.UrlImage, item.Note, _currentUser.GetUserId());
 
             // Tenta criar no dom�nio
             var success = await _domain.CreateAsync(entity, ct);

@@ -1,7 +1,6 @@
 using VianaHub.Global.Gerit.Domain.Base;
 using VianaHub.Global.Gerit.Domain.Entities.Business;
 using VianaHub.Global.Gerit.Domain.Entities.Identity;
-using VianaHub.Global.Gerit.Domain.Enums;
 
 namespace VianaHub.Global.Gerit.Domain.Entities.Billing;
 
@@ -16,7 +15,8 @@ public class TenantEntity : Entity, IAggregateRoot
     private readonly List<TenantFiscalDataEntity> _fiscalData = [];
     private readonly List<UserEntity> _users = [];
 
-    public TenantType TenantType { get; private set; }
+    public byte PartyTypeId { get; private set; }
+    public PartyTypeEntity PartyType { get; private set; }
     public int AcquisitionSourceTypeId { get; private set; }
     public AcquisitionSourceTypeEntity AcquisitionSourceType { get; private set; }
     public string? Name { get; private set; }
@@ -37,11 +37,11 @@ public class TenantEntity : Entity, IAggregateRoot
     protected TenantEntity() { }
 
     /// <summary>
-    /// Construtor para cria��o de um novo Tenant
+    /// Construtor para criação de um novo Tenant
     /// </summary>
-    public TenantEntity(TenantType tenantType, int acquisitionSourceTypeId, string name, string email, string? website, string? urlImage, string? note, int createdBy)
+    public TenantEntity(byte partyTypeId, int acquisitionSourceTypeId, string name, string email, string? website, string? urlImage, string? note, int createdBy)
     {
-        TenantType = tenantType;
+        PartyTypeId = partyTypeId;
         AcquisitionSourceTypeId = acquisitionSourceTypeId;
         Name = name;
         Email = email;
@@ -54,9 +54,9 @@ public class TenantEntity : Entity, IAggregateRoot
         CreatedAt = DateTime.UtcNow;
     }
 
-    public void Update(TenantType tenantType, int acquisitionSourceTypeId, string name, string email, string? website, string? urlImage, string? note, int modifiedBy)
+    public void Update(byte partyTypeId, int acquisitionSourceTypeId, string name, string email, string? website, string? urlImage, string? note, int modifiedBy)
     {
-        TenantType = tenantType;
+        PartyTypeId = partyTypeId;
         AcquisitionSourceTypeId = acquisitionSourceTypeId;
         Name = name;
         Email = email;
