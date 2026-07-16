@@ -13,6 +13,10 @@ public class VisitContactEntity : Entity
     public string? Name { get; private set; }
     public string? Email { get; private set; }
     public string? Phone { get; private set; }
+    public string? JobTitle { get; private set; }
+    public string? Department { get; private set; }
+    public string? CellPhoneNumber { get; private set; }
+    public bool IsCellPhoneWhatsapp { get; private set; }
     public bool IsPrimary { get; private set; }
     public bool IsActive { get; private set; }
     public bool IsDeleted { get; private set; }
@@ -28,6 +32,7 @@ public class VisitContactEntity : Entity
     /// Construtor para cria��o de um novo contato da Interven��o
     /// </summary>
     public VisitContactEntity(int tenantId, int interventionId, string name, string email, string? phone,
+        string? jobTitle, string? department, string? cellPhoneNumber, bool isCellPhoneWhatsapp,
         bool isPrimary, int createdBy)
     {
         TenantId = tenantId;
@@ -35,6 +40,10 @@ public class VisitContactEntity : Entity
         Name = name;
         Email = email;
         Phone = phone;
+        JobTitle = jobTitle;
+        Department = department;
+        CellPhoneNumber = cellPhoneNumber;
+        IsCellPhoneWhatsapp = isCellPhoneWhatsapp;
         IsPrimary = isPrimary;
         IsActive = true;
         IsDeleted = false;
@@ -42,11 +51,17 @@ public class VisitContactEntity : Entity
         CreatedAt = DateTime.UtcNow;
     }
 
-    public void Update(string name, string email, string? phone, bool isPrimary, int modifiedBy)
+    public void Update(string name, string email, string? phone,
+        string? jobTitle, string? department, string? cellPhoneNumber, bool isCellPhoneWhatsapp,
+        bool isPrimary, int modifiedBy)
     {
         Name = name;
         Email = email;
         Phone = phone;
+        JobTitle = jobTitle;
+        Department = department;
+        CellPhoneNumber = cellPhoneNumber;
+        IsCellPhoneWhatsapp = isCellPhoneWhatsapp;
         IsPrimary = isPrimary;
         ModifiedBy = modifiedBy;
         ModifiedAt = DateTime.UtcNow;

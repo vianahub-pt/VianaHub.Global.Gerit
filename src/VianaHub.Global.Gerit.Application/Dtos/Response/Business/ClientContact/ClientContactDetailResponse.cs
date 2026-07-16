@@ -11,6 +11,9 @@ public class ClientContactDetailResponse
     public string? PhoneNumber { get; private set; }
     public string? CellPhoneNumber { get; private set; }
     public bool IsWhatsapp { get; private set; }
+    public string? JobTitle { get; private set; }
+    public string? Department { get; private set; }
+    public bool IsCellPhoneWhatsapp { get; private set; }
     public string? Email { get; private set; } = null!;
 
     public bool IsPrimary { get; private set; }

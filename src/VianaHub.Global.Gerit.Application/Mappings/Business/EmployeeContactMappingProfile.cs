@@ -18,6 +18,10 @@ public class EmployeeContactMappingProfile : Profile
             .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
             .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
             .ForMember(dest => dest.Phone, opt => opt.MapFrom(src => src.Phone))
+            .ForMember(dest => dest.JobTitle, opt => opt.MapFrom(src => src.JobTitle))
+            .ForMember(dest => dest.Department, opt => opt.MapFrom(src => src.Department))
+            .ForMember(dest => dest.CellPhoneNumber, opt => opt.MapFrom(src => src.CellPhoneNumber))
+            .ForMember(dest => dest.IsCellPhoneWhatsapp, opt => opt.MapFrom(src => src.IsCellPhoneWhatsapp))
             .ForMember(dest => dest.IsPrimary, opt => opt.MapFrom(src => src.IsPrimary))
             .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsActive));
 

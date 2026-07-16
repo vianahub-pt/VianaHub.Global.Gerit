@@ -39,6 +39,21 @@ public class ClientContactMapping : IEntityTypeConfiguration<ClientContactEntity
             .HasMaxLength(255)
             .IsRequired();
 
+        builder.Property(x => x.JobTitle)
+            .HasColumnType("NVARCHAR(100)")
+            .HasMaxLength(100)
+            .IsRequired(false);
+
+        builder.Property(x => x.Department)
+            .HasColumnType("NVARCHAR(100)")
+            .HasMaxLength(100)
+            .IsRequired(false);
+
+        builder.Property(x => x.IsCellPhoneWhatsapp)
+            .HasColumnType("BIT")
+            .HasDefaultValue(false)
+            .IsRequired();
+
         builder.Property(x => x.IsPrimary)
             .HasColumnType("BIT")
             .HasDefaultValue(false)
