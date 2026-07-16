@@ -14,7 +14,7 @@ public class TenantContactMapping : IEntityTypeConfiguration<TenantContactEntity
     {
         builder.ToTable("TenantContacts", "dbo");
 
-        // Chave Primária
+        // Chave Primï¿½ria
         builder.HasKey(x => x.Id)
             .HasName("PK_TenantContacts");
 
@@ -40,6 +40,26 @@ public class TenantContactMapping : IEntityTypeConfiguration<TenantContactEntity
             .HasColumnType("NVARCHAR(30)")
             .HasMaxLength(30)
             .IsRequired(false);
+
+        builder.Property(x => x.JobTitle)
+            .HasColumnType("NVARCHAR(100)")
+            .HasMaxLength(100)
+            .IsRequired(false);
+
+        builder.Property(x => x.Department)
+            .HasColumnType("NVARCHAR(100)")
+            .HasMaxLength(100)
+            .IsRequired(false);
+
+        builder.Property(x => x.CellPhoneNumber)
+            .HasColumnType("NVARCHAR(30)")
+            .HasMaxLength(30)
+            .IsRequired(false);
+
+        builder.Property(x => x.IsCellPhoneWhatsapp)
+            .HasColumnType("BIT")
+            .HasDefaultValue(false)
+            .IsRequired();
 
         builder.Property(x => x.IsPrimary)
             .HasColumnType("BIT")
@@ -72,7 +92,7 @@ public class TenantContactMapping : IEntityTypeConfiguration<TenantContactEntity
             .HasColumnType("DATETIME2")
             .IsRequired(false);
 
-        // Índices
+        // ï¿½ndices
         builder.HasIndex(x => x.TenantId)
             .HasDatabaseName("IX_TenantContacts_TenantId")
             .HasFilter("[IsDeleted] = 0");
