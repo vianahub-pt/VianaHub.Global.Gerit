@@ -7,14 +7,14 @@ using VianaHub.Global.Gerit.Domain.Tools.Pagination;
 namespace VianaHub.Global.Gerit.Application.Mappings.Billing;
 
 /// <summary>
-/// Perfil de mapeamento do AutoMapper para PlanEntity
+/// Perfil de mapeamento do AutoMapper para SubscriptionPlanEntity
 /// </summary>
 public class PlanMappingProfile : Profile
 {
     public PlanMappingProfile()
     {
-        // Mapeia PlanEntity -> PlanResponse
-        CreateMap<PlanEntity, PlanResponse>()
+        // Mapeia SubscriptionPlanEntity -> PlanResponse
+        CreateMap<SubscriptionPlanEntity, PlanResponse>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
             .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
             .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
@@ -24,9 +24,9 @@ public class PlanMappingProfile : Profile
             .ForMember(dest => dest.PricePerYear, opt => opt.MapFrom(src => src.PricePerYear))
             .ForMember(dest => dest.Currency, opt => opt.MapFrom(src => src.Currency))
             .ForMember(dest => dest.MaxUsers, opt => opt.MapFrom(src => src.MaxUsers))
-            .ForMember(dest => dest.MaxPhotosPerVisits, opt => opt.MapFrom(src => src.MaxPhotosPerVisits))
+            .ForMember(dest => dest.MaxPhotosPerVisit, opt => opt.MapFrom(src => src.MaxPhotosPerVisit))
             .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsActive));
 
-        CreateMap<ListPage<PlanEntity>, ListPageResponse<PlanResponse>>();
+        CreateMap<ListPage<SubscriptionPlanEntity>, ListPageResponse<PlanResponse>>();
     }
 }

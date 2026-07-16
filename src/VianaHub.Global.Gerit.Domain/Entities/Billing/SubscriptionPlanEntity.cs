@@ -5,7 +5,7 @@ namespace VianaHub.Global.Gerit.Domain.Entities.Billing;
 /// <summary>
 /// Entidade que representa um plano de assinatura do sistema
 /// </summary>
-public class PlanEntity : Entity
+public class SubscriptionPlanEntity : Entity
 {
     public string? Name { get; private set; }
     public string? Description { get; set; }
@@ -15,7 +15,7 @@ public class PlanEntity : Entity
     public decimal? PricePerYear { get; set; }
     public string? Currency { get; private set; }
     public int MaxUsers { get; private set; }
-    public int MaxPhotosPerVisits { get; private set; }
+    public int MaxPhotosPerVisit { get; private set; }
     public bool IsActive { get; private set; }
     public bool IsDeleted { get; private set; }
 
@@ -24,12 +24,12 @@ public class PlanEntity : Entity
     public IReadOnlyCollection<SubscriptionEntity> Subscriptions => _subscriptions.AsReadOnly();
 
     // Construtor protegido para o EF Core
-    protected PlanEntity() { }
+    protected SubscriptionPlanEntity() { }
 
     /// <summary>
     /// Construtor para cria��o de um novo plano
     /// </summary>
-    public PlanEntity(
+    public SubscriptionPlanEntity(
         string name, 
         string? description, 
         decimal? pricePerHour,
@@ -38,7 +38,7 @@ public class PlanEntity : Entity
         decimal? pricePerYear,
         string currency,
         int maxUsers,
-        int maxPhotosPerVisits,
+        int maxPhotosPerVisit,
         int createdBy)
     {
         Name = name;
@@ -49,7 +49,7 @@ public class PlanEntity : Entity
         PricePerYear = pricePerYear;
         Currency = currency ?? "USD";
         MaxUsers = maxUsers;
-        MaxPhotosPerVisits = maxPhotosPerVisits;
+        MaxPhotosPerVisit = maxPhotosPerVisit;
         IsActive = true;
         IsDeleted = false;
         CreatedBy = createdBy;
@@ -64,7 +64,7 @@ public class PlanEntity : Entity
         decimal? pricePerYear,
         string currency,
         int maxUsers,
-        int maxPhotosPerVisits,
+        int maxPhotosPerVisit,
         int modifiedBy)
     {
         Name = name;
@@ -75,7 +75,7 @@ public class PlanEntity : Entity
         PricePerYear = pricePerYear;
         Currency = currency ?? "USD";
         MaxUsers = maxUsers;
-        MaxPhotosPerVisits = maxPhotosPerVisits;
+        MaxPhotosPerVisit = maxPhotosPerVisit;
         ModifiedBy = modifiedBy;
         ModifiedAt = DateTime.UtcNow;
     }

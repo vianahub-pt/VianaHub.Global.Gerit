@@ -5,7 +5,7 @@ using VianaHub.Global.Gerit.Domain.Interfaces.Base;
 
 namespace VianaHub.Global.Gerit.Domain.Validators.Billing.Plan;
 
-public class PlanValidator : IEntityDomainValidator<PlanEntity>
+public class PlanValidator : IEntityDomainValidator<SubscriptionPlanEntity>
 {
     private readonly CreatePlanValidator _createValidator;
     private readonly UpdatePlanValidator _updateValidator;
@@ -22,34 +22,34 @@ public class PlanValidator : IEntityDomainValidator<PlanEntity>
         _deleteValidator = new DeletePlanValidator(localization);
     }
 
-    public async Task<FluentValidation.Results.ValidationResult> ValidateForCreateAsync(PlanEntity entity)
+    public async Task<FluentValidation.Results.ValidationResult> ValidateForCreateAsync(SubscriptionPlanEntity entity)
     {
         return await _createValidator.ValidateAsync(entity);
     }
 
-    public async Task<FluentValidation.Results.ValidationResult> ValidateForUpdateAsync(PlanEntity entity)
+    public async Task<FluentValidation.Results.ValidationResult> ValidateForUpdateAsync(SubscriptionPlanEntity entity)
     {
         return await _updateValidator.ValidateAsync(entity);
     }
 
-    public async Task<FluentValidation.Results.ValidationResult> ValidateForActivateAsync(PlanEntity entity)
+    public async Task<FluentValidation.Results.ValidationResult> ValidateForActivateAsync(SubscriptionPlanEntity entity)
     {
         return await _activateValidator.ValidateAsync(entity);
     }
 
-    public async Task<FluentValidation.Results.ValidationResult> ValidateForDeactivateAsync(PlanEntity entity)
+    public async Task<FluentValidation.Results.ValidationResult> ValidateForDeactivateAsync(SubscriptionPlanEntity entity)
     {
         return await _deactivateValidator.ValidateAsync(entity);
     }
 
-    public async Task<FluentValidation.Results.ValidationResult> ValidateForDeleteAsync(PlanEntity entity)
+    public async Task<FluentValidation.Results.ValidationResult> ValidateForDeleteAsync(SubscriptionPlanEntity entity)
     {
         return await _deleteValidator.ValidateAsync(entity);
     }
 
-    public async Task<FluentValidation.Results.ValidationResult> ValidateForRevokeAsync(PlanEntity entity)
+    public async Task<FluentValidation.Results.ValidationResult> ValidateForRevokeAsync(SubscriptionPlanEntity entity)
     {
-        // Plans não têm operação de revogação, retorna sempre válido
+        // Plans nï¿½o tï¿½m operaï¿½ï¿½o de revogaï¿½ï¿½o, retorna sempre vï¿½lido
         return await Task.FromResult(new FluentValidation.Results.ValidationResult());
     }
 }

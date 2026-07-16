@@ -100,7 +100,7 @@ public static class DependencyInjection
         services.AddScoped<IEntityDomainValidator<ActionEntity>, ActionValidator>();
         services.AddScoped<IEntityDomainValidator<ResourceEntity>, ResourceValidator>();
         services.AddScoped<IEntityDomainValidator<RoleEntity>, RoleValidator>();
-        services.AddScoped<IEntityDomainValidator<PlanEntity>, PlanValidator>();
+        services.AddScoped<IEntityDomainValidator<SubscriptionPlanEntity>, PlanValidator>();
         services.AddScoped<IEntityDomainValidator<TenantEntity>, TenantValidator>();
         services.AddScoped<IEntityDomainValidator<SubscriptionEntity>, SubscriptionValidator>();
         services.AddScoped<IEntityDomainValidator<UserEntity>, UserValidator>();

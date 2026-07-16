@@ -80,7 +80,7 @@ public class PlanAppService : IPlanAppService
             return 0;
         }
 
-        var entity = new PlanEntity(
+        var entity = new SubscriptionPlanEntity(
             request.Name,
             request.Description,
             request.PricePerHour,
@@ -89,7 +89,7 @@ public class PlanAppService : IPlanAppService
             request.PricePerYear,
             request.Currency ?? "USD",
             request.MaxUsers,
-            request.MaxPhotosPerVisits,
+            request.MaxPhotosPerVisit,
             _currentUser.GetUserId());
 
         var success = await _domain.CreateAsync(entity, ct);
@@ -114,7 +114,7 @@ public class PlanAppService : IPlanAppService
             request.PricePerYear,
             request.Currency ?? "USD",
             request.MaxUsers,
-            request.MaxPhotosPerVisits,
+            request.MaxPhotosPerVisit,
             _currentUser.GetUserId());
 
         return await _domain.UpdateAsync(entity, ct);
@@ -222,7 +222,7 @@ public class PlanAppService : IPlanAppService
                         record.PricePerYear = record.PricePerYear;
                         record.Currency = record.Currency?.SanitizeCsvInput().NormalizeUtf8();
                         record.MaxUsers = record.MaxUsers;
-                        record.MaxPhotosPerVisits = record.MaxPhotosPerVisits;
+                        record.MaxPhotosPerVisit = record.MaxPhotosPerVisit;
 
                         // Valida se os campos n�o cont�m conte�do perigoso
                         if (!string.IsNullOrEmpty(record.Name) && !record.Name.IsSafeCsvValue())
@@ -291,7 +291,7 @@ public class PlanAppService : IPlanAppService
             }
 
             // Cria a entidade
-            var entity = new PlanEntity(item.Name, item.Description, item.PricePerHour, item.PricePerDay, item.PricePerMonth, item.PricePerYear, item.Currency, item.MaxUsers, item.MaxPhotosPerVisits, _currentUser.GetUserId());
+            var entity = new SubscriptionPlanEntity(item.Name, item.Description, item.PricePerHour, item.PricePerDay, item.PricePerMonth, item.PricePerYear, item.Currency, item.MaxUsers, item.MaxPhotosPerVisit, _currentUser.GetUserId());
 
             // Tenta criar no dom�nio
             var success = await _domain.CreateAsync(entity, ct);

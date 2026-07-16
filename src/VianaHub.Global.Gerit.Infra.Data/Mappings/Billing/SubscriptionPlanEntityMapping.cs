@@ -4,11 +4,11 @@ using VianaHub.Global.Gerit.Domain.Entities.Billing;
 
 namespace VianaHub.Global.Gerit.Infra.Data.Mappings.Billing;
 
-public class PlanEntityMapping : IEntityTypeConfiguration<PlanEntity>
+public class SubscriptionPlanEntityMapping : IEntityTypeConfiguration<SubscriptionPlanEntity>
 {
-    public void Configure(EntityTypeBuilder<PlanEntity> builder)
+    public void Configure(EntityTypeBuilder<SubscriptionPlanEntity> builder)
     {
-        builder.ToTable("Plans", "dbo");
+        builder.ToTable("SubscriptionPlans", "dbo");
 
         builder.HasKey(x => x.Id);
 
@@ -47,7 +47,7 @@ public class PlanEntityMapping : IEntityTypeConfiguration<PlanEntity>
         builder.Property(x => x.MaxUsers)
             .IsRequired();
 
-        builder.Property(x => x.MaxPhotosPerVisits)
+        builder.Property(x => x.MaxPhotosPerVisit)
             .IsRequired();
 
         builder.Property(x => x.IsActive)
@@ -75,10 +75,10 @@ public class PlanEntityMapping : IEntityTypeConfiguration<PlanEntity>
             .HasColumnType("DATETIME2")
             .IsRequired(false);
 
-        // Constraint: Se IsDeleted = 1, então IsActive = 0
-        builder.HasCheckConstraint("CK_Plans_DeletedImpliesInactive", "[IsDeleted] = 0 OR [IsActive] = 0");
+        // Constraint: Se IsDeleted = 1, entï¿½o IsActive = 0
+        builder.HasCheckConstraint("CK_SubscriptionPlans_DeletedImpliesInactive", "[IsDeleted] = 0 OR [IsActive] = 0");
 
-        // Navegação
+        // Navegaï¿½ï¿½o
         builder.HasMany(x => x.Subscriptions)
             .WithOne()
             .HasForeignKey("PlanId")

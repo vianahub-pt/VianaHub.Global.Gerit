@@ -16,23 +16,23 @@ public class PlanDataRepository : IPlanDataRepository
         _context = context;
     }
 
-    public async Task<PlanEntity> GetByIdAsync(int id, CancellationToken ct)
+    public async Task<SubscriptionPlanEntity> GetByIdAsync(int id, CancellationToken ct)
     {
-        return await _context.Set<PlanEntity>().AsNoTracking().FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted, ct);
+        return await _context.Set<SubscriptionPlanEntity>().AsNoTracking().FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted, ct);
     }
 
-    public async Task<IEnumerable<PlanEntity>> GetAllAsync(CancellationToken ct)
+    public async Task<IEnumerable<SubscriptionPlanEntity>> GetAllAsync(CancellationToken ct)
     {
-        return await _context.Set<PlanEntity>()
+        return await _context.Set<SubscriptionPlanEntity>()
             .AsNoTracking()
             .Where(x => !x.IsDeleted)
             .OrderBy(x => x.Name)
             .ToListAsync(ct);
     }
 
-    public async Task<ListPage<PlanEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct)
+    public async Task<ListPage<SubscriptionPlanEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct)
     {
-        var query = _context.Set<PlanEntity>().AsNoTracking().Where(x => !x.IsDeleted);
+        var query = _context.Set<SubscriptionPlanEntity>().AsNoTracking().Where(x => !x.IsDeleted);
 
         // Filtro de busca
         if (!string.IsNullOrWhiteSpace(request.Search))
@@ -63,7 +63,7 @@ public class PlanDataRepository : IPlanDataRepository
             .Take(pageSize)
             .ToListAsync(ct);
 
-        return new ListPage<PlanEntity>
+        return new ListPage<SubscriptionPlanEntity>
         {
             Items = result,
             PageNumber = pageNumber,
@@ -75,23 +75,23 @@ public class PlanDataRepository : IPlanDataRepository
 
     public async Task<bool> ExistsByIdAsync(int id, CancellationToken ct)
     {
-        return await _context.Set<PlanEntity>().AsNoTracking().AnyAsync(x => x.Id == id && !x.IsDeleted, ct);
+        return await _context.Set<SubscriptionPlanEntity>().AsNoTracking().AnyAsync(x => x.Id == id && !x.IsDeleted, ct);
     }
 
     public async Task<bool> ExistsByNameAsync(string name, CancellationToken ct)
     {
-        return await _context.Set<PlanEntity>().AsNoTracking().AnyAsync(x => x.Name == name && !x.IsDeleted, ct);
+        return await _context.Set<SubscriptionPlanEntity>().AsNoTracking().AnyAsync(x => x.Name == name && !x.IsDeleted, ct);
     }
 
-    public async Task<bool> AddAsync(PlanEntity entity, CancellationToken ct)
+    public async Task<bool> AddAsync(SubscriptionPlanEntity entity, CancellationToken ct)
     {
-        await _context.Set<PlanEntity>().AddAsync(entity, ct);
+        await _context.Set<SubscriptionPlanEntity>().AddAsync(entity, ct);
         return await _context.SaveChangesAsync(ct) > 0;
     }
 
-    public async Task<bool> UpdateAsync(PlanEntity entity, CancellationToken ct)
+    public async Task<bool> UpdateAsync(SubscriptionPlanEntity entity, CancellationToken ct)
     {
-        _context.Set<PlanEntity>().Update(entity);
+        _context.Set<SubscriptionPlanEntity>().Update(entity);
         return await _context.SaveChangesAsync(ct) > 0;
     }
 }
