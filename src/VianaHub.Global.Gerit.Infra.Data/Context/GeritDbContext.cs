@@ -62,7 +62,6 @@ public class GeritDbContext : DbContext
     public DbSet<VisitContactEntity> VisitContacts { get; set; }
     public DbSet<VisitAddressEntity> VisitAddresses { get; set; }
     public DbSet<VisitTeamVehicleEntity> VisitTeamVehicles { get; set; }
-    public DbSet<AttachmentCategoryEntity> AttachmentCategories { get; set; }
     public DbSet<VisitAttachmentEntity> VisitAttachments { get; set; }
     public DbSet<DocumentTypeEntity> DocumentTypes { get; set; }
     public DbSet<TenantDocumentEntity> TenantDocuments { get; set; }

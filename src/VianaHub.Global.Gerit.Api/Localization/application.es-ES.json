@@ -291,14 +291,6 @@
   "Application.Service.AddressType.ValidateBulkItem.Description": "La descripción es obligatoria en la carga masiva",
   "Application.Service.AddressType.ValidateBulkItem.Name": "El nombre es obligatorio en la carga masiva",
 
-  "Application.Service.AttachmentCategory.Activate.ResourceNotFound": "Categoría de adjunto no encontrada",
-  "Application.Service.AttachmentCategory.Create.NameAlreadyExists": "Ya existe una categoría de adjunto con este nombre",
-  "Application.Service.AttachmentCategory.Deactivate.ResourceNotFound": "Categoría de adjunto no encontrada",
-  "Application.Service.AttachmentCategory.Delete.ResourceNotFound": "Categoría de adjunto no encontrada",
-  "Application.Service.AttachmentCategory.GetById.ResourceNotFound": "Categoría de adjunto no encontrada o inactiva",
-  "Application.Service.AttachmentCategory.Update.NameAlreadyExists": "Ya existe una categoría de adjunto con este nombre",
-  "Application.Service.AttachmentCategory.Update.ResourceNotFound": "Categoría de adjunto no encontrada",
-
   "Application.Service.Auth.Login.InvalidCredentials": "Credenciales inválidas",
   "Application.Service.Auth.Login.Subscription.Canceled": "La suscripción ha sido cancelada",
   "Application.Service.Auth.Login.Subscription.Deleted": "La suscripción ha sido eliminada",

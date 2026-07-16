@@ -291,14 +291,6 @@
   "Application.Service.AddressType.ValidateBulkItem.Description": "Description is required in bulk upload",
   "Application.Service.AddressType.ValidateBulkItem.Name": "Name is required in bulk upload",
 
-  "Application.Service.AttachmentCategory.Activate.ResourceNotFound": "Attachment category not found",
-  "Application.Service.AttachmentCategory.Create.NameAlreadyExists": "An attachment category with this name already exists",
-  "Application.Service.AttachmentCategory.Deactivate.ResourceNotFound": "Attachment category not found",
-  "Application.Service.AttachmentCategory.Delete.ResourceNotFound": "Attachment category not found",
-  "Application.Service.AttachmentCategory.GetById.ResourceNotFound": "Attachment category not found or inactive",
-  "Application.Service.AttachmentCategory.Update.NameAlreadyExists": "An attachment category with this name already exists",
-  "Application.Service.AttachmentCategory.Update.ResourceNotFound": "Attachment category not found",
-
   "Application.Service.Auth.Login.InvalidCredentials": "Invalid credentials",
   "Application.Service.Auth.Login.Subscription.Canceled": "Subscription has been canceled",
   "Application.Service.Auth.Login.Subscription.Deleted": "Subscription has been deleted",
