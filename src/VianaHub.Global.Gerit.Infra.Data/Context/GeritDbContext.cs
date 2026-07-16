@@ -36,11 +36,15 @@ public class GeritDbContext : DbContext
     #endregion
 
     #region DbSets - Global Catalog Tables
+    public DbSet<PartyTypeEntity> PartyTypes { get; set; }
+    public DbSet<PartyTypeTranslationEntity> PartyTypeTranslations { get; set; }
     public DbSet<AcquisitionSourceTypeEntity> AcquisitionSourceTypes { get; set; }
+    public DbSet<AcquisitionSourceTypeTranslationEntity> AcquisitionSourceTypeTranslations { get; set; }
     #endregion
 
     #region DbSets - Domain Tables
     public DbSet<AddressTypeEntity> AddressTypes { get; set; }
+    public DbSet<AddressTypeTranslationEntity> AddressTypeTranslations { get; set; }
     public DbSet<ClientEntity> Clients { get; set; }
     public DbSet<ClientContactEntity> ClientContacts { get; set; }
     public DbSet<ClientAddressEntity> ClientAddresses { get; set; }
@@ -50,6 +54,7 @@ public class GeritDbContext : DbContext
     public DbSet<EmployeeContactEntity> EmployeeContacts { get; set; }
     public DbSet<EmployeeAddressEntity> EmployeeAddresses { get; set; }
     public DbSet<EmployeeFiscalDataEntity> EmployeeFiscalData { get; set; }
+    public DbSet<EmployeeTeamEntity> EmployeeTeams { get; set; }
     public DbSet<FunctionEntity> Functions { get; set; }
     public DbSet<EquipmentEntity> Equipments { get; set; }
     public DbSet<EquipmentTypeEntity> EquipmentTypes { get; set; }
@@ -57,11 +62,19 @@ public class GeritDbContext : DbContext
     public DbSet<VisitEntity> Visits { get; set; }
     public DbSet<VisitTeamEntity> VisitTeams { get; set; }
     public DbSet<VisitTeamEmployeeEntity> VisitTeamEmployees { get; set; }
+    public DbSet<VisitTeamEquipmentEntity> VisitTeamEquipments { get; set; }
     public DbSet<VisitContactEntity> VisitContacts { get; set; }
     public DbSet<VisitAddressEntity> VisitAddresses { get; set; }
     public DbSet<VisitTeamVehicleEntity> VisitTeamVehicles { get; set; }
     public DbSet<VisitAttachmentEntity> VisitAttachments { get; set; }
     public DbSet<DocumentTypeEntity> DocumentTypes { get; set; }
+    public DbSet<DocumentTypeTranslationEntity> DocumentTypeTranslations { get; set; }
+    public DbSet<FileTypeEntity> FileTypes { get; set; }
+    public DbSet<FileTypeTranslationEntity> FileTypeTranslations { get; set; }
+    public DbSet<StatusDomainEntity> StatusDomains { get; set; }
+    public DbSet<StatusDomainTranslationEntity> StatusDomainTranslations { get; set; }
+    public DbSet<StatusDefinitionEntity> StatusDefinitions { get; set; }
+    public DbSet<StatusDefinitionTranslationEntity> StatusDefinitionTranslations { get; set; }
     public DbSet<TenantDocumentEntity> TenantDocuments { get; set; }
     public DbSet<ClientDocumentEntity> ClientDocuments { get; set; }
 
