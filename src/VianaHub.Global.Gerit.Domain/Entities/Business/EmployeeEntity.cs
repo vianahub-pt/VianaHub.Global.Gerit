@@ -10,13 +10,20 @@ namespace VianaHub.Global.Gerit.Domain.Entities.Business;
 public class EmployeeEntity : Entity, IAggregateRoot
 {
     public int TenantId { get; private set; }
+    public int StatusDefinitionId { get; private set; }
+    public int StatusDomainId { get; private set; }
     public string? Name { get; private set; }
-    public string? TaxNumber { get; private set; }
+    public string? PhoneNumber { get; private set; }
+    public string? CellPhoneNumber { get; private set; }
+    public bool IsCellPhoneWhatsapp { get; private set; }
+    public string? Email { get; private set; }
+    public string? ImageUrl { get; private set; }
     public bool IsActive { get; private set; }
     public bool IsDeleted { get; private set; }
 
     // Navigation Properties
     public TenantEntity Tenant { get; private set; }
+    public StatusDefinitionEntity StatusDefinition { get; private set; }
 
     private readonly List<EmployeeContactEntity> _contacts = [];
     public IReadOnlyCollection<EmployeeContactEntity> Contacts => _contacts.AsReadOnly();
@@ -30,21 +37,37 @@ public class EmployeeEntity : Entity, IAggregateRoot
     /// <summary>
     /// Construtor para criação de um novo Funcionário
     /// </summary>
-    public EmployeeEntity(int tenantId, string name, string? taxNumber, int createdBy)
+    public EmployeeEntity(int tenantId, int statusDefinitionId, int statusDomainId, string name,
+        string? phoneNumber, string? cellPhoneNumber, bool isCellPhoneWhatsapp,
+        string? email, string? imageUrl, int createdBy)
     {
         TenantId = tenantId;
+        StatusDefinitionId = statusDefinitionId;
+        StatusDomainId = statusDomainId;
         Name = name;
-        TaxNumber = taxNumber;
+        PhoneNumber = phoneNumber;
+        CellPhoneNumber = cellPhoneNumber;
+        IsCellPhoneWhatsapp = isCellPhoneWhatsapp;
+        Email = email;
+        ImageUrl = imageUrl;
         IsActive = true;
         IsDeleted = false;
         CreatedBy = createdBy;
         CreatedAt = DateTime.UtcNow;
     }
 
-    public void Update(string name, string? taxNumber, int modifiedBy)
+    public void Update(int statusDefinitionId, int statusDomainId, string name,
+        string? phoneNumber, string? cellPhoneNumber, bool isCellPhoneWhatsapp,
+        string? email, string? imageUrl, int modifiedBy)
     {
+        StatusDefinitionId = statusDefinitionId;
+        StatusDomainId = statusDomainId;
         Name = name;
-        TaxNumber = taxNumber;
+        PhoneNumber = phoneNumber;
+        CellPhoneNumber = cellPhoneNumber;
+        IsCellPhoneWhatsapp = isCellPhoneWhatsapp;
+        Email = email;
+        ImageUrl = imageUrl;
         ModifiedBy = modifiedBy;
         ModifiedAt = DateTime.UtcNow;
     }

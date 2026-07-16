@@ -35,9 +35,37 @@ public class EmployeeMapping : IEntityTypeConfiguration<EmployeeEntity>
             .HasMaxLength(150)
             .IsRequired();
 
-        builder.Property(tm => tm.TaxNumber)
-            .HasColumnType("NVARCHAR(20)")
-            .HasMaxLength(20)
+        builder.Property(tm => tm.StatusDefinitionId)
+            .HasColumnType("INT")
+            .IsRequired();
+
+        builder.Property(tm => tm.StatusDomainId)
+            .HasColumnType("INT")
+            .IsRequired();
+
+        builder.Property(tm => tm.PhoneNumber)
+            .HasColumnType("NVARCHAR(30)")
+            .HasMaxLength(30)
+            .IsRequired(false);
+
+        builder.Property(tm => tm.CellPhoneNumber)
+            .HasColumnType("NVARCHAR(30)")
+            .HasMaxLength(30)
+            .IsRequired(false);
+
+        builder.Property(tm => tm.IsCellPhoneWhatsapp)
+            .HasColumnType("BIT")
+            .HasDefaultValue(false)
+            .IsRequired();
+
+        builder.Property(tm => tm.Email)
+            .HasColumnType("NVARCHAR(250)")
+            .HasMaxLength(250)
+            .IsRequired(false);
+
+        builder.Property(tm => tm.ImageUrl)
+            .HasColumnType("NVARCHAR(500)")
+            .HasMaxLength(500)
             .IsRequired(false);
 
         builder.Property(x => x.IsActive)
@@ -68,6 +96,13 @@ public class EmployeeMapping : IEntityTypeConfiguration<EmployeeEntity>
             .WithMany()
             .HasForeignKey(tm => tm.TenantId)
             .HasConstraintName("FK_Employees_Tenant")
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasOne(tm => tm.StatusDefinition)
+            .WithMany()
+            .HasForeignKey(tm => new { tm.StatusDefinitionId, tm.TenantId, tm.StatusDomainId })
+            .HasPrincipalKey(s => new { s.Id, s.TenantId, s.StatusDomainId })
+            .HasConstraintName("FK_Employees_StatusDefinitions")
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasMany(tm => tm.Contacts)

@@ -18,10 +18,30 @@ public class CreateEmployeeValidator : AbstractValidator<EmployeeEntity>
             .MaximumLength(150)
             .WithMessage(localization.GetMessage("Domain.Employee.NameMaxLength", 150));
 
-        RuleFor(x => x.TaxNumber)
-            .NotEmpty()
-            .WithMessage(localization.GetMessage("Domain.Employee.TaxNumberRequired"))
-            .MaximumLength(20)
-            .WithMessage(localization.GetMessage("Domain.Employee.TaxNumberMaxLength", 20));
+        RuleFor(x => x.StatusDefinitionId)
+            .GreaterThan(0)
+            .WithMessage(localization.GetMessage("Domain.Employee.StatusDefinitionIdRequired"));
+
+        RuleFor(x => x.StatusDomainId)
+            .GreaterThan(0)
+            .WithMessage(localization.GetMessage("Domain.Employee.StatusDomainIdRequired"));
+
+        RuleFor(x => x.Email)
+            .MaximumLength(250)
+            .WithMessage(localization.GetMessage("Domain.Employee.EmailMaxLength", 250))
+            .EmailAddress()
+            .WithMessage(localization.GetMessage("Domain.Employee.EmailInvalid"));
+
+        RuleFor(x => x.PhoneNumber)
+            .MaximumLength(30)
+            .WithMessage(localization.GetMessage("Domain.Employee.PhoneNumberMaxLength", 30));
+
+        RuleFor(x => x.CellPhoneNumber)
+            .MaximumLength(30)
+            .WithMessage(localization.GetMessage("Domain.Employee.CellPhoneNumberMaxLength", 30));
+
+        RuleFor(x => x.ImageUrl)
+            .MaximumLength(500)
+            .WithMessage(localization.GetMessage("Domain.Employee.ImageUrlMaxLength", 500));
     }
 }
