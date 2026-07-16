@@ -17,6 +17,7 @@ public class UserEntity : Entity
     public bool PhoneNumberConfirmed { get; private set; }
     public DateTime? LastAccessAt { get; private set; }
     public string? PasswordHash { get; private set; }
+    public string? UrlImage { get; private set; }
     public bool IsActive { get; private set; }
     public bool IsDeleted { get; private set; }
 
