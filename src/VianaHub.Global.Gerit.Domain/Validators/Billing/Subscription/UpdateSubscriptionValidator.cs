@@ -16,9 +16,21 @@ public class UpdateSubscriptionValidator : AbstractValidator<SubscriptionEntity>
             .Equal(false)
             .WithMessage(localization.GetMessage("Domain.Subscription.CannotUpdateDeleted"));
 
-        RuleFor(x => x.PlanId)
+        RuleFor(x => x.SubscriptionPlanId)
             .GreaterThan(0)
-            .WithMessage(localization.GetMessage("Domain.Subscription.PlanIdRequired"));
+            .WithMessage(localization.GetMessage("Domain.Subscription.SubscriptionPlanIdRequired"));
+
+        RuleFor(x => x.StatusDefinitionId)
+            .GreaterThan(0)
+            .WithMessage(localization.GetMessage("Domain.Subscription.StatusDefinitionIdRequired"));
+
+        RuleFor(x => x.StatusDomainId)
+            .GreaterThan(0)
+            .WithMessage(localization.GetMessage("Domain.Subscription.StatusDomainIdRequired"));
+
+        RuleFor(x => x.AgreedAmount)
+            .GreaterThanOrEqualTo(0)
+            .WithMessage(localization.GetMessage("Domain.Subscription.AgreedAmountNonNegative"));
 
         RuleFor(x => x.CurrentPeriodEnd)
             .GreaterThan(x => x.CurrentPeriodStart)

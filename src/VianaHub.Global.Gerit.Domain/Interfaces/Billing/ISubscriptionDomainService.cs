@@ -12,7 +12,7 @@ public interface ISubscriptionDomainService
     Task<bool> ExistsByIdAsync(int id, CancellationToken ct);
     Task<bool> ExistsByTenantIdAsync(int tenantId, CancellationToken ct);
     Task<SubscriptionEntity> GetByTenantIdAsync(int tenantId, CancellationToken ct);
-    Task<IEnumerable<SubscriptionEntity>> GetByPlanIdAsync(int planId, CancellationToken ct);
+    Task<IEnumerable<SubscriptionEntity>> GetBySubscriptionPlanIdAsync(int subscriptionPlanId, CancellationToken ct);
     Task<IEnumerable<SubscriptionEntity>> GetActiveSubscriptionsAsync(CancellationToken ct);
     Task<IEnumerable<SubscriptionEntity>> GetExpiringSubscriptionsAsync(int daysBeforeExpiration, CancellationToken ct);
     Task<bool> IsTrialAsync(int tenantId, CancellationToken ct);

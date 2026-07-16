@@ -1,4 +1,5 @@
 using VianaHub.Global.Gerit.Domain.Base;
+using VianaHub.Global.Gerit.Domain.Entities.Business;
 
 namespace VianaHub.Global.Gerit.Domain.Entities.Billing;
 
@@ -8,7 +9,12 @@ namespace VianaHub.Global.Gerit.Domain.Entities.Billing;
 public class SubscriptionEntity : Entity
 {
     public int TenantId { get; private set; }
-    public int PlanId { get; private set; }
+    public int SubscriptionPlanId { get; private set; }
+    public int StatusDefinitionId { get; private set; }
+    public int StatusDomainId { get; private set; }
+    public decimal AgreedAmount { get; private set; }
+    public string? BillingInterval { get; private set; }
+    public string? CurrencyCode { get; private set; }
     public string? StripeId { get; private set; }
     public DateTime CurrentPeriodStart { get; private set; }
     public DateTime CurrentPeriodEnd { get; private set; }
@@ -22,18 +28,24 @@ public class SubscriptionEntity : Entity
     public bool IsDeleted { get; private set; }
 
     // Navigation Properties
-    public TenantEntity Tenant { get; private set; }
-    public PlanEntity Plan { get; private set; }
+    public TenantEntity Tenant { get; private set; } = null!;
+    public PlanEntity SubscriptionPlan { get; private set; } = null!;
+    public StatusDefinitionEntity StatusDefinition { get; private set; } = null!;
 
     // Construtor protegido para o EF Core
     protected SubscriptionEntity() { }
 
     /// <summary>
-    /// Construtor para cria��o de uma nova assinatura
+    /// Construtor para criação de uma nova assinatura
     /// </summary>
     public SubscriptionEntity(
         int tenantId,
-        int planId,
+        int subscriptionPlanId,
+        int statusDefinitionId,
+        int statusDomainId,
+        decimal agreedAmount,
+        string? billingInterval,
+        string? currencyCode,
         DateTime currentPeriodStart,
         DateTime currentPeriodEnd,
         DateTime? trialStart,
@@ -42,7 +54,12 @@ public class SubscriptionEntity : Entity
         int createdBy)
     {
         TenantId = tenantId;
-        PlanId = planId;
+        SubscriptionPlanId = subscriptionPlanId;
+        StatusDefinitionId = statusDefinitionId;
+        StatusDomainId = statusDomainId;
+        AgreedAmount = agreedAmount;
+        BillingInterval = billingInterval;
+        CurrencyCode = currencyCode;
         CurrentPeriodStart = currentPeriodStart;
         CurrentPeriodEnd = currentPeriodEnd;
         TrialStart = trialStart;
@@ -55,14 +72,24 @@ public class SubscriptionEntity : Entity
     }
 
     public void Update(
-        int planId,
+        int subscriptionPlanId,
+        int statusDefinitionId,
+        int statusDomainId,
+        decimal agreedAmount,
+        string? billingInterval,
+        string? currencyCode,
         DateTime currentPeriodStart,
         DateTime currentPeriodEnd,
         DateTime? trialStart,
         DateTime? trialEnd,
         int modifiedBy)
     {
-        PlanId = planId;
+        SubscriptionPlanId = subscriptionPlanId;
+        StatusDefinitionId = statusDefinitionId;
+        StatusDomainId = statusDomainId;
+        AgreedAmount = agreedAmount;
+        BillingInterval = billingInterval;
+        CurrencyCode = currencyCode;
         CurrentPeriodStart = currentPeriodStart;
         CurrentPeriodEnd = currentPeriodEnd;
         TrialStart = trialStart;

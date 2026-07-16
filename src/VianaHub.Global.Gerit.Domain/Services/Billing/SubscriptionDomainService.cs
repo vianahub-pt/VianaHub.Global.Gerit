@@ -48,9 +48,9 @@ public class SubscriptionDomainService : ISubscriptionDomainService
     {
         return await _repo.GetByTenantIdAsync(tenantId, ct);
     }
-    public async Task<IEnumerable<SubscriptionEntity>> GetByPlanIdAsync(int planId, CancellationToken ct)
+    public async Task<IEnumerable<SubscriptionEntity>> GetBySubscriptionPlanIdAsync(int subscriptionPlanId, CancellationToken ct)
     {
-        return await _repo.GetByPlanIdAsync(planId, ct);
+        return await _repo.GetBySubscriptionPlanIdAsync(subscriptionPlanId, ct);
     }
     public async Task<IEnumerable<SubscriptionEntity>> GetActiveSubscriptionsAsync(CancellationToken ct)
     {

@@ -52,6 +52,12 @@
 
   "Domain.Subscription.TenantIdRequired": "El ID del inquilino es obligatorio para la suscripción",
   "Domain.Subscription.PlanIdRequired": "El ID del plan es obligatorio para la suscripción",
+  "Domain.Subscription.SubscriptionPlanIdRequired": "El ID del plan de suscripción es obligatorio",
+  "Domain.Subscription.StatusDefinitionIdRequired": "El ID de la definición de estado es obligatorio",
+  "Domain.Subscription.StatusDomainIdRequired": "El ID del dominio de estado es obligatorio",
+  "Domain.Subscription.AgreedAmountNonNegative": "El importe acordado debe ser mayor o igual a cero",
+  "Domain.Subscription.BillingIntervalMaxLength": "El intervalo de facturación debe tener como máximo {0} caracteres",
+  "Domain.Subscription.CurrencyCodeLength": "El código de moneda debe tener exactamente {0} caracteres",
   "Domain.Subscription.InvalidId": "ID de suscripción inválido",
   "Domain.Subscription.CannotUpdateDeleted": "No se puede actualizar una suscripción eliminada",
   "Domain.Subscription.CannotActivateDeleted": "No se puede activar una suscripción eliminada",

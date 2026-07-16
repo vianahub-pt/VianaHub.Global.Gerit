@@ -380,5 +380,26 @@
   "Api.Validator.Vehicle.Update.Model.MaximumLength": "Model must be at most {0} characters",
   "Api.Validator.Vehicle.Update.Year": "Year must be greater than 1885",
   "Api.Validator.Vehicle.Update.Color.MaximumLength": "Color must be at most {0} characters",
-  "Api.Validator.Vehicle.Update.FuelType.MaximumLength": "Fuel type must be at most {0} characters"
+  "Api.Validator.Vehicle.Update.FuelType.MaximumLength": "Fuel type must be at most {0} characters",
+
+  "Api.Validator.Subscription.Create.TenantId": "Tenant ID is required",
+  "Api.Validator.Subscription.Create.SubscriptionPlanId": "Subscription plan ID is required",
+  "Api.Validator.Subscription.Create.StatusDefinitionId": "Status definition ID is required",
+  "Api.Validator.Subscription.Create.StatusDomainId": "Status domain ID is required",
+  "Api.Validator.Subscription.Create.AgreedAmountNonNegative": "Agreed amount must be greater than or equal to zero",
+  "Api.Validator.Subscription.Create.CurrentPeriodStart": "Current period start date is required",
+  "Api.Validator.Subscription.Create.CurrentPeriodEnd": "Current period end date is required",
+  "Api.Validator.Subscription.Create.CurrentPeriodEnd.AfterStart": "Current period end date must be after start date",
+  "Api.Validator.Subscription.Create.TrialEnd.AfterStart": "Trial end date must be after trial start date",
+  "Api.Validator.Subscription.Create.StripeCustomerId.MaximumLength": "Stripe customer ID must be at most {0} characters",
+  "Api.Validator.Subscription.Create.BillingInterval.MaximumLength": "Billing interval must be at most {0} characters",
+  "Api.Validator.Subscription.Create.CurrencyCode.Length": "Currency code must be exactly {0} characters",
+  "Api.Validator.Subscription.Update.SubscriptionPlanId": "Subscription plan ID is required",
+  "Api.Validator.Subscription.Update.StatusDefinitionId": "Status definition ID is required",
+  "Api.Validator.Subscription.Update.StatusDomainId": "Status domain ID is required",
+  "Api.Validator.Subscription.Update.AgreedAmountNonNegative": "Agreed amount must be greater than or equal to zero",
+  "Api.Validator.Subscription.Update.CurrentPeriodStart": "Current period start date is required",
+  "Api.Validator.Subscription.Update.CurrentPeriodEnd": "Current period end date is required",
+  "Api.Validator.Subscription.Update.CurrentPeriodEnd.AfterStart": "Current period end date must be after start date",
+  "Api.Validator.Subscription.Update.TrialEnd.AfterStart": "Trial end date must be after trial start date"
 }
