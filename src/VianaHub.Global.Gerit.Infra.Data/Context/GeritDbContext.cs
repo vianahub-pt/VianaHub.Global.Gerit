@@ -62,6 +62,9 @@ public class GeritDbContext : DbContext
     public DbSet<VisitTeamVehicleEntity> VisitTeamVehicles { get; set; }
     public DbSet<AttachmentCategoryEntity> AttachmentCategories { get; set; }
     public DbSet<VisitAttachmentEntity> VisitAttachments { get; set; }
+    public DbSet<DocumentTypeEntity> DocumentTypes { get; set; }
+    public DbSet<TenantDocumentEntity> TenantDocuments { get; set; }
+    public DbSet<ClientDocumentEntity> ClientDocuments { get; set; }
 
     public DbSet<RefreshTokenEntity> RefreshTokens { get; set; }
     #endregion
