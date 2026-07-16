@@ -20,6 +20,8 @@ public partial class ClientDataRepository : IClientDataRepository
     {
         return await _context.Set<ClientEntity>()
             .AsNoTracking()
+            .Include(x => x.StatusDefinition)
+                .ThenInclude(x => x.Translations)
             .Where(x => !x.IsDeleted)
             .ToListAsync(ct);
     }
@@ -28,6 +30,8 @@ public partial class ClientDataRepository : IClientDataRepository
     {
         return await _context.Set<ClientEntity>()
             .AsNoTracking()
+            .Include(x => x.StatusDefinition)
+                .ThenInclude(x => x.Translations)
             .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted, ct);
     }
 
@@ -35,6 +39,8 @@ public partial class ClientDataRepository : IClientDataRepository
     {
         return await _context.Set<ClientEntity>()
             .AsNoTracking()
+            .Include(x => x.StatusDefinition)
+                .ThenInclude(x => x.Translations)
             .Where(x => x.TenantId == tenantId && !x.IsDeleted)
             .OrderBy(x => x.CreatedAt)
             .ToListAsync(ct);
@@ -46,6 +52,8 @@ public partial class ClientDataRepository : IClientDataRepository
             .AsNoTracking()
             .AsSplitQuery()
             .Include(x => x.Contacts)
+            .Include(x => x.StatusDefinition)
+                .ThenInclude(x => x.Translations)
             .Where(x => !x.IsDeleted);
 
         if (!string.IsNullOrWhiteSpace(request.Search))
@@ -85,6 +93,8 @@ public partial class ClientDataRepository : IClientDataRepository
             .AsNoTracking()
             .AsSplitQuery()
             .Include(x => x.Contacts)
+            .Include(x => x.StatusDefinition)
+                .ThenInclude(x => x.Translations)
             .Where(x => x.TenantId == tenantId && !x.IsDeleted);
 
         if (!string.IsNullOrWhiteSpace(request.Search))

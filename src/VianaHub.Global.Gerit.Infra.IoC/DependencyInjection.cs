@@ -245,6 +245,10 @@ public static class DependencyInjection
         services.AddScoped<IVisitAttachmentDataRepository, VisitAttachmentDataRepository>();
         services.AddScoped<IPartyTypeDataRepository, PartyTypeDataRepository>();
         services.AddScoped<IPartyTypeTranslationDataRepository, PartyTypeTranslationDataRepository>();
+        services.AddScoped<IStatusDomainDataRepository, StatusDomainDataRepository>();
+        services.AddScoped<IStatusDefinitionDataRepository, StatusDefinitionDataRepository>();
+        services.AddScoped<IDocumentTypeDataRepository, DocumentTypeDataRepository>();
+        services.AddScoped<ISubscriptionPlanFileRuleDataRepository, SubscriptionPlanFileRuleDataRepository>();
 
         // Infra.Messaging (Email sender no-op por enquanto)
         services.AddScoped<IEmailSender, NoOpEmailSender>();

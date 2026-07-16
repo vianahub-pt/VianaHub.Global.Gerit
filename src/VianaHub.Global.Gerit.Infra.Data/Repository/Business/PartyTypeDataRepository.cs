@@ -20,6 +20,7 @@ public class PartyTypeDataRepository : IPartyTypeDataRepository
     {
         return await _context.Set<PartyTypeEntity>()
             .AsNoTracking()
+            .Include(x => x.Translations)
             .Where(x => !x.IsDeleted)
             .OrderBy(x => x.Code)
             .ToListAsync(ct);
@@ -29,6 +30,7 @@ public class PartyTypeDataRepository : IPartyTypeDataRepository
     {
         return await _context.Set<PartyTypeEntity>()
             .AsNoTracking()
+            .Include(x => x.Translations)
             .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted, ct);
     }
 
@@ -36,6 +38,7 @@ public class PartyTypeDataRepository : IPartyTypeDataRepository
     {
         var query = _context.Set<PartyTypeEntity>()
             .AsNoTracking()
+            .Include(x => x.Translations)
             .Where(x => !x.IsDeleted);
 
         if (!string.IsNullOrWhiteSpace(request.Search))
