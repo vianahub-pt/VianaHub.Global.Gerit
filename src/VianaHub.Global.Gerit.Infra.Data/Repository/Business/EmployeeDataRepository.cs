@@ -40,7 +40,7 @@ public class EmployeeDataRepository : IEmployeeDataRepository
         {
             var search = request.Search.Trim().ToLower();
             query = query.Where(x => EF.Functions.Like(x.Name.ToLower(), $"%{search}%") || 
-                                     EF.Functions.Like(x.TaxNumber.ToLower(), $"%{search}%"));
+                                     (x.Email != null && EF.Functions.Like(x.Email.ToLower(), $"%{search}%")));
         }
 
         if (request.IsActive.HasValue)
@@ -70,9 +70,9 @@ public class EmployeeDataRepository : IEmployeeDataRepository
         return await _context.Set<EmployeeEntity>().AsNoTracking().AnyAsync(x => x.Id == id && !x.IsDeleted, ct);
     }
 
-    public async Task<bool> ExistsByTaxNumberAsync(int tenantId, string taxNumber, CancellationToken ct)
+    public async Task<bool> ExistsByEmailAsync(int tenantId, string email, CancellationToken ct)
     {
-        return await _context.Set<EmployeeEntity>().AsNoTracking().AnyAsync(x => x.TenantId == tenantId && x.TaxNumber == taxNumber && !x.IsDeleted, ct);
+        return await _context.Set<EmployeeEntity>().AsNoTracking().AnyAsync(x => x.TenantId == tenantId && x.Email == email && !x.IsDeleted, ct);
     }
 
     public async Task<bool> AddAsync(EmployeeEntity entity, CancellationToken ct)

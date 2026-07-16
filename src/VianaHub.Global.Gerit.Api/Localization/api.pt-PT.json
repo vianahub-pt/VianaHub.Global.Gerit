@@ -307,5 +307,24 @@
   "Api.Validator.Equipment.Update.Name": "O nome do equipamento é obrigatório",
   "Api.Validator.Equipment.Update.Name.MaximumLength": "O nome do equipamento deve ter no máximo {0} caracteres",
   "Api.Validator.Equipment.Update.SerialNumber.MaximumLength": "O número de série deve ter no máximo {0} caracteres",
-  "Api.Validator.Equipment.Update.UrlImage.MaximumLength": "O URL da imagem deve ter no máximo {0} caracteres"
+  "Api.Validator.Equipment.Update.UrlImage.MaximumLength": "O URL da imagem deve ter no máximo {0} caracteres",
+
+  "Api.Validator.Employee.Create.Name": "O nome é obrigatório",
+  "Api.Validator.Employee.Create.Name.MaximumLength": "O nome deve ter no máximo {0} caracteres",
+  "Api.Validator.Employee.Create.StatusDefinitionId": "A definição de estado é obrigatória",
+  "Api.Validator.Employee.Create.StatusDomainId": "O domínio de estado é obrigatório",
+  "Api.Validator.Employee.Create.Email.MaximumLength": "O e-mail deve ter no máximo {0} caracteres",
+  "Api.Validator.Employee.Create.Email.Invalid": "O e-mail não é válido",
+  "Api.Validator.Employee.Create.PhoneNumber.MaximumLength": "O número de telefone deve ter no máximo {0} caracteres",
+  "Api.Validator.Employee.Create.CellPhoneNumber.MaximumLength": "O número de telemóvel deve ter no máximo {0} caracteres",
+  "Api.Validator.Employee.Create.ImageUrl.MaximumLength": "O URL da imagem deve ter no máximo {0} caracteres",
+  "Api.Validator.Employee.Update.Name": "O nome é obrigatório",
+  "Api.Validator.Employee.Update.Name.MaximumLength": "O nome deve ter no máximo {0} caracteres",
+  "Api.Validator.Employee.Update.StatusDefinitionId": "A definição de estado é obrigatória",
+  "Api.Validator.Employee.Update.StatusDomainId": "O domínio de estado é obrigatório",
+  "Api.Validator.Employee.Update.Email.MaximumLength": "O e-mail deve ter no máximo {0} caracteres",
+  "Api.Validator.Employee.Update.Email.Invalid": "O e-mail não é válido",
+  "Api.Validator.Employee.Update.PhoneNumber.MaximumLength": "O número de telefone deve ter no máximo {0} caracteres",
+  "Api.Validator.Employee.Update.CellPhoneNumber.MaximumLength": "O número de telemóvel deve ter no máximo {0} caracteres",
+  "Api.Validator.Employee.Update.ImageUrl.MaximumLength": "O URL da imagem deve ter no máximo {0} caracteres"
 }

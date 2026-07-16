@@ -12,8 +12,23 @@ public class CreateEmployeeRouteValidator : AbstractValidator<CreateEmployeeRequ
             .NotEmpty().WithMessage(localization.GetMessage("Api.Validator.Employee.Create.Name"))
             .MaximumLength(150).WithMessage(localization.GetMessage("Api.Validator.Employee.Create.Name.MaximumLength", 150));
 
-        RuleFor(x => x.TaxNumber)
-            .NotEmpty().WithMessage(localization.GetMessage("Api.Validator.Employee.Create.TaxNumber"))
-            .MaximumLength(20).WithMessage(localization.GetMessage("Api.Validator.Employee.Create.TaxNumber.MaximumLength", 20));
+        RuleFor(x => x.StatusDefinitionId)
+            .GreaterThan(0).WithMessage(localization.GetMessage("Api.Validator.Employee.Create.StatusDefinitionId"));
+
+        RuleFor(x => x.StatusDomainId)
+            .GreaterThan(0).WithMessage(localization.GetMessage("Api.Validator.Employee.Create.StatusDomainId"));
+
+        RuleFor(x => x.Email)
+            .MaximumLength(250).WithMessage(localization.GetMessage("Api.Validator.Employee.Create.Email.MaximumLength", 250))
+            .EmailAddress().WithMessage(localization.GetMessage("Api.Validator.Employee.Create.Email.Invalid"));
+
+        RuleFor(x => x.PhoneNumber)
+            .MaximumLength(30).WithMessage(localization.GetMessage("Api.Validator.Employee.Create.PhoneNumber.MaximumLength", 30));
+
+        RuleFor(x => x.CellPhoneNumber)
+            .MaximumLength(30).WithMessage(localization.GetMessage("Api.Validator.Employee.Create.CellPhoneNumber.MaximumLength", 30));
+
+        RuleFor(x => x.ImageUrl)
+            .MaximumLength(500).WithMessage(localization.GetMessage("Api.Validator.Employee.Create.ImageUrl.MaximumLength", 500));
     }
 }
