@@ -22,6 +22,7 @@ public class EquipmentDataRepository : IEquipmentDataRepository
             .AsNoTracking()
             .Include(x => x.EquipmentType)
             .Include(x => x.StatusDefinition)
+                .ThenInclude(x => x.Translations)
             .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted, ct);
     }
 
@@ -31,6 +32,7 @@ public class EquipmentDataRepository : IEquipmentDataRepository
             .AsNoTracking()
             .Include(x => x.EquipmentType)
             .Include(x => x.StatusDefinition)
+                .ThenInclude(x => x.Translations)
             .Where(x => !x.IsDeleted).OrderBy(x => x.Name).ToListAsync(ct);
     }
 
@@ -40,6 +42,7 @@ public class EquipmentDataRepository : IEquipmentDataRepository
             .AsNoTracking()
             .Include(x => x.EquipmentType)
             .Include(x => x.StatusDefinition)
+                .ThenInclude(x => x.Translations)
             .Where(x => !x.IsDeleted);
 
         if (!string.IsNullOrWhiteSpace(request.Search))

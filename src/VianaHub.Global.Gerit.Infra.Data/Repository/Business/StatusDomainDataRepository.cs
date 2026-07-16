@@ -7,36 +7,36 @@ using VianaHub.Global.Gerit.Infra.Data.Context;
 
 namespace VianaHub.Global.Gerit.Infra.Data.Repository.Business;
 
-public class FileTypeDataRepository : IFileTypeDataRepository
+public class StatusDomainDataRepository : IStatusDomainDataRepository
 {
     private readonly GeritDbContext _context;
 
-    public FileTypeDataRepository(GeritDbContext context)
+    public StatusDomainDataRepository(GeritDbContext context)
     {
         _context = context;
     }
 
-    public async Task<IEnumerable<FileTypeEntity>> GetAllAsync(CancellationToken ct)
+    public async Task<IEnumerable<StatusDomainEntity>> GetAllAsync(CancellationToken ct)
     {
-        return await _context.Set<FileTypeEntity>()
+        return await _context.Set<StatusDomainEntity>()
             .AsNoTracking()
             .Include(x => x.Translations)
             .Where(x => !x.IsDeleted)
-            .OrderBy(x => x.MimeType)
+            .OrderBy(x => x.Code)
             .ToListAsync(ct);
     }
 
-    public async Task<FileTypeEntity> GetByIdAsync(int id, CancellationToken ct)
+    public async Task<StatusDomainEntity> GetByIdAsync(int id, CancellationToken ct)
     {
-        return await _context.Set<FileTypeEntity>()
+        return await _context.Set<StatusDomainEntity>()
             .AsNoTracking()
             .Include(x => x.Translations)
             .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted, ct);
     }
 
-    public async Task<ListPage<FileTypeEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct)
+    public async Task<ListPage<StatusDomainEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct)
     {
-        var query = _context.Set<FileTypeEntity>()
+        var query = _context.Set<StatusDomainEntity>()
             .AsNoTracking()
             .Include(x => x.Translations)
             .Where(x => !x.IsDeleted);
@@ -45,8 +45,7 @@ public class FileTypeDataRepository : IFileTypeDataRepository
         {
             var search = request.Search.Trim().ToLower();
             query = query.Where(x =>
-                EF.Functions.Like(x.MimeType.ToLower(), $"%{search}%") ||
-                EF.Functions.Like(x.Extension.ToLower(), $"%{search}%"));
+                EF.Functions.Like(x.Code.ToLower(), $"%{search}%"));
         }
 
         if (request.IsActive.HasValue)
@@ -64,7 +63,7 @@ public class FileTypeDataRepository : IFileTypeDataRepository
             .Take(pageSize)
             .ToListAsync(ct);
 
-        return new ListPage<FileTypeEntity>
+        return new ListPage<StatusDomainEntity>
         {
             Items = result,
             PageNumber = pageNumber,
@@ -76,27 +75,27 @@ public class FileTypeDataRepository : IFileTypeDataRepository
 
     public async Task<bool> ExistsByIdAsync(int id, CancellationToken ct)
     {
-        return await _context.Set<FileTypeEntity>()
+        return await _context.Set<StatusDomainEntity>()
             .AsNoTracking()
             .AnyAsync(x => x.Id == id && !x.IsDeleted, ct);
     }
 
-    public async Task<bool> ExistsByMimeTypeAsync(string mimeType, CancellationToken ct)
+    public async Task<bool> ExistsByCodeAsync(string code, CancellationToken ct)
     {
-        return await _context.Set<FileTypeEntity>()
+        return await _context.Set<StatusDomainEntity>()
             .AsNoTracking()
-            .AnyAsync(x => x.MimeType == mimeType && !x.IsDeleted, ct);
+            .AnyAsync(x => x.Code == code && !x.IsDeleted, ct);
     }
 
-    public async Task<bool> AddAsync(FileTypeEntity entity, CancellationToken ct)
+    public async Task<bool> AddAsync(StatusDomainEntity entity, CancellationToken ct)
     {
-        await _context.Set<FileTypeEntity>().AddAsync(entity, ct);
+        await _context.Set<StatusDomainEntity>().AddAsync(entity, ct);
         return await _context.SaveChangesAsync(ct) > 0;
     }
 
-    public async Task<bool> UpdateAsync(FileTypeEntity entity, CancellationToken ct)
+    public async Task<bool> UpdateAsync(StatusDomainEntity entity, CancellationToken ct)
     {
-        _context.Set<FileTypeEntity>().Update(entity);
+        _context.Set<StatusDomainEntity>().Update(entity);
         return await _context.SaveChangesAsync(ct) > 0;
     }
 }
