@@ -70,6 +70,9 @@ using VianaHub.Global.Gerit.Domain.Validators.Business.AcquisitionSourceType;
 using VianaHub.Global.Gerit.Domain.Validators.Business.FileType;
 using VianaHub.Global.Gerit.Domain.Validators.Business.VisitAttachment;
 using VianaHub.Global.Gerit.Domain.Validators.Business.ClientFiscalData;
+using VianaHub.Global.Gerit.Domain.Validators.Billing.TenantContact;
+using VianaHub.Global.Gerit.Domain.Validators.Billing.TenantAddress;
+using VianaHub.Global.Gerit.Domain.Validators.Business.ClientDocument;
 
 namespace VianaHub.Global.Gerit.Infra.IoC;
 
@@ -128,6 +131,9 @@ public static class DependencyInjection
         services.AddScoped<IEntityDomainValidator<VisitTeamEquipmentEntity>, VisitTeamEquipmentValidator>();
         services.AddScoped<IEntityDomainValidator<VisitAttachmentEntity>, VisitAttachmentValidator>();
         services.AddScoped<IEntityDomainValidator<ClientFiscalDataEntity>, ClientFiscalDataValidator>();
+        services.AddScoped<IEntityDomainValidator<TenantContactEntity>, TenantContactValidator>();
+        services.AddScoped<IEntityDomainValidator<TenantAddressEntity>, TenantAddressValidator>();
+        services.AddScoped<IEntityDomainValidator<ClientDocumentEntity>, ClientDocumentValidator>();
 
 
         // Application - Common Services
