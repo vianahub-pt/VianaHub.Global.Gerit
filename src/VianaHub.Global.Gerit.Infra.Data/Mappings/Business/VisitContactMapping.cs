@@ -6,7 +6,7 @@ namespace VianaHub.Global.Gerit.Infra.Data.Mappings.Business;
 
 /// <summary>
 /// Mapeamento da entidade VisitContact
-/// Contatos da intervenção com suporte a Row Level Security
+/// Contatos da intervenï¿½ï¿½o com suporte a Row Level Security
 /// </summary>
 public class VisitContactMapping : IEntityTypeConfiguration<VisitContactEntity>
 {
@@ -14,7 +14,7 @@ public class VisitContactMapping : IEntityTypeConfiguration<VisitContactEntity>
     {
         builder.ToTable("VisitContacts", "dbo");
 
-        // Chave Primária
+        // Chave Primï¿½ria
         builder.HasKey(x => x.Id)
             .HasName("PK_VisitContacts");
 
@@ -44,6 +44,26 @@ public class VisitContactMapping : IEntityTypeConfiguration<VisitContactEntity>
             .HasMaxLength(30)
             .IsRequired(false);
 
+        builder.Property(x => x.JobTitle)
+            .HasColumnType("NVARCHAR(100)")
+            .HasMaxLength(100)
+            .IsRequired(false);
+
+        builder.Property(x => x.Department)
+            .HasColumnType("NVARCHAR(100)")
+            .HasMaxLength(100)
+            .IsRequired(false);
+
+        builder.Property(x => x.CellPhoneNumber)
+            .HasColumnType("NVARCHAR(30)")
+            .HasMaxLength(30)
+            .IsRequired(false);
+
+        builder.Property(x => x.IsCellPhoneWhatsapp)
+            .HasColumnType("BIT")
+            .HasDefaultValue(false)
+            .IsRequired();
+
         builder.Property(x => x.IsPrimary)
             .HasColumnType("BIT")
             .HasDefaultValue(false)
@@ -72,7 +92,7 @@ public class VisitContactMapping : IEntityTypeConfiguration<VisitContactEntity>
             .HasColumnType("DATETIME2(7)")
             .IsRequired(false);
 
-        // Índices
+        // ï¿½ndices
         builder.HasIndex(x => x.VisitId)
             .HasDatabaseName("IX_VisitContacts_VisitId")
             .IncludeProperties(x => x.TenantId)

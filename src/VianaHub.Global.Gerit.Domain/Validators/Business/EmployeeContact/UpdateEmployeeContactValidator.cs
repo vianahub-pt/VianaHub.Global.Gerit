@@ -46,6 +46,27 @@ public class UpdateEmployeeContactValidator : AbstractValidator<EmployeeContactE
             .When(x => !string.IsNullOrWhiteSpace(x.Phone))
             .WithMessage(_localization.GetMessage("Domain.EmployeeContact.PhoneMaxLength"));
 
+        RuleFor(x => x.JobTitle)
+            .MaximumLength(100)
+            .WithMessage(_localization.GetMessage("Domain.EmployeeContact.JobTitleMaxLength", 100))
+            .When(x => !string.IsNullOrWhiteSpace(x.JobTitle));
+
+        RuleFor(x => x.Department)
+            .MaximumLength(100)
+            .WithMessage(_localization.GetMessage("Domain.EmployeeContact.DepartmentMaxLength", 100))
+            .When(x => !string.IsNullOrWhiteSpace(x.Department));
+
+        RuleFor(x => x.CellPhoneNumber)
+            .MaximumLength(30)
+            .WithMessage(_localization.GetMessage("Domain.EmployeeContact.CellPhoneNumberMaxLength", 30))
+            .When(x => !string.IsNullOrWhiteSpace(x.CellPhoneNumber));
+
+        // Quando IsCellPhoneWhatsapp for true, CellPhoneNumber é obrigatório
+        RuleFor(x => x.CellPhoneNumber)
+            .NotEmpty()
+            .WithMessage(_localization.GetMessage("Domain.EmployeeContact.CellPhoneNumberRequiredForWhatsapp"))
+            .When(x => x.IsCellPhoneWhatsapp);
+
         RuleFor(x => x.ModifiedBy)
             .GreaterThan(0)
             .WithMessage(_localization.GetMessage("Domain.EmployeeContact.ModifiedByRequired"));

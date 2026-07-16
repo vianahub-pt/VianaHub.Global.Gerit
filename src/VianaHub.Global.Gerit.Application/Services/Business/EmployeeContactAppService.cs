@@ -80,12 +80,16 @@ public class EmployeeContactAppService : IEmployeeContactAppService
         }
 
         var entity = new EmployeeContactEntity(
-            tenantId, 
-            request.EmployeeId, 
-            request.Name, 
-            request.Email, 
-            request.Phone, 
-            request.IsPrimary, 
+            tenantId,
+            request.EmployeeId,
+            request.Name,
+            request.Email,
+            request.Phone,
+            request.JobTitle,
+            request.Department,
+            request.CellPhoneNumber,
+            request.IsCellPhoneWhatsapp,
+            request.IsPrimary,
             _currentUser.GetUserId());
 
         var success = await _domain.CreateAsync(entity, ct);
@@ -109,7 +113,7 @@ public class EmployeeContactAppService : IEmployeeContactAppService
             return false;
         }
 
-        entity.UpdateContactInfo(request.Name, request.Email, request.Phone, _currentUser.GetUserId());
+        entity.UpdateContactInfo(request.Name, request.Email, request.Phone, request.JobTitle, request.Department, request.CellPhoneNumber, request.IsCellPhoneWhatsapp, _currentUser.GetUserId());
 
         if (request.IsPrimary && !entity.IsPrimary)
         {
@@ -283,12 +287,16 @@ public class EmployeeContactAppService : IEmployeeContactAppService
             }
 
             var entity = new EmployeeContactEntity(
-                tenantId, 
-                item.EmployeeId, 
-                item.Name, 
-                item.Email, 
-                item.Phone, 
-                item.IsPrimary, 
+                tenantId,
+                item.EmployeeId,
+                item.Name,
+                item.Email,
+                item.Phone,
+                null, // JobTitle
+                null, // Department
+                null, // CellPhoneNumber
+                false, // IsCellPhoneWhatsapp
+                item.IsPrimary,
                 _currentUser.GetUserId());
 
             var success = await _domain.CreateAsync(entity, ct);

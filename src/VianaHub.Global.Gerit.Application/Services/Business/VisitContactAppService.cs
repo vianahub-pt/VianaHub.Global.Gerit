@@ -95,6 +95,10 @@ public class VisitContactAppService : IVisitContactAppService
             request.Name,
             request.Email,
             request.Phone,
+            request.JobTitle,
+            request.Department,
+            request.CellPhoneNumber,
+            request.IsCellPhoneWhatsapp,
             request.IsPrimary,
             userId
         );
@@ -120,7 +124,7 @@ public class VisitContactAppService : IVisitContactAppService
             return false;
         }
 
-        entity.Update(request.Name, request.Email, request.Phone, request.IsPrimary, _currentUser.GetUserId());
+        entity.Update(request.Name, request.Email, request.Phone, request.JobTitle, request.Department, request.CellPhoneNumber, request.IsCellPhoneWhatsapp, request.IsPrimary, _currentUser.GetUserId());
         return await _domain.UpdateAsync(entity, ct);
     }
 
@@ -301,6 +305,10 @@ public class VisitContactAppService : IVisitContactAppService
                 item.Name,
                 item.Email,
                 item.Phone,
+                null, // JobTitle
+                null, // Department
+                null, // CellPhoneNumber
+                false, // IsCellPhoneWhatsapp
                 item.IsPrimary,
                 userId
             );

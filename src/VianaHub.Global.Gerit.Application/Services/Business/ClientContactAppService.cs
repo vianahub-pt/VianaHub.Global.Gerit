@@ -90,7 +90,10 @@ public class ClientContactAppService : IClientContactAppService
             request.IsWhatsapp,
             request.Email,
             request.IsPrimary,
-            UserId
+            UserId,
+            request.JobTitle,
+            request.Department,
+            request.IsCellPhoneWhatsapp
         );
 
         var success = await _domain.CreateAsync(clientContact, ct);
@@ -106,7 +109,7 @@ public class ClientContactAppService : IClientContactAppService
             return false;
         }
 
-        clientContact.Update(request.Name, request.PhoneNumber, request.CellPhoneNumber, request.IsWhatsapp, request.Email, request.IsPrimary, UserId);
+        clientContact.Update(request.Name, request.PhoneNumber, request.CellPhoneNumber, request.IsWhatsapp, request.Email, request.IsPrimary, UserId, request.JobTitle, request.Department, request.IsCellPhoneWhatsapp);
 
         return await _repo.UpdateAsync(clientContact, ct);
     }

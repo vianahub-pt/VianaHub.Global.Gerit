@@ -44,6 +44,26 @@ public class EmployeeContactMapping : IEntityTypeConfiguration<EmployeeContactEn
             .HasMaxLength(30)
             .IsRequired(false);
 
+        builder.Property(x => x.JobTitle)
+            .HasColumnType("NVARCHAR(100)")
+            .HasMaxLength(100)
+            .IsRequired(false);
+
+        builder.Property(x => x.Department)
+            .HasColumnType("NVARCHAR(100)")
+            .HasMaxLength(100)
+            .IsRequired(false);
+
+        builder.Property(x => x.CellPhoneNumber)
+            .HasColumnType("NVARCHAR(30)")
+            .HasMaxLength(30)
+            .IsRequired(false);
+
+        builder.Property(x => x.IsCellPhoneWhatsapp)
+            .HasColumnType("BIT")
+            .HasDefaultValue(false)
+            .IsRequired();
+
         builder.Property(x => x.IsPrimary)
             .HasColumnType("BIT")
             .HasDefaultValue(false)

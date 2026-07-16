@@ -13,6 +13,10 @@ public class EmployeeContactEntity : Entity
     public string? Name { get; private set; }
     public string? Email { get; private set; }
     public string? Phone { get; private set; }
+    public string? JobTitle { get; private set; }
+    public string? Department { get; private set; }
+    public string? CellPhoneNumber { get; private set; }
+    public bool IsCellPhoneWhatsapp { get; private set; }
     public bool IsPrimary { get; private set; }
     public bool IsActive { get; private set; }
     public bool IsDeleted { get; private set; }
@@ -27,14 +31,18 @@ public class EmployeeContactEntity : Entity
     /// <summary>
     /// Construtor para criação de um novo contato do Funcionário
     /// </summary>
-    public EmployeeContactEntity(int tenantId, int employeeId, string name, string email, 
-        string? phone, bool isPrimary, int createdBy)
+    public EmployeeContactEntity(int tenantId, int employeeId, string name, string email,
+        string? phone, string? jobTitle, string? department, string? cellPhoneNumber, bool isCellPhoneWhatsapp, bool isPrimary, int createdBy)
     {
         TenantId = tenantId;
         EmployeeId = employeeId;
         Name = name;
         Email = email;
         Phone = phone;
+        JobTitle = jobTitle;
+        Department = department;
+        CellPhoneNumber = cellPhoneNumber;
+        IsCellPhoneWhatsapp = isCellPhoneWhatsapp;
         IsPrimary = isPrimary;
         IsActive = true;
         IsDeleted = false;
@@ -42,11 +50,15 @@ public class EmployeeContactEntity : Entity
         CreatedAt = DateTime.UtcNow;
     }
 
-    public void UpdateContactInfo(string name, string email, string? phone, int modifiedBy)
+    public void UpdateContactInfo(string name, string email, string? phone, string? jobTitle, string? department, string? cellPhoneNumber, bool isCellPhoneWhatsapp, int modifiedBy)
     {
         Name = name;
         Email = email;
         Phone = phone;
+        JobTitle = jobTitle;
+        Department = department;
+        CellPhoneNumber = cellPhoneNumber;
+        IsCellPhoneWhatsapp = isCellPhoneWhatsapp;
         ModifiedBy = modifiedBy;
         ModifiedAt = DateTime.UtcNow;
     }
