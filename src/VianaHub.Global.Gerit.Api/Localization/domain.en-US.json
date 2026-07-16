@@ -354,6 +354,10 @@
 
   "Domain.Visit.TenantIdRequired": "Tenant ID is required for the visit",
   "Domain.Visit.ClientIdRequired": "Client ID is required for the visit",
+  "Domain.Visit.StatusDefinitionIdRequired": "Status definition ID is required for the visit",
+  "Domain.Visit.StatusDomainIdRequired": "Status domain ID is required for the visit",
+  "Domain.Visit.CurrencyCodeRequired": "Currency code is required for the visit",
+  "Domain.Visit.CurrencyCodeMaxLength": "Currency code must be at most {0} characters",
   "Domain.Visit.TitleRequired": "Visit title is required",
   "Domain.Visit.TitleMaxLength": "Visit title must be at most {0} characters",
   "Domain.Visit.DescriptionRequired": "Visit description is required",

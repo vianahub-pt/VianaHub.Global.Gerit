@@ -226,6 +226,33 @@
   "Api.Middleware.GlobalException.JsonException.Error.JsonGeneric": "JSON is invalid",
 
 
+  "Api.Validator.Visit.Create.ClientId": "Client ID is required",
+  "Api.Validator.Visit.Create.StatusDefinitionId": "Status definition ID is required",
+  "Api.Validator.Visit.Create.StatusDomainId": "Status domain ID is required",
+  "Api.Validator.Visit.Create.CurrencyCode": "Currency code is required",
+  "Api.Validator.Visit.Create.CurrencyCode.MaximumLength": "Currency code must be at most {0} characters",
+  "Api.Validator.Visit.Create.Title": "Visit title is required",
+  "Api.Validator.Visit.Create.Title.MaximumLength": "Visit title must be at most {0} characters",
+  "Api.Validator.Visit.Create.Description": "Visit description is required",
+  "Api.Validator.Visit.Create.Description.MaximumLength": "Visit description must be at most {0} characters",
+  "Api.Validator.Visit.Create.StartDateTime": "Start date/time is required",
+  "Api.Validator.Visit.Create.EstimatedValue.GreaterThanOrEqual": "Estimated value must be greater than or equal to zero",
+
+  "Api.Validator.Visit.Update.ClientId": "Client ID is required",
+  "Api.Validator.Visit.Update.StatusDefinitionId": "Status definition ID is required",
+  "Api.Validator.Visit.Update.StatusDomainId": "Status domain ID is required",
+  "Api.Validator.Visit.Update.CurrencyCode": "Currency code is required",
+  "Api.Validator.Visit.Update.CurrencyCode.MaximumLength": "Currency code must be at most {0} characters",
+  "Api.Validator.Visit.Update.Title": "Visit title is required",
+  "Api.Validator.Visit.Update.Title.MaximumLength": "Visit title must be at most {0} characters",
+  "Api.Validator.Visit.Update.Description": "Visit description is required",
+  "Api.Validator.Visit.Update.Description.MaximumLength": "Visit description must be at most {0} characters",
+  "Api.Validator.Visit.Update.StartDateTime": "Start date/time is required",
+  "Api.Validator.Visit.Update.EstimatedValue.GreaterThanOrEqual": "Estimated value must be greater than or equal to zero",
+  "Api.Validator.Visit.Update.EndDateTime.GreaterThanStart": "End date/time must be after start date/time",
+  "Api.Validator.Visit.Update.RealValue.GreaterThanOrEqual": "Real value must be greater than or equal to zero",
+
+
   "Api.Validator.VisitAddress.Create.VisitId": "",
   "Api.Validator.VisitAddress.Create.AddressTypeId": "Address type ID is required",
   "Api.Validator.VisitAddress.Create.CountryCode": "Country code is required",

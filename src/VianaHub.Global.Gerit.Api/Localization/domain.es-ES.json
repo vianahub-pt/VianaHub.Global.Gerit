@@ -354,6 +354,10 @@
 
   "Domain.Visit.TenantIdRequired": "El ID del inquilino es obligatorio para la visita",
   "Domain.Visit.ClientIdRequired": "El ID del cliente es obligatorio para la visita",
+  "Domain.Visit.StatusDefinitionIdRequired": "El ID de la definición de estado es obligatorio para la visita",
+  "Domain.Visit.StatusDomainIdRequired": "El ID del dominio de estado es obligatorio para la visita",
+  "Domain.Visit.CurrencyCodeRequired": "El código de moneda es obligatorio para la visita",
+  "Domain.Visit.CurrencyCodeMaxLength": "El código de moneda debe tener como máximo {0} caracteres",
   "Domain.Visit.TitleRequired": "El título de la visita es obligatorio",
   "Domain.Visit.TitleMaxLength": "El título de la visita debe tener como máximo {0} caracteres",
   "Domain.Visit.DescriptionRequired": "La descripción de la visita es obligatoria",

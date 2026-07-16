@@ -6,8 +6,10 @@ public class VisitResponse
     public int TenantId { get; set; }
     public int ClientId { get; set; }
     public string? Client { get; set; }
-    public int StatusId { get; set; }
-    public string? Status { get; set; }
+    public int StatusDefinitionId { get; set; }
+    public int StatusDomainId { get; set; }
+    public string? StatusDefinition { get; set; }
+    public string CurrencyCode { get; set; }
     public string? Title { get; set; }
     public string? Description { get; set; }
     public DateTime StartDateTime { get; set; }

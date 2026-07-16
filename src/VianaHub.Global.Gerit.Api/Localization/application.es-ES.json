@@ -798,7 +798,8 @@
   "Application.Service.Visit.Update.ResourceNotFound": "Visita no encontrada",
   "Application.Service.Visit.ValidateBulkItem.Code": "El código es obligatorio en la línea {0}",
   "Application.Service.Visit.ValidateBulkItem.InterventionId": "El ID de la intervención es obligatorio en la línea {0}",
-  "Application.Service.Visit.ValidateBulkItem.StatusId": "El ID del estado es obligatorio en la línea {0}",
+  "Application.Service.Visit.ValidateBulkItem.StatusDefinitionId": "El ID de la definición de estado es obligatorio en la línea {0}",
+  "Application.Service.Visit.ValidateBulkItem.StatusDomainId": "El ID del dominio de estado es obligatorio en la línea {0}",
 
   "Application.Service.VisitAttachment.Activate.ResourceNotFound": "Adjunto de la visita no encontrado",
   "Application.Service.VisitAttachment.Create.ResourceAlreadyExists": "Ya existe un adjunto con este nombre para esta visita",

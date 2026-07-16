@@ -15,6 +15,20 @@ public class CreateVisitRouteValidator : AbstractValidator<CreateVisitRequest>
             .GreaterThan(0)
             .WithMessage(localization.GetMessage("Api.Validator.Visit.Create.ClientId"));
 
+        RuleFor(x => x.StatusDefinitionId)
+            .GreaterThan(0)
+            .WithMessage(localization.GetMessage("Api.Validator.Visit.Create.StatusDefinitionId"));
+
+        RuleFor(x => x.StatusDomainId)
+            .GreaterThan(0)
+            .WithMessage(localization.GetMessage("Api.Validator.Visit.Create.StatusDomainId"));
+
+        RuleFor(x => x.CurrencyCode)
+            .NotEmpty()
+            .WithMessage(localization.GetMessage("Api.Validator.Visit.Create.CurrencyCode"))
+            .MaximumLength(3)
+            .WithMessage(localization.GetMessage("Api.Validator.Visit.Create.CurrencyCode.MaximumLength", 3));
+
         RuleFor(x => x.Title)
             .NotEmpty()
             .WithMessage(localization.GetMessage("Api.Validator.Visit.Create.Title"))
