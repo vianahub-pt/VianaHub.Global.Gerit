@@ -69,11 +69,21 @@ public class TenantMapping : IEntityTypeConfiguration<TenantEntity>
             .HasColumnType("DATETIME2")
             .IsRequired(false);
 
+        builder.Property(x => x.PartyTypeId)
+            .HasColumnType("TINYINT")
+            .IsRequired();
+
         builder.Property(x => x.AcquisitionSourceTypeId)
             .HasColumnType("INT")
             .IsRequired();
 
         // Relacionamentos
+        builder.HasOne(x => x.PartyType)
+            .WithMany()
+            .HasForeignKey(x => x.PartyTypeId)
+            .HasConstraintName("FK_Tenants_PartyType")
+            .OnDelete(DeleteBehavior.Restrict);
+
         builder.HasOne(x => x.AcquisitionSourceType)
             .WithMany()
             .HasForeignKey(x => x.AcquisitionSourceTypeId)
