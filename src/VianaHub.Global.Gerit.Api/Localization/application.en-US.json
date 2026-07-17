@@ -840,5 +840,15 @@
   "Application.Service.StatusDefinition.Delete.ResourceNotFound": "Status definition not found",
   "Application.Service.StatusDefinition.Delete.SystemStatusCannotBeDeleted": "System status definitions cannot be deleted",
   "Application.Service.StatusDefinition.Translation.ResourceNotFound": "Status definition not found",
-  "Application.Service.StatusDefinition.Translation.TranslationNotFound": "Translation not found"
+  "Application.Service.StatusDefinition.Translation.TranslationNotFound": "Translation not found",
+
+  "Application.Service.DocumentType.GetById.ResourceNotFound": "Document type not found or deleted",
+  "Application.Service.DocumentType.Create.CodeAlreadyExists": "A document type with this code already exists",
+  "Application.Service.DocumentType.Update.ResourceNotFound": "Document type not found",
+  "Application.Service.DocumentType.Update.CodeAlreadyExists": "A document type with this code already exists",
+  "Application.Service.DocumentType.Activate.ResourceNotFound": "Document type not found",
+  "Application.Service.DocumentType.Deactivate.ResourceNotFound": "Document type not found",
+  "Application.Service.DocumentType.Delete.ResourceNotFound": "Document type not found",
+  "Application.Service.DocumentType.Translation.ResourceNotFound": "Document type not found",
+  "Application.Service.DocumentType.Translation.TranslationNotFound": "Translation not found"
 }

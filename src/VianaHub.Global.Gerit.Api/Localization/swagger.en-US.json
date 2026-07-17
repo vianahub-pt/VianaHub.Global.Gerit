@@ -597,5 +597,19 @@
   "Swagger.Endpoint.StatusDefinition.GetTranslations.Summary": "Get status definition translations",
   "Swagger.Endpoint.StatusDefinition.CreateTranslation.Summary": "Create status definition translation",
   "Swagger.Endpoint.StatusDefinition.UpdateTranslation.Summary": "Update status definition translation",
-  "Swagger.Endpoint.StatusDefinition.DeleteTranslation.Summary": "Delete status definition translation"
+  "Swagger.Endpoint.StatusDefinition.DeleteTranslation.Summary": "Delete status definition translation",
+
+  "Swagger.Tag.DocumentTypes": "Document Types",
+  "Swagger.Endpoint.DocumentType.GetAll.Summary": "Get all document types",
+  "Swagger.Endpoint.DocumentType.GetPaged.Summary": "Get document types paged",
+  "Swagger.Endpoint.DocumentType.GetById.Summary": "Get document type by ID",
+  "Swagger.Endpoint.DocumentType.Create.Summary": "Create new document type",
+  "Swagger.Endpoint.DocumentType.Update.Summary": "Update document type",
+  "Swagger.Endpoint.DocumentType.Activate.Summary": "Activate document type",
+  "Swagger.Endpoint.DocumentType.Deactivate.Summary": "Deactivate document type",
+  "Swagger.Endpoint.DocumentType.Delete.Summary": "Delete document type",
+  "Swagger.Endpoint.DocumentType.GetTranslations.Summary": "Get document type translations",
+  "Swagger.Endpoint.DocumentType.CreateTranslation.Summary": "Create document type translation",
+  "Swagger.Endpoint.DocumentType.UpdateTranslation.Summary": "Update document type translation",
+  "Swagger.Endpoint.DocumentType.DeleteTranslation.Summary": "Delete document type translation"
 }

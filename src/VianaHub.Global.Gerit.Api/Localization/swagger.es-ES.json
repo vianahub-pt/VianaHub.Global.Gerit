@@ -595,5 +595,19 @@
   "Swagger.Endpoint.StatusDefinition.GetTranslations.Summary": "Obtener traducciones de la definición de estado",
   "Swagger.Endpoint.StatusDefinition.CreateTranslation.Summary": "Crear traducción de la definición de estado",
   "Swagger.Endpoint.StatusDefinition.UpdateTranslation.Summary": "Actualizar traducción de la definición de estado",
-  "Swagger.Endpoint.StatusDefinition.DeleteTranslation.Summary": "Eliminar traducción de la definición de estado"
+  "Swagger.Endpoint.StatusDefinition.DeleteTranslation.Summary": "Eliminar traducción de la definición de estado",
+
+  "Swagger.Tag.DocumentTypes": "Tipos de Documento",
+  "Swagger.Endpoint.DocumentType.GetAll.Summary": "Obtener todos los tipos de documento",
+  "Swagger.Endpoint.DocumentType.GetPaged.Summary": "Obtener tipos de documento paginados",
+  "Swagger.Endpoint.DocumentType.GetById.Summary": "Obtener tipo de documento por ID",
+  "Swagger.Endpoint.DocumentType.Create.Summary": "Crear nuevo tipo de documento",
+  "Swagger.Endpoint.DocumentType.Update.Summary": "Actualizar tipo de documento",
+  "Swagger.Endpoint.DocumentType.Activate.Summary": "Activar tipo de documento",
+  "Swagger.Endpoint.DocumentType.Deactivate.Summary": "Desactivar tipo de documento",
+  "Swagger.Endpoint.DocumentType.Delete.Summary": "Eliminar tipo de documento",
+  "Swagger.Endpoint.DocumentType.GetTranslations.Summary": "Obtener traducciones del tipo de documento",
+  "Swagger.Endpoint.DocumentType.CreateTranslation.Summary": "Crear traducción del tipo de documento",
+  "Swagger.Endpoint.DocumentType.UpdateTranslation.Summary": "Actualizar traducción del tipo de documento",
+  "Swagger.Endpoint.DocumentType.DeleteTranslation.Summary": "Eliminar traducción del tipo de documento"
 }

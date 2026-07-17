@@ -482,5 +482,10 @@
   "Api.Validator.StatusDefinition.Create.DisplayOrder": "Display order must be greater than or equal to zero",
   "Api.Validator.StatusDefinition.Update.Code": "Code is required",
   "Api.Validator.StatusDefinition.Update.Code.MaximumLength": "Code must be at most {0} characters",
-  "Api.Validator.StatusDefinition.Update.DisplayOrder": "Display order must be greater than or equal to zero"
+  "Api.Validator.StatusDefinition.Update.DisplayOrder": "Display order must be greater than or equal to zero",
+
+  "Api.Validator.DocumentType.Create.Code": "Code is required",
+  "Api.Validator.DocumentType.Create.Code.MaximumLength": "Code must be at most {0} characters",
+  "Api.Validator.DocumentType.Update.Code": "Code is required",
+  "Api.Validator.DocumentType.Update.Code.MaximumLength": "Code must be at most {0} characters"
 }
