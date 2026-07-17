@@ -156,6 +156,7 @@ public static class DependencyInjection
         services.AddScoped<IAddressTypeAppService, AddressTypeAppService>();
         services.AddScoped<IFileTypeAppService, FileTypeAppService>();
         services.AddScoped<IAcquisitionSourceTypeAppService, AcquisitionSourceTypeAppService>();
+        services.AddScoped<IStatusDefinitionAppService, StatusDefinitionAppService>();
         services.AddScoped<IVisitTeamFunctionAppService, VisitTeamFunctionAppService>();
         services.AddScoped<ITeamAppService, TeamAppService>();
         services.AddScoped<IVehicleAppService, VehicleAppService>();

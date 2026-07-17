@@ -443,5 +443,13 @@
   "Api.Validator.Subscription.Update.CurrentPeriodStart": "La fecha de inicio del período es obligatoria",
   "Api.Validator.Subscription.Update.CurrentPeriodEnd": "La fecha de fin del período es obligatoria",
   "Api.Validator.Subscription.Update.CurrentPeriodEnd.AfterStart": "La fecha de fin del período debe ser posterior a la fecha de inicio",
-  "Api.Validator.Subscription.Update.TrialEnd.AfterStart": "La fecha de fin del período de prueba debe ser posterior a la fecha de inicio"
+  "Api.Validator.Subscription.Update.TrialEnd.AfterStart": "La fecha de fin del período de prueba debe ser posterior a la fecha de inicio",
+
+  "Api.Validator.StatusDefinition.Create.StatusDomainId": "El ID del dominio de estado es obligatorio",
+  "Api.Validator.StatusDefinition.Create.Code": "El código es obligatorio",
+  "Api.Validator.StatusDefinition.Create.Code.MaximumLength": "El código debe tener como máximo {0} caracteres",
+  "Api.Validator.StatusDefinition.Create.DisplayOrder": "El orden de visualización debe ser mayor o igual a cero",
+  "Api.Validator.StatusDefinition.Update.Code": "El código es obligatorio",
+  "Api.Validator.StatusDefinition.Update.Code.MaximumLength": "El código debe tener como máximo {0} caracteres",
+  "Api.Validator.StatusDefinition.Update.DisplayOrder": "El orden de visualización debe ser mayor o igual a cero"
 }

@@ -581,5 +581,19 @@
   "Swagger.Endpoint.VisitTeams.Delete.Summary": "Eliminar equipo de visita",
   "Swagger.Endpoint.VisitTeams.Activate.Summary": "Activar equipo de visita",
   "Swagger.Endpoint.VisitTeams.Deactivate.Summary": "Desactivar equipo de visita",
-  "Swagger.Endpoint.VisitTeams.BulkUpload.Summary": "Carga masiva de equipos de visita"
+  "Swagger.Endpoint.VisitTeams.BulkUpload.Summary": "Carga masiva de equipos de visita",
+
+  "Swagger.Tag.StatusDefinitions": "Definiciones de Estado",
+  "Swagger.Endpoint.StatusDefinition.GetAll.Summary": "Obtener todas las definiciones de estado",
+  "Swagger.Endpoint.StatusDefinition.GetPaged.Summary": "Obtener definiciones de estado paginadas",
+  "Swagger.Endpoint.StatusDefinition.GetById.Summary": "Obtener definición de estado por ID",
+  "Swagger.Endpoint.StatusDefinition.Create.Summary": "Crear nueva definición de estado",
+  "Swagger.Endpoint.StatusDefinition.Update.Summary": "Actualizar definición de estado",
+  "Swagger.Endpoint.StatusDefinition.Activate.Summary": "Activar definición de estado",
+  "Swagger.Endpoint.StatusDefinition.Deactivate.Summary": "Desactivar definición de estado",
+  "Swagger.Endpoint.StatusDefinition.Delete.Summary": "Eliminar definición de estado",
+  "Swagger.Endpoint.StatusDefinition.GetTranslations.Summary": "Obtener traducciones de la definición de estado",
+  "Swagger.Endpoint.StatusDefinition.CreateTranslation.Summary": "Crear traducción de la definición de estado",
+  "Swagger.Endpoint.StatusDefinition.UpdateTranslation.Summary": "Actualizar traducción de la definición de estado",
+  "Swagger.Endpoint.StatusDefinition.DeleteTranslation.Summary": "Eliminar traducción de la definición de estado"
 }

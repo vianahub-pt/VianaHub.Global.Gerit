@@ -583,5 +583,19 @@
   "Swagger.Endpoint.VisitTeams.Delete.Summary": "Delete visit team",
   "Swagger.Endpoint.VisitTeams.Activate.Summary": "Activate visit team",
   "Swagger.Endpoint.VisitTeams.Deactivate.Summary": "Deactivate visit team",
-  "Swagger.Endpoint.VisitTeams.BulkUpload.Summary": "Bulk upload visit teams"
+  "Swagger.Endpoint.VisitTeams.BulkUpload.Summary": "Bulk upload visit teams",
+
+  "Swagger.Tag.StatusDefinitions": "Status Definitions",
+  "Swagger.Endpoint.StatusDefinition.GetAll.Summary": "Get all status definitions",
+  "Swagger.Endpoint.StatusDefinition.GetPaged.Summary": "Get status definitions paged",
+  "Swagger.Endpoint.StatusDefinition.GetById.Summary": "Get status definition by ID",
+  "Swagger.Endpoint.StatusDefinition.Create.Summary": "Create new status definition",
+  "Swagger.Endpoint.StatusDefinition.Update.Summary": "Update status definition",
+  "Swagger.Endpoint.StatusDefinition.Activate.Summary": "Activate status definition",
+  "Swagger.Endpoint.StatusDefinition.Deactivate.Summary": "Deactivate status definition",
+  "Swagger.Endpoint.StatusDefinition.Delete.Summary": "Delete status definition",
+  "Swagger.Endpoint.StatusDefinition.GetTranslations.Summary": "Get status definition translations",
+  "Swagger.Endpoint.StatusDefinition.CreateTranslation.Summary": "Create status definition translation",
+  "Swagger.Endpoint.StatusDefinition.UpdateTranslation.Summary": "Update status definition translation",
+  "Swagger.Endpoint.StatusDefinition.DeleteTranslation.Summary": "Delete status definition translation"
 }

@@ -840,5 +840,16 @@
   "Application.Service.VisitTeamEmployee.Delete.ResourceNotFound": "Empleado del equipo de visita no encontrado",
   "Application.Service.VisitTeamEmployee.GetById.ResourceNotFound": "Empleado del equipo de visita no encontrado o inactivo",
   "Application.Service.VisitTeamEmployee.Update.FunctionNotFound": "Función no encontrada",
-  "Application.Service.VisitTeamEmployee.Update.ResourceNotFound": "Empleado del equipo de visita no encontrado"
+  "Application.Service.VisitTeamEmployee.Update.ResourceNotFound": "Empleado del equipo de visita no encontrado",
+
+  "Application.Service.StatusDefinition.GetById.ResourceNotFound": "Definición de estado no encontrada o eliminada",
+  "Application.Service.StatusDefinition.Create.CodeAlreadyExists": "Ya existe una definición de estado con este código para este dominio",
+  "Application.Service.StatusDefinition.Update.ResourceNotFound": "Definición de estado no encontrada",
+  "Application.Service.StatusDefinition.Update.CodeAlreadyExists": "Ya existe una definición de estado con este código para este dominio",
+  "Application.Service.StatusDefinition.Activate.ResourceNotFound": "Definición de estado no encontrada",
+  "Application.Service.StatusDefinition.Deactivate.ResourceNotFound": "Definición de estado no encontrada",
+  "Application.Service.StatusDefinition.Delete.ResourceNotFound": "Definición de estado no encontrada",
+  "Application.Service.StatusDefinition.Delete.SystemStatusCannotBeDeleted": "No se puede eliminar una definición de estado del sistema",
+  "Application.Service.StatusDefinition.Translation.ResourceNotFound": "Definición de estado no encontrada",
+  "Application.Service.StatusDefinition.Translation.TranslationNotFound": "Traducción no encontrada"
 }
