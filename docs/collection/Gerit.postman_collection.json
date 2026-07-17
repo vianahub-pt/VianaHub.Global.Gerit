@@ -4532,7 +4532,7 @@
                   }
                 ],
                 "url": {
-                  "raw": "https://localhost:7111/v1/functions",
+                  "raw": "https://localhost:7111/v1/visit-team-functions",
                   "protocol": "https",
                   "host": [
                     "localhost"
@@ -4540,7 +4540,7 @@
                   "port": "7111",
                   "path": [
                     "v1",
-                    "functions"
+                    "visit-team-functions"
                   ]
                 }
               },
@@ -4558,7 +4558,7 @@
                   }
                 ],
                 "url": {
-                  "raw": "https://localhost:7111/v1/functions/48",
+                  "raw": "https://localhost:7111/v1/visit-team-functions/48",
                   "protocol": "https",
                   "host": [
                     "localhost"
@@ -4566,7 +4566,7 @@
                   "port": "7111",
                   "path": [
                     "v1",
-                    "functions",
+                    "visit-team-functions",
                     "48"
                   ]
                 }
@@ -4585,7 +4585,7 @@
                   }
                 ],
                 "url": {
-                  "raw": "https://localhost:7111/v1/functions/paged?Search=&PageNumber=1&PageSize=10&SortBy=Name&SortDirection=asc",
+                  "raw": "https://localhost:7111/v1/visit-team-functions/paged?Search=&PageNumber=1&PageSize=10&SortBy=Name&SortDirection=asc",
                   "protocol": "https",
                   "host": [
                     "localhost"
@@ -4593,7 +4593,7 @@
                   "port": "7111",
                   "path": [
                     "v1",
-                    "functions",
+                    "visit-team-functions",
                     "paged"
                   ],
                   "query": [
@@ -4643,7 +4643,7 @@
                   }
                 },
                 "url": {
-                  "raw": "https://localhost:7111/v1/functions",
+                  "raw": "https://localhost:7111/v1/visit-team-functions",
                   "protocol": "https",
                   "host": [
                     "localhost"
@@ -4651,7 +4651,7 @@
                   "port": "7111",
                   "path": [
                     "v1",
-                    "functions"
+                    "visit-team-functions"
                   ]
                 }
               },
@@ -4680,7 +4680,7 @@
                   ]
                 },
                 "url": {
-                  "raw": "https://localhost:7111/v1/functions/bulk-upload",
+                  "raw": "https://localhost:7111/v1/visit-team-functions/bulk-upload",
                   "protocol": "https",
                   "host": [
                     "localhost"
@@ -4688,7 +4688,7 @@
                   "port": "7111",
                   "path": [
                     "v1",
-                    "functions",
+                    "visit-team-functions",
                     "bulk-upload"
                   ]
                 }
@@ -4716,7 +4716,7 @@
                   }
                 },
                 "url": {
-                  "raw": "https://localhost:7111/v1/functions/1",
+                  "raw": "https://localhost:7111/v1/visit-team-functions/1",
                   "protocol": "https",
                   "host": [
                     "localhost"
@@ -4724,7 +4724,7 @@
                   "port": "7111",
                   "path": [
                     "v1",
-                    "functions",
+                    "visit-team-functions",
                     "1"
                   ]
                 }
@@ -4743,7 +4743,7 @@
                   }
                 ],
                 "url": {
-                  "raw": "https://localhost:7111/v1/functions/1/activate",
+                  "raw": "https://localhost:7111/v1/visit-team-functions/1/activate",
                   "protocol": "https",
                   "host": [
                     "localhost"
@@ -4751,7 +4751,7 @@
                   "port": "7111",
                   "path": [
                     "v1",
-                    "functions",
+                    "visit-team-functions",
                     "1",
                     "activate"
                   ]
@@ -4771,7 +4771,7 @@
                   }
                 ],
                 "url": {
-                  "raw": "https://localhost:7111/v1/functions/1/deactivate",
+                  "raw": "https://localhost:7111/v1/visit-team-functions/1/deactivate",
                   "protocol": "https",
                   "host": [
                     "localhost"
@@ -4779,7 +4779,7 @@
                   "port": "7111",
                   "path": [
                     "v1",
-                    "functions",
+                    "visit-team-functions",
                     "1",
                     "deactivate"
                   ]
@@ -4799,7 +4799,7 @@
                   }
                 ],
                 "url": {
-                  "raw": "https://localhost:7111/v1/functions/1",
+                  "raw": "https://localhost:7111/v1/visit-team-functions/1",
                   "protocol": "https",
                   "host": [
                     "localhost"
@@ -4807,7 +4807,7 @@
                   "port": "7111",
                   "path": [
                     "v1",
-                    "functions",
+                    "visit-team-functions",
                     "1"
                   ]
                 }

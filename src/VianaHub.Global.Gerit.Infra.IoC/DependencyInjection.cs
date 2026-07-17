@@ -114,7 +114,7 @@ public static class DependencyInjection
         services.AddScoped<IEntityDomainValidator<VehicleEntity>, VehicleValidator>();
         services.AddScoped<IEntityDomainValidator<EquipmentEntity>, EquipmentValidator>();
         services.AddScoped<IEntityDomainValidator<EquipmentTypeEntity>, EquipmentTypeValidator>();
-        services.AddScoped<IEntityDomainValidator<FunctionEntity>, FunctionValidator>();
+        services.AddScoped<IEntityDomainValidator<VisitTeamFunctionEntity>, VisitTeamFunctionValidator>();
         services.AddScoped<IEntityDomainValidator<TeamEntity>, TeamValidator>();
         services.AddScoped<IEntityDomainValidator<EmployeeEntity>, EmployeeValidator>();
         services.AddScoped<IEntityDomainValidator<EmployeeAddressEntity>, EmployeeAddressValidator>();
@@ -154,7 +154,7 @@ public static class DependencyInjection
         services.AddScoped<IAddressTypeAppService, AddressTypeAppService>();
         services.AddScoped<IFileTypeAppService, FileTypeAppService>();
         services.AddScoped<IAcquisitionSourceTypeAppService, AcquisitionSourceTypeAppService>();
-        services.AddScoped<IFunctionAppService, FunctionAppService>();
+        services.AddScoped<IVisitTeamFunctionAppService, VisitTeamFunctionAppService>();
         services.AddScoped<ITeamAppService, TeamAppService>();
         services.AddScoped<IVehicleAppService, VehicleAppService>();
         services.AddScoped<IEquipmentAppService, EquipmentAppService>();
@@ -200,7 +200,7 @@ public static class DependencyInjection
         services.AddScoped<IUserPreferencesDomainService, UserPreferencesDomainService>();
         services.AddScoped<IRolePermissionDomainService, RolePermissionDomainService>();
         services.AddScoped<IJwtKeyDomainService, JwtKeyDomainService>();
-        services.AddScoped<IFunctionDomainService, FunctionDomainService>();
+        services.AddScoped<IVisitTeamFunctionDomainService, VisitTeamFunctionDomainService>();
         services.AddScoped<ITeamDomainService, TeamDomainService>();
         services.AddScoped<IVehicleDomainService, VehicleDomainService>();
         services.AddScoped<IEquipmentDomainService, EquipmentDomainService>();
@@ -227,7 +227,7 @@ public static class DependencyInjection
         services.AddScoped<IAddressTypeDataRepository, AddressTypeDataRepository>();
         services.AddScoped<IFileTypeDataRepository, FileTypeDataRepository>();
         services.AddScoped<IAcquisitionSourceTypeDataRepository, AcquisitionSourceTypeDataRepository>();
-        services.AddScoped<IFunctionDataRepository, FunctionDataRepository>();
+        services.AddScoped<IVisitTeamFunctionDataRepository, VisitTeamFunctionDataRepository>();
         services.AddScoped<ITeamDataRepository, TeamDataRepository>();
         services.AddScoped<IVehicleDataRepository, VehicleDataRepository>();
         services.AddScoped<IEquipmentDataRepository, EquipmentDataRepository>();

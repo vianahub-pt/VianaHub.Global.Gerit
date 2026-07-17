@@ -3,7 +3,7 @@ using VianaHub.Global.Gerit.Domain.Entities.Billing;
 
 namespace VianaHub.Global.Gerit.Domain.Entities.Business;
 
-public class FunctionEntity : Entity
+public class VisitTeamFunctionEntity : Entity
 {
     public int TenantId { get; private set; }
     public string? Name { get; private set; }
@@ -15,12 +15,12 @@ public class FunctionEntity : Entity
     public TenantEntity Tenant { get; private set; }
 
     // Construtor protegido para o EF Core
-    protected FunctionEntity() { }
+    protected VisitTeamFunctionEntity() { }
 
     /// <summary>
-    /// Construtor para criação de um novo Equipamento
+    /// Construtor para criação de uma nova Função de Equipe de Visita
     /// </summary>
-    public FunctionEntity(int tenantId, string name, string description, int createdBy)
+    public VisitTeamFunctionEntity(int tenantId, string name, string description, int createdBy)
     {
         TenantId = tenantId;
         Name = name;
