@@ -17,7 +17,7 @@ public class VisitTeamEmployeeAppService : IVisitTeamEmployeeAppService
     private readonly IVisitTeamEmployeeDataRepository _repo;
     private readonly IVisitTeamEmployeeDomainService _domain;
     private readonly IEmployeeDataRepository _employeeRepository;
-    private readonly IFunctionDataRepository _functionRepository;
+    private readonly IVisitTeamFunctionDataRepository _functionRepository;
     private readonly IMapper _mapper;
     private readonly INotify _notify;
     private readonly ILocalizationService _localization;
@@ -27,7 +27,7 @@ public class VisitTeamEmployeeAppService : IVisitTeamEmployeeAppService
         IVisitTeamEmployeeDataRepository repo,
         IVisitTeamEmployeeDomainService domain,
         IEmployeeDataRepository employeeRepository,
-        IFunctionDataRepository functionRepository,
+        IVisitTeamFunctionDataRepository functionRepository,
         IMapper mapper,
         INotify notify,
         ILocalizationService localization,
