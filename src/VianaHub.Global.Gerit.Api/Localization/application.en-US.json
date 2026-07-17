@@ -731,6 +731,13 @@
   "Application.Service.TenantFiscalData.Update.ResourceNotFound": "Tenant fiscal data not found",
   "Application.Service.TenantFiscalData.Update.TaxNumberAlreadyExists": "Another fiscal data with this tax number already exists for this country",
 
+  "Application.Service.TenantAddress.Activate.ResourceNotFound": "Tenant address not found",
+  "Application.Service.TenantAddress.Create.PrimaryAlreadyExists": "A primary address already exists for this tenant",
+  "Application.Service.TenantAddress.Deactivate.ResourceNotFound": "Tenant address not found",
+  "Application.Service.TenantAddress.Delete.ResourceNotFound": "Tenant address not found",
+  "Application.Service.TenantAddress.GetById.ResourceNotFound": "Tenant address not found or inactive",
+  "Application.Service.TenantAddress.Update.ResourceNotFound": "Tenant address not found",
+
   "Application.Service.User.Activate.ResourceNotFound": "User not found",
   "Application.Service.User.BulkUpload.EmptyFile": "CSV file is empty",
   "Application.Service.User.Create.ResourceAlreadyExists": "A user with this email already exists",

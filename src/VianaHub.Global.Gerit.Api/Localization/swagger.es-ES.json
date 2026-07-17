@@ -25,6 +25,7 @@
   "Swagger.Tag.Subscriptions": "Suscripciones",
   "Swagger.Tag.TenantContacts": "Contactos de Inquilinos",
   "Swagger.Tag.TenantFiscalData": "Datos Fiscales de Inquilinos",
+  "Swagger.Tag.TenantAddress": "Direcciones de Inquilinos",
   "Swagger.Tag.UserRoles": "Asociaciones Usuario-Rol",
   "Swagger.Tag.RolePermissions": "Permisos de Rol",
   "Swagger.Tag.JobDefinitions": "Definiciones de Trabajo",
@@ -209,6 +210,15 @@
   "Swagger.Endpoint.TenantFiscalData.Activate.Summary": "Activar datos fiscales del inquilino",
   "Swagger.Endpoint.TenantFiscalData.Deactivate.Summary": "Desactivar datos fiscales del inquilino",
   "Swagger.Endpoint.TenantFiscalData.Delete.Summary": "Eliminar datos fiscales del inquilino",
+
+  "Swagger.Endpoint.TenantAddress.GetAll.Summary": "Obtener todas las direcciones del inquilino",
+  "Swagger.Endpoint.TenantAddress.GetById.Summary": "Obtener dirección del inquilino por ID",
+  "Swagger.Endpoint.TenantAddress.GetPaged.Summary": "Obtener direcciones del inquilino paginadas",
+  "Swagger.Endpoint.TenantAddress.Create.Summary": "Crear nueva dirección del inquilino",
+  "Swagger.Endpoint.TenantAddress.Update.Summary": "Actualizar dirección del inquilino",
+  "Swagger.Endpoint.TenantAddress.Activate.Summary": "Activar dirección del inquilino",
+  "Swagger.Endpoint.TenantAddress.Deactivate.Summary": "Desactivar dirección del inquilino",
+  "Swagger.Endpoint.TenantAddress.Delete.Summary": "Eliminar dirección del inquilino",
 
   "Swagger.Endpoint.Equipment.GetAll.Summary": "Obtener todos los equipos",
   "Swagger.Endpoint.Equipment.GetById.Summary": "Obtener equipo por ID",

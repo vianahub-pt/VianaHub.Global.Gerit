@@ -182,6 +182,7 @@ public static class DependencyInjection
         services.AddScoped<ITenantAppService, TenantAppService>();
         services.AddScoped<ITenantContactAppService, TenantContactAppService>();
         services.AddScoped<ITenantFiscalDataAppService, TenantFiscalDataAppService>();
+        services.AddScoped<ITenantAddressesAppService, TenantAddressesAppService>();
         services.AddScoped<ISubscriptionAppService, SubscriptionAppService>();
         services.AddScoped<IUserAppService, UserAppService>();
         services.AddScoped<IUserPreferencesAppService, UserPreferencesAppService>();
@@ -201,6 +202,7 @@ public static class DependencyInjection
         services.AddScoped<ITenantDomainService, TenantDomainService>();
         services.AddScoped<ITenantContactDomainService, TenantContactDomainService>();
         services.AddScoped<ITenantFiscalDataDomainService, TenantFiscalDataDomainService>();
+        services.AddScoped<ITenantAddressesDomainService, TenantAddressesDomainService>();
         services.AddScoped<ISubscriptionDomainService, SubscriptionDomainService>();
         services.AddScoped<IUserDomainService, UserDomainService>();
         services.AddScoped<IUserPreferencesDomainService, UserPreferencesDomainService>();
@@ -256,6 +258,7 @@ public static class DependencyInjection
         services.AddScoped<ITenantDataRepository, TenantDataRepository>();
         services.AddScoped<ITenantContactDataRepository, TenantContactDataRepository>();
         services.AddScoped<ITenantFiscalDataDataRepository, TenantFiscalDataDataRepository>();
+        services.AddScoped<ITenantAddressesDataRepository, TenantAddressesDataRepository>();
         services.AddScoped<ISubscriptionDataRepository, SubscriptionDataRepository>();
         services.AddScoped<IJwtKeyDataRepository, JwtKeyDataRepository>();
         services.AddScoped<IUserDataRepository, UserDataRepository>();
