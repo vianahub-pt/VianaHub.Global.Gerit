@@ -8,7 +8,7 @@ public class VisitTeamEmployeeMapping : IEntityTypeConfiguration<VisitTeamEmploy
 {
     public void Configure(EntityTypeBuilder<VisitTeamEmployeeEntity> builder)
     {
-        builder.ToTable("VisitTeamEmployee");
+        builder.ToTable("VisitTeamEmployee", "dbo");
 
         builder.HasKey(x => x.Id);
 
@@ -25,6 +25,7 @@ public class VisitTeamEmployeeMapping : IEntityTypeConfiguration<VisitTeamEmploy
             .IsRequired();
 
         builder.Property(x => x.FunctionId)
+            .HasColumnName("FunctionId")
             .IsRequired();
 
         builder.Property(x => x.IsLeader)
@@ -82,6 +83,7 @@ public class VisitTeamEmployeeMapping : IEntityTypeConfiguration<VisitTeamEmploy
             .WithMany()
             .HasForeignKey(x => new { x.FunctionId, x.TenantId })
             .HasPrincipalKey(x => new { x.Id, x.TenantId })
+            .HasConstraintName("FK_VisitTeamEmployee_VisitTeamFunction")
             .OnDelete(DeleteBehavior.Restrict);
 
         // Índices
