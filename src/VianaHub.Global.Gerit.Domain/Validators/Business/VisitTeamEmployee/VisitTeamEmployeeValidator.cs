@@ -67,8 +67,8 @@ public class VisitTeamEmployeeValidator : IEntityDomainValidator<VisitTeamEmploy
         if (entity.EmployeeId <= 0)
             errors.Add(new ValidationFailure(nameof(entity.EmployeeId), "visit_team_employee.employee_id.invalid"));
 
-        if (entity.FunctionId <= 0)
-            errors.Add(new ValidationFailure(nameof(entity.FunctionId), "visit_team_employee.function_id.invalid"));
+        if (entity.VisitTeamFunctionId <= 0)
+            errors.Add(new ValidationFailure(nameof(entity.VisitTeamFunctionId), "visit_team_employee.function_id.invalid"));
 
         if (entity.StartDateTime == default)
             errors.Add(new ValidationFailure(nameof(entity.StartDateTime), "visit_team_employee.start_date_time.required"));
