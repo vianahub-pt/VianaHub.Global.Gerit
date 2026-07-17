@@ -491,6 +491,22 @@
   "Domain.TenantContact.CannotDeactivateDeleted": "Cannot deactivate a deleted contact",
   "Domain.TenantContact.AlreadyDeleted": "Contact already deleted",
 
+  "Domain.TenantFiscalData.TenantIdRequired": "Tenant ID is required",
+  "Domain.TenantFiscalData.TaxNumberRequired": "Tax number is required",
+  "Domain.TenantFiscalData.TaxNumberMaxLength": "Tax number must be at most {0} characters",
+  "Domain.TenantFiscalData.VatNumberMaxLength": "VAT number must be at most {0} characters",
+  "Domain.TenantFiscalData.FiscalCountryRequired": "Fiscal country is required",
+  "Domain.TenantFiscalData.FiscalCountryLength": "Fiscal country must be exactly 2 characters",
+  "Domain.TenantFiscalData.IBANMaxLength": "IBAN must be at most {0} characters",
+  "Domain.TenantFiscalData.FiscalEmailMaxLength": "Fiscal email must be at most {0} characters",
+  "Domain.TenantFiscalData.FiscalEmailInvalid": "Invalid fiscal email",
+  "Domain.TenantFiscalData.CreatedByRequired": "Creator ID is required",
+  "Domain.TenantFiscalData.IdRequired": "Fiscal data ID is required",
+  "Domain.TenantFiscalData.CannotUpdateDeleted": "Cannot update deleted fiscal data",
+  "Domain.TenantFiscalData.CannotActivateDeleted": "Cannot activate deleted fiscal data",
+  "Domain.TenantFiscalData.CannotDeactivateDeleted": "Cannot deactivate deleted fiscal data",
+  "Domain.TenantFiscalData.AlreadyDeleted": "Fiscal data already deleted",
+
   "Domain.EmployeeTeam.TeamIdGreaterThanZero": "Team ID must be greater than zero",
   "Domain.EmployeeTeam.EmployeeIdGreaterThanZero": "Employee ID must be greater than zero",
 

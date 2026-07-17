@@ -71,6 +71,7 @@ using VianaHub.Global.Gerit.Domain.Validators.Business.FileType;
 using VianaHub.Global.Gerit.Domain.Validators.Business.VisitAttachment;
 using VianaHub.Global.Gerit.Domain.Validators.Business.ClientFiscalData;
 using VianaHub.Global.Gerit.Domain.Validators.Billing.TenantContact;
+using VianaHub.Global.Gerit.Domain.Validators.Billing.TenantFiscalData;
 using VianaHub.Global.Gerit.Domain.Validators.Billing.TenantAddress;
 using VianaHub.Global.Gerit.Domain.Validators.Business.ClientDocument;
 using VianaHub.Global.Gerit.Domain.Validators.Business.PartyType;
@@ -136,6 +137,7 @@ public static class DependencyInjection
         services.AddScoped<IEntityDomainValidator<VisitAttachmentsEntity>, VisitAttachmentValidator>();
         services.AddScoped<IEntityDomainValidator<ClientFiscalDataEntity>, ClientFiscalDataValidator>();
         services.AddScoped<IEntityDomainValidator<TenantContactPersonsEntity>, TenantContactValidator>();
+        services.AddScoped<IEntityDomainValidator<TenantFiscalDataEntity>, TenantFiscalDataValidator>();
         services.AddScoped<IEntityDomainValidator<TenantAddressesEntity>, TenantAddressValidator>();
         services.AddScoped<IEntityDomainValidator<ClientDocumentsEntity>, ClientDocumentValidator>();
         services.AddScoped<IEntityDomainValidator<PartyTypeEntity>, PartyTypeValidator>();
@@ -179,6 +181,7 @@ public static class DependencyInjection
         services.AddScoped<IPlanAppService, PlanAppService>();
         services.AddScoped<ITenantAppService, TenantAppService>();
         services.AddScoped<ITenantContactAppService, TenantContactAppService>();
+        services.AddScoped<ITenantFiscalDataAppService, TenantFiscalDataAppService>();
         services.AddScoped<ISubscriptionAppService, SubscriptionAppService>();
         services.AddScoped<IUserAppService, UserAppService>();
         services.AddScoped<IUserPreferencesAppService, UserPreferencesAppService>();
@@ -197,6 +200,7 @@ public static class DependencyInjection
         services.AddScoped<IPlanDomainService, PlanDomainService>();
         services.AddScoped<ITenantDomainService, TenantDomainService>();
         services.AddScoped<ITenantContactDomainService, TenantContactDomainService>();
+        services.AddScoped<ITenantFiscalDataDomainService, TenantFiscalDataDomainService>();
         services.AddScoped<ISubscriptionDomainService, SubscriptionDomainService>();
         services.AddScoped<IUserDomainService, UserDomainService>();
         services.AddScoped<IUserPreferencesDomainService, UserPreferencesDomainService>();
@@ -251,6 +255,7 @@ public static class DependencyInjection
         services.AddScoped<IPlanDataRepository, PlanDataRepository>();
         services.AddScoped<ITenantDataRepository, TenantDataRepository>();
         services.AddScoped<ITenantContactDataRepository, TenantContactDataRepository>();
+        services.AddScoped<ITenantFiscalDataDataRepository, TenantFiscalDataDataRepository>();
         services.AddScoped<ISubscriptionDataRepository, SubscriptionDataRepository>();
         services.AddScoped<IJwtKeyDataRepository, JwtKeyDataRepository>();
         services.AddScoped<IUserDataRepository, UserDataRepository>();

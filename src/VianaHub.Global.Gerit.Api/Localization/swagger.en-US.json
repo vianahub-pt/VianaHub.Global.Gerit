@@ -24,6 +24,7 @@
   "Swagger.Tag.UserPreferences": "User Preferences",
   "Swagger.Tag.Subscriptions": "Subscriptions",
   "Swagger.Tag.TenantContacts": "Tenant Contacts",
+  "Swagger.Tag.TenantFiscalData": "Tenant Fiscal Data",
   "Swagger.Tag.UserRoles": "User-Role Associations",
   "Swagger.Tag.RolePermissions": "Role Permissions",
   "Swagger.Tag.JobDefinitions": "Job Definitions",
@@ -202,6 +203,15 @@
   "Swagger.Endpoint.TenantContact.Activate.Summary": "Activate tenant contact",
   "Swagger.Endpoint.TenantContact.Deactivate.Summary": "Deactivate tenant contact",
   "Swagger.Endpoint.TenantContact.Delete.Summary": "Delete tenant contact",
+
+  "Swagger.Endpoint.TenantFiscalData.GetAll.Summary": "Get all tenant fiscal data",
+  "Swagger.Endpoint.TenantFiscalData.GetById.Summary": "Get tenant fiscal data by ID",
+  "Swagger.Endpoint.TenantFiscalData.GetPaged.Summary": "Get paged tenant fiscal data",
+  "Swagger.Endpoint.TenantFiscalData.Create.Summary": "Create new tenant fiscal data",
+  "Swagger.Endpoint.TenantFiscalData.Update.Summary": "Update tenant fiscal data",
+  "Swagger.Endpoint.TenantFiscalData.Activate.Summary": "Activate tenant fiscal data",
+  "Swagger.Endpoint.TenantFiscalData.Deactivate.Summary": "Deactivate tenant fiscal data",
+  "Swagger.Endpoint.TenantFiscalData.Delete.Summary": "Delete tenant fiscal data",
 
   "Swagger.Endpoint.Equipment.GetAll.Summary": "Get all equipments",
   "Swagger.Endpoint.Equipment.GetById.Summary": "Get equipment by ID",

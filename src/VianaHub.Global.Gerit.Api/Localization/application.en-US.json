@@ -722,6 +722,15 @@
   "Application.Service.TenantContact.Update.ResourceNotFound": "Tenant contact not found",
   "Application.Service.TenantContact.ValidateBulkItem.Email": "Email is required in bulk upload",
 
+  "Application.Service.TenantFiscalData.Activate.ResourceNotFound": "Tenant fiscal data not found",
+  "Application.Service.TenantFiscalData.Create.ActiveAlreadyExists": "Active fiscal data already exists for this tenant",
+  "Application.Service.TenantFiscalData.Create.TaxNumberAlreadyExists": "Fiscal data with this tax number already exists for this country",
+  "Application.Service.TenantFiscalData.Deactivate.ResourceNotFound": "Tenant fiscal data not found",
+  "Application.Service.TenantFiscalData.Delete.ResourceNotFound": "Tenant fiscal data not found",
+  "Application.Service.TenantFiscalData.GetById.ResourceNotFound": "Tenant fiscal data not found or inactive",
+  "Application.Service.TenantFiscalData.Update.ResourceNotFound": "Tenant fiscal data not found",
+  "Application.Service.TenantFiscalData.Update.TaxNumberAlreadyExists": "Another fiscal data with this tax number already exists for this country",
+
   "Application.Service.User.Activate.ResourceNotFound": "User not found",
   "Application.Service.User.BulkUpload.EmptyFile": "CSV file is empty",
   "Application.Service.User.Create.ResourceAlreadyExists": "A user with this email already exists",
