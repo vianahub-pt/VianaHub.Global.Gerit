@@ -178,6 +178,7 @@ public static class DependencyInjection
         services.AddScoped<IRolePermissionAppService, RolePermissionAppService>();
         services.AddScoped<IPlanAppService, PlanAppService>();
         services.AddScoped<ITenantAppService, TenantAppService>();
+        services.AddScoped<ITenantContactAppService, TenantContactAppService>();
         services.AddScoped<ISubscriptionAppService, SubscriptionAppService>();
         services.AddScoped<IUserAppService, UserAppService>();
         services.AddScoped<IUserPreferencesAppService, UserPreferencesAppService>();
@@ -195,6 +196,7 @@ public static class DependencyInjection
         services.AddScoped<IRoleDomainService, RoleDomainService>();
         services.AddScoped<IPlanDomainService, PlanDomainService>();
         services.AddScoped<ITenantDomainService, TenantDomainService>();
+        services.AddScoped<ITenantContactDomainService, TenantContactDomainService>();
         services.AddScoped<ISubscriptionDomainService, SubscriptionDomainService>();
         services.AddScoped<IUserDomainService, UserDomainService>();
         services.AddScoped<IUserPreferencesDomainService, UserPreferencesDomainService>();
@@ -248,6 +250,7 @@ public static class DependencyInjection
         services.AddScoped<IRoleDataRepository, RoleDataRepository>();
         services.AddScoped<IPlanDataRepository, PlanDataRepository>();
         services.AddScoped<ITenantDataRepository, TenantDataRepository>();
+        services.AddScoped<ITenantContactDataRepository, TenantContactDataRepository>();
         services.AddScoped<ISubscriptionDataRepository, SubscriptionDataRepository>();
         services.AddScoped<IJwtKeyDataRepository, JwtKeyDataRepository>();
         services.AddScoped<IUserDataRepository, UserDataRepository>();
