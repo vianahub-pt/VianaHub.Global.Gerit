@@ -48,6 +48,10 @@ using VianaHub.Global.Gerit.Api.Validators.Business.AcquisitionSourceType;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Business.StatusDefinition;
 using VianaHub.Global.Gerit.Api.Validators.Business.StatusDefinition;
 
+// DocumentType DTOs & Validators
+using VianaHub.Global.Gerit.Application.Dtos.Request.Business.DocumentType;
+using VianaHub.Global.Gerit.Api.Validators.Business.DocumentType;
+
 // Client DTOs & Validators
 using VianaHub.Global.Gerit.Application.Dtos.Request.Business.Client;
 using VianaHub.Global.Gerit.Api.Validators.Business.Client;
@@ -166,6 +170,10 @@ public static class RouteValidatorSetup
         // StatusDefinition Route Validators
         services.AddScoped<IValidator<CreateStatusDefinitionRequest>, CreateStatusDefinitionRouteValidator>();
         services.AddScoped<IValidator<UpdateStatusDefinitionRequest>, UpdateStatusDefinitionRouteValidator>();
+
+        // DocumentType Route Validators
+        services.AddScoped<IValidator<CreateDocumentTypeRequest>, CreateDocumentTypeRouteValidator>();
+        services.AddScoped<IValidator<UpdateDocumentTypeRequest>, UpdateDocumentTypeRouteValidator>();
 
         return services;
     }

@@ -451,5 +451,10 @@
   "Api.Validator.StatusDefinition.Create.DisplayOrder": "El orden de visualización debe ser mayor o igual a cero",
   "Api.Validator.StatusDefinition.Update.Code": "El código es obligatorio",
   "Api.Validator.StatusDefinition.Update.Code.MaximumLength": "El código debe tener como máximo {0} caracteres",
-  "Api.Validator.StatusDefinition.Update.DisplayOrder": "El orden de visualización debe ser mayor o igual a cero"
+  "Api.Validator.StatusDefinition.Update.DisplayOrder": "El orden de visualización debe ser mayor o igual a cero",
+
+  "Api.Validator.DocumentType.Create.Code": "El código es obligatorio",
+  "Api.Validator.DocumentType.Create.Code.MaximumLength": "El código debe tener como máximo {0} caracteres",
+  "Api.Validator.DocumentType.Update.Code": "El código es obligatorio",
+  "Api.Validator.DocumentType.Update.Code.MaximumLength": "El código debe tener como máximo {0} caracteres"
 }
