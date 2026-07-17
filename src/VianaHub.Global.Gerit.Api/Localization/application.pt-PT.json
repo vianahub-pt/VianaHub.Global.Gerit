@@ -830,5 +830,16 @@
   "Application.Service.VisitAttachment.ValidateBulkItem.FileTypeId": "O ID do tipo de ficheiro é obrigatório no carregamento em massa",
   "Application.Service.VisitAttachment.ValidateBulkItem.FilePath": "O caminho do ficheiro é obrigatório no carregamento em massa",
   "Application.Service.VisitAttachment.ValidateBulkItem.VisitId": "O ID da visita é obrigatório no carregamento em massa",
-  "Application.Service.VisitAttachment.ValidateBulkItem.FileSize": "O tamanho do ficheiro é obrigatório no carregamento em massa"
+  "Application.Service.VisitAttachment.ValidateBulkItem.FileSize": "O tamanho do ficheiro é obrigatório no carregamento em massa",
+
+  "Application.Service.StatusDefinition.GetById.ResourceNotFound": "Definição de status não encontrada ou eliminada",
+  "Application.Service.StatusDefinition.Create.CodeAlreadyExists": "Já existe uma definição de status com este código para este domínio",
+  "Application.Service.StatusDefinition.Update.ResourceNotFound": "Definição de status não encontrada",
+  "Application.Service.StatusDefinition.Update.CodeAlreadyExists": "Já existe uma definição de status com este código para este domínio",
+  "Application.Service.StatusDefinition.Activate.ResourceNotFound": "Definição de status não encontrada",
+  "Application.Service.StatusDefinition.Deactivate.ResourceNotFound": "Definição de status não encontrada",
+  "Application.Service.StatusDefinition.Delete.ResourceNotFound": "Definição de status não encontrada",
+  "Application.Service.StatusDefinition.Delete.SystemStatusCannotBeDeleted": "Não é possível eliminar uma definição de status de sistema",
+  "Application.Service.StatusDefinition.Translation.ResourceNotFound": "Definição de status não encontrada",
+  "Application.Service.StatusDefinition.Translation.TranslationNotFound": "Tradução não encontrada"
 }

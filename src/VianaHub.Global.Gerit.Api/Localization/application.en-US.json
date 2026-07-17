@@ -829,5 +829,16 @@
   "Application.Service.VisitTeamEmployee.Delete.ResourceNotFound": "Visit team employee not found",
   "Application.Service.VisitTeamEmployee.GetById.ResourceNotFound": "Visit team employee not found or inactive",
   "Application.Service.VisitTeamEmployee.Update.FunctionNotFound": "Function not found",
-  "Application.Service.VisitTeamEmployee.Update.ResourceNotFound": "Visit team employee not found"
+  "Application.Service.VisitTeamEmployee.Update.ResourceNotFound": "Visit team employee not found",
+
+  "Application.Service.StatusDefinition.GetById.ResourceNotFound": "Status definition not found or deleted",
+  "Application.Service.StatusDefinition.Create.CodeAlreadyExists": "A status definition with this code already exists for this domain",
+  "Application.Service.StatusDefinition.Update.ResourceNotFound": "Status definition not found",
+  "Application.Service.StatusDefinition.Update.CodeAlreadyExists": "A status definition with this code already exists for this domain",
+  "Application.Service.StatusDefinition.Activate.ResourceNotFound": "Status definition not found",
+  "Application.Service.StatusDefinition.Deactivate.ResourceNotFound": "Status definition not found",
+  "Application.Service.StatusDefinition.Delete.ResourceNotFound": "Status definition not found",
+  "Application.Service.StatusDefinition.Delete.SystemStatusCannotBeDeleted": "System status definitions cannot be deleted",
+  "Application.Service.StatusDefinition.Translation.ResourceNotFound": "Status definition not found",
+  "Application.Service.StatusDefinition.Translation.TranslationNotFound": "Translation not found"
 }

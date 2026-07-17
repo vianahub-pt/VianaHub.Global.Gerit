@@ -474,5 +474,13 @@
   "Api.Validator.Subscription.Update.CurrentPeriodStart": "Current period start date is required",
   "Api.Validator.Subscription.Update.CurrentPeriodEnd": "Current period end date is required",
   "Api.Validator.Subscription.Update.CurrentPeriodEnd.AfterStart": "Current period end date must be after start date",
-  "Api.Validator.Subscription.Update.TrialEnd.AfterStart": "Trial end date must be after trial start date"
+  "Api.Validator.Subscription.Update.TrialEnd.AfterStart": "Trial end date must be after trial start date",
+
+  "Api.Validator.StatusDefinition.Create.StatusDomainId": "Status domain ID is required",
+  "Api.Validator.StatusDefinition.Create.Code": "Code is required",
+  "Api.Validator.StatusDefinition.Create.Code.MaximumLength": "Code must be at most {0} characters",
+  "Api.Validator.StatusDefinition.Create.DisplayOrder": "Display order must be greater than or equal to zero",
+  "Api.Validator.StatusDefinition.Update.Code": "Code is required",
+  "Api.Validator.StatusDefinition.Update.Code.MaximumLength": "Code must be at most {0} characters",
+  "Api.Validator.StatusDefinition.Update.DisplayOrder": "Display order must be greater than or equal to zero"
 }
