@@ -3,12 +3,14 @@ using VianaHub.Global.Gerit.Domain.Base;
 namespace VianaHub.Global.Gerit.Domain.Entities.Billing;
 
 /// <summary>
-/// Entidade que representa um plano de assinatura do sistema
+/// Entidade que representa um plano de assinatura do sistema.
+/// Tabela: dbo.SubscriptionPlans.
+/// Nota: Name e Description residem exclusivamente na tabela de tradução
+/// SubscriptionPlanTranslations e são acedidos via propriedade de navegação Translations.
 /// </summary>
 public class SubscriptionPlanEntity : Entity
 {
-    public string? Name { get; private set; }
-    public string? Description { get; set; }
+    public string? Code { get; private set; }
     public decimal? PricePerHour { get; set; }
     public decimal? PricePerDay { get; set; }
     public decimal? PricePerMonth { get; set; }
@@ -23,15 +25,18 @@ public class SubscriptionPlanEntity : Entity
     private readonly List<SubscriptionEntity> _subscriptions = new();
     public IReadOnlyCollection<SubscriptionEntity> Subscriptions => _subscriptions.AsReadOnly();
 
+    private readonly List<SubscriptionPlanTranslationEntity> _translations = new();
+    public IReadOnlyCollection<SubscriptionPlanTranslationEntity> Translations => _translations.AsReadOnly();
+
     // Construtor protegido para o EF Core
     protected SubscriptionPlanEntity() { }
 
     /// <summary>
-    /// Construtor para cria��o de um novo plano
+    /// Construtor para criação de um novo plano.
+    /// Name e Description são armazenados separadamente na tabela de traduções.
     /// </summary>
     public SubscriptionPlanEntity(
-        string name, 
-        string? description, 
+        string code,
         decimal? pricePerHour,
         decimal? pricePerDay,
         decimal? pricePerMonth,
@@ -41,13 +46,12 @@ public class SubscriptionPlanEntity : Entity
         int maxPhotosPerVisit,
         int createdBy)
     {
-        Name = name;
-        Description = description;
+        Code = code;
         PricePerHour = pricePerHour;
         PricePerDay = pricePerDay;
         PricePerMonth = pricePerMonth;
         PricePerYear = pricePerYear;
-        Currency = currency ?? "USD";
+        Currency = currency ?? "EUR";
         MaxUsers = maxUsers;
         MaxPhotosPerVisit = maxPhotosPerVisit;
         IsActive = true;
@@ -56,8 +60,7 @@ public class SubscriptionPlanEntity : Entity
     }
 
     public void Update(
-        string name, 
-        string? description,
+        string code,
         decimal? pricePerHour,
         decimal? pricePerDay,
         decimal? pricePerMonth,
@@ -67,19 +70,27 @@ public class SubscriptionPlanEntity : Entity
         int maxPhotosPerVisit,
         int modifiedBy)
     {
-        Name = name;
-        Description = description;
+        Code = code;
         PricePerHour = pricePerHour;
         PricePerDay = pricePerDay;
         PricePerMonth = pricePerMonth;
         PricePerYear = pricePerYear;
-        Currency = currency ?? "USD";
+        Currency = currency ?? "EUR";
         MaxUsers = maxUsers;
         MaxPhotosPerVisit = maxPhotosPerVisit;
         ModifiedBy = modifiedBy;
         ModifiedAt = DateTime.UtcNow;
     }
-    
+
+    /// <summary>
+    /// Adiciona uma tradução ao plano. Usado para criar traduções iniciais (pt-PT)
+    /// ou adicionar novos idiomas posteriormente.
+    /// </summary>
+    public void AddTranslation(SubscriptionPlanTranslationEntity translation)
+    {
+        _translations.Add(translation);
+    }
+
     public void Activate(int? modifiedBy)
     {
         IsActive = true;

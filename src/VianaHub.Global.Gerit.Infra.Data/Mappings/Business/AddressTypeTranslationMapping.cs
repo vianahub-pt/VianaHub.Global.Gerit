@@ -6,8 +6,8 @@ namespace VianaHub.Global.Gerit.Infra.Data.Mappings.Business;
 
 /// <summary>
 /// Mapeamento da entidade AddressTypeTranslation.
-/// Tabela: dbo.AddressTypeTranslations — FK composta (AddressTypeId, LanguageCode).
-/// Description usa NVARCHAR(500) — maior que os 300 das demais traduções do domínio.
+/// Tabela: dbo.AddressTypeTranslations — PK surrogate (Id).
+/// Name NVARCHAR(200), Description NVARCHAR(500) conforme SQL.
 /// </summary>
 public class AddressTypeTranslationMapping : IEntityTypeConfiguration<AddressTypeTranslationEntity>
 {
@@ -15,9 +15,13 @@ public class AddressTypeTranslationMapping : IEntityTypeConfiguration<AddressTyp
     {
         builder.ToTable("AddressTypeTranslations", "dbo");
 
-        // Chave Primária composta
-        builder.HasKey(x => new { x.AddressTypeId, x.LanguageCode })
+        // Chave Primária surrogate (Id)
+        builder.HasKey(x => x.Id)
             .HasName("PK_AddressTypeTranslations");
+
+        builder.Property(x => x.Id)
+            .UseIdentityColumn(1, 1)
+            .IsRequired();
 
         // Propriedades
         builder.Property(x => x.AddressTypeId)
@@ -37,15 +41,21 @@ public class AddressTypeTranslationMapping : IEntityTypeConfiguration<AddressTyp
         builder.Property(x => x.Description)
             .HasColumnType("NVARCHAR(500)")
             .HasMaxLength(500)
-            .IsRequired();
+            .IsRequired(false);
 
-        // Constraint único composto (AddressTypeId + LanguageCode) — já garantido pela PK,
-        // mas a constraint nomeada é requerida pelo schema SQL.
+        // Relacionamento FK
+        builder.HasOne(x => x.AddressType)
+            .WithMany()
+            .HasForeignKey(x => x.AddressTypeId)
+            .HasConstraintName("FK_AddressTypeTranslations_AddressType")
+            .OnDelete(DeleteBehavior.Restrict);
+
+        // Constraint único composto (AddressTypeId + LanguageCode)
         builder.HasIndex(x => new { x.AddressTypeId, x.LanguageCode })
             .IsUnique()
             .HasDatabaseName("UQ_AddressTypeTranslations_AddressType_Language");
 
-        // Constraint único composto (LanguageCode + Name) — nomes de tradução são únicos por idioma
+        // Constraint único composto (LanguageCode + Name)
         builder.HasIndex(x => new { x.LanguageCode, x.Name })
             .IsUnique()
             .HasDatabaseName("UQ_AddressTypeTranslations_Language_Name");

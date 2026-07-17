@@ -90,5 +90,15 @@ public class SubscriptionPlanFileRuleMapping : IEntityTypeConfiguration<Subscrip
         builder.HasCheckConstraint(
             "CK_SubscriptionPlanFileRules_Active_Deleted",
             "NOT ([IsActive] = 1 AND [IsDeleted] = 1)");
+
+        // Indice nao clusterizado: busca por SubscriptionPlan
+        builder.HasIndex(x => x.SubscriptionPlanId)
+            .HasDatabaseName("IX_SubscriptionPlanFileRules_SubscriptionPlan")
+            .HasFilter("[IsDeleted] = 0");
+
+        // Indice nao clusterizado: busca por FileType
+        builder.HasIndex(x => x.FileTypeId)
+            .HasDatabaseName("IX_SubscriptionPlanFileRules_FileType")
+            .HasFilter("[IsDeleted] = 0");
     }
 }

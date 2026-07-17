@@ -21,6 +21,7 @@ public class SubscriptionPlanFileRuleDataRepository : ISubscriptionPlanFileRuleD
         return await _context.Set<SubscriptionPlanFileRuleEntity>()
             .AsNoTracking()
             .Include(x => x.SubscriptionPlan)
+                .ThenInclude(x => x.Translations)
             .Include(x => x.FileType)
             .Where(x => !x.IsDeleted)
             .OrderBy(x => x.SubscriptionPlanId)
@@ -33,6 +34,7 @@ public class SubscriptionPlanFileRuleDataRepository : ISubscriptionPlanFileRuleD
         return await _context.Set<SubscriptionPlanFileRuleEntity>()
             .AsNoTracking()
             .Include(x => x.SubscriptionPlan)
+                .ThenInclude(x => x.Translations)
             .Include(x => x.FileType)
             .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted, ct);
     }
@@ -59,7 +61,8 @@ public class SubscriptionPlanFileRuleDataRepository : ISubscriptionPlanFileRuleD
         {
             var search = request.Search.Trim().ToLower();
             query = query.Where(x =>
-                EF.Functions.Like(x.SubscriptionPlan.Name.ToLower(), $"%{search}%") ||
+                x.SubscriptionPlan.Translations.Any(t =>
+                    EF.Functions.Like(t.Name.ToLower(), $"%{search}%")) ||
                 EF.Functions.Like(x.FileType.MimeType.ToLower(), $"%{search}%"));
         }
 

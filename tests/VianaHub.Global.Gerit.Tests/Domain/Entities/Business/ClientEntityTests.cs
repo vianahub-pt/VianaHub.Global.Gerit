@@ -50,7 +50,7 @@ public class ClientEntityTests
             tenantId: 1,
             partyTypeId: 1,
             acquisitionSourceTypeId: 1,
-            urlImage: null,
+            imageUrl: null,
             note: null,
             name: "Test Client",
             phoneNumber: null,
@@ -64,8 +64,8 @@ public class ClientEntityTests
             companyRegistrationNumber: null,
             economicActivityCode: null,
             numberOfEmployees: null,
-            statusDefinitionId: null,
-            statusDomainId: null,
+            statusDefinitionId: 0,
+            statusDomainId: 0,
             createdBy: 7);
     }
 }

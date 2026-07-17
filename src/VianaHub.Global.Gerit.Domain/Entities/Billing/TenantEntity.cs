@@ -21,8 +21,8 @@ public class TenantEntity : Entity, IAggregateRoot
     public AcquisitionSourceTypeEntity AcquisitionSourceType { get; private set; }
     public string? Name { get; private set; }
     public string? Email { get; private set; }
-    public string? Website { get; private set; }
-    public string? UrlImage { get; private set; }
+    public string? WebsiteUrl { get; private set; }
+    public string? ImageUrl { get; private set; }
     public string? Note { get; private set; }
     public bool IsActive { get; private set; }
     public bool IsDeleted { get; private set; }
@@ -39,14 +39,14 @@ public class TenantEntity : Entity, IAggregateRoot
     /// <summary>
     /// Construtor para criação de um novo Tenant
     /// </summary>
-    public TenantEntity(byte partyTypeId, int acquisitionSourceTypeId, string name, string email, string? website, string? urlImage, string? note, int createdBy)
+    public TenantEntity(byte partyTypeId, int acquisitionSourceTypeId, string name, string email, string? websiteUrl, string? imageUrl, string? note, int createdBy)
     {
         PartyTypeId = partyTypeId;
         AcquisitionSourceTypeId = acquisitionSourceTypeId;
         Name = name;
         Email = email;
-        Website = website;
-        UrlImage = urlImage;
+        WebsiteUrl = websiteUrl;
+        ImageUrl = imageUrl;
         Note = note;
         IsActive = true;
         IsDeleted = false;
@@ -54,14 +54,14 @@ public class TenantEntity : Entity, IAggregateRoot
         CreatedAt = DateTime.UtcNow;
     }
 
-    public void Update(byte partyTypeId, int acquisitionSourceTypeId, string name, string email, string? website, string? urlImage, string? note, int modifiedBy)
+    public void Update(byte partyTypeId, int acquisitionSourceTypeId, string name, string email, string? websiteUrl, string? imageUrl, string? note, int modifiedBy)
     {
         PartyTypeId = partyTypeId;
         AcquisitionSourceTypeId = acquisitionSourceTypeId;
         Name = name;
         Email = email;
-        Website = website;
-        UrlImage = urlImage;
+        WebsiteUrl = websiteUrl;
+        ImageUrl = imageUrl;
         Note = note;
         ModifiedBy = modifiedBy;
         ModifiedAt = DateTime.UtcNow;

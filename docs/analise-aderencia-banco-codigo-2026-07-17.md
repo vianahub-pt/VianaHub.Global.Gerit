@@ -25,14 +25,14 @@ Todas as **31 discrepâncias** identificadas foram corrigidas:
 
 #### C1 — Tabela `VisitTeamFunctions` sem entidade → ✅ Criado mapeamento
 
-**Solução:** `FunctionEntity` agora mapeia explicitamente para a tabela `dbo.VisitTeamFunctions` via `FunctionMapping.cs`. A entidade manteve o nome `FunctionEntity` para compatibilidade com a API existente, mas o mapeamento EF Core aponta para a tabela correta.
+**Solução:** `VisitTeamFunctionEntity` agora mapeia explicitamente para a tabela `dbo.VisitTeamFunctions` via `VisitTeamFunctionMapping.cs`. A entidade foi renomeada de `FunctionEntity` para `VisitTeamFunctionEntity` e os endpoints foram atualizados para `/v1/visit-team-functions`.
 
-**Arquivos criados:**
-- `src/VianaHub.Global.Gerit.Infra.Data/Mappings/Business/FunctionMapping.cs`
+**Arquivos criados/renomeados:**
+- `src/VianaHub.Global.Gerit.Infra.Data/Mappings/Business/VisitTeamFunctionMapping.cs`
 
 #### C2 — `VisitTeamEmployeeEntity.FunctionId` referenciando entidade errada → ✅ Corrigido
 
-**Solução:** Propriedade renomeada para `VisitTeamFunctionId` (corresponde à coluna SQL). A navigation property mantém `FunctionEntity` (que agora mapeia para `VisitTeamFunctions`). FK configurada como composta `(VisitTeamFunctionId, TenantId)` com constraint `FK_VisitTeamEmployee_VisitTeamFunction`.
+**Solução:** Propriedade renomeada para `VisitTeamFunctionId` (corresponde à coluna SQL). A navigation property usa `VisitTeamFunctionEntity` (que mapeia para `VisitTeamFunctions`). FK configurada como composta `(VisitTeamFunctionId, TenantId)` com constraint `FK_VisitTeamEmployee_VisitTeamFunction`.
 
 **Arquivos modificados:**
 - `src/VianaHub.Global.Gerit.Domain/Entities/Business/VisitTeamEmployeeEntity.cs`
@@ -52,9 +52,9 @@ Todas as **31 discrepâncias** identificadas foram corrigidas:
 - `src/VianaHub.Global.Gerit.Domain/Entities/Business/ClientEntity.cs`
 - `src/VianaHub.Global.Gerit.Application/Services/Business/ClientAppService.cs`
 
-#### A2 — `FunctionEntity` sem arquivo de mapeamento → ✅ Criado
+#### A2 — `VisitTeamFunctionEntity` sem arquivo de mapeamento → ✅ Criado
 
-**Solução:** Criado `FunctionMapping.cs` que mapeia `FunctionEntity` para `dbo.VisitTeamFunctions`.
+**Solução:** Criado `VisitTeamFunctionMapping.cs` que mapeia `VisitTeamFunctionEntity` para `dbo.VisitTeamFunctions`.
 
 #### A3 — `EmployeeTeamEntity` sem colunas `IsLeader`, `StartDateTime`, `EndDateTime` → ✅ Adicionadas
 
@@ -280,7 +280,7 @@ Esta entidade já possuía `Id` surrogate.
 17. `src/VianaHub.Global.Gerit.Domain/Validators/Business/VisitTeamEmployee/VisitTeamEmployeeValidator.cs`
 
 ### Infra.Data Mappings (11 arquivos + 1 novo)
-18. `src/VianaHub.Global.Gerit.Infra.Data/Mappings/Business/FunctionMapping.cs` **(NOVO)**
+18. `src/VianaHub.Global.Gerit.Infra.Data/Mappings/Business/VisitTeamFunctionMapping.cs` **(NOVO)**
 19. `src/VianaHub.Global.Gerit.Infra.Data/Mappings/Business/ClientMapping.cs`
 20. `src/VianaHub.Global.Gerit.Infra.Data/Mappings/Business/EmployeeTeamMapping.cs`
 21. `src/VianaHub.Global.Gerit.Infra.Data/Mappings/Business/VisitTeamMapping.cs`

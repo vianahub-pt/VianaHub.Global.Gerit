@@ -44,13 +44,13 @@ public class EmployeeMapping : IEntityTypeConfiguration<EmployeeEntity>
             .IsRequired();
 
         builder.Property(tm => tm.PhoneNumber)
-            .HasColumnType("NVARCHAR(30)")
-            .HasMaxLength(30)
+            .HasColumnType("NVARCHAR(50)")
+            .HasMaxLength(50)
             .IsRequired(false);
 
         builder.Property(tm => tm.CellPhoneNumber)
-            .HasColumnType("NVARCHAR(30)")
-            .HasMaxLength(30)
+            .HasColumnType("NVARCHAR(50)")
+            .HasMaxLength(50)
             .IsRequired(false);
 
         builder.Property(tm => tm.IsCellPhoneWhatsapp)
@@ -59,8 +59,8 @@ public class EmployeeMapping : IEntityTypeConfiguration<EmployeeEntity>
             .IsRequired();
 
         builder.Property(tm => tm.Email)
-            .HasColumnType("NVARCHAR(250)")
-            .HasMaxLength(250)
+            .HasColumnType("NVARCHAR(320)")
+            .HasMaxLength(320)
             .IsRequired(false);
 
         builder.Property(tm => tm.ImageUrl)

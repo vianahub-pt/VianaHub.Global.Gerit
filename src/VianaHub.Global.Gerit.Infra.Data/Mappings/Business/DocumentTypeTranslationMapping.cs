@@ -6,7 +6,7 @@ namespace VianaHub.Global.Gerit.Infra.Data.Mappings.Business;
 
 /// <summary>
 /// Mapeamento da entidade DocumentTypeTranslation.
-/// Tabela: dbo.DocumentTypeTranslations — FK composta (DocumentTypeId, LanguageCode).
+/// Tabela: dbo.DocumentTypeTranslations — PK surrogate (Id).
 /// </summary>
 public class DocumentTypeTranslationMapping : IEntityTypeConfiguration<DocumentTypeTranslationEntity>
 {
@@ -14,9 +14,13 @@ public class DocumentTypeTranslationMapping : IEntityTypeConfiguration<DocumentT
     {
         builder.ToTable("DocumentTypeTranslations", "dbo");
 
-        // Chave Primária composta
-        builder.HasKey(x => new { x.DocumentTypeId, x.LanguageCode })
+        // Chave Primária surrogate (Id)
+        builder.HasKey(x => x.Id)
             .HasName("PK_DocumentTypeTranslations");
+
+        builder.Property(x => x.Id)
+            .UseIdentityColumn(1, 1)
+            .IsRequired();
 
         // Propriedades
         builder.Property(x => x.DocumentTypeId)
@@ -29,22 +33,28 @@ public class DocumentTypeTranslationMapping : IEntityTypeConfiguration<DocumentT
             .IsRequired();
 
         builder.Property(x => x.Name)
-            .HasColumnType("NVARCHAR(200)")
-            .HasMaxLength(200)
+            .HasColumnType("NVARCHAR(100)")
+            .HasMaxLength(100)
             .IsRequired();
 
         builder.Property(x => x.Description)
-            .HasColumnType("NVARCHAR(500)")
-            .HasMaxLength(500)
-            .IsRequired();
+            .HasColumnType("NVARCHAR(300)")
+            .HasMaxLength(300)
+            .IsRequired(false);
 
-        // Constraint único composto (DocumentTypeId + LanguageCode) — já garantido pela PK,
-        // mas a constraint nomeada é requerida pelo schema SQL.
+        // Relacionamento FK
+        builder.HasOne(x => x.DocumentType)
+            .WithMany()
+            .HasForeignKey(x => x.DocumentTypeId)
+            .HasConstraintName("FK_DocumentTypeTranslations_DocumentType")
+            .OnDelete(DeleteBehavior.Restrict);
+
+        // Constraint único composto (DocumentTypeId + LanguageCode)
         builder.HasIndex(x => new { x.DocumentTypeId, x.LanguageCode })
             .IsUnique()
             .HasDatabaseName("UQ_DocumentTypeTranslations_DocumentType_Language");
 
-        // Constraint único composto (LanguageCode + Name) — nomes de tradução são únicos por idioma
+        // Constraint único composto (LanguageCode + Name)
         builder.HasIndex(x => new { x.LanguageCode, x.Name })
             .IsUnique()
             .HasDatabaseName("UQ_DocumentTypeTranslations_Language_Name");

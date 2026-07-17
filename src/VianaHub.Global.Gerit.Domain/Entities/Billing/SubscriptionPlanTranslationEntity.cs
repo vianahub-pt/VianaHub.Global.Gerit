@@ -2,17 +2,18 @@ namespace VianaHub.Global.Gerit.Domain.Entities.Billing;
 
 /// <summary>
 /// Entidade de tradução de um SubscriptionPlan por idioma (pt-PT, en-US, es-ES).
-/// Chave composta: (SubscriptionPlanId + LanguageCode).
+/// Tabela: dbo.SubscriptionPlanTranslations — PK surrogate (Id).
 /// </summary>
 public class SubscriptionPlanTranslationEntity
 {
+    public int Id { get; private set; }
     public int SubscriptionPlanId { get; private set; }
     public string? LanguageCode { get; private set; }
     public string? Name { get; private set; }
     public string? Description { get; private set; }
 
     // Navigation Property
-    public SubscriptionPlanEntity SubscriptionPlan { get; private set; }
+    public SubscriptionPlanEntity SubscriptionPlan { get; private set; } = null!;
 
     // Construtor protegido para o EF Core
     protected SubscriptionPlanTranslationEntity() { }
@@ -20,7 +21,7 @@ public class SubscriptionPlanTranslationEntity
     /// <summary>
     /// Construtor para criação de uma nova tradução de SubscriptionPlan
     /// </summary>
-    public SubscriptionPlanTranslationEntity(int subscriptionPlanId, string languageCode, string name, string description)
+    public SubscriptionPlanTranslationEntity(int subscriptionPlanId, string languageCode, string name, string? description)
     {
         SubscriptionPlanId = subscriptionPlanId;
         LanguageCode = languageCode;
@@ -28,7 +29,7 @@ public class SubscriptionPlanTranslationEntity
         Description = description;
     }
 
-    public void Update(string name, string description)
+    public void Update(string name, string? description)
     {
         Name = name;
         Description = description;

@@ -51,7 +51,7 @@ public class LocalizationService : ILocalizationService
         }
     }
 
-    private string GetCurrentCulture()
+    public string GetCurrentCulture()
     {
         // First, try to get culture from HttpContext.Items (set by RequestLocalizationMiddleware)
         var httpContext = _httpContextAccessor.HttpContext;

@@ -12,11 +12,11 @@ public class ClientContactMapping : IEntityTypeConfiguration<ClientContactEntity
 {
     public void Configure(EntityTypeBuilder<ClientContactEntity> builder)
     {
-        builder.ToTable("ClientContacts", "dbo");
+        builder.ToTable("ClientContactPersons", "dbo");
 
-        // Chave Prim�ria
+        // Chave Primaria
         builder.HasKey(x => x.Id)
-            .HasName("PK_ClientContacts");
+            .HasName("PK_ClientContactPersons");
 
         builder.Property(x => x.Id)
             .UseIdentityColumn(1, 1)
@@ -97,11 +97,22 @@ public class ClientContactMapping : IEntityTypeConfiguration<ClientContactEntity
             .HasColumnType("DATETIME2(7)")
             .IsRequired(false);
 
-        // �ndices
-        builder.HasIndex(x => x.ClientId)
-            .HasDatabaseName("IX_ClientContacts_ClientId")
-            .IncludeProperties(x => x.TenantId)
+        // Indices
+        // Email unico por tenant+cliente (apenas ativos e nao deletados)
+        builder.HasIndex(x => new { x.TenantId, x.ClientId, x.Email })
+            .IsUnique()
+            .HasDatabaseName("UX_ClientContactPersons_Email")
+            .HasFilter("[Email] IS NOT NULL AND [IsActive] = 1 AND [IsDeleted] = 0");
+
+        // Apenas um contato primario por tenant+cliente
+        builder.HasIndex(x => new { x.TenantId, x.ClientId })
+            .IsUnique()
+            .HasDatabaseName("UX_ClientContactPersons_Primary")
+            .HasFilter("[IsPrimary] = 1 AND [IsActive] = 1 AND [IsDeleted] = 0");
+
+        // Indice nao clusterizado: busca por tenant + client
+        builder.HasIndex(x => new { x.TenantId, x.ClientId })
+            .HasDatabaseName("IX_ClientContactPersons_Client")
             .HasFilter("[IsDeleted] = 0");
     }
 }
-

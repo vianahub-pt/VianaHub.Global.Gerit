@@ -79,8 +79,7 @@ public class VisitTeamAppService : IVisitTeamsAppService
             return 0;
         }
 
-        var entity = new VisitTeamEntity(tenantId, request.VisitId, request.TeamId, _currentUser.GetUserId());
-        entity.Update(request.VisitId, request.TeamId, _currentUser.GetUserId());
+        var entity = new VisitTeamEntity(tenantId, request.VisitId, request.TeamId, DateTime.UtcNow, _currentUser.GetUserId());
         var success = await _domain.CreateAsync(entity, ct);
         return success ? entity.Id : 0;
     }
@@ -94,7 +93,7 @@ public class VisitTeamAppService : IVisitTeamsAppService
             return false;
         }
 
-        entity.Update(request.VisitId, request.TeamId, _currentUser.GetUserId());
+        entity.Update(request.VisitId, request.TeamId, DateTime.UtcNow, null, _currentUser.GetUserId());
         return await _domain.UpdateAsync(entity, ct);
     }
 
@@ -242,8 +241,7 @@ public class VisitTeamAppService : IVisitTeamsAppService
                 continue;
             }
 
-            var entity = new VisitTeamEntity(tenantId, item.VisitId, item.TeamId, _currentUser.GetUserId());
-            entity.Update(item.VisitId, item.TeamId, _currentUser.GetUserId());
+            var entity = new VisitTeamEntity(tenantId, item.VisitId, item.TeamId, DateTime.UtcNow, _currentUser.GetUserId());
 
             var success = await _domain.CreateAsync(entity, ct);
 

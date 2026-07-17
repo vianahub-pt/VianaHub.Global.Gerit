@@ -6,7 +6,7 @@ namespace VianaHub.Global.Gerit.Infra.Data.Mappings.Business;
 
 /// <summary>
 /// Mapeamento da entidade PartyTypeTranslation.
-/// Tabela: dbo.PartyTypeTranslations — FK composta (PartyTypeId, LanguageCode).
+/// Tabela: dbo.PartyTypeTranslations — PK surrogate (Id).
 /// </summary>
 public class PartyTypeTranslationMapping : IEntityTypeConfiguration<PartyTypeTranslationEntity>
 {
@@ -14,9 +14,13 @@ public class PartyTypeTranslationMapping : IEntityTypeConfiguration<PartyTypeTra
     {
         builder.ToTable("PartyTypeTranslations", "dbo");
 
-        // Chave Primária composta
-        builder.HasKey(x => new { x.PartyTypeId, x.LanguageCode })
+        // Chave Primária surrogate (Id)
+        builder.HasKey(x => x.Id)
             .HasName("PK_PartyTypeTranslations");
+
+        builder.Property(x => x.Id)
+            .UseIdentityColumn(1, 1)
+            .IsRequired();
 
         // Propriedades
         builder.Property(x => x.PartyTypeId)
@@ -29,17 +33,23 @@ public class PartyTypeTranslationMapping : IEntityTypeConfiguration<PartyTypeTra
             .IsRequired();
 
         builder.Property(x => x.Name)
-            .HasColumnType("NVARCHAR(200)")
-            .HasMaxLength(200)
+            .HasColumnType("NVARCHAR(100)")
+            .HasMaxLength(100)
             .IsRequired();
 
         builder.Property(x => x.Description)
-            .HasColumnType("NVARCHAR(500)")
-            .HasMaxLength(500)
-            .IsRequired();
+            .HasColumnType("NVARCHAR(300)")
+            .HasMaxLength(300)
+            .IsRequired(false);
 
-        // Constraint único composto (PartyTypeId + LanguageCode) — já garantido pela PK,
-        // mas a constraint nomeada é requerida pelo schema SQL.
+        // Relacionamento FK
+        builder.HasOne(x => x.PartyType)
+            .WithMany()
+            .HasForeignKey(x => x.PartyTypeId)
+            .HasConstraintName("FK_PartyTypeTranslations_PartyType")
+            .OnDelete(DeleteBehavior.Restrict);
+
+        // Constraint único composto (PartyTypeId + LanguageCode)
         builder.HasIndex(x => new { x.PartyTypeId, x.LanguageCode })
             .IsUnique()
             .HasDatabaseName("UQ_PartyTypeTranslations_PartyType_Language");
