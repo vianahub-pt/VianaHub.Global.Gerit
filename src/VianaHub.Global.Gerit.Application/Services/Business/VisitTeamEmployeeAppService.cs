@@ -95,7 +95,7 @@ public class VisitTeamEmployeeAppService : IVisitTeamEmployeeAppService
             return 0;
         }
 
-        if (!await _functionRepository.ExistsByIdAsync(request.FunctionId, ct))
+        if (!await _functionRepository.ExistsByIdAsync(request.VisitTeamFunctionId, ct))
         {
             _notify.Add(_localization.GetMessage("Application.Service.VisitTeamEmployee.Create.FunctionNotFound"), 400);
             return 0;
@@ -111,7 +111,7 @@ public class VisitTeamEmployeeAppService : IVisitTeamEmployeeAppService
             tenantId,
             request.VisitTeamId,
             request.EmployeeId,
-            request.FunctionId,
+            request.VisitTeamFunctionId,
             request.IsLeader,
             request.StartDateTime,
             _currentUser.GetUserId()
@@ -130,13 +130,13 @@ public class VisitTeamEmployeeAppService : IVisitTeamEmployeeAppService
             return false;
         }
 
-        if (!await _functionRepository.ExistsByIdAsync(request.FunctionId, ct))
+        if (!await _functionRepository.ExistsByIdAsync(request.VisitTeamFunctionId, ct))
         {
             _notify.Add(_localization.GetMessage("Application.Service.VisitTeamEmployee.Update.FunctionNotFound"), 400);
             return false;
         }
 
-        entity.Update(request.FunctionId, request.IsLeader, request.StartDateTime, request.EndDateTime, _currentUser.GetUserId());
+        entity.Update(request.VisitTeamFunctionId, request.IsLeader, request.StartDateTime, request.EndDateTime, _currentUser.GetUserId());
 
         return await _domain.UpdateAsync(entity, ct);
     }

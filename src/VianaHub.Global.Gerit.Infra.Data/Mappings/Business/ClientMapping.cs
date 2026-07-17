@@ -39,14 +39,14 @@ public class ClientMapping : IEntityTypeConfiguration<ClientEntity>
             .HasColumnType("INT")
             .IsRequired(true);
 
-        builder.Property(x => x.UrlImage)
+        builder.Property(x => x.ImageUrl)
             .HasColumnType("NVARCHAR(500)")
             .HasMaxLength(500)
             .IsRequired(false);
 
         builder.Property(x => x.Note)
-            .HasColumnType("NVARCHAR(500)")
-            .HasMaxLength(500)
+            .HasColumnType("NVARCHAR(1000)")
+            .HasMaxLength(1000)
             .IsRequired(false);
 
         // Campos unificados
@@ -70,8 +70,8 @@ public class ClientMapping : IEntityTypeConfiguration<ClientEntity>
             .IsRequired();
 
         builder.Property(x => x.Email)
-            .HasColumnType("NVARCHAR(500)")
-            .HasMaxLength(500)
+            .HasColumnType("NVARCHAR(320)")
+            .HasMaxLength(320)
             .IsRequired(false);
 
         builder.Property(x => x.WebsiteUrl)
@@ -84,8 +84,8 @@ public class ClientMapping : IEntityTypeConfiguration<ClientEntity>
             .IsRequired(false);
 
         builder.Property(x => x.Gender)
-            .HasColumnType("NVARCHAR(20)")
-            .HasMaxLength(20)
+            .HasColumnType("NVARCHAR(30)")
+            .HasMaxLength(30)
             .IsRequired(false);
 
         builder.Property(x => x.Nationality)
@@ -94,13 +94,13 @@ public class ClientMapping : IEntityTypeConfiguration<ClientEntity>
             .IsRequired(false);
 
         builder.Property(x => x.CompanyRegistrationNumber)
-            .HasColumnType("NVARCHAR(50)")
-            .HasMaxLength(50)
+            .HasColumnType("NVARCHAR(100)")
+            .HasMaxLength(100)
             .IsRequired(false);
 
         builder.Property(x => x.EconomicActivityCode)
-            .HasColumnType("NVARCHAR(10)")
-            .HasMaxLength(10)
+            .HasColumnType("NVARCHAR(20)")
+            .HasMaxLength(20)
             .IsRequired(false);
 
         builder.Property(x => x.NumberOfEmployees)
@@ -109,11 +109,11 @@ public class ClientMapping : IEntityTypeConfiguration<ClientEntity>
 
         builder.Property(x => x.StatusDefinitionId)
             .HasColumnType("INT")
-            .IsRequired(false);
+            .IsRequired(true);
 
         builder.Property(x => x.StatusDomainId)
             .HasColumnType("INT")
-            .IsRequired(false);
+            .IsRequired(true);
 
         builder.Property(x => x.IsActive)
             .HasDefaultValue(true)
@@ -158,7 +158,6 @@ public class ClientMapping : IEntityTypeConfiguration<ClientEntity>
             .OnDelete(DeleteBehavior.Restrict);
 
         // FK composta para StatusDefinition: (StatusDefinitionId, TenantId, StatusDomainId)
-        // StatusDomainId é desnormalizado no Client para participar na FK composta
         builder.HasOne(x => x.StatusDefinition)
             .WithMany()
             .HasForeignKey(x => new { x.StatusDefinitionId, x.TenantId, x.StatusDomainId })
@@ -189,5 +188,10 @@ public class ClientMapping : IEntityTypeConfiguration<ClientEntity>
             .HasPrincipalKey<ClientEntity>(c => new { c.Id, c.TenantId })
             .HasConstraintName("FK_ClientFiscalData_Client")
             .OnDelete(DeleteBehavior.Restrict);
+
+        // Índices
+        builder.HasIndex(x => x.TenantId)
+            .HasDatabaseName("IX_Clients_TenantId")
+            .HasFilter("[IsDeleted] = 0");
     }
 }

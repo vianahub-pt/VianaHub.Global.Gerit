@@ -6,7 +6,7 @@ namespace VianaHub.Global.Gerit.Infra.Data.Mappings.Business;
 
 /// <summary>
 /// Mapeamento da entidade AcquisitionSourceTypeTranslation.
-/// Tabela: dbo.AcquisitionSourceTypeTranslations — FK composta (AcquisitionSourceTypeId, LanguageCode).
+/// Tabela: dbo.AcquisitionSourceTypeTranslations — PK surrogate (Id).
 /// </summary>
 public class AcquisitionSourceTypeTranslationMapping : IEntityTypeConfiguration<AcquisitionSourceTypeTranslationEntity>
 {
@@ -14,9 +14,13 @@ public class AcquisitionSourceTypeTranslationMapping : IEntityTypeConfiguration<
     {
         builder.ToTable("AcquisitionSourceTypeTranslations", "dbo");
 
-        // Chave Primária composta
-        builder.HasKey(x => new { x.AcquisitionSourceTypeId, x.LanguageCode })
+        // Chave Primária surrogate (Id)
+        builder.HasKey(x => x.Id)
             .HasName("PK_AcquisitionSourceTypeTranslations");
+
+        builder.Property(x => x.Id)
+            .UseIdentityColumn(1, 1)
+            .IsRequired();
 
         // Propriedades
         builder.Property(x => x.AcquisitionSourceTypeId)
@@ -29,22 +33,28 @@ public class AcquisitionSourceTypeTranslationMapping : IEntityTypeConfiguration<
             .IsRequired();
 
         builder.Property(x => x.Name)
-            .HasColumnType("NVARCHAR(200)")
-            .HasMaxLength(200)
+            .HasColumnType("NVARCHAR(100)")
+            .HasMaxLength(100)
             .IsRequired();
 
         builder.Property(x => x.Description)
-            .HasColumnType("NVARCHAR(500)")
-            .HasMaxLength(500)
-            .IsRequired();
+            .HasColumnType("NVARCHAR(300)")
+            .HasMaxLength(300)
+            .IsRequired(false);
 
-        // Constraint único composto (AcquisitionSourceTypeId + LanguageCode) — já garantido pela PK,
-        // mas a constraint nomeada é requerida pelo schema SQL.
+        // Relacionamento FK
+        builder.HasOne(x => x.AcquisitionSourceType)
+            .WithMany()
+            .HasForeignKey(x => x.AcquisitionSourceTypeId)
+            .HasConstraintName("FK_AcquisitionSourceTypeTranslations_AcquisitionSourceType")
+            .OnDelete(DeleteBehavior.Restrict);
+
+        // Constraint único composto (AcquisitionSourceTypeId + LanguageCode)
         builder.HasIndex(x => new { x.AcquisitionSourceTypeId, x.LanguageCode })
             .IsUnique()
             .HasDatabaseName("UQ_AcquisitionSourceTypeTranslations_AcquisitionSourceType_Language");
 
-        // Constraint único composto (LanguageCode + Name) — nomes de tradução são únicos por idioma
+        // Constraint único composto (LanguageCode + Name)
         builder.HasIndex(x => new { x.LanguageCode, x.Name })
             .IsUnique()
             .HasDatabaseName("UQ_AcquisitionSourceTypeTranslations_Language_Name");

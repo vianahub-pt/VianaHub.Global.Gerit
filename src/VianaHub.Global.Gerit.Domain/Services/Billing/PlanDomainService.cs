@@ -45,6 +45,11 @@ public class PlanDomainService : IPlanDomainService
         return await _repo.ExistsByNameAsync(name, ct);
     }
 
+    public async Task<bool> ExistsByNameAsync(string name, string languageCode, CancellationToken ct)
+    {
+        return await _repo.ExistsByNameAsync(name, languageCode, ct);
+    }
+
     public async Task<bool> CreateAsync(SubscriptionPlanEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForCreateAsync(entity);

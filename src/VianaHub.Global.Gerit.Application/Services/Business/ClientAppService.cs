@@ -102,8 +102,8 @@ public class ClientAppService : IClientAppService
             request.CompanyRegistrationNumber,
             request.EconomicActivityCode,
             request.NumberOfEmployees,
-            request.StatusDefinitionId,
-            request.StatusDomainId,
+            request.StatusDefinitionId ?? 0,
+            request.StatusDomainId ?? 0,
             UserId);
 
         var success = await _domain.CreateAsync(client, ct);
@@ -141,8 +141,8 @@ public class ClientAppService : IClientAppService
             request.CompanyRegistrationNumber,
             request.EconomicActivityCode,
             request.NumberOfEmployees,
-            request.StatusDefinitionId,
-            request.StatusDomainId,
+            request.StatusDefinitionId ?? 0,
+            request.StatusDomainId ?? 0,
             UserId);
 
         return await _domain.UpdateAsync(client, ct);
@@ -367,8 +367,8 @@ public class ClientAppService : IClientAppService
                 null, // CompanyRegistrationNumber
                 null, // EconomicActivityCode
                 null, // NumberOfEmployees
-                null, // StatusDefinitionId
-                null, // StatusDomainId
+                0, // StatusDefinitionId — obrigatório, deve ser validado externamente
+                0, // StatusDomainId — obrigatório, deve ser validado externamente
                 _currentUser.GetUserId());
 
             // Tenta criar no dominio

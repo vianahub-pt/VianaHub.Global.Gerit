@@ -29,6 +29,12 @@ public class StatusDomainMapping : IEntityTypeConfiguration<StatusDomainEntity>
             .HasMaxLength(50)
             .IsRequired();
 
+        // Constraint unico no Code
+        builder.HasIndex(x => x.Code)
+            .IsUnique()
+            .HasFilter("[IsDeleted] = 0")
+            .HasDatabaseName("UX_StatusDomains_Code");
+
         // FK para a tabela de traduções StatusDomainTranslations
         builder.HasMany(x => x.Translations)
             .WithOne(x => x.StatusDomain)

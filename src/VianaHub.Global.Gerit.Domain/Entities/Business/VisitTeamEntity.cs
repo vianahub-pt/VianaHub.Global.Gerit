@@ -8,31 +8,36 @@ public class VisitTeamEntity : Entity
     public int TenantId { get; private set; }
     public int VisitId { get; private set; }
     public int TeamId { get; private set; }
+    public DateTime StartDateTime { get; private set; }
+    public DateTime? EndDateTime { get; private set; }
     public bool IsActive { get; private set; }
     public bool IsDeleted { get; private set; }
 
     // Navigation
-    public TenantEntity Tenant { get; private set; }
-    public VisitEntity Visit { get; private set; }
-    public TeamEntity Team { get; private set; }
+    public TenantEntity Tenant { get; private set; } = null!;
+    public VisitEntity Visit { get; private set; } = null!;
+    public TeamEntity Team { get; private set; } = null!;
 
     protected VisitTeamEntity() { }
 
-    public VisitTeamEntity(int tenantId, int interventionId, int teamId, int createdBy)
+    public VisitTeamEntity(int tenantId, int visitId, int teamId, DateTime startDateTime, int createdBy)
     {
         TenantId = tenantId;
-        VisitId = interventionId;
+        VisitId = visitId;
         TeamId = teamId;
+        StartDateTime = startDateTime;
         IsActive = true;
         IsDeleted = false;
         CreatedBy = createdBy;
         CreatedAt = DateTime.UtcNow;
     }
 
-    public void Update(int interventionId, int teamId, int modifiedBy)
+    public void Update(int visitId, int teamId, DateTime startDateTime, DateTime? endDateTime, int modifiedBy)
     {
-        VisitId = interventionId;
+        VisitId = visitId;
         TeamId = teamId;
+        StartDateTime = startDateTime;
+        EndDateTime = endDateTime;
         ModifiedBy = modifiedBy;
         ModifiedAt = DateTime.UtcNow;
     }

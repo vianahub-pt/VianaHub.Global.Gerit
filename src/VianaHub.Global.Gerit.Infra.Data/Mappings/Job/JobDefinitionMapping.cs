@@ -94,12 +94,12 @@ public class JobDefinitionMapping : IEntityTypeConfiguration<JobDefinitionEntity
             .IsRequired(false);
 
         // Indexes
-        builder.HasIndex(x => new { x.JobCategory, x.IsActive, x.IsDeleted }).HasDatabaseName("IX_Services_Category_Active");
-        builder.HasIndex(x => new { x.IsActive, x.IsSystemJob }).HasFilter("IsDeleted = 0").HasDatabaseName("IX_Services_Active_SYSTEM");
-        builder.HasIndex(x => x.HangfireJobId).HasFilter("HangfireJobId IS NOT NULL").HasDatabaseName("IX_Services_HangfireJobId");
+        builder.HasIndex(x => new { x.JobCategory, x.IsActive, x.IsDeleted }).HasDatabaseName("IX_JobDefinitions_Category_Active");
+        builder.HasIndex(x => new { x.IsActive, x.IsSystemJob }).HasFilter("IsDeleted = 0").HasDatabaseName("IX_JobDefinitions_Active_System");
+        builder.HasIndex(x => x.HangfireJobId).HasFilter("HangfireJobId IS NOT NULL").HasDatabaseName("IX_JobDefinitions_HangfireJobId");
 
         // Unique constraint
-        builder.HasIndex(x => x.JobName).IsUnique().HasDatabaseName("UQ_Job_JobName");
+        builder.HasIndex(x => x.JobName).IsUnique().HasFilter("[IsDeleted] = 0").HasDatabaseName("UX_JobDefinitions_JobName");
 
 
     }

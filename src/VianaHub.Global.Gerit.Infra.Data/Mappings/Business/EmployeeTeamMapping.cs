@@ -8,9 +8,10 @@ public class EmployeeTeamMapping : IEntityTypeConfiguration<EmployeeTeamEntity>
 {
     public void Configure(EntityTypeBuilder<EmployeeTeamEntity> builder)
     {
-        builder.ToTable("EmployeeTeams", "dbo");
+        // Nome da tabela: singular (SQL: dbo.EmployeeTeam)
+        builder.ToTable("EmployeeTeam", "dbo");
 
-        builder.HasKey(x => x.Id).HasName("PK_EmployeeTeams");
+        builder.HasKey(x => x.Id).HasName("PK_EmployeeTeam");
 
         builder.Property(x => x.Id)
             .UseIdentityColumn(1,1)
@@ -25,6 +26,19 @@ public class EmployeeTeamMapping : IEntityTypeConfiguration<EmployeeTeamEntity>
         builder.Property(x => x.EmployeeId)
             .HasColumnType("INT")
             .IsRequired();
+
+        builder.Property(x => x.IsLeader)
+            .HasColumnType("BIT")
+            .HasDefaultValue(false)
+            .IsRequired();
+
+        builder.Property(x => x.StartDateTime)
+            .HasColumnType("DATETIME2")
+            .IsRequired();
+
+        builder.Property(x => x.EndDateTime)
+            .HasColumnType("DATETIME2")
+            .IsRequired(false);
 
         builder.Property(x => x.IsActive)
             .HasDefaultValue(true)
@@ -49,23 +63,38 @@ public class EmployeeTeamMapping : IEntityTypeConfiguration<EmployeeTeamEntity>
             .HasColumnType("DATETIME2(7)")
             .IsRequired(false);
 
-        // Relacionamentos
+        // Relacionamentos com FKs compostas (Id, TenantId)
         builder.HasOne(x => x.Tenant)
             .WithMany()
             .HasForeignKey(x => x.TenantId)
-            .HasConstraintName("FK_EmployeeAddresses_Tenant")
+            .HasConstraintName("FK_EmployeeTeam_Tenant")
             .OnDelete(DeleteBehavior.NoAction);
 
         builder.HasOne(x => x.Team)
-        .WithMany()
-        .HasForeignKey(x => x.TeamId)
-        .HasConstraintName("FK_EmployeeTeams_Team")
-        .OnDelete(DeleteBehavior.NoAction);
+            .WithMany()
+            .HasForeignKey(x => new { x.TeamId, x.TenantId })
+            .HasPrincipalKey(x => new { x.Id, x.TenantId })
+            .HasConstraintName("FK_EmployeeTeam_Team")
+            .OnDelete(DeleteBehavior.NoAction);
 
         builder.HasOne(x => x.Employee)
             .WithMany()
-            .HasForeignKey(x => x.EmployeeId)
-            .HasConstraintName("FK_EmployeeTeams_Employee")
+            .HasForeignKey(x => new { x.EmployeeId, x.TenantId })
+            .HasPrincipalKey(x => new { x.Id, x.TenantId })
+            .HasConstraintName("FK_EmployeeTeam_Member")
             .OnDelete(DeleteBehavior.NoAction);
+
+        // Constraints
+        builder.HasCheckConstraint("CK_EmployeeTeam_Active_Deleted",
+            "NOT ([IsActive] = 1 AND [IsDeleted] = 1)");
+
+        builder.HasCheckConstraint("CK_EmployeeTeam_EndDateTime",
+            "[EndDateTime] IS NULL OR [EndDateTime] >= [StartDateTime]");
+
+        // Índice filtrado: apenas uma associação ativa por (Team, Employee)
+        builder.HasIndex(x => new { x.TenantId, x.TeamId, x.EmployeeId })
+            .HasFilter("[EndDateTime] IS NULL AND [IsDeleted] = 0")
+            .IsUnique()
+            .HasDatabaseName("UX_EmployeeTeam_Active");
     }
 }

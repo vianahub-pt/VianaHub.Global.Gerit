@@ -37,6 +37,12 @@ public class AddressTypeMapping : IEntityTypeConfiguration<AddressTypeEntity>
             .HasMaxLength(50)
             .IsRequired();
 
+        // Constraint unico no Code
+        builder.HasIndex(x => x.Code)
+            .IsUnique()
+            .HasFilter("[IsDeleted] = 0")
+            .HasDatabaseName("UX_AddressTypes_Code");
+
         // FK para a tabela de traduções AddressTypeTranslations
         builder.HasMany(x => x.Translations)
             .WithOne(x => x.AddressType)

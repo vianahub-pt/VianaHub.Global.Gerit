@@ -7,7 +7,8 @@ using VianaHub.Global.Gerit.Domain.Tools.Pagination;
 namespace VianaHub.Global.Gerit.Application.Mappings.Billing;
 
 /// <summary>
-/// Perfil de mapeamento do AutoMapper para SubscriptionEntity
+/// Perfil de mapeamento do AutoMapper para SubscriptionEntity.
+/// Nota: SubscriptionPlanName é resolvido a partir da tabela de traduções do plano.
 /// </summary>
 public class SubscriptionMappingProfile : Profile
 {
@@ -18,7 +19,10 @@ public class SubscriptionMappingProfile : Profile
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
             .ForMember(dest => dest.TenantId, opt => opt.MapFrom(src => src.TenantId))
             .ForMember(dest => dest.SubscriptionPlanId, opt => opt.MapFrom(src => src.SubscriptionPlanId))
-            .ForMember(dest => dest.SubscriptionPlanName, opt => opt.MapFrom(src => src.SubscriptionPlan != null ? src.SubscriptionPlan.Name : string.Empty))
+            .ForMember(dest => dest.SubscriptionPlanName, opt => opt.MapFrom(src =>
+                src.SubscriptionPlan != null && src.SubscriptionPlan.Translations.Any()
+                    ? src.SubscriptionPlan.Translations.First().Name
+                    : string.Empty))
             .ForMember(dest => dest.StatusDefinitionId, opt => opt.MapFrom(src => src.StatusDefinitionId))
             .ForMember(dest => dest.StatusDomainId, opt => opt.MapFrom(src => src.StatusDomainId))
             .ForMember(dest => dest.AgreedAmount, opt => opt.MapFrom(src => src.AgreedAmount))

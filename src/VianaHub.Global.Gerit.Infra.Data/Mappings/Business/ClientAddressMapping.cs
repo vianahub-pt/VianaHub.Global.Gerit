@@ -6,7 +6,7 @@ namespace VianaHub.Global.Gerit.Infra.Data.Mappings.Business;
 
 /// <summary>
 /// Mapeamento da entidade ClientAddress
-/// Endere�os do cliente com suporte a Row Level Security
+/// Enderecos do cliente com suporte a Row Level Security
 /// </summary>
 public class ClientAddressMapping : IEntityTypeConfiguration<ClientAddressEntity>
 {
@@ -14,13 +14,17 @@ public class ClientAddressMapping : IEntityTypeConfiguration<ClientAddressEntity
     {
         builder.ToTable("ClientAddresses", "dbo");
 
-        // Chave Prim�ria
+        // Chave Primaria
         builder.HasKey(x => x.Id)
             .HasName("PK_ClientAddresses");
 
         builder.Property(x => x.Id)
             .UseIdentityColumn(1, 1)
             .IsRequired();
+
+        // Chave alternativa para suportar FKs compostas com TenantId
+        builder.HasAlternateKey(x => new { x.Id, x.TenantId })
+            .HasName("UQ_ClientAddresses_Id_Tenant");
 
         // Propriedades
         builder.Property(x => x.TenantId)
@@ -129,17 +133,15 @@ public class ClientAddressMapping : IEntityTypeConfiguration<ClientAddressEntity
             .HasConstraintName("FK_ClientAddresses_Client")
             .OnDelete(DeleteBehavior.Restrict);
 
-        // �ndices �nicos com filtro para endere�o prim�rio
-        builder.HasIndex(x => x.ClientId)
+        // Indice unico com filtro para endereco primario
+        builder.HasIndex(x => new { x.TenantId, x.ClientId })
             .IsUnique()
             .HasDatabaseName("UX_ClientAddresses_Primary")
-            .HasFilter("[IsPrimary] = 1 AND [IsDeleted] = 0");
+            .HasFilter("[IsPrimary] = 1 AND [IsActive] = 1 AND [IsDeleted] = 0");
 
-        // �ndices n�o clusterizados
-        builder.HasIndex(x => x.ClientId)
-            .HasDatabaseName("IX_ClientAddresses_ClientId")
-            .IncludeProperties(x => x.TenantId)
+        // Indice nao clusterizado: busca por tenant + client
+        builder.HasIndex(x => new { x.TenantId, x.ClientId })
+            .HasDatabaseName("IX_ClientAddresses_Client")
             .HasFilter("[IsDeleted] = 0");
     }
 }
-

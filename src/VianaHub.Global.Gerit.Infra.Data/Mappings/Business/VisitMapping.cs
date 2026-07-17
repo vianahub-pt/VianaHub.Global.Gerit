@@ -52,21 +52,21 @@ public class VisitMapping : IEntityTypeConfiguration<VisitEntity>
             .IsRequired();
 
         builder.Property(x => x.StartDateTime)
-            .HasColumnType("DATETIME2")
+            .HasColumnType("DATETIME2(7)")
             .IsRequired();
 
         builder.Property(x => x.EndDateTime)
-            .HasColumnType("DATETIME2")
+            .HasColumnType("DATETIME2(7)")
             .IsRequired(false);
 
         builder.Property(x => x.EstimatedValue)
-            .HasColumnType("DECIMAL(10,2)")
-            .HasPrecision(10, 2)
+            .HasColumnType("DECIMAL(19,4)")
+            .HasPrecision(19, 4)
             .IsRequired();
 
         builder.Property(x => x.RealValue)
-            .HasColumnType("DECIMAL(10,2)")
-            .HasPrecision(10, 2)
+            .HasColumnType("DECIMAL(19,4)")
+            .HasPrecision(19, 4)
             .IsRequired(false);
 
         builder.Property(x => x.IsActive)
@@ -120,6 +120,19 @@ public class VisitMapping : IEntityTypeConfiguration<VisitEntity>
             .HasPrincipalKey(s => new { s.Id, s.TenantId, s.StatusDomainId })
             .HasConstraintName("FK_Visits_StatusDefinitions")
             .OnDelete(DeleteBehavior.Restrict);
+
+        // Indices nao clusterizados
+        builder.HasIndex(x => new { x.TenantId, x.StartDateTime })
+            .HasDatabaseName("IX_Visits_Tenant_Date")
+            .HasFilter("[IsDeleted] = 0");
+
+        builder.HasIndex(x => new { x.TenantId, x.ClientId })
+            .HasDatabaseName("IX_Visits_ClientId")
+            .HasFilter("[IsDeleted] = 0");
+
+        builder.HasIndex(x => new { x.TenantId, x.StatusDefinitionId, x.StartDateTime })
+            .HasDatabaseName("IX_Visits_Dashboard")
+            .HasFilter("[IsDeleted] = 0");
 
         builder.HasMany(x => x.Contacts)
             .WithOne(ic => ic.Visit)

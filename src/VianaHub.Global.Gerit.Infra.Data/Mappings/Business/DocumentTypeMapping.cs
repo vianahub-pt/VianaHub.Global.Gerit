@@ -29,6 +29,12 @@ public class DocumentTypeMapping : IEntityTypeConfiguration<DocumentTypeEntity>
             .HasMaxLength(50)
             .IsRequired();
 
+        // Constraint unico no Code
+        builder.HasIndex(x => x.Code)
+            .IsUnique()
+            .HasFilter("[IsDeleted] = 0")
+            .HasDatabaseName("UX_DocumentTypes_Code");
+
         // FK para a tabela de traduções DocumentTypeTranslations
         builder.HasMany(x => x.Translations)
             .WithOne(x => x.DocumentType)

@@ -111,6 +111,12 @@ public class EmployeeFiscalDataMapping : IEntityTypeConfiguration<EmployeeFiscal
             .HasFilter("[IsActive] = 1 AND [IsDeleted] = 0")
             .HasDatabaseName("UX_EmployeeFiscalData_Active");
 
+        // TaxNumber unico por tenant + pais fiscal
+        builder.HasIndex(x => new { x.TenantId, x.FiscalCountry, x.TaxNumber })
+            .IsUnique()
+            .HasFilter("[IsDeleted] = 0")
+            .HasDatabaseName("UX_EmployeeFiscalData_TaxNumber");
+
         // Check constraint
         builder.HasCheckConstraint(
             "CK_EmployeeFiscalData_Active_Deleted",

@@ -92,6 +92,18 @@ public class ClientFiscalDataMapping : IEntityTypeConfiguration<ClientFiscalData
             .HasFilter("[IsDeleted] = 0")
             .HasDatabaseName("UQ_ClientFiscalData_Client");
 
+        // TaxNumber unico por tenant + pais fiscal
+        builder.HasIndex(x => new { x.TenantId, x.FiscalCountry, x.TaxNumber })
+            .IsUnique()
+            .HasFilter("[IsDeleted] = 0")
+            .HasDatabaseName("UX_ClientFiscalData_TaxNumber");
+
+        // Apenas um registro fiscal ativo por tenant+cliente
+        builder.HasIndex(x => new { x.TenantId, x.ClientId })
+            .IsUnique()
+            .HasFilter("[IsActive] = 1 AND [IsDeleted] = 0")
+            .HasDatabaseName("UX_ClientFiscalData_Active");
+
         // Check constraint
         builder.HasCheckConstraint(
             "CK_ClientFiscalData_Active_Deleted",

@@ -19,4 +19,10 @@ public interface ILocalizationService
     /// <param name="args">Argumentos para formatação</param>
     /// <returns>Mensagem localizada e formatada</returns>
     string GetMessage(string key, params object[] args);
+
+    /// <summary>
+    /// Obtém a cultura atual da requisição (ex: pt-PT, en-US, es-ES).
+    /// </summary>
+    /// <returns>Código da cultura atual</returns>
+    string GetCurrentCulture();
 }

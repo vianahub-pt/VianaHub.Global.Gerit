@@ -13,7 +13,8 @@ public class ClientMappingProfile : Profile
         CreateMap<ClientEntity, ClientResponse>()
             .ForMember(dest => dest.Contact, opt => opt.MapFrom(src => ResolvePrimaryContact(src)));
 
-        CreateMap<ClientEntity, ClientDetailResponse>();
+        CreateMap<ClientEntity, ClientDetailResponse>()
+            .ForMember(dest => dest.UrlImage, opt => opt.MapFrom(src => src.ImageUrl));
 
         CreateMap<ListPage<ClientEntity>, ListPageResponse<ClientResponse>>();
     }

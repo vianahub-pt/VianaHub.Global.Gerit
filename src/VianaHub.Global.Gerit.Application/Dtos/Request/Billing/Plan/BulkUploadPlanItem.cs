@@ -2,6 +2,7 @@
 
 public class BulkUploadPlanItem
 {
+    public string? Code { get; set; }
     public string? Name { get; set; }
     public string? Description { get; set; }
     public decimal? PricePerHour { get; set; }

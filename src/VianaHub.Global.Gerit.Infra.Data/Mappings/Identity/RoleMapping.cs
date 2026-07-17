@@ -14,7 +14,7 @@ public class RoleMapping : IEntityTypeConfiguration<RoleEntity>
     {
         builder.ToTable("Roles", "dbo");
 
-        // Chave Primária
+        // Chave Primï¿½ria
         builder.HasKey(x => x.Id)
             .HasName("PK_Roles");
 
@@ -22,7 +22,9 @@ public class RoleMapping : IEntityTypeConfiguration<RoleEntity>
             .UseIdentityColumn(1, 1)
             .IsRequired();
 
-        // Propriedades
+        // Chave alternativa para suportar FKs compostas com TenantId
+        builder.HasAlternateKey(x => new { x.Id, x.TenantId })
+            .HasName("UQ_Roles_Id_Tenant");// Propriedades
         builder.Property(x => x.TenantId)
             .IsRequired();
 
@@ -59,7 +61,7 @@ public class RoleMapping : IEntityTypeConfiguration<RoleEntity>
             .HasColumnType("DATETIME2(7)")
             .IsRequired(false);
 
-        // Constraints únicos
+        // Constraints ï¿½nicos
         builder.HasIndex(x => new { x.TenantId, x.Name })
             .IsUnique()
             .HasDatabaseName("UQ_Roles_Tenant_Name");

@@ -6,7 +6,7 @@ namespace VianaHub.Global.Gerit.Infra.Data.Mappings.Billing;
 
 /// <summary>
 /// Mapeamento da entidade SubscriptionPlanTranslation.
-/// Tabela: dbo.SubscriptionPlanTranslations — FK composta (SubscriptionPlanId, LanguageCode).
+/// Tabela: dbo.SubscriptionPlanTranslations — PK surrogate (Id).
 /// </summary>
 public class SubscriptionPlanTranslationMapping : IEntityTypeConfiguration<SubscriptionPlanTranslationEntity>
 {
@@ -14,9 +14,13 @@ public class SubscriptionPlanTranslationMapping : IEntityTypeConfiguration<Subsc
     {
         builder.ToTable("SubscriptionPlanTranslations", "dbo");
 
-        // Chave Primária composta
-        builder.HasKey(x => new { x.SubscriptionPlanId, x.LanguageCode })
+        // Chave Primária surrogate (Id)
+        builder.HasKey(x => x.Id)
             .HasName("PK_SubscriptionPlanTranslations");
+
+        builder.Property(x => x.Id)
+            .UseIdentityColumn(1, 1)
+            .IsRequired();
 
         // Propriedades
         builder.Property(x => x.SubscriptionPlanId)
@@ -29,26 +33,30 @@ public class SubscriptionPlanTranslationMapping : IEntityTypeConfiguration<Subsc
             .IsRequired();
 
         builder.Property(x => x.Name)
-            .HasColumnType("NVARCHAR(200)")
-            .HasMaxLength(200)
+            .HasColumnType("NVARCHAR(100)")
+            .HasMaxLength(100)
             .IsRequired();
 
         builder.Property(x => x.Description)
             .HasColumnType("NVARCHAR(500)")
             .HasMaxLength(500)
-            .IsRequired();
+            .IsRequired(false);
 
-        // Constraint único composto (SubscriptionPlanId + LanguageCode) — já garantido pela PK,
-        // mas a constraint nomeada é requerida pelo schema SQL.
-        builder.HasIndex(x => new { x.SubscriptionPlanId, x.LanguageCode })
-            .IsUnique()
-            .HasDatabaseName("UQ_SubscriptionPlanTranslations_Plan_Language");
-
-        // Relacionamento com SubscriptionPlan
+        // Relacionamento FK com SubscriptionPlan
         builder.HasOne(x => x.SubscriptionPlan)
-            .WithMany()
+            .WithMany(x => x.Translations)
             .HasForeignKey(x => x.SubscriptionPlanId)
             .HasConstraintName("FK_SubscriptionPlanTranslations_SubscriptionPlan")
             .OnDelete(DeleteBehavior.Cascade);
+
+        // Constraint único composto (SubscriptionPlanId + LanguageCode)
+        builder.HasIndex(x => new { x.SubscriptionPlanId, x.LanguageCode })
+            .IsUnique()
+            .HasDatabaseName("UQ_SubscriptionPlanTranslations_SubscriptionPlan_Language");
+
+        // Constraint único composto (LanguageCode + Name)
+        builder.HasIndex(x => new { x.LanguageCode, x.Name })
+            .IsUnique()
+            .HasDatabaseName("UQ_SubscriptionPlanTranslations_Language_Name");
     }
 }
