@@ -60,10 +60,11 @@ public class EquipmentTypeMapping : IEntityTypeConfiguration<EquipmentTypeEntity
             .HasColumnType("DATETIME2")
             .IsRequired(false);
 
-        // Índice único para garantir unicidade de nome por tenant
+        // Indice unico para garantir unicidade de nome por tenant
         builder.HasIndex(x => new { x.TenantId, x.Name })
             .IsUnique()
-            .HasFilter("[IsDeleted] = 0");
+            .HasFilter("[IsDeleted] = 0")
+            .HasDatabaseName("UX_EquipmentTypes_Tenant_Name");
 
         // Relacionamento com Tenant
         builder.HasOne(x => x.Tenant)

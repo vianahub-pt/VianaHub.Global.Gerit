@@ -62,12 +62,13 @@ public class FileTypeMapping : IEntityTypeConfiguration<FileTypeEntity>
             .HasColumnType("DATETIME2(7)")
             .IsRequired(false);
 
-        builder.HasIndex(x => x.MimeType)
+        // Constraint unico composto: MimeType + Extension (apenas registos nao removidos)
+        builder.HasIndex(x => new { x.MimeType, x.Extension })
             .IsUnique()
             .HasFilter("[IsDeleted] = 0")
-            .HasDatabaseName("UQ_FileTypes_Mime");
+            .HasDatabaseName("UX_FileTypes_MimeType_Extension");
 
-        // Constraint único no Code — apenas registos não removidos
+        // Constraint unico no Code — apenas registos não removidos
         builder.HasIndex(x => x.Code)
             .IsUnique()
             .HasFilter("[IsDeleted] = 0")

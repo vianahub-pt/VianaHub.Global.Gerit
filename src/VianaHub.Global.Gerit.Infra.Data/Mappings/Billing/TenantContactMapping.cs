@@ -92,7 +92,20 @@ public class TenantContactMapping : IEntityTypeConfiguration<TenantContactEntity
             .HasColumnType("DATETIME2")
             .IsRequired(false);
 
-        // �ndices
+        // Indices
+        // Email unico por tenant (apenas ativos e nao deletados)
+        builder.HasIndex(x => new { x.TenantId, x.Email })
+            .IsUnique()
+            .HasDatabaseName("UX_TenantContactPersons_Email_Active")
+            .HasFilter("[Email] IS NOT NULL AND [IsActive] = 1 AND [IsDeleted] = 0");
+
+        // Apenas um contato primario por tenant
+        builder.HasIndex(x => x.TenantId)
+            .IsUnique()
+            .HasDatabaseName("UX_TenantContactPersons_Primary")
+            .HasFilter("[IsPrimary] = 1 AND [IsActive] = 1 AND [IsDeleted] = 0");
+
+        // Indice para consultas por tenant
         builder.HasIndex(x => x.TenantId)
             .HasDatabaseName("IX_TenantContacts_TenantId")
             .HasFilter("[IsDeleted] = 0");

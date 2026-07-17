@@ -134,10 +134,16 @@ public class EmployeeAddressMapping : IEntityTypeConfiguration<EmployeeAddressEn
             .HasConstraintName("FK_EmployeeAddresses_Employee")
             .OnDelete(DeleteBehavior.NoAction);
 
-        // �ndices
-        builder.HasIndex(x => x.EmployeeId)
+        // Indices
+        // Indice unico: endereco primario por tenant+employee
+        builder.HasIndex(x => new { x.TenantId, x.EmployeeId })
+            .IsUnique()
+            .HasDatabaseName("UX_EmployeeAddresses_Primary")
+            .HasFilter("[IsPrimary] = 1 AND [IsActive] = 1 AND [IsDeleted] = 0");
+
+        // Indice nao clusterizado: busca por employee
+        builder.HasIndex(x => new { x.TenantId, x.EmployeeId })
             .HasDatabaseName("IX_EmployeeAddresses_EmployeeId")
-            .IncludeProperties(x => x.TenantId)
             .HasFilter("[IsDeleted] = 0");
     }
 }

@@ -102,6 +102,12 @@ public class JwtKeyMapping : IEntityTypeConfiguration<JwtKeyEntity>
         // Índices
         builder.HasIndex(x => x.KeyId).IsUnique().HasDatabaseName("UQ_JwtKeys_KeyId");
 
+        // Apenas uma chave ativa por tenant
+        builder.HasIndex(x => x.TenantId)
+            .IsUnique()
+            .HasFilter("[IsActive] = 1 AND [IsDeleted] = 0")
+            .HasDatabaseName("UX_JwtKeys_Active");
+
         builder.HasIndex(x => new { x.IsActive, x.IsDeleted })
             .HasFilter("IsDeleted = 0")
             .HasDatabaseName("IX_JwtKeys_IsActive_IsDeleted");

@@ -22,7 +22,9 @@ public class EquipmentMapping : IEntityTypeConfiguration<EquipmentEntity>
             .UseIdentityColumn(1, 1)
             .IsRequired();
 
-        // Propriedades
+        // Chave alternativa para suportar FKs compostas com TenantId
+        builder.HasAlternateKey(x => new { x.Id, x.TenantId })
+            .HasName("UQ_Equipments_Id_Tenant");// Propriedades
         builder.Property(x => x.TenantId)
             .IsRequired();
 

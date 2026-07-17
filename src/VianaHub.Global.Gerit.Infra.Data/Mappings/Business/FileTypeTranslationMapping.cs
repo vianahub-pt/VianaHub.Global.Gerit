@@ -6,7 +6,7 @@ namespace VianaHub.Global.Gerit.Infra.Data.Mappings.Business;
 
 /// <summary>
 /// Mapeamento da entidade FileTypeTranslation.
-/// Tabela: dbo.FileTypeTranslations — FK composta (FileTypeId, LanguageCode).
+/// Tabela: dbo.FileTypeTranslations — PK surrogate (Id).
 /// </summary>
 public class FileTypeTranslationMapping : IEntityTypeConfiguration<FileTypeTranslationEntity>
 {
@@ -14,9 +14,13 @@ public class FileTypeTranslationMapping : IEntityTypeConfiguration<FileTypeTrans
     {
         builder.ToTable("FileTypeTranslations", "dbo");
 
-        // Chave Primária composta
-        builder.HasKey(x => new { x.FileTypeId, x.LanguageCode })
+        // Chave Primária surrogate (Id)
+        builder.HasKey(x => x.Id)
             .HasName("PK_FileTypeTranslations");
+
+        builder.Property(x => x.Id)
+            .UseIdentityColumn(1, 1)
+            .IsRequired();
 
         // Propriedades
         builder.Property(x => x.FileTypeId)
@@ -29,22 +33,28 @@ public class FileTypeTranslationMapping : IEntityTypeConfiguration<FileTypeTrans
             .IsRequired();
 
         builder.Property(x => x.Name)
-            .HasColumnType("NVARCHAR(200)")
-            .HasMaxLength(200)
+            .HasColumnType("NVARCHAR(100)")
+            .HasMaxLength(100)
             .IsRequired();
 
         builder.Property(x => x.Description)
-            .HasColumnType("NVARCHAR(500)")
-            .HasMaxLength(500)
-            .IsRequired();
+            .HasColumnType("NVARCHAR(300)")
+            .HasMaxLength(300)
+            .IsRequired(false);
 
-        // Constraint único composto (FileTypeId + LanguageCode) — já garantido pela PK,
-        // mas a constraint nomeada é requerida pelo schema SQL.
+        // Relacionamento FK
+        builder.HasOne(x => x.FileType)
+            .WithMany()
+            .HasForeignKey(x => x.FileTypeId)
+            .HasConstraintName("FK_FileTypeTranslations_FileType")
+            .OnDelete(DeleteBehavior.Restrict);
+
+        // Constraint único composto (FileTypeId + LanguageCode)
         builder.HasIndex(x => new { x.FileTypeId, x.LanguageCode })
             .IsUnique()
             .HasDatabaseName("UQ_FileTypeTranslations_FileType_Language");
 
-        // Constraint único composto (LanguageCode + Name) — nomes de tradução são únicos por idioma
+        // Constraint único composto (LanguageCode + Name)
         builder.HasIndex(x => new { x.LanguageCode, x.Name })
             .IsUnique()
             .HasDatabaseName("UQ_FileTypeTranslations_Language_Name");

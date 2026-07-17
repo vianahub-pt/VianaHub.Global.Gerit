@@ -10,7 +10,7 @@ public class TeamMapping : IEntityTypeConfiguration<TeamEntity>
     {
         builder.ToTable("Teams", "dbo");
 
-        // Chave Primária
+        // Chave Primï¿½ria
         builder.HasKey(x => x.Id)
             .HasName("PK_Teams");
 
@@ -65,5 +65,11 @@ public class TeamMapping : IEntityTypeConfiguration<TeamEntity>
             .HasForeignKey(x => x.TenantId)
             .HasConstraintName("FK_Teams_Tenant")
             .OnDelete(DeleteBehavior.Restrict);
+
+        // Indice unico: nome de team unico por tenant
+        builder.HasIndex(x => new { x.TenantId, x.Name })
+            .IsUnique()
+            .HasFilter("[IsDeleted] = 0")
+            .HasDatabaseName("UX_Teams_Tenant_Name");
     }
 }

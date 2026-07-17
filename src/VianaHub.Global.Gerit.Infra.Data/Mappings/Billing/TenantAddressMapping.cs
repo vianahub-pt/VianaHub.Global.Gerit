@@ -129,5 +129,11 @@ public class TenantAddressMapping : IEntityTypeConfiguration<TenantAddressEntity
             .IsUnique()
             .HasFilter("[IsDeleted] = 0")
             .HasDatabaseName("UQ_TenantAddresses_Id_Tenant");
+
+        // Indice unico: endereco primario por tenant
+        builder.HasIndex(x => x.TenantId)
+            .IsUnique()
+            .HasDatabaseName("UX_TenantAddresses_Primary")
+            .HasFilter("[IsPrimary] = 1 AND [IsActive] = 1 AND [IsDeleted] = 0");
     }
 }

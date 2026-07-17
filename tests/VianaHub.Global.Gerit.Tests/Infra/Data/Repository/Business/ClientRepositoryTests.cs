@@ -10,12 +10,12 @@ namespace VianaHub.Global.Gerit.Tests.Infra.Data.Repository.Business
     {
         private static ClientEntity CreateActiveClient(string name, string email)
         {
-            return new ClientEntity(1, 1, 1, urlImage: null, note: null,
+            return new ClientEntity(1, 1, 1, imageUrl: null, note: null,
                 name: name, phoneNumber: null, cellPhoneNumber: null,
                 isCellPhoneWhatsapp: false, email: email, websiteUrl: null,
                 birthDate: null, gender: null, nationality: null,
                 companyRegistrationNumber: null, economicActivityCode: null,
-                numberOfEmployees: null, statusDefinitionId: null, statusDomainId: null,
+                numberOfEmployees: null, statusDefinitionId: 0, statusDomainId: 0,
                 createdBy: 1);
         }
 

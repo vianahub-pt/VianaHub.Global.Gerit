@@ -6,7 +6,7 @@ namespace VianaHub.Global.Gerit.Infra.Data.Mappings.Business;
 
 /// <summary>
 /// Mapeamento da entidade StatusDomainTranslation.
-/// Tabela: dbo.StatusDomainTranslations — FK composta (StatusDomainId, LanguageCode).
+/// Tabela: dbo.StatusDomainTranslations — PK surrogate (Id).
 /// </summary>
 public class StatusDomainTranslationMapping : IEntityTypeConfiguration<StatusDomainTranslationEntity>
 {
@@ -14,9 +14,13 @@ public class StatusDomainTranslationMapping : IEntityTypeConfiguration<StatusDom
     {
         builder.ToTable("StatusDomainTranslations", "dbo");
 
-        // Chave Primária composta
-        builder.HasKey(x => new { x.StatusDomainId, x.LanguageCode })
+        // Chave Primária surrogate (Id)
+        builder.HasKey(x => x.Id)
             .HasName("PK_StatusDomainTranslations");
+
+        builder.Property(x => x.Id)
+            .UseIdentityColumn(1, 1)
+            .IsRequired();
 
         // Propriedades
         builder.Property(x => x.StatusDomainId)
@@ -29,22 +33,28 @@ public class StatusDomainTranslationMapping : IEntityTypeConfiguration<StatusDom
             .IsRequired();
 
         builder.Property(x => x.Name)
-            .HasColumnType("NVARCHAR(200)")
-            .HasMaxLength(200)
+            .HasColumnType("NVARCHAR(100)")
+            .HasMaxLength(100)
             .IsRequired();
 
         builder.Property(x => x.Description)
-            .HasColumnType("NVARCHAR(500)")
-            .HasMaxLength(500)
-            .IsRequired();
+            .HasColumnType("NVARCHAR(300)")
+            .HasMaxLength(300)
+            .IsRequired(false);
 
-        // Constraint único composto (StatusDomainId + LanguageCode) — já garantido pela PK,
-        // mas a constraint nomeada é requerida pelo schema SQL.
+        // Relacionamento FK
+        builder.HasOne(x => x.StatusDomain)
+            .WithMany()
+            .HasForeignKey(x => x.StatusDomainId)
+            .HasConstraintName("FK_StatusDomainTranslations_StatusDomain")
+            .OnDelete(DeleteBehavior.Restrict);
+
+        // Constraint único composto (StatusDomainId + LanguageCode)
         builder.HasIndex(x => new { x.StatusDomainId, x.LanguageCode })
             .IsUnique()
             .HasDatabaseName("UQ_StatusDomainTranslations_StatusDomain_Language");
 
-        // Constraint único composto (LanguageCode + Name) — nomes de tradução são únicos por idioma
+        // Constraint único composto (LanguageCode + Name)
         builder.HasIndex(x => new { x.LanguageCode, x.Name })
             .IsUnique()
             .HasDatabaseName("UQ_StatusDomainTranslations_Language_Name");

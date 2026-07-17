@@ -144,11 +144,11 @@ public class SubscriptionEntityMapping : IEntityTypeConfiguration<SubscriptionEn
             .HasFilter("[IsDeleted] = 0")
             .HasDatabaseName("UQ_Subscriptions_TenantId_Id");
 
-        // Constraint nica: Garantir que s pode haver um registro ativo por tenant
-        builder.HasIndex(x => new { x.TenantId, x.IsActive })
+        // Constraint unica: Garantir que so pode haver um registro ativo por tenant
+        builder.HasIndex(x => x.TenantId)
             .IsUnique()
-            .HasFilter("[IsDeleted] = 0")
-            .HasDatabaseName("UQ_Subscriptions_Tenant_Active");
+            .HasFilter("[IsActive] = 1 AND [IsDeleted] = 0")
+            .HasDatabaseName("UX_Subscriptions_Active");
 
         // ndice para performance em consultas por SubscriptionPlanId
         builder.HasIndex(x => x.SubscriptionPlanId)
@@ -157,5 +157,11 @@ public class SubscriptionEntityMapping : IEntityTypeConfiguration<SubscriptionEn
         // ndice para consultas por StatusDefinition
         builder.HasIndex(x => new { x.StatusDefinitionId, x.TenantId, x.StatusDomainId })
             .HasDatabaseName("IX_Subscriptions_StatusDefinition");
+
+        // StripeId unico (quando preenchido)
+        builder.HasIndex(x => x.StripeId)
+            .IsUnique()
+            .HasFilter("[StripeId] IS NOT NULL")
+            .HasDatabaseName("UX_Subscriptions_StripeId");
     }
 }

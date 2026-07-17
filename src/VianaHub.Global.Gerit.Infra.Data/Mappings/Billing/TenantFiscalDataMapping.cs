@@ -28,8 +28,8 @@ public class TenantFiscalDataMapping : IEntityTypeConfiguration<TenantFiscalData
             .IsRequired();
 
         builder.Property(x => x.TaxNumber)
-            .HasColumnType("CHAR(9)")
-            .HasMaxLength(9)
+            .HasColumnType("NVARCHAR(20)")
+            .HasMaxLength(20)
             .IsRequired();
 
         builder.Property(x => x.VatNumber)
@@ -53,9 +53,9 @@ public class TenantFiscalDataMapping : IEntityTypeConfiguration<TenantFiscalData
             .HasDefaultValue("PT")
             .IsRequired();
 
-        builder.Property(x => x.IsVATRegistered)
+        builder.Property(x => x.IsVatRegistered)
             .HasColumnType("BIT")
-            .HasDefaultValue(true)
+            .HasDefaultValue(false)
             .IsRequired();
 
         builder.Property(x => x.IsActive)
@@ -73,8 +73,8 @@ public class TenantFiscalDataMapping : IEntityTypeConfiguration<TenantFiscalData
               .IsRequired();
 
         builder.Property(x => x.CreatedAt)
-            .HasColumnType("DATETIME2")
-            .HasDefaultValueSql("SYSDATETIME()")
+            .HasColumnType("DATETIME2(7)")
+            .HasDefaultValueSql("SYSUTCDATETIME()")
             .IsRequired();
 
         builder.Property(x => x.ModifiedBy)
@@ -82,7 +82,7 @@ public class TenantFiscalDataMapping : IEntityTypeConfiguration<TenantFiscalData
             .IsRequired(false);
 
         builder.Property(x => x.ModifiedAt)
-            .HasColumnType("DATETIME2")
+            .HasColumnType("DATETIME2(7)")
             .IsRequired(false);
 
         // Relacionamento
@@ -92,18 +92,19 @@ public class TenantFiscalDataMapping : IEntityTypeConfiguration<TenantFiscalData
             .HasConstraintName("FK_TenantFiscalData_Tenant")
             .OnDelete(DeleteBehavior.NoAction);
 
-        // Constraint unica: TaxNumber unico
-        builder.HasIndex(x => x.TaxNumber)
-            .IsUnique()
-            .HasDatabaseName("UQ_TenantFiscalData_TaxNumber");
-
-        // Constraint unica: Garantir que so pode haver um registro ativo por tenant (soft delete)
-        builder.HasIndex(x => new { x.TenantId, x.IsActive })
+        // Índice único filtrado: TaxNumber único por Tenant+FiscalCountry
+        builder.HasIndex(x => new { x.TenantId, x.FiscalCountry, x.TaxNumber })
             .IsUnique()
             .HasFilter("[IsDeleted] = 0")
-            .HasDatabaseName("UQ_TenantFiscalData_Tenant_Active");
+            .HasDatabaseName("UX_TenantFiscalData_TaxNumber");
 
-        // Indice filtrado para consultas por tenant
+        // Índice único filtrado: apenas um registro fiscal ativo por tenant
+        builder.HasIndex(x => new { x.TenantId })
+            .IsUnique()
+            .HasFilter("[IsActive] = 1 AND [IsDeleted] = 0")
+            .HasDatabaseName("UX_TenantFiscalData_Active");
+
+        // Índice filtrado para consultas por tenant
         builder.HasIndex(x => x.TenantId)
             .HasFilter("[IsDeleted] = 0")
             .HasDatabaseName("IX_TenantFiscalData_TenantId");

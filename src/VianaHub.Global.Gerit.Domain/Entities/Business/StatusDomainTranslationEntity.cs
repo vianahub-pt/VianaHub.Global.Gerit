@@ -2,17 +2,18 @@ namespace VianaHub.Global.Gerit.Domain.Entities.Business;
 
 /// <summary>
 /// Entidade de tradução de um StatusDomain por idioma (pt-PT, en-US, es-ES).
-/// Compõe a chave estrangeira composta (StatusDomainId + LanguageCode).
+/// Tabela: dbo.StatusDomainTranslations — PK surrogate (Id).
 /// </summary>
 public class StatusDomainTranslationEntity
 {
+    public int Id { get; private set; }
     public int StatusDomainId { get; private set; }
     public string? LanguageCode { get; private set; }
     public string? Name { get; private set; }
     public string? Description { get; private set; }
 
     // Navigation Property
-    public StatusDomainEntity StatusDomain { get; private set; }
+    public StatusDomainEntity StatusDomain { get; private set; } = null!;
 
     // Construtor protegido para o EF Core
     protected StatusDomainTranslationEntity() { }
@@ -20,7 +21,7 @@ public class StatusDomainTranslationEntity
     /// <summary>
     /// Construtor para criação de uma nova tradução de StatusDomain
     /// </summary>
-    public StatusDomainTranslationEntity(int statusDomainId, string languageCode, string name, string description)
+    public StatusDomainTranslationEntity(int statusDomainId, string languageCode, string name, string? description)
     {
         StatusDomainId = statusDomainId;
         LanguageCode = languageCode;
@@ -28,7 +29,7 @@ public class StatusDomainTranslationEntity
         Description = description;
     }
 
-    public void Update(string name, string description)
+    public void Update(string name, string? description)
     {
         Name = name;
         Description = description;

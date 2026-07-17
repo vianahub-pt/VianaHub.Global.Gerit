@@ -11,7 +11,7 @@ public class ClientEntity : Entity, IAggregateRoot
     public int TenantId { get; private set; }
     public byte PartyTypeId { get; private set; }
     public int AcquisitionSourceTypeId { get; private set; }
-    public string? UrlImage { get; private set; }
+    public string? ImageUrl { get; private set; }
     public string? Note { get; private set; }
     public bool IsActive { get; private set; }
     public bool IsDeleted { get; private set; }
@@ -29,8 +29,8 @@ public class ClientEntity : Entity, IAggregateRoot
     public string? CompanyRegistrationNumber { get; private set; }
     public string? EconomicActivityCode { get; private set; }
     public int? NumberOfEmployees { get; private set; }
-    public int? StatusDefinitionId { get; private set; }
-    public int? StatusDomainId { get; private set; }
+    public int StatusDefinitionId { get; private set; }
+    public int StatusDomainId { get; private set; }
 
     // Navegação para FiscalData (mantida)
     public ClientFiscalDataEntity? FiscalData { get; private set; }
@@ -52,7 +52,7 @@ public class ClientEntity : Entity, IAggregateRoot
         int tenantId,
         byte partyTypeId,
         int acquisitionSourceTypeId,
-        string? urlImage,
+        string? imageUrl,
         string? note,
         string? name,
         string? phoneNumber,
@@ -66,14 +66,14 @@ public class ClientEntity : Entity, IAggregateRoot
         string? companyRegistrationNumber,
         string? economicActivityCode,
         int? numberOfEmployees,
-        int? statusDefinitionId,
-        int? statusDomainId,
+        int statusDefinitionId,
+        int statusDomainId,
         int createdBy)
     {
         TenantId = tenantId;
         PartyTypeId = partyTypeId;
         AcquisitionSourceTypeId = acquisitionSourceTypeId;
-        UrlImage = urlImage;
+        ImageUrl = imageUrl;
         Note = note;
         Name = name;
         PhoneNumber = phoneNumber;
@@ -98,7 +98,7 @@ public class ClientEntity : Entity, IAggregateRoot
     public void Update(
         byte partyTypeId,
         int acquisitionSourceTypeId,
-        string? urlImage,
+        string? imageUrl,
         string? note,
         string? name,
         string? phoneNumber,
@@ -112,13 +112,13 @@ public class ClientEntity : Entity, IAggregateRoot
         string? companyRegistrationNumber,
         string? economicActivityCode,
         int? numberOfEmployees,
-        int? statusDefinitionId,
-        int? statusDomainId,
+        int statusDefinitionId,
+        int statusDomainId,
         int modifiedBy)
     {
         PartyTypeId = partyTypeId;
         AcquisitionSourceTypeId = acquisitionSourceTypeId;
-        UrlImage = urlImage;
+        ImageUrl = imageUrl;
         Note = note;
         Name = name;
         PhoneNumber = phoneNumber;

@@ -110,11 +110,26 @@ public class ClientDocumentMapping : IEntityTypeConfiguration<ClientDocumentEnti
             .HasConstraintName("FK_ClientDocuments_DocumentType")
             .OnDelete(DeleteBehavior.Restrict);
 
-        // Unique filtered index: apenas um documento primário por Client (ativo e não deletado)
-        builder.HasIndex(x => new { x.ClientId, x.TenantId, x.DocumentTypeId })
+        // Chave alternativa para suportar FKs compostas com TenantId
+        builder.HasAlternateKey(x => new { x.Id, x.TenantId })
+            .HasName("UQ_ClientDocuments_Id_Tenant");
+
+        // Unique filtered index: tipo + pais + numero unico por tenant
+        builder.HasIndex(x => new { x.TenantId, x.DocumentTypeId, x.IssuingCountryCode, x.DocumentNumber })
+            .IsUnique()
+            .HasFilter("[IsDeleted] = 0")
+            .HasDatabaseName("UX_ClientDocuments_Type_Country_Number");
+
+        // Unique filtered index: apenas um documento primario por Client
+        builder.HasIndex(x => new { x.TenantId, x.ClientId })
             .IsUnique()
             .HasFilter("[IsPrimary] = 1 AND [IsActive] = 1 AND [IsDeleted] = 0")
             .HasDatabaseName("UX_ClientDocuments_Primary");
+
+        // Indice nao clusterizado: busca por tenant + client
+        builder.HasIndex(x => new { x.TenantId, x.ClientId })
+            .HasDatabaseName("IX_ClientDocuments_Client")
+            .HasFilter("[IsDeleted] = 0");
 
         // Check constraint: ExpiresAt >= IssuedAt quando ambos preenchidos
         builder.HasCheckConstraint(

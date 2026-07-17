@@ -6,7 +6,7 @@ namespace VianaHub.Global.Gerit.Infra.Data.Mappings.Business;
 
 /// <summary>
 /// Mapeamento da entidade VisitAddress
-/// Endereços da intervenção com suporte a Row Level Security
+/// Endereï¿½os da intervenï¿½ï¿½o com suporte a Row Level Security
 /// </summary>
 public class VisitAddressMapping : IEntityTypeConfiguration<VisitAddressEntity>
 {
@@ -14,7 +14,7 @@ public class VisitAddressMapping : IEntityTypeConfiguration<VisitAddressEntity>
     {
         builder.ToTable("VisitAddresses", "dbo");
 
-        // Chave Primária
+        // Chave Primï¿½ria
         builder.HasKey(x => x.Id)
             .HasName("PK_VisitAddresses");
 
@@ -22,12 +22,14 @@ public class VisitAddressMapping : IEntityTypeConfiguration<VisitAddressEntity>
             .UseIdentityColumn(1, 1)
             .IsRequired();
 
-        // Propriedades
+        // Chave alternativa para suportar FKs compostas com TenantId
+        builder.HasAlternateKey(x => new { x.Id, x.TenantId })
+            .HasName("UQ_VisitAddresses_Id_Tenant");// Propriedades
         builder.Property(x => x.TenantId)
             .HasColumnType("INT")
             .IsRequired();
 
-        // Corrigido: coluna correta é VisitId
+        // Corrigido: coluna correta ï¿½ VisitId
         builder.Property(x => x.VisitId)
             .HasColumnType("INT")
             .IsRequired();
@@ -131,7 +133,7 @@ public class VisitAddressMapping : IEntityTypeConfiguration<VisitAddressEntity>
             .HasConstraintName("FK_VisitAddresses_Visit")
             .OnDelete(DeleteBehavior.NoAction);
 
-        // Índices
+        // ï¿½ndices
         builder.HasIndex(x => x.VisitId)
             .HasDatabaseName("IX_VisitAddresses_VisitId")
             .IncludeProperties(x => x.TenantId)

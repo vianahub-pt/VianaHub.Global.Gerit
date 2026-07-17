@@ -29,7 +29,7 @@ public class SubscriptionAppService : ISubscriptionAppService
     private readonly INotify _notify;
     private readonly IMapper _mapper;
     private readonly ILocalizationService _localization;
-    private readonly ILogger<FunctionAppService> _logger;
+    private readonly ILogger<SubscriptionAppService> _logger;
     private readonly IFileValidationService _fileValidation;
 
     public SubscriptionAppService(
@@ -39,7 +39,7 @@ public class SubscriptionAppService : ISubscriptionAppService
         IMapper mapper,
         ICurrentUserService currentUser,
         ILocalizationService localization,
-        ILogger<FunctionAppService> logger,
+        ILogger<SubscriptionAppService> logger,
         IFileValidationService fileValidation)
     {
         _repo = repo;
