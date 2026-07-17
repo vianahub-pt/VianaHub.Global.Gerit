@@ -21,6 +21,7 @@ public class SubscriptionDataRepository : ISubscriptionDataRepository
         return await _context.Set<SubscriptionEntity>()
             .AsNoTracking()
             .Include(x => x.SubscriptionPlan)
+                .ThenInclude(x => x.Translations)
             .Include(x => x.Tenant)
             .Include(x => x.StatusDefinition)
                 .ThenInclude(x => x.Translations)
@@ -32,6 +33,7 @@ public class SubscriptionDataRepository : ISubscriptionDataRepository
         return await _context.Set<SubscriptionEntity>()
             .AsNoTracking()
             .Include(x => x.SubscriptionPlan)
+                .ThenInclude(x => x.Translations)
             .Include(x => x.Tenant)
             .Include(x => x.StatusDefinition)
                 .ThenInclude(x => x.Translations)
@@ -45,6 +47,7 @@ public class SubscriptionDataRepository : ISubscriptionDataRepository
         var query = _context.Set<SubscriptionEntity>()
             .AsNoTracking()
             .Include(x => x.SubscriptionPlan)
+                .ThenInclude(x => x.Translations)
             .Include(x => x.Tenant)
             .Include(x => x.StatusDefinition)
                 .ThenInclude(x => x.Translations)
@@ -56,7 +59,8 @@ public class SubscriptionDataRepository : ISubscriptionDataRepository
             var search = request.Search.Trim().ToLower();
 
             query = query.Where(x =>
-                EF.Functions.Like(x.SubscriptionPlan.Name.ToLower(), $"%{search}%")
+                x.SubscriptionPlan.Translations.Any(t =>
+                    EF.Functions.Like(t.Name.ToLower(), $"%{search}%"))
                 || EF.Functions.Like(x.StripeId.ToLower(), $"%{search}%")
                 || EF.Functions.Like(x.StripeCustomerId.ToLower(), $"%{search}%")
             );
@@ -108,6 +112,7 @@ public class SubscriptionDataRepository : ISubscriptionDataRepository
         return await _context.Set<SubscriptionEntity>()
             .AsNoTracking()
             .Include(x => x.SubscriptionPlan)
+                .ThenInclude(x => x.Translations)
             .Include(x => x.Tenant)
             .Include(x => x.StatusDefinition)
                 .ThenInclude(x => x.Translations)
@@ -119,6 +124,7 @@ public class SubscriptionDataRepository : ISubscriptionDataRepository
         return await _context.Set<SubscriptionEntity>()
             .AsNoTracking()
             .Include(x => x.SubscriptionPlan)
+                .ThenInclude(x => x.Translations)
             .Include(x => x.Tenant)
             .Include(x => x.StatusDefinition)
                 .ThenInclude(x => x.Translations)
@@ -131,6 +137,7 @@ public class SubscriptionDataRepository : ISubscriptionDataRepository
         return await _context.Set<SubscriptionEntity>()
             .AsNoTracking()
             .Include(x => x.SubscriptionPlan)
+                .ThenInclude(x => x.Translations)
             .Include(x => x.Tenant)
             .Include(x => x.StatusDefinition)
                 .ThenInclude(x => x.Translations)
@@ -145,6 +152,7 @@ public class SubscriptionDataRepository : ISubscriptionDataRepository
         return await _context.Set<SubscriptionEntity>()
             .AsNoTracking()
             .Include(x => x.SubscriptionPlan)
+                .ThenInclude(x => x.Translations)
             .Include(x => x.Tenant)
             .Include(x => x.StatusDefinition)
                 .ThenInclude(x => x.Translations)

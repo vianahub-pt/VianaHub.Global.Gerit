@@ -15,34 +15,32 @@ public class SubscriptionPlanEntityMapping : IEntityTypeConfiguration<Subscripti
         builder.Property(x => x.Id)
             .ValueGeneratedOnAdd();
 
-        builder.Property(x => x.Name)
-            .HasMaxLength(100)
+        builder.Property(x => x.Code)
+            .HasColumnType("NVARCHAR(50)")
+            .HasMaxLength(50)
             .IsRequired();
 
-        builder.Property(x => x.Description)
-            .HasMaxLength(500)
-            .IsRequired(false);
-
         builder.Property(x => x.PricePerHour)
-            .HasColumnType("decimal(10,2)")
+            .HasColumnType("DECIMAL(19,4)")
             .IsRequired(false);
 
         builder.Property(x => x.PricePerDay)
-            .HasColumnType("decimal(10,2)")
+            .HasColumnType("DECIMAL(19,4)")
             .IsRequired(false);
 
         builder.Property(x => x.PricePerMonth)
-            .HasColumnType("decimal(10,2)")
+            .HasColumnType("DECIMAL(19,4)")
             .IsRequired(false);
 
         builder.Property(x => x.PricePerYear)
-            .HasColumnType("decimal(10,2)")
+            .HasColumnType("DECIMAL(19,4)")
             .IsRequired(false);
 
         builder.Property(x => x.Currency)
+            .HasColumnType("NVARCHAR(3)")
             .HasMaxLength(3)
             .IsRequired()
-            .HasDefaultValue("USD");
+            .HasDefaultValue("EUR");
 
         builder.Property(x => x.MaxUsers)
             .IsRequired();
@@ -63,8 +61,8 @@ public class SubscriptionPlanEntityMapping : IEntityTypeConfiguration<Subscripti
               .IsRequired();
 
         builder.Property(x => x.CreatedAt)
-            .HasColumnType("DATETIME2")
-            .HasDefaultValueSql("SYSDATETIME()")
+            .HasColumnType("DATETIME2(7)")
+            .HasDefaultValueSql("SYSUTCDATETIME()")
             .IsRequired();
 
         builder.Property(x => x.ModifiedBy)
@@ -72,18 +70,17 @@ public class SubscriptionPlanEntityMapping : IEntityTypeConfiguration<Subscripti
             .IsRequired(false);
 
         builder.Property(x => x.ModifiedAt)
-            .HasColumnType("DATETIME2")
+            .HasColumnType("DATETIME2(7)")
             .IsRequired(false);
 
-        // Constraint: Se IsDeleted = 1, entao IsActive = 0
-        builder.HasCheckConstraint("CK_SubscriptionPlans_DeletedImpliesInactive", "[IsDeleted] = 0 OR [IsActive] = 0");
+        // Constraints
+        builder.HasCheckConstraint("CK_SubscriptionPlans_Active_Deleted",
+            "NOT ([IsActive] = 1 AND [IsDeleted] = 1)");
 
-        // Indice filtrado para planos ativos
-        builder.HasIndex(x => x.Name)
+        // Índice único filtrado para Code
+        builder.HasIndex(x => x.Code)
+            .IsUnique()
             .HasFilter("[IsDeleted] = 0")
-            .HasDatabaseName("IX_SubscriptionPlans_Name");
-
-        // Navegacao: o relacionamento com Subscriptions ja esta configurado
-        // em SubscriptionEntityMapping via SubscriptionPlanId
+            .HasDatabaseName("UX_SubscriptionPlans_Code");
     }
 }

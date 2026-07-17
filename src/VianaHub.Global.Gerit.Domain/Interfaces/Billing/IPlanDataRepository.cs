@@ -11,6 +11,7 @@ public interface IPlanDataRepository
     Task<ListPage<SubscriptionPlanEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct);
     Task<bool> ExistsByIdAsync(int id, CancellationToken ct);
     Task<bool> ExistsByNameAsync(string name, CancellationToken ct);
+    Task<bool> ExistsByNameAsync(string name, string languageCode, CancellationToken ct);
     Task<bool> AddAsync(SubscriptionPlanEntity entity, CancellationToken ct);
     Task<bool> UpdateAsync(SubscriptionPlanEntity entity, CancellationToken ct);
 }

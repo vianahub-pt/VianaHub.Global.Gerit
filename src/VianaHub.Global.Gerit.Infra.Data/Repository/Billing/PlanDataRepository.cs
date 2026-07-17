@@ -18,30 +18,38 @@ public class PlanDataRepository : IPlanDataRepository
 
     public async Task<SubscriptionPlanEntity> GetByIdAsync(int id, CancellationToken ct)
     {
-        return await _context.Set<SubscriptionPlanEntity>().AsNoTracking().FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted, ct);
+        return await _context.Set<SubscriptionPlanEntity>()
+            .AsNoTracking()
+            .Include(x => x.Translations)
+            .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted, ct);
     }
 
     public async Task<IEnumerable<SubscriptionPlanEntity>> GetAllAsync(CancellationToken ct)
     {
         return await _context.Set<SubscriptionPlanEntity>()
             .AsNoTracking()
+            .Include(x => x.Translations)
             .Where(x => !x.IsDeleted)
-            .OrderBy(x => x.Name)
             .ToListAsync(ct);
     }
 
     public async Task<ListPage<SubscriptionPlanEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct)
     {
-        var query = _context.Set<SubscriptionPlanEntity>().AsNoTracking().Where(x => !x.IsDeleted);
+        var query = _context.Set<SubscriptionPlanEntity>()
+            .AsNoTracking()
+            .Include(x => x.Translations)
+            .Where(x => !x.IsDeleted);
 
-        // Filtro de busca
+        // Filtro de busca — pesquisa nas traduções
         if (!string.IsNullOrWhiteSpace(request.Search))
         {
             var search = request.Search.Trim().ToLower();
 
             query = query.Where(x =>
-                EF.Functions.Like(x.Name.ToLower(), $"%{search}%")
-                || EF.Functions.Like(x.Description.ToLower(), $"%{search}%")
+                x.Translations.Any(t =>
+                    EF.Functions.Like(t.Name.ToLower(), $"%{search}%")
+                    || (t.Description != null && EF.Functions.Like(t.Description.ToLower(), $"%{search}%"))
+                )
                 || EF.Functions.Like(x.Currency.ToLower(), $"%{search}%")
             );
         }
@@ -80,7 +88,16 @@ public class PlanDataRepository : IPlanDataRepository
 
     public async Task<bool> ExistsByNameAsync(string name, CancellationToken ct)
     {
-        return await _context.Set<SubscriptionPlanEntity>().AsNoTracking().AnyAsync(x => x.Name == name && !x.IsDeleted, ct);
+        return await _context.Set<SubscriptionPlanTranslationEntity>()
+            .AsNoTracking()
+            .AnyAsync(x => x.Name == name && !x.SubscriptionPlan.IsDeleted, ct);
+    }
+
+    public async Task<bool> ExistsByNameAsync(string name, string languageCode, CancellationToken ct)
+    {
+        return await _context.Set<SubscriptionPlanTranslationEntity>()
+            .AsNoTracking()
+            .AnyAsync(x => x.Name == name && x.LanguageCode == languageCode && !x.SubscriptionPlan.IsDeleted, ct);
     }
 
     public async Task<bool> AddAsync(SubscriptionPlanEntity entity, CancellationToken ct)
