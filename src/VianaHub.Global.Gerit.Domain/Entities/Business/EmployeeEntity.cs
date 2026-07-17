@@ -25,11 +25,11 @@ public class EmployeeEntity : Entity, IAggregateRoot
     public TenantEntity Tenant { get; private set; }
     public StatusDefinitionEntity StatusDefinition { get; private set; }
 
-    private readonly List<EmployeeContactEntity> _contacts = [];
-    public IReadOnlyCollection<EmployeeContactEntity> Contacts => _contacts.AsReadOnly();
+    private readonly List<EmployeeContactPersonsEntity> _contacts = [];
+    public IReadOnlyCollection<EmployeeContactPersonsEntity> Contacts => _contacts.AsReadOnly();
 
-    private readonly List<EmployeeAddressEntity> _addresses = [];
-    public IReadOnlyCollection<EmployeeAddressEntity> Addresses => _addresses.AsReadOnly();
+    private readonly List<EmployeeAddressesEntity> _addresses = [];
+    public IReadOnlyCollection<EmployeeAddressesEntity> Addresses => _addresses.AsReadOnly();
 
     // Construtor protegido para o EF Core
     protected EmployeeEntity() { }
@@ -94,7 +94,7 @@ public class EmployeeEntity : Entity, IAggregateRoot
         ModifiedAt = DateTime.UtcNow;
     }
 
-    public void AddContact(EmployeeContactEntity contact)
+    public void AddContact(EmployeeContactPersonsEntity contact)
     {
         if (contact == null)
             throw new ArgumentNullException(nameof(contact));
@@ -102,7 +102,7 @@ public class EmployeeEntity : Entity, IAggregateRoot
         _contacts.Add(contact);
     }
 
-    public void AddAddress(EmployeeAddressEntity address)
+    public void AddAddress(EmployeeAddressesEntity address)
     {
         if (address == null)
             throw new ArgumentNullException(nameof(address));

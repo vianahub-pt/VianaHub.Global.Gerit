@@ -25,8 +25,8 @@ public class SubscriptionPlanEntity : Entity
     private readonly List<SubscriptionEntity> _subscriptions = new();
     public IReadOnlyCollection<SubscriptionEntity> Subscriptions => _subscriptions.AsReadOnly();
 
-    private readonly List<SubscriptionPlanTranslationEntity> _translations = new();
-    public IReadOnlyCollection<SubscriptionPlanTranslationEntity> Translations => _translations.AsReadOnly();
+    private readonly List<SubscriptionPlanTranslationsEntity> _translations = new();
+    public IReadOnlyCollection<SubscriptionPlanTranslationsEntity> Translations => _translations.AsReadOnly();
 
     // Construtor protegido para o EF Core
     protected SubscriptionPlanEntity() { }
@@ -86,7 +86,7 @@ public class SubscriptionPlanEntity : Entity
     /// Adiciona uma tradução ao plano. Usado para criar traduções iniciais (pt-PT)
     /// ou adicionar novos idiomas posteriormente.
     /// </summary>
-    public void AddTranslation(SubscriptionPlanTranslationEntity translation)
+    public void AddTranslation(SubscriptionPlanTranslationsEntity translation)
     {
         _translations.Add(translation);
     }

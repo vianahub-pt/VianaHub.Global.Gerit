@@ -4,7 +4,7 @@ using VianaHub.Global.Gerit.Domain.Interfaces.Base;
 
 namespace VianaHub.Global.Gerit.Domain.Validators.Identity.RolePermission;
 
-public class RolePermissionValidator : AbstractValidator<RolePermissionEntity>
+public class RolePermissionValidator : AbstractValidator<RolePermissionsEntity>
 {
     public RolePermissionValidator(ILocalizationService localization)
     {

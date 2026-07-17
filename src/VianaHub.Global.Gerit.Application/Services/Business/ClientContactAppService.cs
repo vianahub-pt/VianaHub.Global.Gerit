@@ -81,7 +81,7 @@ public class ClientContactAppService : IClientContactAppService
             return 0;
         }
 
-        var clientContact = new ClientContactEntity(
+        var clientContact = new ClientContactPersonsEntity(
             TenantId,
             clientId,
             request.Name,
@@ -288,7 +288,7 @@ public class ClientContactAppService : IClientContactAppService
                 continue;
             }
 
-            //var entity = new ClientContactEntity(
+            //var entity = new ClientContactPersonsEntity(
             //    tenantId,
             //    clientId,
             //    item.Name,

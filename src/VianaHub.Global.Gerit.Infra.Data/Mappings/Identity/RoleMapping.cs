@@ -28,14 +28,19 @@ public class RoleMapping : IEntityTypeConfiguration<RoleEntity>
         builder.Property(x => x.TenantId)
             .IsRequired();
 
+        builder.Property(x => x.Code)
+            .HasColumnType("NVARCHAR(50)")
+            .HasMaxLength(50)
+            .IsRequired();
+
         builder.Property(x => x.Name)
             .HasColumnType("NVARCHAR(100)")
             .HasMaxLength(100)
             .IsRequired();
 
         builder.Property(x => x.Description)
-            .HasColumnType("NVARCHAR(255)")
-            .HasMaxLength(255)
+            .HasColumnType("NVARCHAR(500)")
+            .HasMaxLength(500)
             .IsRequired();
 
         builder.Property(x => x.IsActive)

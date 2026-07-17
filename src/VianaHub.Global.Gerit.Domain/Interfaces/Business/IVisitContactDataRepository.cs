@@ -5,15 +5,15 @@ using VianaHub.Global.Gerit.Domain.Tools.Pagination;
 namespace VianaHub.Global.Gerit.Domain.Interfaces.Business;
 
 /// <summary>
-/// Interface do repositório de dados para VisitContact
+/// Interface do repositï¿½rio de dados para VisitContact
 /// </summary>
 public interface IVisitContactDataRepository
 {
-    Task<VisitContactEntity> GetByIdAsync(int id, CancellationToken ct);
-    Task<IEnumerable<VisitContactEntity>> GetAllAsync(CancellationToken ct);
-    Task<ListPage<VisitContactEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct);
+    Task<VisitContactPersonsEntity> GetByIdAsync(int id, CancellationToken ct);
+    Task<IEnumerable<VisitContactPersonsEntity>> GetAllAsync(CancellationToken ct);
+    Task<ListPage<VisitContactPersonsEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct);
     Task<bool> ExistsByIdAsync(int id, CancellationToken ct);
     Task<bool> ExistsByVisitAndEmailAsync(int interventionId, string email, int? excludeId, CancellationToken ct);
-    Task<bool> AddAsync(VisitContactEntity entity, CancellationToken ct);
-    Task<bool> UpdateAsync(VisitContactEntity entity, CancellationToken ct);
+    Task<bool> AddAsync(VisitContactPersonsEntity entity, CancellationToken ct);
+    Task<bool> UpdateAsync(VisitContactPersonsEntity entity, CancellationToken ct);
 }

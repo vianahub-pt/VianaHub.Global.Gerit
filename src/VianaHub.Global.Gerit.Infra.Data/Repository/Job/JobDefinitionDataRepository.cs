@@ -16,24 +16,24 @@ public class JobDefinitionDataRepository : IJobDefinitionDataRepository
         _context = context;
     }
 
-    public async Task<JobDefinitionEntity> GetByIdAsync(int id, CancellationToken ct)
+    public async Task<JobDefinitionsEntity> GetByIdAsync(int id, CancellationToken ct)
     {
-        return await _context.Set<JobDefinitionEntity>()
+        return await _context.Set<JobDefinitionsEntity>()
             .AsNoTracking()
             .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted, ct);
     }
 
-    public async Task<JobDefinitionEntity> GetByNameAsync(string jobName, CancellationToken ct)
+    public async Task<JobDefinitionsEntity> GetByNameAsync(string jobName, CancellationToken ct)
     {
         var normalized = jobName?.Trim();
-        return await _context.Set<JobDefinitionEntity>()
+        return await _context.Set<JobDefinitionsEntity>()
             .AsNoTracking()
             .FirstOrDefaultAsync(x => x.JobName == normalized && !x.IsDeleted, ct);
     }
 
-    public async Task<IEnumerable<JobDefinitionEntity>> GetAllAsync(CancellationToken ct)
+    public async Task<IEnumerable<JobDefinitionsEntity>> GetAllAsync(CancellationToken ct)
     {
-        return await _context.Set<JobDefinitionEntity>()
+        return await _context.Set<JobDefinitionsEntity>()
             .AsNoTracking()
             .Where(x => !x.IsDeleted)
             .OrderBy(x => x.JobCategory)
@@ -42,12 +42,12 @@ public class JobDefinitionDataRepository : IJobDefinitionDataRepository
             .ToListAsync(ct);
     }
 
-    public async Task<ListPage<JobDefinitionEntity>> GetPagedAsync(PagedFilter filter, CancellationToken ct)
+    public async Task<ListPage<JobDefinitionsEntity>> GetPagedAsync(PagedFilter filter, CancellationToken ct)
     {
         // Accept JobPagedFilter or fallback to PagedFilter
         var jobFilter = filter as JobPagedFilter ?? new JobPagedFilter(filter?.Search, filter.IsActive, filter?.PageNumber, filter?.PageSize, filter?.SortBy, filter?.SortDirection);
 
-        var query = _context.Set<JobDefinitionEntity>()
+        var query = _context.Set<JobDefinitionsEntity>()
             .AsNoTracking()
             .Where(x => !x.IsDeleted);
 
@@ -80,7 +80,7 @@ public class JobDefinitionDataRepository : IJobDefinitionDataRepository
 
         var data = await ordered.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync(ct);
 
-        return new ListPage<JobDefinitionEntity>
+        return new ListPage<JobDefinitionsEntity>
         {
             Items = data,
             PageNumber = pageNumber,
@@ -93,26 +93,26 @@ public class JobDefinitionDataRepository : IJobDefinitionDataRepository
     public async Task<bool> ExistsByNameAsync(string jobName, CancellationToken ct)
     {
         var normalized = jobName?.Trim();
-        return await _context.Set<JobDefinitionEntity>()
+        return await _context.Set<JobDefinitionsEntity>()
             .AsNoTracking()
             .AnyAsync(x => x.JobName == normalized && !x.IsDeleted, ct);
     }
 
-    public async Task<bool> CreateAsync(JobDefinitionEntity entity, CancellationToken ct)
+    public async Task<bool> CreateAsync(JobDefinitionsEntity entity, CancellationToken ct)
     {
-        await _context.Set<JobDefinitionEntity>().AddAsync(entity, ct);
+        await _context.Set<JobDefinitionsEntity>().AddAsync(entity, ct);
         return await _context.SaveChangesAsync(ct) > 0;
     }
 
-    public async Task<bool> UpdateAsync(JobDefinitionEntity entity, CancellationToken ct)
+    public async Task<bool> UpdateAsync(JobDefinitionsEntity entity, CancellationToken ct)
     {
-        _context.Set<JobDefinitionEntity>().Update(entity);
+        _context.Set<JobDefinitionsEntity>().Update(entity);
         return await _context.SaveChangesAsync(ct) > 0;
     }
 
-    public async Task<bool> DeleteAsync(JobDefinitionEntity entity, CancellationToken ct)
+    public async Task<bool> DeleteAsync(JobDefinitionsEntity entity, CancellationToken ct)
     {
-        _context.Set<JobDefinitionEntity>().Update(entity);
+        _context.Set<JobDefinitionsEntity>().Update(entity);
         return await _context.SaveChangesAsync(ct) > 0;
     }
 }

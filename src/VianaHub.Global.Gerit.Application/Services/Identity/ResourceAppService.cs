@@ -77,7 +77,7 @@ public class ResourceAppService : IResourceAppService
             return 0;
         }
 
-        var entity = new ResourceEntity(request.Name, request.Description, _currentUser.GetUserId());
+        var entity = new ResourceEntity(request.Code ?? request.Name ?? "RES", request.Name, request.Description, _currentUser.GetUserId());
         var success = await _domain.CreateAsync(entity, ct);
         return success ? entity.Id : 0;
     }
@@ -90,7 +90,7 @@ public class ResourceAppService : IResourceAppService
             return false;
         }
 
-        entity.Update(request.Name, request.Description, _currentUser.GetUserId());
+        entity.Update(request.Code ?? entity.Code ?? request.Name ?? "RES", request.Name, request.Description, _currentUser.GetUserId());
         return await _domain.UpdateAsync(entity, ct);
     }
     public async Task<bool> ActivateAsync(int id, CancellationToken ct)
@@ -251,7 +251,7 @@ public class ResourceAppService : IResourceAppService
             }
 
             // Cria a entidade
-            var entity = new ResourceEntity(item.Name, item.Description, _currentUser.GetUserId());
+            var entity = new ResourceEntity(item.Code ?? item.Name ?? "RES", item.Name, item.Description, _currentUser.GetUserId());
 
             // Tenta criar no dom�nio
             var success = await _domain.CreateAsync(entity, ct);

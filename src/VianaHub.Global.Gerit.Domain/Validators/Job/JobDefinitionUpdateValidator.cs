@@ -5,7 +5,7 @@ using VianaHub.Global.Gerit.Domain.Interfaces.Base;
 
 namespace VianaHub.Global.Gerit.Domain.Validators.Job;
 
-public class JobDefinitionUpdateValidator : AbstractValidator<JobDefinitionEntity>
+public class JobDefinitionUpdateValidator : AbstractValidator<JobDefinitionsEntity>
 {
     public JobDefinitionUpdateValidator(ILocalizationService localization)
     {

@@ -14,7 +14,7 @@ public class PartyTypeEntity : Entity
     public bool IsDeleted { get; private set; }
 
     // Navigation Properties
-    public ICollection<PartyTypeTranslationEntity> Translations { get; private set; }
+    public ICollection<PartyTypeTranslationsEntity> Translations { get; private set; }
 
     // Construtor protegido para o EF Core
     protected PartyTypeEntity() { }
@@ -29,7 +29,7 @@ public class PartyTypeEntity : Entity
         IsDeleted = false;
         CreatedBy = createdBy;
         CreatedAt = DateTime.UtcNow;
-        Translations = new List<PartyTypeTranslationEntity>();
+        Translations = new List<PartyTypeTranslationsEntity>();
     }
 
     public void UpdateCode(string code, int modifiedBy)

@@ -3,27 +3,29 @@ using VianaHub.Global.Gerit.Domain.Base;
 namespace VianaHub.Global.Gerit.Domain.Entities.Identity;
 
 /// <summary>
-/// Entidade que representa uma ação possível no sistema
+/// Entidade que representa uma aï¿½ï¿½o possï¿½vel no sistema
 /// </summary>
 public class ActionEntity : Entity
 {
+    public string? Code { get; private set; }
     public string? Name { get; private set; }
     public string? Description { get; set; }
     public bool IsActive { get; private set; }
     public bool IsDeleted { get; private set; }
 
     // Navigation Properties
-    private readonly List<RolePermissionEntity> _rolePermissions = new();
-    public IReadOnlyCollection<RolePermissionEntity> RolePermissions => _rolePermissions.AsReadOnly();
+    private readonly List<RolePermissionsEntity> _rolePermissions = new();
+    public IReadOnlyCollection<RolePermissionsEntity> RolePermissions => _rolePermissions.AsReadOnly();
 
     // Construtor protegido para o EF Core
     protected ActionEntity() { }
 
     /// <summary>
-    /// Construtor para criação de uma nova ação
+    /// Construtor para criaï¿½ï¿½o de uma nova aï¿½ï¿½o
     /// </summary>
-    public ActionEntity(string name, string description, int createdBy)
+    public ActionEntity(string code, string name, string description, int createdBy)
     {
+        Code = code;
         Name = name;
         Description = description;
         IsActive = true;
@@ -31,8 +33,9 @@ public class ActionEntity : Entity
         CreatedBy = createdBy;
     }
 
-    public void Update(string name, string description, int modifiedBy)
+    public void Update(string code, string name, string description, int modifiedBy)
     {
+        Code = code;
         Name = name;
         Description = description;
         ModifiedBy = modifiedBy;

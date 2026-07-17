@@ -14,7 +14,7 @@ public class AddressTypeEntity : Entity
     public bool IsDeleted { get; private set; }
 
     // Navigation Properties
-    public ICollection<AddressTypeTranslationEntity> Translations { get; private set; }
+    public ICollection<AddressTypeTranslationsEntity> Translations { get; private set; }
 
     // Construtor protegido para o EF Core
     protected AddressTypeEntity() { }
@@ -39,7 +39,7 @@ public class AddressTypeEntity : Entity
         IsDeleted = false;
         CreatedBy = createdBy;
         CreatedAt = DateTime.UtcNow;
-        Translations = new List<AddressTypeTranslationEntity>();
+        Translations = new List<AddressTypeTranslationsEntity>();
     }
 
     public void Update(string name, string description, int modifiedBy)

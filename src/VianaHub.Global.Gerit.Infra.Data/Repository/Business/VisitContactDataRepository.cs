@@ -16,17 +16,17 @@ public class VisitContactDataRepository : IVisitContactDataRepository
         _context = context;
     }
 
-    public async Task<VisitContactEntity> GetByIdAsync(int id, CancellationToken ct)
+    public async Task<VisitContactPersonsEntity> GetByIdAsync(int id, CancellationToken ct)
     {
-        return await _context.Set<VisitContactEntity>()
+        return await _context.Set<VisitContactPersonsEntity>()
             .AsNoTracking()
             .Include(x => x.Visit)
             .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted, ct);
     }
 
-    public async Task<IEnumerable<VisitContactEntity>> GetAllAsync(CancellationToken ct)
+    public async Task<IEnumerable<VisitContactPersonsEntity>> GetAllAsync(CancellationToken ct)
     {
-        return await _context.Set<VisitContactEntity>()
+        return await _context.Set<VisitContactPersonsEntity>()
             .AsNoTracking()
             .Include(x => x.Visit)
             .Where(x => !x.IsDeleted)
@@ -34,9 +34,9 @@ public class VisitContactDataRepository : IVisitContactDataRepository
             .ToListAsync(ct);
     }
 
-    public async Task<ListPage<VisitContactEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct)
+    public async Task<ListPage<VisitContactPersonsEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct)
     {
-        var query = _context.Set<VisitContactEntity>()
+        var query = _context.Set<VisitContactPersonsEntity>()
             .AsNoTracking()
             .Include(x => x.Visit)
             .Where(x => !x.IsDeleted);
@@ -63,7 +63,7 @@ public class VisitContactDataRepository : IVisitContactDataRepository
 
         var result = await orderedQuery.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync(ct);
 
-        return new ListPage<VisitContactEntity>
+        return new ListPage<VisitContactPersonsEntity>
         {
             Items = result,
             PageNumber = pageNumber,
@@ -75,14 +75,14 @@ public class VisitContactDataRepository : IVisitContactDataRepository
 
     public async Task<bool> ExistsByIdAsync(int id, CancellationToken ct)
     {
-        return await _context.Set<VisitContactEntity>()
+        return await _context.Set<VisitContactPersonsEntity>()
             .AsNoTracking()
             .AnyAsync(x => x.Id == id && !x.IsDeleted, ct);
     }
 
     public async Task<bool> ExistsByVisitAndEmailAsync(int interventionId, string email, int? excludeId, CancellationToken ct)
     {
-        var query = _context.Set<VisitContactEntity>()
+        var query = _context.Set<VisitContactPersonsEntity>()
             .AsNoTracking()
             .Where(x => x.VisitId == interventionId && x.Email == email && !x.IsDeleted);
 
@@ -94,15 +94,15 @@ public class VisitContactDataRepository : IVisitContactDataRepository
         return await query.AnyAsync(ct);
     }
 
-    public async Task<bool> AddAsync(VisitContactEntity entity, CancellationToken ct)
+    public async Task<bool> AddAsync(VisitContactPersonsEntity entity, CancellationToken ct)
     {
-        await _context.Set<VisitContactEntity>().AddAsync(entity, ct);
+        await _context.Set<VisitContactPersonsEntity>().AddAsync(entity, ct);
         return await _context.SaveChangesAsync(ct) > 0;
     }
 
-    public async Task<bool> UpdateAsync(VisitContactEntity entity, CancellationToken ct)
+    public async Task<bool> UpdateAsync(VisitContactPersonsEntity entity, CancellationToken ct)
     {
-        _context.Set<VisitContactEntity>().Update(entity);
+        _context.Set<VisitContactPersonsEntity>().Update(entity);
         return await _context.SaveChangesAsync(ct) > 0;
     }
 }

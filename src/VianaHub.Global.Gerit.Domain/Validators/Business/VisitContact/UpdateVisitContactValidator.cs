@@ -7,7 +7,7 @@ namespace VianaHub.Global.Gerit.Domain.Validators.Business.VisitContact;
 /// <summary>
 /// Validador para atualiza��o de VisitContact
 /// </summary>
-public class UpdateVisitContactValidator : AbstractValidator<VisitContactEntity>
+public class UpdateVisitContactValidator : AbstractValidator<VisitContactPersonsEntity>
 {
     public UpdateVisitContactValidator(ILocalizationService localization)
     {

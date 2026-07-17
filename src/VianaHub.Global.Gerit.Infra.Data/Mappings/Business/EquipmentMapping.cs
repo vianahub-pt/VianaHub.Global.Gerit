@@ -89,7 +89,7 @@ public class EquipmentMapping : IEntityTypeConfiguration<EquipmentEntity>
             .WithMany()
             .HasForeignKey(x => new { x.EquipmentTypeId, x.TenantId })
             .HasPrincipalKey(x => new { x.Id, x.TenantId })
-            .HasConstraintName("FK_Equipments_EquipamentType")
+            .HasConstraintName("FK_Equipments_EquipmentType")
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(x => x.StatusDefinition)

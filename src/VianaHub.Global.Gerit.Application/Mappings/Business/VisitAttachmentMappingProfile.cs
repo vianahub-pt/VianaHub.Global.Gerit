@@ -5,16 +5,16 @@ using VianaHub.Global.Gerit.Domain.Entities.Business;
 
 namespace VianaHub.Global.Gerit.Application.Mappings.Business;
 
-public class VisitAttachmentMappingProfile : Profile
+public class VisitAttachmentsMappingProfile : Profile
 {
-    public VisitAttachmentMappingProfile()
+    public VisitAttachmentsMappingProfile()
     {
-        CreateMap<VisitAttachmentEntity, VisitAttachmentResponse>()
+        CreateMap<VisitAttachmentsEntity, VisitAttachmentResponse>()
             .ForMember(dest => dest.FileTypeName, opt => opt.MapFrom(src => src.FileType.Extension))
             .ForMember(dest => dest.MimeType, opt => opt.MapFrom(src => src.FileType.MimeType))
             .ForMember(dest => dest.FormattedFileSize, opt => opt.MapFrom(src => src.GetFormattedFileSize()));
 
-        CreateMap<CreateVisitAttachmentRequest, VisitAttachmentEntity>();
-        CreateMap<UpdateVisitAttachmentRequest, VisitAttachmentEntity>();
+        CreateMap<CreateVisitAttachmentRequest, VisitAttachmentsEntity>();
+        CreateMap<UpdateVisitAttachmentRequest, VisitAttachmentsEntity>();
     }
 }

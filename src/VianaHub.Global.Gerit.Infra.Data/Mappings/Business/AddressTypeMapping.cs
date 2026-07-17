@@ -22,15 +22,8 @@ public class AddressTypeMapping : IEntityTypeConfiguration<AddressTypeEntity>
             .IsRequired();
 
         // Propriedades
-        builder.Property(x => x.Name)
-            .HasColumnType("NVARCHAR(200)")
-            .HasMaxLength(200)
-            .IsRequired();
-
-        builder.Property(x => x.Description)
-            .HasColumnType("NVARCHAR(500)")
-            .HasMaxLength(500)
-            .IsRequired();
+        builder.Ignore(x => x.Name);
+        builder.Ignore(x => x.Description);
 
         builder.Property(x => x.Code)
             .HasColumnType("NVARCHAR(50)")
@@ -65,8 +58,8 @@ public class AddressTypeMapping : IEntityTypeConfiguration<AddressTypeEntity>
             .IsRequired();
 
         builder.Property(x => x.CreatedAt)
-            .HasColumnType("DATETIME2")
-            .HasDefaultValueSql("SYSDATETIME()")
+            .HasColumnType("DATETIME2(7)")
+            .HasDefaultValueSql("SYSUTCDATETIME()")
             .IsRequired();
 
         builder.Property(x => x.ModifiedBy)
@@ -74,7 +67,7 @@ public class AddressTypeMapping : IEntityTypeConfiguration<AddressTypeEntity>
             .IsRequired(false);
 
         builder.Property(x => x.ModifiedAt)
-            .HasColumnType("DATETIME2")
+            .HasColumnType("DATETIME2(7)")
             .IsRequired(false);
     }
 }

@@ -88,14 +88,14 @@ public class PlanDataRepository : IPlanDataRepository
 
     public async Task<bool> ExistsByNameAsync(string name, CancellationToken ct)
     {
-        return await _context.Set<SubscriptionPlanTranslationEntity>()
+        return await _context.Set<SubscriptionPlanTranslationsEntity>()
             .AsNoTracking()
             .AnyAsync(x => x.Name == name && !x.SubscriptionPlan.IsDeleted, ct);
     }
 
     public async Task<bool> ExistsByNameAsync(string name, string languageCode, CancellationToken ct)
     {
-        return await _context.Set<SubscriptionPlanTranslationEntity>()
+        return await _context.Set<SubscriptionPlanTranslationsEntity>()
             .AsNoTracking()
             .AnyAsync(x => x.Name == name && x.LanguageCode == languageCode && !x.SubscriptionPlan.IsDeleted, ct);
     }

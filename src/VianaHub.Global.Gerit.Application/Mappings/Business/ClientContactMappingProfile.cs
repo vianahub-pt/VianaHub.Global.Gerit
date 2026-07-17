@@ -9,16 +9,16 @@ namespace VianaHub.Global.Gerit.Application.Mappings.Business;
 /// <summary>
 /// Profile de mapeamento para ClientContact
 /// </summary>
-public class ClientContactMappingProfile : Profile
+public class ClientContactPersonsMappingProfile : Profile
 {
-    public ClientContactMappingProfile()
+    public ClientContactPersonsMappingProfile()
     {
-        CreateMap<ClientContactEntity, ClientContactResponse>()
+        CreateMap<ClientContactPersonsEntity, ClientContactResponse>()
             .ForMember(dest => dest.Client, opt => opt.MapFrom(src => src.Client.Name));
 
-        CreateMap<ClientContactEntity, ClientContactDetailResponse>()
+        CreateMap<ClientContactPersonsEntity, ClientContactDetailResponse>()
             .ForMember(dest => dest.Client, opt => opt.MapFrom(src => src.Client.Name));
 
-        CreateMap<ListPage<ClientContactEntity>, ListPageResponse<ClientContactResponse>>();
+        CreateMap<ListPage<ClientContactPersonsEntity>, ListPageResponse<ClientContactResponse>>();
     }
 }

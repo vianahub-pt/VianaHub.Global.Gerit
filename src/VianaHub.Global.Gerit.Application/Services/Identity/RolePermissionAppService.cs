@@ -65,7 +65,7 @@ public class RolePermissionAppService : IRolePermissionAppService
             return null;
         }
 
-        // Valida existência de role/resource/action
+        // Valida existï¿½ncia de role/resource/action
         var roleExists = await _roleRepository.ExistsByIdAsync(request.RoleId, ct);
         if (!roleExists)
         {
@@ -87,7 +87,7 @@ public class RolePermissionAppService : IRolePermissionAppService
             return null;
         }
 
-        var entity = new RolePermissionEntity(tenantId, request.RoleId, request.ResourceId, request.ActionId);
+        var entity = new RolePermissionsEntity(tenantId, request.RoleId, request.ResourceId, request.ActionId);
         await _domain.CreateAsync(entity, ct);
         return _mapper.Map<RolePermissionResponse>(entity);
     }
@@ -135,11 +135,11 @@ public class RolePermissionAppService : IRolePermissionAppService
 
     public async Task<bool> BulkUploadAsync(IFormFile file, CancellationToken ct)
     {
-        // Valida arquivo usando serviço centralizado
+        // Valida arquivo usando serviï¿½o centralizado
         if (!_fileValidation.ValidateFile(file))
             return false;
 
-        // Lê itens do CSV
+        // Lï¿½ itens do CSV
         var items = ReadCsvFile(file);
         if (items == null)
             return false;
@@ -158,17 +158,17 @@ public class RolePermissionAppService : IRolePermissionAppService
     {
         try
         {
-            // Cria StreamReader com encoding UTF-8 forçado
+            // Cria StreamReader com encoding UTF-8 forï¿½ado
             using var reader = file.OpenReadStream().CreateUtf8StreamReader();
 
             var config = new CsvConfiguration(CultureInfo.InvariantCulture)
             {
                 HasHeaderRecord = true,
-                Delimiter = ";", // CSV usa ponto e vírgula como delimitador
+                Delimiter = ";", // CSV usa ponto e vï¿½rgula como delimitador
                 MissingFieldFound = null,
                 HeaderValidated = null,
                 TrimOptions = TrimOptions.Trim,
-                BadDataFound = null // Ignora linhas mal formatadas ao invés de lançar exceção
+                BadDataFound = null // Ignora linhas mal formatadas ao invï¿½s de lanï¿½ar exceï¿½ï¿½o
             };
 
             using var csv = new CsvReader(reader, config);
@@ -187,7 +187,7 @@ public class RolePermissionAppService : IRolePermissionAppService
                     var record = csv.GetRecord<BulkUploadRolePermissionItem>();
                     if (record != null)
                     {
-                        // Valida se os campos não contêm conteúdo perigoso
+                        // Valida se os campos nï¿½o contï¿½m conteï¿½do perigoso
                         if (record.RoleId <= 0)
                         {
                             _notify.Add(_localization.GetMessage("Application.Service.RolePermission.ReadCsvFile.RoleId.IsSafeCsvValue", rowCount + 2), 400);
@@ -239,7 +239,7 @@ public class RolePermissionAppService : IRolePermissionAppService
 
         foreach (var item in items)
         {
-            // Valida campos obrigatórios
+            // Valida campos obrigatï¿½rios
             if (!ValidateBulkItem(item))
             {
                 hasErrors = true;
@@ -256,9 +256,9 @@ public class RolePermissionAppService : IRolePermissionAppService
             }
 
             // Cria a entidade
-            var entity = new RolePermissionEntity(tenantId, item.RoleId, item.ResourceId, item.ActionId);
+            var entity = new RolePermissionsEntity(tenantId, item.RoleId, item.ResourceId, item.ActionId);
 
-            // Tenta criar no domínio
+            // Tenta criar no domï¿½nio
             var success = await _domain.CreateAsync(entity, ct);
 
             if (!success)

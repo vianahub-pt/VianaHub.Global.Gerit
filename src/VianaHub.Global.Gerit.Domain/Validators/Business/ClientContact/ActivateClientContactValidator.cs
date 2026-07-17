@@ -5,9 +5,9 @@ using VianaHub.Global.Gerit.Domain.Interfaces.Base;
 namespace VianaHub.Global.Gerit.Domain.Validators.Business.ClientContact;
 
 /// <summary>
-/// Validador para ativação de ClientContact
+/// Validador para ativaï¿½ï¿½o de ClientContact
 /// </summary>
-public class ActivateClientContactValidator : AbstractValidator<ClientContactEntity>
+public class ActivateClientContactValidator : AbstractValidator<ClientContactPersonsEntity>
 {
     public ActivateClientContactValidator(ILocalizationService localization)
     {

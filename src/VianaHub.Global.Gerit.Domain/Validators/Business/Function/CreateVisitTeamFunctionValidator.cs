@@ -1,10 +1,10 @@
-﻿using FluentValidation;
+using FluentValidation;
 using VianaHub.Global.Gerit.Domain.Entities.Business;
 using VianaHub.Global.Gerit.Domain.Interfaces.Base;
 
 namespace VianaHub.Global.Gerit.Domain.Validators.Business.Function;
 
-public class CreateVisitTeamFunctionValidator : AbstractValidator<VisitTeamFunctionEntity>
+public class CreateVisitTeamFunctionValidator : AbstractValidator<VisitTeamFunctionsEntity>
 {
     public CreateVisitTeamFunctionValidator(ILocalizationService localization)
     {

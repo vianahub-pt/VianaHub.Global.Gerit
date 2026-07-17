@@ -8,7 +8,7 @@ using VianaHub.Global.Gerit.Infra.Data.Context;
 namespace VianaHub.Global.Gerit.Infra.Data.Repository.Business;
 
 /// <summary>
-/// Repositório de dados para VisitAddress
+/// Repositï¿½rio de dados para VisitAddress
 /// </summary>
 public class VisitAddressDataRepository : IVisitAddressDataRepository
 {
@@ -19,7 +19,7 @@ public class VisitAddressDataRepository : IVisitAddressDataRepository
         _context = context;
     }
 
-    public async Task<VisitAddressEntity?> GetByIdAsync(int id, CancellationToken ct)
+    public async Task<VisitAddressesEntity?> GetByIdAsync(int id, CancellationToken ct)
     {
         return await _context.VisitAddresses
             .AsNoTracking()
@@ -28,7 +28,7 @@ public class VisitAddressDataRepository : IVisitAddressDataRepository
             .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted, ct);
     }
 
-    public async Task<IEnumerable<VisitAddressEntity>> GetAllAsync(CancellationToken ct)
+    public async Task<IEnumerable<VisitAddressesEntity>> GetAllAsync(CancellationToken ct)
     {
         return await _context.VisitAddresses
             .AsNoTracking()
@@ -40,7 +40,7 @@ public class VisitAddressDataRepository : IVisitAddressDataRepository
             .ToListAsync(ct);
     }
 
-    public async Task<ListPage<VisitAddressEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct)
+    public async Task<ListPage<VisitAddressesEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct)
     {
         var query = _context.VisitAddresses
             .AsNoTracking()
@@ -76,7 +76,7 @@ public class VisitAddressDataRepository : IVisitAddressDataRepository
             .Take(pageSize)
             .ToListAsync(ct);
 
-        return new ListPage<VisitAddressEntity>
+        return new ListPage<VisitAddressesEntity>
         {
             Items = result,
             PageNumber = pageNumber,
@@ -105,7 +105,7 @@ public class VisitAddressDataRepository : IVisitAddressDataRepository
                           !x.IsDeleted, ct);
     }
 
-    public async Task<VisitAddressEntity> GetPrimaryAddressByVisitAsync(int interventionId, CancellationToken ct)
+    public async Task<VisitAddressesEntity> GetPrimaryAddressByVisitAsync(int interventionId, CancellationToken ct)
     {
         return await _context.VisitAddresses
             .AsNoTracking()
@@ -114,13 +114,13 @@ public class VisitAddressDataRepository : IVisitAddressDataRepository
             .FirstOrDefaultAsync(x => x.VisitId == interventionId && x.IsPrimary && !x.IsDeleted, ct);
     }
 
-    public async Task<bool> AddAsync(VisitAddressEntity entity, CancellationToken ct)
+    public async Task<bool> AddAsync(VisitAddressesEntity entity, CancellationToken ct)
     {
         await _context.VisitAddresses.AddAsync(entity, ct);
         return await _context.SaveChangesAsync(ct) > 0;
     }
 
-    public async Task<bool> UpdateAsync(VisitAddressEntity entity, CancellationToken ct)
+    public async Task<bool> UpdateAsync(VisitAddressesEntity entity, CancellationToken ct)
     {
         _context.VisitAddresses.Update(entity);
         return await _context.SaveChangesAsync(ct) > 0;

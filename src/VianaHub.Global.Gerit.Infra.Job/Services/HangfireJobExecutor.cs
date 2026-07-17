@@ -1,4 +1,4 @@
-﻿using Hangfire;
+using Hangfire;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using VianaHub.Global.Gerit.Domain.Entities.Job;
@@ -23,7 +23,7 @@ public class HangfireJobExecutor : IJobExecutor
         _logger = logger;
     }
 
-    public Task<bool> RegisterRecurringJobAsync(JobDefinitionEntity jobDefinition)
+    public Task<bool> RegisterRecurringJobAsync(JobDefinitionsEntity jobDefinition)
     {
         try
         {
@@ -60,7 +60,7 @@ public class HangfireJobExecutor : IJobExecutor
         }
     }
 
-    public Task<string> EnqueueJobAsync(JobDefinitionEntity jobDefinition)
+    public Task<string> EnqueueJobAsync(JobDefinitionsEntity jobDefinition)
     {
         try
         {

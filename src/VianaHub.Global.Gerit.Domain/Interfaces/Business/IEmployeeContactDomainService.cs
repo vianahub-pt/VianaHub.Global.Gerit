@@ -1,4 +1,4 @@
-﻿using VianaHub.Global.Gerit.Domain.Entities.Business;
+using VianaHub.Global.Gerit.Domain.Entities.Business;
 using VianaHub.Global.Gerit.Domain.ReadModels;
 using VianaHub.Global.Gerit.Domain.Tools.Pagination;
 
@@ -9,13 +9,13 @@ namespace VianaHub.Global.Gerit.Domain.Interfaces.Business;
 /// </summary>
 public interface IEmployeeContactDomainService
 {
-    Task<EmployeeContactEntity> GetByIdAsync(int id, CancellationToken ct);
-    Task<IEnumerable<EmployeeContactEntity>> GetAllAsync(CancellationToken ct);
-    Task<ListPage<EmployeeContactEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct);
+    Task<EmployeeContactPersonsEntity> GetByIdAsync(int id, CancellationToken ct);
+    Task<IEnumerable<EmployeeContactPersonsEntity>> GetAllAsync(CancellationToken ct);
+    Task<ListPage<EmployeeContactPersonsEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct);
     Task<bool> ExistsByIdAsync(int id, CancellationToken ct);
-    Task<bool> CreateAsync(EmployeeContactEntity entity, CancellationToken ct);
-    Task<bool> UpdateAsync(EmployeeContactEntity entity, CancellationToken ct);
-    Task<bool> ActivateAsync(EmployeeContactEntity entity, CancellationToken ct);
-    Task<bool> DeactivateAsync(EmployeeContactEntity entity, CancellationToken ct);
-    Task<bool> DeleteAsync(EmployeeContactEntity entity, CancellationToken ct);
+    Task<bool> CreateAsync(EmployeeContactPersonsEntity entity, CancellationToken ct);
+    Task<bool> UpdateAsync(EmployeeContactPersonsEntity entity, CancellationToken ct);
+    Task<bool> ActivateAsync(EmployeeContactPersonsEntity entity, CancellationToken ct);
+    Task<bool> DeactivateAsync(EmployeeContactPersonsEntity entity, CancellationToken ct);
+    Task<bool> DeleteAsync(EmployeeContactPersonsEntity entity, CancellationToken ct);
 }

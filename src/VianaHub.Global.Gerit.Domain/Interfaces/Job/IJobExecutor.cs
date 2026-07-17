@@ -1,4 +1,4 @@
-﻿using VianaHub.Global.Gerit.Domain.Entities.Job;
+using VianaHub.Global.Gerit.Domain.Entities.Job;
 
 namespace VianaHub.Global.Gerit.Domain.Interfaces.Job;
 
@@ -10,7 +10,7 @@ public interface IJobExecutor
     /// <summary>
     /// Registra um job recorrente no Hangfire
     /// </summary>
-    Task<bool> RegisterRecurringJobAsync(JobDefinitionEntity jobDefinition);
+    Task<bool> RegisterRecurringJobAsync(JobDefinitionsEntity jobDefinition);
 
     /// <summary>
     /// Remove um job recorrente do Hangfire
@@ -20,5 +20,5 @@ public interface IJobExecutor
     /// <summary>
     /// Enfileira um job para execução imediata
     /// </summary>
-    Task<string> EnqueueJobAsync(JobDefinitionEntity jobDefinition);
+    Task<string> EnqueueJobAsync(JobDefinitionsEntity jobDefinition);
 }

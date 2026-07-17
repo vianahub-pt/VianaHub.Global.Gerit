@@ -36,7 +36,7 @@ public class SubscriptionEntityMapping : IEntityTypeConfiguration<SubscriptionEn
         builder.Property(x => x.BillingInterval)
             .HasColumnType("NVARCHAR(20)")
             .HasMaxLength(20)
-            .IsRequired(false);
+            .IsRequired();
 
         builder.Property(x => x.CurrencyCode)
             .HasColumnType("CHAR(3)")
@@ -98,8 +98,8 @@ public class SubscriptionEntityMapping : IEntityTypeConfiguration<SubscriptionEn
               .IsRequired();
 
         builder.Property(x => x.CreatedAt)
-            .HasColumnType("DATETIME2")
-            .HasDefaultValueSql("SYSDATETIME()")
+            .HasColumnType("DATETIME2(7)")
+            .HasDefaultValueSql("SYSUTCDATETIME()")
             .IsRequired();
 
         builder.Property(x => x.ModifiedBy)
@@ -107,7 +107,7 @@ public class SubscriptionEntityMapping : IEntityTypeConfiguration<SubscriptionEn
             .IsRequired(false);
 
         builder.Property(x => x.ModifiedAt)
-            .HasColumnType("DATETIME2")
+            .HasColumnType("DATETIME2(7)")
             .IsRequired(false);
 
         // Constraint: Se IsDeleted = 1, ento IsActive = 0

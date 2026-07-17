@@ -15,7 +15,7 @@ public class AcquisitionSourceTypeEntity : Entity
     public bool IsDeleted { get; private set; }
 
     // Navigation Properties
-    public IReadOnlyCollection<AcquisitionSourceTypeTranslationEntity> Translations { get; private set; }
+    public IReadOnlyCollection<AcquisitionSourceTypeTranslationsEntity> Translations { get; private set; }
 
     protected AcquisitionSourceTypeEntity() { }
 
@@ -31,7 +31,7 @@ public class AcquisitionSourceTypeEntity : Entity
         IsDeleted = false;
         CreatedBy = createdBy;
         CreatedAt = DateTime.UtcNow;
-        Translations = new List<AcquisitionSourceTypeTranslationEntity>();
+        Translations = new List<AcquisitionSourceTypeTranslationsEntity>();
     }
 
     public void Update(string name, string? description, int modifiedBy)

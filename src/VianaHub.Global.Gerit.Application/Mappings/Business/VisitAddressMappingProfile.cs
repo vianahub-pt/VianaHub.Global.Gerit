@@ -6,12 +6,12 @@ using VianaHub.Global.Gerit.Domain.Tools.Pagination;
 
 namespace VianaHub.Global.Gerit.Application.Mappings.Business;
 
-public class VisitAddressMappingProfile : Profile
+public class VisitAddressesMappingProfile : Profile
 {
-    public VisitAddressMappingProfile()
+    public VisitAddressesMappingProfile()
     {
-        CreateMap<VisitAddressEntity, VisitAddressResponse>()
+        CreateMap<VisitAddressesEntity, VisitAddressResponse>()
             .ForMember(dest => dest.Visit, opt => opt.MapFrom(src => src.Visit.Title)); 
-        CreateMap<ListPage<VisitAddressEntity>, ListPageResponse<VisitAddressResponse>>();
+        CreateMap<ListPage<VisitAddressesEntity>, ListPageResponse<VisitAddressResponse>>();
     }
 }

@@ -31,19 +31,9 @@ public class AcquisitionSourceTypeMapping : IEntityTypeConfiguration<Acquisition
             .HasDatabaseName("UQ_AcquisitionSourceTypes_Code")
             .IsUnique();
 
-        builder.Property(x => x.Name)
-            .HasColumnType("NVARCHAR(100)")
-            .HasMaxLength(100)
-            .IsRequired();
-
-        builder.HasIndex(x => x.Name)
-            .HasDatabaseName("UQ_AcquisitionSourceTypes_Name")
-            .IsUnique();
-
-        builder.Property(x => x.Description)
-            .HasColumnType("NVARCHAR(300)")
-            .HasMaxLength(300)
-            .IsRequired(false);
+        // Name e Description est�o na tabela de tradu��es (AcquisitionSourceTypeTranslations)
+        builder.Ignore(x => x.Name);
+        builder.Ignore(x => x.Description);
 
         builder.Property(x => x.IsActive)
             .HasDefaultValue(true)

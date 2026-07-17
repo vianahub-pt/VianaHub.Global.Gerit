@@ -7,7 +7,7 @@ namespace VianaHub.Global.Gerit.Domain.Validators.Business.ClientDocument;
 /// <summary>
 /// Validador para desativação de ClientDocument
 /// </summary>
-public class DeactivateClientDocumentValidator : AbstractValidator<ClientDocumentEntity>
+public class DeactivateClientDocumentValidator : AbstractValidator<ClientDocumentsEntity>
 {
     public DeactivateClientDocumentValidator(ILocalizationService localization)
     {

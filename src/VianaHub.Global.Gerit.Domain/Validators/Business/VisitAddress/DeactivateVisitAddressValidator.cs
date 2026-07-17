@@ -4,7 +4,7 @@ using VianaHub.Global.Gerit.Domain.Interfaces.Base;
 
 namespace VianaHub.Global.Gerit.Domain.Validators.Business.VisitAddress;
 
-public class DeactivateVisitAddressValidator : AbstractValidator<VisitAddressEntity>
+public class DeactivateVisitAddressValidator : AbstractValidator<VisitAddressesEntity>
 {
     public DeactivateVisitAddressValidator(ILocalizationService localization)
     {

@@ -9,7 +9,7 @@ public class ClientFiscalDataMapping : IEntityTypeConfiguration<ClientFiscalData
 {
     public void Configure(EntityTypeBuilder<ClientFiscalDataEntity> builder)
     {
-        builder.ToTable("ClientFiscalData");
+        builder.ToTable("ClientFiscalData", "dbo");
 
         builder.HasKey(x => x.Id);
         

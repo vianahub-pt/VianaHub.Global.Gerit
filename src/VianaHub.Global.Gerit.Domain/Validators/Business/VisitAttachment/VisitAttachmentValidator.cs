@@ -4,19 +4,19 @@ using VianaHub.Global.Gerit.Domain.Entities.Business;
 
 namespace VianaHub.Global.Gerit.Domain.Validators.Business.VisitAttachment;
 
-public class VisitAttachmentValidator : IEntityDomainValidator<VisitAttachmentEntity>
+public class VisitAttachmentValidator : IEntityDomainValidator<VisitAttachmentsEntity>
 {
-    public async Task<ValidationResult> ValidateForCreateAsync(VisitAttachmentEntity entity)
+    public async Task<ValidationResult> ValidateForCreateAsync(VisitAttachmentsEntity entity)
     {
         return await ValidateAsync(entity);
     }
 
-    public async Task<ValidationResult> ValidateForUpdateAsync(VisitAttachmentEntity entity)
+    public async Task<ValidationResult> ValidateForUpdateAsync(VisitAttachmentsEntity entity)
     {
         return await ValidateAsync(entity);
     }
 
-    public async Task<ValidationResult> ValidateForActivateAsync(VisitAttachmentEntity entity)
+    public async Task<ValidationResult> ValidateForActivateAsync(VisitAttachmentsEntity entity)
     {
         if (entity == null)
             return new ValidationResult(new[] { new ValidationFailure("Entity", "visit_attachment.entity.null") });
@@ -24,7 +24,7 @@ public class VisitAttachmentValidator : IEntityDomainValidator<VisitAttachmentEn
         return await Task.FromResult(new ValidationResult());
     }
 
-    public async Task<ValidationResult> ValidateForDeactivateAsync(VisitAttachmentEntity entity)
+    public async Task<ValidationResult> ValidateForDeactivateAsync(VisitAttachmentsEntity entity)
     {
         if (entity == null)
             return new ValidationResult(new[] { new ValidationFailure("Entity", "visit_attachment.entity.null") });
@@ -32,7 +32,7 @@ public class VisitAttachmentValidator : IEntityDomainValidator<VisitAttachmentEn
         return await Task.FromResult(new ValidationResult());
     }
 
-    public async Task<ValidationResult> ValidateForDeleteAsync(VisitAttachmentEntity entity)
+    public async Task<ValidationResult> ValidateForDeleteAsync(VisitAttachmentsEntity entity)
     {
         if (entity == null)
             return new ValidationResult(new[] { new ValidationFailure("Entity", "visit_attachment.entity.null") });
@@ -40,7 +40,7 @@ public class VisitAttachmentValidator : IEntityDomainValidator<VisitAttachmentEn
         return await Task.FromResult(new ValidationResult());
     }
 
-    public async Task<ValidationResult> ValidateForRevokeAsync(VisitAttachmentEntity entity)
+    public async Task<ValidationResult> ValidateForRevokeAsync(VisitAttachmentsEntity entity)
     {
         if (entity == null)
             return new ValidationResult(new[] { new ValidationFailure("Entity", "visit_attachment.entity.null") });
@@ -48,7 +48,7 @@ public class VisitAttachmentValidator : IEntityDomainValidator<VisitAttachmentEn
         return await Task.FromResult(new ValidationResult());
     }
 
-    private async Task<ValidationResult> ValidateAsync(VisitAttachmentEntity entity)
+    private async Task<ValidationResult> ValidateAsync(VisitAttachmentsEntity entity)
     {
         var errors = new List<ValidationFailure>();
 

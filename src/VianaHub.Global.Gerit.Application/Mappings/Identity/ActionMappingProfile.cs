@@ -23,6 +23,6 @@ public class ActionMappingProfile : Profile
 
         CreateMap<ListPage<ActionEntity>, ListPageResponse<ActionResponse>>();
 
-        CreateMap<JwtKeyEntity, JwtKeyResponse>();
+        CreateMap<JwtKeysEntity, JwtKeyResponse>();
     }
 }

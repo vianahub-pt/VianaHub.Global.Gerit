@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using CsvHelper;
 using CsvHelper.Configuration;
 using Microsoft.AspNetCore.Http;
@@ -83,7 +83,7 @@ public class VisitTeamFunctionAppService : IVisitTeamFunctionAppService
             return 0;
         }
 
-        var entity = new VisitTeamFunctionEntity(tenantId, request.Name, request.Description, _currentUser.GetUserId());
+        var entity = new VisitTeamFunctionsEntity(tenantId, request.Name, request.Description, _currentUser.GetUserId());
         var success = await _domain.CreateAsync(entity, ct);
         return success ? entity.Id : 0;
     }
@@ -266,7 +266,7 @@ public class VisitTeamFunctionAppService : IVisitTeamFunctionAppService
             }
 
             // Cria a entidade
-            var entity = new VisitTeamFunctionEntity(tenantId, item.Name, item.Description, _currentUser.GetUserId());
+            var entity = new VisitTeamFunctionsEntity(tenantId, item.Name, item.Description, _currentUser.GetUserId());
 
             // Tenta criar no domínio
             var success = await _domain.CreateAsync(entity, ct);

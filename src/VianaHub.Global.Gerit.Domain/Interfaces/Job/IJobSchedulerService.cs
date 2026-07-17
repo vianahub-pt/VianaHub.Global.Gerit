@@ -4,13 +4,13 @@ using VianaHub.Global.Gerit.Domain.Entities.Job;
 namespace VianaHub.Global.Gerit.Domain.Interfaces.Job;
 
 /// <summary>
-/// Abstração para agendamento e execução de jobs (adapter para Hangfire ou outros sistemas).
+/// Abstraï¿½ï¿½o para agendamento e execuï¿½ï¿½o de jobs (adapter para Hangfire ou outros sistemas).
 /// </summary>
 public interface IJobSchedulerService
 {
-    Task RegisterRecurringAsync(JobDefinitionEntity jobDef);
+    Task RegisterRecurringAsync(JobDefinitionsEntity jobDef);
 
     Task RemoveRecurringAsync(string jobName);
 
-    Task<string> EnqueueJobAsync(JobDefinitionEntity jobDef);
+    Task<string> EnqueueJobAsync(JobDefinitionsEntity jobDef);
 }

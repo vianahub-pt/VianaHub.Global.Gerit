@@ -94,7 +94,7 @@ public class TenantContactAppService : ITenantContactAppService
             return 0;
         }
 
-        var entity = new TenantContactEntity(
+        var entity = new TenantContactPersonsEntity(
             tenantId,
             request.Name,
             request.Email,

@@ -7,7 +7,7 @@ namespace VianaHub.Global.Gerit.Domain.Validators.Billing.TenantContact;
 /// <summary>
 /// Validador para exclusão de TenantContact
 /// </summary>
-public class DeleteTenantContactValidator : AbstractValidator<TenantContactEntity>
+public class DeleteTenantContactValidator : AbstractValidator<TenantContactPersonsEntity>
 {
     public DeleteTenantContactValidator(ILocalizationService localization)
     {

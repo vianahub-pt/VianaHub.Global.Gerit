@@ -7,23 +7,25 @@ namespace VianaHub.Global.Gerit.Domain.Entities.Identity;
 /// </summary>
 public class ResourceEntity : Entity
 {
+    public string? Code { get; private set; }
     public string? Name { get; private set; }
     public string? Description { get; set; }
     public bool IsActive { get; private set; }
     public bool IsDeleted { get; private set; }
 
     // Navigation Properties
-    private readonly List<RolePermissionEntity> _rolePermissions = new();
-    public IReadOnlyCollection<RolePermissionEntity> RolePermissions => _rolePermissions.AsReadOnly();
+    private readonly List<RolePermissionsEntity> _rolePermissions = new();
+    public IReadOnlyCollection<RolePermissionsEntity> RolePermissions => _rolePermissions.AsReadOnly();
 
     // Construtor protegido para o EF Core
     protected ResourceEntity() { }
 
     /// <summary>
-    /// Construtor para criação de um novo recurso
+    /// Construtor para criaï¿½ï¿½o de um novo recurso
     /// </summary>
-    public ResourceEntity(string name, string description, int createdBy)
+    public ResourceEntity(string code, string name, string description, int createdBy)
     {
+        Code = code;
         Name = name;
         Description = description;
         IsActive = true;
@@ -31,8 +33,9 @@ public class ResourceEntity : Entity
         CreatedBy = createdBy;
     }
 
-    public void Update(string name, string description, int modifiedBy)
+    public void Update(string code, string name, string description, int modifiedBy)
     {
+        Code = code;
         Name = name;
         Description = description;
         ModifiedBy = modifiedBy;

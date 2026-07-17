@@ -107,7 +107,7 @@ public class PlanAppService : IPlanAppService
         // Adiciona tradução padrão (pt-PT)
         if (!string.IsNullOrWhiteSpace(request.Name))
         {
-            var translation = new SubscriptionPlanTranslationEntity(
+            var translation = new SubscriptionPlanTranslationsEntity(
                 entity.Id, // Será atualizado pelo EF após o save
                 DefaultLanguage,
                 request.Name,
@@ -150,7 +150,7 @@ public class PlanAppService : IPlanAppService
             }
             else
             {
-                var translation = new SubscriptionPlanTranslationEntity(
+                var translation = new SubscriptionPlanTranslationsEntity(
                     entity.Id,
                     culture,
                     request.Name,
@@ -337,7 +337,7 @@ public class PlanAppService : IPlanAppService
             // Adiciona tradução padrão (pt-PT) do CSV
             if (!string.IsNullOrWhiteSpace(item.Name))
             {
-                var translation = new SubscriptionPlanTranslationEntity(entity.Id, DefaultLanguage, item.Name, item.Description);
+                var translation = new SubscriptionPlanTranslationsEntity(entity.Id, DefaultLanguage, item.Name, item.Description);
                 entity.AddTranslation(translation);
             }
 

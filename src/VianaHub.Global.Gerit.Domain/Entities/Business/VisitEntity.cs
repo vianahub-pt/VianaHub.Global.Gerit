@@ -28,11 +28,11 @@ public class VisitEntity : Entity, IAggregateRoot
     public ClientEntity Client { get; private set; }
     public StatusDefinitionEntity StatusDefinition { get; private set; }
 
-    private readonly List<VisitContactEntity> _contacts = new();
-    public IReadOnlyCollection<VisitContactEntity> Contacts => _contacts.AsReadOnly();
+    private readonly List<VisitContactPersonsEntity> _contacts = new();
+    public IReadOnlyCollection<VisitContactPersonsEntity> Contacts => _contacts.AsReadOnly();
 
-    private readonly List<VisitAddressEntity> _addresses = new();
-    public IReadOnlyCollection<VisitAddressEntity> Addresses => _addresses.AsReadOnly();
+    private readonly List<VisitAddressesEntity> _addresses = new();
+    public IReadOnlyCollection<VisitAddressesEntity> Addresses => _addresses.AsReadOnly();
 
     // Construtor protegido para o EF Core
     protected VisitEntity() { }
@@ -99,7 +99,7 @@ public class VisitEntity : Entity, IAggregateRoot
         ModifiedAt = DateTime.UtcNow;
     }
 
-    public void AddContact(VisitContactEntity contact)
+    public void AddContact(VisitContactPersonsEntity contact)
     {
         if (contact == null)
             throw new ArgumentNullException(nameof(contact));
@@ -107,7 +107,7 @@ public class VisitEntity : Entity, IAggregateRoot
         _contacts.Add(contact);
     }
 
-    public void AddAddress(VisitAddressEntity address)
+    public void AddAddress(VisitAddressesEntity address)
     {
         if (address == null)
             throw new ArgumentNullException(nameof(address));

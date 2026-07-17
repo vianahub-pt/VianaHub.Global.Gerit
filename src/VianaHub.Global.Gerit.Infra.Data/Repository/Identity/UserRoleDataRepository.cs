@@ -14,7 +14,7 @@ public class UserRoleDataRepository : IUserRoleDataRepository
         _context = context;
     }
 
-    public async Task<IList<UserRoleEntity>> GetAllAsync(int tenantId, CancellationToken ct)
+    public async Task<IList<UserRolesEntity>> GetAllAsync(int tenantId, CancellationToken ct)
     {
         return await _context.UserRoles
             .AsNoTracking()
@@ -24,7 +24,7 @@ public class UserRoleDataRepository : IUserRoleDataRepository
             .Where(x => x.TenantId == tenantId)
             .ToListAsync(ct);
     }
-    public async Task<UserRoleEntity> GetByIdAsync(int tenantId, int userId, int roleId, CancellationToken ct)
+    public async Task<UserRolesEntity> GetByIdAsync(int tenantId, int userId, int roleId, CancellationToken ct)
     {
         return await _context.UserRoles
             .AsNoTracking()
@@ -35,7 +35,7 @@ public class UserRoleDataRepository : IUserRoleDataRepository
                                       x.UserId == userId &&
                                       x.RoleId == roleId, ct);
     }
-    public async Task<IList<UserRoleEntity>> GetByUserAsync(int tenantId, int userId, CancellationToken ct)
+    public async Task<IList<UserRolesEntity>> GetByUserAsync(int tenantId, int userId, CancellationToken ct)
     {
         return await _context.UserRoles
             .AsNoTracking()
@@ -44,7 +44,7 @@ public class UserRoleDataRepository : IUserRoleDataRepository
             .Where(x => x.TenantId == tenantId && x.UserId == userId)
             .ToListAsync(ct);
     }
-    public async Task<IList<UserRoleEntity>> GetByRoleAsync(int tenantId, int roleId, CancellationToken ct)
+    public async Task<IList<UserRolesEntity>> GetByRoleAsync(int tenantId, int roleId, CancellationToken ct)
     {
         return await _context.UserRoles
             .AsNoTracking()
@@ -58,7 +58,7 @@ public class UserRoleDataRepository : IUserRoleDataRepository
         return await _context.UserRoles.AnyAsync(x => x.TenantId == tenantId && x.UserId == userId && x.RoleId == roleId, ct);
     }
 
-    public async Task<bool> CreateAsync(UserRoleEntity entity, CancellationToken ct)
+    public async Task<bool> CreateAsync(UserRolesEntity entity, CancellationToken ct)
     {
         await _context.UserRoles.AddAsync(entity, ct);
         return await _context.SaveChangesAsync(ct) > 0;

@@ -85,7 +85,7 @@ public class VisitAddressAppService : IVisitAddressAppService
             return 0;
         }
 
-        var entity = new VisitAddressEntity(
+        var entity = new VisitAddressesEntity(
             tenantId,
             request.VisitId,
             request.AddressTypeId,
@@ -296,7 +296,7 @@ public class VisitAddressAppService : IVisitAddressAppService
                 continue;
             }
 
-            var entity = new VisitAddressEntity(
+            var entity = new VisitAddressesEntity(
                 tenantId,
                 item.VisitId,
                 item.AddressTypeId,

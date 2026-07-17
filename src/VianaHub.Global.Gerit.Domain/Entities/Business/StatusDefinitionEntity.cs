@@ -20,7 +20,7 @@ public class StatusDefinitionEntity : Entity
     // Navigation Properties
     public TenantEntity Tenant { get; private set; } = null!;
     public StatusDomainEntity StatusDomain { get; private set; } = null!;
-    public ICollection<StatusDefinitionTranslationEntity> Translations { get; private set; }
+    public ICollection<StatusDefinitionTranslationsEntity> Translations { get; private set; }
 
     // Construtor protegido para o EF Core
     protected StatusDefinitionEntity() { }
@@ -39,7 +39,7 @@ public class StatusDefinitionEntity : Entity
         IsDeleted = false;
         CreatedBy = createdBy;
         CreatedAt = DateTime.UtcNow;
-        Translations = new List<StatusDefinitionTranslationEntity>();
+        Translations = new List<StatusDefinitionTranslationsEntity>();
     }
 
     public void Update(string code, int displayOrder, bool isSystem, int modifiedBy)

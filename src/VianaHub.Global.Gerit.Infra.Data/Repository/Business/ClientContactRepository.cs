@@ -16,7 +16,7 @@ public class ClientContactRepository : IClientContactDataRepository
         _context = context;
     }
 
-    public async Task<IEnumerable<ClientContactEntity>> GetAllAsync(int clientId, CancellationToken ct)
+    public async Task<IEnumerable<ClientContactPersonsEntity>> GetAllAsync(int clientId, CancellationToken ct)
     {
         return await _context.ClientContacts
             .AsNoTracking()
@@ -27,7 +27,7 @@ public class ClientContactRepository : IClientContactDataRepository
             .ToListAsync(ct);
     }
 
-    public async Task<ClientContactEntity?> GetByIdAsync(int clientId, int id, CancellationToken ct)
+    public async Task<ClientContactPersonsEntity?> GetByIdAsync(int clientId, int id, CancellationToken ct)
     {
         return await _context.ClientContacts
             .AsNoTracking()
@@ -36,7 +36,7 @@ public class ClientContactRepository : IClientContactDataRepository
             .FirstOrDefaultAsync(x => x.ClientId == clientId && x.Id == id && !x.IsDeleted, ct);
     }
 
-    public async Task<ListPage<ClientContactEntity>> GetPagedAsync(int clientId, PagedFilter filter, CancellationToken ct)
+    public async Task<ListPage<ClientContactPersonsEntity>> GetPagedAsync(int clientId, PagedFilter filter, CancellationToken ct)
     {
         var query = _context.ClientContacts
             .AsNoTracking()
@@ -64,7 +64,7 @@ public class ClientContactRepository : IClientContactDataRepository
 
         var result = await orderedQuery.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync(ct);
 
-        return new ListPage<ClientContactEntity>
+        return new ListPage<ClientContactPersonsEntity>
         {
             Items = result,
             PageNumber = pageNumber,
@@ -84,7 +84,7 @@ public class ClientContactRepository : IClientContactDataRepository
                            !x.IsDeleted, ct);
     }
 
-    public async Task<bool> AddAsync(ClientContactEntity entity, CancellationToken ct)
+    public async Task<bool> AddAsync(ClientContactPersonsEntity entity, CancellationToken ct)
     {
         await _context.ClientContacts
             .AddAsync(entity, ct);
@@ -92,7 +92,7 @@ public class ClientContactRepository : IClientContactDataRepository
         return await _context.SaveChangesAsync(ct) > 0;
     }
 
-    public async Task<bool> UpdateAsync(ClientContactEntity entity, CancellationToken ct)
+    public async Task<bool> UpdateAsync(ClientContactPersonsEntity entity, CancellationToken ct)
     {
         _context.ClientContacts
             .Update(entity);
