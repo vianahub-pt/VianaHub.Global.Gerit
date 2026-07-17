@@ -53,7 +53,7 @@ public class ClientAddressMapping : IEntityTypeConfiguration<ClientAddressEntity
         builder.Property(x => x.Neighborhood)
             .HasColumnType("NVARCHAR(100)")
             .HasMaxLength(100)
-            .IsRequired();
+            .IsRequired(false);
 
         builder.Property(x => x.City)
             .HasColumnType("NVARCHAR(100)")
@@ -113,8 +113,8 @@ public class ClientAddressMapping : IEntityTypeConfiguration<ClientAddressEntity
             .IsRequired();
 
         builder.Property(x => x.CreatedAt)
-            .HasColumnType("DATETIME2")
-            .HasDefaultValueSql("SYSDATETIME()")
+            .HasColumnType("DATETIME2(7)")
+            .HasDefaultValueSql("SYSUTCDATETIME()")
             .IsRequired();
 
         builder.Property(x => x.ModifiedBy)
@@ -122,7 +122,7 @@ public class ClientAddressMapping : IEntityTypeConfiguration<ClientAddressEntity
             .IsRequired(false);
 
         builder.Property(x => x.ModifiedAt)
-            .HasColumnType("DATETIME2")
+            .HasColumnType("DATETIME2(7)")
             .IsRequired(false);
 
         // Relacionamentos

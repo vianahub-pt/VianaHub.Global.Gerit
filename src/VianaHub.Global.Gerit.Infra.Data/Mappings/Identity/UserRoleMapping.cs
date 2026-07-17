@@ -14,9 +14,13 @@ public class UserRoleMapping : IEntityTypeConfiguration<UserRoleEntity>
     {
         builder.ToTable("UserRoles", "dbo");
 
-        // Chave prim�ria composta
-        builder.HasKey(x => new { x.TenantId, x.UserId, x.RoleId })
+        // Chave prim�ria (Identity PK conforme SQL)
+        builder.HasKey(x => x.Id)
             .HasName("PK_UserRoles");
+
+        builder.Property(x => x.Id)
+            .UseIdentityColumn(1, 1)
+            .IsRequired();
 
         // Propriedades
         builder.Property(x => x.TenantId)

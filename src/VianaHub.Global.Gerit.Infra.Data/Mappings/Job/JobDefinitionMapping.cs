@@ -26,10 +26,10 @@ public class JobDefinitionMapping : IEntityTypeConfiguration<JobDefinitionEntity
             .IsRequired();
         
         builder.Property(x => x.Description)
-            .HasMaxLength(1000);
+            .HasMaxLength(500);
         
         builder.Property(x => x.JobPurpose)
-            .HasMaxLength(1000);
+            .HasMaxLength(500);
         
         builder.Property(x => x.JobType)
             .HasMaxLength(200)
@@ -39,10 +39,11 @@ public class JobDefinitionMapping : IEntityTypeConfiguration<JobDefinitionEntity
             .HasMaxLength(100);
         
         builder.Property(x => x.CronExpression).
-            HasMaxLength(200);
+            HasMaxLength(100);
         
         builder.Property(x => x.TimeZoneId)
-            .HasMaxLength(150);
+            .HasColumnName("Timezone")
+            .HasMaxLength(100);
         
         builder.Property(x => x.ExecuteOnlyOnce)
             .IsRequired();
@@ -54,19 +55,19 @@ public class JobDefinitionMapping : IEntityTypeConfiguration<JobDefinitionEntity
             .IsRequired();
         
         builder.Property(x => x.Queue)
-            .HasMaxLength(100);
+            .HasMaxLength(50);
         
         builder.Property(x => x.MaxRetries)
             .IsRequired();
         
         builder.Property(x => x.JobConfiguration)
-            .HasColumnType("text");
+            .HasColumnType("NVARCHAR(MAX)");
         
         builder.Property(x => x.IsSystemJob)
             .IsRequired();
         
         builder.Property(x => x.HangfireJobId)
-            .HasMaxLength(200);
+            .HasMaxLength(100);
         
         builder.Property(x => x.LastRegisteredAt);
 

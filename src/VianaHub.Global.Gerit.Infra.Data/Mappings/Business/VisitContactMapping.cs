@@ -12,11 +12,11 @@ public class VisitContactMapping : IEntityTypeConfiguration<VisitContactEntity>
 {
     public void Configure(EntityTypeBuilder<VisitContactEntity> builder)
     {
-        builder.ToTable("VisitContacts", "dbo");
+        builder.ToTable("VisitContactPersons", "dbo");
 
         // Chave Prim�ria
         builder.HasKey(x => x.Id)
-            .HasName("PK_VisitContacts");
+            .HasName("PK_VisitContactPersons");
 
         builder.Property(x => x.Id)
             .UseIdentityColumn(1, 1)
@@ -40,23 +40,24 @@ public class VisitContactMapping : IEntityTypeConfiguration<VisitContactEntity>
             .IsRequired();
 
         builder.Property(x => x.Phone)
-            .HasColumnType("NVARCHAR(30)")
-            .HasMaxLength(30)
+            .HasColumnName("PhoneNumber")
+            .HasColumnType("NVARCHAR(50)")
+            .HasMaxLength(50)
             .IsRequired(false);
 
         builder.Property(x => x.JobTitle)
-            .HasColumnType("NVARCHAR(100)")
-            .HasMaxLength(100)
+            .HasColumnType("NVARCHAR(150)")
+            .HasMaxLength(150)
             .IsRequired(false);
 
         builder.Property(x => x.Department)
-            .HasColumnType("NVARCHAR(100)")
-            .HasMaxLength(100)
+            .HasColumnType("NVARCHAR(150)")
+            .HasMaxLength(150)
             .IsRequired(false);
 
         builder.Property(x => x.CellPhoneNumber)
-            .HasColumnType("NVARCHAR(30)")
-            .HasMaxLength(30)
+            .HasColumnType("NVARCHAR(50)")
+            .HasMaxLength(50)
             .IsRequired(false);
 
         builder.Property(x => x.IsCellPhoneWhatsapp)
@@ -94,7 +95,7 @@ public class VisitContactMapping : IEntityTypeConfiguration<VisitContactEntity>
 
         // �ndices
         builder.HasIndex(x => x.VisitId)
-            .HasDatabaseName("IX_VisitContacts_VisitId")
+            .HasDatabaseName("IX_VisitContactPersons_VisitId")
             .IncludeProperties(x => x.TenantId)
             .HasFilter("[IsDeleted] = 0");
 
@@ -102,7 +103,7 @@ public class VisitContactMapping : IEntityTypeConfiguration<VisitContactEntity>
         builder.HasOne(x => x.Tenant)
             .WithMany()
             .HasForeignKey(x => x.TenantId)
-            .HasConstraintName("FK_VisitContacts_Tenant")
+            .HasConstraintName("FK_VisitContactPersons_Tenant")
             .OnDelete(DeleteBehavior.Restrict);
 
         // Relacionamento com Visit configurado no VisitMapping

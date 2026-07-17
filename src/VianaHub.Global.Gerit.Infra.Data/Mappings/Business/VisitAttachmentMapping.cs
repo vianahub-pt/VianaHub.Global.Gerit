@@ -8,7 +8,7 @@ public class VisitAttachmentMapping : IEntityTypeConfiguration<VisitAttachmentEn
 {
     public void Configure(EntityTypeBuilder<VisitAttachmentEntity> builder)
     {
-        builder.ToTable("VisitAttachments");
+        builder.ToTable("VisitAttachments", "dbo");
 
         builder.HasKey(x => x.Id);
 

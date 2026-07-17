@@ -7,6 +7,7 @@ namespace VianaHub.Global.Gerit.Domain.Entities.Identity;
 /// </summary>
 public class ResourceEntity : Entity
 {
+    public string? Code { get; private set; }
     public string? Name { get; private set; }
     public string? Description { get; set; }
     public bool IsActive { get; private set; }
@@ -20,10 +21,11 @@ public class ResourceEntity : Entity
     protected ResourceEntity() { }
 
     /// <summary>
-    /// Construtor para criação de um novo recurso
+    /// Construtor para criaï¿½ï¿½o de um novo recurso
     /// </summary>
-    public ResourceEntity(string name, string description, int createdBy)
+    public ResourceEntity(string code, string name, string description, int createdBy)
     {
+        Code = code;
         Name = name;
         Description = description;
         IsActive = true;
@@ -31,8 +33,9 @@ public class ResourceEntity : Entity
         CreatedBy = createdBy;
     }
 
-    public void Update(string name, string description, int modifiedBy)
+    public void Update(string code, string name, string description, int modifiedBy)
     {
+        Code = code;
         Name = name;
         Description = description;
         ModifiedBy = modifiedBy;

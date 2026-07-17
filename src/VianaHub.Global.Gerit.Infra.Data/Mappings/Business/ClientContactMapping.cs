@@ -44,15 +44,13 @@ public class ClientContactMapping : IEntityTypeConfiguration<ClientContactEntity
             .HasMaxLength(50)
             .IsRequired(false);
 
-        builder.Property(x => x.IsWhatsapp)
-            .HasColumnType("BIT")
-            .HasDefaultValue(false)
-            .IsRequired();
+        // IsWhatsapp � coluna fantasma — a coluna real no SQL � IsCellPhoneWhatsapp
+        builder.Ignore(x => x.IsWhatsapp);
 
         builder.Property(x => x.Email)
             .HasColumnType("NVARCHAR(255)")
             .HasMaxLength(255)
-            .IsRequired();
+            .IsRequired(false);
 
         builder.Property(x => x.JobTitle)
             .HasColumnType("NVARCHAR(100)")

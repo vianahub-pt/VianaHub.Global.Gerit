@@ -4,10 +4,11 @@ using VianaHub.Global.Gerit.Domain.Entities.Billing;
 namespace VianaHub.Global.Gerit.Domain.Entities.Identity;
 
 /// <summary>
-/// Entidade que representa a permissão de uma Role sobre um Resource com uma ActionEntity
+/// Entidade que representa a permissï¿½o de uma Role sobre um Resource com uma ActionEntity
 /// </summary>
 public class RolePermissionEntity
 {
+    public int Id { get; private set; }
     public int TenantId { get; private set; }
     public int RoleId { get; private set; }
     public int ResourceId { get; private set; }
@@ -23,7 +24,7 @@ public class RolePermissionEntity
     protected RolePermissionEntity() { }
 
     /// <summary>
-    /// Construtor para criação de uma nova permissão de Role
+    /// Construtor para criaï¿½ï¿½o de uma nova permissï¿½o de Role
     /// </summary>
     public RolePermissionEntity(int tenantId, int roleId, int resourceId, int actionId)
     {

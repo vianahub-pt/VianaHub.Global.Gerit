@@ -6,7 +6,7 @@ namespace VianaHub.Global.Gerit.Infra.Data.Mappings.Identity;
 
 /// <summary>
 /// Mapeamento da entidade ActionEntity
-/// Ações possíveis no sistema (não possui TenantId pois são globais)
+/// Aï¿½ï¿½es possï¿½veis no sistema (nï¿½o possui TenantId pois sï¿½o globais)
 /// </summary>
 public class ActionMapping : IEntityTypeConfiguration<ActionEntity>
 {
@@ -14,7 +14,7 @@ public class ActionMapping : IEntityTypeConfiguration<ActionEntity>
     {
         builder.ToTable("Actions", "dbo");
 
-        // Chave Primária
+        // Chave Primï¿½ria
         builder.HasKey(x => x.Id)
             .HasName("PK_Actions");
 
@@ -23,9 +23,19 @@ public class ActionMapping : IEntityTypeConfiguration<ActionEntity>
             .IsRequired();
 
         // Propriedades
+        builder.Property(x => x.Code)
+            .HasColumnType("NVARCHAR(50)")
+            .HasMaxLength(50)
+            .IsRequired();
+
         builder.Property(x => x.Name)
             .HasColumnType("NVARCHAR(50)")
             .HasMaxLength(50)
+            .IsRequired();
+
+        builder.Property(x => x.Description)
+            .HasColumnType("NVARCHAR(500)")
+            .HasMaxLength(500)
             .IsRequired();
 
         builder.Property(x => x.IsActive)
@@ -51,10 +61,10 @@ public class ActionMapping : IEntityTypeConfiguration<ActionEntity>
             .HasColumnType("DATETIME2(7)")
             .IsRequired(false);
 
-        // Constraints únicos
-        builder.HasIndex(x => x.Name)
+        // Constraints ï¿½nicos
+        builder.HasIndex(x => x.Code)
             .IsUnique()
-            .HasDatabaseName("UQ_Actions_Name");
+            .HasDatabaseName("UQ_Actions_Code");
 
         // Relacionamentos
         builder.HasMany(x => x.RolePermissions)

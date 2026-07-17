@@ -6,7 +6,7 @@ namespace VianaHub.Global.Gerit.Infra.Data.Mappings.Identity;
 
 /// <summary>
 /// Mapeamento da entidade Resource
-/// Recursos do sistema (não possui TenantId pois são globais)
+/// Recursos do sistema (nï¿½o possui TenantId pois sï¿½o globais)
 /// </summary>
 public class ResourceMapping : IEntityTypeConfiguration<ResourceEntity>
 {
@@ -14,7 +14,7 @@ public class ResourceMapping : IEntityTypeConfiguration<ResourceEntity>
     {
         builder.ToTable("Resources", "dbo");
 
-        // Chave Primária
+        // Chave Primï¿½ria
         builder.HasKey(r => r.Id)
             .HasName("PK_Resources");
 
@@ -23,14 +23,19 @@ public class ResourceMapping : IEntityTypeConfiguration<ResourceEntity>
             .IsRequired();
 
         // Propriedades
+        builder.Property(r => r.Code)
+            .HasColumnType("NVARCHAR(50)")
+            .HasMaxLength(50)
+            .IsRequired();
+
         builder.Property(r => r.Name)
             .HasColumnType("NVARCHAR(100)")
             .HasMaxLength(100)
             .IsRequired();
 
         builder.Property(r => r.Description)
-            .HasColumnType("NVARCHAR(255)")
-            .HasMaxLength(255)
+            .HasColumnType("NVARCHAR(500)")
+            .HasMaxLength(500)
             .IsRequired();
 
         builder.Property(x => x.IsActive)
@@ -56,10 +61,10 @@ public class ResourceMapping : IEntityTypeConfiguration<ResourceEntity>
             .HasColumnType("DATETIME2(7)")
             .IsRequired(false);
 
-        // Constraints únicos
-        builder.HasIndex(r => r.Name)
+        // Constraints ï¿½nicos
+        builder.HasIndex(r => r.Code)
             .IsUnique()
-            .HasDatabaseName("UQ_Resources_Name");
+            .HasDatabaseName("UQ_Resources_Code");
 
         // Relacionamentos
         builder.HasMany(r => r.RolePermissions)

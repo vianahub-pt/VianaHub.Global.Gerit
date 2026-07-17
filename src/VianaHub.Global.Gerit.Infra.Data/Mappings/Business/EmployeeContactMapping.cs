@@ -12,11 +12,11 @@ public class EmployeeContactMapping : IEntityTypeConfiguration<EmployeeContactEn
 {
     public void Configure(EntityTypeBuilder<EmployeeContactEntity> builder)
     {
-        builder.ToTable("EmployeeContacts", "dbo");
+        builder.ToTable("EmployeeContactPersons", "dbo");
 
         // Chave Prim�ria
         builder.HasKey(x => x.Id)
-            .HasName("PK_EmployeeContacts");
+            .HasName("PK_EmployeeContactPersons");
 
         builder.Property(x => x.Id)
             .UseIdentityColumn(1, 1)
@@ -40,23 +40,24 @@ public class EmployeeContactMapping : IEntityTypeConfiguration<EmployeeContactEn
             .IsRequired();
 
         builder.Property(x => x.Phone)
-            .HasColumnType("NVARCHAR(30)")
-            .HasMaxLength(30)
+            .HasColumnName("PhoneNumber")
+            .HasColumnType("NVARCHAR(50)")
+            .HasMaxLength(50)
             .IsRequired(false);
 
         builder.Property(x => x.JobTitle)
-            .HasColumnType("NVARCHAR(100)")
-            .HasMaxLength(100)
+            .HasColumnType("NVARCHAR(150)")
+            .HasMaxLength(150)
             .IsRequired(false);
 
         builder.Property(x => x.Department)
-            .HasColumnType("NVARCHAR(100)")
-            .HasMaxLength(100)
+            .HasColumnType("NVARCHAR(150)")
+            .HasMaxLength(150)
             .IsRequired(false);
 
         builder.Property(x => x.CellPhoneNumber)
-            .HasColumnType("NVARCHAR(30)")
-            .HasMaxLength(30)
+            .HasColumnType("NVARCHAR(50)")
+            .HasMaxLength(50)
             .IsRequired(false);
 
         builder.Property(x => x.IsCellPhoneWhatsapp)
@@ -94,7 +95,7 @@ public class EmployeeContactMapping : IEntityTypeConfiguration<EmployeeContactEn
 
         // �ndices
         builder.HasIndex(x => x.EmployeeId)
-            .HasDatabaseName("IX_EmployeeContacts_EmployeeId")
+            .HasDatabaseName("IX_EmployeeContactPersons_EmployeeId")
             .IncludeProperties(x => x.TenantId)
             .HasFilter("[IsDeleted] = 0");
 
@@ -102,7 +103,7 @@ public class EmployeeContactMapping : IEntityTypeConfiguration<EmployeeContactEn
         builder.HasOne(x => x.Tenant)
             .WithMany()
             .HasForeignKey(x => x.TenantId)
-            .HasConstraintName("FK_EmployeeContacts_Tenant")
+            .HasConstraintName("FK_EmployeeContactPersons_Tenant")
             .OnDelete(DeleteBehavior.Restrict);
 
         // Relacionamento com Employee configurado no EmployeeMapping

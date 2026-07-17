@@ -12,11 +12,11 @@ public class TenantContactMapping : IEntityTypeConfiguration<TenantContactEntity
 {
     public void Configure(EntityTypeBuilder<TenantContactEntity> builder)
     {
-        builder.ToTable("TenantContacts", "dbo");
+        builder.ToTable("TenantContactPersons", "dbo");
 
         // Chave Prim�ria
         builder.HasKey(x => x.Id)
-            .HasName("PK_TenantContacts");
+            .HasName("PK_TenantContactPersons");
 
         builder.Property(x => x.Id)
             .UseIdentityColumn(1, 1)
@@ -37,23 +37,24 @@ public class TenantContactMapping : IEntityTypeConfiguration<TenantContactEntity
             .IsRequired();
 
         builder.Property(x => x.Phone)
-            .HasColumnType("NVARCHAR(30)")
-            .HasMaxLength(30)
+            .HasColumnName("PhoneNumber")
+            .HasColumnType("NVARCHAR(50)")
+            .HasMaxLength(50)
             .IsRequired(false);
 
         builder.Property(x => x.JobTitle)
-            .HasColumnType("NVARCHAR(100)")
-            .HasMaxLength(100)
+            .HasColumnType("NVARCHAR(150)")
+            .HasMaxLength(150)
             .IsRequired(false);
 
         builder.Property(x => x.Department)
-            .HasColumnType("NVARCHAR(100)")
-            .HasMaxLength(100)
+            .HasColumnType("NVARCHAR(150)")
+            .HasMaxLength(150)
             .IsRequired(false);
 
         builder.Property(x => x.CellPhoneNumber)
-            .HasColumnType("NVARCHAR(30)")
-            .HasMaxLength(30)
+            .HasColumnType("NVARCHAR(50)")
+            .HasMaxLength(50)
             .IsRequired(false);
 
         builder.Property(x => x.IsCellPhoneWhatsapp)
@@ -80,8 +81,8 @@ public class TenantContactMapping : IEntityTypeConfiguration<TenantContactEntity
               .IsRequired();
 
         builder.Property(x => x.CreatedAt)
-            .HasColumnType("DATETIME2")
-            .HasDefaultValueSql("SYSDATETIME()")
+            .HasColumnType("DATETIME2(7)")
+            .HasDefaultValueSql("SYSUTCDATETIME()")
             .IsRequired();
 
         builder.Property(x => x.ModifiedBy)
@@ -89,7 +90,7 @@ public class TenantContactMapping : IEntityTypeConfiguration<TenantContactEntity
             .IsRequired(false);
 
         builder.Property(x => x.ModifiedAt)
-            .HasColumnType("DATETIME2")
+            .HasColumnType("DATETIME2(7)")
             .IsRequired(false);
 
         // Indices
@@ -107,7 +108,7 @@ public class TenantContactMapping : IEntityTypeConfiguration<TenantContactEntity
 
         // Indice para consultas por tenant
         builder.HasIndex(x => x.TenantId)
-            .HasDatabaseName("IX_TenantContacts_TenantId")
+            .HasDatabaseName("IX_TenantContactPersons_TenantId")
             .HasFilter("[IsDeleted] = 0");
 
         // Relacionamentos configurados no TenantMapping

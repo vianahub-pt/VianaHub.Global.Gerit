@@ -6,7 +6,7 @@ namespace VianaHub.Global.Gerit.Infra.Data.Mappings.Identity;
 
 /// <summary>
 /// Mapeamento da entidade RolePermission
-/// Permissões por role com suporte a Row Level Security
+/// Permissï¿½es por role com suporte a Row Level Security
 /// </summary>
 public class RolePermissionMapping : IEntityTypeConfiguration<RolePermissionEntity>
 {
@@ -14,9 +14,13 @@ public class RolePermissionMapping : IEntityTypeConfiguration<RolePermissionEnti
     {
         builder.ToTable("RolePermissions", "dbo");
 
-        // Chave Primária
-        builder.HasKey(x => new { x.TenantId, x.RoleId, x.ResourceId, x.ActionId })
+        // Chave Primï¿½ria (Identity PK conforme SQL)
+        builder.HasKey(x => x.Id)
             .HasName("PK_RolePermissions");
+
+        builder.Property(x => x.Id)
+            .UseIdentityColumn(1, 1)
+            .IsRequired();
 
         // Propriedades
         builder.Property(x => x.TenantId)
@@ -31,12 +35,12 @@ public class RolePermissionMapping : IEntityTypeConfiguration<RolePermissionEnti
         builder.Property(x => x.ActionId)
             .IsRequired();
 
-        // Constraints únicos
+        // Constraints ï¿½nicos
         builder.HasIndex(x => new { x.TenantId, x.RoleId, x.ResourceId, x.ActionId })
             .IsUnique()
             .HasDatabaseName("UQ_RolePermissions");
 
-        // Índices
+        // ï¿½ndices
         builder.HasIndex(x => x.RoleId)
             .HasDatabaseName("IX_RolePermissions_RoleId")
             .IncludeProperties(x => new { x.TenantId, x.ResourceId, x.ActionId });

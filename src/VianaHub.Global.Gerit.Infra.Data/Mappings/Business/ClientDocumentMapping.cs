@@ -76,8 +76,8 @@ public class ClientDocumentMapping : IEntityTypeConfiguration<ClientDocumentEnti
             .IsRequired();
 
         builder.Property(x => x.CreatedAt)
-            .HasColumnType("DATETIME2")
-            .HasDefaultValueSql("SYSDATETIME()")
+            .HasColumnType("DATETIME2(7)")
+            .HasDefaultValueSql("SYSUTCDATETIME()")
             .IsRequired();
 
         builder.Property(x => x.ModifiedBy)
@@ -85,7 +85,7 @@ public class ClientDocumentMapping : IEntityTypeConfiguration<ClientDocumentEnti
             .IsRequired(false);
 
         builder.Property(x => x.ModifiedAt)
-            .HasColumnType("DATETIME2")
+            .HasColumnType("DATETIME2(7)")
             .IsRequired(false);
 
         // Relacionamento com Client (FK composta ClientId + TenantId)

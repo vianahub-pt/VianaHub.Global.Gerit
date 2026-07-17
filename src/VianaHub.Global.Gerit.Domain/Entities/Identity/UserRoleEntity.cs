@@ -4,10 +4,11 @@ using VianaHub.Global.Gerit.Domain.Entities.Billing;
 namespace VianaHub.Global.Gerit.Domain.Entities.Identity;
 
 /// <summary>
-/// Entidade que representa a relação entre User e Role
+/// Entidade que representa a relaï¿½ï¿½o entre User e Role
 /// </summary>
 public class UserRoleEntity
 {
+    public int Id { get; private set; }
     public int TenantId { get; private set; }
     public int UserId { get; private set; }
     public int RoleId { get; private set; }
@@ -21,7 +22,7 @@ public class UserRoleEntity
     protected UserRoleEntity() { }
 
     /// <summary>
-    /// Construtor para criação de uma nova relação User-Role
+    /// Construtor para criaï¿½ï¿½o de uma nova relaï¿½ï¿½o User-Role
     /// </summary>
     public UserRoleEntity(int tenantId, int userId, int roleId)
     {

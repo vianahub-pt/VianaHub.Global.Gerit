@@ -52,7 +52,7 @@ public class VisitAddressMapping : IEntityTypeConfiguration<VisitAddressEntity>
         builder.Property(x => x.Neighborhood)
             .HasColumnType("NVARCHAR(100)")
             .HasMaxLength(100)
-            .IsRequired();
+            .IsRequired(false);
 
         builder.Property(x => x.City)
             .HasColumnType("NVARCHAR(100)")
@@ -129,7 +129,8 @@ public class VisitAddressMapping : IEntityTypeConfiguration<VisitAddressEntity>
 
         builder.HasOne(x => x.Visit)
             .WithMany(i => i.Addresses)
-            .HasForeignKey(x => x.VisitId)
+            .HasForeignKey(x => new { x.VisitId, x.TenantId })
+            .HasPrincipalKey(v => new { v.Id, v.TenantId })
             .HasConstraintName("FK_VisitAddresses_Visit")
             .OnDelete(DeleteBehavior.NoAction);
 
