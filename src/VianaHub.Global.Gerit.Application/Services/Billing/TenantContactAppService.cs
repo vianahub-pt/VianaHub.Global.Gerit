@@ -84,18 +84,19 @@ public class TenantContactAppService : ITenantContactAppService
         return _mapper.Map<ListPageResponse<TenantContactResponse>>(paged);
     }
 
-    public async Task<int> CreateAsync(CreateTenantContactRequest request, CancellationToken ct)
+    public async Task<int> CreateAsync(int tenantId, CreateTenantContactRequest request, CancellationToken ct)
     {
-        var tenantId = _currentUser.GetTenantId();
+        // tenantId da rota é o tenant efetivo; fallback para o do utilizador autenticado se a rota não trouxer
+        var effectiveTenantId = tenantId > 0 ? tenantId : _currentUser.GetTenantId();
 
-        if (request.IsPrimary && await _repo.ExistsPrimaryContactAsync(tenantId, ct))
+        if (request.IsPrimary && await _repo.ExistsPrimaryContactAsync(effectiveTenantId, ct))
         {
             _notify.Add(_localization.GetMessage("Application.Service.TenantContact.Create.PrimaryAlreadyExists"), 409);
             return 0;
         }
 
         var entity = new TenantContactPersonsEntity(
-            tenantId,
+            effectiveTenantId,
             request.Name,
             request.Email,
             request.Phone,
@@ -111,10 +112,17 @@ public class TenantContactAppService : ITenantContactAppService
         return success ? entity.Id : 0;
     }
 
-    public async Task<bool> UpdateAsync(int id, UpdateTenantContactRequest request, CancellationToken ct)
+    public async Task<bool> UpdateAsync(int tenantId, int id, UpdateTenantContactRequest request, CancellationToken ct)
     {
         var entity = await _repo.GetByIdAsync(id, ct);
         if (entity == null || entity.IsDeleted || !entity.IsActive)
+        {
+            _notify.Add(_localization.GetMessage("Application.Service.TenantContact.Update.ResourceNotFound"), 410);
+            return false;
+        }
+
+        // Validação multi-tenant: o contacto deve pertencer ao tenant da rota
+        if (entity.TenantId != tenantId)
         {
             _notify.Add(_localization.GetMessage("Application.Service.TenantContact.Update.ResourceNotFound"), 410);
             return false;
@@ -134,10 +142,16 @@ public class TenantContactAppService : ITenantContactAppService
         return await _domain.UpdateAsync(entity, ct);
     }
 
-    public async Task<bool> SetAsPrimaryAsync(int id, CancellationToken ct)
+    public async Task<bool> SetAsPrimaryAsync(int tenantId, int id, CancellationToken ct)
     {
         var entity = await _repo.GetByIdAsync(id, ct);
         if (entity == null || entity.IsDeleted || !entity.IsActive)
+        {
+            _notify.Add(_localization.GetMessage("Application.Service.TenantContact.SetAsPrimary.ResourceNotFound"), 410);
+            return false;
+        }
+
+        if (entity.TenantId != tenantId)
         {
             _notify.Add(_localization.GetMessage("Application.Service.TenantContact.SetAsPrimary.ResourceNotFound"), 410);
             return false;
@@ -154,10 +168,16 @@ public class TenantContactAppService : ITenantContactAppService
         return await _repo.UpdateAsync(entity, ct);
     }
 
-    public async Task<bool> ActivateAsync(int id, CancellationToken ct)
+    public async Task<bool> ActivateAsync(int tenantId, int id, CancellationToken ct)
     {
         var entity = await _repo.GetByIdAsync(id, ct);
         if (entity == null || entity.IsDeleted)
+        {
+            _notify.Add(_localization.GetMessage("Application.Service.TenantContact.Activate.ResourceNotFound"), 410);
+            return false;
+        }
+
+        if (entity.TenantId != tenantId)
         {
             _notify.Add(_localization.GetMessage("Application.Service.TenantContact.Activate.ResourceNotFound"), 410);
             return false;
@@ -167,10 +187,16 @@ public class TenantContactAppService : ITenantContactAppService
         return await _domain.ActivateAsync(entity, ct);
     }
 
-    public async Task<bool> DeactivateAsync(int id, CancellationToken ct)
+    public async Task<bool> DeactivateAsync(int tenantId, int id, CancellationToken ct)
     {
         var entity = await _repo.GetByIdAsync(id, ct);
         if (entity == null || entity.IsDeleted || !entity.IsActive)
+        {
+            _notify.Add(_localization.GetMessage("Application.Service.TenantContact.Deactivate.ResourceNotFound"), 410);
+            return false;
+        }
+
+        if (entity.TenantId != tenantId)
         {
             _notify.Add(_localization.GetMessage("Application.Service.TenantContact.Deactivate.ResourceNotFound"), 410);
             return false;
@@ -180,10 +206,16 @@ public class TenantContactAppService : ITenantContactAppService
         return await _domain.DeactivateAsync(entity, ct);
     }
 
-    public async Task<bool> DeleteAsync(int id, CancellationToken ct)
+    public async Task<bool> DeleteAsync(int tenantId, int id, CancellationToken ct)
     {
         var entity = await _repo.GetByIdAsync(id, ct);
         if (entity == null || entity.IsDeleted)
+        {
+            _notify.Add(_localization.GetMessage("Application.Service.TenantContact.Delete.ResourceNotFound"), 410);
+            return false;
+        }
+
+        if (entity.TenantId != tenantId)
         {
             _notify.Add(_localization.GetMessage("Application.Service.TenantContact.Delete.ResourceNotFound"), 410);
             return false;

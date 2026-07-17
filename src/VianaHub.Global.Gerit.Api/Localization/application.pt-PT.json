@@ -722,10 +722,13 @@
   "Application.Service.Tenant.Update.ResourceNotFound": "Inquilino não encontrado",
 
   "Application.Service.TenantContact.Activate.ResourceNotFound": "Contacto do inquilino não encontrado",
+  "Application.Service.TenantContact.Create.PrimaryAlreadyExists": "Já existe um contacto primário para este inquilino",
   "Application.Service.TenantContact.Create.ResourceAlreadyExists": "Já existe um contacto com este e-mail para este inquilino",
   "Application.Service.TenantContact.Deactivate.ResourceNotFound": "Contacto do inquilino não encontrado",
   "Application.Service.TenantContact.Delete.ResourceNotFound": "Contacto do inquilino não encontrado",
   "Application.Service.TenantContact.GetById.ResourceNotFound": "Contacto do inquilino não encontrado ou inativo",
+  "Application.Service.TenantContact.GetPrimaryByTenantId.ResourceNotFound": "Contacto primário do inquilino não encontrado",
+  "Application.Service.TenantContact.SetAsPrimary.ResourceNotFound": "Contacto do inquilino não encontrado",
   "Application.Service.TenantContact.Update.ResourceAlreadyExists": "Já existe outro contacto com este e-mail para este inquilino",
   "Application.Service.TenantContact.Update.ResourceNotFound": "Contacto do inquilino não encontrado",
   "Application.Service.TenantContact.ValidateBulkItem.Email": "O e-mail é obrigatório no carregamento em massa",

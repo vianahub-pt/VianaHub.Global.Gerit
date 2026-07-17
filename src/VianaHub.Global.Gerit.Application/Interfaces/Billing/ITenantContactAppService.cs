@@ -13,10 +13,10 @@ public interface ITenantContactAppService
     Task<IEnumerable<TenantContactResponse>> GetAllAsync(CancellationToken ct);
     Task<IEnumerable<TenantContactResponse>> GetActiveAsync(CancellationToken ct);
     Task<ListPageResponse<TenantContactResponse>> GetPagedAsync(PagedFilterRequest request, CancellationToken ct);
-    Task<int> CreateAsync(CreateTenantContactRequest request, CancellationToken ct);
-    Task<bool> UpdateAsync(int id, UpdateTenantContactRequest request, CancellationToken ct);
-    Task<bool> SetAsPrimaryAsync(int id, CancellationToken ct);
-    Task<bool> ActivateAsync(int id, CancellationToken ct);
-    Task<bool> DeactivateAsync(int id, CancellationToken ct);
-    Task<bool> DeleteAsync(int id, CancellationToken ct);
+    Task<int> CreateAsync(int tenantId, CreateTenantContactRequest request, CancellationToken ct);
+    Task<bool> UpdateAsync(int tenantId, int id, UpdateTenantContactRequest request, CancellationToken ct);
+    Task<bool> SetAsPrimaryAsync(int tenantId, int id, CancellationToken ct);
+    Task<bool> ActivateAsync(int tenantId, int id, CancellationToken ct);
+    Task<bool> DeactivateAsync(int tenantId, int id, CancellationToken ct);
+    Task<bool> DeleteAsync(int tenantId, int id, CancellationToken ct);
 }

@@ -711,10 +711,13 @@
   "Application.Service.Tenant.Update.ResourceNotFound": "Tenant not found",
 
   "Application.Service.TenantContact.Activate.ResourceNotFound": "Tenant contact not found",
+  "Application.Service.TenantContact.Create.PrimaryAlreadyExists": "A primary contact already exists for this tenant",
   "Application.Service.TenantContact.Create.ResourceAlreadyExists": "A contact with this email already exists for this tenant",
   "Application.Service.TenantContact.Deactivate.ResourceNotFound": "Tenant contact not found",
   "Application.Service.TenantContact.Delete.ResourceNotFound": "Tenant contact not found",
   "Application.Service.TenantContact.GetById.ResourceNotFound": "Tenant contact not found or inactive",
+  "Application.Service.TenantContact.GetPrimaryByTenantId.ResourceNotFound": "Primary tenant contact not found",
+  "Application.Service.TenantContact.SetAsPrimary.ResourceNotFound": "Tenant contact not found",
   "Application.Service.TenantContact.Update.ResourceAlreadyExists": "Another contact with this email already exists for this tenant",
   "Application.Service.TenantContact.Update.ResourceNotFound": "Tenant contact not found",
   "Application.Service.TenantContact.ValidateBulkItem.Email": "Email is required in bulk upload",
