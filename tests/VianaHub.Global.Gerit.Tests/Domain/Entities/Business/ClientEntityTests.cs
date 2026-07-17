@@ -11,8 +11,8 @@ public class ClientEntityTests
     [Trait("Domain", "")]
     public void ClientContact_SetPrimaryAndRemovePrimary_WorksAsExpected()
     {
-        var first = new ClientContactEntity(1, 0, "Contato 1", "111", "", true, "c1@test.com", false, 7);
-        var second = new ClientContactEntity(1, 0, "Contato 2", "222", "", true, "c2@test.com", false, 7);
+        var first = new ClientContactPersonsEntity(1, 0, "Contato 1", "111", "", true, "c1@test.com", false, 7);
+        var second = new ClientContactPersonsEntity(1, 0, "Contato 2", "222", "", true, "c2@test.com", false, 7);
 
         // Set primary on first
         first.SetPrimary(7);
@@ -31,8 +31,8 @@ public class ClientEntityTests
     [Trait("Domain", "")]
     public void ClientAddress_SetPrimaryAndRemovePrimary_WorksAsExpected()
     {
-        var first = new ClientAddressEntity(1, 0, 1, "PT", "Rua 1", "10", "", "Centro", "Porto", "Porto", "4000-001", null, null, "", false, 7);
-        var second = new ClientAddressEntity(1, 0, 2, "PT", "Rua 2", "20", "", "Centro", "Lisboa", "Lisboa", "1000-001", null, null, "", false, 7);
+        var first = new ClientAddressesEntity(1, 0, 1, "PT", "Rua 1", "10", "", "Centro", "Porto", "Porto", "4000-001", null, null, "", false, 7);
+        var second = new ClientAddressesEntity(1, 0, 2, "PT", "Rua 2", "20", "", "Centro", "Lisboa", "Lisboa", "1000-001", null, null, "", false, 7);
 
         first.SetPrimary(7);
         Assert.True(first.IsPrimary);

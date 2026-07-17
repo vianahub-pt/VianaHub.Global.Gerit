@@ -13,7 +13,7 @@ public class StatusDomainEntity : Entity
     public bool IsDeleted { get; private set; }
 
     // Navigation Properties
-    public ICollection<StatusDomainTranslationEntity> Translations { get; private set; }
+    public ICollection<StatusDomainTranslationsEntity> Translations { get; private set; }
 
     // Construtor protegido para o EF Core
     protected StatusDomainEntity() { }
@@ -28,7 +28,7 @@ public class StatusDomainEntity : Entity
         IsDeleted = false;
         CreatedBy = createdBy;
         CreatedAt = DateTime.UtcNow;
-        Translations = new List<StatusDomainTranslationEntity>();
+        Translations = new List<StatusDomainTranslationsEntity>();
     }
 
     public void UpdateCode(string code, int modifiedBy)

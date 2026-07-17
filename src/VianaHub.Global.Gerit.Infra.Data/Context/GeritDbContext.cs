@@ -16,12 +16,12 @@ public class GeritDbContext : DbContext
 
     #region DbSets - Core Multi-Tenant Tables
     public DbSet<SubscriptionPlanEntity> SubscriptionPlans { get; set; }
-    public DbSet<SubscriptionPlanTranslationEntity> SubscriptionPlanTranslations { get; set; }
-    public DbSet<SubscriptionPlanFileRuleEntity> SubscriptionPlanFileRules { get; set; }
+    public DbSet<SubscriptionPlanTranslationsEntity> SubscriptionPlanTranslations { get; set; }
+    public DbSet<SubscriptionPlanFileRulesEntity> SubscriptionPlanFileRules { get; set; }
     public DbSet<SubscriptionEntity> Subscriptions { get; set; }
     public DbSet<TenantEntity> Tenants { get; set; }
-    public DbSet<TenantContactEntity> TenantContacts { get; set; }
-    public DbSet<TenantAddressEntity> TenantAddresses { get; set; }
+    public DbSet<TenantContactPersonsEntity> TenantContacts { get; set; }
+    public DbSet<TenantAddressesEntity> TenantAddresses { get; set; }
     public DbSet<TenantFiscalDataEntity> TenantFiscalData { get; set; }
     public DbSet<UserEntity> Users { get; set; }
     #endregion
@@ -30,32 +30,32 @@ public class GeritDbContext : DbContext
     public DbSet<RoleEntity> Roles { get; set; }
     public DbSet<ResourceEntity> Resources { get; set; }
     public DbSet<ActionEntity> Actions { get; set; }
-    public DbSet<RolePermissionEntity> RolePermissions { get; set; }
-    public DbSet<UserRoleEntity> UserRoles { get; set; }
-    public DbSet<JwtKeyEntity> JwtKeys { get; set; }
+    public DbSet<RolePermissionsEntity> RolePermissions { get; set; }
+    public DbSet<UserRolesEntity> UserRoles { get; set; }
+    public DbSet<JwtKeysEntity> JwtKeys { get; set; }
     #endregion
 
     #region DbSets - Global Catalog Tables
     public DbSet<PartyTypeEntity> PartyTypes { get; set; }
-    public DbSet<PartyTypeTranslationEntity> PartyTypeTranslations { get; set; }
+    public DbSet<PartyTypeTranslationsEntity> PartyTypeTranslations { get; set; }
     public DbSet<AcquisitionSourceTypeEntity> AcquisitionSourceTypes { get; set; }
-    public DbSet<AcquisitionSourceTypeTranslationEntity> AcquisitionSourceTypeTranslations { get; set; }
+    public DbSet<AcquisitionSourceTypeTranslationsEntity> AcquisitionSourceTypeTranslations { get; set; }
     #endregion
 
     #region DbSets - Domain Tables
     public DbSet<AddressTypeEntity> AddressTypes { get; set; }
-    public DbSet<AddressTypeTranslationEntity> AddressTypeTranslations { get; set; }
+    public DbSet<AddressTypeTranslationsEntity> AddressTypeTranslations { get; set; }
     public DbSet<ClientEntity> Clients { get; set; }
-    public DbSet<ClientContactEntity> ClientContacts { get; set; }
-    public DbSet<ClientAddressEntity> ClientAddresses { get; set; }
+    public DbSet<ClientContactPersonsEntity> ClientContacts { get; set; }
+    public DbSet<ClientAddressesEntity> ClientAddresses { get; set; }
     public DbSet<ClientFiscalDataEntity> ClientFiscalData { get; set; }
     public DbSet<TeamEntity> Teams { get; set; }
     public DbSet<EmployeeEntity> Employees { get; set; }
-    public DbSet<EmployeeContactEntity> EmployeeContacts { get; set; }
-    public DbSet<EmployeeAddressEntity> EmployeeAddresses { get; set; }
+    public DbSet<EmployeeContactPersonsEntity> EmployeeContacts { get; set; }
+    public DbSet<EmployeeAddressesEntity> EmployeeAddresses { get; set; }
     public DbSet<EmployeeFiscalDataEntity> EmployeeFiscalData { get; set; }
     public DbSet<EmployeeTeamEntity> EmployeeTeams { get; set; }
-    public DbSet<VisitTeamFunctionEntity> VisitTeamFunctions { get; set; }
+    public DbSet<VisitTeamFunctionsEntity> VisitTeamFunctions { get; set; }
     public DbSet<EquipmentEntity> Equipments { get; set; }
     public DbSet<EquipmentTypeEntity> EquipmentTypes { get; set; }
     public DbSet<VehicleEntity> Vehicles { get; set; }
@@ -63,23 +63,23 @@ public class GeritDbContext : DbContext
     public DbSet<VisitTeamEntity> VisitTeams { get; set; }
     public DbSet<VisitTeamEmployeeEntity> VisitTeamEmployees { get; set; }
     public DbSet<VisitTeamEquipmentEntity> VisitTeamEquipments { get; set; }
-    public DbSet<VisitContactEntity> VisitContacts { get; set; }
-    public DbSet<VisitAddressEntity> VisitAddresses { get; set; }
+    public DbSet<VisitContactPersonsEntity> VisitContacts { get; set; }
+    public DbSet<VisitAddressesEntity> VisitAddresses { get; set; }
     public DbSet<VisitTeamVehicleEntity> VisitTeamVehicles { get; set; }
-    public DbSet<VisitAttachmentEntity> VisitAttachments { get; set; }
+    public DbSet<VisitAttachmentsEntity> VisitAttachments { get; set; }
     public DbSet<DocumentTypeEntity> DocumentTypes { get; set; }
-    public DbSet<DocumentTypeTranslationEntity> DocumentTypeTranslations { get; set; }
+    public DbSet<DocumentTypeTranslationsEntity> DocumentTypeTranslations { get; set; }
     public DbSet<FileTypeEntity> FileTypes { get; set; }
-    public DbSet<FileTypeTranslationEntity> FileTypeTranslations { get; set; }
+    public DbSet<FileTypeTranslationsEntity> FileTypeTranslations { get; set; }
     public DbSet<StatusDomainEntity> StatusDomains { get; set; }
-    public DbSet<StatusDomainTranslationEntity> StatusDomainTranslations { get; set; }
+    public DbSet<StatusDomainTranslationsEntity> StatusDomainTranslations { get; set; }
     public DbSet<StatusDefinitionEntity> StatusDefinitions { get; set; }
-    public DbSet<StatusDefinitionTranslationEntity> StatusDefinitionTranslations { get; set; }
-    public DbSet<TenantDocumentEntity> TenantDocuments { get; set; }
-    public DbSet<ClientDocumentEntity> ClientDocuments { get; set; }
+    public DbSet<StatusDefinitionTranslationsEntity> StatusDefinitionTranslations { get; set; }
+    public DbSet<TenantDocumentsEntity> TenantDocuments { get; set; }
+    public DbSet<ClientDocumentsEntity> ClientDocuments { get; set; }
 
     public DbSet<UserPreferencesEntity> UserPreferences { get; set; }
-    public DbSet<RefreshTokenEntity> RefreshTokens { get; set; }
+    public DbSet<RefreshTokensEntity> RefreshTokens { get; set; }
     #endregion
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

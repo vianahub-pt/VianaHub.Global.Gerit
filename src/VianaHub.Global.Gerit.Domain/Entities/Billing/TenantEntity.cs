@@ -10,8 +10,8 @@ namespace VianaHub.Global.Gerit.Domain.Entities.Billing;
 /// </summary>
 public class TenantEntity : Entity, IAggregateRoot
 {
-    private readonly List<TenantContactEntity> _contacts = [];
-    private readonly List<TenantAddressEntity> _addresses = [];
+    private readonly List<TenantContactPersonsEntity> _contacts = [];
+    private readonly List<TenantAddressesEntity> _addresses = [];
     private readonly List<TenantFiscalDataEntity> _fiscalData = [];
     private readonly List<UserEntity> _users = [];
 
@@ -28,8 +28,8 @@ public class TenantEntity : Entity, IAggregateRoot
     public bool IsDeleted { get; private set; }
 
     // Partes internas do agregado
-    public IReadOnlyCollection<TenantContactEntity> Contacts => _contacts.AsReadOnly();
-    public IReadOnlyCollection<TenantAddressEntity> Addresses => _addresses.AsReadOnly();
+    public IReadOnlyCollection<TenantContactPersonsEntity> Contacts => _contacts.AsReadOnly();
+    public IReadOnlyCollection<TenantAddressesEntity> Addresses => _addresses.AsReadOnly();
     public IReadOnlyCollection<TenantFiscalDataEntity> FiscalData => _fiscalData.AsReadOnly();
     public IReadOnlyCollection<UserEntity> Users => _users.AsReadOnly();
 
@@ -89,7 +89,7 @@ public class TenantEntity : Entity, IAggregateRoot
         ModifiedAt = DateTime.UtcNow;
     }
 
-    public void AddAddress(TenantAddressEntity address, int createdBy)
+    public void AddAddress(TenantAddressesEntity address, int createdBy)
     {
         if (address == null)
             throw new ArgumentNullException(nameof(address));

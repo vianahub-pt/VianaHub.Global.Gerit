@@ -24,8 +24,8 @@ public class UserEntity : Entity
     // Navigation Properties
     public TenantEntity Tenant { get; private set; }
 
-    private readonly List<UserRoleEntity> _userRoles = new();
-    public IReadOnlyCollection<UserRoleEntity> UserRoles => _userRoles.AsReadOnly();
+    private readonly List<UserRolesEntity> _userRoles = new();
+    public IReadOnlyCollection<UserRolesEntity> UserRoles => _userRoles.AsReadOnly();
 
     // Construtor protegido para o EF Core
     protected UserEntity() { }

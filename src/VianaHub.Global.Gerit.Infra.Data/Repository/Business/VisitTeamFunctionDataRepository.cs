@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using VianaHub.Global.Gerit.Domain.Entities.Business;
 using VianaHub.Global.Gerit.Domain.Interfaces.Business;
 using VianaHub.Global.Gerit.Domain.ReadModels;
@@ -16,19 +16,19 @@ public class VisitTeamFunctionDataRepository : IVisitTeamFunctionDataRepository
         _context = context;
     }
 
-    public async Task<VisitTeamFunctionEntity> GetByIdAsync(int id, CancellationToken ct)
+    public async Task<VisitTeamFunctionsEntity> GetByIdAsync(int id, CancellationToken ct)
     {
-        return await _context.Set<VisitTeamFunctionEntity>().AsNoTracking().FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted, ct);
+        return await _context.Set<VisitTeamFunctionsEntity>().AsNoTracking().FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted, ct);
     }
 
-    public async Task<IEnumerable<VisitTeamFunctionEntity>> GetAllAsync(CancellationToken ct)
+    public async Task<IEnumerable<VisitTeamFunctionsEntity>> GetAllAsync(CancellationToken ct)
     {
-        return await _context.Set<VisitTeamFunctionEntity>().AsNoTracking().Where(x => !x.IsDeleted).OrderBy(x => x.Name).ToListAsync(ct);
+        return await _context.Set<VisitTeamFunctionsEntity>().AsNoTracking().Where(x => !x.IsDeleted).OrderBy(x => x.Name).ToListAsync(ct);
     }
 
-    public async Task<ListPage<VisitTeamFunctionEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct)
+    public async Task<ListPage<VisitTeamFunctionsEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct)
     {
-        var query = _context.Set<VisitTeamFunctionEntity>().AsNoTracking().Where(x => !x.IsDeleted);
+        var query = _context.Set<VisitTeamFunctionsEntity>().AsNoTracking().Where(x => !x.IsDeleted);
 
         if (!string.IsNullOrWhiteSpace(request.Search))
         {
@@ -49,7 +49,7 @@ public class VisitTeamFunctionDataRepository : IVisitTeamFunctionDataRepository
 
         var result = await orderedQuery.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync(ct);
 
-        return new ListPage<VisitTeamFunctionEntity>
+        return new ListPage<VisitTeamFunctionsEntity>
         {
             Items = result,
             PageNumber = pageNumber,
@@ -61,23 +61,23 @@ public class VisitTeamFunctionDataRepository : IVisitTeamFunctionDataRepository
 
     public async Task<bool> ExistsByIdAsync(int id, CancellationToken ct)
     {
-        return await _context.Set<VisitTeamFunctionEntity>().AsNoTracking().AnyAsync(x => x.Id == id && !x.IsDeleted, ct);
+        return await _context.Set<VisitTeamFunctionsEntity>().AsNoTracking().AnyAsync(x => x.Id == id && !x.IsDeleted, ct);
     }
 
     public async Task<bool> ExistsByNameAsync(int tenantId, string name, CancellationToken ct)
     {
-        return await _context.Set<VisitTeamFunctionEntity>().AsNoTracking().AnyAsync(x => x.TenantId == tenantId && x.Name == name && !x.IsDeleted, ct);
+        return await _context.Set<VisitTeamFunctionsEntity>().AsNoTracking().AnyAsync(x => x.TenantId == tenantId && x.Name == name && !x.IsDeleted, ct);
     }
 
-    public async Task<bool> AddAsync(VisitTeamFunctionEntity entity, CancellationToken ct)
+    public async Task<bool> AddAsync(VisitTeamFunctionsEntity entity, CancellationToken ct)
     {
-        await _context.Set<VisitTeamFunctionEntity>().AddAsync(entity, ct);
+        await _context.Set<VisitTeamFunctionsEntity>().AddAsync(entity, ct);
         return await _context.SaveChangesAsync(ct) > 0;
     }
 
-    public async Task<bool> UpdateAsync(VisitTeamFunctionEntity entity, CancellationToken ct)
+    public async Task<bool> UpdateAsync(VisitTeamFunctionsEntity entity, CancellationToken ct)
     {
-        _context.Set<VisitTeamFunctionEntity>().Update(entity);
+        _context.Set<VisitTeamFunctionsEntity>().Update(entity);
         return await _context.SaveChangesAsync(ct) > 0;
     }
 }

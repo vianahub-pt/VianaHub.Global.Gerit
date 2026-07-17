@@ -86,7 +86,7 @@ public class ClientAddressAppService : IClientAddressAppService
             return 0;
         }
 
-        var clientAddress = new ClientAddressEntity(
+        var clientAddress = new ClientAddressesEntity(
             TenantId,
             clientId,
             request.AddressTypeId,
@@ -287,7 +287,7 @@ public class ClientAddressAppService : IClientAddressAppService
                 continue;
             }
 
-            var entity = new ClientAddressEntity(
+            var entity = new ClientAddressesEntity(
                 tenantId,
                 clientId,
                 item.AddressTypeId,

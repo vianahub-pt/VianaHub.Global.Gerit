@@ -16,26 +16,26 @@ public class VisitAttachmentDataRepository : IVisitAttachmentDataRepository
         _context = context;
     }
 
-    public async Task<VisitAttachmentEntity> GetByIdAsync(int id, CancellationToken ct)
+    public async Task<VisitAttachmentsEntity> GetByIdAsync(int id, CancellationToken ct)
     {
-        return await _context.Set<VisitAttachmentEntity>()
+        return await _context.Set<VisitAttachmentsEntity>()
             .AsNoTracking()
             .Include(x => x.FileType)
             .Include(x => x.Visit)
             .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted, ct);
     }
 
-    public async Task<VisitAttachmentEntity> GetByPublicIdAsync(Guid publicId, CancellationToken ct)
+    public async Task<VisitAttachmentsEntity> GetByPublicIdAsync(Guid publicId, CancellationToken ct)
     {
-        return await _context.Set<VisitAttachmentEntity>()
+        return await _context.Set<VisitAttachmentsEntity>()
             .AsNoTracking()
             .Include(x => x.FileType)
             .FirstOrDefaultAsync(x => x.PublicId == publicId && !x.IsDeleted, ct);
     }
 
-    public async Task<IEnumerable<VisitAttachmentEntity>> GetAllAsync(CancellationToken ct)
+    public async Task<IEnumerable<VisitAttachmentsEntity>> GetAllAsync(CancellationToken ct)
     {
-        return await _context.Set<VisitAttachmentEntity>()
+        return await _context.Set<VisitAttachmentsEntity>()
             .AsNoTracking()
             .Include(x => x.FileType)
             .Where(x => !x.IsDeleted)
@@ -44,9 +44,9 @@ public class VisitAttachmentDataRepository : IVisitAttachmentDataRepository
             .ToListAsync(ct);
     }
 
-    public async Task<IEnumerable<VisitAttachmentEntity>> GetByVisitIdAsync(int visitId, CancellationToken ct)
+    public async Task<IEnumerable<VisitAttachmentsEntity>> GetByVisitIdAsync(int visitId, CancellationToken ct)
     {
-        return await _context.Set<VisitAttachmentEntity>()
+        return await _context.Set<VisitAttachmentsEntity>()
             .AsNoTracking()
             .Include(x => x.FileType)
             .Where(x => x.VisitId == visitId && !x.IsDeleted)
@@ -56,17 +56,17 @@ public class VisitAttachmentDataRepository : IVisitAttachmentDataRepository
             .ToListAsync(ct);
     }
 
-    public async Task<VisitAttachmentEntity> GetPrimaryByVisitIdAsync(int visitId, CancellationToken ct)
+    public async Task<VisitAttachmentsEntity> GetPrimaryByVisitIdAsync(int visitId, CancellationToken ct)
     {
-        return await _context.Set<VisitAttachmentEntity>()
+        return await _context.Set<VisitAttachmentsEntity>()
             .AsNoTracking()
             .Include(x => x.FileType)
             .FirstOrDefaultAsync(x => x.VisitId == visitId && x.IsPrimary && x.IsActive && !x.IsDeleted, ct);
     }
 
-    public async Task<ListPage<VisitAttachmentEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct)
+    public async Task<ListPage<VisitAttachmentsEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct)
     {
-        var query = _context.Set<VisitAttachmentEntity>()
+        var query = _context.Set<VisitAttachmentsEntity>()
             .AsNoTracking()
             .Include(x => x.FileType)
             .Include(x => x.Visit)
@@ -91,7 +91,7 @@ public class VisitAttachmentDataRepository : IVisitAttachmentDataRepository
 
         var result = await orderedQuery.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync(ct);
 
-        return new ListPage<VisitAttachmentEntity>
+        return new ListPage<VisitAttachmentsEntity>
         {
             Items = result,
             PageNumber = pageNumber,
@@ -103,40 +103,40 @@ public class VisitAttachmentDataRepository : IVisitAttachmentDataRepository
 
     public async Task<bool> ExistsByIdAsync(int id, CancellationToken ct)
     {
-        return await _context.Set<VisitAttachmentEntity>()
+        return await _context.Set<VisitAttachmentsEntity>()
             .AsNoTracking()
             .AnyAsync(x => x.Id == id && !x.IsDeleted, ct);
     }
 
     public async Task<bool> ExistsByS3KeyAsync(int tenantId, string s3Key, CancellationToken ct)
     {
-        return await _context.Set<VisitAttachmentEntity>()
+        return await _context.Set<VisitAttachmentsEntity>()
             .AsNoTracking()
             .AnyAsync(x => x.TenantId == tenantId && x.S3Key == s3Key && !x.IsDeleted, ct);
     }
 
     public async Task<bool> HasPrimaryAttachmentAsync(int visitId, CancellationToken ct)
     {
-        return await _context.Set<VisitAttachmentEntity>()
+        return await _context.Set<VisitAttachmentsEntity>()
             .AsNoTracking()
             .AnyAsync(x => x.VisitId == visitId && x.IsPrimary && x.IsActive && !x.IsDeleted, ct);
     }
 
-    public async Task<bool> AddAsync(VisitAttachmentEntity entity, CancellationToken ct)
+    public async Task<bool> AddAsync(VisitAttachmentsEntity entity, CancellationToken ct)
     {
-        await _context.Set<VisitAttachmentEntity>().AddAsync(entity, ct);
+        await _context.Set<VisitAttachmentsEntity>().AddAsync(entity, ct);
         return await _context.SaveChangesAsync(ct) > 0;
     }
 
-    public async Task<bool> UpdateAsync(VisitAttachmentEntity entity, CancellationToken ct)
+    public async Task<bool> UpdateAsync(VisitAttachmentsEntity entity, CancellationToken ct)
     {
-        _context.Set<VisitAttachmentEntity>().Update(entity);
+        _context.Set<VisitAttachmentsEntity>().Update(entity);
         return await _context.SaveChangesAsync(ct) > 0;
     }
 
     public async Task<long> GetTotalSizeByVisitIdAsync(int visitId, CancellationToken ct)
     {
-        return await _context.Set<VisitAttachmentEntity>()
+        return await _context.Set<VisitAttachmentsEntity>()
             .AsNoTracking()
             .Where(x => x.VisitId == visitId && !x.IsDeleted)
             .SumAsync(x => x.FileSizeBytes, ct);
@@ -144,7 +144,7 @@ public class VisitAttachmentDataRepository : IVisitAttachmentDataRepository
 
     public async Task<int> GetCountByVisitIdAsync(int visitId, CancellationToken ct)
     {
-        return await _context.Set<VisitAttachmentEntity>()
+        return await _context.Set<VisitAttachmentsEntity>()
             .AsNoTracking()
             .CountAsync(x => x.VisitId == visitId && !x.IsDeleted, ct);
     }

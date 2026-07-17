@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using VianaHub.Global.Gerit.Application.Dtos.Base;
 using VianaHub.Global.Gerit.Application.Dtos.Response.Business.EmployeeAddress;
 using VianaHub.Global.Gerit.Domain.Entities.Business;
@@ -6,11 +6,11 @@ using VianaHub.Global.Gerit.Domain.Tools.Pagination;
 
 namespace VianaHub.Global.Gerit.Application.Mappings.Business;
 
-public class EmployeeAddressMappingProfile : Profile
+public class EmployeeAddressesMappingProfile : Profile
 {
-    public EmployeeAddressMappingProfile()
+    public EmployeeAddressesMappingProfile()
     {
-        CreateMap<EmployeeAddressEntity, EmployeeAddressResponse>()
+        CreateMap<EmployeeAddressesEntity, EmployeeAddressResponse>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
             .ForMember(dest => dest.TenantId, opt => opt.MapFrom(src => src.TenantId))
             .ForMember(dest => dest.EmployeeId, opt => opt.MapFrom(src => src.EmployeeId))
@@ -27,6 +27,6 @@ public class EmployeeAddressMappingProfile : Profile
             .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => src.CreatedAt))
             .ForMember(dest => dest.ModifiedAt, opt => opt.MapFrom(src => src.ModifiedAt));
 
-        CreateMap<ListPage<EmployeeAddressEntity>, ListPageResponse<EmployeeAddressResponse>>();
+        CreateMap<ListPage<EmployeeAddressesEntity>, ListPageResponse<EmployeeAddressResponse>>();
     }
 }

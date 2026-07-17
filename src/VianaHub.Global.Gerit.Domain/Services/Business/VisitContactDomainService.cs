@@ -8,17 +8,17 @@ using VianaHub.Global.Gerit.Domain.Tools.Pagination;
 namespace VianaHub.Global.Gerit.Domain.Services.Business;
 
 /// <summary>
-/// Serviço de domínio para VisitContact
+/// Serviï¿½o de domï¿½nio para VisitContact
 /// </summary>
 public class VisitContactDomainService : IVisitContactDomainService
 {
     private readonly IVisitContactDataRepository _repo;
-    private readonly IEntityDomainValidator<VisitContactEntity> _validator;
+    private readonly IEntityDomainValidator<VisitContactPersonsEntity> _validator;
     private readonly INotify _notify;
 
     public VisitContactDomainService(
         IVisitContactDataRepository repo,
-        IEntityDomainValidator<VisitContactEntity> validator,
+        IEntityDomainValidator<VisitContactPersonsEntity> validator,
         INotify notify)
     {
         _repo = repo;
@@ -26,15 +26,15 @@ public class VisitContactDomainService : IVisitContactDomainService
         _notify = notify;
     }
 
-    public async Task<VisitContactEntity> GetByIdAsync(int id, CancellationToken ct)
+    public async Task<VisitContactPersonsEntity> GetByIdAsync(int id, CancellationToken ct)
     {
         return await _repo.GetByIdAsync(id, ct);
     }
-    public async Task<IEnumerable<VisitContactEntity>> GetAllAsync(CancellationToken ct)
+    public async Task<IEnumerable<VisitContactPersonsEntity>> GetAllAsync(CancellationToken ct)
     {
         return await _repo.GetAllAsync(ct);
     }
-    public async Task<ListPage<VisitContactEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct)
+    public async Task<ListPage<VisitContactPersonsEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct)
     {
         return await _repo.GetPagedAsync(request, ct);
     }
@@ -43,7 +43,7 @@ public class VisitContactDomainService : IVisitContactDomainService
         return await _repo.ExistsByIdAsync(id, ct);
     }
 
-    public async Task<bool> CreateAsync(VisitContactEntity entity, CancellationToken ct)
+    public async Task<bool> CreateAsync(VisitContactPersonsEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForCreateAsync(entity);
         if (!validationResult.IsValid)
@@ -57,7 +57,7 @@ public class VisitContactDomainService : IVisitContactDomainService
 
         return await _repo.AddAsync(entity, ct);
     }
-    public async Task<bool> UpdateAsync(VisitContactEntity entity, CancellationToken ct)
+    public async Task<bool> UpdateAsync(VisitContactPersonsEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForUpdateAsync(entity);
         if (!validationResult.IsValid)
@@ -71,7 +71,7 @@ public class VisitContactDomainService : IVisitContactDomainService
 
         return await _repo.UpdateAsync(entity, ct);
     }
-    public async Task<bool> ActivateAsync(VisitContactEntity entity, CancellationToken ct)
+    public async Task<bool> ActivateAsync(VisitContactPersonsEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForActivateAsync(entity);
         if (!validationResult.IsValid)
@@ -85,7 +85,7 @@ public class VisitContactDomainService : IVisitContactDomainService
 
         return await _repo.UpdateAsync(entity, ct);
     }
-    public async Task<bool> DeactivateAsync(VisitContactEntity entity, CancellationToken ct)
+    public async Task<bool> DeactivateAsync(VisitContactPersonsEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForDeactivateAsync(entity);
         if (!validationResult.IsValid)
@@ -99,7 +99,7 @@ public class VisitContactDomainService : IVisitContactDomainService
 
         return await _repo.UpdateAsync(entity, ct);
     }
-    public async Task<bool> DeleteAsync(VisitContactEntity entity, CancellationToken ct)
+    public async Task<bool> DeleteAsync(VisitContactPersonsEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForDeleteAsync(entity);
         if (!validationResult.IsValid)

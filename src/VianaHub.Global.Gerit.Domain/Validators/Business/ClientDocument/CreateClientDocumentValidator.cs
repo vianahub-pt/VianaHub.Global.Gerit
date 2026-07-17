@@ -7,7 +7,7 @@ namespace VianaHub.Global.Gerit.Domain.Validators.Business.ClientDocument;
 /// <summary>
 /// Validador para criação de ClientDocument
 /// </summary>
-public class CreateClientDocumentValidator : AbstractValidator<ClientDocumentEntity>
+public class CreateClientDocumentValidator : AbstractValidator<ClientDocumentsEntity>
 {
     public CreateClientDocumentValidator(ILocalizationService localization)
     {

@@ -24,7 +24,7 @@ public class VisitTeamEmployeeEntity : Entity
     public TenantEntity Tenant { get; private set; } = null!;
     public VisitTeamEntity VisitTeam { get; private set; } = null!;
     public EmployeeEntity Employee { get; private set; } = null!;
-    public VisitTeamFunctionEntity Function { get; private set; } = null!;
+    public VisitTeamFunctionsEntity Function { get; private set; } = null!;
 
     protected VisitTeamEmployeeEntity() { }
 

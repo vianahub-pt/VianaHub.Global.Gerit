@@ -6,11 +6,11 @@ using VianaHub.Global.Gerit.Domain.Tools.Pagination;
 
 namespace VianaHub.Global.Gerit.Application.Mappings.Billing;
 
-public class TenantContactMappingProfile : Profile
+public class TenantContactPersonsMappingProfile : Profile
 {
-    public TenantContactMappingProfile()
+    public TenantContactPersonsMappingProfile()
     {
-        CreateMap<TenantContactEntity, TenantContactResponse>();
-        CreateMap<ListPage<TenantContactEntity>, ListPageResponse<TenantContactResponse>>();
+        CreateMap<TenantContactPersonsEntity, TenantContactResponse>();
+        CreateMap<ListPage<TenantContactPersonsEntity>, ListPageResponse<TenantContactResponse>>();
     }
 }

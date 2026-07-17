@@ -14,8 +14,8 @@ public class ActionEntity : Entity
     public bool IsDeleted { get; private set; }
 
     // Navigation Properties
-    private readonly List<RolePermissionEntity> _rolePermissions = new();
-    public IReadOnlyCollection<RolePermissionEntity> RolePermissions => _rolePermissions.AsReadOnly();
+    private readonly List<RolePermissionsEntity> _rolePermissions = new();
+    public IReadOnlyCollection<RolePermissionsEntity> RolePermissions => _rolePermissions.AsReadOnly();
 
     // Construtor protegido para o EF Core
     protected ActionEntity() { }

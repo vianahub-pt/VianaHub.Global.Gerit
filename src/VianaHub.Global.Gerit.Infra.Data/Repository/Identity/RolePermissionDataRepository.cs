@@ -14,7 +14,7 @@ public class RolePermissionDataRepository : IRolePermissionDataRepository
         _context = context;
     }
 
-    public async Task<IList<RolePermissionEntity>> GetAllAsync(int tenantId, CancellationToken ct)
+    public async Task<IList<RolePermissionsEntity>> GetAllAsync(int tenantId, CancellationToken ct)
     {
         return await _context.RolePermissions
             .AsNoTracking()
@@ -24,7 +24,7 @@ public class RolePermissionDataRepository : IRolePermissionDataRepository
             .Where(x => x.TenantId == tenantId)
             .ToListAsync(ct);
     }
-    public async Task<RolePermissionEntity> GetByIdAsync(int tenantId, int roleId, int resourceId, int actionId, CancellationToken ct)
+    public async Task<RolePermissionsEntity> GetByIdAsync(int tenantId, int roleId, int resourceId, int actionId, CancellationToken ct)
     {
         return await _context.RolePermissions
             .AsNoTracking()
@@ -37,7 +37,7 @@ public class RolePermissionDataRepository : IRolePermissionDataRepository
                                       x.ResourceId == resourceId &&
                                       x.ActionId == actionId, ct);
     }
-    public async Task<IList<RolePermissionEntity>> GetByRoleAsync(int roleId, int tenantId, CancellationToken ct)
+    public async Task<IList<RolePermissionsEntity>> GetByRoleAsync(int roleId, int tenantId, CancellationToken ct)
     {
         return await _context.RolePermissions
             .AsNoTracking()
@@ -47,7 +47,7 @@ public class RolePermissionDataRepository : IRolePermissionDataRepository
             .Where(x => x.RoleId == roleId && x.TenantId == tenantId)
             .ToListAsync(ct);
     }
-    public async Task<IList<RolePermissionEntity>> GetByResourceAsync(int resourceId, int tenantId, CancellationToken ct)
+    public async Task<IList<RolePermissionsEntity>> GetByResourceAsync(int resourceId, int tenantId, CancellationToken ct)
     {
         return await _context.RolePermissions
             .AsNoTracking()
@@ -64,7 +64,7 @@ public class RolePermissionDataRepository : IRolePermissionDataRepository
             .AnyAsync(x => x.TenantId == tenantId && x.RoleId == roleId && x.ResourceId == resourceId && x.ActionId == actionId, ct);
     }
 
-    public async Task<bool> CreateAsync(RolePermissionEntity entity, CancellationToken ct)
+    public async Task<bool> CreateAsync(RolePermissionsEntity entity, CancellationToken ct)
     {
         await _context.RolePermissions.AddAsync(entity, ct);
         return await _context.SaveChangesAsync(ct) > 0;

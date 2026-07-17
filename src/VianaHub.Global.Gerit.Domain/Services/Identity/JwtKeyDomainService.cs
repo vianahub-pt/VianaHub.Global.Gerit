@@ -14,7 +14,7 @@ public class JwtKeyDomainService : IJwtKeyDomainService
     private readonly IJwtKeyDataRepository _repo;
     private readonly ITenantDataRepository _tenantRepo;
     private readonly INotify _notify;
-    private readonly IEntityDomainValidator<JwtKeyEntity> _validator;
+    private readonly IEntityDomainValidator<JwtKeysEntity> _validator;
     private readonly ILocalizationService _localization;
     private readonly ICurrentUserService _currentUser;
     private readonly ILogger<JwtKeyDomainService> _logger;
@@ -24,7 +24,7 @@ public class JwtKeyDomainService : IJwtKeyDomainService
         IJwtKeyDataRepository repo,
         ITenantDataRepository tenantRepo,
         INotify notify,
-        IEntityDomainValidator<JwtKeyEntity> validator,
+        IEntityDomainValidator<JwtKeysEntity> validator,
         ILocalizationService localization,
         ICurrentUserService currentUser,
         ILogger<JwtKeyDomainService> logger,
@@ -40,28 +40,28 @@ public class JwtKeyDomainService : IJwtKeyDomainService
         _secretProvider = secretProvider;
     }
 
-    public async Task<JwtKeyEntity> GetByIdAsync(int id, CancellationToken ct)
+    public async Task<JwtKeysEntity> GetByIdAsync(int id, CancellationToken ct)
     {
         return await _repo.GetByIdAsync(id, ct);
     }
-    public async Task<JwtKeyEntity> GetByKeyIdAsync(Guid keyId, CancellationToken ct)
+    public async Task<JwtKeysEntity> GetByKeyIdAsync(Guid keyId, CancellationToken ct)
     {
         return await _repo.GetByKeyIdAsync(keyId, ct);
     }
-    public async Task<JwtKeyEntity> GetActiveKeyAsync(int tenantId, CancellationToken ct)
+    public async Task<JwtKeysEntity> GetActiveKeyAsync(int tenantId, CancellationToken ct)
     {
         return await _repo.GetActiveKeyAsync(tenantId, ct);
     }
-    public async Task<IEnumerable<JwtKeyEntity>> GetAllAsync(CancellationToken ct)
+    public async Task<IEnumerable<JwtKeysEntity>> GetAllAsync(CancellationToken ct)
     {
         return await _repo.GetAllAsync(ct);
     }
-    public async Task<IEnumerable<JwtKeyEntity>> GetByTenantAsync(int tenantId, CancellationToken ct)
+    public async Task<IEnumerable<JwtKeysEntity>> GetByTenantAsync(int tenantId, CancellationToken ct)
     {
         return await _repo.GetByTenantAsync(tenantId, ct);
     }
 
-    public async Task<JwtKeyEntity> CreateAsync(JwtKeyEntity entity, CancellationToken ct)
+    public async Task<JwtKeysEntity> CreateAsync(JwtKeysEntity entity, CancellationToken ct)
     {
         // Validar tenant
         if (!await ValidateTenantAsync(entity.TenantId, ct))
@@ -74,7 +74,7 @@ public class JwtKeyDomainService : IJwtKeyDomainService
         var validation = await _validator.ValidateForCreateAsync(entity);
         if (!validation.IsValid)
         {
-            _logger.LogWarning("?? [CreateAsync] Validação de JwtKey falhou. Errors={Errors}",
+            _logger.LogWarning("?? [CreateAsync] Validaï¿½ï¿½o de JwtKey falhou. Errors={Errors}",
                 string.Join(", ", validation.Errors.Select(e => e.ErrorMessage)));
 
             foreach (var error in validation.Errors)
@@ -82,7 +82,7 @@ public class JwtKeyDomainService : IJwtKeyDomainService
             return null;
         }
 
-        // Verificar se já existe uma chave ativa para esta combinação Tenant + Application
+        // Verificar se jï¿½ existe uma chave ativa para esta combinaï¿½ï¿½o Tenant + Application
         var hasActiveKey = await _repo.HasActiveKeyAsync(entity.TenantId, ct);
         if (hasActiveKey)
         {
@@ -97,7 +97,7 @@ public class JwtKeyDomainService : IJwtKeyDomainService
             _logger.LogError("? [CreateAsync] Falha ao persistir JwtKey. TenantId={TenantId}", entity.TenantId);
             if (_notify.HasNotify())
             {
-                _logger.LogDebug("? [CreateAsync] Notificações acumuladas: {Notifications}", string.Join("; ", _notify.GetErrorMessage()));
+                _logger.LogDebug("? [CreateAsync] Notificaï¿½ï¿½es acumuladas: {Notifications}", string.Join("; ", _notify.GetErrorMessage()));
             }
             return null;
         }
@@ -106,7 +106,7 @@ public class JwtKeyDomainService : IJwtKeyDomainService
 
         return entity;
     }
-    public async Task<bool> ActivateAsync(JwtKeyEntity key, CancellationToken ct)
+    public async Task<bool> ActivateAsync(JwtKeysEntity key, CancellationToken ct)
     {
         var existing = await _repo.GetByIdAsync(key.Id, ct);
         if (existing == null)
@@ -123,7 +123,7 @@ public class JwtKeyDomainService : IJwtKeyDomainService
             return false;
         }
 
-        // Verificar se já existe uma chave ativa
+        // Verificar se jï¿½ existe uma chave ativa
         var activeKey = await _repo.GetActiveKeyAsync(existing.TenantId, ct);
         if (activeKey != null && activeKey.Id != existing.Id)
         {
@@ -146,7 +146,7 @@ public class JwtKeyDomainService : IJwtKeyDomainService
 
         return updated;
     }
-    public async Task<bool> DeactivateAsync(JwtKeyEntity key, CancellationToken ct)
+    public async Task<bool> DeactivateAsync(JwtKeysEntity key, CancellationToken ct)
     {
         var existing = await _repo.GetByIdAsync(key.Id, ct);
         if (existing == null)
@@ -191,13 +191,13 @@ public class JwtKeyDomainService : IJwtKeyDomainService
             return false;
         }
 
-        // Se for a única chave ativa, gerar uma nova antes de revogar
+        // Se for a ï¿½nica chave ativa, gerar uma nova antes de revogar
         if (existing.IsActive)
         {
             var hasOtherActiveKey = await _repo.HasActiveKeyAsync(existing.TenantId, ct);
             if (!hasOtherActiveKey)
             {
-                _logger.LogWarning("?? [RevokeAsync] Revogando única chave ativa. Gerando nova chave primeiro. Id={Id}",
+                _logger.LogWarning("?? [RevokeAsync] Revogando ï¿½nica chave ativa. Gerando nova chave primeiro. Id={Id}",
                     existing.Id);
 
                 // Gerar nova chave
@@ -206,7 +206,7 @@ public class JwtKeyDomainService : IJwtKeyDomainService
                     existing.KeySize,
                     ct);
 
-                var newKey = new JwtKeyEntity(
+                var newKey = new JwtKeysEntity(
                     existing.TenantId,
                     publicKey,
                     privateKeyEncrypted,
@@ -236,7 +236,7 @@ public class JwtKeyDomainService : IJwtKeyDomainService
 
         return updated;
     }
-    public async Task<bool> DeleteAsync(JwtKeyEntity key, CancellationToken ct)
+    public async Task<bool> DeleteAsync(JwtKeysEntity key, CancellationToken ct)
     {
         var existing = await _repo.GetByIdAsync(key.Id, ct);
         if (existing == null)
@@ -299,7 +299,7 @@ public class JwtKeyDomainService : IJwtKeyDomainService
         var masterKey = _secretProvider?.GetMasterKey();
         if (string.IsNullOrWhiteSpace(masterKey))
         {
-            _logger.LogError("? [GenerateKeyPairAsync] Chave mestra para criptografia não disponível");
+            _logger.LogError("? [GenerateKeyPairAsync] Chave mestra para criptografia nï¿½o disponï¿½vel");
             _notify.Add(_localization.GetMessage("Domain.JwtKey.EncryptionKeyMissing"), 400);
             throw new InvalidOperationException("Master encryption key is not available");
         }
@@ -327,7 +327,7 @@ public class JwtKeyDomainService : IJwtKeyDomainService
         var masterKey = _secretProvider?.GetMasterKey();
         if (string.IsNullOrWhiteSpace(masterKey))
         {
-            _logger.LogError("? [DecryptPrivateKeyAsync] Chave mestra para descriptografia não disponível");
+            _logger.LogError("? [DecryptPrivateKeyAsync] Chave mestra para descriptografia nï¿½o disponï¿½vel");
             _notify.Add(_localization.GetMessage("Domain.JwtKey.EncryptionKeyMissing"), 400);
             throw new InvalidOperationException("Master encryption key is not available");
         }
@@ -345,20 +345,20 @@ public class JwtKeyDomainService : IJwtKeyDomainService
     }
     public async Task<int> RotateKeysAsync(CancellationToken ct)
     {
-        _logger.LogInformation("?? [RotateKeysAsync] Iniciando rotação de chaves");
+        _logger.LogInformation("?? [RotateKeysAsync] Iniciando rotaï¿½ï¿½o de chaves");
 
         var keysToRotate = await _repo.GetKeysEligibleForRotationAsync(ct);
         var keysList = keysToRotate.ToList();
         var rotatedCount = 0;
 
-        _logger.LogInformation("?? [RotateKeysAsync] Encontradas {Count} chaves elegíveis para rotação", keysList.Count);
+        _logger.LogInformation("?? [RotateKeysAsync] Encontradas {Count} chaves elegï¿½veis para rotaï¿½ï¿½o", keysList.Count);
 
         foreach (var oldKey in keysList)
         {
             // Validar estado
             if (!oldKey.IsActive || oldKey.IsDeleted || oldKey.IsRevoked())
             {
-                _logger.LogWarning("?? [RotateKeysAsync] Chave não está mais elegível. Id={Id}, KeyId={KeyId}",
+                _logger.LogWarning("?? [RotateKeysAsync] Chave nï¿½o estï¿½ mais elegï¿½vel. Id={Id}, KeyId={KeyId}",
                     oldKey.Id, oldKey.KeyId);
                 continue;
             }
@@ -376,7 +376,7 @@ public class JwtKeyDomainService : IJwtKeyDomainService
                 oldKey.KeySize,
                 ct);
 
-            var newKey = new JwtKeyEntity(
+            var newKey = new JwtKeysEntity(
                 oldKey.TenantId,
                 publicKey,
                 privateKeyEncrypted,
@@ -394,7 +394,7 @@ public class JwtKeyDomainService : IJwtKeyDomainService
             // Inserir nova chave
             await _repo.AddAsync(newKey, ct);
 
-            // Desativar chave antiga e estender expiração pelo período de sobreposição
+            // Desativar chave antiga e estender expiraï¿½ï¿½o pelo perï¿½odo de sobreposiï¿½ï¿½o
             oldKey.Deactivate(0);
             oldKey.UpdateRotationSchedule(oldKey.OverlapPeriodDays, 0, 0);
 
@@ -405,7 +405,7 @@ public class JwtKeyDomainService : IJwtKeyDomainService
             _logger.LogInformation("? [RotateKeysAsync] Chave rotacionada com sucesso. OldKeyId={OldKeyId}, NewKeyId={NewKeyId}, TenantId={TenantId}", oldKey.KeyId, newKey.KeyId, oldKey.TenantId);
         }
 
-        _logger.LogInformation("? [RotateKeysAsync] Rotação concluída. Total rotacionado: {RotatedCount}/{TotalCount}", rotatedCount, keysList.Count);
+        _logger.LogInformation("? [RotateKeysAsync] Rotaï¿½ï¿½o concluï¿½da. Total rotacionado: {RotatedCount}/{TotalCount}", rotatedCount, keysList.Count);
 
         return rotatedCount;
     }
@@ -428,33 +428,33 @@ public class JwtKeyDomainService : IJwtKeyDomainService
                 key.Id, key.KeyId, key.ExpiresAt);
         }
 
-        _logger.LogInformation("? [CleanupExpiredKeysAsync] Limpeza concluída. Total deletado: {DeletedCount}/{TotalCount}", deletedCount, keysList.Count);
+        _logger.LogInformation("? [CleanupExpiredKeysAsync] Limpeza concluï¿½da. Total deletado: {DeletedCount}/{TotalCount}", deletedCount, keysList.Count);
 
         return deletedCount;
     }
-    public async Task<JwtKeyEntity> EnsureKeyExistsAsync(int tenantId, int createdBy, CancellationToken ct)
+    public async Task<JwtKeysEntity> EnsureKeyExistsAsync(int tenantId, int createdBy, CancellationToken ct)
     {
-        _logger.LogInformation("?? [EnsureKeyExistsAsync] Verificando existência de chave JWT. TenantId={TenantId}", tenantId);
+        _logger.LogInformation("?? [EnsureKeyExistsAsync] Verificando existï¿½ncia de chave JWT. TenantId={TenantId}", tenantId);
 
-        // Verificar se já existe chave ativa
+        // Verificar se jï¿½ existe chave ativa
         var existingKey = await _repo.GetActiveKeyAsync(tenantId, ct);
         if (existingKey != null)
         {
-            _logger.LogInformation("? [EnsureKeyExistsAsync] Chave ativa já existe. KeyId={KeyId}", existingKey.KeyId);
+            _logger.LogInformation("? [EnsureKeyExistsAsync] Chave ativa jï¿½ existe. KeyId={KeyId}", existingKey.KeyId);
             return existingKey;
         }
 
         // Validar tenant
         if (!await ValidateTenantAsync(tenantId, ct))
         {
-            _logger.LogWarning("?? [EnsureKeyExistsAsync] Tenant não encontrado ou inativo. TenantId={TenantId}", tenantId);
+            _logger.LogWarning("?? [EnsureKeyExistsAsync] Tenant nï¿½o encontrado ou inativo. TenantId={TenantId}", tenantId);
             _notify.Add(_localization.GetMessage("Domain.JwtKey.TenantNotFound"), 400);
             return null;
         }
 
-        // Criar nova chave com configurações padrão
+        // Criar nova chave com configuraï¿½ï¿½es padrï¿½o
         _logger.LogInformation(
-            "?? [EnsureKeyExistsAsync] Criando nova chave JWT com configurações padrão. TenantId={TenantId}", tenantId);
+            "?? [EnsureKeyExistsAsync] Criando nova chave JWT com configuraï¿½ï¿½es padrï¿½o. TenantId={TenantId}", tenantId);
 
         const string defaultAlgorithm = "RS256";
         const int defaultKeySize = 2048;
@@ -471,7 +471,7 @@ public class JwtKeyDomainService : IJwtKeyDomainService
                 defaultKeySize,
                 ct);
 
-            var newKey = new JwtKeyEntity(
+            var newKey = new JwtKeysEntity(
                 tenantId,
                 publicKey,
                 privateKeyEncrypted,
@@ -487,7 +487,7 @@ public class JwtKeyDomainService : IJwtKeyDomainService
             var validation = await _validator.ValidateForCreateAsync(newKey);
             if (!validation.IsValid)
             {
-                _logger.LogWarning("?? [EnsureKeyExistsAsync] Validação da nova chave falhou. Errors={Errors}", string.Join(", ", validation.Errors.Select(e => e.ErrorMessage)));
+                _logger.LogWarning("?? [EnsureKeyExistsAsync] Validaï¿½ï¿½o da nova chave falhou. Errors={Errors}", string.Join(", ", validation.Errors.Select(e => e.ErrorMessage)));
 
                 foreach (var error in validation.Errors)
                     _notify.Add(error.ErrorMessage, 400);
@@ -498,7 +498,7 @@ public class JwtKeyDomainService : IJwtKeyDomainService
             var doubleCheck = await _repo.HasActiveKeyAsync(tenantId, ct);
             if (doubleCheck)
             {
-                _logger.LogWarning("?? [EnsureKeyExistsAsync] Chave ativa já foi criada por outro processo (race condition detectada). TenantId={TenantId}", tenantId);
+                _logger.LogWarning("?? [EnsureKeyExistsAsync] Chave ativa jï¿½ foi criada por outro processo (race condition detectada). TenantId={TenantId}", tenantId);
 
                 // Retornar a chave existente
                 return await _repo.GetActiveKeyAsync(tenantId, ct);
@@ -512,7 +512,7 @@ public class JwtKeyDomainService : IJwtKeyDomainService
 
                 if (_notify.HasNotify())
                 {
-                    _logger.LogError("? [EnsureKeyExistsAsync] Notificações: {Notifications}", string.Join("; ", _notify.GetErrorMessage()));
+                    _logger.LogError("? [EnsureKeyExistsAsync] Notificaï¿½ï¿½es: {Notifications}", string.Join("; ", _notify.GetErrorMessage()));
                 }
 
                 _notify.Add(_localization.GetMessage("Domain.JwtKey.CreateFailed"), 400);
@@ -526,10 +526,10 @@ public class JwtKeyDomainService : IJwtKeyDomainService
             _logger.LogError(ex, "? [EnsureKeyExistsAsync] Erro ao criar chave JWT para Tenant {TenantId}", tenantId);
             if (_notify.HasNotify())
             {
-                _logger.LogError("? [EnsureKeyExistsAsync] Notificações antes da exceção: {Notifications}", string.Join("; ", _notify.GetErrorMessage()));
+                _logger.LogError("? [EnsureKeyExistsAsync] Notificaï¿½ï¿½es antes da exceï¿½ï¿½o: {Notifications}", string.Join("; ", _notify.GetErrorMessage()));
             }
 
-            // Repassar uma notificação amigável
+            // Repassar uma notificaï¿½ï¿½o amigï¿½vel
             _notify.Add(_localization.GetMessage("Domain.JwtKey.CreateFailed"), 500);
             return null;
         }

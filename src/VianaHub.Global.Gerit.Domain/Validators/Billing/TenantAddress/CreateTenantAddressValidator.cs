@@ -7,7 +7,7 @@ namespace VianaHub.Global.Gerit.Domain.Validators.Billing.TenantAddress;
 /// <summary>
 /// Validador para criação de TenantAddress
 /// </summary>
-public class CreateTenantAddressValidator : AbstractValidator<TenantAddressEntity>
+public class CreateTenantAddressValidator : AbstractValidator<TenantAddressesEntity>
 {
     public CreateTenantAddressValidator(ILocalizationService localization)
     {

@@ -8,12 +8,12 @@ namespace VianaHub.Global.Gerit.Domain.Services.Billing;
 public class TenantContactDomainService : ITenantContactDomainService
 {
     private readonly ITenantContactDataRepository _repo;
-    private readonly IEntityDomainValidator<TenantContactEntity> _validator;
+    private readonly IEntityDomainValidator<TenantContactPersonsEntity> _validator;
     private readonly INotify _notify;
 
     public TenantContactDomainService(
         ITenantContactDataRepository repo,
-        IEntityDomainValidator<TenantContactEntity> validator,
+        IEntityDomainValidator<TenantContactPersonsEntity> validator,
         INotify notify)
     {
         _repo = repo;
@@ -21,7 +21,7 @@ public class TenantContactDomainService : ITenantContactDomainService
         _notify = notify;
     }
 
-    public async Task<bool> CreateAsync(TenantContactEntity entity, CancellationToken ct)
+    public async Task<bool> CreateAsync(TenantContactPersonsEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForCreateAsync(entity);
         if (!validationResult.IsValid)
@@ -36,7 +36,7 @@ public class TenantContactDomainService : ITenantContactDomainService
         return await _repo.AddAsync(entity, ct);
     }
 
-    public async Task<bool> UpdateAsync(TenantContactEntity entity, CancellationToken ct)
+    public async Task<bool> UpdateAsync(TenantContactPersonsEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForUpdateAsync(entity);
         if (!validationResult.IsValid)
@@ -51,7 +51,7 @@ public class TenantContactDomainService : ITenantContactDomainService
         return await _repo.UpdateAsync(entity, ct);
     }
 
-    public async Task<bool> ActivateAsync(TenantContactEntity entity, CancellationToken ct)
+    public async Task<bool> ActivateAsync(TenantContactPersonsEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForActivateAsync(entity);
         if (!validationResult.IsValid)
@@ -66,7 +66,7 @@ public class TenantContactDomainService : ITenantContactDomainService
         return await _repo.UpdateAsync(entity, ct);
     }
 
-    public async Task<bool> DeactivateAsync(TenantContactEntity entity, CancellationToken ct)
+    public async Task<bool> DeactivateAsync(TenantContactPersonsEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForDeactivateAsync(entity);
         if (!validationResult.IsValid)
@@ -81,7 +81,7 @@ public class TenantContactDomainService : ITenantContactDomainService
         return await _repo.UpdateAsync(entity, ct);
     }
 
-    public async Task<bool> DeleteAsync(TenantContactEntity entity, CancellationToken ct)
+    public async Task<bool> DeleteAsync(TenantContactPersonsEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForDeleteAsync(entity);
         if (!validationResult.IsValid)

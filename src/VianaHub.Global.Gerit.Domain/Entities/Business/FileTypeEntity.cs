@@ -1,4 +1,4 @@
-﻿using VianaHub.Global.Gerit.Domain.Base;
+using VianaHub.Global.Gerit.Domain.Base;
 
 namespace VianaHub.Global.Gerit.Domain.Entities.Business;
 
@@ -11,7 +11,7 @@ public class FileTypeEntity : Entity
     public bool IsDeleted { get; private set; }
 
     // Navigation Properties
-    public ICollection<FileTypeTranslationEntity> Translations { get; private set; }
+    public ICollection<FileTypeTranslationsEntity> Translations { get; private set; }
 
     // Construtor protegido para o EF Core
     protected FileTypeEntity() { }
@@ -33,7 +33,7 @@ public class FileTypeEntity : Entity
         IsDeleted = false;
         CreatedBy = createdBy;
         CreatedAt = DateTime.UtcNow;
-        Translations = new List<FileTypeTranslationEntity>();
+        Translations = new List<FileTypeTranslationsEntity>();
     }
 
     public void Update(string mimeType, string extension, int modifiedBy)

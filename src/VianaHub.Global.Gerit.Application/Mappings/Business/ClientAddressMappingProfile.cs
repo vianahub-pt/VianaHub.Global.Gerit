@@ -9,14 +9,14 @@ namespace VianaHub.Global.Gerit.Application.Mappings.Business;
 /// <summary>
 /// Perfil de mapeamento para ClientAddress
 /// </summary>
-public class ClientAddressMappingProfile : Profile
+public class ClientAddressesMappingProfile : Profile
 {
-    public ClientAddressMappingProfile()
+    public ClientAddressesMappingProfile()
     {
-        CreateMap<ClientAddressEntity, ClientAddressResponse>()
+        CreateMap<ClientAddressesEntity, ClientAddressResponse>()
             .ForMember(dest => dest.Client, opt => opt.MapFrom(src => src.Client.Name))
             .ForMember(dest => dest.AddressType, opt => opt.MapFrom(src => src.AddressType.Name));
         
-        CreateMap<ListPage<ClientAddressEntity>, ListPageResponse<ClientAddressResponse>>();
+        CreateMap<ListPage<ClientAddressesEntity>, ListPageResponse<ClientAddressResponse>>();
     }
 }

@@ -89,7 +89,7 @@ public class VisitContactAppService : IVisitContactAppService
             return 0;
         }
 
-        var entity = new VisitContactEntity(
+        var entity = new VisitContactPersonsEntity(
             tenantId,
             request.VisitId,
             request.Name,
@@ -299,7 +299,7 @@ public class VisitContactAppService : IVisitContactAppService
                 continue;
             }
 
-            var entity = new VisitContactEntity(
+            var entity = new VisitContactPersonsEntity(
                 tenantId,
                 item.VisitId,
                 item.Name,

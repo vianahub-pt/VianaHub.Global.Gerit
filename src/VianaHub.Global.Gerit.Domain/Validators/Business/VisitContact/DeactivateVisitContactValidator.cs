@@ -5,9 +5,9 @@ using VianaHub.Global.Gerit.Domain.Interfaces.Base;
 namespace VianaHub.Global.Gerit.Domain.Validators.Business.VisitContact;
 
 /// <summary>
-/// Validador para desativação de VisitContact
+/// Validador para desativaï¿½ï¿½o de VisitContact
 /// </summary>
-public class DeactivateVisitContactValidator : AbstractValidator<VisitContactEntity>
+public class DeactivateVisitContactValidator : AbstractValidator<VisitContactPersonsEntity>
 {
     public DeactivateVisitContactValidator(ILocalizationService localization)
     {

@@ -16,9 +16,9 @@ public class SubscriptionPlanFileRuleDataRepository : ISubscriptionPlanFileRuleD
         _context = context;
     }
 
-    public async Task<IEnumerable<SubscriptionPlanFileRuleEntity>> GetAllAsync(CancellationToken ct)
+    public async Task<IEnumerable<SubscriptionPlanFileRulesEntity>> GetAllAsync(CancellationToken ct)
     {
-        return await _context.Set<SubscriptionPlanFileRuleEntity>()
+        return await _context.Set<SubscriptionPlanFileRulesEntity>()
             .AsNoTracking()
             .Include(x => x.SubscriptionPlan)
                 .ThenInclude(x => x.Translations)
@@ -29,9 +29,9 @@ public class SubscriptionPlanFileRuleDataRepository : ISubscriptionPlanFileRuleD
             .ToListAsync(ct);
     }
 
-    public async Task<SubscriptionPlanFileRuleEntity> GetByIdAsync(int id, CancellationToken ct)
+    public async Task<SubscriptionPlanFileRulesEntity> GetByIdAsync(int id, CancellationToken ct)
     {
-        return await _context.Set<SubscriptionPlanFileRuleEntity>()
+        return await _context.Set<SubscriptionPlanFileRulesEntity>()
             .AsNoTracking()
             .Include(x => x.SubscriptionPlan)
                 .ThenInclude(x => x.Translations)
@@ -39,9 +39,9 @@ public class SubscriptionPlanFileRuleDataRepository : ISubscriptionPlanFileRuleD
             .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted, ct);
     }
 
-    public async Task<IEnumerable<SubscriptionPlanFileRuleEntity>> GetBySubscriptionPlanIdAsync(int subscriptionPlanId, CancellationToken ct)
+    public async Task<IEnumerable<SubscriptionPlanFileRulesEntity>> GetBySubscriptionPlanIdAsync(int subscriptionPlanId, CancellationToken ct)
     {
-        return await _context.Set<SubscriptionPlanFileRuleEntity>()
+        return await _context.Set<SubscriptionPlanFileRulesEntity>()
             .AsNoTracking()
             .Include(x => x.FileType)
             .Where(x => x.SubscriptionPlanId == subscriptionPlanId && !x.IsDeleted)
@@ -49,9 +49,9 @@ public class SubscriptionPlanFileRuleDataRepository : ISubscriptionPlanFileRuleD
             .ToListAsync(ct);
     }
 
-    public async Task<ListPage<SubscriptionPlanFileRuleEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct)
+    public async Task<ListPage<SubscriptionPlanFileRulesEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct)
     {
-        var query = _context.Set<SubscriptionPlanFileRuleEntity>()
+        var query = _context.Set<SubscriptionPlanFileRulesEntity>()
             .AsNoTracking()
             .Include(x => x.SubscriptionPlan)
             .Include(x => x.FileType)
@@ -81,7 +81,7 @@ public class SubscriptionPlanFileRuleDataRepository : ISubscriptionPlanFileRuleD
             .Take(pageSize)
             .ToListAsync(ct);
 
-        return new ListPage<SubscriptionPlanFileRuleEntity>
+        return new ListPage<SubscriptionPlanFileRulesEntity>
         {
             Items = result,
             PageNumber = pageNumber,
@@ -93,20 +93,20 @@ public class SubscriptionPlanFileRuleDataRepository : ISubscriptionPlanFileRuleD
 
     public async Task<bool> ExistsByIdAsync(int id, CancellationToken ct)
     {
-        return await _context.Set<SubscriptionPlanFileRuleEntity>()
+        return await _context.Set<SubscriptionPlanFileRulesEntity>()
             .AsNoTracking()
             .AnyAsync(x => x.Id == id && !x.IsDeleted, ct);
     }
 
-    public async Task<bool> AddAsync(SubscriptionPlanFileRuleEntity entity, CancellationToken ct)
+    public async Task<bool> AddAsync(SubscriptionPlanFileRulesEntity entity, CancellationToken ct)
     {
-        await _context.Set<SubscriptionPlanFileRuleEntity>().AddAsync(entity, ct);
+        await _context.Set<SubscriptionPlanFileRulesEntity>().AddAsync(entity, ct);
         return await _context.SaveChangesAsync(ct) > 0;
     }
 
-    public async Task<bool> UpdateAsync(SubscriptionPlanFileRuleEntity entity, CancellationToken ct)
+    public async Task<bool> UpdateAsync(SubscriptionPlanFileRulesEntity entity, CancellationToken ct)
     {
-        _context.Set<SubscriptionPlanFileRuleEntity>().Update(entity);
+        _context.Set<SubscriptionPlanFileRulesEntity>().Update(entity);
         return await _context.SaveChangesAsync(ct) > 0;
     }
 }

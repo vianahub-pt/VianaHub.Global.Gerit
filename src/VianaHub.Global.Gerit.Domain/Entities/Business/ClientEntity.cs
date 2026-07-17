@@ -5,8 +5,8 @@ namespace VianaHub.Global.Gerit.Domain.Entities.Business;
 
 public class ClientEntity : Entity, IAggregateRoot
 {
-    private readonly List<ClientAddressEntity> _addresses = new();
-    private readonly List<ClientContactEntity> _contacts = new();
+    private readonly List<ClientAddressesEntity> _addresses = new();
+    private readonly List<ClientContactPersonsEntity> _contacts = new();
 
     public int TenantId { get; private set; }
     public byte PartyTypeId { get; private set; }
@@ -42,8 +42,8 @@ public class ClientEntity : Entity, IAggregateRoot
     public StatusDefinitionEntity? StatusDefinition { get; private set; }
     public StatusDomainEntity? StatusDomain { get; private set; }
 
-    public IReadOnlyCollection<ClientAddressEntity> Addresses => _addresses.AsReadOnly();
-    public IReadOnlyCollection<ClientContactEntity> Contacts => _contacts.AsReadOnly();
+    public IReadOnlyCollection<ClientAddressesEntity> Addresses => _addresses.AsReadOnly();
+    public IReadOnlyCollection<ClientContactPersonsEntity> Contacts => _contacts.AsReadOnly();
 
     // Construtor protegido para o EF Core
     protected ClientEntity() { }

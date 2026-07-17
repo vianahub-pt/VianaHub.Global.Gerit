@@ -5,9 +5,9 @@ using VianaHub.Global.Gerit.Domain.Interfaces.Base;
 namespace VianaHub.Global.Gerit.Domain.Validators.Business.ClientAddress;
 
 /// <summary>
-/// Validador para criação de ClientAddress
+/// Validador para criaï¿½ï¿½o de ClientAddress
 /// </summary>
-public class CreateClientAddressValidator : AbstractValidator<ClientAddressEntity>
+public class CreateClientAddressValidator : AbstractValidator<ClientAddressesEntity>
 {
     public CreateClientAddressValidator(ILocalizationService localization)
     {

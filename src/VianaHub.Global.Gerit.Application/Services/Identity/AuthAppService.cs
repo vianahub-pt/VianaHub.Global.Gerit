@@ -97,7 +97,7 @@ public class AuthAppService : IAuthAppService
         // Propaga o TenantId para o interceptor ANTES de qualquer query
         _requestTenantContext.SetTenantId(request.TenantId);
 
-        // Verificar se email já existe (no tenant informado)
+        // Verificar se email jï¿½ existe (no tenant informado)
         var exists = await _userRepo.ExistsByEmailAsync(request.Email, ct);
         if (exists)
         {
@@ -108,10 +108,10 @@ public class AuthAppService : IAuthAppService
         // Hash da senha
         var passwordHash = DomainExtensions.HashClientSecret(request.Password);
 
-        // Criar entidade de usuário
+        // Criar entidade de usuï¿½rio
         var user = new UserEntity(request.TenantId, request.Name, request.Email, passwordHash, request.PhoneNumber, 0);
 
-        // Persistir via repositório
+        // Persistir via repositï¿½rio
         var created = await _userRepo.CreateAsync(user, ct);
         if (!created)
         {
@@ -119,7 +119,7 @@ public class AuthAppService : IAuthAppService
             return null;
         }
 
-        // Enviar email de confirmação (NoOp por enquanto)
+        // Enviar email de confirmaï¿½ï¿½o (NoOp por enquanto)
         await _emailSender.SendAsync(user.Email, "Application.Service.Auth.Email.Confirm.Subject", "Application.Service.Auth.Email.Confirm.Body", user.Name);
 
         _requestTenantContext.Clear();
@@ -196,11 +196,11 @@ public class AuthAppService : IAuthAppService
         var accessToken = await GenerateAccessTokenAsync(user, isTrial, ct);
         if (accessToken.Token == null)
         {
-            // Erro já notificado
+            // Erro jï¿½ notificado
             return null;
         }
 
-        // Atualizar LastAccessAt do usuário (não bloquear login em caso de falha)
+        // Atualizar LastAccessAt do usuï¿½rio (nï¿½o bloquear login em caso de falha)
         try
         {
             user.UpdateLastAccess();
@@ -208,12 +208,12 @@ public class AuthAppService : IAuthAppService
         }
         catch (Exception ex)
         {
-            _logger.LogWarning(ex, "Falha ao atualizar LastAccessAt para o usuário {UserId}", user.Id);
+            _logger.LogWarning(ex, "Falha ao atualizar LastAccessAt para o usuï¿½rio {UserId}", user.Id);
         }
 
         var refreshTokenValue = GenerateRefreshTokenValue();
 
-        var refreshTokenEntity = new RefreshTokenEntity(user.TenantId, user.Id, refreshTokenValue, DateTime.UtcNow.AddDays(_jwtSettings.RefreshTokenExpirationDays), user.Id);
+        var refreshTokenEntity = new RefreshTokensEntity(user.TenantId, user.Id, refreshTokenValue, DateTime.UtcNow.AddDays(_jwtSettings.RefreshTokenExpirationDays), user.Id);
         await _refreshRepo.AddAsync(refreshTokenEntity);
 
         _requestTenantContext.Clear();
@@ -252,7 +252,7 @@ public class AuthAppService : IAuthAppService
             return null;
         }
 
-        // Encontrar usuário
+        // Encontrar usuï¿½rio
         var user = await _userRepo.GetByIdAsync(tokenEntity.UserId, ct);
         if (user == null)
         {
@@ -291,11 +291,11 @@ public class AuthAppService : IAuthAppService
             return null;
         }
 
-        // Rotação: revogar token antigo e criar novo
+        // Rotaï¿½ï¿½o: revogar token antigo e criar novo
         await _refreshRepo.RevokeAsync(tokenEntity.Token, user.Id, request.TenantId);
 
         var newRefreshValue = GenerateRefreshTokenValue();
-        var newRefresh = new RefreshTokenEntity(request.TenantId, user.Id, newRefreshValue, DateTime.UtcNow.AddDays(_jwtSettings.RefreshTokenExpirationDays), user.Id);
+        var newRefresh = new RefreshTokensEntity(request.TenantId, user.Id, newRefreshValue, DateTime.UtcNow.AddDays(_jwtSettings.RefreshTokenExpirationDays), user.Id);
         await _refreshRepo.AddAsync(newRefresh);
 
         var accessToken = await GenerateAccessTokenAsync(user, isTrial, ct);
@@ -330,7 +330,7 @@ public class AuthAppService : IAuthAppService
         var now = DateTime.UtcNow;
         var expires = now.AddMinutes(_jwtSettings.AccessTokenExpirationMinutes);
 
-        // Gera claims básicos
+        // Gera claims bï¿½sicos
         var claims = new List<Claim>
         {
             new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
@@ -346,10 +346,10 @@ public class AuthAppService : IAuthAppService
 
         string permissionsJson = null;
 
-        // Adicionar roles e permissões ao token para autorização stateless
+        // Adicionar roles e permissï¿½es ao token para autorizaï¿½ï¿½o stateless
         try
         {
-            // Buscar roles do usuário
+            // Buscar roles do usuï¿½rio
             var userRoles = await _userRoleRepo.GetByUserAsync(user.TenantId, user.Id, ct);
 
             var roleNames = userRoles?
@@ -367,7 +367,7 @@ public class AuthAppService : IAuthAppService
                 claims.Add(new Claim("role", roleName));
             }
 
-            // Coletar permissões de cada role agrupadas por recurso
+            // Coletar permissï¿½es de cada role agrupadas por recurso
             var permissionsByResource = new Dictionary<string, HashSet<string>>();
 
             foreach (var role in userRoles ?? Enumerable.Empty<dynamic>())
@@ -396,19 +396,19 @@ public class AuthAppService : IAuthAppService
                 }
             }
 
-            // Serializar o dicionário para JSON e guardar em variável (não adicionar como claim string)
+            // Serializar o dicionï¿½rio para JSON e guardar em variï¿½vel (nï¿½o adicionar como claim string)
             if (permissionsByResource.Any())
             {
-                // Converter HashSet<string> para List<string> para serialização previsível
+                // Converter HashSet<string> para List<string> para serializaï¿½ï¿½o previsï¿½vel
                 var serializable = permissionsByResource.ToDictionary(k => k.Key, x => x.Value.OrderBy(x => x).ToList());
                 permissionsJson = JsonSerializer.Serialize(serializable);
-                // Não adicionar como Claim string para evitar escape no payload
+                // Nï¿½o adicionar como Claim string para evitar escape no payload
             }
         }
         catch (Exception ex)
         {
             _logger.LogWarning(ex, "Falha ao incluir roles/permissions no token para user {UserId}", user.Id);
-            // Não falhar a geração do token por causa das claims de permissão; conceder token básico
+            // Nï¿½o falhar a geraï¿½ï¿½o do token por causa das claims de permissï¿½o; conceder token bï¿½sico
         }
 
         // Carregar chave ativa do tenant
@@ -444,8 +444,8 @@ public class AuthAppService : IAuthAppService
         // Import private key into RSA
         try
         {
-            // Não usar 'using' aqui: precisamos garantir que a instância RSA permaneça viva
-            // durante a operação de assinatura (WriteToken). Alguns provedores internos
+            // Nï¿½o usar 'using' aqui: precisamos garantir que a instï¿½ncia RSA permaneï¿½a viva
+            // durante a operaï¿½ï¿½o de assinatura (WriteToken). Alguns provedores internos
             // podem acessar o objeto RSA durante a escrita do token e provocar
             // ObjectDisposedException se ele for descartado antes.
             var rsa = RSA.Create();
@@ -455,9 +455,9 @@ public class AuthAppService : IAuthAppService
                 rsa.ImportPkcs8PrivateKey(privateKeyBytes, out _);
 
                 var rsaKey = new RsaSecurityKey(rsa) { KeyId = keyEntity.KeyId.ToString() };
-                // Evitar cache de SignatureProviders que podem reter referência ao objeto RSA e
+                // Evitar cache de SignatureProviders que podem reter referï¿½ncia ao objeto RSA e
                 // causar ObjectDisposedException em chamadas subsequentes. Garantir que cada
-                // geração de token use um provider fresco.
+                // geraï¿½ï¿½o de token use um provider fresco.
                 rsaKey.CryptoProviderFactory = new CryptoProviderFactory
                 {
                     CacheSignatureProviders = false
@@ -493,7 +493,7 @@ public class AuthAppService : IAuthAppService
             }
             finally
             {
-                // Garantir liberação explícita após a escrita do token
+                // Garantir liberaï¿½ï¿½o explï¿½cita apï¿½s a escrita do token
                 try { rsa.Dispose(); } catch { }
             }
         }

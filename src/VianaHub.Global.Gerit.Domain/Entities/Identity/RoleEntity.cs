@@ -18,11 +18,11 @@ public class RoleEntity : Entity
     // Navigation Properties
     public TenantEntity Tenant { get; private set; }
 
-    private readonly List<RolePermissionEntity> _permissions = new();
-    public IReadOnlyCollection<RolePermissionEntity> Permissions => _permissions.AsReadOnly();
+    private readonly List<RolePermissionsEntity> _permissions = new();
+    public IReadOnlyCollection<RolePermissionsEntity> Permissions => _permissions.AsReadOnly();
 
-    private readonly List<UserRoleEntity> _userRoles = new();
-    public IReadOnlyCollection<UserRoleEntity> UserRoles => _userRoles.AsReadOnly();
+    private readonly List<UserRolesEntity> _userRoles = new();
+    public IReadOnlyCollection<UserRolesEntity> UserRoles => _userRoles.AsReadOnly();
 
     // Construtor protegido para o EF Core
     protected RoleEntity() { }

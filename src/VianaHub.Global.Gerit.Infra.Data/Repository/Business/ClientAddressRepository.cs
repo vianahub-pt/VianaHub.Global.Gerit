@@ -19,7 +19,7 @@ public class ClientAddressRepository : IClientAddressDataRepository
         _context = context;
     }
 
-    public async Task<ClientAddressEntity> GetByIdAsync(int clientId, int id, CancellationToken ct)
+    public async Task<ClientAddressesEntity> GetByIdAsync(int clientId, int id, CancellationToken ct)
     {
         return await _context.ClientAddresses
             .AsNoTracking()
@@ -29,7 +29,7 @@ public class ClientAddressRepository : IClientAddressDataRepository
             .FirstOrDefaultAsync(ct);
     }
 
-    public async Task<IEnumerable<ClientAddressEntity>> GetAllAsync(int clientId, CancellationToken ct)
+    public async Task<IEnumerable<ClientAddressesEntity>> GetAllAsync(int clientId, CancellationToken ct)
     {
         return await _context.ClientAddresses
             .AsNoTracking()
@@ -42,7 +42,7 @@ public class ClientAddressRepository : IClientAddressDataRepository
             .ToListAsync(ct);
     }
 
-    public async Task<ListPage<ClientAddressEntity>> GetPagedAsync(int clientId, PagedFilter request, CancellationToken ct)
+    public async Task<ListPage<ClientAddressesEntity>> GetPagedAsync(int clientId, PagedFilter request, CancellationToken ct)
     {
         var query = _context.ClientAddresses
             .AsNoTracking()
@@ -84,7 +84,7 @@ public class ClientAddressRepository : IClientAddressDataRepository
             .Take(pageSize)
             .ToListAsync(ct);
 
-        return new ListPage<ClientAddressEntity>
+        return new ListPage<ClientAddressesEntity>
         {
             Items = result,
             PageNumber = pageNumber,
@@ -123,19 +123,19 @@ public class ClientAddressRepository : IClientAddressDataRepository
             .AnyAsync(x => x.ClientId == clientId && x.AddressTypeId == addressTypeId && !x.IsDeleted, ct);
     }
 
-    public async Task<bool> CreateAsync(ClientAddressEntity entity, CancellationToken ct)
+    public async Task<bool> CreateAsync(ClientAddressesEntity entity, CancellationToken ct)
     {
         await _context.ClientAddresses.AddAsync(entity, ct);
         return await _context.SaveChangesAsync(ct) > 0;
     }
 
-    public async Task<bool> UpdateAsync(ClientAddressEntity entity, CancellationToken ct)
+    public async Task<bool> UpdateAsync(ClientAddressesEntity entity, CancellationToken ct)
     {
         _context.ClientAddresses.Update(entity);
         return await _context.SaveChangesAsync(ct) > 0;
     }
 
-    public async Task<bool> DeleteAsync(ClientAddressEntity entity, CancellationToken ct)
+    public async Task<bool> DeleteAsync(ClientAddressesEntity entity, CancellationToken ct)
     {
         _context.ClientAddresses.Update(entity);
         return await _context.SaveChangesAsync(ct) > 0;

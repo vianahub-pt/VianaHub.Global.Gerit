@@ -126,7 +126,7 @@ public class VisitAttachmentAppService : IVisitAttachmentAppService
             await RemoveAllPrimaryFlagsAsync(request.VisitId, ct);
         }
 
-        var entity = new VisitAttachmentEntity(tenantId, request.FileTypeId, request.VisitId,
+        var entity = new VisitAttachmentsEntity(tenantId, request.FileTypeId, request.VisitId,
             request.S3Key, request.FileName, request.FileSizeBytes,
             request.DisplayOrder, request.IsPrimary, _currentUser.GetUserId());
 

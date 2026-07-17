@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using VianaHub.Global.Gerit.Domain.Entities.Business;
 using VianaHub.Global.Gerit.Domain.Interfaces.Business;
 using VianaHub.Global.Gerit.Domain.ReadModels;
@@ -16,7 +16,7 @@ public class EmployeeAddressDataRepository : IEmployeeAddressDataRepository
         _context = context;
     }
 
-    public async Task<EmployeeAddressEntity> GetByIdAsync(int id, CancellationToken ct)
+    public async Task<EmployeeAddressesEntity> GetByIdAsync(int id, CancellationToken ct)
     {
         return await _context.EmployeeAddresses
             .AsNoTracking()
@@ -25,7 +25,7 @@ public class EmployeeAddressDataRepository : IEmployeeAddressDataRepository
             .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted, ct);
     }
 
-    public async Task<IEnumerable<EmployeeAddressEntity>> GetAllAsync(CancellationToken ct)
+    public async Task<IEnumerable<EmployeeAddressesEntity>> GetAllAsync(CancellationToken ct)
     {
         return await _context.EmployeeAddresses
             .AsNoTracking()
@@ -37,7 +37,7 @@ public class EmployeeAddressDataRepository : IEmployeeAddressDataRepository
             .ToListAsync(ct);
     }
 
-    public async Task<ListPage<EmployeeAddressEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct)
+    public async Task<ListPage<EmployeeAddressesEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct)
     {
         var query = _context.EmployeeAddresses
             .AsNoTracking()
@@ -72,7 +72,7 @@ public class EmployeeAddressDataRepository : IEmployeeAddressDataRepository
             .Take(pageSize)
             .ToListAsync(ct);
 
-        return new ListPage<EmployeeAddressEntity>
+        return new ListPage<EmployeeAddressesEntity>
         {
             Items = result,
             PageNumber = pageNumber,
@@ -101,7 +101,7 @@ public class EmployeeAddressDataRepository : IEmployeeAddressDataRepository
                           !x.IsDeleted, ct);
     }
 
-    public async Task<EmployeeAddressEntity> GetPrimaryAddressByEmployeeAsync(int EmployeeId, CancellationToken ct)
+    public async Task<EmployeeAddressesEntity> GetPrimaryAddressByEmployeeAsync(int EmployeeId, CancellationToken ct)
     {
         return await _context.EmployeeAddresses
             .AsNoTracking()
@@ -110,13 +110,13 @@ public class EmployeeAddressDataRepository : IEmployeeAddressDataRepository
             .FirstOrDefaultAsync(x => x.EmployeeId == EmployeeId && x.IsPrimary && !x.IsDeleted, ct);
     }
 
-    public async Task<bool> AddAsync(EmployeeAddressEntity entity, CancellationToken ct)
+    public async Task<bool> AddAsync(EmployeeAddressesEntity entity, CancellationToken ct)
     {
         await _context.EmployeeAddresses.AddAsync(entity, ct);
         return await _context.SaveChangesAsync(ct) > 0;
     }
 
-    public async Task<bool> UpdateAsync(EmployeeAddressEntity entity, CancellationToken ct)
+    public async Task<bool> UpdateAsync(EmployeeAddressesEntity entity, CancellationToken ct)
     {
         _context.EmployeeAddresses.Update(entity);
         return await _context.SaveChangesAsync(ct) > 0;

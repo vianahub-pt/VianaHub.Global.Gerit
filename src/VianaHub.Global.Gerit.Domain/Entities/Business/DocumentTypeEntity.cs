@@ -13,7 +13,7 @@ public class DocumentTypeEntity : Entity
     public bool IsDeleted { get; private set; }
 
     // Navigation Properties
-    public ICollection<DocumentTypeTranslationEntity> Translations { get; private set; }
+    public ICollection<DocumentTypeTranslationsEntity> Translations { get; private set; }
 
     // Construtor protegido para o EF Core
     protected DocumentTypeEntity() { }
@@ -28,7 +28,7 @@ public class DocumentTypeEntity : Entity
         IsDeleted = false;
         CreatedBy = createdBy;
         CreatedAt = DateTime.UtcNow;
-        Translations = new List<DocumentTypeTranslationEntity>();
+        Translations = new List<DocumentTypeTranslationsEntity>();
     }
 
     public void UpdateCode(string code, int modifiedBy)
