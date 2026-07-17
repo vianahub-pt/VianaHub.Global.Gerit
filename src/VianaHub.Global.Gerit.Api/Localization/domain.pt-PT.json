@@ -491,6 +491,22 @@
   "Domain.TenantContact.CannotDeactivateDeleted": "Não é possível desativar um contacto eliminado",
   "Domain.TenantContact.AlreadyDeleted": "O contacto já foi eliminado",
 
+  "Domain.TenantFiscalData.TenantIdRequired": "O ID do inquilino é obrigatório",
+  "Domain.TenantFiscalData.TaxNumberRequired": "O número de identificação fiscal é obrigatório",
+  "Domain.TenantFiscalData.TaxNumberMaxLength": "O número de identificação fiscal deve ter no máximo {0} caracteres",
+  "Domain.TenantFiscalData.VatNumberMaxLength": "O número de IVA deve ter no máximo {0} caracteres",
+  "Domain.TenantFiscalData.FiscalCountryRequired": "O país fiscal é obrigatório",
+  "Domain.TenantFiscalData.FiscalCountryLength": "O país fiscal deve ter exatamente 2 caracteres",
+  "Domain.TenantFiscalData.IBANMaxLength": "O IBAN deve ter no máximo {0} caracteres",
+  "Domain.TenantFiscalData.FiscalEmailMaxLength": "O e-mail fiscal deve ter no máximo {0} caracteres",
+  "Domain.TenantFiscalData.FiscalEmailInvalid": "E-mail fiscal inválido",
+  "Domain.TenantFiscalData.CreatedByRequired": "O ID do criador é obrigatório",
+  "Domain.TenantFiscalData.IdRequired": "O ID dos dados fiscais é obrigatório",
+  "Domain.TenantFiscalData.CannotUpdateDeleted": "Não é possível atualizar dados fiscais eliminados",
+  "Domain.TenantFiscalData.CannotActivateDeleted": "Não é possível ativar dados fiscais eliminados",
+  "Domain.TenantFiscalData.CannotDeactivateDeleted": "Não é possível desativar dados fiscais eliminados",
+  "Domain.TenantFiscalData.AlreadyDeleted": "Os dados fiscais já foram eliminados",
+
   "Domain.EmployeeTeam.TeamIdGreaterThanZero": "O ID da equipa deve ser maior que zero",
   "Domain.EmployeeTeam.EmployeeIdGreaterThanZero": "O ID do colaborador deve ser maior que zero",
 

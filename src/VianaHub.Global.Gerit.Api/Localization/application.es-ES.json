@@ -733,6 +733,15 @@
   "Application.Service.TenantContact.Update.ResourceNotFound": "Contacto del inquilino no encontrado",
   "Application.Service.TenantContact.ValidateBulkItem.Email": "El correo electrónico es obligatorio en la carga masiva",
 
+  "Application.Service.TenantFiscalData.Activate.ResourceNotFound": "Datos fiscales del inquilino no encontrados",
+  "Application.Service.TenantFiscalData.Create.ActiveAlreadyExists": "Ya existen datos fiscales activos para este inquilino",
+  "Application.Service.TenantFiscalData.Create.TaxNumberAlreadyExists": "Ya existen datos fiscales con este número de identificación fiscal para este país",
+  "Application.Service.TenantFiscalData.Deactivate.ResourceNotFound": "Datos fiscales del inquilino no encontrados",
+  "Application.Service.TenantFiscalData.Delete.ResourceNotFound": "Datos fiscales del inquilino no encontrados",
+  "Application.Service.TenantFiscalData.GetById.ResourceNotFound": "Datos fiscales del inquilino no encontrados o inactivos",
+  "Application.Service.TenantFiscalData.Update.ResourceNotFound": "Datos fiscales del inquilino no encontrados",
+  "Application.Service.TenantFiscalData.Update.TaxNumberAlreadyExists": "Ya existen otros datos fiscales con este número de identificación fiscal para este país",
+
   "Application.Service.User.Activate.ResourceNotFound": "Usuario no encontrado",
   "Application.Service.User.BulkUpload.EmptyFile": "El archivo CSV está vacío",
   "Application.Service.User.Create.ResourceAlreadyExists": "Ya existe un usuario con este correo electrónico",

@@ -24,6 +24,7 @@
   "Swagger.Tag.UserPreferences": "Preferencias de Usuario",
   "Swagger.Tag.Subscriptions": "Suscripciones",
   "Swagger.Tag.TenantContacts": "Contactos de Inquilinos",
+  "Swagger.Tag.TenantFiscalData": "Datos Fiscales de Inquilinos",
   "Swagger.Tag.UserRoles": "Asociaciones Usuario-Rol",
   "Swagger.Tag.RolePermissions": "Permisos de Rol",
   "Swagger.Tag.JobDefinitions": "Definiciones de Trabajo",
@@ -199,6 +200,15 @@
   "Swagger.Endpoint.TenantContact.Activate.Summary": "Activar contacto de inquilino",
   "Swagger.Endpoint.TenantContact.Deactivate.Summary": "Desactivar contacto de inquilino",
   "Swagger.Endpoint.TenantContact.Delete.Summary": "Eliminar contacto de inquilino",
+
+  "Swagger.Endpoint.TenantFiscalData.GetAll.Summary": "Obtener todos los datos fiscales del inquilino",
+  "Swagger.Endpoint.TenantFiscalData.GetById.Summary": "Obtener datos fiscales del inquilino por ID",
+  "Swagger.Endpoint.TenantFiscalData.GetPaged.Summary": "Obtener datos fiscales del inquilino paginados",
+  "Swagger.Endpoint.TenantFiscalData.Create.Summary": "Crear nuevos datos fiscales del inquilino",
+  "Swagger.Endpoint.TenantFiscalData.Update.Summary": "Actualizar datos fiscales del inquilino",
+  "Swagger.Endpoint.TenantFiscalData.Activate.Summary": "Activar datos fiscales del inquilino",
+  "Swagger.Endpoint.TenantFiscalData.Deactivate.Summary": "Desactivar datos fiscales del inquilino",
+  "Swagger.Endpoint.TenantFiscalData.Delete.Summary": "Eliminar datos fiscales del inquilino",
 
   "Swagger.Endpoint.Equipment.GetAll.Summary": "Obtener todos los equipos",
   "Swagger.Endpoint.Equipment.GetById.Summary": "Obtener equipo por ID",
