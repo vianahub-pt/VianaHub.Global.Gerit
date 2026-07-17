@@ -13,7 +13,7 @@ public static class VisitTeamFunctionEndpoint
 {
     public static void MapVisitTeamFunctionEndpoints(this IEndpointRouteBuilder app)
     {
-        var groupV1 = app.MapGroup("/v1/functions").WithTags("VisitTeamFunctions").WithGroupName("v1").RequireAuthorization();
+        var groupV1 = app.MapGroup("/v1/visit-team-functions").WithTags("VisitTeamFunctions").WithGroupName("v1").RequireAuthorization();
 
         groupV1.MapGet("/", async ([FromServices] IVisitTeamFunctionAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
