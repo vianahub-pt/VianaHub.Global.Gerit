@@ -4,9 +4,9 @@ using VianaHub.Global.Gerit.Domain.Interfaces.Base;
 
 namespace VianaHub.Global.Gerit.Domain.Validators.Business.Function;
 
-public class DeleteFunctionValidator : AbstractValidator<FunctionEntity>
+public class DeleteVisitTeamFunctionValidator : AbstractValidator<VisitTeamFunctionEntity>
 {
-    public DeleteFunctionValidator(ILocalizationService localization)
+    public DeleteVisitTeamFunctionValidator(ILocalizationService localization)
     {
         RuleFor(x => x.Id)
             .GreaterThan(0)

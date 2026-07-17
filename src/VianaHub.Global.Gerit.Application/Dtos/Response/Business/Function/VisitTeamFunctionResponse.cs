@@ -1,6 +1,6 @@
 ﻿namespace VianaHub.Global.Gerit.Application.Dtos.Response.Business.Function;
 
-public class FunctionResponse
+public class VisitTeamFunctionResponse
 {
     public int Id { get; set; }
     public int TenantId { get; set; }

@@ -18,25 +18,25 @@ using VianaHub.Global.Gerit.Domain.Tools.Notifications;
 
 namespace VianaHub.Global.Gerit.Application.Services.Business;
 
-public class FunctionAppService : IFunctionAppService
+public class VisitTeamFunctionAppService : IVisitTeamFunctionAppService
 {
-    private readonly IFunctionDataRepository _repo;
-    private readonly IFunctionDomainService _domain;
+    private readonly IVisitTeamFunctionDataRepository _repo;
+    private readonly IVisitTeamFunctionDomainService _domain;
     private readonly IMapper _mapper;
     private readonly INotify _notify;
     private readonly ILocalizationService _localization;
     private readonly ICurrentUserService _currentUser;
-    private readonly ILogger<FunctionAppService> _logger;
+    private readonly ILogger<VisitTeamFunctionAppService> _logger;
     private readonly IFileValidationService _fileValidation;
 
-    public FunctionAppService(
-        IFunctionDataRepository repo,
-        IFunctionDomainService domain,
+    public VisitTeamFunctionAppService(
+        IVisitTeamFunctionDataRepository repo,
+        IVisitTeamFunctionDomainService domain,
         IMapper mapper,
         INotify notify,
         ILocalizationService localization,
         ICurrentUserService currentUser,
-        ILogger<FunctionAppService> logger,
+        ILogger<VisitTeamFunctionAppService> logger,
         IFileValidationService fileValidation)
     {
         _repo = repo;
@@ -49,13 +49,13 @@ public class FunctionAppService : IFunctionAppService
         _fileValidation = fileValidation;
     }
 
-    public async Task<IEnumerable<FunctionResponse>> GetAllAsync(CancellationToken ct)
+    public async Task<IEnumerable<VisitTeamFunctionResponse>> GetAllAsync(CancellationToken ct)
     {
         var entities = await _repo.GetAllAsync(ct);
-        return _mapper.Map<IEnumerable<FunctionResponse>>(entities);
+        return _mapper.Map<IEnumerable<VisitTeamFunctionResponse>>(entities);
     }
 
-    public async Task<FunctionResponse> GetByIdAsync(int id, CancellationToken ct)
+    public async Task<VisitTeamFunctionResponse> GetByIdAsync(int id, CancellationToken ct)
     {
         var entity = await _repo.GetByIdAsync(id, ct);
         if (entity == null || entity.IsDeleted || !entity.IsActive)
@@ -63,17 +63,17 @@ public class FunctionAppService : IFunctionAppService
             _notify.Add(_localization.GetMessage("Application.Service.Function.Update.ResourceNotFound"), 410);
             return null;
         }
-        return _mapper.Map<FunctionResponse>(entity);
+        return _mapper.Map<VisitTeamFunctionResponse>(entity);
     }
 
-    public async Task<ListPageResponse<FunctionResponse>> GetPagedAsync(PagedFilterRequest request, CancellationToken ct)
+    public async Task<ListPageResponse<VisitTeamFunctionResponse>> GetPagedAsync(PagedFilterRequest request, CancellationToken ct)
     {
         var filter = new PagedFilter(request.Search, request.IsActive, request.PageNumber, request.PageSize, request.SortBy, request.SortDirection);
         var paged = await _repo.GetPagedAsync(filter, ct);
-        return _mapper.Map<ListPageResponse<FunctionResponse>>(paged);
+        return _mapper.Map<ListPageResponse<VisitTeamFunctionResponse>>(paged);
     }
 
-    public async Task<int> CreateAsync(CreateFunctionRequest request, CancellationToken ct)
+    public async Task<int> CreateAsync(CreateVisitTeamFunctionRequest request, CancellationToken ct)
     {
         var tenantId = _currentUser.GetTenantId();
         var exists = await _repo.ExistsByNameAsync(tenantId, request.Name, ct);
@@ -83,12 +83,12 @@ public class FunctionAppService : IFunctionAppService
             return 0;
         }
 
-        var entity = new FunctionEntity(tenantId, request.Name, request.Description, _currentUser.GetUserId());
+        var entity = new VisitTeamFunctionEntity(tenantId, request.Name, request.Description, _currentUser.GetUserId());
         var success = await _domain.CreateAsync(entity, ct);
         return success ? entity.Id : 0;
     }
 
-    public async Task<bool> UpdateAsync(int id, UpdateFunctionRequest request, CancellationToken ct)
+    public async Task<bool> UpdateAsync(int id, UpdateVisitTeamFunctionRequest request, CancellationToken ct)
     {
         var entity = await _repo.GetByIdAsync(id, ct);
         if (entity == null)
@@ -162,7 +162,7 @@ public class FunctionAppService : IFunctionAppService
         return await ProcessBulkItemsAsync(items, ct);
     }
 
-    private List<BulkUploadFunctionItem> ReadCsvFile(IFormFile file)
+    private List<BulkUploadVisitTeamFunctionItem> ReadCsvFile(IFormFile file)
     {
         try
         {
@@ -180,7 +180,7 @@ public class FunctionAppService : IFunctionAppService
             };
 
             using var csv = new CsvReader(reader, config);
-            var records = new List<BulkUploadFunctionItem>();
+            var records = new List<BulkUploadVisitTeamFunctionItem>();
 
             csv.Read();
             csv.ReadHeader();
@@ -192,7 +192,7 @@ public class FunctionAppService : IFunctionAppService
             {
                 try
                 {
-                    var record = csv.GetRecord<BulkUploadFunctionItem>();
+                    var record = csv.GetRecord<BulkUploadVisitTeamFunctionItem>();
                     if (record != null)
                     {
                         // Sanitiza e normaliza campos
@@ -242,7 +242,7 @@ public class FunctionAppService : IFunctionAppService
         }
     }
 
-    private async Task<bool> ProcessBulkItemsAsync(List<BulkUploadFunctionItem> items, CancellationToken ct)
+    private async Task<bool> ProcessBulkItemsAsync(List<BulkUploadVisitTeamFunctionItem> items, CancellationToken ct)
     {
         var hasErrors = false;
         var tenantId = _currentUser.GetTenantId();
@@ -266,7 +266,7 @@ public class FunctionAppService : IFunctionAppService
             }
 
             // Cria a entidade
-            var entity = new FunctionEntity(tenantId, item.Name, item.Description, _currentUser.GetUserId());
+            var entity = new VisitTeamFunctionEntity(tenantId, item.Name, item.Description, _currentUser.GetUserId());
 
             // Tenta criar no domínio
             var success = await _domain.CreateAsync(entity, ct);
@@ -281,7 +281,7 @@ public class FunctionAppService : IFunctionAppService
         return !hasErrors;
     }
 
-    private bool ValidateBulkItem(BulkUploadFunctionItem item)
+    private bool ValidateBulkItem(BulkUploadVisitTeamFunctionItem item)
     {
         if (string.IsNullOrWhiteSpace(item.Name))
         {

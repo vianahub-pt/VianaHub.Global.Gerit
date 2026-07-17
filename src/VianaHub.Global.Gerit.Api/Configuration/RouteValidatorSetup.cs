@@ -99,8 +99,8 @@ public static class RouteValidatorSetup
         services.AddScoped<IValidator<RefreshRequest>, RefreshRouteValidator>();
 
         // Function Route Validators
-        services.AddScoped<IValidator<CreateFunctionRequest>, CreateFunctionRouteValidator>();
-        services.AddScoped<IValidator<UpdateFunctionRequest>, UpdateFunctionRouteValidator>();
+        services.AddScoped<IValidator<CreateVisitTeamFunctionRequest>, CreateVisitTeamFunctionRouteValidator>();
+        services.AddScoped<IValidator<UpdateVisitTeamFunctionRequest>, UpdateVisitTeamFunctionRouteValidator>();
 
         // Vehicle Route Validators
         services.AddScoped<IValidator<CreateVehicleRequest>, CreateVehicleRouteValidator>();

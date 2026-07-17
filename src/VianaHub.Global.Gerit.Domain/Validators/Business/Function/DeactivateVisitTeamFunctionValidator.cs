@@ -4,9 +4,9 @@ using VianaHub.Global.Gerit.Domain.Interfaces.Base;
 
 namespace VianaHub.Global.Gerit.Domain.Validators.Business.Function;
 
-public class ActivateFunctionValidator : AbstractValidator<FunctionEntity>
+public class DeactivateVisitTeamFunctionValidator : AbstractValidator<VisitTeamFunctionEntity>
 {
-    public ActivateFunctionValidator(ILocalizationService localization)
+    public DeactivateVisitTeamFunctionValidator(ILocalizationService localization)
     {
         RuleFor(x => x.Id)
             .GreaterThan(0)
@@ -14,6 +14,6 @@ public class ActivateFunctionValidator : AbstractValidator<FunctionEntity>
 
         RuleFor(x => x.IsDeleted)
             .Equal(false)
-            .WithMessage(localization.GetMessage("Domain.Function.CannotActivateDeleted"));
+            .WithMessage(localization.GetMessage("Domain.Function.CannotDeactivateDeleted"));
     }
 }

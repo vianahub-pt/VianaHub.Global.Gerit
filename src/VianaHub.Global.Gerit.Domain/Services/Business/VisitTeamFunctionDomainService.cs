@@ -8,15 +8,15 @@ using VianaHub.Global.Gerit.Domain.Tools.Pagination;
 
 namespace VianaHub.Global.Gerit.Domain.Services.Business;
 
-public class FunctionDomainService : IFunctionDomainService
+public class VisitTeamFunctionDomainService : IVisitTeamFunctionDomainService
 {
-    private readonly IFunctionDataRepository _repo;
-    private readonly IEntityDomainValidator<FunctionEntity> _validator;
+    private readonly IVisitTeamFunctionDataRepository _repo;
+    private readonly IEntityDomainValidator<VisitTeamFunctionEntity> _validator;
     private readonly INotify _notify;
 
-    public FunctionDomainService(
-        IFunctionDataRepository repo,
-        IEntityDomainValidator<FunctionEntity> validator,
+    public VisitTeamFunctionDomainService(
+        IVisitTeamFunctionDataRepository repo,
+        IEntityDomainValidator<VisitTeamFunctionEntity> validator,
         INotify notify)
     {
         _repo = repo;
@@ -24,15 +24,15 @@ public class FunctionDomainService : IFunctionDomainService
         _notify = notify;
     }
 
-    public async Task<FunctionEntity> GetByIdAsync(int id, CancellationToken ct)
+    public async Task<VisitTeamFunctionEntity> GetByIdAsync(int id, CancellationToken ct)
     {
         return await _repo.GetByIdAsync(id, ct);
     }
-    public async Task<IEnumerable<FunctionEntity>> GetAllAsync(CancellationToken ct)
+    public async Task<IEnumerable<VisitTeamFunctionEntity>> GetAllAsync(CancellationToken ct)
     {
         return await _repo.GetAllAsync(ct);
     }
-    public async Task<ListPage<FunctionEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct)
+    public async Task<ListPage<VisitTeamFunctionEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct)
     {
         return await _repo.GetPagedAsync(request, ct);
     }
@@ -41,7 +41,7 @@ public class FunctionDomainService : IFunctionDomainService
         return await _repo.ExistsByIdAsync(id, ct);
     }
 
-    public async Task<bool> CreateAsync(FunctionEntity entity, CancellationToken ct)
+    public async Task<bool> CreateAsync(VisitTeamFunctionEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForCreateAsync(entity);
         if (!validationResult.IsValid)
@@ -55,7 +55,7 @@ public class FunctionDomainService : IFunctionDomainService
 
         return await _repo.AddAsync(entity, ct);
     }
-    public async Task<bool> UpdateAsync(FunctionEntity entity, CancellationToken ct)
+    public async Task<bool> UpdateAsync(VisitTeamFunctionEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForUpdateAsync(entity);
         if (!validationResult.IsValid)
@@ -69,7 +69,7 @@ public class FunctionDomainService : IFunctionDomainService
 
         return await _repo.UpdateAsync(entity, ct);
     }
-    public async Task<bool> ActivateAsync(FunctionEntity entity, CancellationToken ct)
+    public async Task<bool> ActivateAsync(VisitTeamFunctionEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForActivateAsync(entity);
         if (!validationResult.IsValid)
@@ -83,7 +83,7 @@ public class FunctionDomainService : IFunctionDomainService
 
         return await _repo.UpdateAsync(entity, ct);
     }
-    public async Task<bool> DeactivateAsync(FunctionEntity entity, CancellationToken ct)
+    public async Task<bool> DeactivateAsync(VisitTeamFunctionEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForDeactivateAsync(entity);
         if (!validationResult.IsValid)
@@ -97,7 +97,7 @@ public class FunctionDomainService : IFunctionDomainService
 
         return await _repo.UpdateAsync(entity, ct);
     }
-    public async Task<bool> DeleteAsync(FunctionEntity entity, CancellationToken ct)
+    public async Task<bool> DeleteAsync(VisitTeamFunctionEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForDeleteAsync(entity);
         if (!validationResult.IsValid)

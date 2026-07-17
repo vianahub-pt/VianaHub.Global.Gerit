@@ -4,10 +4,14 @@ using VianaHub.Global.Gerit.Domain.Interfaces.Base;
 
 namespace VianaHub.Global.Gerit.Domain.Validators.Business.Function;
 
-public class CreateFunctionValidator : AbstractValidator<FunctionEntity>
+public class UpdateVisitTeamFunctionValidator : AbstractValidator<VisitTeamFunctionEntity>
 {
-    public CreateFunctionValidator(ILocalizationService localization)
+    public UpdateVisitTeamFunctionValidator(ILocalizationService localization)
     {
+        RuleFor(x => x.Id)
+            .GreaterThan(0)
+            .WithMessage(localization.GetMessage("Domain.Function.InvalidId"));
+
         RuleFor(x => x.TenantId)
             .GreaterThan(0)
             .WithMessage(localization.GetMessage("Domain.Function.TenantIdRequired"));
@@ -18,10 +22,8 @@ public class CreateFunctionValidator : AbstractValidator<FunctionEntity>
             .MaximumLength(150)
             .WithMessage(localization.GetMessage("Domain.Function.NameMaxLength", 150));
 
-        RuleFor(x => x.Description)
-            .NotEmpty()
-            .WithMessage(localization.GetMessage("Domain.Function.DescriptionRequired"))
-            .MaximumLength(255)
-            .WithMessage(localization.GetMessage("Domain.Function.DescriptionMaxLength", 255));
+        RuleFor(x => x.IsDeleted)
+            .Equal(false)
+            .WithMessage(localization.GetMessage("Domain.Function.CannotUpdateDeleted"));
     }
 }
