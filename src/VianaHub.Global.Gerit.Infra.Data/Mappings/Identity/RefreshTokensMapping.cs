@@ -32,7 +32,9 @@ public class RefreshTokensMapping : IEntityTypeConfiguration<RefreshTokensEntity
             .IsRequired();
 
         builder.Property(x => x.Token)
-            .HasColumnType("VARBINARY(64)")
+            .HasColumnName("TokenHash")
+            .HasColumnType("NVARCHAR(200)")
+            .HasMaxLength(200)
             .IsRequired();
 
         builder.Property(x => x.ExpiresAt)

@@ -549,7 +549,7 @@ CREATE TABLE dbo.RefreshTokens (
 Id 						INT IDENTITY(1,1)	NOT NULL,
 TenantId 				INT					NOT NULL,
 UserId 					INT					NOT NULL,
-TokenHash               VARBINARY(64)       NOT NULL,
+TokenHash               NVARCHAR(200)       NOT NULL,
 ExpiresAt				DATETIME2(7) 		NOT	NULL,
 RevokedAt 				DATETIME2(7) 			NULL,
 RevokedBy				INT 					NULL,
