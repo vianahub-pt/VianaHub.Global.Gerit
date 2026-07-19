@@ -36,8 +36,8 @@ public class RefreshTokensMapping : IEntityTypeConfiguration<RefreshTokensEntity
             .HasColumnType("VARBINARY(64)")
             .IsRequired()
             .HasConversion(
-                v => Convert.FromBase64String(v!),           // string → byte[] para INSERT/UPDATE
-                v => Convert.ToBase64String(v).TrimEnd('=')  // byte[] → string para SELECT
+                v => Convert.FromBase64String(PadBase64(v!)), // string → byte[] — repõe padding antes
+                v => Convert.ToBase64String(v).TrimEnd('=')   // byte[] → string — remove padding
             );
 
         builder.Property(x => x.ExpiresAt)
@@ -83,5 +83,16 @@ public class RefreshTokensMapping : IEntityTypeConfiguration<RefreshTokensEntity
         builder.HasIndex(x => new { x.TenantId, x.ExpiresAt })
             .HasDatabaseName("IX_RefreshTokens_ExpiresAt")
             .HasFilter("[RevokedAt] IS NULL");
+    }
+
+    /// <summary>
+    /// Repõe o padding Base64 removido para que o comprimento total seja múltiplo de 4.
+    /// Sem o padding, Convert.FromBase64String() lança FormatException.
+    /// </summary>
+    private static string PadBase64(string base64)
+    {
+        return base64.Length % 4 == 0
+            ? base64
+            : base64 + new string('=', 4 - base64.Length % 4);
     }
 }
