@@ -7,7 +7,9 @@ public class ClientResponse
 {
     public int Id { get; set; }
     public int TenantId { get; set; }
-    public byte PartyTypeId { get; set; }
+    public string? Tenant { get; set; }
+    public int PartyTypeId { get; set; }
+    public string? PartyType { get; set; }
     public string? Name { get; set; }
     public string? PhoneNumber { get; set; }
     public string? CellPhoneNumber { get; set; }

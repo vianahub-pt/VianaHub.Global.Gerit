@@ -24,7 +24,8 @@ public class ClientRepository : IClientRepository
         return await _context.Clients
             .AsNoTracking()
             .AsSplitQuery()
-            .Include(x => x.Contacts)
+            .Include(x => x.PartyType)
+            .ThenInclude(x => x.Translations)
             .Where(x => !x.IsDeleted)
             .OrderBy(x => x.CreatedAt)
             .ToListAsync(ct);
@@ -35,9 +36,8 @@ public class ClientRepository : IClientRepository
         return await _context.Clients
             .AsNoTracking()
             .AsSplitQuery()
-            .Include(x => x.FiscalData)
-            .Include(x => x.Contacts)
-            .Include(x => x.Addresses)
+            .Include(x => x.PartyType)
+            .ThenInclude(x => x.Translations)
             .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted, ct);
     }
 
@@ -49,6 +49,10 @@ public class ClientRepository : IClientRepository
             .Include(x => x.FiscalData)
             .Include(x => x.Contacts)
             .Include(x => x.Addresses)
+            .Include(x => x.PartyType)
+            .ThenInclude(x => x.Translations)
+            .Include(x => x.AcquisitionSourceType)
+            .ThenInclude(x => x.Translations)
             .Where(x => !x.IsDeleted);
 
         if (!string.IsNullOrWhiteSpace(request.Search))
