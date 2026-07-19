@@ -31,9 +31,14 @@ public class RefreshTokensMapping : IEntityTypeConfiguration<RefreshTokensEntity
             .HasColumnType("INT")
             .IsRequired();
 
-        builder.Property(x => x.Token)
+        builder.Property(x => x.TokenHash)
+            .HasColumnName("TokenHash")
             .HasColumnType("VARBINARY(64)")
-            .IsRequired();
+            .IsRequired()
+            .HasConversion(
+                v => Convert.FromBase64String(v!),           // string → byte[] para INSERT/UPDATE
+                v => Convert.ToBase64String(v).TrimEnd('=')  // byte[] → string para SELECT
+            );
 
         builder.Property(x => x.ExpiresAt)
             .HasColumnType("DATETIME2(7)")
@@ -65,7 +70,7 @@ public class RefreshTokensMapping : IEntityTypeConfiguration<RefreshTokensEntity
             .IsRequired(false);
 
         // Indice unico: TokenHash
-        builder.HasIndex(x => x.Token)
+        builder.HasIndex(x => x.TokenHash)
             .IsUnique()
             .HasDatabaseName("UX_RefreshTokens_TokenHash");
 
