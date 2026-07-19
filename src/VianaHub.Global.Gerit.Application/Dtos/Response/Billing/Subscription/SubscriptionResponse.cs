@@ -7,7 +7,9 @@ public class SubscriptionResponse
     public int SubscriptionPlanId { get; set; }
     public string? SubscriptionPlanName { get; set; }
     public int StatusDefinitionId { get; set; }
+    public string? StatusDefinitionName { get; set; }
     public int StatusDomainId { get; set; }
+    public string? StatusDomainName { get; set; }
     public decimal AgreedAmount { get; set; }
     public string? BillingInterval { get; set; }
     public string? CurrencyCode { get; set; }

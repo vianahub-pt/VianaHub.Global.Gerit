@@ -25,6 +25,9 @@ public class SubscriptionDataRepository : ISubscriptionDataRepository
             .Include(x => x.Tenant)
             .Include(x => x.StatusDefinition)
                 .ThenInclude(x => x.Translations)
+            .Include(x => x.StatusDefinition)
+                .ThenInclude(x => x.StatusDomain)
+                .ThenInclude(x => x.Translations)
             .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted, ct);
     }
 
@@ -36,6 +39,9 @@ public class SubscriptionDataRepository : ISubscriptionDataRepository
                 .ThenInclude(x => x.Translations)
             .Include(x => x.Tenant)
             .Include(x => x.StatusDefinition)
+                .ThenInclude(x => x.Translations)
+            .Include(x => x.StatusDefinition)
+                .ThenInclude(x => x.StatusDomain)
                 .ThenInclude(x => x.Translations)
             .Where(x => !x.IsDeleted)
             .OrderByDescending(x => x.CreatedAt)
@@ -50,6 +56,9 @@ public class SubscriptionDataRepository : ISubscriptionDataRepository
                 .ThenInclude(x => x.Translations)
             .Include(x => x.Tenant)
             .Include(x => x.StatusDefinition)
+                .ThenInclude(x => x.Translations)
+            .Include(x => x.StatusDefinition)
+                .ThenInclude(x => x.StatusDomain)
                 .ThenInclude(x => x.Translations)
             .Where(x => !x.IsDeleted);
 
@@ -116,6 +125,9 @@ public class SubscriptionDataRepository : ISubscriptionDataRepository
             .Include(x => x.Tenant)
             .Include(x => x.StatusDefinition)
                 .ThenInclude(x => x.Translations)
+            .Include(x => x.StatusDefinition)
+                .ThenInclude(x => x.StatusDomain)
+                .ThenInclude(x => x.Translations)
             .FirstOrDefaultAsync(x => x.TenantId == tenantId && !x.IsDeleted, ct);
     }
 
@@ -127,6 +139,9 @@ public class SubscriptionDataRepository : ISubscriptionDataRepository
                 .ThenInclude(x => x.Translations)
             .Include(x => x.Tenant)
             .Include(x => x.StatusDefinition)
+                .ThenInclude(x => x.Translations)
+            .Include(x => x.StatusDefinition)
+                .ThenInclude(x => x.StatusDomain)
                 .ThenInclude(x => x.Translations)
             .Where(x => x.SubscriptionPlanId == subscriptionPlanId && !x.IsDeleted)
             .ToListAsync(ct);
@@ -140,6 +155,9 @@ public class SubscriptionDataRepository : ISubscriptionDataRepository
                 .ThenInclude(x => x.Translations)
             .Include(x => x.Tenant)
             .Include(x => x.StatusDefinition)
+                .ThenInclude(x => x.Translations)
+            .Include(x => x.StatusDefinition)
+                .ThenInclude(x => x.StatusDomain)
                 .ThenInclude(x => x.Translations)
             .Where(x => x.IsActive && !x.IsDeleted)
             .ToListAsync(ct);
@@ -155,6 +173,9 @@ public class SubscriptionDataRepository : ISubscriptionDataRepository
                 .ThenInclude(x => x.Translations)
             .Include(x => x.Tenant)
             .Include(x => x.StatusDefinition)
+                .ThenInclude(x => x.Translations)
+            .Include(x => x.StatusDefinition)
+                .ThenInclude(x => x.StatusDomain)
                 .ThenInclude(x => x.Translations)
             .Where(x => x.IsActive 
                 && !x.IsDeleted 

@@ -29,8 +29,6 @@ public class PlanAppService : IPlanAppService
     private readonly ILogger<PlanAppService> _logger;
     private readonly IFileValidationService _fileValidation;
 
-    private const string DefaultLanguage = "pt-PT";
-
     public PlanAppService(
         IPlanDataRepository repo,
         IPlanDomainService domain,
@@ -51,30 +49,29 @@ public class PlanAppService : IPlanAppService
         _fileValidation = fileValidation;
     }
 
+    private static readonly string DefaultLanguage = Domain.Constants.SupportedLanguages.Default;
+
     public async Task<IEnumerable<PlanResponse>> GetAllAsync(CancellationToken ct)
     {
         var entities = await _repo.GetAllAsync(ct);
-        var culture = _localization.GetCurrentCulture();
-        return entities.Select(e => MapToResponse(e, culture));
+        return _mapper.Map<IEnumerable<PlanResponse>>(entities);
     }
 
     public async Task<PlanResponse> GetByIdAsync(int id, CancellationToken ct)
     {
         var entity = await _repo.GetByIdAsync(id, ct);
         if (entity == null) return null;
-        var culture = _localization.GetCurrentCulture();
-        return MapToResponse(entity, culture);
+        return _mapper.Map<PlanResponse>(entity);
     }
 
     public async Task<ListPageResponse<PlanResponse>> GetPagedAsync(PagedFilterRequest request, CancellationToken ct)
     {
         var filter = new PagedFilter(request.Search, request.IsActive, request.PageNumber, request.PageSize, request.SortBy, request.SortDirection);
         var paged = await _repo.GetPagedAsync(filter, ct);
-        var culture = _localization.GetCurrentCulture();
 
         var responseDto = new ListPageResponse<PlanResponse>
         {
-            Items = paged.Items.Select(e => MapToResponse(e, culture)).ToList(),
+            Items = _mapper.Map<IEnumerable<PlanResponse>>(paged.Items).ToList(),
             PageNumber = paged.PageNumber,
             PageSize = paged.PageSize,
             TotalItems = paged.TotalItems,
@@ -365,29 +362,4 @@ public class PlanAppService : IPlanAppService
         return true;
     }
 
-    /// <summary>
-    /// Mapeia uma SubscriptionPlanEntity para PlanResponse, resolvendo Name/Description
-    /// a partir da tradução correspondente à cultura do utilizador.
-    /// Fallback: pt-PT se a tradução para a cultura atual não existir.
-    /// </summary>
-    private PlanResponse MapToResponse(SubscriptionPlanEntity entity, string culture)
-    {
-        var translation = entity.Translations.FirstOrDefault(t => t.LanguageCode == culture)
-                       ?? entity.Translations.FirstOrDefault(t => t.LanguageCode == DefaultLanguage);
-
-        return new PlanResponse
-        {
-            Id = entity.Id,
-            Name = translation?.Name,
-            Description = translation?.Description,
-            PricePerHour = entity.PricePerHour,
-            PricePerDay = entity.PricePerDay,
-            PricePerMonth = entity.PricePerMonth,
-            PricePerYear = entity.PricePerYear,
-            Currency = entity.Currency,
-            MaxUsers = entity.MaxUsers,
-            MaxPhotosPerVisit = entity.MaxPhotosPerVisit,
-            IsActive = entity.IsActive
-        };
-    }
 }

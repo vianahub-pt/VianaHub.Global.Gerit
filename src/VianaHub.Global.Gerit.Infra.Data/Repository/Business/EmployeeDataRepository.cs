@@ -22,6 +22,9 @@ public class EmployeeDataRepository : IEmployeeDataRepository
             .AsNoTracking()
             .Include(x => x.StatusDefinition)
                 .ThenInclude(x => x.Translations)
+            .Include(x => x.StatusDefinition)
+                .ThenInclude(x => x.StatusDomain)
+                .ThenInclude(x => x.Translations)
             .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted, ct);
     }
 
@@ -31,6 +34,9 @@ public class EmployeeDataRepository : IEmployeeDataRepository
             .AsNoTracking()
             .Include(x => x.StatusDefinition)
                 .ThenInclude(x => x.Translations)
+            .Include(x => x.StatusDefinition)
+                .ThenInclude(x => x.StatusDomain)
+                .ThenInclude(x => x.Translations)
             .Where(x => !x.IsDeleted).OrderBy(x => x.Name).ToListAsync(ct);
     }
 
@@ -39,6 +45,9 @@ public class EmployeeDataRepository : IEmployeeDataRepository
         var query = _context.Set<EmployeeEntity>()
             .AsNoTracking()
             .Include(x => x.StatusDefinition)
+                .ThenInclude(x => x.Translations)
+            .Include(x => x.StatusDefinition)
+                .ThenInclude(x => x.StatusDomain)
                 .ThenInclude(x => x.Translations)
             .Where(x => !x.IsDeleted);
 

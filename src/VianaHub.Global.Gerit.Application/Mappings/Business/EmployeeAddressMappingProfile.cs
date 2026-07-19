@@ -1,7 +1,9 @@
 using AutoMapper;
+using System.Globalization;
 using VianaHub.Global.Gerit.Application.Dtos.Base;
 using VianaHub.Global.Gerit.Application.Dtos.Response.Business.EmployeeAddress;
 using VianaHub.Global.Gerit.Domain.Entities.Business;
+using VianaHub.Global.Gerit.Domain.Services;
 using VianaHub.Global.Gerit.Domain.Tools.Pagination;
 
 namespace VianaHub.Global.Gerit.Application.Mappings.Business;
@@ -16,7 +18,8 @@ public class EmployeeAddressesMappingProfile : Profile
             .ForMember(dest => dest.EmployeeId, opt => opt.MapFrom(src => src.EmployeeId))
             .ForMember(dest => dest.Employee, opt => opt.MapFrom(src => src.Employee.Name))
             .ForMember(dest => dest.AddressTypeId, opt => opt.MapFrom(src => src.AddressTypeId))
-            .ForMember(dest => dest.AddressType, opt => opt.MapFrom(src => src.AddressType.Name))
+            .ForMember(dest => dest.AddressType, opt => opt.MapFrom((src, _, _, _) =>
+                TranslationResolver.Resolve(src.AddressType.Translations, CultureInfo.CurrentCulture.Name, t => t.LanguageCode, t => t.Name)))
             .ForMember(dest => dest.Street, opt => opt.MapFrom(src => src.Street))
             .ForMember(dest => dest.City, opt => opt.MapFrom(src => src.City))
             .ForMember(dest => dest.PostalCode, opt => opt.MapFrom(src => src.PostalCode))

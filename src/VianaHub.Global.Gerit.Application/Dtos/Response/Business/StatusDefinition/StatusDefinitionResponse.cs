@@ -9,6 +9,7 @@ public class StatusDefinitionResponse
     public int StatusDomainId { get; set; }
     public string? StatusDomainName { get; set; }
     public string? Code { get; set; }
+    public string? Name { get; set; }
     public int DisplayOrder { get; set; }
     public bool IsSystem { get; set; }
     public bool IsActive { get; set; }

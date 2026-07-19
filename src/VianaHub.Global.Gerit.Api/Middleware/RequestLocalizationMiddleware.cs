@@ -23,7 +23,7 @@ public class RequestLocalizationMiddleware
         var list = supportedCultures?.ToList();
         if (list == null || list.Count == 0)
         {
-            list = new List<string> { "pt-PT", "en-US", "es-ES" };
+            list = new List<string> { "pt-PT", "pt-BR", "en-US", "es-ES" };
         }
 
         _supported = list.Select(c => new CultureInfo(c)).ToList();
