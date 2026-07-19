@@ -21,7 +21,8 @@ public class VisitDataRepository : IVisitDataRepository
         return await _context.Set<VisitEntity>()
             .AsNoTracking()
             .Include(x => x.Client)
-            .Include(x => x.Status)
+            .Include(x => x.StatusDefinition)
+                .ThenInclude(x => x.Translations)
             .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted, ct);
     }
 
@@ -30,7 +31,8 @@ public class VisitDataRepository : IVisitDataRepository
         return await _context.Set<VisitEntity>()
             .AsNoTracking()
             .Include(x => x.Client)
-            .Include(x => x.Status)
+            .Include(x => x.StatusDefinition)
+                .ThenInclude(x => x.Translations)
             .Where(x => !x.IsDeleted)
             .OrderByDescending(x => x.StartDateTime)
             .ToListAsync(ct);
@@ -41,7 +43,8 @@ public class VisitDataRepository : IVisitDataRepository
         var query = _context.Set<VisitEntity>()
             .AsNoTracking()
             .Include(x => x.Client)
-            .Include(x => x.Status)
+            .Include(x => x.StatusDefinition)
+                .ThenInclude(x => x.Translations)
             .Where(x => !x.IsDeleted);
 
         if (!string.IsNullOrWhiteSpace(request.Search))

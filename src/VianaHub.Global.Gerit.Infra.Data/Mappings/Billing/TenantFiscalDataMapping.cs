@@ -14,7 +14,7 @@ public class TenantFiscalDataMapping : IEntityTypeConfiguration<TenantFiscalData
     {
         builder.ToTable("TenantFiscalData", "dbo");
 
-        // Chave Primária
+        // Chave Primaria
         builder.HasKey(x => x.Id)
             .HasName("PK_TenantFiscalData");
 
@@ -27,19 +27,24 @@ public class TenantFiscalDataMapping : IEntityTypeConfiguration<TenantFiscalData
             .HasColumnType("INT")
             .IsRequired();
 
-        builder.Property(x => x.NIF)
-            .HasColumnType("CHAR(9)")
-            .HasMaxLength(9)
-            .IsRequired();
-
-        builder.Property(x => x.VATNumber)
+        builder.Property(x => x.TaxNumber)
             .HasColumnType("NVARCHAR(20)")
             .HasMaxLength(20)
             .IsRequired();
 
-        builder.Property(x => x.CAE)
-            .HasColumnType("NVARCHAR(10)")
-            .HasMaxLength(10)
+        builder.Property(x => x.VatNumber)
+            .HasColumnType("NVARCHAR(20)")
+            .HasMaxLength(20)
+            .IsRequired(false);
+
+        builder.Property(x => x.IBAN)
+            .HasColumnType("NVARCHAR(34)")
+            .HasMaxLength(34)
+            .IsRequired(false);
+
+        builder.Property(x => x.FiscalEmail)
+            .HasColumnType("NVARCHAR(255)")
+            .HasMaxLength(255)
             .IsRequired(false);
 
         builder.Property(x => x.FiscalCountry)
@@ -48,9 +53,9 @@ public class TenantFiscalDataMapping : IEntityTypeConfiguration<TenantFiscalData
             .HasDefaultValue("PT")
             .IsRequired();
 
-        builder.Property(x => x.IsVATRegistered)
+        builder.Property(x => x.IsVatRegistered)
             .HasColumnType("BIT")
-            .HasDefaultValue(true)
+            .HasDefaultValue(false)
             .IsRequired();
 
         builder.Property(x => x.IsActive)
@@ -68,8 +73,8 @@ public class TenantFiscalDataMapping : IEntityTypeConfiguration<TenantFiscalData
               .IsRequired();
 
         builder.Property(x => x.CreatedAt)
-            .HasColumnType("DATETIME2")
-            .HasDefaultValueSql("SYSDATETIME()")
+            .HasColumnType("DATETIME2(7)")
+            .HasDefaultValueSql("SYSUTCDATETIME()")
             .IsRequired();
 
         builder.Property(x => x.ModifiedBy)
@@ -77,7 +82,7 @@ public class TenantFiscalDataMapping : IEntityTypeConfiguration<TenantFiscalData
             .IsRequired(false);
 
         builder.Property(x => x.ModifiedAt)
-            .HasColumnType("DATETIME2")
+            .HasColumnType("DATETIME2(7)")
             .IsRequired(false);
 
         // Relacionamento
@@ -87,14 +92,21 @@ public class TenantFiscalDataMapping : IEntityTypeConfiguration<TenantFiscalData
             .HasConstraintName("FK_TenantFiscalData_Tenant")
             .OnDelete(DeleteBehavior.NoAction);
 
-        // Constraint Única: NIF único
-        builder.HasIndex(x => x.NIF)
+        // Ãndice Ãºnico filtrado: TaxNumber Ãºnico por Tenant+FiscalCountry
+        builder.HasIndex(x => new { x.TenantId, x.FiscalCountry, x.TaxNumber })
             .IsUnique()
-            .HasDatabaseName("UQ_TenantFiscalData_NIF");
+            .HasFilter("[IsDeleted] = 0")
+            .HasDatabaseName("UX_TenantFiscalData_TaxNumber");
 
-        // Constraint Única: Garantir que só pode haver um registro ativo por tenant (soft delete)
-        builder.HasIndex(x => new { x.TenantId, x.IsActive })
+        // Ãndice Ãºnico filtrado: apenas um registro fiscal ativo por tenant
+        builder.HasIndex(x => new { x.TenantId })
             .IsUnique()
-            .HasDatabaseName("UQ_TenantFiscalData_Tenant_Active");
+            .HasFilter("[IsActive] = 1 AND [IsDeleted] = 0")
+            .HasDatabaseName("UX_TenantFiscalData_Active");
+
+        // Ãndice filtrado para consultas por tenant
+        builder.HasIndex(x => x.TenantId)
+            .HasFilter("[IsDeleted] = 0")
+            .HasDatabaseName("IX_TenantFiscalData_TenantId");
     }
 }

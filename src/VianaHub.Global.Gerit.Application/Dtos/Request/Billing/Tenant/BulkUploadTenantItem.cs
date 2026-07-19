@@ -2,7 +2,7 @@ namespace VianaHub.Global.Gerit.Application.Dtos.Request.Billing.Tenant;
 
 public class BulkUploadTenantItem
 {
-    public int TenantType { get; set; }
+    public byte PartyTypeId { get; set; }
     public int AcquisitionSourceTypeId { get; set; }
     public string? Name { get; set; }
     public string? Email { get; set; }

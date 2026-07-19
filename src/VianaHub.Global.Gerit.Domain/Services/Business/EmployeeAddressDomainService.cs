@@ -1,4 +1,4 @@
-﻿using VianaHub.Global.Gerit.Domain.Base;
+using VianaHub.Global.Gerit.Domain.Base;
 using VianaHub.Global.Gerit.Domain.Entities.Business;
 using VianaHub.Global.Gerit.Domain.Interfaces;
 using VianaHub.Global.Gerit.Domain.Interfaces.Business;
@@ -14,12 +14,12 @@ namespace VianaHub.Global.Gerit.Domain.Services.Business;
 public class EmployeeAddressDomainService : IEmployeeAddressDomainService
 {
     private readonly IEmployeeAddressDataRepository _repo;
-    private readonly IEntityDomainValidator<EmployeeAddressEntity> _validator;
+    private readonly IEntityDomainValidator<EmployeeAddressesEntity> _validator;
     private readonly INotify _notify;
 
     public EmployeeAddressDomainService(
         IEmployeeAddressDataRepository repo,
-        IEntityDomainValidator<EmployeeAddressEntity> validator,
+        IEntityDomainValidator<EmployeeAddressesEntity> validator,
         INotify notify)
     {
         _repo = repo;
@@ -27,15 +27,15 @@ public class EmployeeAddressDomainService : IEmployeeAddressDomainService
         _notify = notify;
     }
 
-    public async Task<EmployeeAddressEntity> GetByIdAsync(int id, CancellationToken ct)
+    public async Task<EmployeeAddressesEntity> GetByIdAsync(int id, CancellationToken ct)
     {
         return await _repo.GetByIdAsync(id, ct);
     }
-    public async Task<IEnumerable<EmployeeAddressEntity>> GetAllAsync(CancellationToken ct)
+    public async Task<IEnumerable<EmployeeAddressesEntity>> GetAllAsync(CancellationToken ct)
     {
         return await _repo.GetAllAsync(ct);
     }
-    public async Task<ListPage<EmployeeAddressEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct)
+    public async Task<ListPage<EmployeeAddressesEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct)
     {
         return await _repo.GetPagedAsync(request, ct);
     }
@@ -44,7 +44,7 @@ public class EmployeeAddressDomainService : IEmployeeAddressDomainService
         return await _repo.ExistsByIdAsync(id, ct);
     }
 
-    public async Task<bool> CreateAsync(EmployeeAddressEntity entity, CancellationToken ct)
+    public async Task<bool> CreateAsync(EmployeeAddressesEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForCreateAsync(entity);
         if (!validationResult.IsValid)
@@ -56,7 +56,7 @@ public class EmployeeAddressDomainService : IEmployeeAddressDomainService
 
         return await _repo.AddAsync(entity, ct);
     }
-    public async Task<bool> UpdateAsync(EmployeeAddressEntity entity, CancellationToken ct)
+    public async Task<bool> UpdateAsync(EmployeeAddressesEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForUpdateAsync(entity);
         if (!validationResult.IsValid)
@@ -68,7 +68,7 @@ public class EmployeeAddressDomainService : IEmployeeAddressDomainService
 
         return await _repo.UpdateAsync(entity, ct);
     }
-    public async Task<bool> ActivateAsync(EmployeeAddressEntity entity, CancellationToken ct)
+    public async Task<bool> ActivateAsync(EmployeeAddressesEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForActivateAsync(entity);
         if (!validationResult.IsValid)
@@ -80,7 +80,7 @@ public class EmployeeAddressDomainService : IEmployeeAddressDomainService
 
         return await _repo.UpdateAsync(entity, ct);
     }
-    public async Task<bool> DeactivateAsync(EmployeeAddressEntity entity, CancellationToken ct)
+    public async Task<bool> DeactivateAsync(EmployeeAddressesEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForDeactivateAsync(entity);
         if (!validationResult.IsValid)
@@ -92,7 +92,7 @@ public class EmployeeAddressDomainService : IEmployeeAddressDomainService
 
         return await _repo.UpdateAsync(entity, ct);
     }
-    public async Task<bool> DeleteAsync(EmployeeAddressEntity entity, CancellationToken ct)
+    public async Task<bool> DeleteAsync(EmployeeAddressesEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForDeleteAsync(entity);
         if (!validationResult.IsValid)

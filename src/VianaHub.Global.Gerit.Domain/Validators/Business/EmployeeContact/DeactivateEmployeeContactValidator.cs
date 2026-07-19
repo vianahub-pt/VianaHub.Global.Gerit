@@ -1,4 +1,4 @@
-﻿using FluentValidation;
+using FluentValidation;
 using VianaHub.Global.Gerit.Domain.Entities.Business;
 using VianaHub.Global.Gerit.Domain.Interfaces.Base;
 
@@ -7,7 +7,7 @@ namespace VianaHub.Global.Gerit.Domain.Validators.Business.EmployeeContact;
 /// <summary>
 /// Validator para desativa��o de EmployeeContact
 /// </summary>
-public class DeactivateEmployeeContactValidator : AbstractValidator<EmployeeContactEntity>
+public class DeactivateEmployeeContactValidator : AbstractValidator<EmployeeContactPersonsEntity>
 {
     private readonly ILocalizationService _localization;
 

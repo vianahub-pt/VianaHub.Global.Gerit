@@ -72,14 +72,20 @@ public class EmployeeAppService : IEmployeeAppService
     public async Task<int> CreateAsync(CreateEmployeeRequest request, CancellationToken ct)
     {
         var tenantId = _currentUser.GetTenantId();
-        var exists = await _repo.ExistsByTaxNumberAsync(tenantId, request.TaxNumber, ct);
-        if (exists)
+
+        if (!string.IsNullOrWhiteSpace(request.Email))
         {
-            _notify.Add(_localization.GetMessage("Application.Service.Employee.Create.ResourceAlreadyExists"), 409);
-            return 0;
+            var exists = await _repo.ExistsByEmailAsync(tenantId, request.Email, ct);
+            if (exists)
+            {
+                _notify.Add(_localization.GetMessage("Application.Service.Employee.Create.ResourceAlreadyExists"), 409);
+                return 0;
+            }
         }
 
-        var entity = new EmployeeEntity(tenantId, request.Name, request.TaxNumber, _currentUser.GetUserId());
+        var entity = new EmployeeEntity(tenantId, request.StatusDefinitionId, request.StatusDomainId, request.Name,
+            request.PhoneNumber, request.CellPhoneNumber, request.IsCellPhoneWhatsapp,
+            request.Email, request.ImageUrl, _currentUser.GetUserId());
         var success = await _domain.CreateAsync(entity, ct);
         return success ? entity.Id : 0;
     }
@@ -93,7 +99,9 @@ public class EmployeeAppService : IEmployeeAppService
             return false;
         }
 
-        entity.Update(request.Name, request.TaxNumber, _currentUser.GetUserId());
+        entity.Update(request.StatusDefinitionId, request.StatusDomainId, request.Name,
+            request.PhoneNumber, request.CellPhoneNumber, request.IsCellPhoneWhatsapp,
+            request.Email, request.ImageUrl, _currentUser.GetUserId());
         return await _domain.UpdateAsync(entity, ct);
     }
 
@@ -187,7 +195,10 @@ public class EmployeeAppService : IEmployeeAppService
                     if (record != null)
                     {
                         record.Name = record.Name?.SanitizeCsvInput().NormalizeUtf8();
-                        record.TaxNumber = record.TaxNumber?.SanitizeCsvInput().NormalizeUtf8();
+                        record.Email = record.Email?.SanitizeCsvInput().NormalizeUtf8();
+                        record.PhoneNumber = record.PhoneNumber?.SanitizeCsvInput().NormalizeUtf8();
+                        record.CellPhoneNumber = record.CellPhoneNumber?.SanitizeCsvInput().NormalizeUtf8();
+                        record.ImageUrl = record.ImageUrl?.SanitizeCsvInput().NormalizeUtf8();
 
                         if (!string.IsNullOrEmpty(record.Name) && !record.Name.IsSafeCsvValue())
                         {
@@ -195,9 +206,9 @@ public class EmployeeAppService : IEmployeeAppService
                             continue;
                         }
 
-                        if (!string.IsNullOrEmpty(record.TaxNumber) && !record.TaxNumber.IsSafeCsvValue())
+                        if (!string.IsNullOrEmpty(record.Email) && !record.Email.IsSafeCsvValue())
                         {
-                            _notify.Add(_localization.GetMessage("Application.Service.Employee.ReadCsvFile.TaxNumber.IsSafeCsvValue", rowCount + 2), 400);
+                            _notify.Add(_localization.GetMessage("Application.Service.Employee.ReadCsvFile.Email.IsSafeCsvValue", rowCount + 2), 400);
                             continue;
                         }
 
@@ -241,15 +252,20 @@ public class EmployeeAppService : IEmployeeAppService
                 continue;
             }
 
-            var exists = await _repo.ExistsByTaxNumberAsync(tenantId, item.TaxNumber, ct);
-            if (exists)
+            if (!string.IsNullOrWhiteSpace(item.Email))
             {
-                _notify.Add(_localization.GetMessage("Application.Service.Employee.ProcessBulkItems.ExistsByTaxNumber", item.TaxNumber), 400);
-                hasErrors = true;
-                continue;
+                var exists = await _repo.ExistsByEmailAsync(tenantId, item.Email, ct);
+                if (exists)
+                {
+                    _notify.Add(_localization.GetMessage("Application.Service.Employee.ProcessBulkItems.ExistsByEmail", item.Email), 400);
+                    hasErrors = true;
+                    continue;
+                }
             }
 
-            var entity = new EmployeeEntity(tenantId, item.Name, item.TaxNumber, _currentUser.GetUserId());
+            var entity = new EmployeeEntity(tenantId, 0, 0, item.Name,
+                item.PhoneNumber, item.CellPhoneNumber, item.IsCellPhoneWhatsapp,
+                item.Email, item.ImageUrl, _currentUser.GetUserId());
 
             var success = await _domain.CreateAsync(entity, ct);
 
@@ -271,9 +287,9 @@ public class EmployeeAppService : IEmployeeAppService
             return false;
         }
 
-        if (string.IsNullOrWhiteSpace(item.TaxNumber))
+        if (string.IsNullOrWhiteSpace(item.Email))
         {
-            _notify.Add(_localization.GetMessage("Application.Service.Employee.ValidateBulkItem.TaxNumber", item.Name), 400);
+            _notify.Add(_localization.GetMessage("Application.Service.Employee.ValidateBulkItem.Email", item.Name), 400);
             return false;
         }
 

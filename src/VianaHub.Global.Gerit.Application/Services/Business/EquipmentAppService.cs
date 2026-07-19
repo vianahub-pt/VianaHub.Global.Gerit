@@ -82,7 +82,7 @@ public class EquipmentAppService : IEquipmentAppService
             return 0;
         }
 
-        var entity = new EquipmentEntity(tenantId, request.EquipmentTypeId, request.StatusId, request.Name, request.SerialNumber, _currentUser.GetUserId());
+        var entity = new EquipmentEntity(tenantId, request.EquipmentTypeId, request.StatusDefinitionId, request.StatusDomainId, request.Name, request.SerialNumber, request.UrlImage, _currentUser.GetUserId());
         var success = await _domain.CreateAsync(entity, ct);
         return success ? entity.Id : 0;
     }
@@ -96,7 +96,7 @@ public class EquipmentAppService : IEquipmentAppService
             return false;
         }
 
-        entity.Update(request.EquipmentTypeId, request.StatusId, request.Name, request.SerialNumber, _currentUser.GetUserId());
+        entity.Update(request.EquipmentTypeId, request.StatusDefinitionId, request.StatusDomainId, request.Name, request.SerialNumber, request.UrlImage, _currentUser.GetUserId());
 
         return await _domain.UpdateAsync(entity, ct);
     }
@@ -263,7 +263,7 @@ public class EquipmentAppService : IEquipmentAppService
             }
 
             // Cria a entidade
-            var entity = new EquipmentEntity(tenantId, item.EquipmentTypeId, item.StatusId, item.Name, item.SerialNumber, _currentUser.GetUserId());
+            var entity = new EquipmentEntity(tenantId, item.EquipmentTypeId, item.StatusDefinitionId, item.StatusDomainId, item.Name, item.SerialNumber, item.UrlImage, _currentUser.GetUserId());
 
             // Tenta criar no dom�nio
             var success = await _domain.CreateAsync(entity, ct);

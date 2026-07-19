@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using VianaHub.Global.Gerit.Domain.Entities.Business;
 using VianaHub.Global.Gerit.Domain.Interfaces.Business;
 using VianaHub.Global.Gerit.Domain.ReadModels;
@@ -16,25 +16,25 @@ public class EmployeeContactDataRepository : IEmployeeContactDataRepository
         _context = context;
     }
 
-    public async Task<EmployeeContactEntity> GetByIdAsync(int id, CancellationToken ct)
+    public async Task<EmployeeContactPersonsEntity> GetByIdAsync(int id, CancellationToken ct)
     {
-        return await _context.Set<EmployeeContactEntity>()
+        return await _context.Set<EmployeeContactPersonsEntity>()
             .AsNoTracking()
             .Include(x => x.Employee)
             .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted, ct);
     }
 
-    public async Task<IEnumerable<EmployeeContactEntity>> GetAllAsync(CancellationToken ct)
+    public async Task<IEnumerable<EmployeeContactPersonsEntity>> GetAllAsync(CancellationToken ct)
     {
-        return await _context.Set<EmployeeContactEntity>()
+        return await _context.Set<EmployeeContactPersonsEntity>()
             .AsNoTracking()
             .Include(x => x.Employee)
             .Where(x => !x.IsDeleted).OrderBy(x => x.Name).ToListAsync(ct);
     }
 
-    public async Task<ListPage<EmployeeContactEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct)
+    public async Task<ListPage<EmployeeContactPersonsEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct)
     {
-        var query = _context.Set<EmployeeContactEntity>()
+        var query = _context.Set<EmployeeContactPersonsEntity>()
             .AsNoTracking()
             .Include(x => x.Employee)
             .Where(x => !x.IsDeleted);
@@ -60,7 +60,7 @@ public class EmployeeContactDataRepository : IEmployeeContactDataRepository
 
         var result = await orderedQuery.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync(ct);
 
-        return new ListPage<EmployeeContactEntity>
+        return new ListPage<EmployeeContactPersonsEntity>
         {
             Items = result,
             PageNumber = pageNumber,
@@ -72,30 +72,30 @@ public class EmployeeContactDataRepository : IEmployeeContactDataRepository
 
     public async Task<bool> ExistsByIdAsync(int id, CancellationToken ct)
     {
-        return await _context.Set<EmployeeContactEntity>().AsNoTracking().AnyAsync(x => x.Id == id && !x.IsDeleted, ct);
+        return await _context.Set<EmployeeContactPersonsEntity>().AsNoTracking().AnyAsync(x => x.Id == id && !x.IsDeleted, ct);
     }
 
     public async Task<bool> ExistsByEmailAsync(int tenantId, int EmployeeId, string email, CancellationToken ct)
     {
-        return await _context.Set<EmployeeContactEntity>().AsNoTracking()
+        return await _context.Set<EmployeeContactPersonsEntity>().AsNoTracking()
             .AnyAsync(x => x.TenantId == tenantId && x.EmployeeId == EmployeeId && x.Email == email && !x.IsDeleted, ct);
     }
 
     public async Task<bool> ExistsByEmailForUpdateAsync(int tenantId, int EmployeeId, string email, int excludeId, CancellationToken ct)
     {
-        return await _context.Set<EmployeeContactEntity>().AsNoTracking()
+        return await _context.Set<EmployeeContactPersonsEntity>().AsNoTracking()
             .AnyAsync(x => x.TenantId == tenantId && x.EmployeeId == EmployeeId && x.Email == email && x.Id != excludeId && !x.IsDeleted, ct);
     }
 
-    public async Task<bool> AddAsync(EmployeeContactEntity entity, CancellationToken ct)
+    public async Task<bool> AddAsync(EmployeeContactPersonsEntity entity, CancellationToken ct)
     {
-        await _context.Set<EmployeeContactEntity>().AddAsync(entity, ct);
+        await _context.Set<EmployeeContactPersonsEntity>().AddAsync(entity, ct);
         return await _context.SaveChangesAsync(ct) > 0;
     }
 
-    public async Task<bool> UpdateAsync(EmployeeContactEntity entity, CancellationToken ct)
+    public async Task<bool> UpdateAsync(EmployeeContactPersonsEntity entity, CancellationToken ct)
     {
-        _context.Set<EmployeeContactEntity>().Update(entity);
+        _context.Set<EmployeeContactPersonsEntity>().Update(entity);
         return await _context.SaveChangesAsync(ct) > 0;
     }
 }

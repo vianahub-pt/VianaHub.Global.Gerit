@@ -20,6 +20,7 @@ public class FileTypeDataRepository : IFileTypeDataRepository
     {
         return await _context.Set<FileTypeEntity>()
             .AsNoTracking()
+            .Include(x => x.Translations)
             .Where(x => !x.IsDeleted)
             .OrderBy(x => x.MimeType)
             .ToListAsync(ct);
@@ -29,6 +30,7 @@ public class FileTypeDataRepository : IFileTypeDataRepository
     {
         return await _context.Set<FileTypeEntity>()
             .AsNoTracking()
+            .Include(x => x.Translations)
             .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted, ct);
     }
 
@@ -36,6 +38,7 @@ public class FileTypeDataRepository : IFileTypeDataRepository
     {
         var query = _context.Set<FileTypeEntity>()
             .AsNoTracking()
+            .Include(x => x.Translations)
             .Where(x => !x.IsDeleted);
 
         if (!string.IsNullOrWhiteSpace(request.Search))

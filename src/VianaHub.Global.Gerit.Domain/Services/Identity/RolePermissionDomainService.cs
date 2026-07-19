@@ -7,27 +7,27 @@ namespace VianaHub.Global.Gerit.Domain.Services.Identity;
 public class RolePermissionDomainService : IRolePermissionDomainService
 {
     private readonly IRolePermissionDataRepository _repository;
-    private readonly IValidator<RolePermissionEntity> _validator;
+    private readonly IValidator<RolePermissionsEntity> _validator;
 
-    public RolePermissionDomainService(IRolePermissionDataRepository repository, IValidator<RolePermissionEntity> validator)
+    public RolePermissionDomainService(IRolePermissionDataRepository repository, IValidator<RolePermissionsEntity> validator)
     {
         _repository = repository;
         _validator = validator;
     }
 
-    public async Task<IList<RolePermissionEntity>> GetAllAsync(int tenantId, CancellationToken ct)
+    public async Task<IList<RolePermissionsEntity>> GetAllAsync(int tenantId, CancellationToken ct)
     {
         return await _repository.GetAllAsync(tenantId, ct);
     }
-    public async Task<RolePermissionEntity> GetByIdAsync(int tenantId, int roleId, int resourceId, int actionId, CancellationToken ct)
+    public async Task<RolePermissionsEntity> GetByIdAsync(int tenantId, int roleId, int resourceId, int actionId, CancellationToken ct)
     {
         return await _repository.GetByIdAsync(tenantId, roleId, resourceId, actionId, ct);
     }
-    public async Task<IList<RolePermissionEntity>> GetByRoleAsync(int roleId, int tenantId, CancellationToken ct)
+    public async Task<IList<RolePermissionsEntity>> GetByRoleAsync(int roleId, int tenantId, CancellationToken ct)
     {
         return await _repository.GetByRoleAsync(roleId, tenantId, ct);
     }
-    public async Task<IList<RolePermissionEntity>> GetByResourceAsync(int resourceId, int tenantId, CancellationToken ct)
+    public async Task<IList<RolePermissionsEntity>> GetByResourceAsync(int resourceId, int tenantId, CancellationToken ct)
     {
         return await _repository.GetByResourceAsync(resourceId, tenantId, ct);
     }
@@ -36,7 +36,7 @@ public class RolePermissionDomainService : IRolePermissionDomainService
         return await _repository.ExistsAsync(tenantId, roleId, resourceId, actionId, ct);
     }
 
-    public async Task<bool> CreateAsync(RolePermissionEntity entity, CancellationToken ct)
+    public async Task<bool> CreateAsync(RolePermissionsEntity entity, CancellationToken ct)
     {
         var validation = _validator.Validate(entity);
         if (!validation.IsValid)

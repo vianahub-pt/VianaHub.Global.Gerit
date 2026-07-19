@@ -5,18 +5,18 @@ using VianaHub.Global.Gerit.Domain.Tools.Pagination;
 namespace VianaHub.Global.Gerit.Domain.Interfaces.Business;
 
 /// <summary>
-/// Interface de serviço de domínio para VisitAddress
+/// Interface de serviï¿½o de domï¿½nio para VisitAddress
 /// </summary>
 public interface IVisitAddressDomainService
 {
-    Task<VisitAddressEntity> GetByIdAsync(int id, CancellationToken ct);
-    Task<IEnumerable<VisitAddressEntity>> GetAllAsync(CancellationToken ct);
-    Task<ListPage<VisitAddressEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct);
+    Task<VisitAddressesEntity> GetByIdAsync(int id, CancellationToken ct);
+    Task<IEnumerable<VisitAddressesEntity>> GetAllAsync(CancellationToken ct);
+    Task<ListPage<VisitAddressesEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct);
     Task<bool> ExistsByIdAsync(int id, CancellationToken ct);
 
-    Task<bool> CreateAsync(VisitAddressEntity entity, CancellationToken ct);
-    Task<bool> UpdateAsync(VisitAddressEntity entity, CancellationToken ct);
-    Task<bool> ActivateAsync(VisitAddressEntity entity, CancellationToken ct);
-    Task<bool> DeactivateAsync(VisitAddressEntity entity, CancellationToken ct);
-    Task<bool> DeleteAsync(VisitAddressEntity entity, CancellationToken ct);
+    Task<bool> CreateAsync(VisitAddressesEntity entity, CancellationToken ct);
+    Task<bool> UpdateAsync(VisitAddressesEntity entity, CancellationToken ct);
+    Task<bool> ActivateAsync(VisitAddressesEntity entity, CancellationToken ct);
+    Task<bool> DeactivateAsync(VisitAddressesEntity entity, CancellationToken ct);
+    Task<bool> DeleteAsync(VisitAddressesEntity entity, CancellationToken ct);
 }

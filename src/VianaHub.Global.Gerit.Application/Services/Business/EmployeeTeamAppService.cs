@@ -79,7 +79,7 @@ public class EmployeeTeamAppService : IEmployeeTeamsAppService
             return 0;
         }
 
-        var entity = new EmployeeTeamEntity(tenantId, request.TeamId, request.EmployeeId, _currentUser.GetUserId());
+        var entity = new EmployeeTeamEntity(tenantId, request.TeamId, request.EmployeeId, false, DateTime.UtcNow, _currentUser.GetUserId());
         var success = await _domain.CreateAsync(entity, ct);
         return success ? entity.Id : 0;
     }
@@ -93,7 +93,7 @@ public class EmployeeTeamAppService : IEmployeeTeamsAppService
             return false;
         }
 
-        entity.Update(request.TeamId, request.EmployeeId, _currentUser.GetUserId());
+        entity.Update(request.TeamId, request.EmployeeId, false, DateTime.UtcNow, null, _currentUser.GetUserId());
         return await _domain.UpdateAsync(entity, ct);
     }
 
@@ -234,7 +234,7 @@ public class EmployeeTeamAppService : IEmployeeTeamsAppService
                 continue;
             }
 
-            var entity = new EmployeeTeamEntity(tenantId, item.TeamId, item.EmployeeId, _currentUser.GetUserId());
+            var entity = new EmployeeTeamEntity(tenantId, item.TeamId, item.EmployeeId, false, DateTime.UtcNow, _currentUser.GetUserId());
 
             var success = await _domain.CreateAsync(entity, ct);
 

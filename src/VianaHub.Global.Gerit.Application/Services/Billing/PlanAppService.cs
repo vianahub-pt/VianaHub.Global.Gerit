@@ -6,13 +6,10 @@ using Microsoft.Extensions.Logging;
 using System.Globalization;
 using VianaHub.Global.Gerit.Application.Dtos.Base;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Billing.Plan;
-using VianaHub.Global.Gerit.Application.Dtos.Request.Business.Function;
 using VianaHub.Global.Gerit.Application.Dtos.Response.Billing.Plan;
 using VianaHub.Global.Gerit.Application.Interfaces.Billing;
 using VianaHub.Global.Gerit.Application.Interfaces.Common;
-using VianaHub.Global.Gerit.Application.Services.Business;
 using VianaHub.Global.Gerit.Domain.Entities.Billing;
-using VianaHub.Global.Gerit.Domain.Entities.Business;
 using VianaHub.Global.Gerit.Domain.Helpers;
 using VianaHub.Global.Gerit.Domain.Interfaces.Base;
 using VianaHub.Global.Gerit.Domain.Interfaces.Billing;
@@ -31,6 +28,8 @@ public class PlanAppService : IPlanAppService
     private readonly ILocalizationService _localization;
     private readonly ILogger<PlanAppService> _logger;
     private readonly IFileValidationService _fileValidation;
+
+    private const string DefaultLanguage = "pt-PT";
 
     public PlanAppService(
         IPlanDataRepository repo,
@@ -55,20 +54,34 @@ public class PlanAppService : IPlanAppService
     public async Task<IEnumerable<PlanResponse>> GetAllAsync(CancellationToken ct)
     {
         var entities = await _repo.GetAllAsync(ct);
-        return _mapper.Map<IEnumerable<PlanResponse>>(entities);
+        var culture = _localization.GetCurrentCulture();
+        return entities.Select(e => MapToResponse(e, culture));
     }
 
     public async Task<PlanResponse> GetByIdAsync(int id, CancellationToken ct)
     {
         var entity = await _repo.GetByIdAsync(id, ct);
-        return _mapper.Map<PlanResponse>(entity);
+        if (entity == null) return null;
+        var culture = _localization.GetCurrentCulture();
+        return MapToResponse(entity, culture);
     }
 
     public async Task<ListPageResponse<PlanResponse>> GetPagedAsync(PagedFilterRequest request, CancellationToken ct)
     {
         var filter = new PagedFilter(request.Search, request.IsActive, request.PageNumber, request.PageSize, request.SortBy, request.SortDirection);
         var paged = await _repo.GetPagedAsync(filter, ct);
-        return _mapper.Map<ListPageResponse<PlanResponse>>(paged);
+        var culture = _localization.GetCurrentCulture();
+
+        var responseDto = new ListPageResponse<PlanResponse>
+        {
+            Items = paged.Items.Select(e => MapToResponse(e, culture)).ToList(),
+            PageNumber = paged.PageNumber,
+            PageSize = paged.PageSize,
+            TotalItems = paged.TotalItems,
+            TotalPages = paged.TotalPages
+        };
+
+        return responseDto;
     }
 
     public async Task<int> CreateAsync(CreatePlanRequest request, CancellationToken ct)
@@ -80,17 +93,27 @@ public class PlanAppService : IPlanAppService
             return 0;
         }
 
-        var entity = new PlanEntity(
-            request.Name,
-            request.Description,
+        var entity = new SubscriptionPlanEntity(
+            request.Code ?? request.Name,
             request.PricePerHour,
             request.PricePerDay,
             request.PricePerMonth,
             request.PricePerYear,
-            request.Currency ?? "USD",
+            request.Currency ?? "EUR",
             request.MaxUsers,
-            request.MaxPhotosPerVisits,
+            request.MaxPhotosPerVisit,
             _currentUser.GetUserId());
+
+        // Adiciona tradução padrão (pt-PT)
+        if (!string.IsNullOrWhiteSpace(request.Name))
+        {
+            var translation = new SubscriptionPlanTranslationsEntity(
+                entity.Id, // Será atualizado pelo EF após o save
+                DefaultLanguage,
+                request.Name,
+                request.Description);
+            entity.AddTranslation(translation);
+        }
 
         var success = await _domain.CreateAsync(entity, ct);
         return success ? entity.Id : 0;
@@ -106,16 +129,35 @@ public class PlanAppService : IPlanAppService
         }
 
         entity.Update(
-            request.Name,
-            request.Description,
+            request.Code ?? request.Name,
             request.PricePerHour,
             request.PricePerDay,
             request.PricePerMonth,
             request.PricePerYear,
-            request.Currency ?? "USD",
+            request.Currency ?? "EUR",
             request.MaxUsers,
-            request.MaxPhotosPerVisits,
+            request.MaxPhotosPerVisit,
             _currentUser.GetUserId());
+
+        // Atualiza ou cria tradução para o idioma do utilizador
+        if (!string.IsNullOrWhiteSpace(request.Name))
+        {
+            var culture = _localization.GetCurrentCulture();
+            var existingTranslation = entity.Translations.FirstOrDefault(t => t.LanguageCode == culture);
+            if (existingTranslation != null)
+            {
+                existingTranslation.Update(request.Name, request.Description);
+            }
+            else
+            {
+                var translation = new SubscriptionPlanTranslationsEntity(
+                    entity.Id,
+                    culture,
+                    request.Name,
+                    request.Description);
+                entity.AddTranslation(translation);
+            }
+        }
 
         return await _domain.UpdateAsync(entity, ct);
     }
@@ -161,11 +203,11 @@ public class PlanAppService : IPlanAppService
 
     public async Task<bool> BulkUploadAsync(IFormFile file, CancellationToken ct)
     {
-        // Valida arquivo usando servi�o centralizado
+        // Valida arquivo usando serviço centralizado
         if (!_fileValidation.ValidateFile(file))
             return false;
 
-        // L� itens do CSV
+        // Lê itens do CSV
         var items = ReadCsvFile(file);
         if (items == null)
             return false;
@@ -184,17 +226,17 @@ public class PlanAppService : IPlanAppService
     {
         try
         {
-            // Cria StreamReader com encoding UTF-8 for�ado
+            // Cria StreamReader com encoding UTF-8 forçado
             using var reader = file.OpenReadStream().CreateUtf8StreamReader();
 
             var config = new CsvConfiguration(CultureInfo.InvariantCulture)
             {
                 HasHeaderRecord = true,
-                Delimiter = ";", // CSV usa ponto e v�rgula como delimitador
+                Delimiter = ";", // CSV usa ponto e vírgula como delimitador
                 MissingFieldFound = null,
                 HeaderValidated = null,
                 TrimOptions = TrimOptions.Trim,
-                BadDataFound = null // Ignora linhas mal formatadas ao inv�s de lan�ar exce��o
+                BadDataFound = null // Ignora linhas mal formatadas ao invés de lançar exceção
             };
 
             using var csv = new CsvReader(reader, config);
@@ -222,9 +264,9 @@ public class PlanAppService : IPlanAppService
                         record.PricePerYear = record.PricePerYear;
                         record.Currency = record.Currency?.SanitizeCsvInput().NormalizeUtf8();
                         record.MaxUsers = record.MaxUsers;
-                        record.MaxPhotosPerVisits = record.MaxPhotosPerVisits;
+                        record.MaxPhotosPerVisit = record.MaxPhotosPerVisit;
 
-                        // Valida se os campos n�o cont�m conte�do perigoso
+                        // Valida se os campos não contêm conteúdo perigoso
                         if (!string.IsNullOrEmpty(record.Name) && !record.Name.IsSafeCsvValue())
                         {
                             _notify.Add(_localization.GetMessage("Application.Service.Plan.ReadCsvFile.Name.IsSafeCsvValue", rowCount + 2), 400);
@@ -270,11 +312,10 @@ public class PlanAppService : IPlanAppService
     private async Task<bool> ProcessBulkItemsAsync(List<BulkUploadPlanItem> items, CancellationToken ct)
     {
         var hasErrors = false;
-        var tenantId = _currentUser.GetTenantId();
 
         foreach (var item in items)
         {
-            // Valida campos obrigat�rios
+            // Valida campos obrigatórios
             if (!ValidateBulkItem(item))
             {
                 hasErrors = true;
@@ -291,9 +332,16 @@ public class PlanAppService : IPlanAppService
             }
 
             // Cria a entidade
-            var entity = new PlanEntity(item.Name, item.Description, item.PricePerHour, item.PricePerDay, item.PricePerMonth, item.PricePerYear, item.Currency, item.MaxUsers, item.MaxPhotosPerVisits, _currentUser.GetUserId());
+            var entity = new SubscriptionPlanEntity(item.Code ?? item.Name, item.PricePerHour, item.PricePerDay, item.PricePerMonth, item.PricePerYear, item.Currency ?? "EUR", item.MaxUsers, item.MaxPhotosPerVisit, _currentUser.GetUserId());
 
-            // Tenta criar no dom�nio
+            // Adiciona tradução padrão (pt-PT) do CSV
+            if (!string.IsNullOrWhiteSpace(item.Name))
+            {
+                var translation = new SubscriptionPlanTranslationsEntity(entity.Id, DefaultLanguage, item.Name, item.Description);
+                entity.AddTranslation(translation);
+            }
+
+            // Tenta criar no domínio
             var success = await _domain.CreateAsync(entity, ct);
 
             if (!success)
@@ -315,5 +363,31 @@ public class PlanAppService : IPlanAppService
         }
 
         return true;
+    }
+
+    /// <summary>
+    /// Mapeia uma SubscriptionPlanEntity para PlanResponse, resolvendo Name/Description
+    /// a partir da tradução correspondente à cultura do utilizador.
+    /// Fallback: pt-PT se a tradução para a cultura atual não existir.
+    /// </summary>
+    private PlanResponse MapToResponse(SubscriptionPlanEntity entity, string culture)
+    {
+        var translation = entity.Translations.FirstOrDefault(t => t.LanguageCode == culture)
+                       ?? entity.Translations.FirstOrDefault(t => t.LanguageCode == DefaultLanguage);
+
+        return new PlanResponse
+        {
+            Id = entity.Id,
+            Name = translation?.Name,
+            Description = translation?.Description,
+            PricePerHour = entity.PricePerHour,
+            PricePerDay = entity.PricePerDay,
+            PricePerMonth = entity.PricePerMonth,
+            PricePerYear = entity.PricePerYear,
+            Currency = entity.Currency,
+            MaxUsers = entity.MaxUsers,
+            MaxPhotosPerVisit = entity.MaxPhotosPerVisit,
+            IsActive = entity.IsActive
+        };
     }
 }

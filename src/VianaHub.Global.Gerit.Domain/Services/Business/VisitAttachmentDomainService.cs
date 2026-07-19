@@ -9,12 +9,12 @@ namespace VianaHub.Global.Gerit.Domain.Services.Business;
 public class VisitAttachmentDomainService : IVisitAttachmentDomainService
 {
     private readonly IVisitAttachmentDataRepository _repo;
-    private readonly IEntityDomainValidator<VisitAttachmentEntity> _validator;
+    private readonly IEntityDomainValidator<VisitAttachmentsEntity> _validator;
     private readonly INotify _notify;
 
     public VisitAttachmentDomainService(
         IVisitAttachmentDataRepository repo,
-        IEntityDomainValidator<VisitAttachmentEntity> validator,
+        IEntityDomainValidator<VisitAttachmentsEntity> validator,
         INotify notify)
     {
         _repo = repo;
@@ -22,7 +22,7 @@ public class VisitAttachmentDomainService : IVisitAttachmentDomainService
         _notify = notify;
     }
 
-    public async Task<bool> CreateAsync(VisitAttachmentEntity entity, CancellationToken ct)
+    public async Task<bool> CreateAsync(VisitAttachmentsEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForCreateAsync(entity);
         if (!validationResult.IsValid)
@@ -37,7 +37,7 @@ public class VisitAttachmentDomainService : IVisitAttachmentDomainService
         return await _repo.AddAsync(entity, ct);
     }
 
-    public async Task<bool> UpdateAsync(VisitAttachmentEntity entity, CancellationToken ct)
+    public async Task<bool> UpdateAsync(VisitAttachmentsEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForUpdateAsync(entity);
         if (!validationResult.IsValid)
@@ -52,7 +52,7 @@ public class VisitAttachmentDomainService : IVisitAttachmentDomainService
         return await _repo.UpdateAsync(entity, ct);
     }
 
-    public async Task<bool> ActivateAsync(VisitAttachmentEntity entity, CancellationToken ct)
+    public async Task<bool> ActivateAsync(VisitAttachmentsEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForActivateAsync(entity);
         if (!validationResult.IsValid)
@@ -67,7 +67,7 @@ public class VisitAttachmentDomainService : IVisitAttachmentDomainService
         return await _repo.UpdateAsync(entity, ct);
     }
 
-    public async Task<bool> DeactivateAsync(VisitAttachmentEntity entity, CancellationToken ct)
+    public async Task<bool> DeactivateAsync(VisitAttachmentsEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForDeactivateAsync(entity);
         if (!validationResult.IsValid)
@@ -82,7 +82,7 @@ public class VisitAttachmentDomainService : IVisitAttachmentDomainService
         return await _repo.UpdateAsync(entity, ct);
     }
 
-    public async Task<bool> DeleteAsync(VisitAttachmentEntity entity, CancellationToken ct)
+    public async Task<bool> DeleteAsync(VisitAttachmentsEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForDeleteAsync(entity);
         if (!validationResult.IsValid)

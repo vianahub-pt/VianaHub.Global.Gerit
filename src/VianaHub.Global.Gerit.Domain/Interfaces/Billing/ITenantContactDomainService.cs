@@ -4,9 +4,9 @@ namespace VianaHub.Global.Gerit.Domain.Interfaces.Billing;
 
 public interface ITenantContactDomainService
 {
-    Task<bool> CreateAsync(TenantContactEntity entity, CancellationToken ct);
-    Task<bool> UpdateAsync(TenantContactEntity entity, CancellationToken ct);
-    Task<bool> ActivateAsync(TenantContactEntity entity, CancellationToken ct);
-    Task<bool> DeactivateAsync(TenantContactEntity entity, CancellationToken ct);
-    Task<bool> DeleteAsync(TenantContactEntity entity, CancellationToken ct);
+    Task<bool> CreateAsync(TenantContactPersonsEntity entity, CancellationToken ct);
+    Task<bool> UpdateAsync(TenantContactPersonsEntity entity, CancellationToken ct);
+    Task<bool> ActivateAsync(TenantContactPersonsEntity entity, CancellationToken ct);
+    Task<bool> DeactivateAsync(TenantContactPersonsEntity entity, CancellationToken ct);
+    Task<bool> DeleteAsync(TenantContactPersonsEntity entity, CancellationToken ct);
 }

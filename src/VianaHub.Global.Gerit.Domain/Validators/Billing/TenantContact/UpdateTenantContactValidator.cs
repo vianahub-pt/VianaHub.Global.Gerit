@@ -7,7 +7,7 @@ namespace VianaHub.Global.Gerit.Domain.Validators.Billing.TenantContact;
 /// <summary>
 /// Validador para atualização de TenantContact
 /// </summary>
-public class UpdateTenantContactValidator : AbstractValidator<TenantContactEntity>
+public class UpdateTenantContactValidator : AbstractValidator<TenantContactPersonsEntity>
 {
     public UpdateTenantContactValidator(ILocalizationService localization)
     {
@@ -37,6 +37,27 @@ public class UpdateTenantContactValidator : AbstractValidator<TenantContactEntit
             .MaximumLength(50)
             .WithMessage(localization.GetMessage("Domain.TenantContact.PhoneMaxLength", 50))
             .When(x => !string.IsNullOrWhiteSpace(x.Phone));
+
+        RuleFor(x => x.JobTitle)
+            .MaximumLength(100)
+            .WithMessage(localization.GetMessage("Domain.TenantContact.JobTitleMaxLength", 100))
+            .When(x => !string.IsNullOrWhiteSpace(x.JobTitle));
+
+        RuleFor(x => x.Department)
+            .MaximumLength(100)
+            .WithMessage(localization.GetMessage("Domain.TenantContact.DepartmentMaxLength", 100))
+            .When(x => !string.IsNullOrWhiteSpace(x.Department));
+
+        RuleFor(x => x.CellPhoneNumber)
+            .MaximumLength(30)
+            .WithMessage(localization.GetMessage("Domain.TenantContact.CellPhoneNumberMaxLength", 30))
+            .When(x => !string.IsNullOrWhiteSpace(x.CellPhoneNumber));
+
+        // Quando IsCellPhoneWhatsapp for true, CellPhoneNumber é obrigatório
+        RuleFor(x => x.CellPhoneNumber)
+            .NotEmpty()
+            .WithMessage(localization.GetMessage("Domain.TenantContact.CellPhoneNumberRequiredForWhatsapp"))
+            .When(x => x.IsCellPhoneWhatsapp);
 
         RuleFor(x => x.IsDeleted)
             .Equal(false)

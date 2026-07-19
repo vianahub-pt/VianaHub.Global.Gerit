@@ -1,4 +1,4 @@
-﻿using FluentValidation;
+using FluentValidation;
 using VianaHub.Global.Gerit.Domain.Entities.Business;
 using VianaHub.Global.Gerit.Domain.Interfaces.Base;
 
@@ -7,7 +7,7 @@ namespace VianaHub.Global.Gerit.Domain.Validators.Business.EmployeeAddress;
 /// <summary>
 /// Validador para atualiza��o de EmployeeAddress
 /// </summary>
-public class UpdateEmployeeAddressValidator : AbstractValidator<EmployeeAddressEntity>
+public class UpdateEmployeeAddressValidator : AbstractValidator<EmployeeAddressesEntity>
 {
     private readonly ILocalizationService _localization;
 

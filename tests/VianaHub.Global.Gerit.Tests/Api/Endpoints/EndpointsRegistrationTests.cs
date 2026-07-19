@@ -52,6 +52,7 @@ namespace VianaHub.Global.Gerit.Tests.Api.Endpoints
             services.AddSingleton(new Mock<IJobAppService>().Object);
             services.AddSingleton(new Mock<IJwtKeyAppService>().Object);
             services.AddSingleton(new Mock<IAuthAppService>().Object);
+            services.AddSingleton(new Mock<ITenantContactAppService>().Object);
             services.AddSingleton(new Mock<ILocalizationService>().Object);
 
             var sp = services.BuildServiceProvider();
@@ -76,6 +77,7 @@ namespace VianaHub.Global.Gerit.Tests.Api.Endpoints
             builder.Services.AddSingleton(new Mock<IJobAppService>().Object);
             builder.Services.AddSingleton(new Mock<IJwtKeyAppService>().Object);
             builder.Services.AddSingleton(new Mock<IAuthAppService>().Object);
+            builder.Services.AddSingleton(new Mock<ITenantContactAppService>().Object);
             builder.Services.AddSingleton(new Mock<ILocalizationService>().Object);
 
             var app = builder.Build();
@@ -180,6 +182,15 @@ namespace VianaHub.Global.Gerit.Tests.Api.Endpoints
         {
             var routeBuilder = CreateRouteBuilder();
             var ex = Record.Exception(() => AuthEndpoint.MapAuthEndpoints(routeBuilder));
+            Assert.Null(ex);
+        }
+
+        [Fact(DisplayName = "Endpoints - MapTenantContactEndpoints - does not throw")]
+        [Trait("Api", "")]
+        public void MapTenantContactEndpoints_DoesNotThrow()
+        {
+            var routeBuilder = CreateRouteBuilder();
+            var ex = Record.Exception(() => TenantContactEndpoint.MapTenantContactEndpoints(routeBuilder));
             Assert.Null(ex);
         }
     }

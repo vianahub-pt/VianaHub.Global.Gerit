@@ -15,8 +15,17 @@ public class CreateSubscriptionRouteValidator : AbstractValidator<CreateSubscrip
         RuleFor(x => x.TenantId)
             .GreaterThan(0).WithMessage(_localization.GetMessage("Api.Validator.Subscription.Create.TenantId"));
 
-        RuleFor(x => x.PlanId)
-            .GreaterThan(0).WithMessage(_localization.GetMessage("Api.Validator.Subscription.Create.PlanId"));
+        RuleFor(x => x.SubscriptionPlanId)
+            .GreaterThan(0).WithMessage(_localization.GetMessage("Api.Validator.Subscription.Create.SubscriptionPlanId"));
+
+        RuleFor(x => x.StatusDefinitionId)
+            .GreaterThan(0).WithMessage(_localization.GetMessage("Api.Validator.Subscription.Create.StatusDefinitionId"));
+
+        RuleFor(x => x.StatusDomainId)
+            .GreaterThan(0).WithMessage(_localization.GetMessage("Api.Validator.Subscription.Create.StatusDomainId"));
+
+        RuleFor(x => x.AgreedAmount)
+            .GreaterThanOrEqualTo(0).WithMessage(_localization.GetMessage("Api.Validator.Subscription.Create.AgreedAmountNonNegative"));
 
         RuleFor(x => x.CurrentPeriodStart)
             .NotEmpty().WithMessage(_localization.GetMessage("Api.Validator.Subscription.Create.CurrentPeriodStart"));
@@ -33,5 +42,11 @@ public class CreateSubscriptionRouteValidator : AbstractValidator<CreateSubscrip
 
         RuleFor(x => x.StripeCustomerId)
             .MaximumLength(100).WithMessage(_localization.GetMessage("Api.Validator.Subscription.Create.StripeCustomerId.MaximumLength", 100));
+
+        RuleFor(x => x.BillingInterval)
+            .MaximumLength(20).WithMessage(_localization.GetMessage("Api.Validator.Subscription.Create.BillingInterval.MaximumLength", 20));
+
+        RuleFor(x => x.CurrencyCode)
+            .MaximumLength(3).WithMessage(_localization.GetMessage("Api.Validator.Subscription.Create.CurrencyCode.Length", 3));
     }
 }

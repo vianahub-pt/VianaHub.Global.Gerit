@@ -11,9 +11,10 @@ public class VisitTeamEmployeeMappingProfile : Profile
     {
         CreateMap<VisitTeamEmployeeEntity, VisitTeamEmployeeResponse>()
             .ForMember(dest => dest.EmployeeName, opt => opt.MapFrom(src => src.Employee.Name))
-            .ForMember(dest => dest.FunctionName, opt => opt.MapFrom(src => src.Function.Name));
+            .ForMember(dest => dest.VisitTeamFunctionName, opt => opt.MapFrom(src => src.Function.Name));
 
         CreateMap<CreateVisitTeamEmployeeRequest, VisitTeamEmployeeEntity>();
+
         CreateMap<UpdateVisitTeamEmployeeRequest, VisitTeamEmployeeEntity>();
     }
 }

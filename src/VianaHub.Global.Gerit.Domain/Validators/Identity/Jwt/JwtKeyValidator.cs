@@ -7,10 +7,10 @@ using VianaHub.Global.Gerit.Domain.Interfaces.Base;
 namespace VianaHub.Global.Gerit.Domain.Validators.Identity.Jwt;
 
 /// <summary>
-/// Validações de domínio para entidades de chaves JWT.
-/// Implementação simples que garante campos essenciais e segue o padrão de retorno via ValidationResult.
+/// Validaï¿½ï¿½es de domï¿½nio para entidades de chaves JWT.
+/// Implementaï¿½ï¿½o simples que garante campos essenciais e segue o padrï¿½o de retorno via ValidationResult.
 /// </summary>
-public class JwtKeyValidator : IEntityDomainValidator<JwtKeyEntity>
+public class JwtKeyValidator : IEntityDomainValidator<JwtKeysEntity>
 {
     private readonly ILocalizationService _localization;
 
@@ -19,7 +19,7 @@ public class JwtKeyValidator : IEntityDomainValidator<JwtKeyEntity>
         _localization = localization;
     }
 
-    public Task<ValidationResult> ValidateForCreateAsync(JwtKeyEntity entity)
+    public Task<ValidationResult> ValidateForCreateAsync(JwtKeysEntity entity)
     {
         var vr = new ValidationResult();
 
@@ -47,9 +47,9 @@ public class JwtKeyValidator : IEntityDomainValidator<JwtKeyEntity>
         return Task.FromResult(vr);
     }
 
-    public Task<ValidationResult> ValidateForUpdateAsync(JwtKeyEntity entity)
+    public Task<ValidationResult> ValidateForUpdateAsync(JwtKeysEntity entity)
     {
-        // Atualização básica: não permite alterar TenantId/KeyId/public key via update
+        // Atualizaï¿½ï¿½o bï¿½sica: nï¿½o permite alterar TenantId/KeyId/public key via update
         var vr = new ValidationResult();
         if (entity == null)
         {
@@ -63,7 +63,7 @@ public class JwtKeyValidator : IEntityDomainValidator<JwtKeyEntity>
         return Task.FromResult(vr);
     }
 
-    public Task<ValidationResult> ValidateForActivateAsync(JwtKeyEntity entity)
+    public Task<ValidationResult> ValidateForActivateAsync(JwtKeysEntity entity)
     {
         var vr = new ValidationResult();
         if (entity == null)
@@ -78,13 +78,13 @@ public class JwtKeyValidator : IEntityDomainValidator<JwtKeyEntity>
         return Task.FromResult(vr);
     }
 
-    public Task<ValidationResult> ValidateForDeactivateAsync(JwtKeyEntity entity)
+    public Task<ValidationResult> ValidateForDeactivateAsync(JwtKeysEntity entity)
     {
         // Sem regras adicionais por enquanto
         return Task.FromResult(new ValidationResult());
     }
 
-    public Task<ValidationResult> ValidateForDeleteAsync(JwtKeyEntity entity)
+    public Task<ValidationResult> ValidateForDeleteAsync(JwtKeysEntity entity)
     {
         var vr = new ValidationResult();
         if (entity == null)
@@ -99,7 +99,7 @@ public class JwtKeyValidator : IEntityDomainValidator<JwtKeyEntity>
         return Task.FromResult(vr);
     }
 
-    public Task<ValidationResult> ValidateForRevokeAsync(JwtKeyEntity entity)
+    public Task<ValidationResult> ValidateForRevokeAsync(JwtKeysEntity entity)
     {
         var vr = new ValidationResult();
         if (entity == null)

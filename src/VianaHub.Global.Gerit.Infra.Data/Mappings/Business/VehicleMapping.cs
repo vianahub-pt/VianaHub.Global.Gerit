@@ -6,7 +6,7 @@ namespace VianaHub.Global.Gerit.Infra.Data.Mappings.Business;
 
 /// <summary>
 /// Mapeamento da entidade Vehicle
-/// Veículos do tenant com suporte a Row Level Security
+/// VeÃ­culos do tenant com suporte a Row Level Security
 /// </summary>
 public class VehicleMapping : IEntityTypeConfiguration<VehicleEntity>
 {
@@ -14,7 +14,7 @@ public class VehicleMapping : IEntityTypeConfiguration<VehicleEntity>
     {
         builder.ToTable("Vehicles", "dbo");
 
-        // Chave Primária
+        // Chave PrimÃ¡ria
         builder.HasKey(x => x.Id)
             .HasName("PK_Vehicles");
 
@@ -30,7 +30,12 @@ public class VehicleMapping : IEntityTypeConfiguration<VehicleEntity>
         builder.Property(x => x.TenantId)
             .IsRequired();
 
-        builder.Property(x => x.StatusId)
+        builder.Property(x => x.StatusDefinitionId)
+            .HasColumnType("INT")
+            .IsRequired();
+
+        builder.Property(x => x.StatusDomainId)
+            .HasColumnType("INT")
             .IsRequired();
 
         builder.Property(x => x.Plate)
@@ -84,9 +89,10 @@ public class VehicleMapping : IEntityTypeConfiguration<VehicleEntity>
             .HasColumnType("DATETIME2(7)")
             .IsRequired(false);
 
-        // Constraints únicos
+        // Constraints Ãºnicos
         builder.HasIndex(v => new { v.TenantId, v.Plate })
             .IsUnique()
+            .HasFilter("[IsDeleted] = 0")
             .HasDatabaseName("UQ_Vehicles_Tenant_Plate");
 
         // Relacionamentos
@@ -96,10 +102,11 @@ public class VehicleMapping : IEntityTypeConfiguration<VehicleEntity>
             .HasConstraintName("FK_Vehicles_Tenants")
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder.HasOne(x => x.Status)
+        builder.HasOne(x => x.StatusDefinition)
             .WithMany()
-            .HasForeignKey(x => x.StatusId)
-            .HasConstraintName("FK_Vehicles_Status")
+            .HasForeignKey(x => new { x.StatusDefinitionId, x.TenantId, x.StatusDomainId })
+            .HasPrincipalKey(s => new { s.Id, s.TenantId, s.StatusDomainId })
+            .HasConstraintName("FK_Vehicles_StatusDefinitions")
             .OnDelete(DeleteBehavior.Restrict);
     }
 }

@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using CsvHelper;
 using CsvHelper.Configuration;
 using Microsoft.AspNetCore.Http;
@@ -79,7 +79,7 @@ public class EmployeeAddressAppService : IEmployeeAddressAppService
             return 0;
         }
 
-        var entity = new EmployeeAddressEntity(
+        var entity = new EmployeeAddressesEntity(
             tenantId,
             request.EmployeeId,
             request.AddressTypeId,
@@ -289,7 +289,7 @@ public class EmployeeAddressAppService : IEmployeeAddressAppService
                 continue;
             }
 
-            var entity = new EmployeeAddressEntity(
+            var entity = new EmployeeAddressesEntity(
                 tenantId,
                 item.EmployeeId,
                 item.AddressTypeId,

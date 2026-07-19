@@ -75,7 +75,7 @@ public class RoleAppService : IRoleAppService
             return 0;
         }
 
-        var entity = new RoleEntity(tenantId, request.Name, request.Description, _currentUser.GetUserId());
+        var entity = new RoleEntity(tenantId, request.Code ?? request.Name ?? "ROLE", request.Name, request.Description, _currentUser.GetUserId());
         var success = await _domain.CreateAsync(entity, ct);
         return success ? entity.Id : 0;
     }
@@ -89,7 +89,7 @@ public class RoleAppService : IRoleAppService
             return false;
         }
 
-        entity.Update(request.Name, request.Description, _currentUser.GetUserId());
+        entity.Update(request.Code ?? entity.Code ?? request.Name ?? "ROLE", request.Name, request.Description, _currentUser.GetUserId());
         return await _domain.UpdateAsync(entity, ct);
     }
     
@@ -255,7 +255,7 @@ public class RoleAppService : IRoleAppService
             }
 
             // Cria a entidade
-            var entity = new RoleEntity(tenantId, item.Name, item.Description, _currentUser.GetUserId());
+            var entity = new RoleEntity(tenantId, item.Code ?? item.Name ?? "ROLE", item.Name, item.Description, _currentUser.GetUserId());
 
             // Tenta criar no dom�nio
             var success = await _domain.CreateAsync(entity, ct);

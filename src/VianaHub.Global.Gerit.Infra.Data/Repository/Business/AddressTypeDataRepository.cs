@@ -20,6 +20,7 @@ public class AddressTypeDataRepository : IAddressTypeDataRepository
     {
         return await _context.Set<AddressTypeEntity>()
             .AsNoTracking()
+            .Include(x => x.Translations)
             .Where(x => !x.IsDeleted)
             .OrderBy(x => x.Name)
             .ToListAsync(ct);
@@ -28,12 +29,14 @@ public class AddressTypeDataRepository : IAddressTypeDataRepository
     {
         return await _context.Set<AddressTypeEntity>()
             .AsNoTracking()
+            .Include(x => x.Translations)
             .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted, ct);
     }
     public async Task<ListPage<AddressTypeEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct)
     {
         var query = _context.Set<AddressTypeEntity>()
             .AsNoTracking()
+            .Include(x => x.Translations)
             .Where(x => !x.IsDeleted);
 
         if (!string.IsNullOrWhiteSpace(request.Search))

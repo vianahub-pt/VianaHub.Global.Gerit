@@ -92,7 +92,9 @@ public class VisitAppService : IVisitAppService
         var entity = new VisitEntity(
             tenantId,
             request.ClientId,
-            request.StatusId,
+            request.StatusDefinitionId,
+            request.StatusDomainId,
+            request.CurrencyCode,
             request.Title,
             request.Description,
             request.StartDateTime,
@@ -125,7 +127,9 @@ public class VisitAppService : IVisitAppService
 
         entity.UpdateDetails(
             request.ClientId,
-            request.StatusId,
+            request.StatusDefinitionId,
+            request.StatusDomainId,
+            request.CurrencyCode,
             request.Title,
             request.Description,
             request.StartDateTime,
@@ -299,7 +303,9 @@ public class VisitAppService : IVisitAppService
             var entity = new VisitEntity(
                 tenantId,
                 item.ClientId,
-                item.StatusId,
+                item.StatusDefinitionId,
+                item.StatusDomainId,
+                item.CurrencyCode,
                 item.Title,
                 item.Description,
                 item.StartDateTime,
@@ -326,9 +332,15 @@ public class VisitAppService : IVisitAppService
             return false;
         }
 
-        if (item.StatusId <= 0)
+        if (item.StatusDefinitionId <= 0)
         {
-            _notify.Add(_localization.GetMessage("Application.Service.Visit.ValidateBulkItem.StatusId"), 400);
+            _notify.Add(_localization.GetMessage("Application.Service.Visit.ValidateBulkItem.StatusDefinitionId"), 400);
+            return false;
+        }
+
+        if (item.StatusDomainId <= 0)
+        {
+            _notify.Add(_localization.GetMessage("Application.Service.Visit.ValidateBulkItem.StatusDomainId"), 400);
             return false;
         }
 

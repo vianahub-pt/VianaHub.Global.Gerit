@@ -7,8 +7,8 @@ public record VisitTeamEmployeeResponse
     public int VisitTeamId { get; init; }
     public int EmployeeId { get; init; }
     public string? EmployeeName { get; init; }
-    public int FunctionId { get; init; }
-    public string? FunctionName { get; init; }
+    public int VisitTeamFunctionId { get; init; }
+    public string? VisitTeamFunctionName { get; init; }
     public bool IsLeader { get; init; }
     public DateTime StartDateTime { get; init; }
     public DateTime? EndDateTime { get; init; }

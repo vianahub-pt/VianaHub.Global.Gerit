@@ -8,11 +8,23 @@ public class UpdateEquipmentRouteValidator : AbstractValidator<UpdateEquipmentRe
 {
     public UpdateEquipmentRouteValidator(ILocalizationService localization)
     {
+        RuleFor(x => x.EquipmentTypeId)
+            .GreaterThan(0).WithMessage(localization.GetMessage("Api.Validator.Equipment.Update.EquipmentTypeId"));
+
+        RuleFor(x => x.StatusDefinitionId)
+            .GreaterThan(0).WithMessage(localization.GetMessage("Api.Validator.Equipment.Update.StatusDefinitionId"));
+
+        RuleFor(x => x.StatusDomainId)
+            .GreaterThan(0).WithMessage(localization.GetMessage("Api.Validator.Equipment.Update.StatusDomainId"));
+
         RuleFor(x => x.Name)
             .NotEmpty().WithMessage(localization.GetMessage("Api.Validator.Equipment.Update.Name"))
             .MaximumLength(150).WithMessage(localization.GetMessage("Api.Validator.Equipment.Update.Name.MaximumLength", 150));
 
         RuleFor(x => x.SerialNumber)
             .MaximumLength(100).WithMessage(localization.GetMessage("Api.Validator.Equipment.Update.SerialNumber.MaximumLength", 100));
+
+        RuleFor(x => x.UrlImage)
+            .MaximumLength(500).WithMessage(localization.GetMessage("Api.Validator.Equipment.Update.UrlImage.MaximumLength", 500));
     }
 }

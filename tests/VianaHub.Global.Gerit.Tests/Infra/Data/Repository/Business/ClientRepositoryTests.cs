@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using VianaHub.Global.Gerit.Domain.Entities.Business;
-using VianaHub.Global.Gerit.Domain.Enums;
 using VianaHub.Global.Gerit.Domain.ReadModels;
 using VianaHub.Global.Gerit.Infra.Data.Context;
 using VianaHub.Global.Gerit.Infra.Data.Repository.Business;
@@ -9,6 +8,24 @@ namespace VianaHub.Global.Gerit.Tests.Infra.Data.Repository.Business
 {
     public class ClientRepositoryTests
     {
+        private static ClientEntity CreateActiveClient(string name, string email)
+        {
+            return new ClientEntity(1, 1, 1, imageUrl: null, note: null,
+                name: name, phoneNumber: null, cellPhoneNumber: null,
+                isCellPhoneWhatsapp: false, email: email, websiteUrl: null,
+                birthDate: null, gender: null, nationality: null,
+                companyRegistrationNumber: null, economicActivityCode: null,
+                numberOfEmployees: null, statusDefinitionId: 0, statusDomainId: 0,
+                createdBy: 1);
+        }
+
+        private static ClientEntity CreateDeletedClient(string name, string email)
+        {
+            var client = CreateActiveClient(name, email);
+            client.Delete(1);
+            return client;
+        }
+
         [Fact(DisplayName = "GetPagedAsync: does not return deleted records")]
         [Trait("Infra.Data", "")]
         public async Task GetPagedAsync_ShouldNotReturnDeletedRecords()
@@ -19,12 +36,8 @@ namespace VianaHub.Global.Gerit.Tests.Infra.Data.Repository.Business
 
             await using (var context = new GeritDbContext(options))
             {
-                var active = new ClientEntity(1, ClientType.PessoaSingular, 1, urlImage: null, note: null, createdBy: 1);
-                active.AddIndividual(new ClientIndividualEntity(1, "Teste Active User", "Active", "User", "", "", false, "active@test.local", null, null, null, null, null, 1));
-
-                var deleted = new ClientEntity(1, ClientType.PessoaSingular, 1, urlImage: null, note: null, createdBy: 1);
-                deleted.AddIndividual(new ClientIndividualEntity(1, "Teste Deleted User", "Deleted", "User", "", "", false, "deleted@test.local", null, null, null, null, null, 1));
-                deleted.Delete(ClientType.PessoaSingular, 1);
+                var active = CreateActiveClient("Teste Active User", "active@test.local");
+                var deleted = CreateDeletedClient("Teste Deleted User", "deleted@test.local");
 
                 await context.Clients.AddRangeAsync(active, deleted);
                 await context.SaveChangesAsync();
@@ -37,7 +50,7 @@ namespace VianaHub.Global.Gerit.Tests.Infra.Data.Repository.Business
                 Assert.NotNull(result);
                 Assert.Equal(1, result.TotalItems);
                 Assert.Single(result.Items);
-                Assert.DoesNotContain(result.Items, i => i.Individual != null && i.Individual.Email == "deleted@test.local");
+                Assert.DoesNotContain(result.Items, i => i.Email == "deleted@test.local");
             }
         }
 
@@ -51,12 +64,8 @@ namespace VianaHub.Global.Gerit.Tests.Infra.Data.Repository.Business
 
             await using (var context = new GeritDbContext(options))
             {
-                var active = new ClientEntity(1, ClientType.PessoaSingular, 1, urlImage: null, note: null, createdBy: 1);
-                active.AddIndividual(new ClientIndividualEntity(1, "Teste Alice Active", "Alice", "Active", "", "", false, "alice.active@test.local", null, null, null, null, null, 1));
-
-                var deleted = new ClientEntity(1, ClientType.PessoaSingular, 1, urlImage: null, note: null, createdBy: 1);
-                deleted.AddIndividual(new ClientIndividualEntity(1, "Teste Alice Deleted", "Alice", "Deleted", "", "", false, "alice.deleted@test.local", null, null, null, null, null, 1));
-                deleted.Delete(ClientType.PessoaSingular, 1);
+                var active = CreateActiveClient("Alice Active", "alice.active@test.local");
+                var deleted = CreateDeletedClient("Alice Deleted", "alice.deleted@test.local");
 
                 await context.Clients.AddRangeAsync(active, deleted);
                 await context.SaveChangesAsync();
@@ -69,7 +78,7 @@ namespace VianaHub.Global.Gerit.Tests.Infra.Data.Repository.Business
                 Assert.NotNull(result);
                 Assert.Equal(1, result.TotalItems);
                 Assert.Single(result.Items);
-                Assert.DoesNotContain(result.Items, i => i.Individual != null && i.Individual.Email == "alice.deleted@test.local");
+                Assert.DoesNotContain(result.Items, i => i.Email == "alice.deleted@test.local");
             }
         }
 
@@ -83,13 +92,8 @@ namespace VianaHub.Global.Gerit.Tests.Infra.Data.Repository.Business
 
             await using (var context = new GeritDbContext(options))
             {
-                var deleted1 = new ClientEntity(1, ClientType.PessoaSingular, 1, urlImage: null, note: null, createdBy: 1);
-                deleted1.AddIndividual(new ClientIndividualEntity(1, "Del1 User", "Del1", "User", "", "", false, "del1@test.local", null, null, null, null, null, 1));
-                deleted1.Delete(ClientType.PessoaSingular, 1);
-
-                var deleted2 = new ClientEntity(1, ClientType.PessoaSingular, 1, urlImage: null, note: null, createdBy: 1);
-                deleted2.AddIndividual(new ClientIndividualEntity(1, "Del2 User", "Del2", "User", "", "", false, "del2@test.local", null, null, null, null, null, 1));
-                deleted2.Delete(ClientType.PessoaSingular, 1);
+                var deleted1 = CreateDeletedClient("Del1 User", "del1@test.local");
+                var deleted2 = CreateDeletedClient("Del2 User", "del2@test.local");
 
                 await context.Clients.AddRangeAsync(deleted1, deleted2);
                 await context.SaveChangesAsync();

@@ -5,9 +5,9 @@ using VianaHub.Global.Gerit.Domain.Interfaces.Base;
 namespace VianaHub.Global.Gerit.Domain.Validators.Business.VisitContact;
 
 /// <summary>
-/// Validador para criação de VisitContact
+/// Validador para criaï¿½ï¿½o de VisitContact
 /// </summary>
-public class CreateVisitContactValidator : AbstractValidator<VisitContactEntity>
+public class CreateVisitContactValidator : AbstractValidator<VisitContactPersonsEntity>
 {
     public CreateVisitContactValidator(ILocalizationService localization)
     {
@@ -37,6 +37,27 @@ public class CreateVisitContactValidator : AbstractValidator<VisitContactEntity>
             .MaximumLength(30)
             .WithMessage(localization.GetMessage("Domain.VisitContact.PhoneMaxLength"))
             .When(x => !string.IsNullOrWhiteSpace(x.Phone));
+
+        RuleFor(x => x.JobTitle)
+            .MaximumLength(100)
+            .WithMessage(localization.GetMessage("Domain.VisitContact.JobTitleMaxLength", 100))
+            .When(x => !string.IsNullOrWhiteSpace(x.JobTitle));
+
+        RuleFor(x => x.Department)
+            .MaximumLength(100)
+            .WithMessage(localization.GetMessage("Domain.VisitContact.DepartmentMaxLength", 100))
+            .When(x => !string.IsNullOrWhiteSpace(x.Department));
+
+        RuleFor(x => x.CellPhoneNumber)
+            .MaximumLength(30)
+            .WithMessage(localization.GetMessage("Domain.VisitContact.CellPhoneNumberMaxLength", 30))
+            .When(x => !string.IsNullOrWhiteSpace(x.CellPhoneNumber));
+
+        // Quando IsCellPhoneWhatsapp for true, CellPhoneNumber Ã© obrigatÃ³rio
+        RuleFor(x => x.CellPhoneNumber)
+            .NotEmpty()
+            .WithMessage(localization.GetMessage("Domain.VisitContact.CellPhoneNumberRequiredForWhatsapp"))
+            .When(x => x.IsCellPhoneWhatsapp);
 
         RuleFor(x => x.CreatedBy)
             .GreaterThan(0)

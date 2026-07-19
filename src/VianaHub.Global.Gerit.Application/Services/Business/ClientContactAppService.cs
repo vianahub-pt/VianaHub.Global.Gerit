@@ -81,7 +81,7 @@ public class ClientContactAppService : IClientContactAppService
             return 0;
         }
 
-        var clientContact = new ClientContactEntity(
+        var clientContact = new ClientContactPersonsEntity(
             TenantId,
             clientId,
             request.Name,
@@ -90,7 +90,10 @@ public class ClientContactAppService : IClientContactAppService
             request.IsWhatsapp,
             request.Email,
             request.IsPrimary,
-            UserId
+            UserId,
+            request.JobTitle,
+            request.Department,
+            request.IsCellPhoneWhatsapp
         );
 
         var success = await _domain.CreateAsync(clientContact, ct);
@@ -106,7 +109,7 @@ public class ClientContactAppService : IClientContactAppService
             return false;
         }
 
-        clientContact.Update(request.Name, request.PhoneNumber, request.CellPhoneNumber, request.IsWhatsapp, request.Email, request.IsPrimary, UserId);
+        clientContact.Update(request.Name, request.PhoneNumber, request.CellPhoneNumber, request.IsWhatsapp, request.Email, request.IsPrimary, UserId, request.JobTitle, request.Department, request.IsCellPhoneWhatsapp);
 
         return await _repo.UpdateAsync(clientContact, ct);
     }
@@ -285,7 +288,7 @@ public class ClientContactAppService : IClientContactAppService
                 continue;
             }
 
-            //var entity = new ClientContactEntity(
+            //var entity = new ClientContactPersonsEntity(
             //    tenantId,
             //    clientId,
             //    item.Name,

@@ -20,9 +20,13 @@ public class UpdateEquipmentValidator : AbstractValidator<EquipmentEntity>
             .GreaterThan(0)
             .WithMessage(localization.GetMessage("Domain.Equipment.EquipmentTypeIdRequired"));
 
-        RuleFor(x => x.StatusId)
+        RuleFor(x => x.StatusDefinitionId)
             .GreaterThan(0)
-            .WithMessage(localization.GetMessage("Domain.Equipment.StatusIdRequired"));
+            .WithMessage(localization.GetMessage("Domain.Equipment.StatusDefinitionIdRequired"));
+
+        RuleFor(x => x.StatusDomainId)
+            .GreaterThan(0)
+            .WithMessage(localization.GetMessage("Domain.Equipment.StatusDomainIdRequired"));
 
         RuleFor(x => x.Name)
             .NotEmpty()

@@ -20,6 +20,8 @@ public partial class ClientDataRepository : IClientDataRepository
     {
         return await _context.Set<ClientEntity>()
             .AsNoTracking()
+            .Include(x => x.StatusDefinition)
+                .ThenInclude(x => x.Translations)
             .Where(x => !x.IsDeleted)
             .ToListAsync(ct);
     }
@@ -28,6 +30,8 @@ public partial class ClientDataRepository : IClientDataRepository
     {
         return await _context.Set<ClientEntity>()
             .AsNoTracking()
+            .Include(x => x.StatusDefinition)
+                .ThenInclude(x => x.Translations)
             .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted, ct);
     }
 
@@ -35,6 +39,8 @@ public partial class ClientDataRepository : IClientDataRepository
     {
         return await _context.Set<ClientEntity>()
             .AsNoTracking()
+            .Include(x => x.StatusDefinition)
+                .ThenInclude(x => x.Translations)
             .Where(x => x.TenantId == tenantId && !x.IsDeleted)
             .OrderBy(x => x.CreatedAt)
             .ToListAsync(ct);
@@ -46,6 +52,8 @@ public partial class ClientDataRepository : IClientDataRepository
             .AsNoTracking()
             .AsSplitQuery()
             .Include(x => x.Contacts)
+            .Include(x => x.StatusDefinition)
+                .ThenInclude(x => x.Translations)
             .Where(x => !x.IsDeleted);
 
         if (!string.IsNullOrWhiteSpace(request.Search))
@@ -85,6 +93,8 @@ public partial class ClientDataRepository : IClientDataRepository
             .AsNoTracking()
             .AsSplitQuery()
             .Include(x => x.Contacts)
+            .Include(x => x.StatusDefinition)
+                .ThenInclude(x => x.Translations)
             .Where(x => x.TenantId == tenantId && !x.IsDeleted);
 
         if (!string.IsNullOrWhiteSpace(request.Search))
@@ -132,39 +142,20 @@ public partial class ClientDataRepository : IClientDataRepository
             .AnyAsync(x => x.TenantId == tenantId && x.Id == clientId && !x.IsDeleted, ct);
     }
 
-    public async Task<bool> ExistsIndividualDocumentAsync(int tenantId, string documentType, string documentNumber, int? excludeClientId, CancellationToken ct)
+    public async Task<bool> ExistsByCompanyRegistrationAsync(int tenantId, string companyRegistrationNumber, int? excludeClientId, CancellationToken ct)
     {
-        if (string.IsNullOrWhiteSpace(documentNumber))
+        if (string.IsNullOrWhiteSpace(companyRegistrationNumber))
         {
             return false;
         }
 
-        var query = _context.Set<ClientIndividualEntity>()
+        var query = _context.Set<ClientEntity>()
             .AsNoTracking()
-            .Where(x => x.TenantId == tenantId && x.DocumentType == documentType && x.DocumentNumber == documentNumber && !x.IsDeleted);
+            .Where(x => x.TenantId == tenantId && x.CompanyRegistrationNumber == companyRegistrationNumber && !x.IsDeleted);
 
         if (excludeClientId.HasValue)
         {
-            query = query.Where(x => x.ClientId != excludeClientId.Value);
-        }
-
-        return await query.AnyAsync(ct);
-    }
-
-    public async Task<bool> ExistsCompanyRegistrationAsync(int tenantId, string companyRegistration, int? excludeClientId, CancellationToken ct)
-    {
-        if (string.IsNullOrWhiteSpace(companyRegistration))
-        {
-            return false;
-        }
-
-        var query = _context.Set<ClientCompanyEntity>()
-            .AsNoTracking()
-            .Where(x => x.TenantId == tenantId && x.CompanyRegistration == companyRegistration && !x.IsDeleted);
-
-        if (excludeClientId.HasValue)
-        {
-            query = query.Where(x => x.ClientId != excludeClientId.Value);
+            query = query.Where(x => x.Id != excludeClientId.Value);
         }
 
         return await query.AnyAsync(ct);
@@ -181,4 +172,3 @@ public partial class ClientDataRepository : IClientDataRepository
         return await _context.SaveChangesAsync(ct) > 0;
     }
 }
-

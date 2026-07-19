@@ -12,9 +12,21 @@ public class CreateSubscriptionValidator : AbstractValidator<SubscriptionEntity>
             .GreaterThan(0)
             .WithMessage(localization.GetMessage("Domain.Subscription.TenantIdRequired"));
 
-        RuleFor(x => x.PlanId)
+        RuleFor(x => x.SubscriptionPlanId)
             .GreaterThan(0)
-            .WithMessage(localization.GetMessage("Domain.Subscription.PlanIdRequired"));
+            .WithMessage(localization.GetMessage("Domain.Subscription.SubscriptionPlanIdRequired"));
+
+        RuleFor(x => x.StatusDefinitionId)
+            .GreaterThan(0)
+            .WithMessage(localization.GetMessage("Domain.Subscription.StatusDefinitionIdRequired"));
+
+        RuleFor(x => x.StatusDomainId)
+            .GreaterThan(0)
+            .WithMessage(localization.GetMessage("Domain.Subscription.StatusDomainIdRequired"));
+
+        RuleFor(x => x.AgreedAmount)
+            .GreaterThanOrEqualTo(0)
+            .WithMessage(localization.GetMessage("Domain.Subscription.AgreedAmountNonNegative"));
 
         RuleFor(x => x.CurrentPeriodStart)
             .NotEmpty()
@@ -35,5 +47,15 @@ public class CreateSubscriptionValidator : AbstractValidator<SubscriptionEntity>
             .MaximumLength(100)
             .WithMessage(localization.GetMessage("Domain.Subscription.StripeCustomerIdMaxLength", 100))
             .When(x => !string.IsNullOrEmpty(x.StripeCustomerId));
+
+        RuleFor(x => x.BillingInterval)
+            .MaximumLength(20)
+            .WithMessage(localization.GetMessage("Domain.Subscription.BillingIntervalMaxLength", 20))
+            .When(x => !string.IsNullOrEmpty(x.BillingInterval));
+
+        RuleFor(x => x.CurrencyCode)
+            .MaximumLength(3)
+            .WithMessage(localization.GetMessage("Domain.Subscription.CurrencyCodeLength", 3))
+            .When(x => !string.IsNullOrEmpty(x.CurrencyCode));
     }
 }

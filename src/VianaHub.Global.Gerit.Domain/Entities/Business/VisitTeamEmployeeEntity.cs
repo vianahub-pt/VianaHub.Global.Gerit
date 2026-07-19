@@ -4,15 +4,16 @@ using VianaHub.Global.Gerit.Domain.Entities.Billing;
 namespace VianaHub.Global.Gerit.Domain.Entities.Business;
 
 /// <summary>
-/// Entidade que representa um Funcionário associado a uma Equipe de Visita
-/// Relaciona funcionários com suas funções específicas em visitas
+/// Entidade que representa um Funcionário associado a uma Equipe de Visita.
+/// Relaciona funcionários com suas funções específicas em visitas.
+/// Tabela: dbo.VisitTeamEmployee
 /// </summary>
 public class VisitTeamEmployeeEntity : Entity
 {
     public int TenantId { get; private set; }
     public int VisitTeamId { get; private set; }
     public int EmployeeId { get; private set; }
-    public int FunctionId { get; private set; }
+    public int VisitTeamFunctionId { get; private set; }
     public bool IsLeader { get; private set; }
     public DateTime StartDateTime { get; private set; }
     public DateTime? EndDateTime { get; private set; }
@@ -20,23 +21,23 @@ public class VisitTeamEmployeeEntity : Entity
     public bool IsDeleted { get; private set; }
 
     // Navigation Properties
-    public TenantEntity Tenant { get; private set; }
-    public VisitTeamEntity VisitTeam { get; private set; }
-    public EmployeeEntity Employee { get; private set; }
-    public FunctionEntity Function { get; private set; }
+    public TenantEntity Tenant { get; private set; } = null!;
+    public VisitTeamEntity VisitTeam { get; private set; } = null!;
+    public EmployeeEntity Employee { get; private set; } = null!;
+    public VisitTeamFunctionsEntity Function { get; private set; } = null!;
 
     protected VisitTeamEmployeeEntity() { }
 
     /// <summary>
     /// Construtor para criação de um novo Funcionário na Equipe de Visita
     /// </summary>
-    public VisitTeamEmployeeEntity(int tenantId, int visitTeamId, int employeeId, int functionId, 
+    public VisitTeamEmployeeEntity(int tenantId, int visitTeamId, int employeeId, int visitTeamFunctionId, 
         bool isLeader, DateTime startDateTime, int createdBy)
     {
         TenantId = tenantId;
         VisitTeamId = visitTeamId;
         EmployeeId = employeeId;
-        FunctionId = functionId;
+        VisitTeamFunctionId = visitTeamFunctionId;
         IsLeader = isLeader;
         StartDateTime = startDateTime;
         IsActive = true;
@@ -45,9 +46,9 @@ public class VisitTeamEmployeeEntity : Entity
         CreatedAt = DateTime.UtcNow;
     }
 
-    public void Update(int functionId, bool isLeader, DateTime startDateTime, DateTime? endDateTime, int modifiedBy)
+    public void Update(int visitTeamFunctionId, bool isLeader, DateTime startDateTime, DateTime? endDateTime, int modifiedBy)
     {
-        FunctionId = functionId;
+        VisitTeamFunctionId = visitTeamFunctionId;
         IsLeader = isLeader;
         StartDateTime = startDateTime;
         EndDateTime = endDateTime;

@@ -5,38 +5,38 @@ using VianaHub.Global.Gerit.Domain.Interfaces.Base;
 
 namespace VianaHub.Global.Gerit.Domain.Validators.Job;
 
-public class JobDefinitionValidator : BaseEntityValidator<JobDefinitionEntity>
+public class JobDefinitionValidator : BaseEntityValidator<JobDefinitionsEntity>
 {
     public JobDefinitionValidator(ILocalizationService localization) : base(localization)
     {
     }
 
-    public override async Task<ValidationResult> ValidateForCreateAsync(JobDefinitionEntity entity)
+    public override async Task<ValidationResult> ValidateForCreateAsync(JobDefinitionsEntity entity)
     {
         var validator = new JobDefinitionCreateValidator(_localization);
         return await validator.ValidateAsync(entity);
     }
 
-    public override async Task<ValidationResult> ValidateForUpdateAsync(JobDefinitionEntity entity)
+    public override async Task<ValidationResult> ValidateForUpdateAsync(JobDefinitionsEntity entity)
     {
         var validator = new JobDefinitionUpdateValidator(_localization);
         return await validator.ValidateAsync(entity);
     }
 
-    public override async Task<ValidationResult> ValidateForActivateAsync(JobDefinitionEntity entity)
+    public override async Task<ValidationResult> ValidateForActivateAsync(JobDefinitionsEntity entity)
     {
-        // Validar existência de Cron quando recorrent
+        // Validar existï¿½ncia de Cron quando recorrent
         var validator = new JobDefinitionUpdateValidator(_localization);
         return await validator.ValidateAsync(entity);
     }
 
-    public override async Task<ValidationResult> ValidateForDeactivateAsync(JobDefinitionEntity entity)
+    public override async Task<ValidationResult> ValidateForDeactivateAsync(JobDefinitionsEntity entity)
     {
-        // Sem validações adicionais para desativação
+        // Sem validaï¿½ï¿½es adicionais para desativaï¿½ï¿½o
         return await Task.FromResult(new ValidationResult());
     }
 
-    public override async Task<ValidationResult> ValidateForDeleteAsync(JobDefinitionEntity entity)
+    public override async Task<ValidationResult> ValidateForDeleteAsync(JobDefinitionsEntity entity)
     {
         if (entity.IsSystemJob)
         {
@@ -48,7 +48,7 @@ public class JobDefinitionValidator : BaseEntityValidator<JobDefinitionEntity>
         return await Task.FromResult(new ValidationResult());
     }
 
-    public override Task<ValidationResult> ValidateForRevokeAsync(JobDefinitionEntity entity)
+    public override Task<ValidationResult> ValidateForRevokeAsync(JobDefinitionsEntity entity)
     {
         return Task.FromResult(new ValidationResult());
     }

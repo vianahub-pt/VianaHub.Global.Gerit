@@ -98,7 +98,7 @@ public class UserRoleAppService : IUserRoleAppService
             return null;
         }
 
-        var entity = new UserRoleEntity(tenantId, request.UserId, request.RoleId);
+        var entity = new UserRolesEntity(tenantId, request.UserId, request.RoleId);
         await _domain.CreateAsync(entity, ct);
         return _mapper.Map<UserRoleResponse>(entity);
     }
@@ -121,11 +121,11 @@ public class UserRoleAppService : IUserRoleAppService
 
     public async Task<bool> BulkUploadAsync(IFormFile file, CancellationToken ct)
     {
-        // Valida arquivo usando serviço centralizado
+        // Valida arquivo usando serviï¿½o centralizado
         if (!_fileValidation.ValidateFile(file))
             return false;
 
-        // Lê itens do CSV
+        // Lï¿½ itens do CSV
         var items = ReadCsvFile(file);
         if (items == null)
             return false;
@@ -144,17 +144,17 @@ public class UserRoleAppService : IUserRoleAppService
     {
         try
         {
-            // Cria StreamReader com encoding UTF-8 forçado
+            // Cria StreamReader com encoding UTF-8 forï¿½ado
             using var reader = file.OpenReadStream().CreateUtf8StreamReader();
 
             var config = new CsvConfiguration(CultureInfo.InvariantCulture)
             {
                 HasHeaderRecord = true,
-                Delimiter = ";", // CSV usa ponto e vírgula como delimitador
+                Delimiter = ";", // CSV usa ponto e vï¿½rgula como delimitador
                 MissingFieldFound = null,
                 HeaderValidated = null,
                 TrimOptions = TrimOptions.Trim,
-                BadDataFound = null // Ignora linhas mal formatadas ao invés de lançar exceção
+                BadDataFound = null // Ignora linhas mal formatadas ao invï¿½s de lanï¿½ar exceï¿½ï¿½o
             };
 
             using var csv = new CsvReader(reader, config);
@@ -173,7 +173,7 @@ public class UserRoleAppService : IUserRoleAppService
                     var record = csv.GetRecord<BulkUploadUserRoleItem>();
                     if (record != null)
                     {
-                        // Valida se os campos não contêm conteúdo perigoso
+                        // Valida se os campos nï¿½o contï¿½m conteï¿½do perigoso
                         if (record.UserId <= 0)
                         {
                             _notify.Add(_localization.GetMessage("Application.Service.UserRole.ReadCsvFile.UserId.IsSafeCsvValue", rowCount + 2), 400);
@@ -221,7 +221,7 @@ public class UserRoleAppService : IUserRoleAppService
 
         foreach (var item in items)
         {
-            // Valida campos obrigatórios
+            // Valida campos obrigatï¿½rios
             if (!ValidateBulkItem(item))
             {
                 hasErrors = true;
@@ -237,9 +237,9 @@ public class UserRoleAppService : IUserRoleAppService
                 continue;
             }
 
-            var entity = new UserRoleEntity(tenantId, item.UserId, item.RoleId);
+            var entity = new UserRolesEntity(tenantId, item.UserId, item.RoleId);
 
-            // Tenta criar no domínio
+            // Tenta criar no domï¿½nio
             var success = await _domain.CreateAsync(entity, ct);
 
             if (!success)

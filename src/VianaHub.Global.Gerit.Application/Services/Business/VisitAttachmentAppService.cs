@@ -17,7 +17,6 @@ public class VisitAttachmentAppService : IVisitAttachmentAppService
 {
     private readonly IVisitAttachmentDataRepository _repo;
     private readonly IVisitAttachmentDomainService _domain;
-    private readonly IAttachmentCategoryDataRepository _categoryRepo;
     private readonly IFileTypeDataRepository _fileTypeRepo;
     private readonly IVisitDataRepository _visitRepo;
     private readonly IMapper _mapper;
@@ -29,7 +28,6 @@ public class VisitAttachmentAppService : IVisitAttachmentAppService
     public VisitAttachmentAppService(
         IVisitAttachmentDataRepository repo,
         IVisitAttachmentDomainService domain,
-        IAttachmentCategoryDataRepository categoryRepo,
         IFileTypeDataRepository fileTypeRepo,
         IVisitDataRepository visitRepo,
         IMapper mapper,
@@ -40,7 +38,6 @@ public class VisitAttachmentAppService : IVisitAttachmentAppService
     {
         _repo = repo;
         _domain = domain;
-        _categoryRepo = categoryRepo;
         _fileTypeRepo = fileTypeRepo;
         _visitRepo = visitRepo;
         _mapper = mapper;
@@ -84,12 +81,6 @@ public class VisitAttachmentAppService : IVisitAttachmentAppService
         return _mapper.Map<IEnumerable<VisitAttachmentResponse>>(entities);
     }
 
-    public async Task<IEnumerable<VisitAttachmentResponse>> GetByCategoryIdAsync(int categoryId, CancellationToken ct)
-    {
-        var entities = await _repo.GetByCategoryIdAsync(categoryId, ct);
-        return _mapper.Map<IEnumerable<VisitAttachmentResponse>>(entities);
-    }
-
     public async Task<VisitAttachmentResponse> GetPrimaryByVisitIdAsync(int visitId, CancellationToken ct)
     {
         var entity = await _repo.GetPrimaryByVisitIdAsync(visitId, ct);
@@ -124,12 +115,6 @@ public class VisitAttachmentAppService : IVisitAttachmentAppService
             return 0;
         }
 
-        if (!await _categoryRepo.ExistsByIdAsync(request.AttachmentCategoryId, ct))
-        {
-            _notify.Add(_localization.GetMessage("Application.Service.VisitAttachment.Create.CategoryNotFound"), 400);
-            return 0;
-        }
-
         if (await _repo.ExistsByS3KeyAsync(tenantId, request.S3Key, ct))
         {
             _notify.Add(_localization.GetMessage("Application.Service.VisitAttachment.Create.S3KeyAlreadyExists"), 409);
@@ -141,8 +126,8 @@ public class VisitAttachmentAppService : IVisitAttachmentAppService
             await RemoveAllPrimaryFlagsAsync(request.VisitId, ct);
         }
 
-        var entity = new VisitAttachmentEntity(tenantId, request.FileTypeId, request.VisitId, 
-            request.AttachmentCategoryId, request.S3Key, request.FileName, request.FileSizeBytes, 
+        var entity = new VisitAttachmentsEntity(tenantId, request.FileTypeId, request.VisitId,
+            request.S3Key, request.FileName, request.FileSizeBytes,
             request.DisplayOrder, request.IsPrimary, _currentUser.GetUserId());
 
         var success = await _domain.CreateAsync(entity, ct);
@@ -158,18 +143,12 @@ public class VisitAttachmentAppService : IVisitAttachmentAppService
             return false;
         }
 
-        if (!await _categoryRepo.ExistsByIdAsync(request.AttachmentCategoryId, ct))
-        {
-            _notify.Add(_localization.GetMessage("Application.Service.VisitAttachment.Update.CategoryNotFound"), 400);
-            return false;
-        }
-
         if (request.IsPrimary && !entity.IsPrimary)
         {
             await RemoveAllPrimaryFlagsAsync(entity.VisitId, ct);
         }
 
-        entity.Update(request.AttachmentCategoryId, request.FileName, request.DisplayOrder, request.IsPrimary, _currentUser.GetUserId());
+        entity.Update(request.FileName, request.DisplayOrder, request.IsPrimary, _currentUser.GetUserId());
 
         return await _domain.UpdateAsync(entity, ct);
     }

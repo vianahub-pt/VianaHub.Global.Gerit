@@ -1,5 +1,4 @@
 using AutoMapper;
-using Azure.Core;
 using CsvHelper;
 using CsvHelper.Configuration;
 using Microsoft.AspNetCore.Http;
@@ -11,7 +10,6 @@ using VianaHub.Global.Gerit.Application.Dtos.Response.Business.Client;
 using VianaHub.Global.Gerit.Application.Interfaces.Business;
 using VianaHub.Global.Gerit.Application.Interfaces.Common;
 using VianaHub.Global.Gerit.Domain.Entities.Business;
-using VianaHub.Global.Gerit.Domain.Enums;
 using VianaHub.Global.Gerit.Domain.Helpers;
 using VianaHub.Global.Gerit.Domain.Interfaces.Base;
 using VianaHub.Global.Gerit.Domain.Interfaces.Business;
@@ -82,22 +80,31 @@ public class ClientAppService : IClientAppService
 
     public async Task<int> CreateAsync(CreateClientRequest request, CancellationToken ct)
     {
-        var client = new ClientEntity(TenantId, (ClientType)request.ClientType, request.AcquisitionSourceTypeId, request.UrlImage, request.Note, UserId);
+        // Valida consistência PartyTypeId vs campos obrigatórios via INotify
+        if (!ValidatePartyTypeConsistency(request, isCreate: true))
+            return 0;
 
-        switch (client.ClientType)
-        {
-            case ClientType.PessoaSingular:
-            case ClientType.RecibosVerdes:
-            case ClientType.Freelancer:
-                client.AddIndividual(new ClientIndividualEntity(TenantId, request.Individual.FullName, request.Individual.FirstName, request.Individual.LastName, request.Individual.PhoneNumber, request.Individual.CellPhoneNumber, request.Individual.IsWhatsapp, request.Individual.Email, request.Individual.BirthDate, request.Individual.Gender, request.Individual.DocumentType, request.Individual.DocumentNumber, request.Individual.Nationality, UserId));
-                break;
-            case ClientType.PessoaJuridica:
-            case ClientType.SociedadeUnipessoalQuotas:
-                client.AddCompany(new ClientCompanyEntity(TenantId, request.Company.LegalName, request.Company.TradeName, request.Company.PhoneNumber, request.Company.CellPhoneNumber, request.Company.IsWhatsapp, request.Company.Email, request.Company.Site, request.Company.CompanyRegistration, request.Company.CAE, request.Company.NumberOfEmployee, request.Company.LegalRepresentative, UserId));
-                break;
-            default:
-                break;
-        }
+        var client = new ClientEntity(
+            TenantId,
+            request.PartyTypeId,
+            request.AcquisitionSourceTypeId,
+            request.UrlImage,
+            request.Note,
+            request.Name,
+            request.PhoneNumber,
+            request.CellPhoneNumber,
+            request.IsCellPhoneWhatsapp,
+            request.Email,
+            request.WebsiteUrl,
+            request.BirthDate,
+            request.Gender,
+            request.Nationality,
+            request.CompanyRegistrationNumber,
+            request.EconomicActivityCode,
+            request.NumberOfEmployees,
+            request.StatusDefinitionId ?? 0,
+            request.StatusDomainId ?? 0,
+            UserId);
 
         var success = await _domain.CreateAsync(client, ct);
         return success ? client.Id : 0;
@@ -113,22 +120,30 @@ public class ClientAppService : IClientAppService
             return false;
         }
 
-        client.Update((ClientType)request.ClientType, request.AcquisitionSourceTypeId, request.UrlImage, request.Note, UserId);
+        // Valida consistência PartyTypeId vs campos
+        if (!ValidatePartyTypeConsistency(request, isCreate: false))
+            return false;
 
-        switch ((ClientType)request.ClientType)
-        {
-            case ClientType.PessoaSingular:
-            case ClientType.RecibosVerdes:
-            case ClientType.Freelancer:
-                client.UpdateIndividual(request.Individual.FullName, request.Individual.FirstName, request.Individual.LastName, request.Individual.PhoneNumber, request.Individual.CellPhoneNumber, request.Individual.IsWhatsapp, request.Individual.Email, request.Individual.BirthDate, request.Individual.Gender, request.Individual.DocumentType, request.Individual.DocumentNumber, request.Individual.Nationality, UserId);
-                break;
-            case ClientType.PessoaJuridica:
-            case ClientType.SociedadeUnipessoalQuotas:
-                client.UpdateCompany(request.Company.LegalName, request.Company.TradeName, request.Company.PhoneNumber, request.Company.CellPhoneNumber, request.Company.IsWhatsapp, request.Company.Email, request.Company.Site,request.Company.CompanyRegistration, request.Company.CAE, request.Company.NumberOfEmployee, request.Company.LegalRepresentative, UserId);
-                break;
-            default:
-                break;
-        }
+        client.Update(
+            request.PartyTypeId,
+            request.AcquisitionSourceTypeId,
+            request.UrlImage,
+            request.Note,
+            request.Name,
+            request.PhoneNumber,
+            request.CellPhoneNumber,
+            request.IsCellPhoneWhatsapp,
+            request.Email,
+            request.WebsiteUrl,
+            request.BirthDate,
+            request.Gender,
+            request.Nationality,
+            request.CompanyRegistrationNumber,
+            request.EconomicActivityCode,
+            request.NumberOfEmployees,
+            request.StatusDefinitionId ?? 0,
+            request.StatusDomainId ?? 0,
+            UserId);
 
         return await _domain.UpdateAsync(client, ct);
     }
@@ -142,7 +157,7 @@ public class ClientAppService : IClientAppService
             return false;
         }
 
-        client.Activate(client.ClientType, UserId);
+        client.Activate(UserId);
         return await _domain.ActivateAsync(client, ct);
     }
 
@@ -155,8 +170,8 @@ public class ClientAppService : IClientAppService
             return false;
         }
 
-        client.Deactivate(client.ClientType, UserId);
-        return await _domain.ActivateAsync(client, ct);
+        client.Deactivate(UserId);
+        return await _domain.DeactivateAsync(client, ct);
     }
 
     public async Task<bool> DeleteAsync(int id, CancellationToken ct)
@@ -168,17 +183,17 @@ public class ClientAppService : IClientAppService
             return false;
         }
 
-        client.Delete(client.ClientType, UserId);
+        client.Delete(UserId);
         return await _domain.DeleteAsync(client, ct);
     }
 
     public async Task<bool> BulkUploadAsync(IFormFile file, CancellationToken ct)
     {
-        // Valida arquivo usando servi�o centralizado
+        // Valida arquivo usando servico centralizado
         if (!_fileValidation.ValidateFile(file))
             return false;
 
-        // L� itens do CSV
+        // Le itens do CSV
         var items = ReadCsvFile(file);
         if (items == null)
             return false;
@@ -193,21 +208,85 @@ public class ClientAppService : IClientAppService
         return await ProcessBulkItemsAsync(items, ct);
     }
 
+    /// <summary>
+    /// Valida a consistência entre PartyTypeId e os campos obrigatórios por tipo de party.
+    /// PartyTypeId=1 (pessoa singular): CompanyRegistrationNumber/EconomicActivityCode/NumberOfEmployees devem ser null.
+    /// PartyTypeId=2 (pessoa jurídica): BirthDate/Gender/Nationality devem ser null.
+    /// </summary>
+    private bool ValidatePartyTypeConsistency(CreateClientRequest request, bool isCreate)
+    {
+        // PartyTypeId=1: pessoa singular → dados de empresa não permitidos
+        if (request.PartyTypeId == 1)
+        {
+            if (!string.IsNullOrWhiteSpace(request.CompanyRegistrationNumber) ||
+                !string.IsNullOrWhiteSpace(request.EconomicActivityCode) ||
+                request.NumberOfEmployees.HasValue)
+            {
+                _notify.Add(_localization.GetMessage("Application.Service.Client.Validate.Consistency.IndividualInvalidCompanyFields"), 422);
+                return false;
+            }
+        }
+        // PartyTypeId=2: pessoa jurídica → dados pessoais não permitidos
+        else if (request.PartyTypeId == 2)
+        {
+            if (request.BirthDate.HasValue ||
+                !string.IsNullOrWhiteSpace(request.Gender) ||
+                !string.IsNullOrWhiteSpace(request.Nationality))
+            {
+                _notify.Add(_localization.GetMessage("Application.Service.Client.Validate.Consistency.CompanyInvalidIndividualFields"), 422);
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// Valida a consistência entre PartyTypeId e os campos obrigatórios para update.
+    /// </summary>
+    private bool ValidatePartyTypeConsistency(UpdateClientRequest request, bool isCreate)
+    {
+        // PartyTypeId=1: pessoa singular → dados de empresa não permitidos
+        if (request.PartyTypeId == 1)
+        {
+            if (!string.IsNullOrWhiteSpace(request.CompanyRegistrationNumber) ||
+                !string.IsNullOrWhiteSpace(request.EconomicActivityCode) ||
+                request.NumberOfEmployees.HasValue)
+            {
+                _notify.Add(_localization.GetMessage("Application.Service.Client.Validate.Consistency.IndividualInvalidCompanyFields"), 422);
+                return false;
+            }
+        }
+        // PartyTypeId=2: pessoa jurídica → dados pessoais não permitidos
+        else if (request.PartyTypeId == 2)
+        {
+            if (request.BirthDate.HasValue ||
+                !string.IsNullOrWhiteSpace(request.Gender) ||
+                !string.IsNullOrWhiteSpace(request.Nationality))
+            {
+                _notify.Add(_localization.GetMessage("Application.Service.Client.Validate.Consistency.CompanyInvalidIndividualFields"), 422);
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     private List<BulkUploadClientItem> ReadCsvFile(IFormFile file)
     {
         try
         {
-            // Cria StreamReader com encoding UTF-8 for�ado
+            // Cria StreamReader com encoding UTF-8 forcado
             using var reader = file.OpenReadStream().CreateUtf8StreamReader();
 
             var config = new CsvConfiguration(CultureInfo.InvariantCulture)
             {
                 HasHeaderRecord = true,
-                Delimiter = ";", // CSV usa ponto e v�rgula como delimitador
+                Delimiter = ";", // CSV usa ponto e virgula como delimitador
                 MissingFieldFound = null,
                 HeaderValidated = null,
                 TrimOptions = TrimOptions.Trim,
-                BadDataFound = null // Ignora linhas mal formatadas ao inv�s de lan�ar exce��o
+                BadDataFound = null // Ignora linhas mal formatadas ao inves de lancar excecao
             };
 
             using var csv = new CsvReader(reader, config);
@@ -259,30 +338,40 @@ public class ClientAppService : IClientAppService
     private async Task<bool> ProcessBulkItemsAsync(List<BulkUploadClientItem> items, CancellationToken ct)
     {
         var hasErrors = false;
-        var tenantId = _currentUser.GetTenantId();
 
         foreach (var item in items)
         {
-            // Valida campos obrigat�rios
+            // Valida campos obrigatorios
             if (!ValidateBulkItem(item))
             {
                 hasErrors = true;
                 continue;
             }
 
-            // Verifica duplicidade
-            //var exists = await _repo.ExistsByEmailAsync(tenantId, item.Email, ct);
-            //if (exists)
-            //{
-            //    _notify.Add(_localization.GetMessage("Application.Service.Client.ProcessBulkItems.ExistsByEmail", item.Email), 400);
-            //    hasErrors = true;
-            //    continue;
-            //}
+            // Cria a entidade com campos minimos do CSV
+            var entity = new ClientEntity(
+                _currentUser.GetTenantId(),
+                item.PartyTypeId,
+                item.AcquisitionSourceTypeId,
+                item.UrlImage,
+                item.Note,
+                item.Name,
+                item.PhoneNumber,
+                null, // CellPhoneNumber
+                false, // IsCellPhoneWhatsapp
+                item.Email,
+                null, // WebsiteUrl
+                null, // BirthDate
+                null, // Gender
+                null, // Nationality
+                null, // CompanyRegistrationNumber
+                null, // EconomicActivityCode
+                null, // NumberOfEmployees
+                0, // StatusDefinitionId — obrigatório, deve ser validado externamente
+                0, // StatusDomainId — obrigatório, deve ser validado externamente
+                _currentUser.GetUserId());
 
-            // Cria a entidade
-            var entity = new ClientEntity(_currentUser.GetTenantId(), (ClientType)item.ClientType, item.AcquisitionSourceTypeId, item.UrlImage, item.Note, _currentUser.GetUserId());
-
-            // Tenta criar no dom�nio
+            // Tenta criar no dominio
             var success = await _domain.CreateAsync(entity, ct);
 
             if (!success)
@@ -297,9 +386,9 @@ public class ClientAppService : IClientAppService
 
     private bool ValidateBulkItem(BulkUploadClientItem item)
     {
-        if (item.ClientType <=0)
+        if (item.PartyTypeId <= 0)
         {
-            _notify.Add(_localization.GetMessage("Application.Service.Client.ValidateBulkItem.ClientType"), 400);
+            _notify.Add(_localization.GetMessage("Application.Service.Client.ValidateBulkItem.PartyTypeId"), 400);
             return false;
         }
 
@@ -312,5 +401,3 @@ public class ClientAppService : IClientAppService
         return true;
     }
 }
-
-

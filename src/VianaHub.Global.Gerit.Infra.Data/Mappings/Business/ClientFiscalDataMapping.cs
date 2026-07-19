@@ -9,7 +9,7 @@ public class ClientFiscalDataMapping : IEntityTypeConfiguration<ClientFiscalData
 {
     public void Configure(EntityTypeBuilder<ClientFiscalDataEntity> builder)
     {
-        builder.ToTable("ClientFiscalData");
+        builder.ToTable("ClientFiscalData", "dbo");
 
         builder.HasKey(x => x.Id);
         
@@ -89,7 +89,20 @@ public class ClientFiscalDataMapping : IEntityTypeConfiguration<ClientFiscalData
         // Índice único conforme banco
         builder.HasIndex(x => new { x.ClientId, x.TenantId })
             .IsUnique()
+            .HasFilter("[IsDeleted] = 0")
             .HasDatabaseName("UQ_ClientFiscalData_Client");
+
+        // TaxNumber unico por tenant + pais fiscal
+        builder.HasIndex(x => new { x.TenantId, x.FiscalCountry, x.TaxNumber })
+            .IsUnique()
+            .HasFilter("[IsDeleted] = 0")
+            .HasDatabaseName("UX_ClientFiscalData_TaxNumber");
+
+        // Apenas um registro fiscal ativo por tenant+cliente
+        builder.HasIndex(x => new { x.TenantId, x.ClientId })
+            .IsUnique()
+            .HasFilter("[IsActive] = 1 AND [IsDeleted] = 0")
+            .HasDatabaseName("UX_ClientFiscalData_Active");
 
         // Check constraint
         builder.HasCheckConstraint(

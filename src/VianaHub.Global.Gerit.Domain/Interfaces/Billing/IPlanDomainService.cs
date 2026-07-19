@@ -6,15 +6,16 @@ namespace VianaHub.Global.Gerit.Domain.Interfaces.Billing;
 
 public interface IPlanDomainService
 {
-    Task<PlanEntity> GetByIdAsync(int id, CancellationToken ct);
-    Task<IEnumerable<PlanEntity>> GetAllAsync(CancellationToken ct);
-    Task<ListPage<PlanEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct);
+    Task<SubscriptionPlanEntity> GetByIdAsync(int id, CancellationToken ct);
+    Task<IEnumerable<SubscriptionPlanEntity>> GetAllAsync(CancellationToken ct);
+    Task<ListPage<SubscriptionPlanEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct);
     Task<bool> ExistsByIdAsync(int id, CancellationToken ct);
     Task<bool> ExistsByNameAsync(string name, CancellationToken ct);
+    Task<bool> ExistsByNameAsync(string name, string languageCode, CancellationToken ct);
 
-    Task<bool> CreateAsync(PlanEntity entity, CancellationToken ct);
-    Task<bool> UpdateAsync(PlanEntity entity, CancellationToken ct);
-    Task<bool> ActivateAsync(PlanEntity entity, CancellationToken ct);
-    Task<bool> DeactivateAsync(PlanEntity entity, CancellationToken ct);
-    Task<bool> DeleteAsync(PlanEntity entity, CancellationToken ct);
+    Task<bool> CreateAsync(SubscriptionPlanEntity entity, CancellationToken ct);
+    Task<bool> UpdateAsync(SubscriptionPlanEntity entity, CancellationToken ct);
+    Task<bool> ActivateAsync(SubscriptionPlanEntity entity, CancellationToken ct);
+    Task<bool> DeactivateAsync(SubscriptionPlanEntity entity, CancellationToken ct);
+    Task<bool> DeleteAsync(SubscriptionPlanEntity entity, CancellationToken ct);
 }

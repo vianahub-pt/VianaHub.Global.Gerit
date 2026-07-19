@@ -2,6 +2,7 @@ namespace VianaHub.Global.Gerit.Application.Dtos.Request.Billing.Plan;
 
 public class UpdatePlanRequest
 {
+    public string? Code { get; set; }
     public string? Name { get; set; }
     public string? Description { get; set; }
     public decimal? PricePerHour { get; set; }
@@ -10,5 +11,5 @@ public class UpdatePlanRequest
     public decimal? PricePerYear { get; set; }
     public string? Currency { get; set; }
     public int MaxUsers { get; set; }
-    public int MaxPhotosPerVisits { get; set; }
+    public int MaxPhotosPerVisit { get; set; }
 }

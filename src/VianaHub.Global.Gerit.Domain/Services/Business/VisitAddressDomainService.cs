@@ -10,17 +10,17 @@ using VianaHub.Global.Gerit.Domain.Tools.Pagination;
 namespace VianaHub.Global.Gerit.Domain.Services.Business;
 
 /// <summary>
-/// Serviço de domínio para VisitAddress
+/// Serviï¿½o de domï¿½nio para VisitAddress
 /// </summary>
 public class VisitAddressDomainService : IVisitAddressDomainService
 {
     private readonly IVisitAddressDataRepository _repo;
-    private readonly IEntityDomainValidator<VisitAddressEntity> _validator;
+    private readonly IEntityDomainValidator<VisitAddressesEntity> _validator;
     private readonly INotify _notify;
 
     public VisitAddressDomainService(
         IVisitAddressDataRepository repo,
-        IEntityDomainValidator<VisitAddressEntity> validator,
+        IEntityDomainValidator<VisitAddressesEntity> validator,
         INotify notify)
     {
         _repo = repo;
@@ -28,15 +28,15 @@ public class VisitAddressDomainService : IVisitAddressDomainService
         _notify = notify;
     }
 
-    public async Task<VisitAddressEntity> GetByIdAsync(int id, CancellationToken ct)
+    public async Task<VisitAddressesEntity> GetByIdAsync(int id, CancellationToken ct)
     {
         return await _repo.GetByIdAsync(id, ct);
     }
-    public async Task<IEnumerable<VisitAddressEntity>> GetAllAsync(CancellationToken ct)
+    public async Task<IEnumerable<VisitAddressesEntity>> GetAllAsync(CancellationToken ct)
     {
         return await _repo.GetAllAsync(ct);
     }
-    public async Task<ListPage<VisitAddressEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct)
+    public async Task<ListPage<VisitAddressesEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct)
     {
         return await _repo.GetPagedAsync(request, ct);
     }
@@ -45,7 +45,7 @@ public class VisitAddressDomainService : IVisitAddressDomainService
         return await _repo.ExistsByIdAsync(id, ct);
     }
 
-    public async Task<bool> CreateAsync(VisitAddressEntity entity, CancellationToken ct)
+    public async Task<bool> CreateAsync(VisitAddressesEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForCreateAsync(entity);
         if (!validationResult.IsValid)
@@ -57,7 +57,7 @@ public class VisitAddressDomainService : IVisitAddressDomainService
 
         return await _repo.AddAsync(entity, ct);
     }
-    public async Task<bool> UpdateAsync(VisitAddressEntity entity, CancellationToken ct)
+    public async Task<bool> UpdateAsync(VisitAddressesEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForUpdateAsync(entity);
         if (!validationResult.IsValid)
@@ -69,7 +69,7 @@ public class VisitAddressDomainService : IVisitAddressDomainService
 
         return await _repo.UpdateAsync(entity, ct);
     }
-    public async Task<bool> ActivateAsync(VisitAddressEntity entity, CancellationToken ct)
+    public async Task<bool> ActivateAsync(VisitAddressesEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForActivateAsync(entity);
         if (!validationResult.IsValid)
@@ -81,7 +81,7 @@ public class VisitAddressDomainService : IVisitAddressDomainService
 
         return await _repo.UpdateAsync(entity, ct);
     }
-    public async Task<bool> DeactivateAsync(VisitAddressEntity entity, CancellationToken ct)
+    public async Task<bool> DeactivateAsync(VisitAddressesEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForDeactivateAsync(entity);
         if (!validationResult.IsValid)
@@ -93,7 +93,7 @@ public class VisitAddressDomainService : IVisitAddressDomainService
 
         return await _repo.UpdateAsync(entity, ct);
     }
-    public async Task<bool> DeleteAsync(VisitAddressEntity entity, CancellationToken ct)
+    public async Task<bool> DeleteAsync(VisitAddressesEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForDeleteAsync(entity);
         if (!validationResult.IsValid)

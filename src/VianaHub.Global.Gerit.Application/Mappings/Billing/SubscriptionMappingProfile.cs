@@ -7,7 +7,8 @@ using VianaHub.Global.Gerit.Domain.Tools.Pagination;
 namespace VianaHub.Global.Gerit.Application.Mappings.Billing;
 
 /// <summary>
-/// Perfil de mapeamento do AutoMapper para SubscriptionEntity
+/// Perfil de mapeamento do AutoMapper para SubscriptionEntity.
+/// Nota: SubscriptionPlanName é resolvido a partir da tabela de traduções do plano.
 /// </summary>
 public class SubscriptionMappingProfile : Profile
 {
@@ -17,8 +18,16 @@ public class SubscriptionMappingProfile : Profile
         CreateMap<SubscriptionEntity, SubscriptionResponse>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
             .ForMember(dest => dest.TenantId, opt => opt.MapFrom(src => src.TenantId))
-            .ForMember(dest => dest.PlanId, opt => opt.MapFrom(src => src.PlanId))
-            .ForMember(dest => dest.PlanName, opt => opt.MapFrom(src => src.Plan != null ? src.Plan.Name : string.Empty))
+            .ForMember(dest => dest.SubscriptionPlanId, opt => opt.MapFrom(src => src.SubscriptionPlanId))
+            .ForMember(dest => dest.SubscriptionPlanName, opt => opt.MapFrom(src =>
+                src.SubscriptionPlan != null && src.SubscriptionPlan.Translations.Any()
+                    ? src.SubscriptionPlan.Translations.First().Name
+                    : string.Empty))
+            .ForMember(dest => dest.StatusDefinitionId, opt => opt.MapFrom(src => src.StatusDefinitionId))
+            .ForMember(dest => dest.StatusDomainId, opt => opt.MapFrom(src => src.StatusDomainId))
+            .ForMember(dest => dest.AgreedAmount, opt => opt.MapFrom(src => src.AgreedAmount))
+            .ForMember(dest => dest.BillingInterval, opt => opt.MapFrom(src => src.BillingInterval))
+            .ForMember(dest => dest.CurrencyCode, opt => opt.MapFrom(src => src.CurrencyCode))
             .ForMember(dest => dest.StripeId, opt => opt.MapFrom(src => src.StripeId))
             .ForMember(dest => dest.CurrentPeriodStart, opt => opt.MapFrom(src => src.CurrentPeriodStart))
             .ForMember(dest => dest.CurrentPeriodEnd, opt => opt.MapFrom(src => src.CurrentPeriodEnd))

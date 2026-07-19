@@ -15,7 +15,7 @@ public class TenantMapping : IEntityTypeConfiguration<TenantEntity>
     {
         builder.ToTable("Tenants", "dbo");
 
-        // Chave Prim�ria
+        // Chave Primária
         builder.HasKey(x => x.Id)
             .HasName("PK_Tenants");
 
@@ -33,10 +33,10 @@ public class TenantMapping : IEntityTypeConfiguration<TenantEntity>
             .HasColumnType("NVARCHAR(255)")
             .IsRequired();
 
-        builder.Property(x => x.Website)
+        builder.Property(x => x.WebsiteUrl)
             .HasColumnType("NVARCHAR(255)");
 
-        builder.Property(x => x.UrlImage)
+        builder.Property(x => x.ImageUrl)
             .HasColumnType("NVARCHAR(500)");
 
         builder.Property(x => x.Note)
@@ -57,8 +57,8 @@ public class TenantMapping : IEntityTypeConfiguration<TenantEntity>
               .IsRequired();
 
         builder.Property(x => x.CreatedAt)
-            .HasColumnType("DATETIME2")
-            .HasDefaultValueSql("SYSDATETIME()")
+            .HasColumnType("DATETIME2(7)")
+            .HasDefaultValueSql("SYSUTCDATETIME()")
             .IsRequired();
 
         builder.Property(x => x.ModifiedBy)
@@ -66,14 +66,24 @@ public class TenantMapping : IEntityTypeConfiguration<TenantEntity>
             .IsRequired(false);
 
         builder.Property(x => x.ModifiedAt)
-            .HasColumnType("DATETIME2")
+            .HasColumnType("DATETIME2(7)")
             .IsRequired(false);
+
+        builder.Property(x => x.PartyTypeId)
+            .HasColumnType("TINYINT")
+            .IsRequired();
 
         builder.Property(x => x.AcquisitionSourceTypeId)
             .HasColumnType("INT")
             .IsRequired();
 
         // Relacionamentos
+        builder.HasOne(x => x.PartyType)
+            .WithMany()
+            .HasForeignKey(x => x.PartyTypeId)
+            .HasConstraintName("FK_Tenants_PartyType")
+            .OnDelete(DeleteBehavior.Restrict);
+
         builder.HasOne(x => x.AcquisitionSourceType)
             .WithMany()
             .HasForeignKey(x => x.AcquisitionSourceTypeId)
@@ -102,5 +112,14 @@ public class TenantMapping : IEntityTypeConfiguration<TenantEntity>
             .HasForeignKey(u => u.TenantId)
             .HasConstraintName("FK_Users_Tenant")
             .OnDelete(DeleteBehavior.Restrict);
+
+        // Indices filtrados
+        builder.HasIndex(x => x.Name)
+            .HasFilter("[IsDeleted] = 0")
+            .HasDatabaseName("IX_Tenants_Name");
+
+        builder.HasIndex(x => x.Email)
+            .HasFilter("[IsDeleted] = 0")
+            .HasDatabaseName("IX_Tenants_Email");
     }
 }

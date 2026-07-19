@@ -19,7 +19,7 @@ public class JobAppService : IJobAppService
     private readonly INotify _notify;
     private readonly ILocalizationService _localization;
     private readonly ICurrentUserService _currentUser;
-    private readonly IEntityDomainValidator<JobDefinitionEntity> _validator;
+    private readonly IEntityDomainValidator<JobDefinitionsEntity> _validator;
     private readonly IJobSchedulerService _scheduler;
 
     public JobAppService(
@@ -28,7 +28,7 @@ public class JobAppService : IJobAppService
         INotify notify,
         ILocalizationService localization,
         ICurrentUserService currentUser,
-        IEntityDomainValidator<JobDefinitionEntity> validator,
+        IEntityDomainValidator<JobDefinitionsEntity> validator,
         IJobSchedulerService scheduler)
     {
         _repo = repo;
@@ -68,7 +68,7 @@ public class JobAppService : IJobAppService
             return 0;
         }
 
-        var entity = new JobDefinitionEntity(
+        var entity = new JobDefinitionsEntity(
             request.JobCategory,
             request.JobName,
             request.JobType,

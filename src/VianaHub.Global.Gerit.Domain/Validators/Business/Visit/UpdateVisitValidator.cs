@@ -16,6 +16,20 @@ public class UpdateVisitValidator : AbstractValidator<VisitEntity>
             .GreaterThan(0)
             .WithMessage(localization.GetMessage("Domain.Visit.ClientIdRequired"));
 
+        RuleFor(x => x.StatusDefinitionId)
+            .GreaterThan(0)
+            .WithMessage(localization.GetMessage("Domain.Visit.StatusDefinitionIdRequired"));
+
+        RuleFor(x => x.StatusDomainId)
+            .GreaterThan(0)
+            .WithMessage(localization.GetMessage("Domain.Visit.StatusDomainIdRequired"));
+
+        RuleFor(x => x.CurrencyCode)
+            .NotEmpty()
+            .WithMessage(localization.GetMessage("Domain.Visit.CurrencyCodeRequired"))
+            .MaximumLength(3)
+            .WithMessage(localization.GetMessage("Domain.Visit.CurrencyCodeMaxLength", 3));
+
         RuleFor(x => x.Title)
             .NotEmpty()
             .WithMessage(localization.GetMessage("Domain.Visit.TitleRequired"))

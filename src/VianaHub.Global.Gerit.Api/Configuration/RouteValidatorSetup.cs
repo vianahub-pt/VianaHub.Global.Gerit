@@ -5,7 +5,6 @@ using VianaHub.Global.Gerit.Api.Validators.Billing.Tenant;
 using VianaHub.Global.Gerit.Api.Validators.Business.Equipment;
 using VianaHub.Global.Gerit.Api.Validators.Business.Function;
 using VianaHub.Global.Gerit.Api.Validators.Business.Vehicle;
-using VianaHub.Global.Gerit.Api.Validators.Business.ConsentType;
 using VianaHub.Global.Gerit.Api.Validators.Identity.Action;
 using VianaHub.Global.Gerit.Api.Validators.Identity.Auth;
 using VianaHub.Global.Gerit.Api.Validators.Identity.Resource;
@@ -19,7 +18,6 @@ using VianaHub.Global.Gerit.Application.Dtos.Request.Business.Equipment;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Business.Function;
 // Vehicle DTOs & Validators
 using VianaHub.Global.Gerit.Application.Dtos.Request.Business.Vehicle;
-using VianaHub.Global.Gerit.Application.Dtos.Request.Business.ConsentType;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Identity.Action;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Identity.Auth;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Identity.Resource;
@@ -46,13 +44,29 @@ using VianaHub.Global.Gerit.Api.Validators.Identity.UserPreferences;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Business.AcquisitionSourceType;
 using VianaHub.Global.Gerit.Api.Validators.Business.AcquisitionSourceType;
 
-// ConsentOriginType DTOs & Validators
-using VianaHub.Global.Gerit.Application.Dtos.Request.Business.ConsentOriginType;
-using VianaHub.Global.Gerit.Api.Validators.Business.ConsentOriginType;
+// StatusDefinition DTOs & Validators
+using VianaHub.Global.Gerit.Application.Dtos.Request.Business.StatusDefinition;
+using VianaHub.Global.Gerit.Api.Validators.Business.StatusDefinition;
+
+// DocumentType DTOs & Validators
+using VianaHub.Global.Gerit.Application.Dtos.Request.Business.DocumentType;
+using VianaHub.Global.Gerit.Api.Validators.Business.DocumentType;
 
 // Client DTOs & Validators
 using VianaHub.Global.Gerit.Application.Dtos.Request.Business.Client;
 using VianaHub.Global.Gerit.Api.Validators.Business.Client;
+
+// TenantContact DTOs & Validators
+using VianaHub.Global.Gerit.Application.Dtos.Request.Billing.TenantContact;
+using VianaHub.Global.Gerit.Api.Validators.Billing.TenantContact;
+
+// TenantFiscalData DTOs & Validators
+using VianaHub.Global.Gerit.Application.Dtos.Request.Billing.TenantFiscalData;
+using VianaHub.Global.Gerit.Api.Validators.Billing.TenantFiscalData;
+
+// TenantAddress DTOs & Validators
+using VianaHub.Global.Gerit.Application.Dtos.Request.Billing.TenantAddress;
+using VianaHub.Global.Gerit.Api.Validators.Billing.TenantAddress;
 
 namespace VianaHub.Global.Gerit.Api.Configuration;
 
@@ -90,6 +104,18 @@ public static class RouteValidatorSetup
         services.AddScoped<IValidator<CreateTenantRequest>, CreateTenantRouteValidator>();
         services.AddScoped<IValidator<UpdateTenantRequest>, UpdateTenantRouteValidator>();
 
+        // TenantContact Route Validators
+        services.AddScoped<IValidator<CreateTenantContactRequest>, CreateTenantContactRouteValidator>();
+        services.AddScoped<IValidator<UpdateTenantContactRequest>, UpdateTenantContactRouteValidator>();
+
+        // TenantFiscalData Route Validators
+        services.AddScoped<IValidator<CreateTenantFiscalDataRequest>, CreateTenantFiscalDataRouteValidator>();
+        services.AddScoped<IValidator<UpdateTenantFiscalDataRequest>, UpdateTenantFiscalDataRouteValidator>();
+
+        // TenantAddress Route Validators
+        services.AddScoped<IValidator<CreateTenantAddressRequest>, CreateTenantAddressRouteValidator>();
+        services.AddScoped<IValidator<UpdateTenantAddressRequest>, UpdateTenantAddressRouteValidator>();
+
         // User Route Validators
         services.AddScoped<IValidator<CreateUserRequest>, CreateUserRouteValidator>();
         services.AddScoped<IValidator<UpdateUserRequest>, UpdateUserRouteValidator>();
@@ -105,8 +131,8 @@ public static class RouteValidatorSetup
         services.AddScoped<IValidator<RefreshRequest>, RefreshRouteValidator>();
 
         // Function Route Validators
-        services.AddScoped<IValidator<CreateFunctionRequest>, CreateFunctionRouteValidator>();
-        services.AddScoped<IValidator<UpdateFunctionRequest>, UpdateFunctionRouteValidator>();
+        services.AddScoped<IValidator<CreateVisitTeamFunctionRequest>, CreateVisitTeamFunctionRouteValidator>();
+        services.AddScoped<IValidator<UpdateVisitTeamFunctionRequest>, UpdateVisitTeamFunctionRouteValidator>();
 
         // Vehicle Route Validators
         services.AddScoped<IValidator<CreateVehicleRequest>, CreateVehicleRouteValidator>();
@@ -116,17 +142,9 @@ public static class RouteValidatorSetup
         services.AddScoped<IValidator<CreateEquipmentRequest>, CreateEquipmentRouteValidator>();
         services.AddScoped<IValidator<UpdateEquipmentRequest>, UpdateEquipmentRouteValidator>();
 
-        // ConsentType Route Validators
-        services.AddScoped<IValidator<CreateConsentTypeRequest>, CreateConsentTypeRouteValidator>();
-        services.AddScoped<IValidator<UpdateConsentTypeRequest>, UpdateConsentTypeRouteValidator>();
-
         // AcquisitionSourceType Route Validators
         services.AddScoped<IValidator<CreateAcquisitionSourceTypeRequest>, CreateAcquisitionSourceTypeRouteValidator>();
         services.AddScoped<IValidator<UpdateAcquisitionSourceTypeRequest>, UpdateAcquisitionSourceTypeRouteValidator>();
-
-        // ConsentOriginType Route Validators
-        services.AddScoped<IValidator<CreateConsentOriginTypeRequest>, CreateConsentOriginTypeRouteValidator>();
-        services.AddScoped<IValidator<UpdateConsentOriginTypeRequest>, UpdateConsentOriginTypeRouteValidator>();
 
         // EmployeeTeams Route Validators
         services.AddScoped<IValidator<CreateEmployeeTeamRequest>, CreateEmployeeTeamRouteValidator>();
@@ -148,6 +166,14 @@ public static class RouteValidatorSetup
 
         // Client Route Validators
         services.AddScoped<IValidator<CreateClientRequest>, CreateClientRouteValidator>();
+
+        // StatusDefinition Route Validators
+        services.AddScoped<IValidator<CreateStatusDefinitionRequest>, CreateStatusDefinitionRouteValidator>();
+        services.AddScoped<IValidator<UpdateStatusDefinitionRequest>, UpdateStatusDefinitionRouteValidator>();
+
+        // DocumentType Route Validators
+        services.AddScoped<IValidator<CreateDocumentTypeRequest>, CreateDocumentTypeRouteValidator>();
+        services.AddScoped<IValidator<UpdateDocumentTypeRequest>, UpdateDocumentTypeRouteValidator>();
 
         return services;
     }

@@ -8,31 +8,49 @@ public class EmployeeTeamEntity : Entity
     public int TenantId { get; private set; }
     public int TeamId { get; private set; }
     public int EmployeeId { get; private set; }
+    public bool IsLeader { get; private set; }
+    public DateTime StartDateTime { get; private set; }
+    public DateTime? EndDateTime { get; private set; }
     public bool IsActive { get; private set; }
     public bool IsDeleted { get; private set; }
 
     // Navigation
-    public TenantEntity Tenant { get; private set; }
-    public TeamEntity Team { get; private set; }
-    public EmployeeEntity Employee { get; private set; }
+    public TenantEntity Tenant { get; private set; } = null!;
+    public TeamEntity Team { get; private set; } = null!;
+    public EmployeeEntity Employee { get; private set; } = null!;
 
     protected EmployeeTeamEntity() { }
 
-    public EmployeeTeamEntity(int tenantId, int teamId, int EmployeeId, int createdBy)
+    public EmployeeTeamEntity(int tenantId, int teamId, int employeeId, bool isLeader, DateTime startDateTime, int createdBy)
     {
         TenantId = tenantId;
         TeamId = teamId;
-        EmployeeId = EmployeeId;
+        EmployeeId = employeeId;
+        IsLeader = isLeader;
+        StartDateTime = startDateTime;
         IsActive = true;
         IsDeleted = false;
         CreatedBy = createdBy;
         CreatedAt = DateTime.UtcNow;
     }
 
-    public void Update(int teamId, int EmployeeId, int modifiedBy)
+    public void Update(int teamId, int employeeId, bool isLeader, DateTime startDateTime, DateTime? endDateTime, int modifiedBy)
     {
         TeamId = teamId;
-        EmployeeId = EmployeeId;
+        EmployeeId = employeeId;
+        IsLeader = isLeader;
+        StartDateTime = startDateTime;
+        EndDateTime = endDateTime;
+        ModifiedBy = modifiedBy;
+        ModifiedAt = DateTime.UtcNow;
+    }
+
+    public void SetEndDateTime(DateTime endDateTime, int modifiedBy)
+    {
+        if (endDateTime < StartDateTime)
+            throw new InvalidOperationException("A data de término não pode ser anterior à data de início.");
+
+        EndDateTime = endDateTime;
         ModifiedBy = modifiedBy;
         ModifiedAt = DateTime.UtcNow;
     }

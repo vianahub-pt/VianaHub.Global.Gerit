@@ -8,9 +8,11 @@ public class CreateVehicleRouteValidator : AbstractValidator<CreateVehicleReques
 {
     public CreateVehicleRouteValidator(ILocalizationService localization)
     {
-        RuleFor(x => x.StatusId)
-            .GreaterThan(0)
-            .WithMessage(localization.GetMessage("Api.Validator.Vehicle.Create.StatusIdRequired"));
+        RuleFor(x => x.StatusDefinitionId)
+            .GreaterThan(0).WithMessage(localization.GetMessage("Api.Validator.Vehicle.Create.StatusDefinitionId"));
+
+        RuleFor(x => x.StatusDomainId)
+            .GreaterThan(0).WithMessage(localization.GetMessage("Api.Validator.Vehicle.Create.StatusDomainId"));
 
         RuleFor(x => x.Plate)
             .NotEmpty().WithMessage(localization.GetMessage("Api.Validator.Vehicle.Create.Plate"))

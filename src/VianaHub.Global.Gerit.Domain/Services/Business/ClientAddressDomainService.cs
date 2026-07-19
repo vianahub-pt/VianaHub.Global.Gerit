@@ -8,17 +8,17 @@ using VianaHub.Global.Gerit.Domain.Tools.Pagination;
 namespace VianaHub.Global.Gerit.Domain.Services.Business;
 
 /// <summary>
-/// Serviço de domínio para ClientAddress
+/// Serviï¿½o de domï¿½nio para ClientAddress
 /// </summary>
 public class ClientAddressDomainService : IClientAddressDomainService
 {
     private readonly IClientAddressDataRepository _repo;
-    private readonly IEntityDomainValidator<ClientAddressEntity> _validator;
+    private readonly IEntityDomainValidator<ClientAddressesEntity> _validator;
     private readonly INotify _notify;
 
     public ClientAddressDomainService(
         IClientAddressDataRepository repo,
-        IEntityDomainValidator<ClientAddressEntity> validator,
+        IEntityDomainValidator<ClientAddressesEntity> validator,
         INotify notify)
     {
         _repo = repo;
@@ -26,15 +26,15 @@ public class ClientAddressDomainService : IClientAddressDomainService
         _notify = notify;
     }
 
-    public async Task<ClientAddressEntity> GetByIdAsync(int clientId, int id, CancellationToken ct)
+    public async Task<ClientAddressesEntity> GetByIdAsync(int clientId, int id, CancellationToken ct)
     {
         return await _repo.GetByIdAsync(clientId, id, ct);
     }
-    public async Task<IEnumerable<ClientAddressEntity>> GetAllAsync(int clientId, CancellationToken ct)
+    public async Task<IEnumerable<ClientAddressesEntity>> GetAllAsync(int clientId, CancellationToken ct)
     {
         return await _repo.GetAllAsync(clientId, ct);
     }
-    public async Task<ListPage<ClientAddressEntity>> GetPagedAsync(int clientId, PagedFilter request, CancellationToken ct)
+    public async Task<ListPage<ClientAddressesEntity>> GetPagedAsync(int clientId, PagedFilter request, CancellationToken ct)
     {
         return await _repo.GetPagedAsync(clientId, request, ct);
     }
@@ -50,7 +50,7 @@ public class ClientAddressDomainService : IClientAddressDomainService
     {
         return await _repo.ExistsByClientAndAddressTypeAsync(clientId, addressTypeId, ct);
     }
-    public async Task<bool> CreateAsync(ClientAddressEntity entity, CancellationToken ct)
+    public async Task<bool> CreateAsync(ClientAddressesEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForCreateAsync(entity);
         if (!validationResult.IsValid)
@@ -64,7 +64,7 @@ public class ClientAddressDomainService : IClientAddressDomainService
 
         return await _repo.CreateAsync(entity, ct);
     }
-    public async Task<bool> UpdateAsync(ClientAddressEntity entity, CancellationToken ct)
+    public async Task<bool> UpdateAsync(ClientAddressesEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForUpdateAsync(entity);
         if (!validationResult.IsValid)
@@ -78,7 +78,7 @@ public class ClientAddressDomainService : IClientAddressDomainService
 
         return await _repo.UpdateAsync(entity, ct);
     }
-    public async Task<bool> ActivateAsync(ClientAddressEntity entity, CancellationToken ct)
+    public async Task<bool> ActivateAsync(ClientAddressesEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForActivateAsync(entity);
         if (!validationResult.IsValid)
@@ -92,7 +92,7 @@ public class ClientAddressDomainService : IClientAddressDomainService
 
         return await _repo.UpdateAsync(entity, ct);
     }
-    public async Task<bool> DeactivateAsync(ClientAddressEntity entity, CancellationToken ct)
+    public async Task<bool> DeactivateAsync(ClientAddressesEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForDeactivateAsync(entity);
         if (!validationResult.IsValid)
@@ -106,7 +106,7 @@ public class ClientAddressDomainService : IClientAddressDomainService
 
         return await _repo.UpdateAsync(entity, ct);
     }
-    public async Task<bool> DeleteAsync(ClientAddressEntity entity, CancellationToken ct)
+    public async Task<bool> DeleteAsync(ClientAddressesEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForDeleteAsync(entity);
         if (!validationResult.IsValid)

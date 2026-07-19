@@ -15,6 +15,20 @@ public class UpdateVisitRouteValidator : AbstractValidator<UpdateVisitRequest>
             .GreaterThan(0)
             .WithMessage(localization.GetMessage("Api.Validator.Visit.Update.ClientId"));
 
+        RuleFor(x => x.StatusDefinitionId)
+            .GreaterThan(0)
+            .WithMessage(localization.GetMessage("Api.Validator.Visit.Update.StatusDefinitionId"));
+
+        RuleFor(x => x.StatusDomainId)
+            .GreaterThan(0)
+            .WithMessage(localization.GetMessage("Api.Validator.Visit.Update.StatusDomainId"));
+
+        RuleFor(x => x.CurrencyCode)
+            .NotEmpty()
+            .WithMessage(localization.GetMessage("Api.Validator.Visit.Update.CurrencyCode"))
+            .MaximumLength(3)
+            .WithMessage(localization.GetMessage("Api.Validator.Visit.Update.CurrencyCode.MaximumLength", 3));
+
         RuleFor(x => x.Title)
             .NotEmpty()
             .WithMessage(localization.GetMessage("Api.Validator.Visit.Update.Title"))

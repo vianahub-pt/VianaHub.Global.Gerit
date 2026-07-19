@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using VianaHub.Global.Gerit.Domain.Entities.Business;
-using VianaHub.Global.Gerit.Domain.Enums;
 using Xunit;
 
 namespace VianaHub.Global.Gerit.Tests.Domain.Entities.Business;
@@ -12,8 +11,8 @@ public class ClientEntityTests
     [Trait("Domain", "")]
     public void ClientContact_SetPrimaryAndRemovePrimary_WorksAsExpected()
     {
-        var first = new ClientContactEntity(1, 0, "Contato 1", "111", "", true, "c1@test.com", false, 7);
-        var second = new ClientContactEntity(1, 0, "Contato 2", "222", "", true, "c2@test.com", false, 7);
+        var first = new ClientContactPersonsEntity(1, 0, "Contato 1", "111", "", true, "c1@test.com", false, 7);
+        var second = new ClientContactPersonsEntity(1, 0, "Contato 2", "222", "", true, "c2@test.com", false, 7);
 
         // Set primary on first
         first.SetPrimary(7);
@@ -32,8 +31,8 @@ public class ClientEntityTests
     [Trait("Domain", "")]
     public void ClientAddress_SetPrimaryAndRemovePrimary_WorksAsExpected()
     {
-        var first = new ClientAddressEntity(1, 0, 1, "PT", "Rua 1", "10", "", "Centro", "Porto", "Porto", "4000-001", null, null, "", false, 7);
-        var second = new ClientAddressEntity(1, 0, 2, "PT", "Rua 2", "20", "", "Centro", "Lisboa", "Lisboa", "1000-001", null, null, "", false, 7);
+        var first = new ClientAddressesEntity(1, 0, 1, "PT", "Rua 1", "10", "", "Centro", "Porto", "Porto", "4000-001", null, null, "", false, 7);
+        var second = new ClientAddressesEntity(1, 0, 2, "PT", "Rua 2", "20", "", "Centro", "Lisboa", "Lisboa", "1000-001", null, null, "", false, 7);
 
         first.SetPrimary(7);
         Assert.True(first.IsPrimary);
@@ -47,6 +46,26 @@ public class ClientEntityTests
 
     private static ClientEntity CreateClient()
     {
-        return new ClientEntity(1, ClientType.PessoaSingular, 1, urlImage: null, note: null, createdBy: 7);
+        return new ClientEntity(
+            tenantId: 1,
+            partyTypeId: 1,
+            acquisitionSourceTypeId: 1,
+            imageUrl: null,
+            note: null,
+            name: "Test Client",
+            phoneNumber: null,
+            cellPhoneNumber: null,
+            isCellPhoneWhatsapp: false,
+            email: null,
+            websiteUrl: null,
+            birthDate: null,
+            gender: null,
+            nationality: null,
+            companyRegistrationNumber: null,
+            economicActivityCode: null,
+            numberOfEmployees: null,
+            statusDefinitionId: 0,
+            statusDomainId: 0,
+            createdBy: 7);
     }
 }

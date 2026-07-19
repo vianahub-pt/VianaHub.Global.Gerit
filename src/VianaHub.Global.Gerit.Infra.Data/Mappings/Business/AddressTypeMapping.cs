@@ -5,7 +5,7 @@ using VianaHub.Global.Gerit.Domain.Entities.Business;
 namespace VianaHub.Global.Gerit.Infra.Data.Mappings.Business;
 
 /// <summary>
-/// Mapeamento da entidade AddressType Tipos de endereço (residencial, comercial, etc)
+/// Mapeamento da entidade AddressType Tipos de endereï¿½o (residencial, comercial, etc)
 /// </summary>
 public class AddressTypeMapping : IEntityTypeConfiguration<AddressTypeEntity>
 {
@@ -13,7 +13,7 @@ public class AddressTypeMapping : IEntityTypeConfiguration<AddressTypeEntity>
     {
         builder.ToTable("AddressTypes", "dbo");
 
-        // Chave Primária
+        // Chave Primï¿½ria
         builder.HasKey(x => x.Id)
             .HasName("PK_AddressTypes");
 
@@ -22,15 +22,26 @@ public class AddressTypeMapping : IEntityTypeConfiguration<AddressTypeEntity>
             .IsRequired();
 
         // Propriedades
-        builder.Property(x => x.Name)
-            .HasColumnType("NVARCHAR(200)")
-            .HasMaxLength(200)
+        builder.Ignore(x => x.Name);
+        builder.Ignore(x => x.Description);
+
+        builder.Property(x => x.Code)
+            .HasColumnType("NVARCHAR(50)")
+            .HasMaxLength(50)
             .IsRequired();
 
-        builder.Property(x => x.Description)
-            .HasColumnType("NVARCHAR(500)")
-            .HasMaxLength(500)
-            .IsRequired();
+        // Constraint unico no Code
+        builder.HasIndex(x => x.Code)
+            .IsUnique()
+            .HasFilter("[IsDeleted] = 0")
+            .HasDatabaseName("UX_AddressTypes_Code");
+
+        // FK para a tabela de traduÃ§Ãµes AddressTypeTranslations
+        builder.HasMany(x => x.Translations)
+            .WithOne(x => x.AddressType)
+            .HasForeignKey(x => x.AddressTypeId)
+            .OnDelete(DeleteBehavior.Cascade)
+            .HasConstraintName("FK_AddressTypeTranslations_AddressTypes_AddressTypeId");
 
         builder.Property(x => x.IsActive)
             .HasColumnType("BIT")
@@ -47,8 +58,8 @@ public class AddressTypeMapping : IEntityTypeConfiguration<AddressTypeEntity>
             .IsRequired();
 
         builder.Property(x => x.CreatedAt)
-            .HasColumnType("DATETIME2")
-            .HasDefaultValueSql("SYSDATETIME()")
+            .HasColumnType("DATETIME2(7)")
+            .HasDefaultValueSql("SYSUTCDATETIME()")
             .IsRequired();
 
         builder.Property(x => x.ModifiedBy)
@@ -56,7 +67,7 @@ public class AddressTypeMapping : IEntityTypeConfiguration<AddressTypeEntity>
             .IsRequired(false);
 
         builder.Property(x => x.ModifiedAt)
-            .HasColumnType("DATETIME2")
+            .HasColumnType("DATETIME2(7)")
             .IsRequired(false);
     }
 }

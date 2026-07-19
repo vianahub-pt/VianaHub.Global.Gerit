@@ -17,14 +17,15 @@ public class UserEntity : Entity
     public bool PhoneNumberConfirmed { get; private set; }
     public DateTime? LastAccessAt { get; private set; }
     public string? PasswordHash { get; private set; }
+    public string? UrlImage { get; private set; }
     public bool IsActive { get; private set; }
     public bool IsDeleted { get; private set; }
 
     // Navigation Properties
     public TenantEntity Tenant { get; private set; }
 
-    private readonly List<UserRoleEntity> _userRoles = new();
-    public IReadOnlyCollection<UserRoleEntity> UserRoles => _userRoles.AsReadOnly();
+    private readonly List<UserRolesEntity> _userRoles = new();
+    public IReadOnlyCollection<UserRolesEntity> UserRoles => _userRoles.AsReadOnly();
 
     // Construtor protegido para o EF Core
     protected UserEntity() { }

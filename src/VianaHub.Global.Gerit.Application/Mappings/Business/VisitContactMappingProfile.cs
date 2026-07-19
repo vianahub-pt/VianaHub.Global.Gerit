@@ -9,12 +9,12 @@ namespace VianaHub.Global.Gerit.Application.Mappings.Business;
 /// <summary>
 /// Profile de mapeamento para VisitContact
 /// </summary>
-public class VisitContactMappingProfile : Profile
+public class VisitContactPersonsMappingProfile : Profile
 {
-    public VisitContactMappingProfile()
+    public VisitContactPersonsMappingProfile()
     {
-        CreateMap<VisitContactEntity, VisitContactResponse>()
+        CreateMap<VisitContactPersonsEntity, VisitContactResponse>()
             .ForMember(dest => dest.Visit, opt => opt.MapFrom(src => src.Visit.Title)); 
-        CreateMap<ListPage<VisitContactEntity>, ListPageResponse<VisitContactResponse>>();
+        CreateMap<ListPage<VisitContactPersonsEntity>, ListPageResponse<VisitContactResponse>>();
     }
 }

@@ -10,7 +10,7 @@ public class JobMappingProfile : Profile
 {
     public JobMappingProfile()
     {
-        CreateMap<JobDefinitionEntity, JobResponse>()
+        CreateMap<JobDefinitionsEntity, JobResponse>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
             .ForMember(dest => dest.JobCategory, opt => opt.MapFrom(src => src.JobCategory))
             .ForMember(dest => dest.JobName, opt => opt.MapFrom(src => src.JobName))
@@ -34,6 +34,6 @@ public class JobMappingProfile : Profile
             .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => src.CreatedAt))
             .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(src => src.ModifiedAt));
 
-        CreateMap<ListPage<JobDefinitionEntity>, ListPageResponse<JobResponse>>();
+        CreateMap<ListPage<JobDefinitionsEntity>, ListPageResponse<JobResponse>>();
     }
 }

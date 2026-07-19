@@ -1,7 +1,7 @@
 namespace VianaHub.Global.Gerit.Application.Dtos.Request.Business.ClientContact;
 
 /// <summary>
-/// Request para atualização de ClientContact
+/// Request para atualizaï¿½ï¿½o de ClientContact
 /// </summary>
 public class UpdateClientContactRequest
 {
@@ -10,5 +10,8 @@ public class UpdateClientContactRequest
     public string? PhoneNumber { get; set; }
     public string? CellPhoneNumber { get; set; }
     public bool IsWhatsapp { get; set; }
+    public string? JobTitle { get; set; }
+    public string? Department { get; set; }
+    public bool IsCellPhoneWhatsapp { get; set; }
     public bool IsPrimary { get; set; }
 }

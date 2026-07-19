@@ -4,7 +4,7 @@ using VianaHub.Global.Gerit.Domain.Interfaces.Base;
 
 namespace VianaHub.Global.Gerit.Domain.Validators.Billing.Plan;
 
-public class DeletePlanValidator : AbstractValidator<PlanEntity>
+public class DeletePlanValidator : AbstractValidator<SubscriptionPlanEntity>
 {
     public DeletePlanValidator(ILocalizationService localization)
     {

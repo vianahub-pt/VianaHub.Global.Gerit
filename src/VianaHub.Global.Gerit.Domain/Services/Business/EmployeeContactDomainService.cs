@@ -1,4 +1,4 @@
-﻿using VianaHub.Global.Gerit.Domain.Base;
+using VianaHub.Global.Gerit.Domain.Base;
 using VianaHub.Global.Gerit.Domain.Entities.Business;
 using VianaHub.Global.Gerit.Domain.Interfaces.Business;
 using VianaHub.Global.Gerit.Domain.ReadModels;
@@ -10,12 +10,12 @@ namespace VianaHub.Global.Gerit.Domain.Services.Business;
 public class EmployeeContactDomainService : IEmployeeContactDomainService
 {
     private readonly IEmployeeContactDataRepository _repo;
-    private readonly IEntityDomainValidator<EmployeeContactEntity> _validator;
+    private readonly IEntityDomainValidator<EmployeeContactPersonsEntity> _validator;
     private readonly INotify _notify;
 
     public EmployeeContactDomainService(
         IEmployeeContactDataRepository repo,
-        IEntityDomainValidator<EmployeeContactEntity> validator,
+        IEntityDomainValidator<EmployeeContactPersonsEntity> validator,
         INotify notify)
     {
         _repo = repo;
@@ -23,15 +23,15 @@ public class EmployeeContactDomainService : IEmployeeContactDomainService
         _notify = notify;
     }
 
-    public async Task<EmployeeContactEntity> GetByIdAsync(int id, CancellationToken ct)
+    public async Task<EmployeeContactPersonsEntity> GetByIdAsync(int id, CancellationToken ct)
     {
         return await _repo.GetByIdAsync(id, ct);
     }
-    public async Task<IEnumerable<EmployeeContactEntity>> GetAllAsync(CancellationToken ct)
+    public async Task<IEnumerable<EmployeeContactPersonsEntity>> GetAllAsync(CancellationToken ct)
     {
         return await _repo.GetAllAsync(ct);
     }
-    public async Task<ListPage<EmployeeContactEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct)
+    public async Task<ListPage<EmployeeContactPersonsEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct)
     {
         return await _repo.GetPagedAsync(request, ct);
     }
@@ -40,7 +40,7 @@ public class EmployeeContactDomainService : IEmployeeContactDomainService
         return await _repo.ExistsByIdAsync(id, ct);
     }
 
-    public async Task<bool> CreateAsync(EmployeeContactEntity entity, CancellationToken ct)
+    public async Task<bool> CreateAsync(EmployeeContactPersonsEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForCreateAsync(entity);
         if (!validationResult.IsValid)
@@ -54,7 +54,7 @@ public class EmployeeContactDomainService : IEmployeeContactDomainService
 
         return await _repo.AddAsync(entity, ct);
     }
-    public async Task<bool> UpdateAsync(EmployeeContactEntity entity, CancellationToken ct)
+    public async Task<bool> UpdateAsync(EmployeeContactPersonsEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForUpdateAsync(entity);
         if (!validationResult.IsValid)
@@ -68,7 +68,7 @@ public class EmployeeContactDomainService : IEmployeeContactDomainService
 
         return await _repo.UpdateAsync(entity, ct);
     }
-    public async Task<bool> ActivateAsync(EmployeeContactEntity entity, CancellationToken ct)
+    public async Task<bool> ActivateAsync(EmployeeContactPersonsEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForActivateAsync(entity);
         if (!validationResult.IsValid)
@@ -82,7 +82,7 @@ public class EmployeeContactDomainService : IEmployeeContactDomainService
 
         return await _repo.UpdateAsync(entity, ct);
     }
-    public async Task<bool> DeactivateAsync(EmployeeContactEntity entity, CancellationToken ct)
+    public async Task<bool> DeactivateAsync(EmployeeContactPersonsEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForDeactivateAsync(entity);
         if (!validationResult.IsValid)
@@ -96,7 +96,7 @@ public class EmployeeContactDomainService : IEmployeeContactDomainService
 
         return await _repo.UpdateAsync(entity, ct);
     }
-    public async Task<bool> DeleteAsync(EmployeeContactEntity entity, CancellationToken ct)
+    public async Task<bool> DeleteAsync(EmployeeContactPersonsEntity entity, CancellationToken ct)
     {
         var validationResult = await _validator.ValidateForDeleteAsync(entity);
         if (!validationResult.IsValid)

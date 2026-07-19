@@ -20,8 +20,11 @@ public class SubscriptionDataRepository : ISubscriptionDataRepository
     {
         return await _context.Set<SubscriptionEntity>()
             .AsNoTracking()
-            .Include(x => x.Plan)
+            .Include(x => x.SubscriptionPlan)
+                .ThenInclude(x => x.Translations)
             .Include(x => x.Tenant)
+            .Include(x => x.StatusDefinition)
+                .ThenInclude(x => x.Translations)
             .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted, ct);
     }
 
@@ -29,8 +32,11 @@ public class SubscriptionDataRepository : ISubscriptionDataRepository
     {
         return await _context.Set<SubscriptionEntity>()
             .AsNoTracking()
-            .Include(x => x.Plan)
+            .Include(x => x.SubscriptionPlan)
+                .ThenInclude(x => x.Translations)
             .Include(x => x.Tenant)
+            .Include(x => x.StatusDefinition)
+                .ThenInclude(x => x.Translations)
             .Where(x => !x.IsDeleted)
             .OrderByDescending(x => x.CreatedAt)
             .ToListAsync(ct);
@@ -40,8 +46,11 @@ public class SubscriptionDataRepository : ISubscriptionDataRepository
     {
         var query = _context.Set<SubscriptionEntity>()
             .AsNoTracking()
-            .Include(x => x.Plan)
+            .Include(x => x.SubscriptionPlan)
+                .ThenInclude(x => x.Translations)
             .Include(x => x.Tenant)
+            .Include(x => x.StatusDefinition)
+                .ThenInclude(x => x.Translations)
             .Where(x => !x.IsDeleted);
 
         // Filtro de busca
@@ -50,7 +59,8 @@ public class SubscriptionDataRepository : ISubscriptionDataRepository
             var search = request.Search.Trim().ToLower();
 
             query = query.Where(x =>
-                EF.Functions.Like(x.Plan.Name.ToLower(), $"%{search}%")
+                x.SubscriptionPlan.Translations.Any(t =>
+                    EF.Functions.Like(t.Name.ToLower(), $"%{search}%"))
                 || EF.Functions.Like(x.StripeId.ToLower(), $"%{search}%")
                 || EF.Functions.Like(x.StripeCustomerId.ToLower(), $"%{search}%")
             );
@@ -101,18 +111,24 @@ public class SubscriptionDataRepository : ISubscriptionDataRepository
     {
         return await _context.Set<SubscriptionEntity>()
             .AsNoTracking()
-            .Include(x => x.Plan)
+            .Include(x => x.SubscriptionPlan)
+                .ThenInclude(x => x.Translations)
             .Include(x => x.Tenant)
+            .Include(x => x.StatusDefinition)
+                .ThenInclude(x => x.Translations)
             .FirstOrDefaultAsync(x => x.TenantId == tenantId && !x.IsDeleted, ct);
     }
 
-    public async Task<IEnumerable<SubscriptionEntity>> GetByPlanIdAsync(int planId, CancellationToken ct)
+    public async Task<IEnumerable<SubscriptionEntity>> GetBySubscriptionPlanIdAsync(int subscriptionPlanId, CancellationToken ct)
     {
         return await _context.Set<SubscriptionEntity>()
             .AsNoTracking()
-            .Include(x => x.Plan)
+            .Include(x => x.SubscriptionPlan)
+                .ThenInclude(x => x.Translations)
             .Include(x => x.Tenant)
-            .Where(x => x.PlanId == planId && !x.IsDeleted)
+            .Include(x => x.StatusDefinition)
+                .ThenInclude(x => x.Translations)
+            .Where(x => x.SubscriptionPlanId == subscriptionPlanId && !x.IsDeleted)
             .ToListAsync(ct);
     }
 
@@ -120,8 +136,11 @@ public class SubscriptionDataRepository : ISubscriptionDataRepository
     {
         return await _context.Set<SubscriptionEntity>()
             .AsNoTracking()
-            .Include(x => x.Plan)
+            .Include(x => x.SubscriptionPlan)
+                .ThenInclude(x => x.Translations)
             .Include(x => x.Tenant)
+            .Include(x => x.StatusDefinition)
+                .ThenInclude(x => x.Translations)
             .Where(x => x.IsActive && !x.IsDeleted)
             .ToListAsync(ct);
     }
@@ -132,8 +151,11 @@ public class SubscriptionDataRepository : ISubscriptionDataRepository
         
         return await _context.Set<SubscriptionEntity>()
             .AsNoTracking()
-            .Include(x => x.Plan)
+            .Include(x => x.SubscriptionPlan)
+                .ThenInclude(x => x.Translations)
             .Include(x => x.Tenant)
+            .Include(x => x.StatusDefinition)
+                .ThenInclude(x => x.Translations)
             .Where(x => x.IsActive 
                 && !x.IsDeleted 
                 && x.CurrentPeriodEnd <= targetDate 

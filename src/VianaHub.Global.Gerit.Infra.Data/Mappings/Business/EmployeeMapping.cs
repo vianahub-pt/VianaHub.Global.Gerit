@@ -35,9 +35,37 @@ public class EmployeeMapping : IEntityTypeConfiguration<EmployeeEntity>
             .HasMaxLength(150)
             .IsRequired();
 
-        builder.Property(tm => tm.TaxNumber)
-            .HasColumnType("NVARCHAR(20)")
-            .HasMaxLength(20)
+        builder.Property(tm => tm.StatusDefinitionId)
+            .HasColumnType("INT")
+            .IsRequired();
+
+        builder.Property(tm => tm.StatusDomainId)
+            .HasColumnType("INT")
+            .IsRequired();
+
+        builder.Property(tm => tm.PhoneNumber)
+            .HasColumnType("NVARCHAR(50)")
+            .HasMaxLength(50)
+            .IsRequired(false);
+
+        builder.Property(tm => tm.CellPhoneNumber)
+            .HasColumnType("NVARCHAR(50)")
+            .HasMaxLength(50)
+            .IsRequired(false);
+
+        builder.Property(tm => tm.IsCellPhoneWhatsapp)
+            .HasColumnType("BIT")
+            .HasDefaultValue(false)
+            .IsRequired();
+
+        builder.Property(tm => tm.Email)
+            .HasColumnType("NVARCHAR(320)")
+            .HasMaxLength(320)
+            .IsRequired(false);
+
+        builder.Property(tm => tm.ImageUrl)
+            .HasColumnType("NVARCHAR(500)")
+            .HasMaxLength(500)
             .IsRequired(false);
 
         builder.Property(x => x.IsActive)
@@ -70,15 +98,24 @@ public class EmployeeMapping : IEntityTypeConfiguration<EmployeeEntity>
             .HasConstraintName("FK_Employees_Tenant")
             .OnDelete(DeleteBehavior.Restrict);
 
+        builder.HasOne(tm => tm.StatusDefinition)
+            .WithMany()
+            .HasForeignKey(tm => new { tm.StatusDefinitionId, tm.TenantId, tm.StatusDomainId })
+            .HasPrincipalKey(s => new { s.Id, s.TenantId, s.StatusDomainId })
+            .HasConstraintName("FK_Employees_StatusDefinitions")
+            .OnDelete(DeleteBehavior.Restrict);
+
         builder.HasMany(tm => tm.Contacts)
             .WithOne(tmc => tmc.Employee)
-            .HasForeignKey(tmc => tmc.EmployeeId)
+            .HasForeignKey(tmc => new { tmc.EmployeeId, tmc.TenantId })
+            .HasPrincipalKey(tm => new { tm.Id, tm.TenantId })
             .HasConstraintName("FK_EmployeeContacts_Employee")
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasMany(tm => tm.Addresses)
             .WithOne(x => x.Employee)
-            .HasForeignKey(x => x.EmployeeId)
+            .HasForeignKey(x => new { x.EmployeeId, x.TenantId })
+            .HasPrincipalKey(tm => new { tm.Id, tm.TenantId })
             .HasConstraintName("FK_EmployeeAddresses_Employee")
             .OnDelete(DeleteBehavior.Restrict);
     }

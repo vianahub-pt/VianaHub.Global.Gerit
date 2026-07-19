@@ -4,7 +4,7 @@ using VianaHub.Global.Gerit.Domain.Interfaces.Base;
 
 namespace VianaHub.Global.Gerit.Domain.Validators.Billing.Plan;
 
-public class UpdatePlanValidator : AbstractValidator<PlanEntity>
+public class UpdatePlanValidator : AbstractValidator<SubscriptionPlanEntity>
 {
     public UpdatePlanValidator(ILocalizationService localization)
     {
@@ -12,16 +12,11 @@ public class UpdatePlanValidator : AbstractValidator<PlanEntity>
             .GreaterThan(0)
             .WithMessage(localization.GetMessage("Domain.Plan.InvalidId"));
 
-        RuleFor(x => x.Name)
+        RuleFor(x => x.Code)
             .NotEmpty()
-            .WithMessage(localization.GetMessage("Domain.Plan.NameRequired"))
-            .MaximumLength(100)
-            .WithMessage(localization.GetMessage("Domain.Plan.NameMaxLength", 100));
-
-        RuleFor(x => x.Description)
-            .MaximumLength(500)
-            .WithMessage(localization.GetMessage("Domain.Plan.DescriptionMaxLength", 500))
-            .When(x => !string.IsNullOrWhiteSpace(x.Description));
+            .WithMessage(localization.GetMessage("Domain.Plan.CodeRequired"))
+            .MaximumLength(50)
+            .WithMessage(localization.GetMessage("Domain.Plan.CodeMaxLength", 50));
 
         RuleFor(x => x.Currency)
             .NotEmpty()
@@ -33,7 +28,7 @@ public class UpdatePlanValidator : AbstractValidator<PlanEntity>
             .GreaterThan(0)
             .WithMessage(localization.GetMessage("Domain.Plan.MaxUsersRequired"));
 
-        RuleFor(x => x.MaxPhotosPerVisits)
+        RuleFor(x => x.MaxPhotosPerVisit)
             .GreaterThan(0)
             .WithMessage(localization.GetMessage("Domain.Plan.MaxPhotosRequired"));
 

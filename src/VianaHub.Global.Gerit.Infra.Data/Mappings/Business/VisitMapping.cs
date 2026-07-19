@@ -6,7 +6,7 @@ namespace VianaHub.Global.Gerit.Infra.Data.Mappings.Business;
 
 /// <summary>
 /// Mapeamento da entidade Visit
-/// Intervenções do tenant com suporte a Row Level Security
+/// Intervenï¿½ï¿½es do tenant com suporte a Row Level Security
 /// </summary>
 public class VisitMapping : IEntityTypeConfiguration<VisitEntity>
 {
@@ -14,7 +14,7 @@ public class VisitMapping : IEntityTypeConfiguration<VisitEntity>
     {
         builder.ToTable("Visits", "dbo");
 
-        // Chave Primária
+        // Chave Primï¿½ria
         builder.HasKey(x => x.Id)
             .HasName("PK_Visits");
 
@@ -29,7 +29,16 @@ public class VisitMapping : IEntityTypeConfiguration<VisitEntity>
         builder.Property(x => x.ClientId)
             .IsRequired();
 
-        builder.Property(x => x.StatusId)
+        builder.Property(x => x.StatusDefinitionId)
+            .IsRequired();
+
+        builder.Property(x => x.StatusDomainId)
+            .IsRequired();
+
+        builder.Property(x => x.CurrencyCode)
+            .HasColumnType("CHAR(3)")
+            .HasMaxLength(3)
+            .HasDefaultValue("EUR")
             .IsRequired();
 
         builder.Property(x => x.Title)
@@ -43,21 +52,21 @@ public class VisitMapping : IEntityTypeConfiguration<VisitEntity>
             .IsRequired();
 
         builder.Property(x => x.StartDateTime)
-            .HasColumnType("DATETIME2")
+            .HasColumnType("DATETIME2(7)")
             .IsRequired();
 
         builder.Property(x => x.EndDateTime)
-            .HasColumnType("DATETIME2")
+            .HasColumnType("DATETIME2(7)")
             .IsRequired(false);
 
         builder.Property(x => x.EstimatedValue)
-            .HasColumnType("DECIMAL(10,2)")
-            .HasPrecision(10, 2)
+            .HasColumnType("DECIMAL(19,4)")
+            .HasPrecision(19, 4)
             .IsRequired();
 
         builder.Property(x => x.RealValue)
-            .HasColumnType("DECIMAL(10,2)")
-            .HasPrecision(10, 2)
+            .HasColumnType("DECIMAL(19,4)")
+            .HasPrecision(19, 4)
             .IsRequired(false);
 
         builder.Property(x => x.IsActive)
@@ -87,9 +96,9 @@ public class VisitMapping : IEntityTypeConfiguration<VisitEntity>
         builder.ToTable(t => t.HasCheckConstraint("CK_Visits_EndDateTime", "[EndDateTime] IS NULL OR [EndDateTime] >= [StartDateTime]"));
 
 
-        builder.HasIndex(v => new { v.Id, v.TenantId })
-            .HasDatabaseName("UQ_Visits_Id_Tenant")
-            .IsUnique();
+        // Chave alternativa para suportar FKs compostas com TenantId
+        builder.HasAlternateKey(v => new { v.Id, v.TenantId })
+            .HasName("UQ_Visits_Id_Tenant");
 
         // Relacionamentos
         builder.HasOne(x => x.Tenant)
@@ -105,22 +114,37 @@ public class VisitMapping : IEntityTypeConfiguration<VisitEntity>
             .HasConstraintName("FK_Visits_Clients")
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder.HasOne(x => x.Status)
+        builder.HasOne(x => x.StatusDefinition)
             .WithMany()
-            .HasForeignKey(x => new { x.StatusId, x.TenantId })
-            .HasPrincipalKey(s => new { s.Id, s.TenantId })
-            .HasConstraintName("FK_Visits_Status")
+            .HasForeignKey(x => new { x.StatusDefinitionId, x.TenantId, x.StatusDomainId })
+            .HasPrincipalKey(s => new { s.Id, s.TenantId, s.StatusDomainId })
+            .HasConstraintName("FK_Visits_StatusDefinitions")
             .OnDelete(DeleteBehavior.Restrict);
+
+        // Indices nao clusterizados
+        builder.HasIndex(x => new { x.TenantId, x.StartDateTime })
+            .HasDatabaseName("IX_Visits_Tenant_Date")
+            .HasFilter("[IsDeleted] = 0");
+
+        builder.HasIndex(x => new { x.TenantId, x.ClientId })
+            .HasDatabaseName("IX_Visits_ClientId")
+            .HasFilter("[IsDeleted] = 0");
+
+        builder.HasIndex(x => new { x.TenantId, x.StatusDefinitionId, x.StartDateTime })
+            .HasDatabaseName("IX_Visits_Dashboard")
+            .HasFilter("[IsDeleted] = 0");
 
         builder.HasMany(x => x.Contacts)
             .WithOne(ic => ic.Visit)
-            .HasForeignKey(ic => ic.VisitId)
+            .HasForeignKey(ic => new { ic.VisitId, ic.TenantId })
+            .HasPrincipalKey(x => new { x.Id, x.TenantId })
             .HasConstraintName("FK_VisitContacts_Visit")
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasMany(x => x.Addresses)
             .WithOne(ia => ia.Visit)
-            .HasForeignKey(ia => ia.VisitId)
+            .HasForeignKey(ia => new { ia.VisitId, ia.TenantId })
+            .HasPrincipalKey(x => new { x.Id, x.TenantId })
             .HasConstraintName("FK_VisitAddresses_Visit")
             .OnDelete(DeleteBehavior.Restrict);
     }

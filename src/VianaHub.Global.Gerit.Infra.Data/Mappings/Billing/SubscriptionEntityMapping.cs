@@ -18,8 +18,31 @@ public class SubscriptionEntityMapping : IEntityTypeConfiguration<SubscriptionEn
         builder.Property(x => x.TenantId)
             .IsRequired();
 
-        builder.Property(x => x.PlanId)
+        builder.Property(x => x.SubscriptionPlanId)
             .IsRequired();
+
+        builder.Property(x => x.StatusDefinitionId)
+            .HasColumnType("INT")
+            .IsRequired();
+
+        builder.Property(x => x.StatusDomainId)
+            .HasColumnType("INT")
+            .IsRequired();
+
+        builder.Property(x => x.AgreedAmount)
+            .HasColumnType("DECIMAL(19,4)")
+            .IsRequired();
+
+        builder.Property(x => x.BillingInterval)
+            .HasColumnType("NVARCHAR(20)")
+            .HasMaxLength(20)
+            .IsRequired();
+
+        builder.Property(x => x.CurrencyCode)
+            .HasColumnType("CHAR(3)")
+            .HasMaxLength(3)
+            .IsFixedLength()
+            .IsRequired(false);
 
         builder.Property(x => x.StripeId)
             .HasMaxLength(100)
@@ -75,8 +98,8 @@ public class SubscriptionEntityMapping : IEntityTypeConfiguration<SubscriptionEn
               .IsRequired();
 
         builder.Property(x => x.CreatedAt)
-            .HasColumnType("DATETIME2")
-            .HasDefaultValueSql("SYSDATETIME()")
+            .HasColumnType("DATETIME2(7)")
+            .HasDefaultValueSql("SYSUTCDATETIME()")
             .IsRequired();
 
         builder.Property(x => x.ModifiedBy)
@@ -84,38 +107,61 @@ public class SubscriptionEntityMapping : IEntityTypeConfiguration<SubscriptionEn
             .IsRequired(false);
 
         builder.Property(x => x.ModifiedAt)
-            .HasColumnType("DATETIME2")
+            .HasColumnType("DATETIME2(7)")
             .IsRequired(false);
 
-        // Constraint: Se IsDeleted = 1, então IsActive = 0
+        // Constraint: Se IsDeleted = 1, ento IsActive = 0
         builder.HasCheckConstraint("CK_Subscriptions_DeletedImpliesInactive", "[IsDeleted] = 0 OR [IsActive] = 0");
 
-        // Navegação - Relacionamento com Tenant
+        // Constraint: AgreedAmount >= 0
+        builder.HasCheckConstraint("CK_Subscriptions_AgreedAmount_NonNegative", "[AgreedAmount] >= 0");
+
+        // Navegao - Relacionamento com Tenant
         builder.HasOne(x => x.Tenant)
             .WithMany()
             .HasForeignKey(x => x.TenantId)
             .HasConstraintName("FK_Subscriptions_Tenant")
             .OnDelete(DeleteBehavior.Restrict);
 
-        // Navegação - Relacionamento com Plan
-        builder.HasOne(x => x.Plan)
+        // Navegao - Relacionamento com SubscriptionPlan (SubscriptionPlanEntity)
+        builder.HasOne(x => x.SubscriptionPlan)
             .WithMany(p => p.Subscriptions)
-            .HasForeignKey(x => x.PlanId)
-            .HasConstraintName("FK_Subscriptions_Plan")
+            .HasForeignKey(x => x.SubscriptionPlanId)
+            .HasConstraintName("FK_Subscriptions_SubscriptionPlan")
+            .OnDelete(DeleteBehavior.Restrict);
+
+        // Navegao - Relacionamento com StatusDefinition (FK composta: StatusDefinitionId, TenantId, StatusDomainId)
+        builder.HasOne(x => x.StatusDefinition)
+            .WithMany()
+            .HasForeignKey(x => new { x.StatusDefinitionId, x.TenantId, x.StatusDomainId })
+            .HasPrincipalKey(x => new { x.Id, x.TenantId, x.StatusDomainId })
+            .HasConstraintName("FK_Subscriptions_StatusDefinition")
             .OnDelete(DeleteBehavior.Restrict);
 
         // Chave alternativa (TenantId, Id)
         builder.HasIndex(x => new { x.TenantId, x.Id })
             .IsUnique()
+            .HasFilter("[IsDeleted] = 0")
             .HasDatabaseName("UQ_Subscriptions_TenantId_Id");
 
-        // Constraint Única: Garantir que só pode haver um registro ativo por tenant
-        builder.HasIndex(x => new { x.TenantId, x.IsActive })
+        // Constraint unica: Garantir que so pode haver um registro ativo por tenant
+        builder.HasIndex(x => x.TenantId)
             .IsUnique()
-            .HasDatabaseName("UQ_Subscriptions_Tenant_Active");
+            .HasFilter("[IsActive] = 1 AND [IsDeleted] = 0")
+            .HasDatabaseName("UX_Subscriptions_Active");
 
-        // Índice para performance em consultas por PlanId
-        builder.HasIndex(x => x.PlanId)
-            .HasDatabaseName("IX_Subscriptions_PlanId");
+        // ndice para performance em consultas por SubscriptionPlanId
+        builder.HasIndex(x => x.SubscriptionPlanId)
+            .HasDatabaseName("IX_Subscriptions_SubscriptionPlanId");
+
+        // ndice para consultas por StatusDefinition
+        builder.HasIndex(x => new { x.StatusDefinitionId, x.TenantId, x.StatusDomainId })
+            .HasDatabaseName("IX_Subscriptions_StatusDefinition");
+
+        // StripeId unico (quando preenchido)
+        builder.HasIndex(x => x.StripeId)
+            .IsUnique()
+            .HasFilter("[StripeId] IS NOT NULL")
+            .HasDatabaseName("UX_Subscriptions_StripeId");
     }
 }

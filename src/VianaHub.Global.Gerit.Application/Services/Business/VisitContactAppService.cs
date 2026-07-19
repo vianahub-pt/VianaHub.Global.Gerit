@@ -89,12 +89,16 @@ public class VisitContactAppService : IVisitContactAppService
             return 0;
         }
 
-        var entity = new VisitContactEntity(
+        var entity = new VisitContactPersonsEntity(
             tenantId,
             request.VisitId,
             request.Name,
             request.Email,
             request.Phone,
+            request.JobTitle,
+            request.Department,
+            request.CellPhoneNumber,
+            request.IsCellPhoneWhatsapp,
             request.IsPrimary,
             userId
         );
@@ -120,7 +124,7 @@ public class VisitContactAppService : IVisitContactAppService
             return false;
         }
 
-        entity.Update(request.Name, request.Email, request.Phone, request.IsPrimary, _currentUser.GetUserId());
+        entity.Update(request.Name, request.Email, request.Phone, request.JobTitle, request.Department, request.CellPhoneNumber, request.IsCellPhoneWhatsapp, request.IsPrimary, _currentUser.GetUserId());
         return await _domain.UpdateAsync(entity, ct);
     }
 
@@ -295,12 +299,16 @@ public class VisitContactAppService : IVisitContactAppService
                 continue;
             }
 
-            var entity = new VisitContactEntity(
+            var entity = new VisitContactPersonsEntity(
                 tenantId,
                 item.VisitId,
                 item.Name,
                 item.Email,
                 item.Phone,
+                null, // JobTitle
+                null, // Department
+                null, // CellPhoneNumber
+                false, // IsCellPhoneWhatsapp
                 item.IsPrimary,
                 userId
             );

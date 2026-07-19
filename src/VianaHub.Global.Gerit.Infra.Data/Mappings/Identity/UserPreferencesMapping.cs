@@ -126,6 +126,7 @@ public class UserPreferencesMapping : IEntityTypeConfiguration<UserPreferencesEn
 
         // Check constraints to match SQL table
         builder.HasCheckConstraint("CK_UserPreferences_Active_Deleted", "NOT (IsActive = 1 AND IsDeleted = 1)");
+        builder.HasCheckConstraint("CK_UserPreferences_Appearance", "Appearance IN ('light', 'dark')");
         builder.HasCheckConstraint("CK_UserPreferences_TimeFormat", "TimeFormat IN ('24h', '12h')");
 
         // Relationships
@@ -148,6 +149,6 @@ public class UserPreferencesMapping : IEntityTypeConfiguration<UserPreferencesEn
         builder.HasIndex(x => new { x.TenantId, x.UserId })
             .HasDatabaseName("UX_UserPreferences_Tenant_User_Active")
             .IsUnique()
-            .HasFilter("[IsDeleted] = 0");
+            .HasFilter("[IsActive] = 1 AND [IsDeleted] = 0");
     }
 }

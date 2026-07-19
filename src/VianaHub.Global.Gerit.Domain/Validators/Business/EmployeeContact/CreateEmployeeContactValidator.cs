@@ -1,4 +1,4 @@
-﻿using FluentValidation;
+using FluentValidation;
 using VianaHub.Global.Gerit.Domain.Entities.Business;
 using VianaHub.Global.Gerit.Domain.Interfaces.Base;
 
@@ -7,7 +7,7 @@ namespace VianaHub.Global.Gerit.Domain.Validators.Business.EmployeeContact;
 /// <summary>
 /// Validator para cria��o de EmployeeContact
 /// </summary>
-public class CreateEmployeeContactValidator : AbstractValidator<EmployeeContactEntity>
+public class CreateEmployeeContactValidator : AbstractValidator<EmployeeContactPersonsEntity>
 {
     private readonly ILocalizationService _localization;
 
@@ -41,6 +41,27 @@ public class CreateEmployeeContactValidator : AbstractValidator<EmployeeContactE
             .MaximumLength(30)
             .When(x => !string.IsNullOrWhiteSpace(x.Phone))
             .WithMessage(_localization.GetMessage("Domain.EmployeeContact.PhoneMaxLength"));
+
+        RuleFor(x => x.JobTitle)
+            .MaximumLength(100)
+            .WithMessage(_localization.GetMessage("Domain.EmployeeContact.JobTitleMaxLength", 100))
+            .When(x => !string.IsNullOrWhiteSpace(x.JobTitle));
+
+        RuleFor(x => x.Department)
+            .MaximumLength(100)
+            .WithMessage(_localization.GetMessage("Domain.EmployeeContact.DepartmentMaxLength", 100))
+            .When(x => !string.IsNullOrWhiteSpace(x.Department));
+
+        RuleFor(x => x.CellPhoneNumber)
+            .MaximumLength(30)
+            .WithMessage(_localization.GetMessage("Domain.EmployeeContact.CellPhoneNumberMaxLength", 30))
+            .When(x => !string.IsNullOrWhiteSpace(x.CellPhoneNumber));
+
+        // Quando IsCellPhoneWhatsapp for true, CellPhoneNumber é obrigatório
+        RuleFor(x => x.CellPhoneNumber)
+            .NotEmpty()
+            .WithMessage(_localization.GetMessage("Domain.EmployeeContact.CellPhoneNumberRequiredForWhatsapp"))
+            .When(x => x.IsCellPhoneWhatsapp);
 
         RuleFor(x => x.CreatedBy)
             .GreaterThan(0)

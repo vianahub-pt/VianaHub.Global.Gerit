@@ -6,7 +6,7 @@ namespace VianaHub.Global.Gerit.Infra.Data.Mappings.Identity;
 
 /// <summary>
 /// Mapeamento da entidade User
-/// Usuários do sistema com suporte a Row Level Security
+/// Usuï¿½rios do sistema com suporte a Row Level Security
 /// </summary>
 public class UserMapping : IEntityTypeConfiguration<UserEntity>
 {
@@ -14,7 +14,7 @@ public class UserMapping : IEntityTypeConfiguration<UserEntity>
     {
         builder.ToTable("Users", "dbo");
 
-        // Chave Primária
+        // Chave Primï¿½ria
         builder.HasKey(x => x.Id)
             .HasName("PK_Users");
 
@@ -65,6 +65,11 @@ public class UserMapping : IEntityTypeConfiguration<UserEntity>
             .HasMaxLength(500)
             .IsRequired();
 
+        builder.Property(x => x.UrlImage)
+            .HasColumnType("NVARCHAR(500)")
+            .HasMaxLength(500)
+            .IsRequired(false);
+
         builder.Property(x => x.IsActive)
             .HasDefaultValue(true)
             .IsRequired();
@@ -88,29 +93,31 @@ public class UserMapping : IEntityTypeConfiguration<UserEntity>
             .HasColumnType("DATETIME2(7)")
             .IsRequired(false);
 
-        // Constraints únicos
+        // Constraints ï¿½nicos
         // Adiciona alternate key (Id, TenantId) para compatibilidade com FKs compostas no banco
         builder.HasAlternateKey(x => new { x.Id, x.TenantId })
             .HasName("UQ_Users_Id_Tenant");
 
         builder.HasIndex(x => new { x.TenantId, x.Email })
             .IsUnique()
+            .HasFilter("[IsDeleted] = 0")
             .HasDatabaseName("UQ_Users_Tenant_Email");
 
         builder.HasIndex(x => new { x.TenantId, x.NormalizedEmail })
             .IsUnique()
+            .HasFilter("[IsDeleted] = 0")
             .HasDatabaseName("UQ_Users_Tenant_NormalizedEmail");
 
-        // Índices
+        // ï¿½ndices
         builder.HasIndex(x => new { x.TenantId, x.Email })
             .HasDatabaseName("IX_Users_Login")
             .IncludeProperties(x => new { x.Id, x.IsActive })
             .HasFilter("[IsDeleted] = 0");
 
         // Relacionamentos
-        // NOTA: O relacionamento User -> Tenant já está configurado no TenantMapping.cs
-        // através de HasMany(t => t.Users).WithOne(x => x.Tenant).HasForeignKey(x => x.TenantId)
-        // Não configurar novamente aqui para evitar propriedades sombra (shadow properties)
+        // NOTA: O relacionamento User -> Tenant jï¿½ estï¿½ configurado no TenantMapping.cs
+        // atravï¿½s de HasMany(t => t.Users).WithOne(x => x.Tenant).HasForeignKey(x => x.TenantId)
+        // Nï¿½o configurar novamente aqui para evitar propriedades sombra (shadow properties)
 
         builder.HasMany(x => x.UserRoles)
             .WithOne(ur => ur.User)

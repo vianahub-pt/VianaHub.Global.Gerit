@@ -5,9 +5,9 @@ using VianaHub.Global.Gerit.Domain.Interfaces.Base;
 namespace VianaHub.Global.Gerit.Domain.Validators.Business.ClientAddress;
 
 /// <summary>
-/// Validador para exclusão de ClientAddress
+/// Validador para exclusï¿½o de ClientAddress
 /// </summary>
-public class DeleteClientAddressValidator : AbstractValidator<ClientAddressEntity>
+public class DeleteClientAddressValidator : AbstractValidator<ClientAddressesEntity>
 {
     public DeleteClientAddressValidator(ILocalizationService localization)
     {

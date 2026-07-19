@@ -1,7 +1,6 @@
 using VianaHub.Global.Gerit.Domain.Base;
 using VianaHub.Global.Gerit.Domain.Entities.Business;
 using VianaHub.Global.Gerit.Domain.Entities.Identity;
-using VianaHub.Global.Gerit.Domain.Enums;
 
 namespace VianaHub.Global.Gerit.Domain.Entities.Billing;
 
@@ -11,25 +10,26 @@ namespace VianaHub.Global.Gerit.Domain.Entities.Billing;
 /// </summary>
 public class TenantEntity : Entity, IAggregateRoot
 {
-    private readonly List<TenantContactEntity> _contacts = [];
-    private readonly List<TenantAddressEntity> _addresses = [];
+    private readonly List<TenantContactPersonsEntity> _contacts = [];
+    private readonly List<TenantAddressesEntity> _addresses = [];
     private readonly List<TenantFiscalDataEntity> _fiscalData = [];
     private readonly List<UserEntity> _users = [];
 
-    public TenantType TenantType { get; private set; }
+    public byte PartyTypeId { get; private set; }
+    public PartyTypeEntity PartyType { get; private set; }
     public int AcquisitionSourceTypeId { get; private set; }
     public AcquisitionSourceTypeEntity AcquisitionSourceType { get; private set; }
     public string? Name { get; private set; }
     public string? Email { get; private set; }
-    public string? Website { get; private set; }
-    public string? UrlImage { get; private set; }
+    public string? WebsiteUrl { get; private set; }
+    public string? ImageUrl { get; private set; }
     public string? Note { get; private set; }
     public bool IsActive { get; private set; }
     public bool IsDeleted { get; private set; }
 
     // Partes internas do agregado
-    public IReadOnlyCollection<TenantContactEntity> Contacts => _contacts.AsReadOnly();
-    public IReadOnlyCollection<TenantAddressEntity> Addresses => _addresses.AsReadOnly();
+    public IReadOnlyCollection<TenantContactPersonsEntity> Contacts => _contacts.AsReadOnly();
+    public IReadOnlyCollection<TenantAddressesEntity> Addresses => _addresses.AsReadOnly();
     public IReadOnlyCollection<TenantFiscalDataEntity> FiscalData => _fiscalData.AsReadOnly();
     public IReadOnlyCollection<UserEntity> Users => _users.AsReadOnly();
 
@@ -37,16 +37,16 @@ public class TenantEntity : Entity, IAggregateRoot
     protected TenantEntity() { }
 
     /// <summary>
-    /// Construtor para cria��o de um novo Tenant
+    /// Construtor para criação de um novo Tenant
     /// </summary>
-    public TenantEntity(TenantType tenantType, int acquisitionSourceTypeId, string name, string email, string? website, string? urlImage, string? note, int createdBy)
+    public TenantEntity(byte partyTypeId, int acquisitionSourceTypeId, string name, string email, string? websiteUrl, string? imageUrl, string? note, int createdBy)
     {
-        TenantType = tenantType;
+        PartyTypeId = partyTypeId;
         AcquisitionSourceTypeId = acquisitionSourceTypeId;
         Name = name;
         Email = email;
-        Website = website;
-        UrlImage = urlImage;
+        WebsiteUrl = websiteUrl;
+        ImageUrl = imageUrl;
         Note = note;
         IsActive = true;
         IsDeleted = false;
@@ -54,14 +54,14 @@ public class TenantEntity : Entity, IAggregateRoot
         CreatedAt = DateTime.UtcNow;
     }
 
-    public void Update(TenantType tenantType, int acquisitionSourceTypeId, string name, string email, string? website, string? urlImage, string? note, int modifiedBy)
+    public void Update(byte partyTypeId, int acquisitionSourceTypeId, string name, string email, string? websiteUrl, string? imageUrl, string? note, int modifiedBy)
     {
-        TenantType = tenantType;
+        PartyTypeId = partyTypeId;
         AcquisitionSourceTypeId = acquisitionSourceTypeId;
         Name = name;
         Email = email;
-        Website = website;
-        UrlImage = urlImage;
+        WebsiteUrl = websiteUrl;
+        ImageUrl = imageUrl;
         Note = note;
         ModifiedBy = modifiedBy;
         ModifiedAt = DateTime.UtcNow;
@@ -89,7 +89,7 @@ public class TenantEntity : Entity, IAggregateRoot
         ModifiedAt = DateTime.UtcNow;
     }
 
-    public void AddAddress(TenantAddressEntity address, int createdBy)
+    public void AddAddress(TenantAddressesEntity address, int createdBy)
     {
         if (address == null)
             throw new ArgumentNullException(nameof(address));
