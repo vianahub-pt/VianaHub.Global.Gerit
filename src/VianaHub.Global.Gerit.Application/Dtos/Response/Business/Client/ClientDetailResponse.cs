@@ -26,7 +26,9 @@ public class ClientDetailResponse
     public string? EconomicActivityCode { get; set; }
     public int? NumberOfEmployees { get; set; }
     public int? StatusDefinitionId { get; set; }
+    public string? StatusDefinitionName { get; set; }
     public int? StatusDomainId { get; set; }
+    public string? StatusDomainName { get; set; }
 
     public bool IsActive { get; set; }
 }

@@ -20,6 +20,7 @@ public class AcquisitionSourceTypeDataRepository : IAcquisitionSourceTypeDataRep
     {
         return await _context.Set<AcquisitionSourceTypeEntity>()
             .AsNoTracking()
+            .Include(x => x.Translations)
             .Where(x => !x.IsDeleted)
             .OrderBy(x => x.Name)
             .ToListAsync(ct);
@@ -29,6 +30,7 @@ public class AcquisitionSourceTypeDataRepository : IAcquisitionSourceTypeDataRep
     {
         return await _context.Set<AcquisitionSourceTypeEntity>()
             .AsNoTracking()
+            .Include(x => x.Translations)
             .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted, ct);
     }
 
@@ -36,6 +38,7 @@ public class AcquisitionSourceTypeDataRepository : IAcquisitionSourceTypeDataRep
     {
         var query = _context.Set<AcquisitionSourceTypeEntity>()
             .AsNoTracking()
+            .Include(x => x.Translations)
             .Where(x => !x.IsDeleted);
 
         if (!string.IsNullOrWhiteSpace(request.Search))

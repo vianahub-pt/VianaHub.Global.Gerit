@@ -5,6 +5,7 @@ public class TenantAddressDetailResponse
     public int Id { get; set; }
     public int TenantId { get; set; }
     public int AddressTypeId { get; set; }
+    public string? AddressTypeName { get; set; }
     public string? CountryCode { get; set; }
     public string? Street { get; set; }
     public string? Neighborhood { get; set; }

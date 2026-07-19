@@ -7,7 +7,9 @@ public class VisitResponse
     public int ClientId { get; set; }
     public string? Client { get; set; }
     public int StatusDefinitionId { get; set; }
+    public string? StatusDefinitionName { get; set; }
     public int StatusDomainId { get; set; }
+    public string? StatusDomainName { get; set; }
     public string? StatusDefinition { get; set; }
     public string CurrencyCode { get; set; }
     public string? Title { get; set; }

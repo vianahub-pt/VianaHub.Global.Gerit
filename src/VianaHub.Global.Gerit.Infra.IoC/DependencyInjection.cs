@@ -98,6 +98,10 @@ public static class DependencyInjection
         // Scoped: vive durante o ciclo de vida do request HTTP
         services.AddScoped<IRequestTenantContext, RequestTenantContext>();
 
+        // Contexto de Idioma para traduções i18n (ex: resolver nomes traduzidos)
+        // Scoped: vive durante o ciclo de vida do request HTTP
+        services.AddScoped<IRequestLanguageContext, RequestLanguageContext>();
+
         // Validators (Scoped)
         services.AddScoped<IValidator<UserRolesEntity>, UserRoleValidator>();
         services.AddScoped<IValidator<RolePermissionsEntity>, RolePermissionValidator>();

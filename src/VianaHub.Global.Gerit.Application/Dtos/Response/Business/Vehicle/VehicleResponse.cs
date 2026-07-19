@@ -5,7 +5,9 @@ public class VehicleResponse
     public int Id { get; set; }
     public int TenantId { get; set; }
     public int StatusDefinitionId { get; set; }
+    public string? StatusDefinitionName { get; set; }
     public int StatusDomainId { get; set; }
+    public string? StatusDomainName { get; set; }
     public string? Plate { get; set; }
     public string? Brand { get; set; }
     public string? Model { get; set; }
