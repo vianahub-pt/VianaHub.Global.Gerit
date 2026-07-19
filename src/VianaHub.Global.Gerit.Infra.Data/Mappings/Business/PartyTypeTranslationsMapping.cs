@@ -42,11 +42,12 @@ public class PartyTypeTranslationsMapping : IEntityTypeConfiguration<PartyTypeTr
             .HasMaxLength(300)
             .IsRequired(false);
 
-        // Relacionamento FK
+        // Relacionamento FK — configurado exclusivamente aqui (não duplicar no PartyTypeMapping)
+        // para evitar que EF Core gere shadow FK PartyTypeEntityId por convenção.
         builder.HasOne(x => x.PartyType)
-            .WithMany()
+            .WithMany(x => x.Translations)
             .HasForeignKey(x => x.PartyTypeId)
-            .HasConstraintName("FK_PartyTypeTranslations_PartyType")
+            .HasConstraintName("FK_PartyTypeTranslations_PartyTypes")
             .OnDelete(DeleteBehavior.Restrict);
 
         // Constraint único composto (PartyTypeId + LanguageCode)

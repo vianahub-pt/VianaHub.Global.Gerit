@@ -5,7 +5,9 @@ public class EmployeeResponse
     public int Id { get; set; }
     public int TenantId { get; set; }
     public int StatusDefinitionId { get; set; }
+    public string? StatusDefinitionName { get; set; }
     public int StatusDomainId { get; set; }
+    public string? StatusDomainName { get; set; }
     public string? Name { get; set; }
     public string? PhoneNumber { get; set; }
     public string? CellPhoneNumber { get; set; }

@@ -7,7 +7,9 @@ public class EquipmentResponse
     public int EquipmentTypeId { get; set; }
     public string? EquipmentType { get; set; }
     public int StatusDefinitionId { get; set; }
+    public string? StatusDefinitionName { get; set; }
     public int StatusDomainId { get; set; }
+    public string? StatusDomainName { get; set; }
     public string? StatusDefinition { get; set; }
     public string? Name { get; set; }
     public string? SerialNumber { get; set; }

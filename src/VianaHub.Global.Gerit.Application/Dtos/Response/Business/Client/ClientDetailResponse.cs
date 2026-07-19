@@ -4,8 +4,11 @@ public class ClientDetailResponse
 {
     public int Id { get; set; }
     public int TenantId { get; set; }
-    public byte PartyTypeId { get; set; }
+    public string? Tenant { get; set; }
+    public int PartyTypeId { get; set; }
+    public string? PartyType { get; set; }
     public int AcquisitionSourceTypeId { get; set; }
+    public string? AcquisitionSourceType { get; set; }
     public string? UrlImage { get; set; }
     public string? Note { get; set; }
 
@@ -23,7 +26,9 @@ public class ClientDetailResponse
     public string? EconomicActivityCode { get; set; }
     public int? NumberOfEmployees { get; set; }
     public int? StatusDefinitionId { get; set; }
+    public string? StatusDefinitionName { get; set; }
     public int? StatusDomainId { get; set; }
+    public string? StatusDomainName { get; set; }
 
     public bool IsActive { get; set; }
 }

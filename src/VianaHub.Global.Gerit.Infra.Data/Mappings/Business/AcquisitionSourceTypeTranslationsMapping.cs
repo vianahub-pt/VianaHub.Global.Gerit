@@ -42,11 +42,12 @@ public class AcquisitionSourceTypeTranslationsMapping : IEntityTypeConfiguration
             .HasMaxLength(300)
             .IsRequired(false);
 
-        // Relacionamento FK
+        // Relacionamento FK — configurado exclusivamente aqui (não duplicar no AcquisitionSourceTypeMapping)
+        // para evitar que EF Core gere shadow FK AcquisitionSourceTypeEntityId por convenção.
         builder.HasOne(x => x.AcquisitionSourceType)
-            .WithMany()
+            .WithMany(x => x.Translations)
             .HasForeignKey(x => x.AcquisitionSourceTypeId)
-            .HasConstraintName("FK_AcquisitionSourceTypeTranslations_AcquisitionSourceType")
+            .HasConstraintName("FK_AcquisitionSourceTypeTranslations_AcquisitionSourceTypes")
             .OnDelete(DeleteBehavior.Restrict);
 
         // Constraint único composto (AcquisitionSourceTypeId + LanguageCode)

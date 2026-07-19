@@ -58,11 +58,7 @@ public class AcquisitionSourceTypeMapping : IEntityTypeConfiguration<Acquisition
             .HasColumnType("DATETIME2(7)")
             .IsRequired(false);
 
-        // Relacionamento com Translations (1:N)
-        builder.HasMany(x => x.Translations)
-            .WithOne(x => x.AcquisitionSourceType)
-            .HasForeignKey(x => x.AcquisitionSourceTypeId)
-            .HasConstraintName("FK_AcquisitionSourceTypeTranslations_AcquisitionSourceTypes")
-            .OnDelete(DeleteBehavior.Cascade);
+        // Nota: Relacionamento com Translations (1:N) está configurado exclusivamente
+        // em AcquisitionSourceTypeTranslationsMapping para evitar shadow FK AcquisitionSourceTypeEntityId por convenção.
     }
 }

@@ -62,11 +62,7 @@ public class PartyTypeMapping : IEntityTypeConfiguration<PartyTypeEntity>
             .IsUnique()
             .HasDatabaseName("UQ_PartyTypes_Code");
 
-        // Relacionamento com Translations (1:N)
-        builder.HasMany(x => x.Translations)
-            .WithOne(x => x.PartyType)
-            .HasForeignKey(x => x.PartyTypeId)
-            .HasConstraintName("FK_PartyTypeTranslations_PartyTypes")
-            .OnDelete(DeleteBehavior.Cascade);
+        // Nota: Relacionamento com Translations (1:N) está configurado exclusivamente
+        // em PartyTypeTranslationsMapping para evitar shadow FK PartyTypeEntityId por convenção.
     }
 }
