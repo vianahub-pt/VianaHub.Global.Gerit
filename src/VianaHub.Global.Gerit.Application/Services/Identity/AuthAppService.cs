@@ -292,7 +292,7 @@ public class AuthAppService : IAuthAppService
         }
 
         // Rota��o: revogar token antigo e criar novo
-        await _refreshRepo.RevokeAsync(tokenEntity.Token, user.Id, request.TenantId);
+        await _refreshRepo.RevokeAsync(tokenEntity.TokenHash, user.Id, request.TenantId);
 
         var newRefreshValue = GenerateRefreshTokenValue();
         var newRefresh = new RefreshTokensEntity(request.TenantId, user.Id, newRefreshValue, DateTime.UtcNow.AddDays(_jwtSettings.RefreshTokenExpirationDays), user.Id);
