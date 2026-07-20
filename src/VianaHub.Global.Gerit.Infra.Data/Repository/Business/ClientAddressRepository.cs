@@ -25,6 +25,7 @@ public class ClientAddressRepository : IClientAddressDataRepository
             .AsNoTracking()
             .Include(x => x.Client)
             .Include(x => x.AddressType)
+                .ThenInclude(x => x.Translations)
             .Where(x => x.ClientId == clientId && x.Id == id && !x.IsDeleted)
             .FirstOrDefaultAsync(ct);
     }
@@ -35,6 +36,7 @@ public class ClientAddressRepository : IClientAddressDataRepository
             .AsNoTracking()
             .Include(x => x.Client)
             .Include(x => x.AddressType)
+                .ThenInclude(x => x.Translations)
             .Where(x => x.Client.Id == clientId && !x.IsDeleted)
             .OrderBy(x => x.ClientId)
             .ThenBy(x => x.IsPrimary ? 0 : 1)
@@ -48,6 +50,7 @@ public class ClientAddressRepository : IClientAddressDataRepository
             .AsNoTracking()
             .Include(x => x.Client)
             .Include(x => x.AddressType)
+                .ThenInclude(x => x.Translations)
             .Where(x => x.Client.Id == clientId && !x.IsDeleted);
 
         // Aplicar busca
@@ -61,7 +64,7 @@ public class ClientAddressRepository : IClientAddressDataRepository
                 EF.Functions.Like(x.District.ToLower(), $"%{search}%") ||
                 EF.Functions.Like(x.Neighborhood.ToLower(), $"%{search}%") ||
                 EF.Functions.Like(x.Client.Name.ToLower(), $"%{search}%") ||
-                EF.Functions.Like(x.AddressType.Name.ToLower(), $"%{search}%"));
+                x.AddressType.Translations.Any(t => EF.Functions.Like(t.Name.ToLower(), $"%{search}%")));
         }
 
         if (request.IsActive.HasValue)

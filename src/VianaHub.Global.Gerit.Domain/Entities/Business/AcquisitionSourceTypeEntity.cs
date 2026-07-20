@@ -5,28 +5,26 @@ namespace VianaHub.Global.Gerit.Domain.Entities.Business;
 /// <summary>
 /// Entidade que representa um Tipo de Origem de Aquisição (catálogo global).
 /// Tabela: dbo.AcquisitionSourceTypes — Code NVARCHAR(50) UK + Translations 1:N.
+/// Name e Description residem exclusivamente na tabela de traduções (AcquisitionSourceTypeTranslations).
 /// </summary>
 public class AcquisitionSourceTypeEntity : Entity
 {
     public string? Code { get; private set; }
-    public string? Name { get; private set; }
-    public string? Description { get; private set; }
     public bool IsActive { get; private set; }
     public bool IsDeleted { get; private set; }
 
     // Navigation Properties
-    public IReadOnlyCollection<AcquisitionSourceTypeTranslationsEntity> Translations { get; private set; }
+    public ICollection<AcquisitionSourceTypeTranslationsEntity> Translations { get; private set; }
 
     protected AcquisitionSourceTypeEntity() { }
 
     /// <summary>
-    /// Construtor para criação de um novo AcquisitionSourceType
+    /// Construtor para criação de um novo AcquisitionSourceType.
+    /// Name e Description devem ser persistidos via AddTranslation() na tabela de traduções.
     /// </summary>
-    public AcquisitionSourceTypeEntity(string code, string name, string? description, int createdBy)
+    public AcquisitionSourceTypeEntity(string code, int createdBy)
     {
         Code = code;
-        Name = name;
-        Description = description;
         IsActive = true;
         IsDeleted = false;
         CreatedBy = createdBy;
@@ -34,14 +32,18 @@ public class AcquisitionSourceTypeEntity : Entity
         Translations = new List<AcquisitionSourceTypeTranslationsEntity>();
     }
 
-    public void Update(string name, string? description, int modifiedBy)
+    /// <summary>
+    /// Adiciona uma tradução (Name + Description por idioma) à entidade.
+    /// O FK AcquisitionSourceTypeId será resolvido pelo EF Core no SaveChanges.
+    /// </summary>
+    public void AddTranslation(AcquisitionSourceTypeTranslationsEntity translation)
     {
-        Name = name;
-        Description = description;
-        ModifiedBy = modifiedBy;
-        ModifiedAt = DateTime.UtcNow;
+        Translations.Add(translation);
     }
 
+    /// <summary>
+    /// Atualiza o código do AcquisitionSourceType.
+    /// </summary>
     public void UpdateCode(string code, int modifiedBy)
     {
         Code = code;

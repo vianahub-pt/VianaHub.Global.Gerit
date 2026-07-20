@@ -25,6 +25,7 @@ public class VisitAddressDataRepository : IVisitAddressDataRepository
             .AsNoTracking()
             .Include(x => x.Visit)
             .Include(x => x.AddressType)
+                .ThenInclude(x => x.Translations)
             .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted, ct);
     }
 
@@ -34,6 +35,7 @@ public class VisitAddressDataRepository : IVisitAddressDataRepository
             .AsNoTracking()
             .Include(x => x.Visit)
             .Include(x => x.AddressType)
+                .ThenInclude(x => x.Translations)
             .Where(x => !x.IsDeleted)
             .OrderBy(x => x.VisitId)
             .ThenBy(x => x.City)
@@ -46,6 +48,7 @@ public class VisitAddressDataRepository : IVisitAddressDataRepository
             .AsNoTracking()
             .Include(x => x.Visit)
             .Include(x => x.AddressType)
+                .ThenInclude(x => x.Translations)
             .Where(x => !x.IsDeleted);
 
         if (!string.IsNullOrWhiteSpace(request.Search))
@@ -58,7 +61,7 @@ public class VisitAddressDataRepository : IVisitAddressDataRepository
                 EF.Functions.Like(x.District.ToLower(), $"%{searchLower}%") ||
                 EF.Functions.Like(x.Neighborhood.ToLower(), $"%{searchLower}%") ||
                 EF.Functions.Like(x.Visit.Title.ToLower(), $"%{searchLower}%") ||
-                EF.Functions.Like(x.AddressType.Name.ToLower(), $"%{searchLower}%"));
+                x.AddressType.Translations.Any(t => EF.Functions.Like(t.Name.ToLower(), $"%{searchLower}%")));
         }
 
         if (request.IsActive.HasValue)
@@ -110,6 +113,7 @@ public class VisitAddressDataRepository : IVisitAddressDataRepository
         return await _context.VisitAddresses
             .AsNoTracking()
             .Include(x => x.AddressType)
+                .ThenInclude(x => x.Translations)
             .Include(x => x.Visit)
             .FirstOrDefaultAsync(x => x.VisitId == interventionId && x.IsPrimary && !x.IsDeleted, ct);
     }

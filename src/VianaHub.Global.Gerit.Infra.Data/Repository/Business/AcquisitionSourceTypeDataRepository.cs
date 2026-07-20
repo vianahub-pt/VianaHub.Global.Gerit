@@ -22,7 +22,7 @@ public class AcquisitionSourceTypeDataRepository : IAcquisitionSourceTypeDataRep
             .AsNoTracking()
             .Include(x => x.Translations)
             .Where(x => !x.IsDeleted)
-            .OrderBy(x => x.Name)
+            .OrderBy(x => x.Code)
             .ToListAsync(ct);
     }
 
@@ -45,8 +45,10 @@ public class AcquisitionSourceTypeDataRepository : IAcquisitionSourceTypeDataRep
         {
             var search = request.Search.Trim().ToLower();
             query = query.Where(x =>
-                EF.Functions.Like(x.Name.ToLower(), $"%{search}%") ||
-                EF.Functions.Like(x.Description.ToLower(), $"%{search}%")
+                x.Translations.Any(t =>
+                    EF.Functions.Like(t.Name.ToLower(), $"%{search}%") ||
+                    (t.Description != null && EF.Functions.Like(t.Description.ToLower(), $"%{search}%"))
+                )
             );
         }
 
@@ -84,7 +86,7 @@ public class AcquisitionSourceTypeDataRepository : IAcquisitionSourceTypeDataRep
     {
         return await _context.Set<AcquisitionSourceTypeEntity>()
             .AsNoTracking()
-            .AnyAsync(x => x.Name == name && !x.IsDeleted, ct);
+            .AnyAsync(x => !x.IsDeleted && x.Translations.Any(t => t.Name == name), ct);
     }
 
     public async Task<bool> AddAsync(AcquisitionSourceTypeEntity entity, CancellationToken ct)
