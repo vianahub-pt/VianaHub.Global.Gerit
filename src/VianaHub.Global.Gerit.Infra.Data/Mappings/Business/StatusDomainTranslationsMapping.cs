@@ -42,12 +42,8 @@ public class StatusDomainTranslationsMapping : IEntityTypeConfiguration<StatusDo
             .HasMaxLength(300)
             .IsRequired(false);
 
-        // Relacionamento FK
-        builder.HasOne(x => x.StatusDomain)
-            .WithMany()
-            .HasForeignKey(x => x.StatusDomainId)
-            .HasConstraintName("FK_StatusDomainTranslations_StatusDomain")
-            .OnDelete(DeleteBehavior.Restrict);
+        // Relacionamento FK configurado exclusivamente em StatusDomainMapping
+        // para evitar shadow FK StatusDomainEntityId gerada por convenção do EF Core.
 
         // Constraint único composto (StatusDomainId + LanguageCode)
         builder.HasIndex(x => new { x.StatusDomainId, x.LanguageCode })

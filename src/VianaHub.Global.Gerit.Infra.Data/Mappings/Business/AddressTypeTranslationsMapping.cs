@@ -43,12 +43,8 @@ public class AddressTypeTranslationsMapping : IEntityTypeConfiguration<AddressTy
             .HasMaxLength(500)
             .IsRequired(false);
 
-        // Relacionamento FK
-        builder.HasOne(x => x.AddressType)
-            .WithMany()
-            .HasForeignKey(x => x.AddressTypeId)
-            .HasConstraintName("FK_AddressTypeTranslations_AddressType")
-            .OnDelete(DeleteBehavior.Restrict);
+        // Relacionamento FK configurado exclusivamente em AddressTypeMapping
+        // para evitar shadow FK AddressTypeEntityId gerada por convenção do EF Core.
 
         // Constraint único composto (AddressTypeId + LanguageCode)
         builder.HasIndex(x => new { x.AddressTypeId, x.LanguageCode })
