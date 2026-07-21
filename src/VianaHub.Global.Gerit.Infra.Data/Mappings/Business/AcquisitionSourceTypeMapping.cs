@@ -31,10 +31,6 @@ public class AcquisitionSourceTypeMapping : IEntityTypeConfiguration<Acquisition
             .HasDatabaseName("UQ_AcquisitionSourceTypes_Code")
             .IsUnique();
 
-        // Name e Description est�o na tabela de tradu��es (AcquisitionSourceTypeTranslations)
-        builder.Ignore(x => x.Name);
-        builder.Ignore(x => x.Description);
-
         builder.Property(x => x.IsActive)
             .HasDefaultValue(true)
             .IsRequired();
