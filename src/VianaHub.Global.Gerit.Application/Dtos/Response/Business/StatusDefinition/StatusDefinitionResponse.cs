@@ -13,4 +13,7 @@ public class StatusDefinitionResponse
     public int DisplayOrder { get; set; }
     public bool IsSystem { get; set; }
     public bool IsActive { get; set; }
+    public int TenantId { get; set; }
+    public string? TenantName { get; set; }
+    public string? LanguageCode { get; set; }
 }
