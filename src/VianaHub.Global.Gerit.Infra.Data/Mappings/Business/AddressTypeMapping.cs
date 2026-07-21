@@ -22,9 +22,6 @@ public class AddressTypeMapping : IEntityTypeConfiguration<AddressTypeEntity>
             .IsRequired();
 
         // Propriedades
-        builder.Ignore(x => x.Name);
-        builder.Ignore(x => x.Description);
-
         builder.Property(x => x.Code)
             .HasColumnType("NVARCHAR(50)")
             .HasMaxLength(50)

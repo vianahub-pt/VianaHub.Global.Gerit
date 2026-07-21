@@ -79,7 +79,11 @@ public class AcquisitionSourceTypeAppService : IAcquisitionSourceTypeAppService
             return 0;
         }
 
-        var entity = new AcquisitionSourceTypeEntity(request.Code, request.Name, request.Description, _currentUser.GetUserId());
+        var entity = new AcquisitionSourceTypeEntity(request.Code, _currentUser.GetUserId());
+        // Persistir Name e Description na tabela de traduções (idioma padrão: pt-PT)
+        var translation = new AcquisitionSourceTypeTranslationsEntity(0, "pt-PT", request.Name, request.Description);
+        entity.AddTranslation(translation);
+
         var success = await _domain.CreateAsync(entity, ct);
         return success ? entity.Id : 0;
     }
@@ -93,7 +97,18 @@ public class AcquisitionSourceTypeAppService : IAcquisitionSourceTypeAppService
             return false;
         }
 
-        entity.Update(request.Name, request.Description, _currentUser.GetUserId());
+        // Atualizar a tradução no idioma padrão (pt-PT) em vez de propriedades-fantasma
+        var translation = entity.Translations.FirstOrDefault(t => t.LanguageCode == "pt-PT");
+        if (translation != null)
+        {
+            translation.Update(request.Name, request.Description);
+        }
+        else
+        {
+            // Se não existir tradução pt-PT, cria uma nova
+            entity.AddTranslation(new AcquisitionSourceTypeTranslationsEntity(entity.Id, "pt-PT", request.Name, request.Description));
+        }
+
         return await _domain.UpdateAsync(entity, ct);
     }
 

@@ -83,7 +83,11 @@ public class AddressTypeAppService : IAddressTypeAppService
             return 0;
         }
 
-        var entity = new AddressTypeEntity(request.Name, request.Description, _currentUser.GetUserId());
+        var entity = new AddressTypeEntity(_currentUser.GetUserId());
+        // Persistir Name e Description na tabela de traduções (idioma padrão: pt-PT)
+        var translation = new AddressTypeTranslationsEntity(0, "pt-PT", request.Name, request.Description);
+        entity.AddTranslation(translation);
+
         var success = await _domain.CreateAsync(entity, ct);
         return success ? entity.Id : 0;
     }
@@ -97,7 +101,7 @@ public class AddressTypeAppService : IAddressTypeAppService
             return false;
         }
 
-        // Verifica se j� existe outro com o mesmo nome no mesmo tenant
+        // Verifica se já existe outro com o mesmo nome no mesmo tenant
         var exists = await _repo.ExistsByNameAsync(request.Name, ct);
         if (exists)
         {
@@ -105,7 +109,18 @@ public class AddressTypeAppService : IAddressTypeAppService
             return false;
         }
 
-        entity.Update(request.Name, request.Description, _currentUser.GetUserId());
+        // Atualizar a tradução no idioma padrão (pt-PT) em vez de propriedades-fantasma
+        var translation = entity.Translations.FirstOrDefault(t => t.LanguageCode == "pt-PT");
+        if (translation != null)
+        {
+            translation.Update(request.Name, request.Description);
+        }
+        else
+        {
+            // Se não existir tradução pt-PT, cria uma nova
+            entity.AddTranslation(new AddressTypeTranslationsEntity(entity.Id, "pt-PT", request.Name, request.Description));
+        }
+
         return await _domain.UpdateAsync(entity, ct);
     }
 
@@ -270,10 +285,11 @@ public class AddressTypeAppService : IAddressTypeAppService
                 continue;
             }
 
-            // Cria a entidade
-            var entity = new AddressTypeEntity(item.Name, item.Description, _currentUser.GetUserId());
+            // Cria a entidade com tradução pt-PT
+            var entity = new AddressTypeEntity(_currentUser.GetUserId());
+            entity.AddTranslation(new AddressTypeTranslationsEntity(0, "pt-PT", item.Name, item.Description));
 
-            // Tenta criar no dom�nio
+            // Tenta criar no domínio
             var success = await _domain.CreateAsync(entity, ct);
 
             if (!success)

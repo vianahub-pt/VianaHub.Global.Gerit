@@ -21,6 +21,7 @@ public class EmployeeAddressDataRepository : IEmployeeAddressDataRepository
         return await _context.EmployeeAddresses
             .AsNoTracking()
             .Include(x => x.AddressType)
+                .ThenInclude(x => x.Translations)
             .Include(x => x.Employee)
             .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted, ct);
     }
@@ -30,6 +31,7 @@ public class EmployeeAddressDataRepository : IEmployeeAddressDataRepository
         return await _context.EmployeeAddresses
             .AsNoTracking()
             .Include(x => x.AddressType)
+                .ThenInclude(x => x.Translations)
             .Include(x => x.Employee)
             .Where(x => !x.IsDeleted)
             .OrderBy(x => x.EmployeeId)
@@ -42,6 +44,7 @@ public class EmployeeAddressDataRepository : IEmployeeAddressDataRepository
         var query = _context.EmployeeAddresses
             .AsNoTracking()
             .Include(x => x.AddressType)
+                .ThenInclude(x => x.Translations)
             .Include(x => x.Employee)
             .Where(x => !x.IsDeleted);
 
@@ -53,7 +56,7 @@ public class EmployeeAddressDataRepository : IEmployeeAddressDataRepository
                 EF.Functions.Like(x.City.ToLower(), $"%{searchLower}%") ||
                 EF.Functions.Like(x.PostalCode.ToLower(), $"%{searchLower}%") ||
                 EF.Functions.Like(x.District.ToLower(), $"%{searchLower}%") ||
-                EF.Functions.Like(x.AddressType.Name.ToLower(), $"%{searchLower}%") ||
+                x.AddressType.Translations.Any(t => EF.Functions.Like(t.Name.ToLower(), $"%{searchLower}%")) ||
                 EF.Functions.Like(x.Employee.Name.ToLower(), $"%{searchLower}%"));
         }
 
@@ -106,6 +109,7 @@ public class EmployeeAddressDataRepository : IEmployeeAddressDataRepository
         return await _context.EmployeeAddresses
             .AsNoTracking()
             .Include(x => x.AddressType)
+                .ThenInclude(x => x.Translations)
             .Include(x => x.Employee)
             .FirstOrDefaultAsync(x => x.EmployeeId == EmployeeId && x.IsPrimary && !x.IsDeleted, ct);
     }

@@ -3,12 +3,11 @@ using VianaHub.Global.Gerit.Domain.Base;
 namespace VianaHub.Global.Gerit.Domain.Entities.Business;
 
 /// <summary>
-/// Entidade que representa um Tipo de Endereço (Residencial, Comercial, etc.)
+/// Entidade que representa um Tipo de Endereço (Residencial, Comercial, etc.).
+/// Name e Description residem exclusivamente na tabela de traduções (AddressTypeTranslations).
 /// </summary>
 public class AddressTypeEntity : Entity
 {
-    public string? Name { get; private set; }
-    public string? Description { get; private set; }
     public string? Code { get; private set; }
     public bool IsActive { get; private set; }
     public bool IsDeleted { get; private set; }
@@ -20,20 +19,20 @@ public class AddressTypeEntity : Entity
     protected AddressTypeEntity() { }
 
     /// <summary>
-    /// Construtor para criação de um novo Tipo de Endereço
+    /// Construtor para criação de um novo Tipo de Endereço sem código.
+    /// Name e Description devem ser persistidos via AddTranslation() na tabela de traduções.
     /// </summary>
-    public AddressTypeEntity(string name, string description, int createdBy)
-        : this(name, description, code: null, createdBy)
+    public AddressTypeEntity(int createdBy)
+        : this(code: null, createdBy)
     {
     }
 
     /// <summary>
     /// Construtor completo para criação de um novo Tipo de Endereço, incluindo o Code de identificação.
+    /// Name e Description devem ser persistidos via AddTranslation() na tabela de traduções.
     /// </summary>
-    public AddressTypeEntity(string name, string description, string code, int createdBy)
+    public AddressTypeEntity(string? code, int createdBy)
     {
-        Name = name;
-        Description = description;
         Code = code;
         IsActive = true;
         IsDeleted = false;
@@ -42,14 +41,18 @@ public class AddressTypeEntity : Entity
         Translations = new List<AddressTypeTranslationsEntity>();
     }
 
-    public void Update(string name, string description, int modifiedBy)
+    /// <summary>
+    /// Adiciona uma tradução (Name + Description por idioma) à entidade.
+    /// O FK AddressTypeId será resolvido pelo EF Core no SaveChanges.
+    /// </summary>
+    public void AddTranslation(AddressTypeTranslationsEntity translation)
     {
-        Name = name;
-        Description = description;
-        ModifiedBy = modifiedBy;
-        ModifiedAt = DateTime.UtcNow;
+        Translations.Add(translation);
     }
 
+    /// <summary>
+    /// Atualiza o código do Tipo de Endereço.
+    /// </summary>
     public void UpdateCode(string code, int modifiedBy)
     {
         Code = code;

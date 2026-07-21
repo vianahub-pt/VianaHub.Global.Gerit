@@ -22,7 +22,7 @@ public class AddressTypeDataRepository : IAddressTypeDataRepository
             .AsNoTracking()
             .Include(x => x.Translations)
             .Where(x => !x.IsDeleted)
-            .OrderBy(x => x.Name)
+            .OrderBy(x => x.Code)
             .ToListAsync(ct);
     }
     public async Task<AddressTypeEntity> GetByIdAsync(int id, CancellationToken ct)
@@ -43,8 +43,10 @@ public class AddressTypeDataRepository : IAddressTypeDataRepository
         {
             var search = request.Search.Trim().ToLower();
             query = query.Where(x => 
-                EF.Functions.Like(x.Name.ToLower(), $"%{search}%") ||
-                EF.Functions.Like(x.Description.ToLower(), $"%{search}%")
+                x.Translations.Any(t =>
+                    EF.Functions.Like(t.Name.ToLower(), $"%{search}%") ||
+                    (t.Description != null && EF.Functions.Like(t.Description.ToLower(), $"%{search}%"))
+                )
             );
         }
 
@@ -82,7 +84,7 @@ public class AddressTypeDataRepository : IAddressTypeDataRepository
     {
         return await _context.Set<AddressTypeEntity>()
             .AsNoTracking()
-            .AnyAsync(x => x.Name == name && !x.IsDeleted, ct);
+            .AnyAsync(x => !x.IsDeleted && x.Translations.Any(t => t.Name == name), ct);
     }
 
     public async Task<bool> AddAsync(AddressTypeEntity entity, CancellationToken ct)

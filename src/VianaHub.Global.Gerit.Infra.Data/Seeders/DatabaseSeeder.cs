@@ -31,22 +31,32 @@ public class DatabaseSeeder
 
         var seeds = new List<AcquisitionSourceTypeEntity>
         {
-            new("INSTAGRAM", "Instagram", "Aquisicao via Instagram", 1),
-            new("FACEBOOK", "Facebook", "Aquisicao via Facebook", 1),
-            new("LINKEDIN", "LinkedIn", "Aquisicao via LinkedIn", 1),
-            new("GOOGLE", "Google", "Aquisicao via Google", 1),
-            new("WHATSAPP", "WhatsApp", "Aquisicao via WhatsApp", 1),
-            new("FRIENDS", "Amigos", "Indicacao de amigos", 1),
-            new("EVENTS", "Eventos", "Aquisicao em eventos", 1),
-            new("TELEVISION", "Televisao", "Aquisicao via televisao", 1),
-            new("RADIO", "Radio", "Aquisicao via radio", 1),
-            new("NEWSPAPER", "Jornal", "Aquisicao via jornal", 1),
-            new("MAGAZINE", "Revista", "Aquisicao via revista", 1),
-            new("OTHER", "Outro", "Outras formas de aquisicao", 1),
+            CreateSeed("INSTAGRAM", "Instagram", "Aquisicao via Instagram", 1),
+            CreateSeed("FACEBOOK", "Facebook", "Aquisicao via Facebook", 1),
+            CreateSeed("LINKEDIN", "LinkedIn", "Aquisicao via LinkedIn", 1),
+            CreateSeed("GOOGLE", "Google", "Aquisicao via Google", 1),
+            CreateSeed("WHATSAPP", "WhatsApp", "Aquisicao via WhatsApp", 1),
+            CreateSeed("FRIENDS", "Amigos", "Indicacao de amigos", 1),
+            CreateSeed("EVENTS", "Eventos", "Aquisicao em eventos", 1),
+            CreateSeed("TELEVISION", "Televisao", "Aquisicao via televisao", 1),
+            CreateSeed("RADIO", "Radio", "Aquisicao via radio", 1),
+            CreateSeed("NEWSPAPER", "Jornal", "Aquisicao via jornal", 1),
+            CreateSeed("MAGAZINE", "Revista", "Aquisicao via revista", 1),
+            CreateSeed("OTHER", "Outro", "Outras formas de aquisicao", 1),
         };
 
         _context.Set<AcquisitionSourceTypeEntity>().AddRange(seeds);
         await _context.SaveChangesAsync(ct);
         _logger.LogInformation("Seed de AcquisitionSourceTypes concluido: {Count} registros.", seeds.Count);
+    }
+
+    /// <summary>
+    /// Cria uma entidade AcquisitionSourceType com tradução pt-PT embutida para seed.
+    /// </summary>
+    private static AcquisitionSourceTypeEntity CreateSeed(string code, string name, string description, int createdBy)
+    {
+        var entity = new AcquisitionSourceTypeEntity(code, createdBy);
+        entity.AddTranslation(new AcquisitionSourceTypeTranslationsEntity(0, "pt-PT", name, description));
+        return entity;
     }
 }

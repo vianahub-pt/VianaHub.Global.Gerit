@@ -10,12 +10,9 @@ public class UpdateAcquisitionSourceTypeValidator : AbstractValidator<Acquisitio
     {
         RuleFor(x => x.Id).GreaterThan(0).WithMessage(localization.GetMessage("Domain.AcquisitionSourceType.IdRequired"));
 
-        RuleFor(x => x.Name)
-            .NotEmpty().WithMessage(localization.GetMessage("Domain.AcquisitionSourceType.NameRequired"))
-            .MaximumLength(100).WithMessage(localization.GetMessage("Domain.AcquisitionSourceType.NameMaxLength", 100));
-
-        RuleFor(x => x.Description)
-            .MaximumLength(300).WithMessage(localization.GetMessage("Domain.AcquisitionSourceType.DescriptionMaxLength", 300));
+        RuleFor(x => x.Code)
+            .NotEmpty().WithMessage(localization.GetMessage("Domain.AcquisitionSourceType.CodeRequired"))
+            .MaximumLength(50).WithMessage(localization.GetMessage("Domain.AcquisitionSourceType.CodeMaxLength", 50));
 
         RuleFor(x => x.ModifiedBy)
             .NotNull().WithMessage(localization.GetMessage("Domain.AcquisitionSourceType.ModifiedByRequired"))
