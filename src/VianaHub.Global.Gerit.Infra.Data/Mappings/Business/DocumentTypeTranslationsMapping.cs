@@ -42,12 +42,8 @@ public class DocumentTypeTranslationsMapping : IEntityTypeConfiguration<Document
             .HasMaxLength(300)
             .IsRequired(false);
 
-        // Relacionamento FK
-        builder.HasOne(x => x.DocumentType)
-            .WithMany()
-            .HasForeignKey(x => x.DocumentTypeId)
-            .HasConstraintName("FK_DocumentTypeTranslations_DocumentType")
-            .OnDelete(DeleteBehavior.Restrict);
+        // Relacionamento FK configurado exclusivamente em DocumentTypeMapping
+        // para evitar shadow FK DocumentTypeEntityId gerada por convenção do EF Core.
 
         // Constraint único composto (DocumentTypeId + LanguageCode)
         builder.HasIndex(x => new { x.DocumentTypeId, x.LanguageCode })

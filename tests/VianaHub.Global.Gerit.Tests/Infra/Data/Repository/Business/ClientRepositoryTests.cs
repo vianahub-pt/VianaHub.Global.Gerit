@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using VianaHub.Global.Gerit.Domain.Entities.Billing;
 using VianaHub.Global.Gerit.Domain.Entities.Business;
 using VianaHub.Global.Gerit.Domain.ReadModels;
 using VianaHub.Global.Gerit.Infra.Data.Context;
@@ -36,6 +37,25 @@ namespace VianaHub.Global.Gerit.Tests.Infra.Data.Repository.Business
 
             await using (var context = new GeritDbContext(options))
             {
+                // Seed required related entities (PartyType, AcquisitionSourceType, Tenant)
+                // necessários porque o repositório faz Include com navegações obrigatórias,
+                // que o InMemory provider trata como INNER JOIN.
+                var partyType = new PartyTypeEntity("PF", 1);
+                context.PartyTypes.Add(partyType);
+                // PartyTypeEntity.Id é TINYINT sem identity — force-set Id=1
+                context.Entry(partyType).Property("Id").CurrentValue = (byte)1;
+
+                var acquisitionSourceType = new AcquisitionSourceTypeEntity("DIRECT", 1);
+                context.AcquisitionSourceTypes.Add(acquisitionSourceType);
+                // AcquisitionSourceTypeEntity.Id é INT com identity — auto-gera Id=1
+
+                var tenant = new TenantEntity(1, 1, "Test Tenant", "tenant@test.local", null, null, null, 1);
+                context.Tenants.Add(tenant);
+                // TenantEntity.Id é INT com identity — auto-gera Id=1
+
+                await context.SaveChangesAsync();
+
+                // Agora criar os clients de teste
                 var active = CreateActiveClient("Teste Active User", "active@test.local");
                 var deleted = CreateDeletedClient("Teste Deleted User", "deleted@test.local");
 
@@ -64,6 +84,19 @@ namespace VianaHub.Global.Gerit.Tests.Infra.Data.Repository.Business
 
             await using (var context = new GeritDbContext(options))
             {
+                // Seed required related entities
+                var partyType = new PartyTypeEntity("PF", 1);
+                context.PartyTypes.Add(partyType);
+                context.Entry(partyType).Property("Id").CurrentValue = (byte)1;
+
+                var acquisitionSourceType = new AcquisitionSourceTypeEntity("DIRECT", 1);
+                context.AcquisitionSourceTypes.Add(acquisitionSourceType);
+
+                var tenant = new TenantEntity(1, 1, "Test Tenant", "tenant@test.local", null, null, null, 1);
+                context.Tenants.Add(tenant);
+
+                await context.SaveChangesAsync();
+
                 var active = CreateActiveClient("Alice Active", "alice.active@test.local");
                 var deleted = CreateDeletedClient("Alice Deleted", "alice.deleted@test.local");
 
@@ -92,6 +125,19 @@ namespace VianaHub.Global.Gerit.Tests.Infra.Data.Repository.Business
 
             await using (var context = new GeritDbContext(options))
             {
+                // Seed required related entities
+                var partyType = new PartyTypeEntity("PF", 1);
+                context.PartyTypes.Add(partyType);
+                context.Entry(partyType).Property("Id").CurrentValue = (byte)1;
+
+                var acquisitionSourceType = new AcquisitionSourceTypeEntity("DIRECT", 1);
+                context.AcquisitionSourceTypes.Add(acquisitionSourceType);
+
+                var tenant = new TenantEntity(1, 1, "Test Tenant", "tenant@test.local", null, null, null, 1);
+                context.Tenants.Add(tenant);
+
+                await context.SaveChangesAsync();
+
                 var deleted1 = CreateDeletedClient("Del1 User", "del1@test.local");
                 var deleted2 = CreateDeletedClient("Del2 User", "del2@test.local");
 

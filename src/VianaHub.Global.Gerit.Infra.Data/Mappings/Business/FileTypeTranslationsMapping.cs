@@ -42,12 +42,8 @@ public class FileTypeTranslationsMapping : IEntityTypeConfiguration<FileTypeTran
             .HasMaxLength(300)
             .IsRequired(false);
 
-        // Relacionamento FK
-        builder.HasOne(x => x.FileType)
-            .WithMany()
-            .HasForeignKey(x => x.FileTypeId)
-            .HasConstraintName("FK_FileTypeTranslations_FileType")
-            .OnDelete(DeleteBehavior.Restrict);
+        // Relacionamento FK configurado exclusivamente em FileTypeMapping
+        // para evitar shadow FK FileTypeEntityId gerada por convenção do EF Core.
 
         // Constraint único composto (FileTypeId + LanguageCode)
         builder.HasIndex(x => new { x.FileTypeId, x.LanguageCode })
