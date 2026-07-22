@@ -19,7 +19,7 @@ public class VisitTeamEmployeeValidator : IEntityDomainValidator<VisitTeamEmploy
     public async Task<ValidationResult> ValidateForActivateAsync(VisitTeamEmployeeEntity entity)
     {
         if (entity == null)
-            return new ValidationResult(new[] { new ValidationFailure("Entity", "visit_team_employee.entity.null") });
+            return new ValidationResult(new[] { new ValidationFailure("Entity", "Domain.VisitTeamEmployee.EntityNull") });
 
         return await Task.FromResult(new ValidationResult());
     }
@@ -27,7 +27,7 @@ public class VisitTeamEmployeeValidator : IEntityDomainValidator<VisitTeamEmploy
     public async Task<ValidationResult> ValidateForDeactivateAsync(VisitTeamEmployeeEntity entity)
     {
         if (entity == null)
-            return new ValidationResult(new[] { new ValidationFailure("Entity", "visit_team_employee.entity.null") });
+            return new ValidationResult(new[] { new ValidationFailure("Entity", "Domain.VisitTeamEmployee.EntityNull") });
 
         return await Task.FromResult(new ValidationResult());
     }
@@ -35,7 +35,7 @@ public class VisitTeamEmployeeValidator : IEntityDomainValidator<VisitTeamEmploy
     public async Task<ValidationResult> ValidateForDeleteAsync(VisitTeamEmployeeEntity entity)
     {
         if (entity == null)
-            return new ValidationResult(new[] { new ValidationFailure("Entity", "visit_team_employee.entity.null") });
+            return new ValidationResult(new[] { new ValidationFailure("Entity", "Domain.VisitTeamEmployee.EntityNull") });
 
         return await Task.FromResult(new ValidationResult());
     }
@@ -43,7 +43,7 @@ public class VisitTeamEmployeeValidator : IEntityDomainValidator<VisitTeamEmploy
     public async Task<ValidationResult> ValidateForRevokeAsync(VisitTeamEmployeeEntity entity)
     {
         if (entity == null)
-            return new ValidationResult(new[] { new ValidationFailure("Entity", "visit_team_employee.entity.null") });
+            return new ValidationResult(new[] { new ValidationFailure("Entity", "Domain.VisitTeamEmployee.EntityNull") });
 
         return await Task.FromResult(new ValidationResult());
     }
@@ -54,27 +54,27 @@ public class VisitTeamEmployeeValidator : IEntityDomainValidator<VisitTeamEmploy
 
         if (entity == null)
         {
-            errors.Add(new ValidationFailure("Entity", "visit_team_employee.entity.null"));
+            errors.Add(new ValidationFailure("Entity", "Domain.VisitTeamEmployee.EntityNull"));
             return new ValidationResult(errors);
         }
 
         if (entity.TenantId <= 0)
-            errors.Add(new ValidationFailure(nameof(entity.TenantId), "visit_team_employee.tenant_id.invalid"));
+            errors.Add(new ValidationFailure(nameof(entity.TenantId), "Domain.VisitTeamEmployee.TenantIdInvalid"));
 
         if (entity.VisitTeamId <= 0)
-            errors.Add(new ValidationFailure(nameof(entity.VisitTeamId), "visit_team_employee.visit_team_id.invalid"));
+            errors.Add(new ValidationFailure(nameof(entity.VisitTeamId), "Domain.VisitTeamEmployee.VisitTeamIdInvalid"));
 
         if (entity.EmployeeId <= 0)
-            errors.Add(new ValidationFailure(nameof(entity.EmployeeId), "visit_team_employee.employee_id.invalid"));
+            errors.Add(new ValidationFailure(nameof(entity.EmployeeId), "Domain.VisitTeamEmployee.EmployeeIdInvalid"));
 
         if (entity.VisitTeamFunctionId <= 0)
-            errors.Add(new ValidationFailure(nameof(entity.VisitTeamFunctionId), "visit_team_employee.function_id.invalid"));
+            errors.Add(new ValidationFailure(nameof(entity.VisitTeamFunctionId), "Domain.VisitTeamEmployee.FunctionIdInvalid"));
 
         if (entity.StartDateTime == default)
-            errors.Add(new ValidationFailure(nameof(entity.StartDateTime), "visit_team_employee.start_date_time.required"));
+            errors.Add(new ValidationFailure(nameof(entity.StartDateTime), "Domain.VisitTeamEmployee.StartDateTimeRequired"));
 
         if (entity.EndDateTime.HasValue && entity.EndDateTime.Value < entity.StartDateTime)
-            errors.Add(new ValidationFailure(nameof(entity.EndDateTime), "visit_team_employee.end_date_time.must_be_after_start"));
+            errors.Add(new ValidationFailure(nameof(entity.EndDateTime), "Domain.VisitTeamEmployee.EndDateTimeMustBeAfterStart"));
 
         return await Task.FromResult(new ValidationResult(errors));
     }

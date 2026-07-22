@@ -8,6 +8,6 @@ public class CreateVisitAttachmentRouteValidator : AbstractValidator<int>
     {
         RuleFor(x => x)
             .GreaterThan(0)
-            .WithMessage("visit_attachment.id.invalid");
+            .WithMessage("Domain.VisitAttachment.IdInvalid");
     }
 }

@@ -8,6 +8,6 @@ public class CreateVisitTeamEmployeeRouteValidator : AbstractValidator<int>
     {
         RuleFor(x => x)
             .GreaterThan(0)
-            .WithMessage("visit_team_employee.id.invalid");
+            .WithMessage("Domain.VisitTeamEmployee.IdInvalid");
     }
 }
