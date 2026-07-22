@@ -6,6 +6,42 @@ namespace VianaHub.Global.Gerit.Domain.Tools.Pagination;
 public static class CreateSort
 {
     /// <summary>
+    /// Obtém uma propriedade pelo nome de forma segura, evitando AmbiguousMatchException
+    /// quando uma classe derivada sombreia uma propriedade da classe base com 'new'
+    /// (ex: PartyTypeEntity com 'new byte Id' sombreando 'Entity.Id' int).
+    /// </summary>
+    private static PropertyInfo? GetPropertySafe(Type type, string name, BindingFlags flags)
+    {
+        try
+        {
+            return type.GetProperty(name, flags);
+        }
+        catch (AmbiguousMatchException)
+        {
+            // Propriedade sombreada (ex: PartyTypeEntity.Id 'new byte' sombreia Entity.Id int).
+            // Usa DeclaredOnly para obter a propriedade mais derivada.
+            var declared = type.GetProperty(name, flags | BindingFlags.DeclaredOnly);
+            if (declared != null)
+                return declared;
+
+            // Se não encontrou no tipo atual, procura na hierarquia acima
+            var baseType = type.BaseType;
+            while (baseType != null)
+            {
+                try
+                {
+                    return baseType.GetProperty(name, flags | BindingFlags.DeclaredOnly);
+                }
+                catch (AmbiguousMatchException)
+                {
+                    baseType = baseType.BaseType;
+                }
+            }
+            return null;
+        }
+    }
+
+    /// <summary>
     /// Cria uma expressão de ordenação baseada no nome da propriedade
     /// Esta implementação tenta localizar a propriedade/field de forma case-insensitive e
     /// cai para um fallback seguro (propriedade 'Id' quando disponível) ou uma constante,
@@ -29,7 +65,7 @@ public static class CreateSort
         static Expression<Func<TEntity, object>> SafeFallback<TEntity>(ParameterExpression param)
         {
             var type = typeof(TEntity);
-            var idProp = type.GetProperty("Id", BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
+            var idProp = GetPropertySafe(type, "Id", BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
             if (idProp != null)
             {
                 var prop = Expression.Property(param, idProp);
@@ -47,8 +83,8 @@ public static class CreateSort
             {
                 foreach (var item in orderBy.Split('.', StringSplitOptions.RemoveEmptyEntries))
                 {
-                    // procura PropertyInfo (case-insensitive)
-                    var propInfo = currentType.GetProperty(item, BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
+                    // procura PropertyInfo (case-insensitive) — uso de GetPropertySafe para evitar AmbiguousMatchException
+                    var propInfo = GetPropertySafe(currentType, item, BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
                     if (propInfo != null)
                     {
                         propertyExpression = Expression.Property(propertyExpression, propInfo);
@@ -71,8 +107,8 @@ public static class CreateSort
             }
             else
             {
-                // procura PropertyInfo (case-insensitive)
-                var propInfo = currentType.GetProperty(orderBy, BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
+                // procura PropertyInfo (case-insensitive) — uso de GetPropertySafe para evitar AmbiguousMatchException
+                var propInfo = GetPropertySafe(currentType, orderBy, BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
                 if (propInfo != null)
                 {
                     propertyExpression = Expression.Property(parameter, propInfo);

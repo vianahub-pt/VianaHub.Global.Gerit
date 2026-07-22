@@ -162,6 +162,8 @@ public static class DependencyInjection
         services.AddScoped<IAcquisitionSourceTypeAppService, AcquisitionSourceTypeAppService>();
         services.AddScoped<IStatusDefinitionAppService, StatusDefinitionAppService>();
         services.AddScoped<IDocumentTypeAppService, DocumentTypeAppService>();
+        services.AddScoped<IPartyTypeAppService, PartyTypeAppService>();
+        services.AddScoped<IStatusDomainAppService, StatusDomainAppService>();
         services.AddScoped<IVisitTeamFunctionAppService, VisitTeamFunctionAppService>();
         services.AddScoped<ITeamAppService, TeamAppService>();
         services.AddScoped<IVehicleAppService, VehicleAppService>();
