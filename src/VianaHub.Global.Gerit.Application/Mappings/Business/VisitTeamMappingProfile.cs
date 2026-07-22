@@ -14,6 +14,10 @@ public class VisitTeamMappingProfile : Profile
             .ForMember(dest => dest.Team, opt => opt.MapFrom(src => src.Team.Name))
             .ForMember(dest => dest.Visit, opt => opt.MapFrom(src => src.Visit.Title));
 
+        CreateMap<VisitTeamEntity, VisitTeamDetailResponse>()
+            .ForMember(dest => dest.Team, opt => opt.MapFrom(src => src.Team.Name))
+            .ForMember(dest => dest.Visit, opt => opt.MapFrom(src => src.Visit.Title));
+
         CreateMap<ListPage<VisitTeamEntity>, ListPageResponse<VisitTeamResponse>>();
     }
 }
