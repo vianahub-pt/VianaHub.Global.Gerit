@@ -55,7 +55,7 @@ public class AddressTypeAppService : IAddressTypeAppService
         return _mapper.Map<IEnumerable<AddressTypeResponse>>(entities);
     }
 
-    public async Task<AddressTypeResponse> GetByIdAsync(int id, CancellationToken ct)
+    public async Task<AddressTypeDetailResponse> GetByIdAsync(int id, CancellationToken ct)
     {
         var entity = await _repo.GetByIdAsync(id, ct);
         if (entity == null || entity.IsDeleted || !entity.IsActive)
@@ -63,7 +63,7 @@ public class AddressTypeAppService : IAddressTypeAppService
             _notify.Add(_localization.GetMessage("Application.Service.AddressType.GetById.ResourceNotFound"), 410);
             return null;
         }
-        return _mapper.Map<AddressTypeResponse>(entity);
+        return _mapper.Map<AddressTypeDetailResponse>(entity);
     }
 
     public async Task<ListPageResponse<AddressTypeResponse>> GetPagedAsync(PagedFilterRequest request, CancellationToken ct)
