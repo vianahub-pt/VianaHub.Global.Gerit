@@ -8,7 +8,7 @@ namespace VianaHub.Global.Gerit.Application.Interfaces.Business;
 public interface IFileTypeAppService
 {
     Task<IEnumerable<FileTypeResponse>> GetAllAsync(CancellationToken ct);
-    Task<FileTypeResponse> GetByIdAsync(int id, CancellationToken ct);
+    Task<FileTypeDetailResponse> GetByIdAsync(int id, CancellationToken ct);
     Task<ListPageResponse<FileTypeResponse>> GetPagedAsync(PagedFilterRequest request, CancellationToken ct);
     Task<int> CreateAsync(CreateFileTypeRequest request, CancellationToken ct);
     Task<bool> UpdateAsync(int id, UpdateFileTypeRequest request, CancellationToken ct);
