@@ -57,7 +57,7 @@ public class VisitAddressAppService : IVisitAddressAppService
         return _mapper.Map<IEnumerable<VisitAddressResponse>>(entities);
     }
 
-    public async Task<VisitAddressResponse> GetByIdAsync(int id, CancellationToken ct)
+    public async Task<VisitAddressDetailResponse> GetByIdAsync(int id, CancellationToken ct)
     {
         var entity = await _repo.GetByIdAsync(id, ct);
         if (entity == null || entity.IsDeleted || !entity.IsActive)
@@ -65,7 +65,7 @@ public class VisitAddressAppService : IVisitAddressAppService
             _notify.Add(_localization.GetMessage("Application.Service.VisitAddress.GetById.ResourceNotFound"), 410);
             return null;
         }
-        return _mapper.Map<VisitAddressResponse>(entity);
+        return _mapper.Map<VisitAddressDetailResponse>(entity);
     }
 
     public async Task<ListPageResponse<VisitAddressResponse>> GetPagedAsync(PagedFilterRequest request, CancellationToken ct)
