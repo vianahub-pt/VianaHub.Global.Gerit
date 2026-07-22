@@ -78,7 +78,7 @@ public class LocalizationService : ILocalizationService
                 return cached;
 
             var localesPath = Path.Combine(
-                Directory.GetCurrentDirectory(),
+                AppContext.BaseDirectory,
                 "locales"
             );
 
