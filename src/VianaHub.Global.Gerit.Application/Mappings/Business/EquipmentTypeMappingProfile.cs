@@ -11,6 +11,7 @@ public class EquipmentTypeMappingProfile : Profile
     public EquipmentTypeMappingProfile()
     {
         CreateMap<EquipmentTypeEntity, EquipmentTypeResponse>();
+        CreateMap<EquipmentTypeEntity, EquipmentTypeDetailResponse>();
         CreateMap<ListPage<EquipmentTypeEntity>, ListPageResponse<EquipmentTypeResponse>>();
     }
 }
