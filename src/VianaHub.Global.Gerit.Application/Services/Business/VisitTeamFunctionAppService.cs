@@ -55,7 +55,7 @@ public class VisitTeamFunctionAppService : IVisitTeamFunctionAppService
         return _mapper.Map<IEnumerable<VisitTeamFunctionResponse>>(entities);
     }
 
-    public async Task<VisitTeamFunctionResponse> GetByIdAsync(int id, CancellationToken ct)
+    public async Task<VisitTeamFunctionDetailResponse> GetByIdAsync(int id, CancellationToken ct)
     {
         var entity = await _repo.GetByIdAsync(id, ct);
         if (entity == null || entity.IsDeleted || !entity.IsActive)
@@ -63,7 +63,7 @@ public class VisitTeamFunctionAppService : IVisitTeamFunctionAppService
             _notify.Add(_localization.GetMessage("Application.Service.Function.Update.ResourceNotFound"), 410);
             return null;
         }
-        return _mapper.Map<VisitTeamFunctionResponse>(entity);
+        return _mapper.Map<VisitTeamFunctionDetailResponse>(entity);
     }
 
     public async Task<ListPageResponse<VisitTeamFunctionResponse>> GetPagedAsync(PagedFilterRequest request, CancellationToken ct)
