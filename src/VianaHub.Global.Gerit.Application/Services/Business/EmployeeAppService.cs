@@ -51,7 +51,7 @@ public class EmployeeAppService : IEmployeeAppService
         return _mapper.Map<IEnumerable<EmployeeResponse>>(entities);
     }
 
-    public async Task<EmployeeResponse> GetByIdAsync(int id, CancellationToken ct)
+    public async Task<EmployeeDetailResponse> GetByIdAsync(int id, CancellationToken ct)
     {
         var entity = await _repo.GetByIdAsync(id, ct);
         if (entity == null || entity.IsDeleted || !entity.IsActive)
@@ -59,7 +59,7 @@ public class EmployeeAppService : IEmployeeAppService
             _notify.Add(_localization.GetMessage("Application.Service.Employee.GetById.ResourceNotFound"), 410);
             return null;
         }
-        return _mapper.Map<EmployeeResponse>(entity);
+        return _mapper.Map<EmployeeDetailResponse>(entity);
     }
 
     public async Task<ListPageResponse<EmployeeResponse>> GetPagedAsync(PagedFilterRequest request, CancellationToken ct)
