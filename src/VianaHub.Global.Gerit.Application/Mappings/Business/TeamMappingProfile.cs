@@ -11,6 +11,7 @@ public class TeamMappingProfile : Profile
     public TeamMappingProfile()
     {
         CreateMap<TeamEntity, TeamResponse>();
+        CreateMap<TeamEntity, TeamDetailResponse>();
         CreateMap<ListPage<TeamEntity>, ListPageResponse<TeamResponse>>();
     }
 }
