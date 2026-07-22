@@ -51,7 +51,7 @@ public class VisitTeamEquipmentAppService : IVisitTeamEquipmentsAppService
         return _mapper.Map<IEnumerable<VisitTeamEquipmentResponse>>(entities);
     }
 
-    public async Task<VisitTeamEquipmentResponse> GetByIdAsync(int id, CancellationToken ct)
+    public async Task<VisitTeamEquipmentDetailResponse> GetByIdAsync(int id, CancellationToken ct)
     {
         var entity = await _repo.GetByIdAsync(id, ct);
         if (entity == null || entity.IsDeleted || !entity.IsActive)
@@ -59,7 +59,7 @@ public class VisitTeamEquipmentAppService : IVisitTeamEquipmentsAppService
             _notify.Add(_localization.GetMessage("Application.Service.VisitTeamEquipment.GetById.ResourceNotFound"), 410);
             return null;
         }
-        return _mapper.Map<VisitTeamEquipmentResponse>(entity);
+        return _mapper.Map<VisitTeamEquipmentDetailResponse>(entity);
     }
 
     public async Task<ListPageResponse<VisitTeamEquipmentResponse>> GetPagedAsync(PagedFilterRequest request, CancellationToken ct)
