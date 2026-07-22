@@ -52,7 +52,7 @@ public class AcquisitionSourceTypeAppService : IAcquisitionSourceTypeAppService
         return _mapper.Map<IEnumerable<AcquisitionSourceTypeResponse>>(entities);
     }
 
-    public async Task<AcquisitionSourceTypeResponse> GetByIdAsync(int id, CancellationToken ct)
+    public async Task<AcquisitionSourceTypeDetailResponse> GetByIdAsync(int id, CancellationToken ct)
     {
         var entity = await _repo.GetByIdAsync(id, ct);
         if (entity == null || entity.IsDeleted || !entity.IsActive)
@@ -60,7 +60,7 @@ public class AcquisitionSourceTypeAppService : IAcquisitionSourceTypeAppService
             _notify.Add(_localization.GetMessage("Application.Service.AcquisitionSourceType.GetById.ResourceNotFound"), 410);
             return null;
         }
-        return _mapper.Map<AcquisitionSourceTypeResponse>(entity);
+        return _mapper.Map<AcquisitionSourceTypeDetailResponse>(entity);
     }
 
     public async Task<ListPageResponse<AcquisitionSourceTypeResponse>> GetPagedAsync(PagedFilterRequest request, CancellationToken ct)
