@@ -9,8 +9,8 @@ using System.Text.Json;
 namespace VianaHub.Global.Gerit.Api.Configuration.Swagger;
 
 /// <summary>
-/// Document filter que traduz a documentação Swagger/OpenAPI baseado na cultura atual.
-/// Carrega todos os arquivos de localização presentes na pasta `Localization` recursivamente e mescla as chaves para a cultura solicitada.
+/// Document filter que traduz a documentaï¿½ï¿½o Swagger/OpenAPI baseado na cultura atual.
+/// Carrega todos os arquivos de localizaï¿½ï¿½o presentes na pasta `Localization` recursivamente e mescla as chaves para a cultura solicitada.
 /// </summary>
 public class SwaggerTranslationFilter : IDocumentFilter
 {
@@ -26,7 +26,7 @@ public class SwaggerTranslationFilter : IDocumentFilter
 
             Log.Debug("?? [Gerit:SwaggerTranslation] Applying translations for culture: {Culture}", culture);
 
-            // Carrega as traduções mescladas de todos os arquivos JSON na pasta Localization
+            // Carrega as traduï¿½ï¿½es mescladas de todos os arquivos JSON na pasta Localization
             var translations = LoadTranslations(culture);
             if (translations == null || translations.Count == 0)
             {
@@ -34,7 +34,7 @@ public class SwaggerTranslationFilter : IDocumentFilter
                 return;
             }
 
-            // Traduz as informações da API
+            // Traduz as informaï¿½ï¿½es da API
             TranslateApiInfo(swaggerDoc.Info, translations);
 
             // Traduz todos os paths (endpoints)
@@ -73,7 +73,7 @@ public class SwaggerTranslationFilter : IDocumentFilter
     }
 
     /// <summary>
-    /// Carrega as traduções procurando recursivamente por arquivos '*.{culture}.json' dentro da pasta 'Localization' e mescla-os.
+    /// Carrega as traduï¿½ï¿½es procurando recursivamente por arquivos '*.{culture}.json' dentro da pasta 'Localization' e mescla-os.
     /// Utiliza cache por cultura.
     /// </summary>
     private Dictionary<string, string>? LoadTranslations(string culture)
@@ -93,78 +93,41 @@ public class SwaggerTranslationFilter : IDocumentFilter
 
             try
             {
-                // Use AppContext.BaseDirectory para garantir que localizamos os arquivos na pasta de saída
+                // Use AppContext.BaseDirectory para garantir que localizamos os arquivos na pasta de saï¿½da
                 var basePath = AppContext.BaseDirectory;
-                var localizationPath = Path.Combine(basePath, "Localization");
+                var localesPath = Path.Combine(basePath, "locales");
 
-                if (!Directory.Exists(localizationPath))
+                if (!Directory.Exists(localesPath))
                 {
-                    Log.Warning("?? [Gerit:SwaggerTranslation] Localization folder not found: {Path}", localizationPath);
+                    Log.Warning("[Gerit:SwaggerTranslation] Locales folder not found: {Path}", localesPath);
                     _translationsCache[culture] = new Dictionary<string, string>();
                     return _translationsCache[culture];
                 }
 
                 var merged = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-                var duplicateKeys = new List<string>();
 
-                // Tentar cadeia de culturas: ex: "pt-PT", "pt", etc.
-                var tryCultures = new[] {
-                    culture,
-                    // Surround with try/catch for segurança caso a cultura seja inválida
-                    CultureInfo.GetCultureInfo(culture).Name,
-                    CultureInfo.GetCultureInfo(culture).TwoLetterISOLanguageName
-                }.Distinct().Where(x => !string.IsNullOrWhiteSpace(x)).ToArray();
+                // Carregar o ficheiro common.json para a cultura
+                var commonFilePath = Path.Combine(localesPath, culture, "common.json");
 
-                foreach (var c in tryCultures)
+                if (File.Exists(commonFilePath))
                 {
-                    // Buscar todos os arquivos que terminam com .{c}.json recursivamente
-                    var pattern = $"*.{c}.json";
-                    var files = Directory.GetFiles(localizationPath, pattern, SearchOption.AllDirectories);
-
-                    if (files.Length == 0)
+                    try
                     {
-                        Log.Debug("?? [Gerit:SwaggerTranslation] No files for pattern {Pattern} in {Path}", pattern, localizationPath);
-                        continue;
-                    }
-
-                    Log.Debug("?? [Gerit:SwaggerTranslation] Found {Count} files for culture token {CultureToken}", files.Length, c);
-
-                    foreach (var file in files)
-                    {
-                        try
+                        var json = File.ReadAllText(commonFilePath);
+                        var dict = JsonSerializer.Deserialize<Dictionary<string, string>>(json);
+                        if (dict != null && dict.Count > 0)
                         {
-                            var json = File.ReadAllText(file);
-                            var dict = JsonSerializer.Deserialize<Dictionary<string, string>>(json);
-                            if (dict == null || dict.Count == 0)
-                            {
-                                Log.Debug("?? [Gerit:SwaggerTranslation] File {File} is empty or invalid", Path.GetFileName(file));
-                                continue;
-                            }
-
                             foreach (var kvp in dict)
                             {
-                                if (merged.ContainsKey(kvp.Key))
-                                {
-                                    duplicateKeys.Add(kvp.Key);
-                                    // Não sobrescrever, manter primeira ocorrência (prioridade por ordem de descoberta)
-                                }
-                                else
-                                {
-                                    merged[kvp.Key] = kvp.Value;
-                                }
+                                merged[kvp.Key] = kvp.Value;
                             }
-
-                            Log.Debug("? [Gerit:SwaggerTranslation] Loaded {Count} messages from {File}", dict.Count, Path.GetFileName(file));
-                        }
-                        catch (Exception ex)
-                        {
-                            Log.Error(ex, "? [Gerit:SwaggerTranslation] Error loading translation file {File}", file);
+                            Log.Debug("[Gerit:SwaggerTranslation] Loaded {Count} translations from {File}", dict.Count, Path.GetFileName(commonFilePath));
                         }
                     }
-
-                    // Se já carregou chaves para a cultura exata, podemos parar antes de tentar a versão de duas letras
-                    if (merged.Count > 0)
-                        break;
+                    catch (Exception ex)
+                    {
+                        Log.Error(ex, "[Gerit:SwaggerTranslation] Error loading {File}", commonFilePath);
+                    }
                 }
 
                 if (merged.Count == 0)
@@ -172,29 +135,24 @@ public class SwaggerTranslationFilter : IDocumentFilter
                     // Tentar fallback pt-PT
                     if (!culture.Equals("pt-PT", StringComparison.OrdinalIgnoreCase))
                     {
-                        Log.Warning("?? [Gerit:SwaggerTranslation] No translations for {Culture}, trying fallback pt-PT", culture);
+                        Log.Warning("[Gerit:SwaggerTranslation] No translations for {Culture}, trying fallback pt-PT", culture);
                         var fallback = LoadTranslations("pt-PT");
                         _translationsCache[culture] = fallback ?? new Dictionary<string, string>();
                         return _translationsCache[culture];
                     }
 
-                    Log.Warning("?? [Gerit:SwaggerTranslation] No translation files found for culture chain: {Culture}", culture);
+                    Log.Warning("[Gerit:SwaggerTranslation] No translation files found for culture: {Culture}", culture);
                     _translationsCache[culture] = new Dictionary<string, string>();
                     return _translationsCache[culture];
                 }
 
-                if (duplicateKeys.Count > 0)
-                {
-                    Log.Warning("?? [Gerit:SwaggerTranslation] Found {Count} duplicate keys while merging translations: {Keys}", duplicateKeys.Count, string.Join(", ", duplicateKeys.Distinct()));
-                }
-
                 _translationsCache[culture] = merged;
-                Log.Information("? [Gerit:SwaggerTranslation] Successfully loaded {Count} translations for culture {Culture}", merged.Count, culture);
+                Log.Information("[Gerit:SwaggerTranslation] Successfully loaded {Count} translations for culture {Culture}", merged.Count, culture);
                 return merged;
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "? [Gerit:SwaggerTranslation] Error loading translations for culture: {Culture}", culture);
+                Log.Error(ex, "[Gerit:SwaggerTranslation] Error loading translations for culture: {Culture}", culture);
                 _translationsCache[culture] = new Dictionary<string, string>();
                 return _translationsCache[culture];
             }
@@ -223,7 +181,7 @@ public class SwaggerTranslationFilter : IDocumentFilter
     {
         if (operation == null) return;
 
-        // Traduz o Summary se começar com "Swagger."
+        // Traduz o Summary se comeï¿½ar com "Swagger."
         if (!string.IsNullOrEmpty(operation.Summary) && operation.Summary.StartsWith("Swagger."))
         {
             operation.Summary = GetTranslation(translations, operation.Summary, operation.Summary);
@@ -233,7 +191,7 @@ public class SwaggerTranslationFilter : IDocumentFilter
         operation.Summary = GetTranslation(translations, $"Swagger.Endpoint.{operation.OperationId}.Summary", operation.Summary);
         operation.Description = GetTranslation(translations, $"Swagger.Endpoint.{operation.OperationId}.Description", operation.Description);
 
-        // Traduz parâmetros
+        // Traduz parï¿½metros
         if (operation.Parameters != null)
         {
             foreach (var param in operation.Parameters)
@@ -270,7 +228,7 @@ public class SwaggerTranslationFilter : IDocumentFilter
     {
         if (schema == null) return;
 
-        // Tenta usar Title, se não existir usa Reference.Id (quando schemas são referenciados)
+        // Tenta usar Title, se nï¿½o existir usa Reference.Id (quando schemas sï¿½o referenciados)
         var schemaId = schema.Title ?? schema.Reference?.Id;
         if (!string.IsNullOrEmpty(schemaId))
         {
@@ -295,7 +253,7 @@ public class SwaggerTranslationFilter : IDocumentFilter
     }
 
     /// <summary>
-    /// Obtém a tradução ou retorna o valor padrão se não encontrar
+    /// Obtï¿½m a traduï¿½ï¿½o ou retorna o valor padrï¿½o se nï¿½o encontrar
     /// </summary>
     private string GetTranslation(Dictionary<string, string> translations, string key, string? defaultValue)
     {
