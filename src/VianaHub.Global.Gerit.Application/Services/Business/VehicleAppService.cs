@@ -51,15 +51,15 @@ public class VehicleAppService : IVehicleAppService
         return _mapper.Map<IEnumerable<VehicleResponse>>(entities);
     }
 
-    public async Task<VehicleResponse> GetByIdAsync(int id, CancellationToken ct)
+    public async Task<VehicleDetailResponse> GetByIdAsync(int id, CancellationToken ct)
     {
         var entity = await _repo.GetByIdAsync(id, ct);
         if (entity == null || entity.IsDeleted || !entity.IsActive)
         {
-            _notify.Add(_localization.GetMessage("Application.Service.Vehicle.Update.ResourceNotFound"), 410);
+            _notify.Add(_localization.GetMessage("Application.Service.Vehicle.GetById.ResourceNotFound"), 410);
             return null;
         }
-        return _mapper.Map<VehicleResponse>(entity);
+        return _mapper.Map<VehicleDetailResponse>(entity);
     }
 
     public async Task<ListPageResponse<VehicleResponse>> GetPagedAsync(PagedFilterRequest request, CancellationToken ct)
