@@ -20,6 +20,9 @@ public class PlanMappingProfile : Profile
         // Name e Description são resolvidos via TranslationResolver com base na cultura atual
         CreateMap<SubscriptionPlanEntity, PlanResponse>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+            .ForMember(dest => dest.Code, opt => opt.MapFrom(src => src.Code))
+            .ForMember(dest => dest.LanguageCode, opt => opt.MapFrom((src, _, _, _) =>
+                TranslationResolver.ResolveUsedLanguageCode(src.Translations, CultureInfo.CurrentCulture.Name, t => t.LanguageCode)))
             .ForMember(dest => dest.Name, opt => opt.MapFrom((src, _, _, _) =>
                 TranslationResolver.Resolve(src.Translations, CultureInfo.CurrentCulture.Name, t => t.LanguageCode, t => t.Name)))
             .ForMember(dest => dest.Description, opt => opt.MapFrom((src, _, _, _) =>
