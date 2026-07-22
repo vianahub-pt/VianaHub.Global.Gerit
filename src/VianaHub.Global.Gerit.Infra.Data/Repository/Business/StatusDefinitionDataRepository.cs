@@ -23,6 +23,7 @@ public class StatusDefinitionDataRepository : IStatusDefinitionDataRepository
             .Include(x => x.StatusDomain)
                 .ThenInclude(sd => sd.Translations)
             .Include(x => x.Translations)
+            .Include(x => x.Tenant)
             .Where(x => !x.IsDeleted)
             .OrderBy(x => x.DisplayOrder)
             .ToListAsync(ct);
@@ -35,6 +36,7 @@ public class StatusDefinitionDataRepository : IStatusDefinitionDataRepository
             .Include(x => x.StatusDomain)
                 .ThenInclude(sd => sd.Translations)
             .Include(x => x.Translations)
+            .Include(x => x.Tenant)
             .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted, ct);
     }
 
@@ -45,6 +47,7 @@ public class StatusDefinitionDataRepository : IStatusDefinitionDataRepository
             .Include(x => x.StatusDomain)
                 .ThenInclude(sd => sd.Translations)
             .Include(x => x.Translations)
+            .Include(x => x.Tenant)
             .Where(x => !x.IsDeleted);
 
         if (!string.IsNullOrWhiteSpace(request.Search))
