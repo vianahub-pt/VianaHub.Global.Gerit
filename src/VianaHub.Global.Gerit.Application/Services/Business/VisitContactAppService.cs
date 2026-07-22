@@ -69,6 +69,17 @@ public class VisitContactAppService : IVisitContactAppService
         return _mapper.Map<VisitContactResponse>(entity);
     }
 
+    public async Task<VisitContactDetailResponse> GetByIdDetailAsync(int id, CancellationToken ct)
+    {
+        var entity = await _repo.GetByIdAsync(id, ct);
+        if (entity == null || entity.IsDeleted || !entity.IsActive)
+        {
+            _notify.Add(_localization.GetMessage("Application.Service.VisitContact.GetById.ResourceNotFound"), 410);
+            return null;
+        }
+        return _mapper.Map<VisitContactDetailResponse>(entity);
+    }
+
     public async Task<ListPageResponse<VisitContactResponse>> GetPagedAsync(PagedFilterRequest request, CancellationToken ct)
     {
         var filter = new PagedFilter(request.Search, request.IsActive, request.PageNumber, request.PageSize, request.SortBy, request.SortDirection);

@@ -12,6 +12,7 @@ public interface IVisitContactAppService
 {
     Task<IEnumerable<VisitContactResponse>> GetAllAsync(CancellationToken ct);
     Task<VisitContactResponse> GetByIdAsync(int id, CancellationToken ct);
+    Task<VisitContactDetailResponse> GetByIdDetailAsync(int id, CancellationToken ct);
     Task<ListPageResponse<VisitContactResponse>> GetPagedAsync(PagedFilterRequest request, CancellationToken ct);
     Task<int> CreateAsync(CreateVisitContactRequest request, CancellationToken ct);
     Task<bool> UpdateAsync(int id, UpdateVisitContactRequest request, CancellationToken ct);

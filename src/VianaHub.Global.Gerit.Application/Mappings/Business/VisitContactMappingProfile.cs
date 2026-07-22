@@ -14,7 +14,9 @@ public class VisitContactPersonsMappingProfile : Profile
     public VisitContactPersonsMappingProfile()
     {
         CreateMap<VisitContactPersonsEntity, VisitContactResponse>()
-            .ForMember(dest => dest.Visit, opt => opt.MapFrom(src => src.Visit.Title)); 
+            .ForMember(dest => dest.Visit, opt => opt.MapFrom(src => src.Visit.Title));
+        CreateMap<VisitContactPersonsEntity, VisitContactDetailResponse>()
+            .ForMember(dest => dest.Visit, opt => opt.MapFrom(src => src.Visit.Title));
         CreateMap<ListPage<VisitContactPersonsEntity>, ListPageResponse<VisitContactResponse>>();
     }
 }
