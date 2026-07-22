@@ -13,6 +13,9 @@ public class VisitTeamEquipmentMappingProfile : Profile
         CreateMap<VisitTeamEquipmentEntity, VisitTeamEquipmentResponse>()
             .ForMember(dest => dest.VisitTeam, opt => opt.MapFrom(src => src.VisitTeam.Visit.Title))
             .ForMember(dest => dest.Equipment, opt => opt.MapFrom(src => src.Equipment.Name));
+        CreateMap<VisitTeamEquipmentEntity, VisitTeamEquipmentDetailResponse>()
+            .ForMember(dest => dest.VisitTeam, opt => opt.MapFrom(src => src.VisitTeam.Visit.Title))
+            .ForMember(dest => dest.Equipment, opt => opt.MapFrom(src => src.Equipment.Name));
         CreateMap<ListPage<VisitTeamEquipmentEntity>, ListPageResponse<VisitTeamEquipmentResponse>>();
     }
 }

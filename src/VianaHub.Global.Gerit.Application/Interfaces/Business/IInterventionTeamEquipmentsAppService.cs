@@ -8,7 +8,7 @@ namespace VianaHub.Global.Gerit.Application.Interfaces.Business;
 public interface IVisitTeamEquipmentsAppService
 {
     Task<IEnumerable<VisitTeamEquipmentResponse>> GetAllAsync(CancellationToken ct);
-    Task<VisitTeamEquipmentResponse> GetByIdAsync(int id, CancellationToken ct);
+    Task<VisitTeamEquipmentDetailResponse> GetByIdAsync(int id, CancellationToken ct);
     Task<ListPageResponse<VisitTeamEquipmentResponse>> GetPagedAsync(PagedFilterRequest request, CancellationToken ct);
     Task<int> CreateAsync(CreateVisitTeamEquipmentRequest request, CancellationToken ct);
     Task<bool> UpdateAsync(int id, UpdateVisitTeamEquipmentRequest request, CancellationToken ct);
