@@ -130,6 +130,7 @@
                 <div id="lang-switcher" class="lang-switcher">
                     <select id="lang-select" class="lang-select" aria-label="Language selector">
                         <option value="pt-PT" ${currentLang === 'pt-PT' ? 'selected' : ''}>Portugu&ecirc;s PT</option>
+                        <option value="pt-BR" ${currentLang === 'pt-BR' ? 'selected' : ''}>Portugues BR</option>
                         <option value="en-US" ${currentLang === 'en-US' ? 'selected' : ''}>English</option>
                         <option value="es-ES" ${currentLang === 'es-ES' ? 'selected' : ''}>Espa&ntilde;ol</option>
                     </select>
