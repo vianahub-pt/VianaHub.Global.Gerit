@@ -6,7 +6,7 @@ using System.Globalization;
 namespace VianaHub.Global.Gerit.Api.Middleware;
 
 /// <summary>
-/// Middleware que captura a cultura da query string para tradução do Swagger.
+/// Middleware que captura a cultura da query string para traduï¿½ï¿½o do Swagger.
 /// Exemplo: /swagger/v1/swagger.json?lang=pt-PT
 /// </summary>
 public class SwaggerLocalizationMiddleware
@@ -23,7 +23,7 @@ public class SwaggerLocalizationMiddleware
         var list = supportedCultures?.ToList();
         if (list == null || list.Count == 0)
         {
-            list = new List<string> { "pt-PT", "en-US", "es-ES" };
+            list = new List<string> { "pt-PT", "pt-BR", "en-US", "es-ES" };
         }
 
         _supportedCultures = list;
@@ -31,7 +31,7 @@ public class SwaggerLocalizationMiddleware
 
     public async Task InvokeAsync(HttpContext context)
     {
-        // Só processa se for requisição do Swagger
+        // Sï¿½ processa se for requisiï¿½ï¿½o do Swagger
         var path = context.Request.Path.Value?.ToLower() ?? string.Empty;
         if (path.Contains("/swagger"))
         {
