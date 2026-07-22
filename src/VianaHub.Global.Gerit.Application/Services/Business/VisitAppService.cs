@@ -58,7 +58,7 @@ public class VisitAppService : IVisitAppService
         return _mapper.Map<IEnumerable<VisitResponse>>(entities);
     }
 
-    public async Task<VisitResponse> GetByIdAsync(int id, CancellationToken ct)
+    public async Task<VisitDetailResponse> GetByIdAsync(int id, CancellationToken ct)
     {
         var entity = await _repo.GetByIdAsync(id, ct);
         if (entity == null || entity.IsDeleted || !entity.IsActive)
@@ -66,7 +66,7 @@ public class VisitAppService : IVisitAppService
             _notify.Add(_localization.GetMessage("Application.Service.Visit.GetById.ResourceNotFound"), 410);
             return null;
         }
-        return _mapper.Map<VisitResponse>(entity);
+        return _mapper.Map<VisitDetailResponse>(entity);
     }
 
     public async Task<ListPageResponse<VisitResponse>> GetPagedAsync(PagedFilterRequest request, CancellationToken ct)
