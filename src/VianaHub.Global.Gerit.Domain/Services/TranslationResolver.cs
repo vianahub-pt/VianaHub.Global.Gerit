@@ -77,4 +77,34 @@ public static class TranslationResolver
 
         return fallback != null ? descriptionSelector(fallback) : null;
     }
+
+    /// <summary>
+    /// Resolve o código do idioma efetivamente utilizado (o solicitado ou o fallback padrão).
+    /// </summary>
+    /// <typeparam name="T">Tipo da entidade de tradução.</typeparam>
+    /// <param name="translations">Coleção de traduções.</param>
+    /// <param name="languageCode">Código do idioma desejado.</param>
+    /// <param name="languageSelector">Função para extrair o LanguageCode da tradução.</param>
+    /// <returns>Código do idioma utilizado ou null se não houver traduções.</returns>
+    public static string? ResolveUsedLanguageCode<T>(
+        IEnumerable<T>? translations,
+        string languageCode,
+        Func<T, string?> languageSelector)
+    {
+        if (translations == null || !translations.Any())
+            return null;
+
+        // Verifica se existe tradução no idioma solicitado
+        var hasRequestedLanguage = translations.Any(t =>
+            string.Equals(languageSelector(t), languageCode, StringComparison.OrdinalIgnoreCase));
+
+        if (hasRequestedLanguage)
+            return languageCode;
+
+        // Fallback para o idioma padrão
+        var hasDefaultLanguage = translations.Any(t =>
+            string.Equals(languageSelector(t), SupportedLanguages.Default, StringComparison.OrdinalIgnoreCase));
+
+        return hasDefaultLanguage ? SupportedLanguages.Default : null;
+    }
 }
