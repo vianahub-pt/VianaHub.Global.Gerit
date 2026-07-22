@@ -17,6 +17,11 @@ public class VisitAddressesMappingProfile : Profile
             .ForMember(dest => dest.AddressType, opt => opt.MapFrom((src, _, _, _) =>
                 TranslationResolver.Resolve(src.AddressType.Translations, CultureInfo.CurrentCulture.Name, t => t.LanguageCode, t => t.Name)));
 
+        CreateMap<VisitAddressesEntity, VisitAddressDetailResponse>()
+            .ForMember(dest => dest.Visit, opt => opt.MapFrom(src => src.Visit.Title))
+            .ForMember(dest => dest.AddressType, opt => opt.MapFrom((src, _, _, _) =>
+                TranslationResolver.Resolve(src.AddressType.Translations, CultureInfo.CurrentCulture.Name, t => t.LanguageCode, t => t.Name)));
+
         CreateMap<ListPage<VisitAddressesEntity>, ListPageResponse<VisitAddressResponse>>();
     }
 }
