@@ -51,7 +51,7 @@ public class EmployeeAddressAppService : IEmployeeAddressAppService
         return _mapper.Map<IEnumerable<EmployeeAddressResponse>>(entities);
     }
 
-    public async Task<EmployeeAddressResponse> GetByIdAsync(int id, CancellationToken ct)
+    public async Task<EmployeeAddressDetailResponse> GetByIdAsync(int id, CancellationToken ct)
     {
         var entity = await _repo.GetByIdAsync(id, ct);
         if (entity == null || entity.IsDeleted || !entity.IsActive)
@@ -59,7 +59,7 @@ public class EmployeeAddressAppService : IEmployeeAddressAppService
             _notify.Add(_localization.GetMessage("Application.Service.EmployeeAddress.GetById.ResourceNotFound"), 410);
             return null;
         }
-        return _mapper.Map<EmployeeAddressResponse>(entity);
+        return _mapper.Map<EmployeeAddressDetailResponse>(entity);
     }
 
     public async Task<ListPageResponse<EmployeeAddressResponse>> GetPagedAsync(PagedFilterRequest request, CancellationToken ct)
