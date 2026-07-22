@@ -6,7 +6,7 @@ namespace VianaHub.Global.Gerit.Application.Interfaces.Business;
 
 public interface IVisitTeamEmployeeAppService
 {
-    Task<VisitTeamEmployeeResponse> GetByIdAsync(int id, CancellationToken ct);
+    Task<VisitTeamEmployeeDetailResponse> GetByIdAsync(int id, CancellationToken ct);
     Task<IEnumerable<VisitTeamEmployeeResponse>> GetAllAsync(CancellationToken ct);
     Task<IEnumerable<VisitTeamEmployeeResponse>> GetByVisitTeamIdAsync(int visitTeamId, CancellationToken ct);
     Task<IEnumerable<VisitTeamEmployeeResponse>> GetByEmployeeIdAsync(int employeeId, CancellationToken ct);
