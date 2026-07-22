@@ -69,6 +69,28 @@ public class VisitAttachmentAppService : IVisitAttachmentAppService
         return _mapper.Map<VisitAttachmentResponse>(entity);
     }
 
+    public async Task<VisitAttachmentDetailResponse> GetDetailByIdAsync(int id, CancellationToken ct)
+    {
+        var entity = await _repo.GetByIdAsync(id, ct);
+        if (entity == null || entity.IsDeleted || !entity.IsActive)
+        {
+            _notify.Add(_localization.GetMessage("Application.Service.VisitAttachment.GetById.ResourceNotFound"), 410);
+            return null;
+        }
+        return _mapper.Map<VisitAttachmentDetailResponse>(entity);
+    }
+
+    public async Task<VisitAttachmentDetailResponse> GetDetailByPublicIdAsync(Guid publicId, CancellationToken ct)
+    {
+        var entity = await _repo.GetByPublicIdAsync(publicId, ct);
+        if (entity == null || entity.IsDeleted || !entity.IsActive)
+        {
+            _notify.Add(_localization.GetMessage("Application.Service.VisitAttachment.GetByPublicId.ResourceNotFound"), 410);
+            return null;
+        }
+        return _mapper.Map<VisitAttachmentDetailResponse>(entity);
+    }
+
     public async Task<IEnumerable<VisitAttachmentResponse>> GetAllAsync(CancellationToken ct)
     {
         var entities = await _repo.GetAllAsync(ct);
