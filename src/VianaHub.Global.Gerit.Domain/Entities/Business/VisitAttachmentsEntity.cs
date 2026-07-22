@@ -35,13 +35,13 @@ public class VisitAttachmentsEntity : Entity
         string s3Key, string fileName, long fileSizeBytes, int displayOrder, bool isPrimary, int createdBy)
     {
         if (fileSizeBytes <= 0)
-            throw new ArgumentException("visit_attachment.file_size_invalid");
+            throw new ArgumentException("Domain.VisitAttachment.FileSizeInvalid");
 
         if (string.IsNullOrWhiteSpace(s3Key))
-            throw new ArgumentNullException(nameof(s3Key), "visit_attachment.s3_key_required");
+            throw new ArgumentNullException(nameof(s3Key), "Domain.VisitAttachment.S3KeyRequired");
 
         if (string.IsNullOrWhiteSpace(fileName))
-            throw new ArgumentNullException(nameof(fileName), "visit_attachment.file_name_required");
+            throw new ArgumentNullException(nameof(fileName), "Domain.VisitAttachment.FileNameRequired");
 
         TenantId = tenantId;
         FileTypeId = fileTypeId;
