@@ -55,7 +55,7 @@ public class TeamAppService : ITeamAppService
         return _mapper.Map<IEnumerable<TeamResponse>>(entities);
     }
 
-    public async Task<TeamResponse> GetByIdAsync(int id, CancellationToken ct)
+    public async Task<TeamDetailResponse> GetByIdAsync(int id, CancellationToken ct)
     {
         var entity = await _repo.GetByIdAsync(id, ct);
         if (entity == null || entity.IsDeleted || !entity.IsActive)
@@ -63,7 +63,7 @@ public class TeamAppService : ITeamAppService
             _notify.Add(_localization.GetMessage("Application.Service.Team.Update.ResourceNotFound"), 410);
             return null;
         }
-        return _mapper.Map<TeamResponse>(entity);
+        return _mapper.Map<TeamDetailResponse>(entity);
     }
 
     public async Task<ListPageResponse<TeamResponse>> GetPagedAsync(PagedFilterRequest request, CancellationToken ct)
