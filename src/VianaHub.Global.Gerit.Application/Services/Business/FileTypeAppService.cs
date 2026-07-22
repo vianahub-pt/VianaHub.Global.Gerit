@@ -55,7 +55,7 @@ public class FileTypeAppService : IFileTypeAppService
         return _mapper.Map<IEnumerable<FileTypeResponse>>(entities);
     }
 
-    public async Task<FileTypeResponse> GetByIdAsync(int id, CancellationToken ct)
+    public async Task<FileTypeDetailResponse> GetByIdAsync(int id, CancellationToken ct)
     {
         var entity = await _repo.GetByIdAsync(id, ct);
         if (entity == null || entity.IsDeleted || !entity.IsActive)
@@ -64,7 +64,7 @@ public class FileTypeAppService : IFileTypeAppService
             return null;
         }
 
-        return _mapper.Map<FileTypeResponse>(entity);
+        return _mapper.Map<FileTypeDetailResponse>(entity);
     }
 
     public async Task<ListPageResponse<FileTypeResponse>> GetPagedAsync(PagedFilterRequest request, CancellationToken ct)
