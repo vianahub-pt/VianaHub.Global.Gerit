@@ -13,6 +13,11 @@ public class VisitTeamVehicleMappingProfile : Profile
         CreateMap<VisitTeamVehicleEntity, VisitTeamVehicleResponse>()
             .ForMember(dest => dest.VisitTeam, opt => opt.MapFrom(src => src.VisitTeam.Visit.Title))
             .ForMember(dest => dest.Vehicle, opt => opt.MapFrom(src => src.Vehicle.Plate));
+
+        CreateMap<VisitTeamVehicleEntity, VisitTeamVehicleDetailResponse>()
+            .ForMember(dest => dest.VisitTeam, opt => opt.MapFrom(src => src.VisitTeam.Visit.Title))
+            .ForMember(dest => dest.Vehicle, opt => opt.MapFrom(src => src.Vehicle.Plate));
+
         CreateMap<ListPage<VisitTeamVehicleEntity>, ListPageResponse<VisitTeamVehicleResponse>>();
     }
 }

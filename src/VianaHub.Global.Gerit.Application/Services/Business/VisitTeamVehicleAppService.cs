@@ -51,7 +51,7 @@ public class VisitTeamVehicleAppService : IVisitTeamVehiclesAppService
         return _mapper.Map<IEnumerable<VisitTeamVehicleResponse>>(entities);
     }
 
-    public async Task<VisitTeamVehicleResponse> GetByIdAsync(int id, CancellationToken ct)
+    public async Task<VisitTeamVehicleDetailResponse> GetByIdAsync(int id, CancellationToken ct)
     {
         var entity = await _repo.GetByIdAsync(id, ct);
         if (entity == null || entity.IsDeleted || !entity.IsActive)
@@ -59,7 +59,7 @@ public class VisitTeamVehicleAppService : IVisitTeamVehiclesAppService
             _notify.Add(_localization.GetMessage("Application.Service.VisitTeamVehicle.GetById.ResourceNotFound"), 410);
             return null;
         }
-        return _mapper.Map<VisitTeamVehicleResponse>(entity);
+        return _mapper.Map<VisitTeamVehicleDetailResponse>(entity);
     }
 
     public async Task<ListPageResponse<VisitTeamVehicleResponse>> GetPagedAsync(PagedFilterRequest request, CancellationToken ct)
