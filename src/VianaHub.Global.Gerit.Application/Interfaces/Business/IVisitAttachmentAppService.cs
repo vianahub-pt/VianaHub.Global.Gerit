@@ -8,6 +8,8 @@ public interface IVisitAttachmentAppService
 {
     Task<VisitAttachmentResponse> GetByIdAsync(int id, CancellationToken ct);
     Task<VisitAttachmentResponse> GetByPublicIdAsync(Guid publicId, CancellationToken ct);
+    Task<VisitAttachmentDetailResponse> GetDetailByIdAsync(int id, CancellationToken ct);
+    Task<VisitAttachmentDetailResponse> GetDetailByPublicIdAsync(Guid publicId, CancellationToken ct);
     Task<IEnumerable<VisitAttachmentResponse>> GetAllAsync(CancellationToken ct);
     Task<IEnumerable<VisitAttachmentResponse>> GetByVisitIdAsync(int visitId, CancellationToken ct);
     Task<VisitAttachmentResponse> GetPrimaryByVisitIdAsync(int visitId, CancellationToken ct);
