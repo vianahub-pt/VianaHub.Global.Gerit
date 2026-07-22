@@ -55,6 +55,14 @@ public class PartyTypeDataRepository : IPartyTypeDataRepository
         }
 
         var count = await query.CountAsync(ct);
+
+        // Garantir que o sort default é "Code" em vez de "Id"/"CreatedAt".
+        // PartyTypeEntity usa 'new byte Id' que sombreia Entity.Id (int),
+        // o que causaria AmbiguousMatchException ao ordenar por "Id".
+        if (string.IsNullOrWhiteSpace(request.SortBy) || string.Equals(request.SortBy, "CreatedAt", StringComparison.OrdinalIgnoreCase))
+        {
+            request.SortBy = "Code";
+        }
         var orderedQuery = CreateSort.ApplyOrdering(query, request);
         var pageNumber = request.PageNumber ?? 1;
         var pageSize = request.PageSize ?? Paging.MinPageSize();
