@@ -62,6 +62,17 @@ public class EmployeeContactAppService : IEmployeeContactAppService
         return _mapper.Map<EmployeeContactResponse>(entity);
     }
 
+    public async Task<EmployeeContactDetailResponse> GetByIdDetailAsync(int id, CancellationToken ct)
+    {
+        var entity = await _repo.GetByIdAsync(id, ct);
+        if (entity == null || entity.IsDeleted || !entity.IsActive)
+        {
+            _notify.Add(_localization.GetMessage("Application.Service.EmployeeContact.GetById.ResourceNotFound"), 410);
+            return null;
+        }
+        return _mapper.Map<EmployeeContactDetailResponse>(entity);
+    }
+
     public async Task<ListPageResponse<EmployeeContactResponse>> GetPagedAsync(PagedFilterRequest request, CancellationToken ct)
     {
         var filter = new PagedFilter(request.Search, request.IsActive, request.PageNumber, request.PageSize, request.SortBy, request.SortDirection);

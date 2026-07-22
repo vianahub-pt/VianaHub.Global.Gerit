@@ -12,6 +12,7 @@ public interface IEmployeeContactAppService
 {
     Task<IEnumerable<EmployeeContactResponse>> GetAllAsync(CancellationToken ct);
     Task<EmployeeContactResponse> GetByIdAsync(int id, CancellationToken ct);
+    Task<EmployeeContactDetailResponse> GetByIdDetailAsync(int id, CancellationToken ct);
     Task<ListPageResponse<EmployeeContactResponse>> GetPagedAsync(PagedFilterRequest request, CancellationToken ct);
     Task<int> CreateAsync(CreateEmployeeContactRequest request, CancellationToken ct);
     Task<bool> UpdateAsync(int id, UpdateEmployeeContactRequest request, CancellationToken ct);
