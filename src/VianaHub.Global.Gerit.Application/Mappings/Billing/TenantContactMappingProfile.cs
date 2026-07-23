@@ -11,6 +11,7 @@ public class TenantContactPersonsMappingProfile : Profile
     public TenantContactPersonsMappingProfile()
     {
         CreateMap<TenantContactPersonsEntity, TenantContactResponse>();
+        CreateMap<TenantContactPersonsEntity, TenantContactDetailResponse>();
         CreateMap<ListPage<TenantContactPersonsEntity>, ListPageResponse<TenantContactResponse>>();
     }
 }

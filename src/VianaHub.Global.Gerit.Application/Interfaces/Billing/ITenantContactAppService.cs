@@ -7,7 +7,7 @@ namespace VianaHub.Global.Gerit.Application.Interfaces.Billing;
 
 public interface ITenantContactAppService
 {
-    Task<TenantContactResponse> GetByIdAsync(int id, CancellationToken ct);
+    Task<TenantContactDetailResponse> GetByIdAsync(int id, CancellationToken ct);
     Task<IEnumerable<TenantContactResponse>> GetByTenantIdAsync(int tenantId, CancellationToken ct);
     Task<TenantContactResponse> GetPrimaryByTenantIdAsync(int tenantId, CancellationToken ct);
     Task<IEnumerable<TenantContactResponse>> GetAllAsync(CancellationToken ct);
