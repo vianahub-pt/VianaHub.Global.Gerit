@@ -58,16 +58,16 @@ public class SubscriptionAppService : ISubscriptionAppService
         return _mapper.Map<IEnumerable<SubscriptionResponse>>(entities);
     }
 
-    public async Task<SubscriptionResponse> GetByIdAsync(int id, CancellationToken ct)
+    public async Task<SubscriptionDetailResponse> GetByIdAsync(int id, CancellationToken ct)
     {
         var entity = await _domain.GetByIdAsync(id, ct);
-        return _mapper.Map<SubscriptionResponse>(entity);
+        return _mapper.Map<SubscriptionDetailResponse>(entity);
     }
 
-    public async Task<SubscriptionResponse> GetByTenantIdAsync(int tenantId, CancellationToken ct)
+    public async Task<SubscriptionDetailResponse> GetByTenantIdAsync(int tenantId, CancellationToken ct)
     {
         var entity = await _domain.GetByTenantIdAsync(tenantId, ct);
-        return _mapper.Map<SubscriptionResponse>(entity);
+        return _mapper.Map<SubscriptionDetailResponse>(entity);
     }
 
     public async Task<ListPageResponse<SubscriptionResponse>> GetPagedAsync(PagedFilterRequest request, CancellationToken ct)
