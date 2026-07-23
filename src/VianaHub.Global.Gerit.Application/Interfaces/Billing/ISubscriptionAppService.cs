@@ -8,8 +8,8 @@ namespace VianaHub.Global.Gerit.Application.Interfaces.Billing;
 public interface ISubscriptionAppService
 {
     Task<IEnumerable<SubscriptionResponse>> GetAllAsync(CancellationToken ct);
-    Task<SubscriptionResponse> GetByIdAsync(int id, CancellationToken ct);
-    Task<SubscriptionResponse> GetByTenantIdAsync(int tenantId, CancellationToken ct);
+    Task<SubscriptionDetailResponse> GetByIdAsync(int id, CancellationToken ct);
+    Task<SubscriptionDetailResponse> GetByTenantIdAsync(int tenantId, CancellationToken ct);
     Task<ListPageResponse<SubscriptionResponse>> GetPagedAsync(PagedFilterRequest request, CancellationToken ct);
     Task<IEnumerable<SubscriptionResponse>> GetActiveSubscriptionsAsync(CancellationToken ct);
     Task<IEnumerable<SubscriptionResponse>> GetExpiringSubscriptionsAsync(int daysBeforeExpiration, CancellationToken ct);
