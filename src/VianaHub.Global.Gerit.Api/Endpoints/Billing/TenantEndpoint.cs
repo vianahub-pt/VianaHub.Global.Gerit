@@ -37,7 +37,7 @@ public static class TenantEndpoint
         .CustomAuthorize("Admin,BackOffice", "Tenants", "GetBy")
         .WithName("GetTenantById")
         .WithSummary("Swagger.Endpoint.Tenant.GetById.Summary")
-        .Produces<TenantResponse>(StatusCodes.Status200OK)
+        .Produces<TenantDetailResponse>(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
