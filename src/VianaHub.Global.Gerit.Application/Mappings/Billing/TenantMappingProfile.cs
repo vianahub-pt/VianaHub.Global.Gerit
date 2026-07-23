@@ -11,7 +11,8 @@ public class TenantMappingProfile : Profile
     public TenantMappingProfile()
     {
         CreateMap<TenantEntity, TenantResponse>();
-        CreateMap<TenantEntity, TenantDetailResponse>();
+        CreateMap<TenantEntity, TenantDetailResponse>()
+            .ForMember(dest => dest.IsDeleted, opt => opt.MapFrom(src => src.IsDeleted));
         CreateMap<TenantEntity, TenantLoginResponse>();
         CreateMap<ListPage<TenantEntity>, ListPageResponse<TenantResponse>>();
     }

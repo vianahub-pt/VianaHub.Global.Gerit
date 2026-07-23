@@ -10,6 +10,7 @@ public class TenantDetailResponse
     public string? Name { get; set; }
     public bool Consent { get; set; }
     public bool IsActive { get; set; }
+    public bool IsDeleted { get; set; }
     public int AcquisitionSourceTypeId { get; set; }
     public int CreatedBy { get; set; }
     public DateTime CreatedAt { get; set; }
