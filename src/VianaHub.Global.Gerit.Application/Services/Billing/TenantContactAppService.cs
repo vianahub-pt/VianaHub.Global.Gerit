@@ -49,7 +49,7 @@ public class TenantContactAppService : ITenantContactAppService
         return _mapper.Map<IEnumerable<TenantContactResponse>>(entities);
     }
 
-    public async Task<TenantContactResponse> GetByIdAsync(int id, CancellationToken ct)
+    public async Task<TenantContactDetailResponse> GetByIdAsync(int id, CancellationToken ct)
     {
         var entity = await _repo.GetByIdAsync(id, ct);
         if (entity == null || entity.IsDeleted || !entity.IsActive)
@@ -57,7 +57,7 @@ public class TenantContactAppService : ITenantContactAppService
             _notify.Add(_localization.GetMessage("Application.Service.TenantContact.GetById.ResourceNotFound"), 410);
             return null;
         }
-        return _mapper.Map<TenantContactResponse>(entity);
+        return _mapper.Map<TenantContactDetailResponse>(entity);
     }
 
     public async Task<IEnumerable<TenantContactResponse>> GetByTenantIdAsync(int tenantId, CancellationToken ct)
