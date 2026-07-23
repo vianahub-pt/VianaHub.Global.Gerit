@@ -57,11 +57,11 @@ public class PlanAppService : IPlanAppService
         return _mapper.Map<IEnumerable<PlanResponse>>(entities);
     }
 
-    public async Task<PlanResponse> GetByIdAsync(int id, CancellationToken ct)
+    public async Task<PlanDetailResponse> GetByIdAsync(int id, CancellationToken ct)
     {
         var entity = await _repo.GetByIdAsync(id, ct);
         if (entity == null) return null;
-        return _mapper.Map<PlanResponse>(entity);
+        return _mapper.Map<PlanDetailResponse>(entity);
     }
 
     public async Task<ListPageResponse<PlanResponse>> GetPagedAsync(PagedFilterRequest request, CancellationToken ct)
