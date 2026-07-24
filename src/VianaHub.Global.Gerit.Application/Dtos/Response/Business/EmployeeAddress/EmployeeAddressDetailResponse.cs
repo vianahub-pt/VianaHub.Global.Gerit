@@ -1,9 +1,5 @@
 namespace VianaHub.Global.Gerit.Application.Dtos.Response.Business.EmployeeAddress;
 
-/// <summary>
-/// DTO de resposta de detalhe para EmployeeAddress (inclui campos de auditoria e campos completos do endere├ºo).
-/// Classe independente ÔÇö n├úo herda de EmployeeAddressResponse.
-/// </summary>
 public class EmployeeAddressDetailResponse
 {
     public int Id { get; set; }
