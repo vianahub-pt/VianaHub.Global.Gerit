@@ -13,8 +13,7 @@ public class VisitContactPersonsMappingProfile : Profile
 {
     public VisitContactPersonsMappingProfile()
     {
-        CreateMap<VisitContactPersonsEntity, VisitContactResponse>()
-            .ForMember(dest => dest.Visit, opt => opt.MapFrom(src => src.Visit.Title)); 
+        CreateMap<VisitContactPersonsEntity, VisitContactResponse>();
         CreateMap<ListPage<VisitContactPersonsEntity>, ListPageResponse<VisitContactResponse>>();
     }
 }

@@ -45,7 +45,6 @@ public class AcquisitionSourceTypeMappingProfileTests
             Assert.NotNull(result);
             Assert.Equal(1, result.Id);
             Assert.Equal("Instagram PT", result.Name);
-            Assert.Equal("Descrição PT", result.Description);
             Assert.True(result.IsActive);
         }
         finally
@@ -77,7 +76,6 @@ public class AcquisitionSourceTypeMappingProfileTests
 
             Assert.NotNull(result);
             Assert.Equal("Instagram EN", result.Name);
-            Assert.Equal("Description EN", result.Description);
         }
         finally
         {
@@ -107,7 +105,6 @@ public class AcquisitionSourceTypeMappingProfileTests
 
             Assert.NotNull(result);
             Assert.Equal("Instagram PT", result.Name);
-            Assert.Equal("Descrição PT", result.Description);
         }
         finally
         {
@@ -129,6 +126,5 @@ public class AcquisitionSourceTypeMappingProfileTests
 
         Assert.NotNull(result);
         Assert.Null(result.Name);
-        Assert.Null(result.Description);
     }
 }

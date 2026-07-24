@@ -15,13 +15,7 @@ public class VisitMappingProfile : Profile
 {
     public VisitMappingProfile()
     {
-        CreateMap<VisitEntity, VisitResponse>()
-            .ForMember(dest => dest.StatusDefinition, opt => opt.MapFrom((src, _, _, _) =>
-                TranslationResolver.Resolve(src.StatusDefinition.Translations, CultureInfo.CurrentCulture.Name, t => t.LanguageCode, t => t.Name)))
-            .ForMember(dest => dest.StatusDefinitionName, opt => opt.MapFrom((src, _, _, _) =>
-                TranslationResolver.Resolve(src.StatusDefinition.Translations, CultureInfo.CurrentCulture.Name, t => t.LanguageCode, t => t.Name)))
-            .ForMember(dest => dest.StatusDomainName, opt => opt.MapFrom((src, _, _, _) =>
-                TranslationResolver.Resolve(src.StatusDefinition.StatusDomain?.Translations, CultureInfo.CurrentCulture.Name, t => t.LanguageCode, t => t.Name)));
+        CreateMap<VisitEntity, VisitResponse>();
 
         CreateMap<VisitEntity, VisitDetailResponse>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
@@ -44,11 +38,7 @@ public class VisitMappingProfile : Profile
             .ForMember(dest => dest.EstimatedValue, opt => opt.MapFrom(src => src.EstimatedValue))
             .ForMember(dest => dest.RealValue, opt => opt.MapFrom(src => src.RealValue))
             .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsActive))
-            .ForMember(dest => dest.IsDeleted, opt => opt.MapFrom(src => src.IsDeleted))
-            .ForMember(dest => dest.CreatedBy, opt => opt.MapFrom(src => src.CreatedBy))
-            .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => src.CreatedAt))
-            .ForMember(dest => dest.ModifiedBy, opt => opt.MapFrom(src => src.ModifiedBy))
-            .ForMember(dest => dest.ModifiedAt, opt => opt.MapFrom(src => src.ModifiedAt));
+            .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => src.CreatedAt));
 
         CreateMap<ListPage<VisitEntity>, ListPageResponse<VisitResponse>>();
     }

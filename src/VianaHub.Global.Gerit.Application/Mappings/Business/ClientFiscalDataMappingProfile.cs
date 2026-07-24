@@ -10,10 +10,7 @@ public class ClientFiscalDataMappingProfile : Profile
 {
     public ClientFiscalDataMappingProfile()
     {
-        CreateMap<ClientFiscalDataEntity, ClientFiscalDataResponse>()
-            .ForMember(dest => dest.ClientTypeId, opt => opt.MapFrom(src => (int)src.Client.PartyTypeId))
-            .ForMember(dest => dest.ClientType, opt => opt.MapFrom(src => src.Client.PartyTypeId.ToString()))
-            .ForMember(dest => dest.Client, opt => opt.MapFrom(src => src.Client.Name));
+        CreateMap<ClientFiscalDataEntity, ClientFiscalDataResponse>();
 
         CreateMap<ClientFiscalDataEntity, ClientFiscalDataDetailResponse>()
             .ForMember(dest => dest.ClientTypeId, opt => opt.MapFrom(src => (int)src.Client.PartyTypeId))
