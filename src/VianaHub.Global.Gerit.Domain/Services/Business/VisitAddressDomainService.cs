@@ -10,7 +10,7 @@ using VianaHub.Global.Gerit.Domain.Tools.Pagination;
 namespace VianaHub.Global.Gerit.Domain.Services.Business;
 
 /// <summary>
-/// Servi�o de dom�nio para VisitAddress
+/// Serviço de domínio para VisitAddress
 /// </summary>
 public class VisitAddressDomainService : IVisitAddressDomainService
 {
@@ -28,17 +28,17 @@ public class VisitAddressDomainService : IVisitAddressDomainService
         _notify = notify;
     }
 
-    public async Task<VisitAddressesEntity> GetByIdAsync(int id, CancellationToken ct)
+    public async Task<VisitAddressesEntity> GetByIdAsync(int visitId, int id, CancellationToken ct)
     {
-        return await _repo.GetByIdAsync(id, ct);
+        return await _repo.GetByIdAsync(visitId, id, ct);
     }
-    public async Task<IEnumerable<VisitAddressesEntity>> GetAllAsync(CancellationToken ct)
+    public async Task<IEnumerable<VisitAddressesEntity>> GetAllAsync(int visitId, CancellationToken ct)
     {
-        return await _repo.GetAllAsync(ct);
+        return await _repo.GetAllAsync(visitId, ct);
     }
-    public async Task<ListPage<VisitAddressesEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct)
+    public async Task<ListPage<VisitAddressesEntity>> GetPagedAsync(int visitId, PagedFilter request, CancellationToken ct)
     {
-        return await _repo.GetPagedAsync(request, ct);
+        return await _repo.GetPagedAsync(visitId, request, ct);
     }
     public async Task<bool> ExistsByIdAsync(int id, CancellationToken ct)
     {

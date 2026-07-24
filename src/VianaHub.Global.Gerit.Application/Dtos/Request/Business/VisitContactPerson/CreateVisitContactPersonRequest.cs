@@ -1,11 +1,10 @@
 namespace VianaHub.Global.Gerit.Application.Dtos.Request.Business.VisitContactPersons;
 
 /// <summary>
-/// Request para cria��o de VisitContact
+/// Request para criação de VisitContact
 /// </summary>
 public class CreateVisitContactPersonRequest
 {
-    public int VisitId { get; set; }
     public string? Name { get; set; }
     public string? Email { get; set; }
     public string? Phone { get; set; }

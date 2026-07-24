@@ -5,13 +5,13 @@ using VianaHub.Global.Gerit.Domain.Tools.Pagination;
 namespace VianaHub.Global.Gerit.Domain.Interfaces.Business;
 
 /// <summary>
-/// Interface do servi�o de dom�nio para VisitContact
+/// Interface do serviço de domínio para VisitContact
 /// </summary>
 public interface IVisitContactDomainService
 {
-    Task<VisitContactPersonsEntity> GetByIdAsync(int id, CancellationToken ct);
-    Task<IEnumerable<VisitContactPersonsEntity>> GetAllAsync(CancellationToken ct);
-    Task<ListPage<VisitContactPersonsEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct);
+    Task<VisitContactPersonsEntity> GetByIdAsync(int visitId, int id, CancellationToken ct);
+    Task<IEnumerable<VisitContactPersonsEntity>> GetAllAsync(int visitId, CancellationToken ct);
+    Task<ListPage<VisitContactPersonsEntity>> GetPagedAsync(int visitId, PagedFilter request, CancellationToken ct);
     Task<bool> ExistsByIdAsync(int id, CancellationToken ct);
 
     Task<bool> CreateAsync(VisitContactPersonsEntity entity, CancellationToken ct);

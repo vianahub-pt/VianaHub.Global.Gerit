@@ -13,11 +13,11 @@ public static class VisitContactPersonEndpoint
 {
     public static void MapVisitContactPersonEndpoints(this IEndpointRouteBuilder app)
     {
-        var groupV1 = app.MapGroup("/v1/visit-contacts").WithTags("VisitContactPersons").WithGroupName("v1").RequireAuthorization();
+        var groupV1 = app.MapGroup("/v1/visits").WithTags("VisitContactPersons").WithGroupName("v1").RequireAuthorization();
 
-        groupV1.MapGet("/", async ([FromServices] IVisitContactPersonAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
+        groupV1.MapGet("/{visitId}/contacts", async ([FromRoute] int visitId, [FromServices] IVisitContactPersonAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
-            var response = await appService.GetAllAsync(ct);
+            var response = await appService.GetAllAsync(visitId, ct);
             return notify.CustomResponse(response, 200);
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "VisitContactPersons", "GetAll")
@@ -26,9 +26,9 @@ public static class VisitContactPersonEndpoint
         .Produces(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapGet("/{id}", async ([FromRoute] int id, [FromServices] IVisitContactPersonAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
+        groupV1.MapGet("/{visitId}/contacts/{id}", async ([FromRoute] int visitId, [FromRoute] int id, [FromServices] IVisitContactPersonAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
-            var response = await appService.GetByIdAsync(id, ct);
+            var response = await appService.GetByIdAsync(visitId, id, ct);
             return notify.CustomResponse(response, 200);
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "VisitContactPersons", "GetBy")
@@ -38,9 +38,9 @@ public static class VisitContactPersonEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status410Gone)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapGet("/paged", async ([AsParameters] PagedFilterRequest request, [FromServices] IVisitContactPersonAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
+        groupV1.MapGet("/{visitId}/contacts/paged", async ([FromRoute] int visitId, [AsParameters] PagedFilterRequest request, [FromServices] IVisitContactPersonAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
-            var response = await appService.GetPagedAsync(request, ct);
+            var response = await appService.GetPagedAsync(visitId, request, ct);
             return notify.CustomResponse(response, 200);
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "VisitContactPersons", "GetPaged")
@@ -49,9 +49,9 @@ public static class VisitContactPersonEndpoint
         .Produces(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapPost("/", async ([FromBody] CreateVisitContactPersonRequest request, [FromServices] IVisitContactPersonAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
+        groupV1.MapPost("/{visitId}/contacts/", async ([FromRoute] int visitId, [FromBody] CreateVisitContactPersonRequest request, [FromServices] IVisitContactPersonAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
-            var id = await appService.CreateAsync(request, ct);
+            var id = await appService.CreateAsync(visitId, request, ct);
             return notify.CustomResponse(new GenericResponse { Id = id }, 201);
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "VisitContactPersons", "Create")
@@ -63,9 +63,9 @@ public static class VisitContactPersonEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError)
         .WithValidation<CreateVisitContactPersonRequest>();
 
-        groupV1.MapPut("/{id}", async ([FromRoute] int id, [FromBody] UpdateVisitContactPersonRequest request, [FromServices] IVisitContactPersonAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
+        groupV1.MapPut("/{visitId}/contacts/{id}", async ([FromRoute] int visitId, [FromRoute] int id, [FromBody] UpdateVisitContactPersonRequest request, [FromServices] IVisitContactPersonAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
-            var updated = await appService.UpdateAsync(id, request, ct);
+            var updated = await appService.UpdateAsync(visitId, id, request, ct);
             return notify.CustomResponse(updated, 200);
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "VisitContactPersons", "Update")
@@ -78,9 +78,9 @@ public static class VisitContactPersonEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError)
         .WithValidation<UpdateVisitContactPersonRequest>();
 
-        groupV1.MapPatch("/{id}/activate", async ([FromRoute] int id, [FromServices] IVisitContactPersonAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
+        groupV1.MapPatch("/{visitId}/contacts/{id}/activate", async ([FromRoute] int visitId, [FromRoute] int id, [FromServices] IVisitContactPersonAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
-            var ok = await appService.ActivateAsync(id, ct);
+            var ok = await appService.ActivateAsync(visitId, id, ct);
             return notify.CustomResponse();
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "VisitContactPersons", "Activate")
@@ -90,9 +90,9 @@ public static class VisitContactPersonEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status410Gone)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapPatch("/{id}/deactivate", async ([FromRoute] int id, [FromServices] IVisitContactPersonAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
+        groupV1.MapPatch("/{visitId}/contacts/{id}/deactivate", async ([FromRoute] int visitId, [FromRoute] int id, [FromServices] IVisitContactPersonAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
-            var ok = await appService.DeactivateAsync(id, ct);
+            var ok = await appService.DeactivateAsync(visitId, id, ct);
             return notify.CustomResponse();
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "VisitContactPersons", "Deactivate")
@@ -102,9 +102,9 @@ public static class VisitContactPersonEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status410Gone)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapDelete("/{id}", async ([FromRoute] int id, [FromServices] IVisitContactPersonAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
+        groupV1.MapDelete("/{visitId}/contacts/{id}", async ([FromRoute] int visitId, [FromRoute] int id, [FromServices] IVisitContactPersonAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
-            var ok = await appService.DeleteAsync(id, ct);
+            var ok = await appService.DeleteAsync(visitId, id, ct);
             return notify.CustomResponse();
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "VisitContactPersons", "Delete")
@@ -114,7 +114,7 @@ public static class VisitContactPersonEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status410Gone)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapPost("/bulk-upload", async (HttpRequest request, [FromServices] IVisitContactPersonAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
+        groupV1.MapPost("/{visitId}/contacts/bulk-upload", async ([FromRoute] int visitId, HttpRequest request, [FromServices] IVisitContactPersonAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             if (!request.HasFormContentType || request.Form.Files.Count == 0)
             {
@@ -123,7 +123,7 @@ public static class VisitContactPersonEndpoint
             }
 
             var file = request.Form.Files[0];
-            var success = await appService.BulkUploadAsync(file, ct);
+            var success = await appService.BulkUploadAsync(visitId, file, ct);
             return notify.CustomResponse(success);
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "VisitContactPersons", "BulkUpload")

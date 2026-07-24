@@ -1,11 +1,10 @@
 ﻿namespace VianaHub.Global.Gerit.Application.Dtos.Request.Business.EmployeeAddress;
 
 /// <summary>
-/// DTO para criaþÒo de endereþo de membro da equipe
+/// DTO para criação de endereço de membro da equipe
 /// </summary>
 public class CreateEmployeeAddressRequest
 {
-    public int EmployeeId { get; set; }
     public int AddressTypeId { get; set; }
     public string? CountryCode { get; set; }
     public string? Street { get; set; }

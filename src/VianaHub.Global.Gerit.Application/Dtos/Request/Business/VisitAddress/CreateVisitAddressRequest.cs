@@ -1,11 +1,10 @@
 namespace VianaHub.Global.Gerit.Application.Dtos.Request.Business.VisitAddress;
 
 /// <summary>
-/// DTO para criação de VisitAddress
+/// DTO para criaÃ§Ã£o de VisitAddress
 /// </summary>
 public class CreateVisitAddressRequest
 {
-    public int VisitId { get; set; }
     public int AddressTypeId { get; set; }
     public string? CountryCode { get; set; }
     public string? Street { get; set; }

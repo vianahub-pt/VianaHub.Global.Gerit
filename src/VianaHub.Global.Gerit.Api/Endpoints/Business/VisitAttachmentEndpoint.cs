@@ -14,11 +14,12 @@ public static class VisitAttachmentEndpoint
 {
     public static void MapVisitAttachmentEndpoints(this IEndpointRouteBuilder app)
     {
-        var groupV1 = app.MapGroup("/v1/visit-attachments").WithTags("VisitAttachments").WithGroupName("v1").RequireAuthorization();
+        var groupV1 = app.MapGroup("/v1/visits").WithTags("VisitAttachments").WithGroupName("v1").RequireAuthorization();
 
-        groupV1.MapGet("/", async ([FromServices] IVisitAttachmentAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
+        // Nested routes under /v1/visits/{visitId}/attachments
+        groupV1.MapGet("/{visitId}/attachments", async ([FromRoute] int visitId, [FromServices] IVisitAttachmentAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
-            var response = await appService.GetAllAsync(ct);
+            var response = await appService.GetAllAsync(visitId, ct);
             return notify.CustomResponse(response, 200);
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "VisitAttachments", "GetAll")
@@ -27,9 +28,9 @@ public static class VisitAttachmentEndpoint
         .Produces(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapGet("/{id}", async ([FromRoute] int id, [FromServices] IVisitAttachmentAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
+        groupV1.MapGet("/{visitId}/attachments/{id}", async ([FromRoute] int visitId, [FromRoute] int id, [FromServices] IVisitAttachmentAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
-            var response = await appService.GetByIdAsync(id, ct);
+            var response = await appService.GetByIdAsync(visitId, id, ct);
             return notify.CustomResponse(response, 200);
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "VisitAttachments", "GetBy")
@@ -39,30 +40,18 @@ public static class VisitAttachmentEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapGet("/public/{publicId}", async ([FromRoute] Guid publicId, [FromServices] IVisitAttachmentAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
+        groupV1.MapGet("/{visitId}/attachments/paged", async ([FromRoute] int visitId, [AsParameters] PagedFilterRequest request, [FromServices] IVisitAttachmentAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
-            var response = await appService.GetByPublicIdAsync(publicId, ct);
+            var response = await appService.GetPagedAsync(visitId, request, ct);
             return notify.CustomResponse(response, 200);
         })
-        .CustomAuthorize("Admin,BackOffice,Manager", "VisitAttachments", "GetBy")
-        .WithName("GetVisitAttachmentByPublicId")
-        .WithSummary("Swagger.Endpoint.VisitAttachment.GetByPublicId.Summary")
-        .Produces(StatusCodes.Status200OK)
-        .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
-        .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
-
-        groupV1.MapGet("/visit/{visitId}", async ([FromRoute] int visitId, [FromServices] IVisitAttachmentAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
-        {
-            var response = await appService.GetByVisitIdAsync(visitId, ct);
-            return notify.CustomResponse(response, 200);
-        })
-        .CustomAuthorize("Admin,BackOffice,Manager", "VisitAttachments", "GetBy")
-        .WithName("GetVisitAttachmentsByVisitId")
-        .WithSummary("Swagger.Endpoint.VisitAttachment.GetByVisitId.Summary")
+        .CustomAuthorize("Admin,BackOffice,Manager", "VisitAttachments", "GetPaged")
+        .WithName("GetVisitAttachmentsPaged")
+        .WithSummary("Swagger.Endpoint.VisitAttachment.GetPaged.Summary")
         .Produces(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapGet("/visit/{visitId}/primary", async ([FromRoute] int visitId, [FromServices] IVisitAttachmentAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
+        groupV1.MapGet("/{visitId}/attachments/primary", async ([FromRoute] int visitId, [FromServices] IVisitAttachmentAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var response = await appService.GetPrimaryByVisitIdAsync(visitId, ct);
             return notify.CustomResponse(response, 200);
@@ -74,20 +63,9 @@ public static class VisitAttachmentEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapPost("/paged", async ([FromBody] PagedFilterRequest request, [FromServices] IVisitAttachmentAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
+        groupV1.MapPost("/{visitId}/attachments/", async ([FromRoute] int visitId, [FromBody] CreateVisitAttachmentRequest request, [FromServices] IVisitAttachmentAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
-            var response = await appService.GetPagedAsync(request, ct);
-            return notify.CustomResponse(response, 200);
-        })
-        .CustomAuthorize("Admin,BackOffice,Manager", "VisitAttachments", "GetPaged")
-        .WithName("GetVisitAttachmentsPaged")
-        .WithSummary("Swagger.Endpoint.VisitAttachment.GetPaged.Summary")
-        .Produces(StatusCodes.Status200OK)
-        .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
-
-        groupV1.MapPost("/", async ([FromBody] CreateVisitAttachmentRequest request, [FromServices] IVisitAttachmentAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
-        {
-            var id = await appService.CreateAsync(request, ct);
+            var id = await appService.CreateAsync(visitId, request, ct);
             return notify.CustomResponse(new GenericResponse { Id = id }, 201);
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "VisitAttachments", "Create")
@@ -98,9 +76,9 @@ public static class VisitAttachmentEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError)
         .WithValidation<CreateVisitAttachmentRequest>();
 
-        groupV1.MapPut("/{id}", async ([FromRoute] int id, [FromBody] UpdateVisitAttachmentRequest request, [FromServices] IVisitAttachmentAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
+        groupV1.MapPut("/{visitId}/attachments/{id}", async ([FromRoute] int visitId, [FromRoute] int id, [FromBody] UpdateVisitAttachmentRequest request, [FromServices] IVisitAttachmentAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
-            var updated = await appService.UpdateAsync(id, request, ct);
+            var updated = await appService.UpdateAsync(visitId, id, request, ct);
             return notify.CustomResponse(updated, 200);
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "VisitAttachments", "Update")
@@ -111,9 +89,9 @@ public static class VisitAttachmentEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError)
         .WithValidation<UpdateVisitAttachmentRequest>();
 
-        groupV1.MapPatch("/{id}/set-primary", async ([FromRoute] int id, [FromServices] IVisitAttachmentAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
+        groupV1.MapPatch("/{visitId}/attachments/{id}/set-primary", async ([FromRoute] int visitId, [FromRoute] int id, [FromServices] IVisitAttachmentAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
-            var ok = await appService.SetAsPrimaryAsync(id, ct);
+            var ok = await appService.SetAsPrimaryAsync(visitId, id, ct);
             return notify.CustomResponse();
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "VisitAttachments", "SetPrimary")
@@ -123,9 +101,9 @@ public static class VisitAttachmentEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapPatch("/{id}/activate", async ([FromRoute] int id, [FromServices] IVisitAttachmentAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
+        groupV1.MapPatch("/{visitId}/attachments/{id}/activate", async ([FromRoute] int visitId, [FromRoute] int id, [FromServices] IVisitAttachmentAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
-            var ok = await appService.ActivateAsync(id, ct);
+            var ok = await appService.ActivateAsync(visitId, id, ct);
             return notify.CustomResponse();
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "VisitAttachments", "Activate")
@@ -135,9 +113,9 @@ public static class VisitAttachmentEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapPatch("/{id}/deactivate", async ([FromRoute] int id, [FromServices] IVisitAttachmentAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
+        groupV1.MapPatch("/{visitId}/attachments/{id}/deactivate", async ([FromRoute] int visitId, [FromRoute] int id, [FromServices] IVisitAttachmentAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
-            var ok = await appService.DeactivateAsync(id, ct);
+            var ok = await appService.DeactivateAsync(visitId, id, ct);
             return notify.CustomResponse();
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "VisitAttachments", "Deactivate")
@@ -147,15 +125,28 @@ public static class VisitAttachmentEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapDelete("/{id}", async ([FromRoute] int id, [FromServices] IVisitAttachmentAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
+        groupV1.MapDelete("/{visitId}/attachments/{id}", async ([FromRoute] int visitId, [FromRoute] int id, [FromServices] IVisitAttachmentAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
-            var ok = await appService.DeleteAsync(id, ct);
+            var ok = await appService.DeleteAsync(visitId, id, ct);
             return notify.CustomResponse();
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "VisitAttachments", "Delete")
         .WithName("DeleteVisitAttachment")
         .WithSummary("Swagger.Endpoint.VisitAttachment.Delete.Summary")
         .Produces(StatusCodes.Status204NoContent)
+        .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
+        .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
+
+        // Global route (not nested) — kept at /attachments/public/{publicId}
+        groupV1.MapGet("/attachments/public/{publicId}", async ([FromRoute] Guid publicId, [FromServices] IVisitAttachmentAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
+        {
+            var response = await appService.GetByPublicIdAsync(publicId, ct);
+            return notify.CustomResponse(response, 200);
+        })
+        .CustomAuthorize("Admin,BackOffice,Manager", "VisitAttachments", "GetBy")
+        .WithName("GetVisitAttachmentByPublicId")
+        .WithSummary("Swagger.Endpoint.VisitAttachment.GetByPublicId.Summary")
+        .Produces(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
     }

@@ -8,7 +8,7 @@ using VianaHub.Global.Gerit.Infra.Data.Context;
 namespace VianaHub.Global.Gerit.Infra.Data.Repository.Business;
 
 /// <summary>
-/// Reposit�rio de dados para VisitAddress
+/// Repositório de dados para VisitAddress
 /// </summary>
 public class VisitAddressDataRepository : IVisitAddressDataRepository
 {
@@ -19,37 +19,37 @@ public class VisitAddressDataRepository : IVisitAddressDataRepository
         _context = context;
     }
 
-    public async Task<VisitAddressesEntity?> GetByIdAsync(int id, CancellationToken ct)
+    public async Task<VisitAddressesEntity?> GetByIdAsync(int visitId, int id, CancellationToken ct)
     {
         return await _context.VisitAddresses
             .AsNoTracking()
             .Include(x => x.Visit)
             .Include(x => x.AddressType)
                 .ThenInclude(x => x.Translations)
-            .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted, ct);
+            .FirstOrDefaultAsync(x => x.VisitId == visitId && x.Id == id && !x.IsDeleted, ct);
     }
 
-    public async Task<IEnumerable<VisitAddressesEntity>> GetAllAsync(CancellationToken ct)
+    public async Task<IEnumerable<VisitAddressesEntity>> GetAllAsync(int visitId, CancellationToken ct)
     {
         return await _context.VisitAddresses
             .AsNoTracking()
             .Include(x => x.Visit)
             .Include(x => x.AddressType)
                 .ThenInclude(x => x.Translations)
-            .Where(x => !x.IsDeleted)
+            .Where(x => x.VisitId == visitId && !x.IsDeleted)
             .OrderBy(x => x.VisitId)
             .ThenBy(x => x.City)
             .ToListAsync(ct);
     }
 
-    public async Task<ListPage<VisitAddressesEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct)
+    public async Task<ListPage<VisitAddressesEntity>> GetPagedAsync(int visitId, PagedFilter request, CancellationToken ct)
     {
         var query = _context.VisitAddresses
             .AsNoTracking()
             .Include(x => x.Visit)
             .Include(x => x.AddressType)
                 .ThenInclude(x => x.Translations)
-            .Where(x => !x.IsDeleted);
+            .Where(x => x.VisitId == visitId && !x.IsDeleted);
 
         if (!string.IsNullOrWhiteSpace(request.Search))
         {

@@ -6,17 +6,17 @@ using VianaHub.Global.Gerit.Application.Dtos.Response.Business.VisitContactPerso
 namespace VianaHub.Global.Gerit.Application.Interfaces.Business;
 
 /// <summary>
-/// Interface do servi�o de aplica��o para VisitContact
+/// Interface do serviço de aplicação para VisitContact
 /// </summary>
 public interface IVisitContactPersonAppService
 {
-    Task<IEnumerable<VisitContactPersonResponse>> GetAllAsync(CancellationToken ct);
-    Task<VisitContactPersonResponse> GetByIdAsync(int id, CancellationToken ct);
-    Task<ListPageResponse<VisitContactPersonResponse>> GetPagedAsync(PagedFilterRequest request, CancellationToken ct);
-    Task<int> CreateAsync(CreateVisitContactPersonRequest request, CancellationToken ct);
-    Task<bool> UpdateAsync(int id, UpdateVisitContactPersonRequest request, CancellationToken ct);
-    Task<bool> ActivateAsync(int id, CancellationToken ct);
-    Task<bool> DeactivateAsync(int id, CancellationToken ct);
-    Task<bool> DeleteAsync(int id, CancellationToken ct);
-    Task<bool> BulkUploadAsync(IFormFile file, CancellationToken ct);
+    Task<IEnumerable<VisitContactPersonResponse>> GetAllAsync(int visitId, CancellationToken ct);
+    Task<VisitContactPersonResponse> GetByIdAsync(int visitId, int id, CancellationToken ct);
+    Task<ListPageResponse<VisitContactPersonResponse>> GetPagedAsync(int visitId, PagedFilterRequest request, CancellationToken ct);
+    Task<int> CreateAsync(int visitId, CreateVisitContactPersonRequest request, CancellationToken ct);
+    Task<bool> UpdateAsync(int visitId, int id, UpdateVisitContactPersonRequest request, CancellationToken ct);
+    Task<bool> ActivateAsync(int visitId, int id, CancellationToken ct);
+    Task<bool> DeactivateAsync(int visitId, int id, CancellationToken ct);
+    Task<bool> DeleteAsync(int visitId, int id, CancellationToken ct);
+    Task<bool> BulkUploadAsync(int visitId, IFormFile file, CancellationToken ct);
 }

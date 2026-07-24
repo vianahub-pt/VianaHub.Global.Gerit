@@ -23,17 +23,17 @@ public class EmployeeContactPersonDomainService : IEmployeeContactPersonDomainSe
         _notify = notify;
     }
 
-    public async Task<EmployeeContactPersonsEntity> GetByIdAsync(int id, CancellationToken ct)
+    public async Task<EmployeeContactPersonsEntity> GetByIdAsync(int employeeId, int id, CancellationToken ct)
     {
-        return await _repo.GetByIdAsync(id, ct);
+        return await _repo.GetByIdAsync(employeeId, id, ct);
     }
-    public async Task<IEnumerable<EmployeeContactPersonsEntity>> GetAllAsync(CancellationToken ct)
+    public async Task<IEnumerable<EmployeeContactPersonsEntity>> GetAllAsync(int employeeId, CancellationToken ct)
     {
-        return await _repo.GetAllAsync(ct);
+        return await _repo.GetAllAsync(employeeId, ct);
     }
-    public async Task<ListPage<EmployeeContactPersonsEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct)
+    public async Task<ListPage<EmployeeContactPersonsEntity>> GetPagedAsync(int employeeId, PagedFilter request, CancellationToken ct)
     {
-        return await _repo.GetPagedAsync(request, ct);
+        return await _repo.GetPagedAsync(employeeId, request, ct);
     }
     public async Task<bool> ExistsByIdAsync(int id, CancellationToken ct)
     {

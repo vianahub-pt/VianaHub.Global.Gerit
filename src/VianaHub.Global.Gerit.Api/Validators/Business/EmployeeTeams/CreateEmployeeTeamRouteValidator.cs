@@ -10,8 +10,5 @@ public class CreateEmployeeTeamRouteValidator : AbstractValidator<CreateEmployee
     {
         RuleFor(x => x.TeamId)
             .GreaterThan(0).WithMessage(localization.GetMessage("Api.Validator.EmployeeTeam.Create.TeamId"));
-
-        RuleFor(x => x.EmployeeId)
-            .GreaterThan(0).WithMessage(localization.GetMessage("Api.Validator.EmployeeTeam.Create.EmployeeId"));
     }
 }

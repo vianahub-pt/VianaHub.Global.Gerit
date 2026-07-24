@@ -5,16 +5,12 @@ using VianaHub.Global.Gerit.Domain.Interfaces.Base;
 namespace VianaHub.Global.Gerit.Api.Validators.Business.VisitAddress;
 
 /// <summary>
-/// Validador de rota para criação de VisitAddress
+/// Validador de rota para criaÃ§Ã£o de VisitAddress
 /// </summary>
 public class CreateVisitAddressRouteValidator : AbstractValidator<CreateVisitAddressRequest>
 {
     public CreateVisitAddressRouteValidator(ILocalizationService localization)
     {
-        RuleFor(x => x.VisitId)
-            .GreaterThan(0)
-            .WithMessage(localization.GetMessage("Api.Validator.VisitAddress.Create.VisitTeamId"));
-
         RuleFor(x => x.AddressTypeId)
             .GreaterThan(0)
             .WithMessage(localization.GetMessage("Api.Validator.VisitAddress.Create.AddressTypeId"));
