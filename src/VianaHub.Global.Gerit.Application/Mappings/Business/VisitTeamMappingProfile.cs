@@ -1,8 +1,8 @@
 using AutoMapper;
-using VianaHub.Global.Gerit.Application.Dtos.Response.Business.VisitTeams;
 using VianaHub.Global.Gerit.Domain.Entities.Business;
 using VianaHub.Global.Gerit.Application.Dtos.Base;
 using VianaHub.Global.Gerit.Domain.Tools.Pagination;
+using VianaHub.Global.Gerit.Application.Dtos.Response.Business.VisitTeam;
 
 namespace VianaHub.Global.Gerit.Application.Mappings.Business;
 

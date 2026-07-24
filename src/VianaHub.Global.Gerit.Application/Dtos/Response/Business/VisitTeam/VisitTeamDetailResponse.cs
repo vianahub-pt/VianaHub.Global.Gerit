@@ -1,4 +1,4 @@
-namespace VianaHub.Global.Gerit.Application.Dtos.Response.Business.VisitTeams;
+namespace VianaHub.Global.Gerit.Application.Dtos.Response.Business.VisitTeam;
 
 public class VisitTeamDetailResponse
 {
@@ -9,9 +9,5 @@ public class VisitTeamDetailResponse
     public int TeamId { get; set; }
     public string? Team { get; set; }
     public bool IsActive { get; set; }
-    public bool IsDeleted { get; set; }
-    public int CreatedBy { get; set; }
     public DateTime CreatedAt { get; set; }
-    public int? ModifiedBy { get; set; }
-    public DateTime? ModifiedAt { get; set; }
 }

@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 using System.Globalization;
 using VianaHub.Global.Gerit.Application.Dtos.Base;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Business.Function;
-using VianaHub.Global.Gerit.Application.Dtos.Response.Business.Function;
+using VianaHub.Global.Gerit.Application.Dtos.Response.Business.VisitTeamFunction;
 using VianaHub.Global.Gerit.Application.Interfaces.Business;
 using VianaHub.Global.Gerit.Application.Interfaces.Common;
 using VianaHub.Global.Gerit.Domain.Entities.Business;

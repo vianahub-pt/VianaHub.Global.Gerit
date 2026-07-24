@@ -13,7 +13,7 @@ public class EmployeeTeamMappingProfile : Profile
         CreateMap<EmployeeTeamEntity, EmployeeTeamResponse>()
             .ForMember(dest => dest.Team, opt => opt.MapFrom(src => src.Team.Name))
             .ForMember(dest => dest.Employee, opt => opt.MapFrom(src => src.Employee.Name));
-        CreateMap<EmployeeTeamEntity, EmployeeTeamsDetailResponse>()
+        CreateMap<EmployeeTeamEntity, EmployeeTeamDetailResponse>()
             .ForMember(dest => dest.Team, opt => opt.MapFrom(src => src.Team.Name))
             .ForMember(dest => dest.Employee, opt => opt.MapFrom(src => src.Employee.Name));
         CreateMap<ListPage<EmployeeTeamEntity>, ListPageResponse<EmployeeTeamResponse>>();

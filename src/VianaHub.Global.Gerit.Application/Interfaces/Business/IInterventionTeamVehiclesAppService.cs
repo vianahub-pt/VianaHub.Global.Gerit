@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Http;
 using VianaHub.Global.Gerit.Application.Dtos.Base;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Business.VisitTeamVehicles;
-using VianaHub.Global.Gerit.Application.Dtos.Response.Business.VisitTeamVehicles;
+using VianaHub.Global.Gerit.Application.Dtos.Response.Business.VisitTeamVehicle;
 
 namespace VianaHub.Global.Gerit.Application.Interfaces.Business;
 

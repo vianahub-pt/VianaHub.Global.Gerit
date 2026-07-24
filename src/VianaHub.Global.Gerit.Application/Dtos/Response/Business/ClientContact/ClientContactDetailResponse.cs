@@ -18,4 +18,5 @@ public class ClientContactDetailResponse
 
     public bool IsPrimary { get; private set; }
     public bool IsActive { get; private set; }
+    public DateTime CreatedAt { get; set; }
 }
