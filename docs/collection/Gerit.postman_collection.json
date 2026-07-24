@@ -4201,7 +4201,7 @@
           ]
         },
         {
-          "name": "ClientContacts",
+          "name": "ClientContactPersons",
           "item": [
             {
               "name": "Obter todos",
@@ -6674,7 +6674,7 @@
           ]
         },
         {
-          "name": "VisitContacts",
+          "name": "VisitContactPersons",
           "item": [
             {
               "name": "Obter todos",

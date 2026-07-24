@@ -20,7 +20,7 @@ public class GeritDbContext : DbContext
     public DbSet<SubscriptionPlanFileRulesEntity> SubscriptionPlanFileRules { get; set; }
     public DbSet<SubscriptionEntity> Subscriptions { get; set; }
     public DbSet<TenantEntity> Tenants { get; set; }
-    public DbSet<TenantContactPersonsEntity> TenantContacts { get; set; }
+    public DbSet<TenantContactPersonsEntity> TenantContactPersons { get; set; }
     public DbSet<TenantAddressesEntity> TenantAddresses { get; set; }
     public DbSet<TenantFiscalDataEntity> TenantFiscalData { get; set; }
     public DbSet<UserEntity> Users { get; set; }
@@ -46,12 +46,12 @@ public class GeritDbContext : DbContext
     public DbSet<AddressTypeEntity> AddressTypes { get; set; }
     public DbSet<AddressTypeTranslationsEntity> AddressTypeTranslations { get; set; }
     public DbSet<ClientEntity> Clients { get; set; }
-    public DbSet<ClientContactPersonsEntity> ClientContacts { get; set; }
+    public DbSet<ClientContactPersonsEntity> ClientContactPersons { get; set; }
     public DbSet<ClientAddressesEntity> ClientAddresses { get; set; }
     public DbSet<ClientFiscalDataEntity> ClientFiscalData { get; set; }
     public DbSet<TeamEntity> Teams { get; set; }
     public DbSet<EmployeeEntity> Employees { get; set; }
-    public DbSet<EmployeeContactPersonsEntity> EmployeeContacts { get; set; }
+    public DbSet<EmployeeContactPersonsEntity> EmployeeContactPersons { get; set; }
     public DbSet<EmployeeAddressesEntity> EmployeeAddresses { get; set; }
     public DbSet<EmployeeFiscalDataEntity> EmployeeFiscalData { get; set; }
     public DbSet<EmployeeTeamEntity> EmployeeTeams { get; set; }
@@ -63,7 +63,7 @@ public class GeritDbContext : DbContext
     public DbSet<VisitTeamEntity> VisitTeams { get; set; }
     public DbSet<VisitTeamEmployeeEntity> VisitTeamEmployees { get; set; }
     public DbSet<VisitTeamEquipmentEntity> VisitTeamEquipments { get; set; }
-    public DbSet<VisitContactPersonsEntity> VisitContacts { get; set; }
+    public DbSet<VisitContactPersonsEntity> VisitContactPersons { get; set; }
     public DbSet<VisitAddressesEntity> VisitAddresses { get; set; }
     public DbSet<VisitTeamVehicleEntity> VisitTeamVehicles { get; set; }
     public DbSet<VisitAttachmentsEntity> VisitAttachments { get; set; }

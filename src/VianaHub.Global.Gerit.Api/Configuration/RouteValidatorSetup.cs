@@ -57,8 +57,8 @@ using VianaHub.Global.Gerit.Application.Dtos.Request.Business.Client;
 using VianaHub.Global.Gerit.Api.Validators.Business.Client;
 
 // TenantContact DTOs & Validators
-using VianaHub.Global.Gerit.Application.Dtos.Request.Billing.TenantContact;
-using VianaHub.Global.Gerit.Api.Validators.Billing.TenantContact;
+using VianaHub.Global.Gerit.Application.Dtos.Request.Billing.TenantContactPerson;
+using VianaHub.Global.Gerit.Api.Validators.Billing.TenantContactPerson;
 
 // TenantFiscalData DTOs & Validators
 using VianaHub.Global.Gerit.Application.Dtos.Request.Billing.TenantFiscalData;
@@ -105,8 +105,8 @@ public static class RouteValidatorSetup
         services.AddScoped<IValidator<UpdateTenantRequest>, UpdateTenantRouteValidator>();
 
         // TenantContact Route Validators
-        services.AddScoped<IValidator<CreateTenantContactRequest>, CreateTenantContactRouteValidator>();
-        services.AddScoped<IValidator<UpdateTenantContactRequest>, UpdateTenantContactRouteValidator>();
+        services.AddScoped<IValidator<CreateTenantContactPersonRequest>, CreateTenantContactPersonRouteValidator>();
+        services.AddScoped<IValidator<UpdateTenantContactPersonRequest>, UpdateTenantContactPersonRouteValidator>();
 
         // TenantFiscalData Route Validators
         services.AddScoped<IValidator<CreateTenantFiscalDataRequest>, CreateTenantFiscalDataRouteValidator>();

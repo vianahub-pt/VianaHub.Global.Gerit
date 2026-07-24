@@ -1,0 +1,21 @@
+namespace VianaHub.Global.Gerit.Application.Dtos.Response.Billing.TenantContactPerson;
+
+/// <summary>
+/// DTO de resposta de detalhe para TenantContact (inclui todos os campos da grid + campos de auditoria).
+/// Classe independente — não herda de TenantContactResponse.
+/// </summary>
+public class TenantContactPersonDetailResponse
+{
+    public int Id { get; set; }
+    public int TenantId { get; set; }
+    public string? Name { get; set; }
+    public string? Email { get; set; }
+    public string? Phone { get; set; }
+    public string? JobTitle { get; set; }
+    public string? Department { get; set; }
+    public string? CellPhoneNumber { get; set; }
+    public bool IsCellPhoneWhatsapp { get; set; }
+    public bool IsPrimary { get; set; }
+    public bool IsActive { get; set; }
+    public DateTime CreatedAt { get; set; }
+}
