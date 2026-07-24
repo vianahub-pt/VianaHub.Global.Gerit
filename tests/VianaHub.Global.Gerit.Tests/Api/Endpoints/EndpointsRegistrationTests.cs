@@ -84,7 +84,7 @@ namespace VianaHub.Global.Gerit.Tests.Api.Endpoints
             return app;
         }
 
-        [Fact(DisplayName = "Endpoints - MapPlanEndpoints não lança exceção")]
+        [Fact(DisplayName = "Endpoints - MapPlanEndpoints nï¿½o lanï¿½a exceï¿½ï¿½o")]
         [Trait("Api", "")]
         public void MapPlanEndpoints_DoesNotThrow()
         {
@@ -95,7 +95,7 @@ namespace VianaHub.Global.Gerit.Tests.Api.Endpoints
             Assert.Null(ex);
         }
 
-        [Fact(DisplayName = "Endpoints - MapSubscriptionEndpoints não lança exceção")]
+        [Fact(DisplayName = "Endpoints - MapSubscriptionEndpoints nï¿½o lanï¿½a exceï¿½ï¿½o")]
         [Trait("Api", "")]
         public void MapSubscriptionEndpoints_DoesNotThrow()
         {
@@ -104,7 +104,7 @@ namespace VianaHub.Global.Gerit.Tests.Api.Endpoints
             Assert.Null(ex);
         }
 
-        [Fact(DisplayName = "Endpoints - MapTenantEndpoints não lança exceção")]
+        [Fact(DisplayName = "Endpoints - MapTenantEndpoints nï¿½o lanï¿½a exceï¿½ï¿½o")]
         [Trait("Api", "")]
         public void MapTenantEndpoints_DoesNotThrow()
         {
@@ -113,7 +113,7 @@ namespace VianaHub.Global.Gerit.Tests.Api.Endpoints
             Assert.Null(ex);
         }
 
-        [Fact(DisplayName = "Endpoints - MapRoleEndpoints não lança exceção")]
+        [Fact(DisplayName = "Endpoints - MapRoleEndpoints nï¿½o lanï¿½a exceï¿½ï¿½o")]
         [Trait("Api", "")]
         public void MapRoleEndpoints_DoesNotThrow()
         {
@@ -122,7 +122,7 @@ namespace VianaHub.Global.Gerit.Tests.Api.Endpoints
             Assert.Null(ex);
         }
 
-        [Fact(DisplayName = "Endpoints - MapResourceEndpoints não lança exceção")]
+        [Fact(DisplayName = "Endpoints - MapResourceEndpoints nï¿½o lanï¿½a exceï¿½ï¿½o")]
         [Trait("Api", "")]
         public void MapResourceEndpoints_DoesNotThrow()
         {
@@ -131,7 +131,7 @@ namespace VianaHub.Global.Gerit.Tests.Api.Endpoints
             Assert.Null(ex);
         }
 
-        [Fact(DisplayName = "Endpoints - MapActionEndpoints não lança exceção")]
+        [Fact(DisplayName = "Endpoints - MapActionEndpoints nï¿½o lanï¿½a exceï¿½ï¿½o")]
         [Trait("Api", "")]
         public void MapActionEndpoints_DoesNotThrow()
         {
@@ -140,7 +140,7 @@ namespace VianaHub.Global.Gerit.Tests.Api.Endpoints
             Assert.Null(ex);
         }
 
-        [Fact(DisplayName = "Endpoints - MapRolePermissionEndpoints não lança exceção")]
+        [Fact(DisplayName = "Endpoints - MapRolePermissionEndpoints nï¿½o lanï¿½a exceï¿½ï¿½o")]
         [Trait("Api", "")]
         public void MapRolePermissionEndpoints_DoesNotThrow()
         {
@@ -149,7 +149,7 @@ namespace VianaHub.Global.Gerit.Tests.Api.Endpoints
             Assert.Null(ex);
         }
 
-        [Fact(DisplayName = "Endpoints - MapUserRoleEndpoints não lança exceção")]
+        [Fact(DisplayName = "Endpoints - MapUserRoleEndpoints nï¿½o lanï¿½a exceï¿½ï¿½o")]
         [Trait("Api", "")]
         public void MapUserRoleEndpoints_DoesNotThrow()
         {
@@ -158,7 +158,7 @@ namespace VianaHub.Global.Gerit.Tests.Api.Endpoints
             Assert.Null(ex);
         }
 
-        [Fact(DisplayName = "Endpoints - MapJobEndpoints não lança exceção")]
+        [Fact(DisplayName = "Endpoints - MapJobEndpoints nï¿½o lanï¿½a exceï¿½ï¿½o")]
         [Trait("Api", "")]
         public void MapJobEndpoints_DoesNotThrow()
         {
@@ -167,7 +167,7 @@ namespace VianaHub.Global.Gerit.Tests.Api.Endpoints
             Assert.Null(ex);
         }
 
-        [Fact(DisplayName = "Endpoints - MapJwtKeyEndpoints não lança exceção")]
+        [Fact(DisplayName = "Endpoints - MapJwtKeyEndpoints nï¿½o lanï¿½a exceï¿½ï¿½o")]
         [Trait("Api", "")]
         public void MapJwtKeyEndpoints_DoesNotThrow()
         {
@@ -176,7 +176,7 @@ namespace VianaHub.Global.Gerit.Tests.Api.Endpoints
             Assert.Null(ex);
         }
 
-        [Fact(DisplayName = "Endpoints - MapAuthEndpoints não lança exceção")]
+        [Fact(DisplayName = "Endpoints - MapAuthEndpoints nï¿½o lanï¿½a exceï¿½ï¿½o")]
         [Trait("Api", "")]
         public void MapAuthEndpoints_DoesNotThrow()
         {
@@ -185,12 +185,12 @@ namespace VianaHub.Global.Gerit.Tests.Api.Endpoints
             Assert.Null(ex);
         }
 
-        [Fact(DisplayName = "Endpoints - MapTenantContactEndpoints - does not throw")]
+        [Fact(DisplayName = "Endpoints - MapTenantContactPersonEndpoints - does not throw")]
         [Trait("Api", "")]
-        public void MapTenantContactEndpoints_DoesNotThrow()
+        public void MapTenantContactPersonEndpoints_DoesNotThrow()
         {
             var routeBuilder = CreateRouteBuilder();
-            var ex = Record.Exception(() => TenantContactPersonEndpoint.MapTenantContactEndpoints(routeBuilder));
+            var ex = Record.Exception(() => TenantContactPersonEndpoint.MapTenantContactPersonEndpoints(routeBuilder));
             Assert.Null(ex);
         }
     }

@@ -11,7 +11,7 @@ namespace VianaHub.Global.Gerit.Api.Endpoints.Business;
 [EndpointMapper]
 public static class ClientContactPersonEndpoint
 {
-    public static void MapClientContactEndpoints(this IEndpointRouteBuilder app)
+    public static void MapClientContactPersonEndpoints(this IEndpointRouteBuilder app)
     {
         var groupV1 = app.MapGroup("/v1/clients").WithTags("ClientContactPersons").WithGroupName("v1").RequireAuthorization();
 
