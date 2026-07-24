@@ -70,6 +70,7 @@ using VianaHub.Global.Gerit.Domain.Validators.Business.AcquisitionSourceType;
 using VianaHub.Global.Gerit.Domain.Validators.Business.FileType;
 using VianaHub.Global.Gerit.Domain.Validators.Business.VisitAttachment;
 using VianaHub.Global.Gerit.Domain.Validators.Business.ClientFiscalData;
+using VianaHub.Global.Gerit.Domain.Validators.Business.EmployeeFiscalData;
 using VianaHub.Global.Gerit.Domain.Validators.Billing.TenantContactPerson;
 using VianaHub.Global.Gerit.Domain.Validators.Billing.TenantFiscalData;
 using VianaHub.Global.Gerit.Domain.Validators.Billing.TenantAddress;
@@ -140,6 +141,7 @@ public static class DependencyInjection
         services.AddScoped<IEntityDomainValidator<VisitTeamEquipmentEntity>, VisitTeamEquipmentValidator>();
         services.AddScoped<IEntityDomainValidator<VisitAttachmentsEntity>, VisitAttachmentValidator>();
         services.AddScoped<IEntityDomainValidator<ClientFiscalDataEntity>, ClientFiscalDataValidator>();
+        services.AddScoped<IEntityDomainValidator<EmployeeFiscalDataEntity>, EmployeeFiscalDataValidator>();
         services.AddScoped<IEntityDomainValidator<TenantContactPersonsEntity>, TenantContactValidator>();
         services.AddScoped<IEntityDomainValidator<TenantFiscalDataEntity>, TenantFiscalDataValidator>();
         services.AddScoped<IEntityDomainValidator<TenantAddressesEntity>, TenantAddressValidator>();
@@ -179,6 +181,7 @@ public static class DependencyInjection
         services.AddScoped<IClientAddressAppService, ClientAddressAppService>();
         services.AddScoped<IClientContactPersonAppService, ClientContactPersonAppService>();
         services.AddScoped<IClientFiscalDataAppService, ClientFiscalDataAppService>();
+        services.AddScoped<IEmployeeFiscalDataAppService, EmployeeFiscalDataAppService>();
         services.AddScoped<IVisitContactPersonAppService, VisitContactPersonAppService>();
         services.AddScoped<IVisitAddressAppService, VisitAddressAppService>();
         services.AddScoped<IVisitAppService, VisitAppService>();
@@ -234,6 +237,7 @@ public static class DependencyInjection
         services.AddScoped<IVisitTeamEquipmentDomainService, VisitTeamEquipmentDomainService>();
         services.AddScoped<IVisitAttachmentDomainService, VisitAttachmentDomainService>();
         services.AddScoped<IClientFiscalDataDomainService, ClientFiscalDataDomainService>();
+        services.AddScoped<IEmployeeFiscalDataDomainService, EmployeeFiscalDataDomainService>();
         services.AddScoped<IPartyTypeDomainService, PartyTypeDomainService>();
         services.AddScoped<IStatusDomainDomainService, StatusDomainDomainService>();
         services.AddScoped<IStatusDefinitionDomainService, StatusDefinitionDomainService>();
@@ -256,6 +260,7 @@ public static class DependencyInjection
         services.AddScoped<IClientContactPersonDataRepository, ClientContactPersonRepository>();
         services.AddScoped<IClientAddressDataRepository, ClientAddressRepository>();
         services.AddScoped<IClientFiscalDataDataRepository, ClientFiscalDataDataRepository>();
+        services.AddScoped<IEmployeeFiscalDataDataRepository, EmployeeFiscalDataDataRepository>();
         services.AddScoped<IVisitContactDataRepository, VisitContactPersonDataRepository>();
         services.AddScoped<IVisitAddressDataRepository, VisitAddressDataRepository>();
         services.AddScoped<IVisitDataRepository, VisitDataRepository>();
