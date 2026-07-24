@@ -1,4 +1,4 @@
-namespace VianaHub.Global.Gerit.Application.Dtos.Response.Business.VisitTeamVehicle;
+namespace VianaHub.Global.Gerit.Application.Dtos.Response.Business.VisitTeamVehicles;
 
 public class VisitTeamVehicleDetailResponse
 {

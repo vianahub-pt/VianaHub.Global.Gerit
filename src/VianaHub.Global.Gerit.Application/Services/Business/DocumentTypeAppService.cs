@@ -163,20 +163,6 @@ public class DocumentTypeAppService : IDocumentTypeAppService
         return await _domain.DeleteAsync(entity, ct);
     }
 
-    // ─── Translation sub-resource ────────────────────────────────────────────
-
-    public async Task<IEnumerable<DocumentTypeTranslationResponse>> GetTranslationsAsync(int id, CancellationToken ct)
-    {
-        var entity = await _repo.GetByIdAsync(id, ct);
-        if (entity == null || entity.IsDeleted)
-        {
-            _notify.Add(_localization.GetMessage("Application.Service.DocumentType.Translation.ResourceNotFound"), 410);
-            return null;
-        }
-
-        return _mapper.Map<IEnumerable<DocumentTypeTranslationResponse>>(entity.Translations);
-    }
-
     public async Task<int> CreateTranslationAsync(int id, CreateDocumentTypeTranslationRequest request, CancellationToken ct)
     {
         var entity = await _repo.GetByIdAsync(id, ct);

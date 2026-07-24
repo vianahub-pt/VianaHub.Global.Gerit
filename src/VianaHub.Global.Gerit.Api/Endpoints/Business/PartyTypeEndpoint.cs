@@ -153,24 +153,6 @@ public static class PartyTypeEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        // ─── Translation sub-resource ───────────────────────────────────────
-
-        groupV1.MapGet("/{id}/translations", async (
-            [FromRoute] byte id,
-            [FromServices] IPartyTypeAppService appService,
-            [FromServices] INotify notify,
-            CancellationToken ct) =>
-        {
-            var response = await appService.GetTranslationsAsync(id, ct);
-            return notify.CustomResponse(response, 200);
-        })
-        .CustomAuthorize("Admin,BackOffice,Manager", "PartyTypes", "GetTranslations")
-        .WithName("GetPartyTypeTranslations")
-        .WithSummary("Swagger.Endpoint.PartyType.GetTranslations.Summary")
-        .Produces(StatusCodes.Status200OK)
-        .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
-        .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
-
         groupV1.MapPost("/{id}/translations", async (
             [FromRoute] byte id,
             [FromBody] CreatePartyTypeTranslationRequest request,

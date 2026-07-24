@@ -14,6 +14,7 @@ using VianaHub.Global.Gerit.Domain.Entities.Business;
 using VianaHub.Global.Gerit.Domain.Helpers;
 using VianaHub.Global.Gerit.Domain.Interfaces.Base;
 using VianaHub.Global.Gerit.Application.Dtos.Response.Business.VisitTeamVehicle;
+using VianaHub.Global.Gerit.Application.Dtos.Response.Business.VisitTeamVehicles;
 
 namespace VianaHub.Global.Gerit.Application.Services.Business;
 

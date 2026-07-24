@@ -34,8 +34,6 @@ public class DocumentTypeMappingProfile : Profile
                 TranslationResolver.ResolveDescription(src.Translations, CultureInfo.CurrentCulture.Name, t => t.LanguageCode, t => t.Description)))
             .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsActive));
 
-        CreateMap<DocumentTypeTranslationsEntity, DocumentTypeTranslationResponse>();
-
         CreateMap<ListPage<DocumentTypeEntity>, ListPageResponse<DocumentTypeResponse>>();
     }
 }

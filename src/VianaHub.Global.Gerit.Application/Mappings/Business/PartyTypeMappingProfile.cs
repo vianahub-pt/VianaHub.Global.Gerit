@@ -34,8 +34,6 @@ public class PartyTypeMappingProfile : Profile
                 TranslationResolver.ResolveUsedLanguageCode(src.Translations, CultureInfo.CurrentCulture.Name, t => t.LanguageCode)))
             .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsActive));
 
-        CreateMap<PartyTypeTranslationsEntity, PartyTypeTranslationResponse>();
-
         CreateMap<ListPage<PartyTypeEntity>, ListPageResponse<PartyTypeResponse>>();
     }
 }

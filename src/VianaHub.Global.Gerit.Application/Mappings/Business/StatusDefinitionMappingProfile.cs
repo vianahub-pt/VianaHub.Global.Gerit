@@ -35,8 +35,6 @@ public class StatusDefinitionMappingProfile : Profile
                     CultureInfo.CurrentCulture.Name,
                     t => t.LanguageCode)));
 
-        CreateMap<StatusDefinitionTranslationsEntity, StatusDefinitionTranslationResponse>();
-
         CreateMap<ListPage<StatusDefinitionEntity>, ListPageResponse<StatusDefinitionResponse>>();
     }
 }

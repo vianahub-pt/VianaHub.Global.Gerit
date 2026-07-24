@@ -34,8 +34,6 @@ public class StatusDomainMappingProfile : Profile
                 TranslationResolver.ResolveUsedLanguageCode(src.Translations, CultureInfo.CurrentCulture.Name, t => t.LanguageCode)))
             .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsActive));
 
-        CreateMap<StatusDomainTranslationsEntity, StatusDomainTranslationResponse>();
-
         CreateMap<ListPage<StatusDomainEntity>, ListPageResponse<StatusDomainResponse>>();
     }
 }
