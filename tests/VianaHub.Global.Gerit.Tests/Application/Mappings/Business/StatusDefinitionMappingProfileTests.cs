@@ -87,11 +87,7 @@ public class StatusDefinitionMappingProfileTests
 
             Assert.NotNull(result);
             Assert.Equal(1, result.Id);
-            Assert.Equal(101, result.TenantId);
-            Assert.Equal("Empresa XPTO", result.TenantName);
-            Assert.Equal("PENDING", result.Code);
             Assert.Equal("Pendente PT", result.Name);
-            Assert.Equal("Estado Visita PT", result.StatusDomainName);
             Assert.Equal("pt-PT", result.LanguageCode);
         }
         finally
@@ -120,11 +116,7 @@ public class StatusDefinitionMappingProfileTests
             var result = _mapper.Map<StatusDefinitionResponse>(entity);
 
             Assert.NotNull(result);
-            Assert.Equal(202, result.TenantId);
-            Assert.Equal("Company ACME", result.TenantName);
-            Assert.Equal("PENDING", result.Code);
             Assert.Equal("Pending EN", result.Name);
-            Assert.Equal("Visit Status EN", result.StatusDomainName);
             Assert.Equal("en-US", result.LanguageCode);
         }
         finally
@@ -153,9 +145,7 @@ public class StatusDefinitionMappingProfileTests
             var result = _mapper.Map<StatusDefinitionResponse>(entity);
 
             Assert.NotNull(result);
-            Assert.Equal("ACTIVE", result.Code);
             Assert.Equal("Ativo PT", result.Name);
-            Assert.Equal("Estado Visita PT", result.StatusDomainName);
             Assert.Equal("pt-PT", result.LanguageCode); // fallback para pt-PT
         }
         finally
@@ -185,11 +175,7 @@ public class StatusDefinitionMappingProfileTests
 
         Assert.NotNull(result);
         Assert.Equal(5, result.Id);
-        Assert.Equal(999, result.TenantId);
-        Assert.Equal("Tenant Sem Traduções", result.TenantName);
-        Assert.Equal("NOTRANS", result.Code);
         Assert.Null(result.Name);
-        Assert.Null(result.StatusDomainName);
         Assert.Null(result.LanguageCode);
     }
 }

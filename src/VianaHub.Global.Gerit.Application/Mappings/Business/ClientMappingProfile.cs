@@ -13,10 +13,8 @@ public class ClientMappingProfile : Profile
     public ClientMappingProfile()
     {
         CreateMap<ClientEntity, ClientResponse>()
-            .ForMember(dest => dest.Tenant, opt => opt.MapFrom(src => ResolveTenant(src)))
-            .ForMember(dest => dest.PartyType, opt => opt.MapFrom((src, _, _, _) =>
-                TranslationResolver.Resolve(src.PartyType.Translations, CultureInfo.CurrentCulture.Name, t => t.LanguageCode, t => t.Name)))
-            .ForMember(dest => dest.Contact, opt => opt.MapFrom(src => ResolvePrimaryContact(src)));
+            .ForMember(dest => dest.PartyTypeName, opt => opt.MapFrom((src, _, _, _) =>
+                TranslationResolver.Resolve(src.PartyType.Translations, CultureInfo.CurrentCulture.Name, t => t.LanguageCode, t => t.Name)));
 
         CreateMap<ClientEntity, ClientDetailResponse>()
             .ForMember(dest => dest.UrlImage, opt => opt.MapFrom(src => src.ImageUrl))
