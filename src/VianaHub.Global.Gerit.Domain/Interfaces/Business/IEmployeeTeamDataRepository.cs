@@ -7,9 +7,9 @@ namespace VianaHub.Global.Gerit.Domain.Interfaces.Business;
 
 public interface IEmployeeTeamDataRepository
 {
-    Task<EmployeeTeamEntity> GetByIdAsync(int id, CancellationToken ct);
-    Task<IEnumerable<EmployeeTeamEntity>> GetAllAsync(CancellationToken ct);
-    Task<ListPage<EmployeeTeamEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct);
+    Task<EmployeeTeamEntity> GetByIdAsync(int employeeId, int id, CancellationToken ct);
+    Task<IEnumerable<EmployeeTeamEntity>> GetAllAsync(int employeeId, CancellationToken ct);
+    Task<ListPage<EmployeeTeamEntity>> GetPagedAsync(int employeeId, PagedFilter request, CancellationToken ct);
     Task<bool> ExistsByIdAsync(int id, CancellationToken ct);
     Task<bool> ExistsByTeamAndMemberAsync(int tenantId, int teamId, int EmployeeId, CancellationToken ct);
     Task<bool> AddAsync(EmployeeTeamEntity entity, CancellationToken ct);

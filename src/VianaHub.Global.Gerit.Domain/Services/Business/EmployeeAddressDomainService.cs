@@ -9,7 +9,7 @@ using VianaHub.Global.Gerit.Domain.Tools.Pagination;
 namespace VianaHub.Global.Gerit.Domain.Services.Business;
 
 /// <summary>
-/// Serviþo de domÝnio para EmployeeAddress
+/// Serviço de domínio para EmployeeAddress
 /// </summary>
 public class EmployeeAddressDomainService : IEmployeeAddressDomainService
 {
@@ -27,17 +27,17 @@ public class EmployeeAddressDomainService : IEmployeeAddressDomainService
         _notify = notify;
     }
 
-    public async Task<EmployeeAddressesEntity> GetByIdAsync(int id, CancellationToken ct)
+    public async Task<EmployeeAddressesEntity> GetByIdAsync(int employeeId, int id, CancellationToken ct)
     {
-        return await _repo.GetByIdAsync(id, ct);
+        return await _repo.GetByIdAsync(employeeId, id, ct);
     }
-    public async Task<IEnumerable<EmployeeAddressesEntity>> GetAllAsync(CancellationToken ct)
+    public async Task<IEnumerable<EmployeeAddressesEntity>> GetAllAsync(int employeeId, CancellationToken ct)
     {
-        return await _repo.GetAllAsync(ct);
+        return await _repo.GetAllAsync(employeeId, ct);
     }
-    public async Task<ListPage<EmployeeAddressesEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct)
+    public async Task<ListPage<EmployeeAddressesEntity>> GetPagedAsync(int employeeId, PagedFilter request, CancellationToken ct)
     {
-        return await _repo.GetPagedAsync(request, ct);
+        return await _repo.GetPagedAsync(employeeId, request, ct);
     }
     public async Task<bool> ExistsByIdAsync(int id, CancellationToken ct)
     {

@@ -8,9 +8,6 @@ public class CreateEmployeeContactPersonRouteValidator : AbstractValidator<Creat
 {
     public CreateEmployeeContactPersonRouteValidator(ILocalizationService localization)
     {
-        RuleFor(x => x.EmployeeId)
-            .GreaterThan(0).WithMessage(localization.GetMessage("Api.Validator.EmployeeContactPerson.Create.EmployeeId"));
-
         RuleFor(x => x.Name)
             .NotEmpty().WithMessage(localization.GetMessage("Api.Validator.EmployeeContactPerson.Create.Name"))
             .MaximumLength(150).WithMessage(localization.GetMessage("Api.Validator.EmployeeContactPerson.Create.Name.MaximumLength", 150));

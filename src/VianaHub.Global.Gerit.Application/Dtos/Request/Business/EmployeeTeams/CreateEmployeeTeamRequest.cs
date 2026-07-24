@@ -3,6 +3,5 @@
 public class CreateEmployeeTeamRequest
 {
     public int TeamId { get; set; }
-    public int EmployeeId { get; set; }
     public bool IsLeader { get; set; }
 }

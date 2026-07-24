@@ -16,30 +16,30 @@ public class VisitContactPersonDataRepository : IVisitContactDataRepository
         _context = context;
     }
 
-    public async Task<VisitContactPersonsEntity> GetByIdAsync(int id, CancellationToken ct)
+    public async Task<VisitContactPersonsEntity> GetByIdAsync(int visitId, int id, CancellationToken ct)
     {
         return await _context.Set<VisitContactPersonsEntity>()
             .AsNoTracking()
             .Include(x => x.Visit)
-            .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted, ct);
+            .FirstOrDefaultAsync(x => x.VisitId == visitId && x.Id == id && !x.IsDeleted, ct);
     }
 
-    public async Task<IEnumerable<VisitContactPersonsEntity>> GetAllAsync(CancellationToken ct)
+    public async Task<IEnumerable<VisitContactPersonsEntity>> GetAllAsync(int visitId, CancellationToken ct)
     {
         return await _context.Set<VisitContactPersonsEntity>()
             .AsNoTracking()
             .Include(x => x.Visit)
-            .Where(x => !x.IsDeleted)
+            .Where(x => x.VisitId == visitId && !x.IsDeleted)
             .OrderBy(x => x.Name)
             .ToListAsync(ct);
     }
 
-    public async Task<ListPage<VisitContactPersonsEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct)
+    public async Task<ListPage<VisitContactPersonsEntity>> GetPagedAsync(int visitId, PagedFilter request, CancellationToken ct)
     {
         var query = _context.Set<VisitContactPersonsEntity>()
             .AsNoTracking()
             .Include(x => x.Visit)
-            .Where(x => !x.IsDeleted);
+            .Where(x => x.VisitId == visitId && !x.IsDeleted);
 
         if (!string.IsNullOrWhiteSpace(request.Search))
         {

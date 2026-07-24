@@ -16,28 +16,28 @@ public class EmployeeContactPersonDataRepository : IEmployeeContactPersonDataRep
         _context = context;
     }
 
-    public async Task<EmployeeContactPersonsEntity> GetByIdAsync(int id, CancellationToken ct)
+    public async Task<EmployeeContactPersonsEntity> GetByIdAsync(int employeeId, int id, CancellationToken ct)
     {
         return await _context.Set<EmployeeContactPersonsEntity>()
             .AsNoTracking()
             .Include(x => x.Employee)
-            .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted, ct);
+            .FirstOrDefaultAsync(x => x.EmployeeId == employeeId && x.Id == id && !x.IsDeleted, ct);
     }
 
-    public async Task<IEnumerable<EmployeeContactPersonsEntity>> GetAllAsync(CancellationToken ct)
+    public async Task<IEnumerable<EmployeeContactPersonsEntity>> GetAllAsync(int employeeId, CancellationToken ct)
     {
         return await _context.Set<EmployeeContactPersonsEntity>()
             .AsNoTracking()
             .Include(x => x.Employee)
-            .Where(x => !x.IsDeleted).OrderBy(x => x.Name).ToListAsync(ct);
+            .Where(x => x.EmployeeId == employeeId && !x.IsDeleted).OrderBy(x => x.Name).ToListAsync(ct);
     }
 
-    public async Task<ListPage<EmployeeContactPersonsEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct)
+    public async Task<ListPage<EmployeeContactPersonsEntity>> GetPagedAsync(int employeeId, PagedFilter request, CancellationToken ct)
     {
         var query = _context.Set<EmployeeContactPersonsEntity>()
             .AsNoTracking()
             .Include(x => x.Employee)
-            .Where(x => !x.IsDeleted);
+            .Where(x => x.EmployeeId == employeeId && !x.IsDeleted);
 
         if (!string.IsNullOrWhiteSpace(request.Search))
         {

@@ -19,7 +19,7 @@ using VianaHub.Global.Gerit.Domain.Tools.Notifications;
 namespace VianaHub.Global.Gerit.Application.Services.Business;
 
 /// <summary>
-/// Servi�o de aplica��o para VisitContact
+/// Serviço de aplicação para VisitContact
 /// </summary>
 public class VisitContactPersonAppService : IVisitContactPersonAppService
 {
@@ -52,15 +52,15 @@ public class VisitContactPersonAppService : IVisitContactPersonAppService
         _logger = logger;
     }
 
-    public async Task<IEnumerable<VisitContactPersonResponse>> GetAllAsync(CancellationToken ct)
+    public async Task<IEnumerable<VisitContactPersonResponse>> GetAllAsync(int visitId, CancellationToken ct)
     {
-        var entities = await _repo.GetAllAsync(ct);
+        var entities = await _repo.GetAllAsync(visitId, ct);
         return _mapper.Map<IEnumerable<VisitContactPersonResponse>>(entities);
     }
 
-    public async Task<VisitContactPersonResponse> GetByIdAsync(int id, CancellationToken ct)
+    public async Task<VisitContactPersonResponse> GetByIdAsync(int visitId, int id, CancellationToken ct)
     {
-        var entity = await _repo.GetByIdAsync(id, ct);
+        var entity = await _repo.GetByIdAsync(visitId, id, ct);
         if (entity == null || entity.IsDeleted || !entity.IsActive)
         {
             _notify.Add(_localization.GetMessage("Application.Service.VisitContactPerson.GetById.ResourceNotFound"), 410);
@@ -69,20 +69,19 @@ public class VisitContactPersonAppService : IVisitContactPersonAppService
         return _mapper.Map<VisitContactPersonResponse>(entity);
     }
 
-    public async Task<ListPageResponse<VisitContactPersonResponse>> GetPagedAsync(PagedFilterRequest request, CancellationToken ct)
+    public async Task<ListPageResponse<VisitContactPersonResponse>> GetPagedAsync(int visitId, PagedFilterRequest request, CancellationToken ct)
     {
         var filter = new PagedFilter(request.Search, request.IsActive, request.PageNumber, request.PageSize, request.SortBy, request.SortDirection);
-        var paged = await _repo.GetPagedAsync(filter, ct);
+        var paged = await _repo.GetPagedAsync(visitId, filter, ct);
         return _mapper.Map<ListPageResponse<VisitContactPersonResponse>>(paged);
     }
 
-    public async Task<int> CreateAsync(CreateVisitContactPersonRequest request, CancellationToken ct)
+    public async Task<int> CreateAsync(int visitId, CreateVisitContactPersonRequest request, CancellationToken ct)
     {
         var tenantId = _currentUser.GetTenantId();
         var userId = _currentUser.GetUserId();
 
-        // Validar unicidade: Email �nico por Interven��o
-        var exists = await _repo.ExistsByVisitAndEmailAsync(request.VisitId, request.Email, null, ct);
+        var exists = await _repo.ExistsByVisitAndEmailAsync(visitId, request.Email, null, ct);
         if (exists)
         {
             _notify.Add(_localization.GetMessage("Application.Service.VisitContactPerson.Create.ResourceAlreadyExists"), 409);
@@ -91,7 +90,7 @@ public class VisitContactPersonAppService : IVisitContactPersonAppService
 
         var entity = new VisitContactPersonsEntity(
             tenantId,
-            request.VisitId,
+            visitId,
             request.Name,
             request.Email,
             request.Phone,
@@ -107,16 +106,15 @@ public class VisitContactPersonAppService : IVisitContactPersonAppService
         return success ? entity.Id : 0;
     }
 
-    public async Task<bool> UpdateAsync(int id, UpdateVisitContactPersonRequest request, CancellationToken ct)
+    public async Task<bool> UpdateAsync(int visitId, int id, UpdateVisitContactPersonRequest request, CancellationToken ct)
     {
-        var entity = await _repo.GetByIdAsync(id, ct);
+        var entity = await _repo.GetByIdAsync(visitId, id, ct);
         if (entity == null || entity.IsDeleted)
         {
             _notify.Add(_localization.GetMessage("Application.Service.VisitContactPerson.Update.ResourceNotFound"), 410);
             return false;
         }
 
-        // Validar unicidade: Email �nico por Interven��o (excluindo o pr�prio registro)
         var exists = await _repo.ExistsByVisitAndEmailAsync(entity.VisitId, request.Email, id, ct);
         if (exists)
         {
@@ -128,9 +126,9 @@ public class VisitContactPersonAppService : IVisitContactPersonAppService
         return await _domain.UpdateAsync(entity, ct);
     }
 
-    public async Task<bool> ActivateAsync(int id, CancellationToken ct)
+    public async Task<bool> ActivateAsync(int visitId, int id, CancellationToken ct)
     {
-        var entity = await _repo.GetByIdAsync(id, ct);
+        var entity = await _repo.GetByIdAsync(visitId, id, ct);
         if (entity == null || entity.IsDeleted)
         {
             _notify.Add(_localization.GetMessage("Application.Service.VisitContactPerson.Activate.ResourceNotFound"), 410);
@@ -141,9 +139,9 @@ public class VisitContactPersonAppService : IVisitContactPersonAppService
         return await _domain.ActivateAsync(entity, ct);
     }
 
-    public async Task<bool> DeactivateAsync(int id, CancellationToken ct)
+    public async Task<bool> DeactivateAsync(int visitId, int id, CancellationToken ct)
     {
-        var entity = await _repo.GetByIdAsync(id, ct);
+        var entity = await _repo.GetByIdAsync(visitId, id, ct);
         if (entity == null || entity.IsDeleted)
         {
             _notify.Add(_localization.GetMessage("Application.Service.VisitContactPerson.Deactivate.ResourceNotFound"), 410);
@@ -154,9 +152,9 @@ public class VisitContactPersonAppService : IVisitContactPersonAppService
         return await _domain.DeactivateAsync(entity, ct);
     }
 
-    public async Task<bool> DeleteAsync(int id, CancellationToken ct)
+    public async Task<bool> DeleteAsync(int visitId, int id, CancellationToken ct)
     {
-        var entity = await _repo.GetByIdAsync(id, ct);
+        var entity = await _repo.GetByIdAsync(visitId, id, ct);
         if (entity == null || entity.IsDeleted)
         {
             _notify.Add(_localization.GetMessage("Application.Service.VisitContactPerson.Delete.ResourceNotFound"), 410);
@@ -167,13 +165,11 @@ public class VisitContactPersonAppService : IVisitContactPersonAppService
         return await _domain.DeleteAsync(entity, ct);
     }
 
-    public async Task<bool> BulkUploadAsync(IFormFile file, CancellationToken ct)
+    public async Task<bool> BulkUploadAsync(int visitId, IFormFile file, CancellationToken ct)
     {
-        // Valida arquivo usando servi�o centralizado
         if (!_fileValidation.ValidateFile(file))
             return false;
 
-        // L� itens do CSV
         var items = ReadCsvFile(file);
         if (items == null)
             return false;
@@ -184,25 +180,23 @@ public class VisitContactPersonAppService : IVisitContactPersonAppService
             return false;
         }
 
-        // Processa cada item
-        return await ProcessBulkItemsAsync(items, ct);
+        return await ProcessBulkItemsAsync(visitId, items, ct);
     }
 
     private List<BulkUploadVisitContactPersonItem> ReadCsvFile(IFormFile file)
     {
         try
         {
-            // Cria StreamReader com encoding UTF-8 for�ado
             using var reader = file.OpenReadStream().CreateUtf8StreamReader();
 
             var config = new CsvConfiguration(CultureInfo.InvariantCulture)
             {
                 HasHeaderRecord = true,
-                Delimiter = ";", // CSV usa ponto e v�rgula como delimitador
+                Delimiter = ";",
                 MissingFieldFound = null,
                 HeaderValidated = null,
                 TrimOptions = TrimOptions.Trim,
-                BadDataFound = null // Ignora linhas mal formatadas ao inv�s de lan�ar exce��o
+                BadDataFound = null
             };
 
             using var csv = new CsvReader(reader, config);
@@ -221,12 +215,10 @@ public class VisitContactPersonAppService : IVisitContactPersonAppService
                     var record = csv.GetRecord<BulkUploadVisitContactPersonItem>();
                     if (record != null)
                     {
-                        // Sanitiza e normaliza campos
                         record.Name = record.Name?.SanitizeCsvInput().NormalizeUtf8();
                         record.Email = record.Email?.SanitizeCsvInput().NormalizeUtf8();
                         record.Phone = record.Phone?.SanitizeCsvInput().NormalizeUtf8();
 
-                        // Valida se os campos n�o cont�m conte�do perigoso
                         if (!string.IsNullOrEmpty(record.Name) && !record.Name.IsSafeCsvValue())
                         {
                             _notify.Add(_localization.GetMessage("Application.Service.VisitContactPerson.ReadCsvFile.Name.IsSafeCsvValue", rowCount + 2), 400);
@@ -251,7 +243,6 @@ public class VisitContactPersonAppService : IVisitContactPersonAppService
                 }
                 catch (CsvHelperException ex)
                 {
-                    // Log linha com erro mas continua processamento
                     _logger.LogWarning(ex, "Erro ao processar linha {RowNumber} do CSV de VisitContactPersons", rowCount + 2);
                     _notify.Add(_localization.GetMessage("Application.Service.VisitContactPerson.ReadCsvFile.CsvHelperException", rowCount + 2), 400);
                     rowCount++;
@@ -275,7 +266,7 @@ public class VisitContactPersonAppService : IVisitContactPersonAppService
         }
     }
 
-    private async Task<bool> ProcessBulkItemsAsync(List<BulkUploadVisitContactPersonItem> items, CancellationToken ct)
+    private async Task<bool> ProcessBulkItemsAsync(int visitId, List<BulkUploadVisitContactPersonItem> items, CancellationToken ct)
     {
         var tenantId = _currentUser.GetTenantId();
         var userId = _currentUser.GetUserId();
@@ -283,14 +274,12 @@ public class VisitContactPersonAppService : IVisitContactPersonAppService
 
         foreach (var item in items)
         {
-            // Valida��o b�sica
             if (!ValidateBulkItem(item))
             {
                 hasErrors = true;
                 continue;
             }
 
-            // Verificar se j� existe
             var exists = await _repo.ExistsByVisitAndEmailAsync(item.VisitId, item.Email, null, ct);
             if (exists)
             {

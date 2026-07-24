@@ -1,11 +1,10 @@
 ﻿namespace VianaHub.Global.Gerit.Application.Dtos.Request.Business.EmployeeContact;
 
 /// <summary>
-/// DTO para cria��o de EmployeeContact
+/// DTO para criação de EmployeeContact
 /// </summary>
 public class CreateEmployeeContactPersonRequest
 {
-    public int EmployeeId { get; set; }
     public string? Name { get; set; }
     public string? Email { get; set; }
     public string? Phone { get; set; }

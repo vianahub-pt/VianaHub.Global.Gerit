@@ -5,16 +5,12 @@ using VianaHub.Global.Gerit.Domain.Interfaces.Base;
 namespace VianaHub.Global.Gerit.Api.Validators.Business.VisitContactPersons;
 
 /// <summary>
-/// Validador de rota para criação de VisitContact
+/// Validador de rota para criaÃ§Ã£o de VisitContact
 /// </summary>
 public class CreateVisitContactPersonRouteValidator : AbstractValidator<CreateVisitContactPersonRequest>
 {
     public CreateVisitContactPersonRouteValidator(ILocalizationService localization)
     {
-        RuleFor(x => x.VisitId)
-            .GreaterThan(0)
-            .WithMessage(localization.GetMessage("Api.Validator.VisitContactPerson.Create.VisitTeamId"));
-
         RuleFor(x => x.Name)
             .NotEmpty()
             .WithMessage(localization.GetMessage("Api.Validator.VisitContactPerson.Create.Name"))

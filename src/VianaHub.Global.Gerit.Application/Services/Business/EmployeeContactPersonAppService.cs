@@ -45,15 +45,15 @@ public class EmployeeContactPersonAppService : IEmployeeContactPersonAppService
         _fileValidation = fileValidation;
     }
 
-    public async Task<IEnumerable<EmployeeContactPersonResponse>> GetAllAsync(CancellationToken ct)
+    public async Task<IEnumerable<EmployeeContactPersonResponse>> GetAllAsync(int employeeId, CancellationToken ct)
     {
-        var entities = await _repo.GetAllAsync(ct);
+        var entities = await _repo.GetAllAsync(employeeId, ct);
         return _mapper.Map<IEnumerable<EmployeeContactPersonResponse>>(entities);
     }
 
-    public async Task<EmployeeContactPersonResponse> GetByIdAsync(int id, CancellationToken ct)
+    public async Task<EmployeeContactPersonResponse> GetByIdAsync(int employeeId, int id, CancellationToken ct)
     {
-        var entity = await _repo.GetByIdAsync(id, ct);
+        var entity = await _repo.GetByIdAsync(employeeId, id, ct);
         if (entity == null || entity.IsDeleted || !entity.IsActive)
         {
             _notify.Add(_localization.GetMessage("Application.Service.EmployeeContactPerson.GetById.ResourceNotFound"), 410);
@@ -62,17 +62,17 @@ public class EmployeeContactPersonAppService : IEmployeeContactPersonAppService
         return _mapper.Map<EmployeeContactPersonResponse>(entity);
     }
 
-    public async Task<ListPageResponse<EmployeeContactPersonResponse>> GetPagedAsync(PagedFilterRequest request, CancellationToken ct)
+    public async Task<ListPageResponse<EmployeeContactPersonResponse>> GetPagedAsync(int employeeId, PagedFilterRequest request, CancellationToken ct)
     {
         var filter = new PagedFilter(request.Search, request.IsActive, request.PageNumber, request.PageSize, request.SortBy, request.SortDirection);
-        var paged = await _repo.GetPagedAsync(filter, ct);
+        var paged = await _repo.GetPagedAsync(employeeId, filter, ct);
         return _mapper.Map<ListPageResponse<EmployeeContactPersonResponse>>(paged);
     }
 
-    public async Task<int> CreateAsync(CreateEmployeeContactPersonRequest request, CancellationToken ct)
+    public async Task<int> CreateAsync(int employeeId, CreateEmployeeContactPersonRequest request, CancellationToken ct)
     {
         var tenantId = _currentUser.GetTenantId();
-        var exists = await _repo.ExistsByEmailAsync(tenantId, request.EmployeeId, request.Email, ct);
+        var exists = await _repo.ExistsByEmailAsync(tenantId, employeeId, request.Email, ct);
         if (exists)
         {
             _notify.Add(_localization.GetMessage("Application.Service.EmployeeContactPerson.Create.ResourceAlreadyExists"), 409);
@@ -81,7 +81,7 @@ public class EmployeeContactPersonAppService : IEmployeeContactPersonAppService
 
         var entity = new EmployeeContactPersonsEntity(
             tenantId,
-            request.EmployeeId,
+            employeeId,
             request.Name,
             request.Email,
             request.Phone,
@@ -96,9 +96,9 @@ public class EmployeeContactPersonAppService : IEmployeeContactPersonAppService
         return success ? entity.Id : 0;
     }
 
-    public async Task<bool> UpdateAsync(int id, UpdateEmployeeContactPersonRequest request, CancellationToken ct)
+    public async Task<bool> UpdateAsync(int employeeId, int id, UpdateEmployeeContactPersonRequest request, CancellationToken ct)
     {
-        var entity = await _repo.GetByIdAsync(id, ct);
+        var entity = await _repo.GetByIdAsync(employeeId, id, ct);
         if (entity == null)
         {
             _notify.Add(_localization.GetMessage("Application.Service.EmployeeContactPerson.Update.ResourceNotFound"), 410);
@@ -127,9 +127,9 @@ public class EmployeeContactPersonAppService : IEmployeeContactPersonAppService
         return await _domain.UpdateAsync(entity, ct);
     }
 
-    public async Task<bool> ActivateAsync(int id, CancellationToken ct)
+    public async Task<bool> ActivateAsync(int employeeId, int id, CancellationToken ct)
     {
-        var entity = await _repo.GetByIdAsync(id, ct);
+        var entity = await _repo.GetByIdAsync(employeeId, id, ct);
         if (entity == null)
         {
             _notify.Add(_localization.GetMessage("Application.Service.EmployeeContactPerson.Activate.ResourceNotFound"), 410);
@@ -140,9 +140,9 @@ public class EmployeeContactPersonAppService : IEmployeeContactPersonAppService
         return await _domain.ActivateAsync(entity, ct);
     }
 
-    public async Task<bool> DeactivateAsync(int id, CancellationToken ct)
+    public async Task<bool> DeactivateAsync(int employeeId, int id, CancellationToken ct)
     {
-        var entity = await _repo.GetByIdAsync(id, ct);
+        var entity = await _repo.GetByIdAsync(employeeId, id, ct);
         if (entity == null)
         {
             _notify.Add(_localization.GetMessage("Application.Service.EmployeeContactPerson.Deactivate.ResourceNotFound"), 410);
@@ -153,9 +153,9 @@ public class EmployeeContactPersonAppService : IEmployeeContactPersonAppService
         return await _domain.DeactivateAsync(entity, ct);
     }
 
-    public async Task<bool> DeleteAsync(int id, CancellationToken ct)
+    public async Task<bool> DeleteAsync(int employeeId, int id, CancellationToken ct)
     {
-        var entity = await _repo.GetByIdAsync(id, ct);
+        var entity = await _repo.GetByIdAsync(employeeId, id, ct);
         if (entity == null)
         {
             _notify.Add(_localization.GetMessage("Application.Service.EmployeeContactPerson.Delete.ResourceNotFound"), 410);
@@ -166,7 +166,7 @@ public class EmployeeContactPersonAppService : IEmployeeContactPersonAppService
         return await _domain.DeleteAsync(entity, ct);
     }
 
-    public async Task<bool> BulkUploadAsync(IFormFile file, CancellationToken ct)
+    public async Task<bool> BulkUploadAsync(int employeeId, IFormFile file, CancellationToken ct)
     {
         if (!_fileValidation.ValidateFile(file))
             return false;
@@ -181,7 +181,7 @@ public class EmployeeContactPersonAppService : IEmployeeContactPersonAppService
             return false;
         }
 
-        return await ProcessBulkItemsAsync(items, ct);
+        return await ProcessBulkItemsAsync(employeeId, items, ct);
     }
 
     private List<BulkUploadEmployeeContactPersonItem> ReadCsvFile(IFormFile file)
@@ -265,7 +265,7 @@ public class EmployeeContactPersonAppService : IEmployeeContactPersonAppService
         }
     }
 
-    private async Task<bool> ProcessBulkItemsAsync(List<BulkUploadEmployeeContactPersonItem> items, CancellationToken ct)
+    private async Task<bool> ProcessBulkItemsAsync(int employeeId, List<BulkUploadEmployeeContactPersonItem> items, CancellationToken ct)
     {
         var hasErrors = false;
         var tenantId = _currentUser.GetTenantId();

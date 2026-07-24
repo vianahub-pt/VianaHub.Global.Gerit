@@ -12,10 +12,6 @@ public class CreateEmployeeAddressRouteValidator : AbstractValidator<CreateEmplo
     {
         _localization = localization;
 
-        RuleFor(x => x.EmployeeId)
-            .GreaterThan(0)
-            .WithMessage(_localization.GetMessage("Api.Validator.EmployeeAddress.Create.EmployeeId"));
-
         RuleFor(x => x.Street)
             .NotEmpty()
             .WithMessage(_localization.GetMessage("Api.Validator.EmployeeAddress.Create.Street"))
