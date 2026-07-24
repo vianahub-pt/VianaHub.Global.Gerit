@@ -13,8 +13,7 @@ public class ClientContactPersonsMappingProfile : Profile
 {
     public ClientContactPersonsMappingProfile()
     {
-        CreateMap<ClientContactPersonsEntity, ClientContactResponse>()
-            .ForMember(dest => dest.Client, opt => opt.MapFrom(src => src.Client.Name));
+        CreateMap<ClientContactPersonsEntity, ClientContactResponse>();
 
         CreateMap<ClientContactPersonsEntity, ClientContactDetailResponse>()
             .ForMember(dest => dest.Client, opt => opt.MapFrom(src => src.Client.Name));

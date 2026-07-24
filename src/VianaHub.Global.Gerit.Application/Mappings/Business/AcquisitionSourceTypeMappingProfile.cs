@@ -14,13 +14,10 @@ public class AcquisitionSourceTypeMappingProfile : Profile
     {
         CreateMap<AcquisitionSourceTypeEntity, AcquisitionSourceTypeResponse>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
-            .ForMember(dest => dest.Code, opt => opt.MapFrom(src => src.Code))
             .ForMember(dest => dest.LanguageCode, opt => opt.MapFrom((src, _, _, _) =>
                 TranslationResolver.ResolveUsedLanguageCode(src.Translations, CultureInfo.CurrentCulture.Name, t => t.LanguageCode)))
             .ForMember(dest => dest.Name, opt => opt.MapFrom((src, _, _, _) =>
                 TranslationResolver.Resolve(src.Translations, CultureInfo.CurrentCulture.Name, t => t.LanguageCode, t => t.Name)))
-            .ForMember(dest => dest.Description, opt => opt.MapFrom((src, _, _, _) =>
-                TranslationResolver.ResolveDescription(src.Translations, CultureInfo.CurrentCulture.Name, t => t.LanguageCode, t => t.Description)))
             .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsActive));
 
         CreateMap<AcquisitionSourceTypeEntity, AcquisitionSourceTypeDetailResponse>()
@@ -33,14 +30,7 @@ public class AcquisitionSourceTypeMappingProfile : Profile
             .ForMember(dest => dest.Description, opt => opt.MapFrom((src, _, _, _) =>
                 TranslationResolver.ResolveDescription(src.Translations, CultureInfo.CurrentCulture.Name, t => t.LanguageCode, t => t.Description)))
             .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsActive))
-            .ForMember(dest => dest.Translations, opt => opt.MapFrom(src => src.Translations))
-            .ForMember(dest => dest.IsDeleted, opt => opt.MapFrom(src => src.IsDeleted))
-            .ForMember(dest => dest.CreatedBy, opt => opt.MapFrom(src => src.CreatedBy))
-            .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => src.CreatedAt))
-            .ForMember(dest => dest.ModifiedBy, opt => opt.MapFrom(src => src.ModifiedBy))
-            .ForMember(dest => dest.ModifiedAt, opt => opt.MapFrom(src => src.ModifiedAt));
-
-        CreateMap<AcquisitionSourceTypeTranslationsEntity, AcquisitionSourceTypeTranslationResponse>();
+            .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => src.CreatedAt));
 
         CreateMap<ListPage<AcquisitionSourceTypeEntity>, ListPageResponse<AcquisitionSourceTypeResponse>>();
     }

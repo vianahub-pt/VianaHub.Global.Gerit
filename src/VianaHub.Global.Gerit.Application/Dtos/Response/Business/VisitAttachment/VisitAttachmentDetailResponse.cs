@@ -1,5 +1,9 @@
 namespace VianaHub.Global.Gerit.Application.Dtos.Response.Business.VisitAttachment;
 
+/// <summary>
+/// DTO de resposta detalhada para VisitAttachment — inclui campos de auditoria.
+/// Classe independente — não herda de VisitAttachmentResponse.
+/// </summary>
 public class VisitAttachmentDetailResponse
 {
     public int Id { get; set; }
