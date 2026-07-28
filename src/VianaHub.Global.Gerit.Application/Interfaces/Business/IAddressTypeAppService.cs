@@ -8,7 +8,7 @@ namespace VianaHub.Global.Gerit.Application.Interfaces.Business;
 public interface IAddressTypeAppService
 {
     Task<IEnumerable<AddressTypeResponse>> GetAllAsync(CancellationToken ct);
-    Task<AddressTypeResponse> GetByIdAsync(int id, CancellationToken ct);
+    Task<AddressTypeDetailResponse> GetByIdAsync(int id, CancellationToken ct);
     Task<ListPageResponse<AddressTypeResponse>> GetPagedAsync(PagedFilterRequest request, CancellationToken ct);
     Task<int> CreateAsync(CreateAddressTypeRequest request, CancellationToken ct);
     Task<bool> UpdateAsync(int id, UpdateAddressTypeRequest request, CancellationToken ct);

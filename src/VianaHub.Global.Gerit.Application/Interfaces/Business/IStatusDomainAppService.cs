@@ -19,7 +19,6 @@ public interface IStatusDomainAppService
     Task<bool> DeleteAsync(int id, CancellationToken ct);
 
     // Translation sub-resource
-    Task<IEnumerable<StatusDomainTranslationResponse>> GetTranslationsAsync(int id, CancellationToken ct);
     Task<int> CreateTranslationAsync(int id, CreateStatusDomainTranslationRequest request, CancellationToken ct);
     Task<bool> UpdateTranslationAsync(int id, int translationId, UpdateStatusDomainTranslationRequest request, CancellationToken ct);
     Task<bool> DeleteTranslationAsync(int id, int translationId, CancellationToken ct);

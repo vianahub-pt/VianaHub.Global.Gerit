@@ -19,7 +19,6 @@ public interface IPartyTypeAppService
     Task<bool> DeleteAsync(byte id, CancellationToken ct);
 
     // Translation sub-resource
-    Task<IEnumerable<PartyTypeTranslationResponse>> GetTranslationsAsync(byte id, CancellationToken ct);
     Task<int> CreateTranslationAsync(byte id, CreatePartyTypeTranslationRequest request, CancellationToken ct);
     Task<bool> UpdateTranslationAsync(byte id, int translationId, UpdatePartyTypeTranslationRequest request, CancellationToken ct);
     Task<bool> DeleteTranslationAsync(byte id, int translationId, CancellationToken ct);

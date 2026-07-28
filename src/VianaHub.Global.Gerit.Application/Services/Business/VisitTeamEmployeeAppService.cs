@@ -6,6 +6,7 @@ using VianaHub.Global.Gerit.Application.Interfaces.Business;
 using VianaHub.Global.Gerit.Application.Interfaces.Common;
 using VianaHub.Global.Gerit.Domain.Entities.Business;
 using VianaHub.Global.Gerit.Domain.Interfaces.Base;
+using VianaHub.Global.Gerit.Domain.Interfaces.Billing;
 using VianaHub.Global.Gerit.Domain.Interfaces.Business;
 using VianaHub.Global.Gerit.Domain.ReadModels;
 using VianaHub.Global.Gerit.Domain.Tools.Notifications;
@@ -49,7 +50,7 @@ public class VisitTeamEmployeeAppService : IVisitTeamEmployeeAppService
         return _mapper.Map<IEnumerable<VisitTeamEmployeeResponse>>(entities);
     }
 
-    public async Task<VisitTeamEmployeeResponse> GetByIdAsync(int id, CancellationToken ct)
+    public async Task<VisitTeamEmployeeDetailResponse> GetByIdAsync(int id, CancellationToken ct)
     {
         var entity = await _repo.GetByIdAsync(id, ct);
         if (entity == null || entity.IsDeleted || !entity.IsActive)
@@ -57,7 +58,7 @@ public class VisitTeamEmployeeAppService : IVisitTeamEmployeeAppService
             _notify.Add(_localization.GetMessage("Application.Service.VisitTeamEmployee.GetById.ResourceNotFound"), 410);
             return null;
         }
-        return _mapper.Map<VisitTeamEmployeeResponse>(entity);
+        return _mapper.Map<VisitTeamEmployeeDetailResponse>(entity);
     }
 
     public async Task<IEnumerable<VisitTeamEmployeeResponse>> GetByVisitTeamIdAsync(int visitTeamId, CancellationToken ct)

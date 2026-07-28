@@ -14,6 +14,12 @@ public class EquipmentMappingProfile : Profile
     {
         CreateMap<EquipmentEntity, EquipmentResponse>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+            .ForMember(dest => dest.EquipmentType, opt => opt.MapFrom(src => src.EquipmentType != null ? src.EquipmentType.Name : string.Empty))
+            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+            .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsActive));
+
+        CreateMap<EquipmentEntity, EquipmentDetailResponse>()
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
             .ForMember(dest => dest.TenantId, opt => opt.MapFrom(src => src.TenantId))
             .ForMember(dest => dest.EquipmentTypeId, opt => opt.MapFrom(src => src.EquipmentTypeId))
             .ForMember(dest => dest.EquipmentType, opt => opt.MapFrom(src => src.EquipmentType != null ? src.EquipmentType.Name : string.Empty))
@@ -28,7 +34,8 @@ public class EquipmentMappingProfile : Profile
             .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
             .ForMember(dest => dest.SerialNumber, opt => opt.MapFrom(src => src.SerialNumber))
             .ForMember(dest => dest.UrlImage, opt => opt.MapFrom(src => src.UrlImage))
-            .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsActive));
+            .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsActive))
+            .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => src.CreatedAt));
 
         CreateMap<ListPage<EquipmentEntity>, ListPageResponse<EquipmentResponse>>()
             .ForMember(dest => dest.Items, opt => opt.MapFrom(src => src.Items))

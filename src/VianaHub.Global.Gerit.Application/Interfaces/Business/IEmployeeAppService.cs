@@ -8,7 +8,7 @@ namespace VianaHub.Global.Gerit.Application.Interfaces.Business;
 public interface IEmployeeAppService
 {
     Task<IEnumerable<EmployeeResponse>> GetAllAsync(CancellationToken ct);
-    Task<EmployeeResponse> GetByIdAsync(int id, CancellationToken ct);
+    Task<EmployeeDetailResponse> GetByIdAsync(int id, CancellationToken ct);
     Task<ListPageResponse<EmployeeResponse>> GetPagedAsync(PagedFilterRequest request, CancellationToken ct);
     Task<int> CreateAsync(CreateEmployeeRequest request, CancellationToken ct);
     Task<bool> UpdateAsync(int id, UpdateEmployeeRequest request, CancellationToken ct);

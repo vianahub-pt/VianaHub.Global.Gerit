@@ -7,6 +7,7 @@ using VianaHub.Global.Gerit.Application.Interfaces.Business;
 using VianaHub.Global.Gerit.Application.Interfaces.Common;
 using VianaHub.Global.Gerit.Domain.Entities.Business;
 using VianaHub.Global.Gerit.Domain.Interfaces.Base;
+using VianaHub.Global.Gerit.Domain.Interfaces.Billing;
 using VianaHub.Global.Gerit.Domain.Interfaces.Business;
 using VianaHub.Global.Gerit.Domain.ReadModels;
 using VianaHub.Global.Gerit.Domain.Tools.Notifications;
@@ -47,9 +48,9 @@ public class VisitAttachmentAppService : IVisitAttachmentAppService
         _logger = logger;
     }
 
-    public async Task<VisitAttachmentResponse> GetByIdAsync(int id, CancellationToken ct)
+    public async Task<VisitAttachmentResponse> GetByIdAsync(int visitId, int id, CancellationToken ct)
     {
-        var entity = await _repo.GetByIdAsync(id, ct);
+        var entity = await _repo.GetByIdAsync(visitId, id, ct);
         if (entity == null || entity.IsDeleted || !entity.IsActive)
         {
             _notify.Add(_localization.GetMessage("Application.Service.VisitAttachment.GetById.ResourceNotFound"), 410);
@@ -69,9 +70,31 @@ public class VisitAttachmentAppService : IVisitAttachmentAppService
         return _mapper.Map<VisitAttachmentResponse>(entity);
     }
 
-    public async Task<IEnumerable<VisitAttachmentResponse>> GetAllAsync(CancellationToken ct)
+    public async Task<VisitAttachmentDetailResponse> GetDetailByIdAsync(int visitId, int id, CancellationToken ct)
     {
-        var entities = await _repo.GetAllAsync(ct);
+        var entity = await _repo.GetByIdAsync(visitId, id, ct);
+        if (entity == null || entity.IsDeleted || !entity.IsActive)
+        {
+            _notify.Add(_localization.GetMessage("Application.Service.VisitAttachment.GetById.ResourceNotFound"), 410);
+            return null;
+        }
+        return _mapper.Map<VisitAttachmentDetailResponse>(entity);
+    }
+
+    public async Task<VisitAttachmentDetailResponse> GetDetailByPublicIdAsync(Guid publicId, CancellationToken ct)
+    {
+        var entity = await _repo.GetByPublicIdAsync(publicId, ct);
+        if (entity == null || entity.IsDeleted || !entity.IsActive)
+        {
+            _notify.Add(_localization.GetMessage("Application.Service.VisitAttachment.GetByPublicId.ResourceNotFound"), 410);
+            return null;
+        }
+        return _mapper.Map<VisitAttachmentDetailResponse>(entity);
+    }
+
+    public async Task<IEnumerable<VisitAttachmentResponse>> GetAllAsync(int visitId, CancellationToken ct)
+    {
+        var entities = await _repo.GetAllAsync(visitId, ct);
         return _mapper.Map<IEnumerable<VisitAttachmentResponse>>(entities);
     }
 
@@ -92,18 +115,18 @@ public class VisitAttachmentAppService : IVisitAttachmentAppService
         return _mapper.Map<VisitAttachmentResponse>(entity);
     }
 
-    public async Task<ListPageResponse<VisitAttachmentResponse>> GetPagedAsync(PagedFilterRequest request, CancellationToken ct)
+    public async Task<ListPageResponse<VisitAttachmentResponse>> GetPagedAsync(int visitId, PagedFilterRequest request, CancellationToken ct)
     {
         var filter = new PagedFilter(request.Search, request.IsActive, request.PageNumber, request.PageSize, request.SortBy, request.SortDirection);
-        var paged = await _repo.GetPagedAsync(filter, ct);
+        var paged = await _repo.GetPagedAsync(visitId, filter, ct);
         return _mapper.Map<ListPageResponse<VisitAttachmentResponse>>(paged);
     }
 
-    public async Task<int> CreateAsync(CreateVisitAttachmentRequest request, CancellationToken ct)
+    public async Task<int> CreateAsync(int visitId, CreateVisitAttachmentRequest request, CancellationToken ct)
     {
         var tenantId = _currentUser.GetTenantId();
 
-        if (!await _visitRepo.ExistsByIdAsync(request.VisitId, ct))
+        if (!await _visitRepo.ExistsByIdAsync(visitId, ct))
         {
             _notify.Add(_localization.GetMessage("Application.Service.VisitAttachment.Create.VisitNotFound"), 400);
             return 0;
@@ -123,10 +146,10 @@ public class VisitAttachmentAppService : IVisitAttachmentAppService
 
         if (request.IsPrimary)
         {
-            await RemoveAllPrimaryFlagsAsync(request.VisitId, ct);
+            await RemoveAllPrimaryFlagsAsync(visitId, ct);
         }
 
-        var entity = new VisitAttachmentsEntity(tenantId, request.FileTypeId, request.VisitId,
+        var entity = new VisitAttachmentsEntity(tenantId, request.FileTypeId, visitId,
             request.S3Key, request.FileName, request.FileSizeBytes,
             request.DisplayOrder, request.IsPrimary, _currentUser.GetUserId());
 
@@ -134,9 +157,9 @@ public class VisitAttachmentAppService : IVisitAttachmentAppService
         return success ? entity.Id : 0;
     }
 
-    public async Task<bool> UpdateAsync(int id, UpdateVisitAttachmentRequest request, CancellationToken ct)
+    public async Task<bool> UpdateAsync(int visitId, int id, UpdateVisitAttachmentRequest request, CancellationToken ct)
     {
-        var entity = await _repo.GetByIdAsync(id, ct);
+        var entity = await _repo.GetByIdAsync(visitId, id, ct);
         if (entity == null || entity.IsDeleted || !entity.IsActive)
         {
             _notify.Add(_localization.GetMessage("Application.Service.VisitAttachment.Update.ResourceNotFound"), 410);
@@ -153,9 +176,9 @@ public class VisitAttachmentAppService : IVisitAttachmentAppService
         return await _domain.UpdateAsync(entity, ct);
     }
 
-    public async Task<bool> SetAsPrimaryAsync(int id, CancellationToken ct)
+    public async Task<bool> SetAsPrimaryAsync(int visitId, int id, CancellationToken ct)
     {
-        var entity = await _repo.GetByIdAsync(id, ct);
+        var entity = await _repo.GetByIdAsync(visitId, id, ct);
         if (entity == null || entity.IsDeleted || !entity.IsActive)
         {
             _notify.Add(_localization.GetMessage("Application.Service.VisitAttachment.SetAsPrimary.ResourceNotFound"), 410);
@@ -168,9 +191,9 @@ public class VisitAttachmentAppService : IVisitAttachmentAppService
         return await _domain.UpdateAsync(entity, ct);
     }
 
-    public async Task<bool> ActivateAsync(int id, CancellationToken ct)
+    public async Task<bool> ActivateAsync(int visitId, int id, CancellationToken ct)
     {
-        var entity = await _repo.GetByIdAsync(id, ct);
+        var entity = await _repo.GetByIdAsync(visitId, id, ct);
         if (entity == null || entity.IsDeleted)
         {
             _notify.Add(_localization.GetMessage("Application.Service.VisitAttachment.Activate.ResourceNotFound"), 410);
@@ -181,9 +204,9 @@ public class VisitAttachmentAppService : IVisitAttachmentAppService
         return await _domain.ActivateAsync(entity, ct);
     }
 
-    public async Task<bool> DeactivateAsync(int id, CancellationToken ct)
+    public async Task<bool> DeactivateAsync(int visitId, int id, CancellationToken ct)
     {
-        var entity = await _repo.GetByIdAsync(id, ct);
+        var entity = await _repo.GetByIdAsync(visitId, id, ct);
         if (entity == null || entity.IsDeleted || !entity.IsActive)
         {
             _notify.Add(_localization.GetMessage("Application.Service.VisitAttachment.Deactivate.ResourceNotFound"), 410);
@@ -194,9 +217,9 @@ public class VisitAttachmentAppService : IVisitAttachmentAppService
         return await _domain.DeactivateAsync(entity, ct);
     }
 
-    public async Task<bool> DeleteAsync(int id, CancellationToken ct)
+    public async Task<bool> DeleteAsync(int visitId, int id, CancellationToken ct)
     {
-        var entity = await _repo.GetByIdAsync(id, ct);
+        var entity = await _repo.GetByIdAsync(visitId, id, ct);
         if (entity == null || entity.IsDeleted)
         {
             _notify.Add(_localization.GetMessage("Application.Service.VisitAttachment.Delete.ResourceNotFound"), 410);

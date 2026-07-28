@@ -171,20 +171,6 @@ public class PartyTypeAppService : IPartyTypeAppService
         return await _domain.DeleteAsync(entity, ct);
     }
 
-    // ─── Translation sub-resource ────────────────────────────────────────────
-
-    public async Task<IEnumerable<PartyTypeTranslationResponse>> GetTranslationsAsync(byte id, CancellationToken ct)
-    {
-        var entity = await _repo.GetByIdAsync(id, ct);
-        if (entity == null || entity.IsDeleted)
-        {
-            _notify.Add(_localization.GetMessage("Application.Service.PartyType.Translation.ResourceNotFound"), 410);
-            return null;
-        }
-
-        return _mapper.Map<IEnumerable<PartyTypeTranslationResponse>>(entity.Translations);
-    }
-
     public async Task<int> CreateTranslationAsync(byte id, CreatePartyTypeTranslationRequest request, CancellationToken ct)
     {
         var entity = await _repo.GetByIdAsync(id, ct);

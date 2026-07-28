@@ -11,9 +11,5 @@ public class TenantFiscalDataDetailResponse
     public string? IBAN { get; set; }
     public string? FiscalEmail { get; set; }
     public bool IsActive { get; set; }
-    public bool IsDeleted { get; set; }
-    public int CreatedBy { get; set; }
     public DateTime CreatedAt { get; set; }
-    public int? ModifiedBy { get; set; }
-    public DateTime? ModifiedAt { get; set; }
 }

@@ -6,17 +6,17 @@ using VianaHub.Global.Gerit.Application.Dtos.Response.Business.EmployeeAddress;
 namespace VianaHub.Global.Gerit.Application.Interfaces.Business;
 
 /// <summary>
-/// Interface de servi�o de aplica��o para EmployeeAddress
+/// Interface de serviço de aplicação para EmployeeAddress
 /// </summary>
 public interface IEmployeeAddressAppService
 {
-    Task<IEnumerable<EmployeeAddressResponse>> GetAllAsync(CancellationToken ct);
-    Task<EmployeeAddressResponse> GetByIdAsync(int id, CancellationToken ct);
-    Task<ListPageResponse<EmployeeAddressResponse>> GetPagedAsync(PagedFilterRequest request, CancellationToken ct);
-    Task<int> CreateAsync(CreateEmployeeAddressRequest request, CancellationToken ct);
-    Task<bool> UpdateAsync(int id, UpdateEmployeeAddressRequest request, CancellationToken ct);
-    Task<bool> ActivateAsync(int id, CancellationToken ct);
-    Task<bool> DeactivateAsync(int id, CancellationToken ct);
-    Task<bool> DeleteAsync(int id, CancellationToken ct);
-    Task<bool> BulkUploadAsync(IFormFile file, CancellationToken ct);
+    Task<IEnumerable<EmployeeAddressResponse>> GetAllAsync(int employeeId, CancellationToken ct);
+    Task<EmployeeAddressDetailResponse> GetByIdAsync(int employeeId, int id, CancellationToken ct);
+    Task<ListPageResponse<EmployeeAddressResponse>> GetPagedAsync(int employeeId, PagedFilterRequest request, CancellationToken ct);
+    Task<int> CreateAsync(int employeeId, CreateEmployeeAddressRequest request, CancellationToken ct);
+    Task<bool> UpdateAsync(int employeeId, int id, UpdateEmployeeAddressRequest request, CancellationToken ct);
+    Task<bool> ActivateAsync(int employeeId, int id, CancellationToken ct);
+    Task<bool> DeactivateAsync(int employeeId, int id, CancellationToken ct);
+    Task<bool> DeleteAsync(int employeeId, int id, CancellationToken ct);
+    Task<bool> BulkUploadAsync(int employeeId, IFormFile file, CancellationToken ct);
 }

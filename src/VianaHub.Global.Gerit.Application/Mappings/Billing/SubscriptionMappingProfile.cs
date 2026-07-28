@@ -19,6 +19,16 @@ public class SubscriptionMappingProfile : Profile
         // Mapeia SubscriptionEntity -> SubscriptionResponse
         CreateMap<SubscriptionEntity, SubscriptionResponse>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+            .ForMember(dest => dest.SubscriptionPlanName, opt => opt.MapFrom((src, _, _, _) =>
+                TranslationResolver.Resolve(src.SubscriptionPlan?.Translations, CultureInfo.CurrentCulture.Name, t => t.LanguageCode, t => t.Name)
+                ?? string.Empty))
+            .ForMember(dest => dest.StatusDomainName, opt => opt.MapFrom((src, _, _, _) =>
+                TranslationResolver.Resolve(src.StatusDefinition.StatusDomain?.Translations, CultureInfo.CurrentCulture.Name, t => t.LanguageCode, t => t.Name)))
+            .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsActive));
+
+        // Mapeia SubscriptionEntity -> SubscriptionDetailResponse (com audit fields)
+        CreateMap<SubscriptionEntity, SubscriptionDetailResponse>()
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
             .ForMember(dest => dest.TenantId, opt => opt.MapFrom(src => src.TenantId))
             .ForMember(dest => dest.SubscriptionPlanId, opt => opt.MapFrom(src => src.SubscriptionPlanId))
             .ForMember(dest => dest.SubscriptionPlanName, opt => opt.MapFrom((src, _, _, _) =>
@@ -48,7 +58,8 @@ public class SubscriptionMappingProfile : Profile
             .ForMember(dest => dest.DaysRemaining, opt => opt.MapFrom(src =>
                 (src.CurrentPeriodEnd - DateTime.UtcNow).Days > 0
                     ? (src.CurrentPeriodEnd - DateTime.UtcNow).Days
-                    : 0));
+                    : 0))
+            .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => src.CreatedAt));
 
         CreateMap<ListPage<SubscriptionEntity>, ListPageResponse<SubscriptionResponse>>();
     }

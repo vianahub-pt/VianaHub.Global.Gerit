@@ -17,35 +17,34 @@ public class EmployeeTeamDataRepository : IEmployeeTeamDataRepository
         _context = context;
     }
 
-    public async Task<EmployeeTeamEntity> GetByIdAsync(int id, CancellationToken ct)
+    public async Task<EmployeeTeamEntity> GetByIdAsync(int employeeId, int id, CancellationToken ct)
     {
         return await _context.Set<EmployeeTeamEntity>()
             .AsNoTracking()
             .Include(x => x.Team)
             .Include(x => x.Employee)
-            .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted, ct);
+            .FirstOrDefaultAsync(x => x.EmployeeId == employeeId && x.Id == id && !x.IsDeleted, ct);
     }
 
-    public async Task<IEnumerable<EmployeeTeamEntity>> GetAllAsync(CancellationToken ct)
+    public async Task<IEnumerable<EmployeeTeamEntity>> GetAllAsync(int employeeId, CancellationToken ct)
     {
         return await _context.Set<EmployeeTeamEntity>()
             .AsNoTracking()
             .Include(x => x.Team)
             .Include(x => x.Employee)
-            .Where(x => !x.IsDeleted).OrderBy(x => x.Id).ToListAsync(ct);
+            .Where(x => x.EmployeeId == employeeId && !x.IsDeleted).OrderBy(x => x.Id).ToListAsync(ct);
     }
 
-    public async Task<ListPage<EmployeeTeamEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct)
+    public async Task<ListPage<EmployeeTeamEntity>> GetPagedAsync(int employeeId, PagedFilter request, CancellationToken ct)
     {
         var query = _context.Set<EmployeeTeamEntity>()
             .AsNoTracking()
             .Include(x => x.Team)
             .Include(x => x.Employee)
-            .Where(x => !x.IsDeleted);
+            .Where(x => x.EmployeeId == employeeId && !x.IsDeleted);
 
         if (!string.IsNullOrWhiteSpace(request.Search))
         {
-            // simple search on Id or TeamId or EmployeeId
             query = query.Where(x => EF.Functions.Like(x.Team.Name.ToString(), $"%{request.Search}%") || 
                                      EF.Functions.Like(x.Employee.Name.ToString(), $"%{request.Search}%"));
         }

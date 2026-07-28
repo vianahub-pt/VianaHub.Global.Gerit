@@ -153,24 +153,6 @@ public static class StatusDomainEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        // ─── Translation sub-resource ───────────────────────────────────────
-
-        groupV1.MapGet("/{id}/translations", async (
-            [FromRoute] int id,
-            [FromServices] IStatusDomainAppService appService,
-            [FromServices] INotify notify,
-            CancellationToken ct) =>
-        {
-            var response = await appService.GetTranslationsAsync(id, ct);
-            return notify.CustomResponse(response, 200);
-        })
-        .CustomAuthorize("Admin,BackOffice,Manager", "StatusDomains", "GetTranslations")
-        .WithName("GetStatusDomainTranslations")
-        .WithSummary("Swagger.Endpoint.StatusDomain.GetTranslations.Summary")
-        .Produces(StatusCodes.Status200OK)
-        .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
-        .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
-
         groupV1.MapPost("/{id}/translations", async (
             [FromRoute] int id,
             [FromBody] CreateStatusDomainTranslationRequest request,

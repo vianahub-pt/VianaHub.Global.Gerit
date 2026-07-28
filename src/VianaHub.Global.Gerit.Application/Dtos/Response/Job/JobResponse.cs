@@ -1,5 +1,3 @@
-using System;
-
 namespace VianaHub.Global.Gerit.Application.Dtos.Response.Job;
 
 public class JobResponse

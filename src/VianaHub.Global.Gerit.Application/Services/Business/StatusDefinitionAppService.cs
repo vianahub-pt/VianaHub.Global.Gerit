@@ -176,20 +176,6 @@ public class StatusDefinitionAppService : IStatusDefinitionAppService
         return await _domain.DeleteAsync(entity, ct);
     }
 
-    // ─── Translation sub-resource ────────────────────────────────────────────
-
-    public async Task<IEnumerable<StatusDefinitionTranslationResponse>> GetTranslationsAsync(int id, CancellationToken ct)
-    {
-        var entity = await _repo.GetByIdAsync(id, ct);
-        if (entity == null || entity.IsDeleted)
-        {
-            _notify.Add(_localization.GetMessage("Application.Service.StatusDefinition.Translation.ResourceNotFound"), 410);
-            return null;
-        }
-
-        return _mapper.Map<IEnumerable<StatusDefinitionTranslationResponse>>(entity.Translations);
-    }
-
     public async Task<int> CreateTranslationAsync(int id, CreateStatusDefinitionTranslationRequest request, CancellationToken ct)
     {
         var entity = await _repo.GetByIdAsync(id, ct);

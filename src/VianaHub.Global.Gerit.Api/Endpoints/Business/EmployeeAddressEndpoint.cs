@@ -13,11 +13,11 @@ public static class EmployeeAddressEndpoint
 {
     public static void MapEmployeeAddressEndpoints(this IEndpointRouteBuilder app)
     {
-        var groupV1 = app.MapGroup("/v1/employee-addresses").WithTags("EmployeeAddresses").WithGroupName("v1").RequireAuthorization();
+        var groupV1 = app.MapGroup("/v1/employees").WithTags("EmployeeAddresses").WithGroupName("v1").RequireAuthorization();
 
-        groupV1.MapGet("/", async ([FromServices] IEmployeeAddressAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
+        groupV1.MapGet("/{employeeId}/addresses", async ([FromRoute] int employeeId, [FromServices] IEmployeeAddressAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
-            var response = await appService.GetAllAsync(ct);
+            var response = await appService.GetAllAsync(employeeId, ct);
             return notify.CustomResponse(response, 200);
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "EmployeeAddresses", "GetAll")
@@ -26,9 +26,9 @@ public static class EmployeeAddressEndpoint
         .Produces(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapGet("/{id}", async ([FromRoute] int id, [FromServices] IEmployeeAddressAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
+        groupV1.MapGet("/{employeeId}/addresses/{id}", async ([FromRoute] int employeeId, [FromRoute] int id, [FromServices] IEmployeeAddressAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
-            var response = await appService.GetByIdAsync(id, ct);
+            var response = await appService.GetByIdAsync(employeeId, id, ct);
             return notify.CustomResponse(response, 200);
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "EmployeeAddresses", "GetBy")
@@ -38,9 +38,9 @@ public static class EmployeeAddressEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status410Gone)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapGet("/paged", async ([AsParameters] PagedFilterRequest request, [FromServices] IEmployeeAddressAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
+        groupV1.MapGet("/{employeeId}/addresses/paged", async ([FromRoute] int employeeId, [AsParameters] PagedFilterRequest request, [FromServices] IEmployeeAddressAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
-            var response = await appService.GetPagedAsync(request, ct);
+            var response = await appService.GetPagedAsync(employeeId, request, ct);
             return notify.CustomResponse(response, 200);
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "EmployeeAddresses", "GetPaged")
@@ -49,9 +49,9 @@ public static class EmployeeAddressEndpoint
         .Produces(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapPost("/", async ([FromBody] CreateEmployeeAddressRequest request, [FromServices] IEmployeeAddressAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
+        groupV1.MapPost("/{employeeId}/addresses/", async ([FromRoute] int employeeId, [FromBody] CreateEmployeeAddressRequest request, [FromServices] IEmployeeAddressAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
-            var id = await appService.CreateAsync(request, ct);
+            var id = await appService.CreateAsync(employeeId, request, ct);
             return notify.CustomResponse(new GenericResponse { Id = id }, 201);
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "EmployeeAddresses", "Create")
@@ -63,9 +63,9 @@ public static class EmployeeAddressEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError)
         .WithValidation<CreateEmployeeAddressRequest>();
 
-        groupV1.MapPut("/{id}", async ([FromRoute] int id, [FromBody] UpdateEmployeeAddressRequest request, [FromServices] IEmployeeAddressAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
+        groupV1.MapPut("/{employeeId}/addresses/{id}", async ([FromRoute] int employeeId, [FromRoute] int id, [FromBody] UpdateEmployeeAddressRequest request, [FromServices] IEmployeeAddressAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
-            var updated = await appService.UpdateAsync(id, request, ct);
+            var updated = await appService.UpdateAsync(employeeId, id, request, ct);
             return notify.CustomResponse(updated, 200);
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "EmployeeAddresses", "Update")
@@ -77,9 +77,9 @@ public static class EmployeeAddressEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError)
         .WithValidation<UpdateEmployeeAddressRequest>();
 
-        groupV1.MapPatch("/{id}/activate", async ([FromRoute] int id, [FromServices] IEmployeeAddressAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
+        groupV1.MapPatch("/{employeeId}/addresses/{id}/activate", async ([FromRoute] int employeeId, [FromRoute] int id, [FromServices] IEmployeeAddressAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
-            var ok = await appService.ActivateAsync(id, ct);
+            var ok = await appService.ActivateAsync(employeeId, id, ct);
             return notify.CustomResponse();
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "EmployeeAddresses", "Activate")
@@ -89,9 +89,9 @@ public static class EmployeeAddressEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status410Gone)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapPatch("/{id}/deactivate", async ([FromRoute] int id, [FromServices] IEmployeeAddressAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
+        groupV1.MapPatch("/{employeeId}/addresses/{id}/deactivate", async ([FromRoute] int employeeId, [FromRoute] int id, [FromServices] IEmployeeAddressAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
-            var ok = await appService.DeactivateAsync(id, ct);
+            var ok = await appService.DeactivateAsync(employeeId, id, ct);
             return notify.CustomResponse();
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "EmployeeAddresses", "Deactivate")
@@ -101,9 +101,9 @@ public static class EmployeeAddressEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status410Gone)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapDelete("/{id}", async ([FromRoute] int id, [FromServices] IEmployeeAddressAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
+        groupV1.MapDelete("/{employeeId}/addresses/{id}", async ([FromRoute] int employeeId, [FromRoute] int id, [FromServices] IEmployeeAddressAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
-            var ok = await appService.DeleteAsync(id, ct);
+            var ok = await appService.DeleteAsync(employeeId, id, ct);
             return notify.CustomResponse();
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "EmployeeAddresses", "Delete")
@@ -113,7 +113,7 @@ public static class EmployeeAddressEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status410Gone)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapPost("/bulk-upload", async (HttpRequest request, [FromServices] IEmployeeAddressAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
+        groupV1.MapPost("/{employeeId}/addresses/bulk-upload", async ([FromRoute] int employeeId, HttpRequest request, [FromServices] IEmployeeAddressAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             if (!request.HasFormContentType || request.Form.Files.Count == 0)
             {
@@ -122,7 +122,7 @@ public static class EmployeeAddressEndpoint
             }
 
             var file = request.Form.Files[0];
-            var success = await appService.BulkUploadAsync(file, ct);
+            var success = await appService.BulkUploadAsync(employeeId, file, ct);
             return notify.CustomResponse(success);
         })
         .CustomAuthorize("Admin,BackOffice,Manager", "EmployeeAddresses", "BulkUpload")

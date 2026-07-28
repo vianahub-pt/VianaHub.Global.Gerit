@@ -20,17 +20,17 @@ public class EmployeeTeamDomainService : IEmployeeTeamDomainService
         _notify = notify;
     }
 
-    public async Task<EmployeeTeamEntity> GetByIdAsync(int id, CancellationToken ct)
+    public async Task<EmployeeTeamEntity> GetByIdAsync(int employeeId, int id, CancellationToken ct)
     {
-        return await _repo.GetByIdAsync(id, ct);
+        return await _repo.GetByIdAsync(employeeId, id, ct);
     }
-    public async Task<IEnumerable<EmployeeTeamEntity>> GetAllAsync(CancellationToken ct)
+    public async Task<IEnumerable<EmployeeTeamEntity>> GetAllAsync(int employeeId, CancellationToken ct)
     {
-        return await _repo.GetAllAsync(ct);
+        return await _repo.GetAllAsync(employeeId, ct);
     }
-    public async Task<ListPage<EmployeeTeamEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct)
+    public async Task<ListPage<EmployeeTeamEntity>> GetPagedAsync(int employeeId, PagedFilter request, CancellationToken ct)
     {
-        return await _repo.GetPagedAsync(request, ct);
+        return await _repo.GetPagedAsync(employeeId, request, ct);
     }
     public async Task<bool> ExistsByIdAsync(int id, CancellationToken ct)
     {

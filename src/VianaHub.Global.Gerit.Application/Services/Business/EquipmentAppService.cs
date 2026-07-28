@@ -54,7 +54,7 @@ public class EquipmentAppService : IEquipmentAppService
         return _mapper.Map<IEnumerable<EquipmentResponse>>(entities);
     }
 
-    public async Task<EquipmentResponse> GetByIdAsync(int id, CancellationToken ct)
+    public async Task<EquipmentDetailResponse> GetByIdAsync(int id, CancellationToken ct)
     {
         var entity = await _repo.GetByIdAsync(id, ct);
         if (entity == null || entity.IsDeleted || !entity.IsActive)
@@ -62,7 +62,7 @@ public class EquipmentAppService : IEquipmentAppService
             _notify.Add(_localization.GetMessage("Application.Service.Equipment.Update.ResourceNotFound"), 410);
             return null;
         }
-        return _mapper.Map<EquipmentResponse>(entity);
+        return _mapper.Map<EquipmentDetailResponse>(entity);
     }
 
     public async Task<ListPageResponse<EquipmentResponse>> GetPagedAsync(PagedFilterRequest request, CancellationToken ct)

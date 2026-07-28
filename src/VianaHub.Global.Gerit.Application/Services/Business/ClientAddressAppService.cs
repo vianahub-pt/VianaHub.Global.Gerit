@@ -59,7 +59,7 @@ public class ClientAddressAppService : IClientAddressAppService
         return _mapper.Map<IEnumerable<ClientAddressResponse>>(entities);
     }
 
-    public async Task<ClientAddressResponse> GetByIdAsync(int clientId, int id, CancellationToken ct)
+    public async Task<ClientAddressDetailResponse> GetByIdAsync(int clientId, int id, CancellationToken ct)
     {
         var entity = await _repo.GetByIdAsync(clientId, id, ct);
         if (entity == null || entity.IsDeleted || !entity.IsActive)
@@ -67,7 +67,7 @@ public class ClientAddressAppService : IClientAddressAppService
             _notify.Add(_localization.GetMessage("Application.Service.ClientAddress.GetById.ResourceNotFound"), 410);
             return null;
         }
-        return _mapper.Map<ClientAddressResponse>(entity);
+        return _mapper.Map<ClientAddressDetailResponse>(entity);
     }
 
     public async Task<ListPageResponse<ClientAddressResponse>> GetPagedAsync(int clientId, PagedFilterRequest request, CancellationToken ct)

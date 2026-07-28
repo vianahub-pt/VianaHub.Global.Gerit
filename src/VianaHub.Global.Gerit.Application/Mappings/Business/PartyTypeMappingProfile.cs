@@ -17,6 +17,14 @@ public class PartyTypeMappingProfile : Profile
     {
         CreateMap<PartyTypeEntity, PartyTypeResponse>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+            .ForMember(dest => dest.Name, opt => opt.MapFrom((src, _, _, _) =>
+                TranslationResolver.Resolve(src.Translations, CultureInfo.CurrentCulture.Name, t => t.LanguageCode, t => t.Name)))
+            .ForMember(dest => dest.LanguageCode, opt => opt.MapFrom((src, _, _, _) =>
+                TranslationResolver.ResolveUsedLanguageCode(src.Translations, CultureInfo.CurrentCulture.Name, t => t.LanguageCode)))
+            .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsActive));
+
+        CreateMap<PartyTypeEntity, PartyTypeDetailResponse>()
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
             .ForMember(dest => dest.Code, opt => opt.MapFrom(src => src.Code))
             .ForMember(dest => dest.Name, opt => opt.MapFrom((src, _, _, _) =>
                 TranslationResolver.Resolve(src.Translations, CultureInfo.CurrentCulture.Name, t => t.LanguageCode, t => t.Name)))
@@ -25,12 +33,6 @@ public class PartyTypeMappingProfile : Profile
             .ForMember(dest => dest.LanguageCode, opt => opt.MapFrom((src, _, _, _) =>
                 TranslationResolver.ResolveUsedLanguageCode(src.Translations, CultureInfo.CurrentCulture.Name, t => t.LanguageCode)))
             .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsActive));
-
-        CreateMap<PartyTypeEntity, PartyTypeDetailResponse>()
-            .IncludeBase<PartyTypeEntity, PartyTypeResponse>()
-            .ForMember(dest => dest.Translations, opt => opt.MapFrom(src => src.Translations));
-
-        CreateMap<PartyTypeTranslationsEntity, PartyTypeTranslationResponse>();
 
         CreateMap<ListPage<PartyTypeEntity>, ListPageResponse<PartyTypeResponse>>();
     }

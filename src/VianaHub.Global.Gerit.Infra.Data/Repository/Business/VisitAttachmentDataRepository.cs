@@ -16,13 +16,13 @@ public class VisitAttachmentDataRepository : IVisitAttachmentDataRepository
         _context = context;
     }
 
-    public async Task<VisitAttachmentsEntity> GetByIdAsync(int id, CancellationToken ct)
+    public async Task<VisitAttachmentsEntity> GetByIdAsync(int visitId, int id, CancellationToken ct)
     {
         return await _context.Set<VisitAttachmentsEntity>()
             .AsNoTracking()
             .Include(x => x.FileType)
             .Include(x => x.Visit)
-            .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted, ct);
+            .FirstOrDefaultAsync(x => x.VisitId == visitId && x.Id == id && !x.IsDeleted, ct);
     }
 
     public async Task<VisitAttachmentsEntity> GetByPublicIdAsync(Guid publicId, CancellationToken ct)
@@ -33,12 +33,12 @@ public class VisitAttachmentDataRepository : IVisitAttachmentDataRepository
             .FirstOrDefaultAsync(x => x.PublicId == publicId && !x.IsDeleted, ct);
     }
 
-    public async Task<IEnumerable<VisitAttachmentsEntity>> GetAllAsync(CancellationToken ct)
+    public async Task<IEnumerable<VisitAttachmentsEntity>> GetAllAsync(int visitId, CancellationToken ct)
     {
         return await _context.Set<VisitAttachmentsEntity>()
             .AsNoTracking()
             .Include(x => x.FileType)
-            .Where(x => !x.IsDeleted)
+            .Where(x => x.VisitId == visitId && !x.IsDeleted)
             .OrderByDescending(x => x.IsPrimary)
             .ThenBy(x => x.DisplayOrder)
             .ToListAsync(ct);
@@ -64,13 +64,13 @@ public class VisitAttachmentDataRepository : IVisitAttachmentDataRepository
             .FirstOrDefaultAsync(x => x.VisitId == visitId && x.IsPrimary && x.IsActive && !x.IsDeleted, ct);
     }
 
-    public async Task<ListPage<VisitAttachmentsEntity>> GetPagedAsync(PagedFilter request, CancellationToken ct)
+    public async Task<ListPage<VisitAttachmentsEntity>> GetPagedAsync(int visitId, PagedFilter request, CancellationToken ct)
     {
         var query = _context.Set<VisitAttachmentsEntity>()
             .AsNoTracking()
             .Include(x => x.FileType)
             .Include(x => x.Visit)
-            .Where(x => !x.IsDeleted);
+            .Where(x => x.VisitId == visitId && !x.IsDeleted);
 
         if (!string.IsNullOrWhiteSpace(request.Search))
         {

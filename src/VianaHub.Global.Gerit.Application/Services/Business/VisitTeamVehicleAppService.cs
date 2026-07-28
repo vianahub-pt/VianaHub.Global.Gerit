@@ -6,7 +6,6 @@ using System.Globalization;
 using VianaHub.Global.Gerit.Application.Dtos.Base;
 using VianaHub.Global.Gerit.Domain.ReadModels;
 using VianaHub.Global.Gerit.Domain.Tools.Notifications;
-using VianaHub.Global.Gerit.Application.Dtos.Response.Business.VisitTeamVehicles;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Business.VisitTeamVehicles;
 using VianaHub.Global.Gerit.Application.Interfaces.Business;
 using VianaHub.Global.Gerit.Application.Interfaces.Common;
@@ -14,6 +13,8 @@ using VianaHub.Global.Gerit.Domain.Interfaces.Business;
 using VianaHub.Global.Gerit.Domain.Entities.Business;
 using VianaHub.Global.Gerit.Domain.Helpers;
 using VianaHub.Global.Gerit.Domain.Interfaces.Base;
+using VianaHub.Global.Gerit.Application.Dtos.Response.Business.VisitTeamVehicle;
+using VianaHub.Global.Gerit.Application.Dtos.Response.Business.VisitTeamVehicles;
 
 namespace VianaHub.Global.Gerit.Application.Services.Business;
 
@@ -51,7 +52,7 @@ public class VisitTeamVehicleAppService : IVisitTeamVehiclesAppService
         return _mapper.Map<IEnumerable<VisitTeamVehicleResponse>>(entities);
     }
 
-    public async Task<VisitTeamVehicleResponse> GetByIdAsync(int id, CancellationToken ct)
+    public async Task<VisitTeamVehicleDetailResponse> GetByIdAsync(int id, CancellationToken ct)
     {
         var entity = await _repo.GetByIdAsync(id, ct);
         if (entity == null || entity.IsDeleted || !entity.IsActive)
@@ -59,7 +60,7 @@ public class VisitTeamVehicleAppService : IVisitTeamVehiclesAppService
             _notify.Add(_localization.GetMessage("Application.Service.VisitTeamVehicle.GetById.ResourceNotFound"), 410);
             return null;
         }
-        return _mapper.Map<VisitTeamVehicleResponse>(entity);
+        return _mapper.Map<VisitTeamVehicleDetailResponse>(entity);
     }
 
     public async Task<ListPageResponse<VisitTeamVehicleResponse>> GetPagedAsync(PagedFilterRequest request, CancellationToken ct)

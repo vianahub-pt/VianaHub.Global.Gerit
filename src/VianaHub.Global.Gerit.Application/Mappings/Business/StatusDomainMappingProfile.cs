@@ -17,6 +17,14 @@ public class StatusDomainMappingProfile : Profile
     {
         CreateMap<StatusDomainEntity, StatusDomainResponse>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+            .ForMember(dest => dest.Name, opt => opt.MapFrom((src, _, _, _) =>
+                TranslationResolver.Resolve(src.Translations, CultureInfo.CurrentCulture.Name, t => t.LanguageCode, t => t.Name)))
+            .ForMember(dest => dest.LanguageCode, opt => opt.MapFrom((src, _, _, _) =>
+                TranslationResolver.ResolveUsedLanguageCode(src.Translations, CultureInfo.CurrentCulture.Name, t => t.LanguageCode)))
+            .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsActive));
+
+        CreateMap<StatusDomainEntity, StatusDomainDetailResponse>()
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
             .ForMember(dest => dest.Code, opt => opt.MapFrom(src => src.Code))
             .ForMember(dest => dest.Name, opt => opt.MapFrom((src, _, _, _) =>
                 TranslationResolver.Resolve(src.Translations, CultureInfo.CurrentCulture.Name, t => t.LanguageCode, t => t.Name)))
@@ -25,12 +33,6 @@ public class StatusDomainMappingProfile : Profile
             .ForMember(dest => dest.LanguageCode, opt => opt.MapFrom((src, _, _, _) =>
                 TranslationResolver.ResolveUsedLanguageCode(src.Translations, CultureInfo.CurrentCulture.Name, t => t.LanguageCode)))
             .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsActive));
-
-        CreateMap<StatusDomainEntity, StatusDomainDetailResponse>()
-            .IncludeBase<StatusDomainEntity, StatusDomainResponse>()
-            .ForMember(dest => dest.Translations, opt => opt.MapFrom(src => src.Translations));
-
-        CreateMap<StatusDomainTranslationsEntity, StatusDomainTranslationResponse>();
 
         CreateMap<ListPage<StatusDomainEntity>, ListPageResponse<StatusDomainResponse>>();
     }

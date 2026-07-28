@@ -7,13 +7,13 @@ namespace VianaHub.Global.Gerit.Application.Interfaces.Business;
 
 public interface IEmployeeTeamsAppService
 {
-    Task<IEnumerable<EmployeeTeamResponse>> GetAllAsync(CancellationToken ct);
-    Task<EmployeeTeamResponse> GetByIdAsync(int id, CancellationToken ct);
-    Task<ListPageResponse<EmployeeTeamResponse>> GetPagedAsync(PagedFilterRequest request, CancellationToken ct);
-    Task<int> CreateAsync(CreateEmployeeTeamRequest request, CancellationToken ct);
-    Task<bool> UpdateAsync(int id, UpdateEmployeeTeamRequest request, CancellationToken ct);
-    Task<bool> ActivateAsync(int id, CancellationToken ct);
-    Task<bool> DeactivateAsync(int id, CancellationToken ct);
-    Task<bool> DeleteAsync(int id, CancellationToken ct);
-    Task<bool> BulkUploadAsync(IFormFile file, CancellationToken ct);
+    Task<IEnumerable<EmployeeTeamResponse>> GetAllAsync(int employeeId, CancellationToken ct);
+    Task<EmployeeTeamDetailResponse> GetByIdAsync(int employeeId, int id, CancellationToken ct);
+    Task<ListPageResponse<EmployeeTeamResponse>> GetPagedAsync(int employeeId, PagedFilterRequest request, CancellationToken ct);
+    Task<int> CreateAsync(int employeeId, CreateEmployeeTeamRequest request, CancellationToken ct);
+    Task<bool> UpdateAsync(int employeeId, int id, UpdateEmployeeTeamRequest request, CancellationToken ct);
+    Task<bool> ActivateAsync(int employeeId, int id, CancellationToken ct);
+    Task<bool> DeactivateAsync(int employeeId, int id, CancellationToken ct);
+    Task<bool> DeleteAsync(int employeeId, int id, CancellationToken ct);
+    Task<bool> BulkUploadAsync(int employeeId, IFormFile file, CancellationToken ct);
 }
