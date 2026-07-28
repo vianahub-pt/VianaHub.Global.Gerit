@@ -20,7 +20,7 @@ public static class EmployeeTeamsEndpoint
             var response = await appService.GetAllAsync(employeeId, ct);
             return notify.CustomResponse(response, 200);
         })
-        .CustomAuthorize("Admin,BackOffice,Manager", "EmployeeTeams", "GetAll")
+        .CustomAuthorize("Admin,BackOffice,Manager", "EmployeeTeam", "GetAll")
         .WithName("GetEmployeeTeams")
         .WithSummary("Swagger.Endpoint.EmployeeTeams.GetAll.Summary")
         .Produces(StatusCodes.Status200OK)
@@ -31,7 +31,7 @@ public static class EmployeeTeamsEndpoint
             var response = await appService.GetByIdAsync(employeeId, id, ct);
             return notify.CustomResponse(response, 200);
         })
-        .CustomAuthorize("Admin,BackOffice,Manager", "EmployeeTeams", "GetBy")
+        .CustomAuthorize("Admin,BackOffice,Manager", "EmployeeTeam", "GetBy")
         .WithName("GetEmployeeTeamById")
         .WithSummary("Swagger.Endpoint.EmployeeTeams.GetById.Summary")
         .Produces(StatusCodes.Status200OK)
@@ -43,7 +43,7 @@ public static class EmployeeTeamsEndpoint
             var response = await appService.GetPagedAsync(employeeId, request, ct);
             return notify.CustomResponse(response, 200);
         })
-        .CustomAuthorize("Admin,BackOffice,Manager", "EmployeeTeams", "GetPaged")
+        .CustomAuthorize("Admin,BackOffice,Manager", "EmployeeTeam", "GetPaged")
         .WithName("GetEmployeeTeamsPaged")
         .WithSummary("Swagger.Endpoint.EmployeeTeams.GetPaged.Summary")
         .Produces(StatusCodes.Status200OK)
@@ -54,7 +54,7 @@ public static class EmployeeTeamsEndpoint
             var id = await appService.CreateAsync(employeeId, request, ct);
             return notify.CustomResponse(new GenericResponse { Id = id }, 201);
         })
-        .CustomAuthorize("Admin,BackOffice,Manager", "EmployeeTeams", "Create")
+        .CustomAuthorize("Admin,BackOffice,Manager", "EmployeeTeam", "Create")
         .WithName("CreateEmployeeTeam")
         .WithSummary("Swagger.Endpoint.EmployeeTeams.Create.Summary")
         .Produces<GenericResponse>(StatusCodes.Status201Created)
@@ -68,7 +68,7 @@ public static class EmployeeTeamsEndpoint
             var updated = await appService.UpdateAsync(employeeId, id, request, ct);
             return notify.CustomResponse(updated, 200);
         })
-        .CustomAuthorize("Admin,BackOffice,Manager", "EmployeeTeams", "Update")
+        .CustomAuthorize("Admin,BackOffice,Manager", "EmployeeTeam", "Update")
         .WithName("UpdateEmployeeTeam")
         .WithSummary("Swagger.Endpoint.EmployeeTeams.Update.Summary")
         .Produces(StatusCodes.Status204NoContent)
@@ -82,7 +82,7 @@ public static class EmployeeTeamsEndpoint
             var ok = await appService.ActivateAsync(employeeId, id, ct);
             return notify.CustomResponse();
         })
-        .CustomAuthorize("Admin,BackOffice,Manager", "EmployeeTeams", "Activate")
+        .CustomAuthorize("Admin,BackOffice,Manager", "EmployeeTeam", "Activate")
         .WithName("ActivateEmployeeTeam")
         .WithSummary("Swagger.Endpoint.EmployeeTeams.Activate.Summary")
         .Produces(StatusCodes.Status204NoContent)
@@ -94,7 +94,7 @@ public static class EmployeeTeamsEndpoint
             var ok = await appService.DeactivateAsync(employeeId, id, ct);
             return notify.CustomResponse();
         })
-        .CustomAuthorize("Admin,BackOffice,Manager", "EmployeeTeams", "Deactivate")
+        .CustomAuthorize("Admin,BackOffice,Manager", "EmployeeTeam", "Deactivate")
         .WithName("DeactivateEmployeeTeam")
         .WithSummary("Swagger.Endpoint.EmployeeTeams.Deactivate.Summary")
         .Produces(StatusCodes.Status204NoContent)
@@ -106,7 +106,7 @@ public static class EmployeeTeamsEndpoint
             var ok = await appService.DeleteAsync(employeeId, id, ct);
             return notify.CustomResponse();
         })
-        .CustomAuthorize("Admin,BackOffice,Manager", "EmployeeTeams", "Delete")
+        .CustomAuthorize("Admin,BackOffice,Manager", "EmployeeTeam", "Delete")
         .WithName("DeleteEmployeeTeam")
         .WithSummary("Swagger.Endpoint.EmployeeTeams.Delete.Summary")
         .Produces(StatusCodes.Status204NoContent)
@@ -125,7 +125,7 @@ public static class EmployeeTeamsEndpoint
             var success = await appService.BulkUploadAsync(employeeId, file, ct);
             return notify.CustomResponse(success);
         })
-        .CustomAuthorize("Admin,BackOffice,Manager", "EmployeeTeams", "BulkUpload")
+        .CustomAuthorize("Admin,BackOffice,Manager", "EmployeeTeam", "BulkUpload")
         .WithName("BulkUploadEmployeeTeams")
         .WithSummary("Swagger.Endpoint.EmployeeTeams.BulkUpload.Summary")
         .DisableAntiforgery()
