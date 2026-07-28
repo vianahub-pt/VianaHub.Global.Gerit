@@ -20,7 +20,7 @@ select * from dbo.SubscriptionPlanTranslations;
 
 --------------------------------------------
 select * from dbo.Actions;
-select * from dbo.Resources;
+select * from dbo.Resources where name like '%Employee%';
 select * from dbo.Roles;
 
 --------------------------------------------

@@ -182,6 +182,8 @@ public static class DependencyInjection
         services.AddScoped<IClientContactPersonAppService, ClientContactPersonAppService>();
         services.AddScoped<IClientFiscalDataAppService, ClientFiscalDataAppService>();
         services.AddScoped<IEmployeeFiscalDataAppService, EmployeeFiscalDataAppService>();
+        services.AddScoped<IEmployeeAddressAppService, EmployeeAddressAppService>();
+        services.AddScoped<IEmployeeContactPersonAppService, EmployeeContactPersonAppService>();
         services.AddScoped<IVisitContactPersonAppService, VisitContactPersonAppService>();
         services.AddScoped<IVisitAddressAppService, VisitAddressAppService>();
         services.AddScoped<IVisitAppService, VisitAppService>();
