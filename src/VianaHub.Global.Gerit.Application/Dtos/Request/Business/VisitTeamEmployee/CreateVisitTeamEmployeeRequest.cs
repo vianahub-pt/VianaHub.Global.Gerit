@@ -2,7 +2,6 @@ namespace VianaHub.Global.Gerit.Application.Dtos.Request.Business.VisitTeamEmplo
 
 public record CreateVisitTeamEmployeeRequest
 {
-    public int VisitTeamId { get; init; }
     public int EmployeeId { get; init; }
     public int VisitTeamFunctionId { get; init; }
     public bool IsLeader { get; init; }

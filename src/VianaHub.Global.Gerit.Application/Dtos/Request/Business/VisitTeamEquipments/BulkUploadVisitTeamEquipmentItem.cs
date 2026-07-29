@@ -2,6 +2,5 @@ namespace VianaHub.Global.Gerit.Application.Dtos.Request.Business.VisitTeamEquip
 
 public class BulkUploadVisitTeamEquipmentItem
 {
-    public int VisitTeamId { get; set; }
     public int EquipmentId { get; set; }
 }
