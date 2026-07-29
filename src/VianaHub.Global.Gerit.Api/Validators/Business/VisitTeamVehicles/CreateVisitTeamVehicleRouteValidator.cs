@@ -8,9 +8,6 @@ public class CreateVisitTeamVehicleRouteValidator : AbstractValidator<CreateVisi
 {
     public CreateVisitTeamVehicleRouteValidator(ILocalizationService localization)
     {
-        RuleFor(x => x.VisitTeamId)
-            .GreaterThan(0).WithMessage(localization.GetMessage("Api.Validator.VisitTeamVehicle.Create.VisitTeamId"));
-
         RuleFor(x => x.VehicleId)
             .GreaterThan(0).WithMessage(localization.GetMessage("Api.Validator.VisitTeamVehicle.Create.VehicleId"));
     }

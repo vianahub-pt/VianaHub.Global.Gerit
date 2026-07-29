@@ -45,16 +45,16 @@ public class VisitTeamEmployeeAppService : IVisitTeamEmployeeAppService
         _currentUser = currentUser;
     }
 
-    public async Task<IEnumerable<VisitTeamEmployeeResponse>> GetAllAsync(CancellationToken ct)
+    public async Task<IEnumerable<VisitTeamEmployeeResponse>> GetAllAsync(int visitTeamId, CancellationToken ct)
     {
-        var entities = await _repo.GetAllAsync(ct);
+        var entities = await _repo.GetByVisitTeamIdAsync(visitTeamId, ct);
         return _mapper.Map<IEnumerable<VisitTeamEmployeeResponse>>(entities);
     }
 
-    public async Task<VisitTeamEmployeeDetailResponse> GetByIdAsync(int id, CancellationToken ct)
+    public async Task<VisitTeamEmployeeDetailResponse> GetByIdAsync(int visitTeamId, int id, CancellationToken ct)
     {
         var entity = await _repo.GetByIdAsync(id, ct);
-        if (entity == null || entity.IsDeleted || !entity.IsActive)
+        if (entity == null || entity.IsDeleted || !entity.IsActive || entity.VisitTeamId != visitTeamId)
         {
             _notify.Add(_localization.GetMessage("Application.Service.VisitTeamEmployee.GetById.ResourceNotFound"), 410);
             return null;
@@ -62,32 +62,20 @@ public class VisitTeamEmployeeAppService : IVisitTeamEmployeeAppService
         return _mapper.Map<VisitTeamEmployeeDetailResponse>(entity);
     }
 
-    public async Task<IEnumerable<VisitTeamEmployeeResponse>> GetByVisitTeamIdAsync(int visitTeamId, CancellationToken ct)
-    {
-        var entities = await _repo.GetByVisitTeamIdAsync(visitTeamId, ct);
-        return _mapper.Map<IEnumerable<VisitTeamEmployeeResponse>>(entities);
-    }
-
-    public async Task<IEnumerable<VisitTeamEmployeeResponse>> GetByEmployeeIdAsync(int employeeId, CancellationToken ct)
-    {
-        var entities = await _repo.GetByEmployeeIdAsync(employeeId, ct);
-        return _mapper.Map<IEnumerable<VisitTeamEmployeeResponse>>(entities);
-    }
-
-    public async Task<IEnumerable<VisitTeamEmployeeResponse>> GetActiveByVisitTeamIdAsync(int visitTeamId, CancellationToken ct)
+    public async Task<IEnumerable<VisitTeamEmployeeResponse>> GetActiveAsync(int visitTeamId, CancellationToken ct)
     {
         var entities = await _repo.GetActiveByVisitTeamIdAsync(visitTeamId, ct);
         return _mapper.Map<IEnumerable<VisitTeamEmployeeResponse>>(entities);
     }
 
-    public async Task<ListPageResponse<VisitTeamEmployeeResponse>> GetPagedAsync(PagedFilterRequest request, CancellationToken ct)
+    public async Task<ListPageResponse<VisitTeamEmployeeResponse>> GetPagedAsync(int visitTeamId, PagedFilterRequest request, CancellationToken ct)
     {
         var filter = new PagedFilter(request.Search, request.IsActive, request.PageNumber, request.PageSize, request.SortBy, request.SortDirection);
         var paged = await _repo.GetPagedAsync(filter, ct);
         return _mapper.Map<ListPageResponse<VisitTeamEmployeeResponse>>(paged);
     }
 
-    public async Task<int> CreateAsync(CreateVisitTeamEmployeeRequest request, CancellationToken ct)
+    public async Task<int> CreateAsync(int visitTeamId, CreateVisitTeamEmployeeRequest request, CancellationToken ct)
     {
         var tenantId = _currentUser.GetTenantId();
 
@@ -103,7 +91,7 @@ public class VisitTeamEmployeeAppService : IVisitTeamEmployeeAppService
             return 0;
         }
 
-        if (await _repo.ExistsActiveAssignmentAsync(request.VisitTeamId, request.EmployeeId, ct))
+        if (await _repo.ExistsActiveAssignmentAsync(visitTeamId, request.EmployeeId, ct))
         {
             _notify.Add(_localization.GetMessage("Application.Service.VisitTeamEmployee.Create.AlreadyAssigned"), 409);
             return 0;
@@ -111,7 +99,7 @@ public class VisitTeamEmployeeAppService : IVisitTeamEmployeeAppService
 
         var entity = new VisitTeamEmployeeEntity(
             tenantId,
-            request.VisitTeamId,
+            visitTeamId,
             request.EmployeeId,
             request.VisitTeamFunctionId,
             request.IsLeader,
@@ -123,10 +111,10 @@ public class VisitTeamEmployeeAppService : IVisitTeamEmployeeAppService
         return success ? entity.Id : 0;
     }
 
-    public async Task<bool> UpdateAsync(int id, UpdateVisitTeamEmployeeRequest request, CancellationToken ct)
+    public async Task<bool> UpdateAsync(int visitTeamId, int id, UpdateVisitTeamEmployeeRequest request, CancellationToken ct)
     {
         var entity = await _repo.GetByIdAsync(id, ct);
-        if (entity == null || entity.IsDeleted || !entity.IsActive)
+        if (entity == null || entity.IsDeleted || !entity.IsActive || entity.VisitTeamId != visitTeamId)
         {
             _notify.Add(_localization.GetMessage("Application.Service.VisitTeamEmployee.Update.ResourceNotFound"), 410);
             return false;
@@ -143,10 +131,10 @@ public class VisitTeamEmployeeAppService : IVisitTeamEmployeeAppService
         return await _domain.UpdateAsync(entity, ct);
     }
 
-    public async Task<bool> ActivateAsync(int id, CancellationToken ct)
+    public async Task<bool> ActivateAsync(int visitTeamId, int id, CancellationToken ct)
     {
         var entity = await _repo.GetByIdAsync(id, ct);
-        if (entity == null || entity.IsDeleted)
+        if (entity == null || entity.IsDeleted || entity.VisitTeamId != visitTeamId)
         {
             _notify.Add(_localization.GetMessage("Application.Service.VisitTeamEmployee.Activate.ResourceNotFound"), 410);
             return false;
@@ -156,10 +144,10 @@ public class VisitTeamEmployeeAppService : IVisitTeamEmployeeAppService
         return await _domain.ActivateAsync(entity, ct);
     }
 
-    public async Task<bool> DeactivateAsync(int id, CancellationToken ct)
+    public async Task<bool> DeactivateAsync(int visitTeamId, int id, CancellationToken ct)
     {
         var entity = await _repo.GetByIdAsync(id, ct);
-        if (entity == null || entity.IsDeleted || !entity.IsActive)
+        if (entity == null || entity.IsDeleted || !entity.IsActive || entity.VisitTeamId != visitTeamId)
         {
             _notify.Add(_localization.GetMessage("Application.Service.VisitTeamEmployee.Deactivate.ResourceNotFound"), 410);
             return false;
@@ -169,10 +157,10 @@ public class VisitTeamEmployeeAppService : IVisitTeamEmployeeAppService
         return await _domain.DeactivateAsync(entity, ct);
     }
 
-    public async Task<bool> DeleteAsync(int id, CancellationToken ct)
+    public async Task<bool> DeleteAsync(int visitTeamId, int id, CancellationToken ct)
     {
         var entity = await _repo.GetByIdAsync(id, ct);
-        if (entity == null || entity.IsDeleted)
+        if (entity == null || entity.IsDeleted || entity.VisitTeamId != visitTeamId)
         {
             _notify.Add(_localization.GetMessage("Application.Service.VisitTeamEmployee.Delete.ResourceNotFound"), 410);
             return false;
@@ -182,7 +170,7 @@ public class VisitTeamEmployeeAppService : IVisitTeamEmployeeAppService
         return await _domain.DeleteAsync(entity, ct);
     }
 
-    public async Task<bool> BulkUploadAsync(IFormFile file, CancellationToken ct)
+    public async Task<bool> BulkUploadAsync(int visitTeamId, IFormFile file, CancellationToken ct)
     {
         _notify.Add(_localization.GetMessage("Application.Service.VisitTeamEmployee.BulkUpload.NotImplemented"), 501);
         return false;
