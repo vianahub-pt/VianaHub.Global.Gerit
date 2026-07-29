@@ -49,7 +49,7 @@ public static class EmployeeTeamsEndpoint
         .Produces(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapPost("/{employeeId}/teams/", async ([FromRoute] int employeeId, [FromBody] CreateEmployeeTeamRequest request, [FromServices] IEmployeeTeamsAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
+        groupV1.MapPost("/{employeeId}/teams", async ([FromRoute] int employeeId, [FromBody] CreateEmployeeTeamRequest request, [FromServices] IEmployeeTeamsAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var id = await appService.CreateAsync(employeeId, request, ct);
             return notify.CustomResponse(new GenericResponse { Id = id }, 201);

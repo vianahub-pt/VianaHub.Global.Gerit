@@ -49,7 +49,7 @@ public static class EmployeeAddressEndpoint
         .Produces(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapPost("/{employeeId}/addresses/", async ([FromRoute] int employeeId, [FromBody] CreateEmployeeAddressRequest request, [FromServices] IEmployeeAddressAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
+        groupV1.MapPost("/{employeeId}/addresses", async ([FromRoute] int employeeId, [FromBody] CreateEmployeeAddressRequest request, [FromServices] IEmployeeAddressAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var id = await appService.CreateAsync(employeeId, request, ct);
             return notify.CustomResponse(new GenericResponse { Id = id }, 201);

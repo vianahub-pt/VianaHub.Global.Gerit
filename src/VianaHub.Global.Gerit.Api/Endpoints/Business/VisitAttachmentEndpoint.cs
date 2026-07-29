@@ -63,7 +63,7 @@ public static class VisitAttachmentEndpoint
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapPost("/{visitId}/attachments/", async ([FromRoute] int visitId, [FromBody] CreateVisitAttachmentRequest request, [FromServices] IVisitAttachmentAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
+        groupV1.MapPost("/{visitId}/attachments", async ([FromRoute] int visitId, [FromBody] CreateVisitAttachmentRequest request, [FromServices] IVisitAttachmentAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var id = await appService.CreateAsync(visitId, request, ct);
             return notify.CustomResponse(new GenericResponse { Id = id }, 201);

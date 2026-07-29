@@ -52,7 +52,7 @@ public static class ClientAddressEndpoint
         .Produces(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapPost("/{clientId}/addresses/", async ([FromRoute] int clientId, [FromBody] CreateClientAddressRequest request, [FromServices] IClientAddressAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
+        groupV1.MapPost("/{clientId}/addresses", async ([FromRoute] int clientId, [FromBody] CreateClientAddressRequest request, [FromServices] IClientAddressAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var id = await appService.CreateAsync(clientId, request, ct);
             return notify.CustomResponse(new GenericResponse { Id = id }, 201);

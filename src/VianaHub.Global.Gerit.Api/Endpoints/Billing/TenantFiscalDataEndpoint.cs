@@ -49,7 +49,7 @@ public static class TenantFiscalDataEndpoint
         .Produces(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapPost("/{tenantId}/fiscal-data/", async ([FromRoute] int tenantId, [FromBody] CreateTenantFiscalDataRequest request, [FromServices] ITenantFiscalDataAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
+        groupV1.MapPost("/{tenantId}/fiscal-data", async ([FromRoute] int tenantId, [FromBody] CreateTenantFiscalDataRequest request, [FromServices] ITenantFiscalDataAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var id = await appService.CreateAsync(tenantId, request, ct);
             return notify.CustomResponse(new GenericResponse { Id = id }, 201);
