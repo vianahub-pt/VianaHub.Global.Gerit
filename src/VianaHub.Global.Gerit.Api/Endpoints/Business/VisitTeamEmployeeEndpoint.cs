@@ -143,5 +143,27 @@ public static class VisitTeamEmployeeEndpoint
         .Produces(StatusCodes.Status204NoContent)
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
+
+        // Upload massivo de visit team employees via CSV
+        groupV1.MapPost("/bulk-upload", async (HttpRequest request, [FromServices] IVisitTeamEmployeeAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
+        {
+            if (!request.HasFormContentType || request.Form.Files.Count == 0)
+            {
+                notify.Add("Api.Upload.NoFileProvided", 400);
+                return notify.CustomResponse();
+            }
+
+            var file = request.Form.Files[0];
+            var success = await appService.BulkUploadAsync(file, ct);
+            return notify.CustomResponse(success);
+        })
+        .CustomAuthorize("Admin,BackOffice,Manager", "VisitTeamEmployees", "BulkUpload")
+        .WithName("BulkUploadVisitTeamEmployees")
+        .WithSummary("Swagger.Endpoint.VisitTeamEmployee.BulkUpload.Summary")
+        .DisableAntiforgery()
+        .Accepts<IFormFile>("multipart/form-data")
+        .Produces(StatusCodes.Status200OK)
+        .Produces<ErrorResponse>(StatusCodes.Status400BadRequest)
+        .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
     }
 }

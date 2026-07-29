@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http;
 using VianaHub.Global.Gerit.Application.Dtos.Base;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Business.VisitTeamEmployee;
 using VianaHub.Global.Gerit.Application.Dtos.Response.Business.VisitTeamEmployee;
@@ -17,4 +18,5 @@ public interface IVisitTeamEmployeeAppService
     Task<bool> ActivateAsync(int id, CancellationToken ct);
     Task<bool> DeactivateAsync(int id, CancellationToken ct);
     Task<bool> DeleteAsync(int id, CancellationToken ct);
+    Task<bool> BulkUploadAsync(IFormFile file, CancellationToken ct);
 }
