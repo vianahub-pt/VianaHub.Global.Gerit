@@ -35,7 +35,7 @@ public static class VisitTeamFunctionEndpoint
         .WithName("GetVisitTeamFunctionById")
         .WithSummary("Swagger.Endpoint.VisitTeamFunction.GetById.Summary")
         .Produces(StatusCodes.Status200OK)
-        .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
+        .Produces<ErrorResponse>(StatusCodes.Status410Gone)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
         groupV1.MapGet("/paged", async ([AsParameters] PagedFilterRequest request, [FromServices] IVisitTeamFunctionAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
@@ -84,7 +84,7 @@ public static class VisitTeamFunctionEndpoint
         .WithName("ActivateVisitTeamFunction")
         .WithSummary("Swagger.Endpoint.VisitTeamFunction.Activate.Summary")
         .Produces(StatusCodes.Status204NoContent)
-        .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
+        .Produces<ErrorResponse>(StatusCodes.Status410Gone)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
         groupV1.MapPatch("/{id}/deactivate", async ([FromRoute] int id, [FromServices] IVisitTeamFunctionAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
@@ -96,7 +96,7 @@ public static class VisitTeamFunctionEndpoint
         .WithName("DeactivateVisitTeamFunction")
         .WithSummary("Swagger.Endpoint.VisitTeamFunction.Deactivate.Summary")
         .Produces(StatusCodes.Status204NoContent)
-        .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
+        .Produces<ErrorResponse>(StatusCodes.Status410Gone)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
         groupV1.MapDelete("/{id}", async ([FromRoute] int id, [FromServices] IVisitTeamFunctionAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
@@ -108,7 +108,7 @@ public static class VisitTeamFunctionEndpoint
         .WithName("DeleteVisitTeamFunction")
         .WithSummary("Swagger.Endpoint.VisitTeamFunction.Delete.Summary")
         .Produces(StatusCodes.Status204NoContent)
-        .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
+        .Produces<ErrorResponse>(StatusCodes.Status410Gone)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
         // Upload massivo de Functions via CSV

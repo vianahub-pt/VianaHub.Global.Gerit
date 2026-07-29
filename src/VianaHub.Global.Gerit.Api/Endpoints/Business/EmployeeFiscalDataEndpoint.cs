@@ -35,7 +35,7 @@ public static class EmployeeFiscalDataEndpoint
         .WithName("GetEmployeeFiscalDataById")
         .WithSummary("Swagger.Endpoint.EmployeeFiscalData.GetById.Summary")
         .Produces(StatusCodes.Status200OK)
-        .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
+        .Produces<ErrorResponse>(StatusCodes.Status410Gone)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
         groupV1.MapGet("/{employeeId}/fiscal-data/paged", async ([FromRoute] int employeeId, [AsParameters] PagedFilterRequest request, [FromServices] IEmployeeFiscalDataAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
@@ -72,7 +72,7 @@ public static class EmployeeFiscalDataEndpoint
         .WithSummary("Swagger.Endpoint.EmployeeFiscalData.Update.Summary")
         .Produces(StatusCodes.Status204NoContent)
         .Produces<ErrorResponse>(StatusCodes.Status400BadRequest)
-        .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
+        .Produces<ErrorResponse>(StatusCodes.Status410Gone)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError)
         .WithValidation<UpdateEmployeeFiscalDataRequest>();
 
@@ -85,7 +85,7 @@ public static class EmployeeFiscalDataEndpoint
         .WithName("ActivateEmployeeFiscalData")
         .WithSummary("Swagger.Endpoint.EmployeeFiscalData.Activate.Summary")
         .Produces(StatusCodes.Status204NoContent)
-        .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
+        .Produces<ErrorResponse>(StatusCodes.Status410Gone)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
         groupV1.MapPatch("/{employeeId}/fiscal-data/{id}/deactivate", async ([FromRoute] int employeeId, [FromRoute] int id, [FromServices] IEmployeeFiscalDataAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
@@ -97,7 +97,7 @@ public static class EmployeeFiscalDataEndpoint
         .WithName("DeactivateEmployeeFiscalData")
         .WithSummary("Swagger.Endpoint.EmployeeFiscalData.Deactivate.Summary")
         .Produces(StatusCodes.Status204NoContent)
-        .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
+        .Produces<ErrorResponse>(StatusCodes.Status410Gone)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
         groupV1.MapDelete("/{employeeId}/fiscal-data/{id}", async ([FromRoute] int employeeId, [FromRoute] int id, [FromServices] IEmployeeFiscalDataAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
@@ -109,7 +109,7 @@ public static class EmployeeFiscalDataEndpoint
         .WithName("DeleteEmployeeFiscalData")
         .WithSummary("Swagger.Endpoint.EmployeeFiscalData.Delete.Summary")
         .Produces(StatusCodes.Status204NoContent)
-        .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
+        .Produces<ErrorResponse>(StatusCodes.Status410Gone)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
     }
 }
