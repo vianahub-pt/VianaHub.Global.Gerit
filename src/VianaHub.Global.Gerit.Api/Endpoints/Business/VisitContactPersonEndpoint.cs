@@ -49,7 +49,7 @@ public static class VisitContactPersonEndpoint
         .Produces(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapPost("/{visitId}/contacts/", async ([FromRoute] int visitId, [FromBody] CreateVisitContactPersonRequest request, [FromServices] IVisitContactPersonAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
+        groupV1.MapPost("/{visitId}/contacts", async ([FromRoute] int visitId, [FromBody] CreateVisitContactPersonRequest request, [FromServices] IVisitContactPersonAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var id = await appService.CreateAsync(visitId, request, ct);
             return notify.CustomResponse(new GenericResponse { Id = id }, 201);
