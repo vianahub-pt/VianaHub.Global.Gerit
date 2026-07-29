@@ -1,4 +1,5 @@
 using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using VianaHub.Global.Gerit.Application.Dtos.Base;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Business.ClientFiscalData;
 using VianaHub.Global.Gerit.Application.Dtos.Response.Business.ClientFiscalData;
@@ -157,5 +158,11 @@ public class ClientFiscalDataAppService : IClientFiscalDataAppService
 
         entity.Delete(_currentUser.GetUserId());
         return await _domain.DeleteAsync(entity, ct);
+    }
+
+    public async Task<bool> BulkUploadAsync(int clientId, IFormFile file, CancellationToken ct)
+    {
+        _notify.Add(_localization.GetMessage("Application.Service.ClientFiscalData.BulkUpload.NotImplemented"), 501);
+        return false;
     }
 }

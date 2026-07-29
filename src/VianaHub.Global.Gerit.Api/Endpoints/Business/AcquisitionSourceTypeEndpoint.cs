@@ -110,5 +110,27 @@ public static class AcquisitionSourceTypeEndpoint
         .Produces(StatusCodes.Status204NoContent)
         .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
+
+        // Upload massivo de acquisition source types via CSV
+        groupV1.MapPost("/bulk-upload", async (HttpRequest request, [FromServices] IAcquisitionSourceTypeAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
+        {
+            if (!request.HasFormContentType || request.Form.Files.Count == 0)
+            {
+                notify.Add("Api.Upload.NoFileProvided", 400);
+                return notify.CustomResponse();
+            }
+
+            var file = request.Form.Files[0];
+            var success = await appService.BulkUploadAsync(file, ct);
+            return notify.CustomResponse(success);
+        })
+        .CustomAuthorize("Admin,BackOffice,Manager", "AcquisitionSourceTypes", "BulkUpload")
+        .WithName("BulkUploadAcquisitionSourceTypes")
+        .WithSummary("Swagger.Endpoint.AcquisitionSourceType.BulkUpload.Summary")
+        .DisableAntiforgery()
+        .Accepts<IFormFile>("multipart/form-data")
+        .Produces(StatusCodes.Status200OK)
+        .Produces<ErrorResponse>(StatusCodes.Status400BadRequest)
+        .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
     }
 }
