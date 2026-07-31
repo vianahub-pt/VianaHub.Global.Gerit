@@ -7,7 +7,7 @@
    - 2 utilizadores: Dener Viana (BackOffice) + Admin (Manager)
    - 3 meses de operacao (Janeiro-Marco 2026)
    - 15 clientes realistas (mix individuais/organizacoes)
-   - 6 colaboradores, 3 equipas regionais
+    - 9 colaboradores, 3 equipas regionais
    - 20 visitas com equipas, veiculos e equipamentos
    - Dados fiscais realistas, coordenadas GPS de Portugal
    - Script idempotente (IF NOT EXISTS)
@@ -867,7 +867,7 @@ BEGIN TRY
     WHERE NOT EXISTS (SELECT 1 FROM dbo.Teams t WHERE t.TenantId = @DemoTenantId AND t.Name = s.Name AND t.IsDeleted = 0);
 
     /* =========================================================
-       27. COLABORADORES (6)
+        27. COLABORADORES (9)
        ========================================================= */
 
     DECLARE @EmployeeSeed TABLE (
@@ -884,10 +884,13 @@ BEGIN TRY
     VALUES
         (N'EMP-001', N'Carlos Mendes', N'253000101', N'916000101', 1, N'carlos.mendes@gerit.pt', N'ACTIVE', N'230111001', N'RESIDENTIAL', N'Rua do Almada', N'Centro', N'Porto', N'Porto', N'4050-036', N'12', N'2. Dt.', 41.148000, -8.614000, N'Tecnico Senior', N'Equipa Norte', 1),
         (N'EMP-002', N'Sofia Pereira', N'222000102', N'916000102', 1, N'sofia.pereira@gerit.pt', N'ACTIVE', N'230111002', N'RESIDENTIAL', N'Rua de Faria Guimaraes', N'Bonfim', N'Porto', N'Porto', N'4000-205', N'34', N'1.', 41.155000, -8.602000, N'Tecnica de Manutencao', N'Equipa Norte', 0),
-        (N'EMP-003', N'Rafael Almeida', N'211000103', N'916000103', 1, N'rafael.almeida@gerit.pt', N'ACTIVE', N'230111003', N'RESIDENTIAL', N'Rua Morais Soares', N'Arroios', N'Lisboa', N'Lisboa', N'1900-350', N'56', N'3. Esq.', 38.733000, -9.127000, N'Tecnico de Inspecao', N'Equipa Sul', 1),
+        (N'EMP-003', N'Rafael Almeida', N'211000103', N'916000103', 1, N'rafael.almeida@gerit.pt', N'ACTIVE', N'230111003', N'RESIDENTIAL', N'Rua Morais Soares', N'Arroios', N'Lisboa', N'Lisboa', N'1900-350', N'56', N'3. Esq.', 38.733000, -9.127000, N'Tecnico de Inspecao', N'Equipa Norte', 0),
         (N'EMP-004', N'Ines Sousa', N'212000104', N'916000104', 1, N'ines.sousa@gerit.pt', N'ACTIVE', N'230111004', N'RESIDENTIAL', N'Avenida de Roma', N'Areeiro', N'Lisboa', N'Lisboa', N'1000-260', N'78', N'6. Dt.', 38.744000, -9.135000, N'Consultora Tecnica', N'Equipa Sul', 0),
-        (N'EMP-005', N'Bruno Marques', N'239000105', N'916000105', 1, N'bruno.marques@gerit.pt', N'ON_LEAVE', N'230111005', N'RESIDENTIAL', N'Rua Padre Antonio Vieira', N'Celas', N'Coimbra', N'Coimbra', N'3000-315', N'22', N'R/C Esq.', 40.214000, -8.417000, N'Tecnico de Reparacao', N'Equipa Centro', 0),
-        (N'EMP-006', N'Diana Costa', N'239000106', N'916000106', 1, N'diana.costa@gerit.pt', N'ACTIVE', N'230111006', N'RESIDENTIAL', N'Rua da Sofia', N'Baixa', N'Coimbra', N'Coimbra', N'3000-395', N'90', N'4.', 40.210000, -8.429000, N'Tecnica de Suporte', N'Equipa Centro', 1);
+        (N'EMP-005', N'Bruno Marques', N'239000105', N'916000105', 1, N'bruno.marques@gerit.pt', N'ON_LEAVE', N'230111005', N'RESIDENTIAL', N'Rua Padre Antonio Vieira', N'Celas', N'Coimbra', N'Coimbra', N'3000-315', N'22', N'R/C Esq.', 40.214000, -8.417000, N'Tecnico de Reparacao', N'Equipa Centro', 1),
+        (N'EMP-006', N'Diana Costa', N'239000106', N'916000106', 1, N'diana.costa@gerit.pt', N'ACTIVE', N'230111006', N'RESIDENTIAL', N'Rua da Sofia', N'Baixa', N'Coimbra', N'Coimbra', N'3000-395', N'90', N'4.', 40.210000, -8.429000, N'Tecnica de Suporte', N'Equipa Centro', 0),
+        (N'EMP-007', N'Ana Oliveira', N'211000107', N'916000107', 1, N'ana.oliveira@gerit.pt', N'ACTIVE', N'230111007', N'RESIDENTIAL', N'Avenida da Liberdade', N'Santo Antonio', N'Lisboa', N'Lisboa', N'1250-096', N'45', N'2. Dt.', 38.720000, -9.142000, N'Tecnica Senior', N'Equipa Sul', 1),
+        (N'EMP-008', N'Pedro Santos', N'211000108', N'916000108', 1, N'pedro.santos@gerit.pt', N'ACTIVE', N'230111008', N'RESIDENTIAL', N'Avenida da Republica', N'Avenidas Novas', N'Lisboa', N'Lisboa', N'1000-190', N'88', N'5. Esq.', 38.739000, -9.147000, N'Tecnico de Manutencao', N'Equipa Sul', 0),
+        (N'EMP-009', N'Maria Silva', N'265000109', N'916000109', 1, N'maria.silva@gerit.pt', N'ACTIVE', N'230111009', N'RESIDENTIAL', N'Avenida Luisa Todi', N'Centro', N'Setubal', N'Setubal', N'2900-452', N'55', N'3.', 38.524000, -8.893000, N'Tecnica de Inspecao', N'Equipa Centro', 0);
 
     INSERT INTO dbo.Employees (TenantId, StatusDefinitionId, StatusDomainId, Name, PhoneNumber, CellPhoneNumber, IsCellPhoneWhatsapp, Email, ImageUrl, IsActive, IsDeleted, CreatedBy, CreatedAt)
     SELECT @DemoTenantId, sd.Id, d.Id, s.Name, s.PhoneNumber, s.CellPhoneNumber, s.IsWhatsapp, s.Email, NULL, 1, 0, @SeedActorId, @UtcNow
