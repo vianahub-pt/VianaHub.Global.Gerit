@@ -614,11 +614,11 @@ BEGIN TRY
         (N'VISITS', N'Visits', N'Visitas ou intervenções.'),
         (N'VISIT_CONTACT_PERSONS', N'VisitContactPersons', N'Pessoas de contacto das visitas.'),
         (N'VISIT_ADDRESSES', N'VisitAddresses', N'Moradas das visitas.'),
-        (N'VISIT_TEAM', N'VisitTeam', N'Equipas associadas às visitas.'),
+        (N'VISIT_TEAM', N'VisitTeams', N'Equipas associadas às visitas.'),
         (N'VISIT_TEAM_FUNCTIONS', N'VisitTeamFunctions', N'Funções operacionais nas equipas de visita.'),
         (N'VISIT_TEAM_EMPLOYEE', N'VisitTeamEmployee', N'Colaboradores associados às equipas de visita.'),
-        (N'VISIT_TEAM_VEHICLE', N'VisitTeamVehicle', N'Veículos associados às equipas de visita.'),
-        (N'VISIT_TEAM_EQUIPMENT', N'VisitTeamEquipment', N'Equipamentos associados às equipas de visita.'),
+        (N'VISIT_TEAM_VEHICLE', N'VisitTeamVehicles', N'Veículos associados às equipas de visita.'),
+        (N'VISIT_TEAM_EQUIPMENT', N'VisitTeamEquipments', N'Equipamentos associados às equipas de visita.'),
         (N'VISIT_ATTACHMENTS', N'VisitAttachments', N'Anexos das visitas.');
 
     UPDATE r
