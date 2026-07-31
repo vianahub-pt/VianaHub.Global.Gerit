@@ -2346,7 +2346,7 @@
   "Swagger.Response.200.Description": "Sucesso",
   "Swagger.Response.201.Description": "Criado",
   "Swagger.Response.204.Description": "Sem Conteúdo",
-  "Swagger.Response.400.Description": "solicitação Incorreto",
+  "Swagger.Response.400.Description": "Solicitação Incorreta",
   "Swagger.Response.401.Description": "Não Autorizado",
   "Swagger.Response.403.Description": "Proibido",
   "Swagger.Response.404.Description": "Não Encontrado",
