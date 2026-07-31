@@ -1,0 +1,31 @@
+## Descricao
+
+Como utilizador do Swagger UI da API Gerit, quero que todos os Summarys dos endpoints de lookup tables (VisitTeamFunctions, StatusDomains, PartyTypes, AcquisitionSourceTypes) e o nome do seletor de endpoints aparecam traduzidos no idioma selecionado, para que a documentacao seja legivel em pt-PT, pt-BR, en-US e es-ES sem expor chaves de traducao internas.
+
+## Contexto
+
+Apos o PR #400 (bypass do cache do Swashbuckle + AllowTrailingCommas), o SwaggerTranslationMiddleware traduz corretamente a maioria dos endpoints. Porem, os Summarys de 4 grupos de endpoints continuam exibindo as chaves de traducao em vez do texto traduzido, em todos os idiomas.
+
+### Causa raiz confirmada
+
+1. Chaves de Summary inexistentes nos locale files. Os endpoints usam WithSummary com chaves que nao existem em locales/{idioma}/common.json:
+   - VisitTeamFunction: faltam 9 chaves
+   - StatusDomain: faltam 11 chaves
+   - PartyType: faltam 11 chaves
+   - AcquisitionSourceType: faltam 8 chaves
+   - Total: 39 chaves por idioma x 4 idiomas = 156 chaves faltantes
+
+2. Swagger.UI.EndpointName resolvido no startup (fora de request), fica fixo para todos os idiomas.
+
+## Criterios de Aceite (BDD)
+
+- Todos os Summarys de VisitTeamFunction, StatusDomain, PartyType, AcquisitionSourceType exibem texto traduzido (nunca chave crua) em pt-PT, pt-BR, en-US, es-ES
+- O seletor de endpoints exibe nome localizado (nunca Swagger.UI.EndpointName)
+- As 39 chaves de cada entidade existem nos 4 idiomas com valores traduzidos
+- Auditoria de cobertura: todas as chaves WithSummary/WithDescription tem correspondencia nos 4 locale files
+
+## Pontos deAtencao
+
+- Terminologia consistente entre idiomas
+- Valores pt-PT nao devem ter valores em ingles
+- Swagger.UI.EndpointName: resolver por request ou aceitar valor estatico
