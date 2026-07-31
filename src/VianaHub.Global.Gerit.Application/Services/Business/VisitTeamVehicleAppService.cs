@@ -46,16 +46,16 @@ public class VisitTeamVehicleAppService : IVisitTeamVehiclesAppService
         _fileValidation = fileValidation;
     }
 
-    public async Task<IEnumerable<VisitTeamVehicleResponse>> GetAllAsync(CancellationToken ct)
+    public async Task<IEnumerable<VisitTeamVehicleResponse>> GetAllAsync(int visitTeamId, CancellationToken ct)
     {
         var entities = await _repo.GetAllAsync(ct);
         return _mapper.Map<IEnumerable<VisitTeamVehicleResponse>>(entities);
     }
 
-    public async Task<VisitTeamVehicleDetailResponse> GetByIdAsync(int id, CancellationToken ct)
+    public async Task<VisitTeamVehicleDetailResponse> GetByIdAsync(int visitTeamId, int id, CancellationToken ct)
     {
         var entity = await _repo.GetByIdAsync(id, ct);
-        if (entity == null || entity.IsDeleted || !entity.IsActive)
+        if (entity == null || entity.IsDeleted || !entity.IsActive || entity.VisitTeamId != visitTeamId)
         {
             _notify.Add(_localization.GetMessage("Application.Service.VisitTeamVehicle.GetById.ResourceNotFound"), 410);
             return null;
@@ -63,46 +63,46 @@ public class VisitTeamVehicleAppService : IVisitTeamVehiclesAppService
         return _mapper.Map<VisitTeamVehicleDetailResponse>(entity);
     }
 
-    public async Task<ListPageResponse<VisitTeamVehicleResponse>> GetPagedAsync(PagedFilterRequest request, CancellationToken ct)
+    public async Task<ListPageResponse<VisitTeamVehicleResponse>> GetPagedAsync(int visitTeamId, PagedFilterRequest request, CancellationToken ct)
     {
         var filter = new PagedFilter(request.Search, request.IsActive, request.PageNumber, request.PageSize, request.SortBy, request.SortDirection);
         var paged = await _repo.GetPagedAsync(filter, ct);
         return _mapper.Map<ListPageResponse<VisitTeamVehicleResponse>>(paged);
     }
 
-    public async Task<int> CreateAsync(CreateVisitTeamVehicleRequest request, CancellationToken ct)
+    public async Task<int> CreateAsync(int visitTeamId, CreateVisitTeamVehicleRequest request, CancellationToken ct)
     {
         var tenantId = _currentUser.GetTenantId();
-        var exists = await _repo.ExistsByIdAsync(tenantId, request.VisitTeamId, request.VehicleId, ct);
+        var exists = await _repo.ExistsByIdAsync(tenantId, visitTeamId, request.VehicleId, ct);
         if (exists)
         {
-            _notify.Add(_localization.GetMessage("Application.Service.VisitTeamVehicle.Create.ResourceAlreadyExists", request.VisitTeamId, request.VehicleId), 409);
+            _notify.Add(_localization.GetMessage("Application.Service.VisitTeamVehicle.Create.ResourceAlreadyExists", visitTeamId, request.VehicleId), 409);
             return 0;
         }
 
-        var entity = new VisitTeamVehicleEntity(tenantId, request.VisitTeamId, request.VehicleId, _currentUser.GetUserId());
-        entity.Update(request.VisitTeamId, request.VehicleId, _currentUser.GetUserId());
+        var entity = new VisitTeamVehicleEntity(tenantId, visitTeamId, request.VehicleId, _currentUser.GetUserId());
+        entity.Update(visitTeamId, request.VehicleId, _currentUser.GetUserId());
         var success = await _domain.CreateAsync(entity, ct);
         return success ? entity.Id : 0;
     }
 
-    public async Task<bool> UpdateAsync(int id, UpdateVisitTeamVehicleRequest request, CancellationToken ct)
+    public async Task<bool> UpdateAsync(int visitTeamId, int id, UpdateVisitTeamVehicleRequest request, CancellationToken ct)
     {
         var entity = await _repo.GetByIdAsync(id, ct);
-        if (entity == null)
+        if (entity == null || entity.VisitTeamId != visitTeamId)
         {
             _notify.Add(_localization.GetMessage("Application.Service.VisitTeamVehicle.Update.ResourceNotFound"), 410);
             return false;
         }
 
-        entity.Update(request.VisitTeamId, request.VehicleId, _currentUser.GetUserId());
+        entity.Update(visitTeamId, request.VehicleId, _currentUser.GetUserId());
         return await _domain.UpdateAsync(entity, ct);
     }
 
-    public async Task<bool> ActivateAsync(int id, CancellationToken ct)
+    public async Task<bool> ActivateAsync(int visitTeamId, int id, CancellationToken ct)
     {
         var entity = await _repo.GetByIdAsync(id, ct);
-        if (entity == null)
+        if (entity == null || entity.VisitTeamId != visitTeamId)
         {
             _notify.Add(_localization.GetMessage("Application.Service.VisitTeamVehicle.Activate.ResourceNotFound"), 410);
             return false;
@@ -112,10 +112,10 @@ public class VisitTeamVehicleAppService : IVisitTeamVehiclesAppService
         return await _domain.ActivateAsync(entity, ct);
     }
 
-    public async Task<bool> DeactivateAsync(int id, CancellationToken ct)
+    public async Task<bool> DeactivateAsync(int visitTeamId, int id, CancellationToken ct)
     {
         var entity = await _repo.GetByIdAsync(id, ct);
-        if (entity == null)
+        if (entity == null || entity.VisitTeamId != visitTeamId)
         {
             _notify.Add(_localization.GetMessage("Application.Service.VisitTeamVehicle.Deactivate.ResourceNotFound"), 410);
             return false;
@@ -125,10 +125,10 @@ public class VisitTeamVehicleAppService : IVisitTeamVehiclesAppService
         return await _domain.DeactivateAsync(entity, ct);
     }
 
-    public async Task<bool> DeleteAsync(int id, CancellationToken ct)
+    public async Task<bool> DeleteAsync(int visitTeamId, int id, CancellationToken ct)
     {
         var entity = await _repo.GetByIdAsync(id, ct);
-        if (entity == null)
+        if (entity == null || entity.VisitTeamId != visitTeamId)
         {
             _notify.Add(_localization.GetMessage("Application.Service.VisitTeamVehicle.Delete.ResourceNotFound"), 410);
             return false;
@@ -138,7 +138,7 @@ public class VisitTeamVehicleAppService : IVisitTeamVehiclesAppService
         return await _domain.DeleteAsync(entity, ct);
     }
 
-    public async Task<bool> BulkUploadAsync(IFormFile file, CancellationToken ct)
+    public async Task<bool> BulkUploadAsync(int visitTeamId, IFormFile file, CancellationToken ct)
     {
         if (!_fileValidation.ValidateFile(file))
             return false;
@@ -153,7 +153,7 @@ public class VisitTeamVehicleAppService : IVisitTeamVehiclesAppService
             return false;
         }
 
-        return await ProcessBulkItemsAsync(items, ct);
+        return await ProcessBulkItemsAsync(visitTeamId, items, ct);
     }
 
     private List<BulkUploadVisitTeamVehicleItem> ReadCsvFile(IFormFile file)
@@ -221,7 +221,7 @@ public class VisitTeamVehicleAppService : IVisitTeamVehiclesAppService
         }
     }
 
-    private async Task<bool> ProcessBulkItemsAsync(List<BulkUploadVisitTeamVehicleItem> items, CancellationToken ct)
+    private async Task<bool> ProcessBulkItemsAsync(int visitTeamId, List<BulkUploadVisitTeamVehicleItem> items, CancellationToken ct)
     {
         var hasErrors = false;
         var tenantId = _currentUser.GetTenantId();
@@ -234,22 +234,22 @@ public class VisitTeamVehicleAppService : IVisitTeamVehiclesAppService
                 continue;
             }
 
-            var exists = await _repo.ExistsByIdAsync(tenantId, item.VisitTeamId, item.VehicleId, ct);
+            var exists = await _repo.ExistsByIdAsync(tenantId, visitTeamId, item.VehicleId, ct);
             if (exists)
             {
-                _notify.Add(_localization.GetMessage("Application.Service.VisitTeamVehicle.ProcessBulkItems.ExistsByVisitAndVehicle", item.VisitTeamId, item.VehicleId), 400);
+                _notify.Add(_localization.GetMessage("Application.Service.VisitTeamVehicle.ProcessBulkItems.ExistsByVisitAndVehicle", visitTeamId, item.VehicleId), 400);
                 hasErrors = true;
                 continue;
             }
 
-            var entity = new VisitTeamVehicleEntity(tenantId, item.VisitTeamId, item.VehicleId, _currentUser.GetUserId());
-            entity.Update(item.VisitTeamId, item.VehicleId, _currentUser.GetUserId());
+            var entity = new VisitTeamVehicleEntity(tenantId, visitTeamId, item.VehicleId, _currentUser.GetUserId());
+            entity.Update(visitTeamId, item.VehicleId, _currentUser.GetUserId());
 
             var success = await _domain.CreateAsync(entity, ct);
 
             if (!success)
             {
-                _notify.Add(_localization.GetMessage("Application.Service.VisitTeamVehicle.ProcessBulkItems.FailedToCreate", item.VisitTeamId, item.VehicleId), 400);
+                _notify.Add(_localization.GetMessage("Application.Service.VisitTeamVehicle.ProcessBulkItems.FailedToCreate", visitTeamId, item.VehicleId), 400);
                 hasErrors = true;
             }
         }
@@ -259,12 +259,6 @@ public class VisitTeamVehicleAppService : IVisitTeamVehiclesAppService
 
     private bool ValidateBulkItem(BulkUploadVisitTeamVehicleItem item)
     {
-        if (item.VisitTeamId <= 0)
-        {
-            _notify.Add(_localization.GetMessage("Application.Service.VisitTeamVehicle.ValidateBulkItem.VisitTeamId", item.VisitTeamId), 400);
-            return false;
-        }
-
         if (item.VehicleId <= 0)
         {
             _notify.Add(_localization.GetMessage("Application.Service.VisitTeamVehicle.ValidateBulkItem.VehicleId", item.VehicleId), 400);

@@ -17,9 +17,11 @@ using VianaHub.Global.Gerit.Infra.Data.Repository.Identity;
 using VianaHub.Global.Gerit.Application.Interfaces.Billing;
 using VianaHub.Global.Gerit.Application.Interfaces.Business;
 using VianaHub.Global.Gerit.Application.Interfaces.Common;
+using VianaHub.Global.Gerit.Application.Interfaces.Job;
 using VianaHub.Global.Gerit.Application.Services.Billing;
 using VianaHub.Global.Gerit.Application.Services.Business;
 using VianaHub.Global.Gerit.Application.Services.Common;
+using VianaHub.Global.Gerit.Application.Services.Job;
 using VianaHub.Global.Gerit.Domain.Entities.Billing;
 using VianaHub.Global.Gerit.Domain.Entities.Business;
 using VianaHub.Global.Gerit.Domain.Entities.Job;
@@ -170,18 +172,23 @@ public static class DependencyInjection
         services.AddScoped<ITeamAppService, TeamAppService>();
         services.AddScoped<IVehicleAppService, VehicleAppService>();
         services.AddScoped<IEquipmentAppService, EquipmentAppService>();
+        services.AddScoped<IEquipmentTypeAppService, EquipmentTypeAppService>();
         services.AddScoped<IEmployeeAppService, EmployeeAppService>();
         services.AddScoped<IEmployeeTeamsAppService, EmployeeTeamAppService>();
         services.AddScoped<IEmployeeTeamDataRepository, EmployeeTeamDataRepository>();
         services.AddScoped<IVisitTeamsAppService, VisitTeamAppService>();
         services.AddScoped<IVisitTeamDataRepository, VisitTeamDataRepository>();
         services.AddScoped<IVisitTeamEmployeeAppService, VisitTeamEmployeeAppService>();
+        services.AddScoped<IVisitTeamVehiclesAppService, VisitTeamVehicleAppService>();
+        services.AddScoped<IVisitTeamEquipmentsAppService, VisitTeamEquipmentAppService>();
         services.AddScoped<IVisitAttachmentAppService, VisitAttachmentAppService>();
         services.AddScoped<IClientAppService, ClientAppService>();
         services.AddScoped<IClientAddressAppService, ClientAddressAppService>();
         services.AddScoped<IClientContactPersonAppService, ClientContactPersonAppService>();
         services.AddScoped<IClientFiscalDataAppService, ClientFiscalDataAppService>();
         services.AddScoped<IEmployeeFiscalDataAppService, EmployeeFiscalDataAppService>();
+        services.AddScoped<IEmployeeAddressAppService, EmployeeAddressAppService>();
+        services.AddScoped<IEmployeeContactPersonAppService, EmployeeContactPersonAppService>();
         services.AddScoped<IVisitContactPersonAppService, VisitContactPersonAppService>();
         services.AddScoped<IVisitAddressAppService, VisitAddressAppService>();
         services.AddScoped<IVisitAppService, VisitAppService>();
@@ -197,6 +204,7 @@ public static class DependencyInjection
         services.AddScoped<ISubscriptionAppService, SubscriptionAppService>();
         services.AddScoped<IUserAppService, UserAppService>();
         services.AddScoped<IUserPreferencesAppService, UserPreferencesAppService>();
+        services.AddScoped<IJobAppService, JobAppService>();
 
         // Domain
         services.AddScoped<IUserRoleDomainService, UserRoleDomainService>();

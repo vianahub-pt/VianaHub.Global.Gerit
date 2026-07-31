@@ -49,13 +49,13 @@ public class VisitTeamFunctionAppService : IVisitTeamFunctionAppService
         _fileValidation = fileValidation;
     }
 
-    public async Task<IEnumerable<VisitTeamFunctionResponse>> GetAllAsync(CancellationToken ct)
+    public async Task<IEnumerable<VisitTeamFunctionResponse>> GetAllAsync(int visitTeamId, CancellationToken ct)
     {
         var entities = await _repo.GetAllAsync(ct);
         return _mapper.Map<IEnumerable<VisitTeamFunctionResponse>>(entities);
     }
 
-    public async Task<VisitTeamFunctionDetailResponse> GetByIdAsync(int id, CancellationToken ct)
+    public async Task<VisitTeamFunctionDetailResponse> GetByIdAsync(int visitTeamId, int id, CancellationToken ct)
     {
         var entity = await _repo.GetByIdAsync(id, ct);
         if (entity == null || entity.IsDeleted || !entity.IsActive)
@@ -66,14 +66,14 @@ public class VisitTeamFunctionAppService : IVisitTeamFunctionAppService
         return _mapper.Map<VisitTeamFunctionDetailResponse>(entity);
     }
 
-    public async Task<ListPageResponse<VisitTeamFunctionResponse>> GetPagedAsync(PagedFilterRequest request, CancellationToken ct)
+    public async Task<ListPageResponse<VisitTeamFunctionResponse>> GetPagedAsync(int visitTeamId, PagedFilterRequest request, CancellationToken ct)
     {
         var filter = new PagedFilter(request.Search, request.IsActive, request.PageNumber, request.PageSize, request.SortBy, request.SortDirection);
         var paged = await _repo.GetPagedAsync(filter, ct);
         return _mapper.Map<ListPageResponse<VisitTeamFunctionResponse>>(paged);
     }
 
-    public async Task<int> CreateAsync(CreateVisitTeamFunctionRequest request, CancellationToken ct)
+    public async Task<int> CreateAsync(int visitTeamId, CreateVisitTeamFunctionRequest request, CancellationToken ct)
     {
         var tenantId = _currentUser.GetTenantId();
         var exists = await _repo.ExistsByNameAsync(tenantId, request.Name, ct);
@@ -88,7 +88,7 @@ public class VisitTeamFunctionAppService : IVisitTeamFunctionAppService
         return success ? entity.Id : 0;
     }
 
-    public async Task<bool> UpdateAsync(int id, UpdateVisitTeamFunctionRequest request, CancellationToken ct)
+    public async Task<bool> UpdateAsync(int visitTeamId, int id, UpdateVisitTeamFunctionRequest request, CancellationToken ct)
     {
         var entity = await _repo.GetByIdAsync(id, ct);
         if (entity == null)
@@ -102,7 +102,7 @@ public class VisitTeamFunctionAppService : IVisitTeamFunctionAppService
         return await _domain.UpdateAsync(entity, ct);
     }
 
-    public async Task<bool> ActivateAsync(int id, CancellationToken ct)
+    public async Task<bool> ActivateAsync(int visitTeamId, int id, CancellationToken ct)
     {
         var entity = await _repo.GetByIdAsync(id, ct);
         if (entity == null)
@@ -115,7 +115,7 @@ public class VisitTeamFunctionAppService : IVisitTeamFunctionAppService
         return await _domain.ActivateAsync(entity, ct);
     }
 
-    public async Task<bool> DeactivateAsync(int id, CancellationToken ct)
+    public async Task<bool> DeactivateAsync(int visitTeamId, int id, CancellationToken ct)
     {
         var entity = await _repo.GetByIdAsync(id, ct);
         if (entity == null)
@@ -128,7 +128,7 @@ public class VisitTeamFunctionAppService : IVisitTeamFunctionAppService
         return await _domain.DeactivateAsync(entity, ct);
     }
 
-    public async Task<bool> DeleteAsync(int id, CancellationToken ct)
+    public async Task<bool> DeleteAsync(int visitTeamId, int id, CancellationToken ct)
     {
         var entity = await _repo.GetByIdAsync(id, ct);
         if (entity == null)
@@ -141,7 +141,7 @@ public class VisitTeamFunctionAppService : IVisitTeamFunctionAppService
         return await _domain.DeleteAsync(entity, ct);
     }
 
-    public async Task<bool> BulkUploadAsync(IFormFile file, CancellationToken ct)
+    public async Task<bool> BulkUploadAsync(int visitTeamId, IFormFile file, CancellationToken ct)
     {
         // Valida arquivo usando serviço centralizado
         if (!_fileValidation.ValidateFile(file))
@@ -292,4 +292,3 @@ public class VisitTeamFunctionAppService : IVisitTeamFunctionAppService
         return true;
     }
 }
-

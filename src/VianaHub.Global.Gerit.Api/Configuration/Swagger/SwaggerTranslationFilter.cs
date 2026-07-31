@@ -1,5 +1,6 @@
 #nullable enable
 
+using Microsoft.AspNetCore.Http;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using Swashbuckle.AspNetCore.SwaggerGen;
@@ -9,32 +10,57 @@ using System.Text.Json;
 namespace VianaHub.Global.Gerit.Api.Configuration.Swagger;
 
 /// <summary>
-/// Document filter que traduz a documenta��o Swagger/OpenAPI baseado na cultura atual.
-/// Carrega todos os arquivos de localiza��o presentes na pasta `Localization` recursivamente e mescla as chaves para a cultura solicitada.
+/// Document filter que traduz a documentação Swagger/OpenAPI baseado na cultura atual.
+/// Carrega os ficheiros de localização da pasta `locales` para a cultura solicitada.
+/// 
+/// A cultura é obtida do HttpContext.Items["SwaggerCulture"] (definido pelo SwaggerLocalizationMiddleware),
+/// com fallback para CultureInfo.CurrentUICulture.Name.
+/// 
+/// O cache é invalidado automaticamente quando os ficheiros de localização são alterados
+/// ou quando uma cultura antes indisponível passa a ter traduções.
 /// </summary>
 public class SwaggerTranslationFilter : IDocumentFilter
 {
     private static readonly Dictionary<string, Dictionary<string, string>> _translationsCache = new();
     private static readonly object _lock = new();
+    private readonly IHttpContextAccessor _httpContextAccessor;
+
+    public SwaggerTranslationFilter(IHttpContextAccessor httpContextAccessor)
+    {
+        _httpContextAccessor = httpContextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));
+    }
 
     public void Apply(OpenApiDocument swaggerDoc, DocumentFilterContext context)
     {
         try
         {
-            // Pega a cultura do CurrentUICulture (definida pelo SwaggerLocalizationMiddleware)
-            var culture = CultureInfo.CurrentUICulture.Name;
+            // Obtém a cultura do HttpContext.Items (definida pelo SwaggerLocalizationMiddleware)
+            // Fallback para CurrentUICulture se o middleware não tiver definido
+            var culture = GetCurrentCulture();
 
-            Log.Debug("?? [Gerit:SwaggerTranslation] Applying translations for culture: {Culture}", culture);
+            Log.Debug("🔄 [Gerit:SwaggerTranslation] Applying translations for culture: {Culture}", culture);
 
-            // Carrega as tradu��es mescladas de todos os arquivos JSON na pasta Localization
+            // Carrega as traduções a partir dos ficheiros JSON na pasta locales
             var translations = LoadTranslations(culture);
             if (translations == null || translations.Count == 0)
             {
-                Log.Warning("?? [Gerit:SwaggerTranslation] No translations found for culture: {Culture}", culture);
-                return;
+                Log.Warning("⚠️ [Gerit:SwaggerTranslation] No translations found for culture: {Culture}", culture);
+
+                // Tenta fallback para pt-PT se a cultura solicitada não for pt-PT
+                if (!culture.Equals("pt-PT", StringComparison.OrdinalIgnoreCase))
+                {
+                    Log.Information("🔄 [Gerit:SwaggerTranslation] Trying fallback to pt-PT for culture: {Culture}", culture);
+                    translations = LoadTranslations("pt-PT");
+                }
+
+                if (translations == null || translations.Count == 0)
+                {
+                    Log.Warning("⚠️ [Gerit:SwaggerTranslation] No fallback translations available. Raw keys will be shown.");
+                    return;
+                }
             }
 
-            // Traduz as informa��es da API
+            // Traduz as informações da API
             TranslateApiInfo(swaggerDoc.Info, translations);
 
             // Traduz todos os paths (endpoints)
@@ -64,44 +90,77 @@ public class SwaggerTranslationFilter : IDocumentFilter
                 }
             }
 
-            Log.Information("? [Gerit:SwaggerTranslation] Successfully translated Swagger document to {Culture}", culture);
+            Log.Information("✅ [Gerit:SwaggerTranslation] Successfully translated Swagger document to {Culture}", culture);
         }
         catch (Exception ex)
         {
-            Log.Error(ex, "? [Gerit:SwaggerTranslation] Error translating Swagger document");
+            Log.Error(ex, "❌ [Gerit:SwaggerTranslation] Error translating Swagger document");
         }
     }
 
     /// <summary>
-    /// Carrega as tradu��es procurando recursivamente por arquivos '*.{culture}.json' dentro da pasta 'Localization' e mescla-os.
-    /// Utiliza cache por cultura.
+    /// Obtém a cultura atual para tradução do Swagger.
+    /// Prioridade: HttpContext.Items["SwaggerCulture"] (definido pelo middleware) > CurrentUICulture.Name.
+    /// </summary>
+    private string GetCurrentCulture()
+    {
+        // Tenta obter do HttpContext.Items (definido pelo SwaggerLocalizationMiddleware)
+        var httpContext = _httpContextAccessor.HttpContext;
+        if (httpContext?.Items.TryGetValue("SwaggerCulture", out var cultureObj) == true
+            && cultureObj is string cultureName
+            && !string.IsNullOrWhiteSpace(cultureName))
+        {
+            Log.Debug("🎯 [Gerit:SwaggerTranslation] Culture from HttpContext.Items: {Culture}", cultureName);
+            return cultureName;
+        }
+
+        // Fallback para CurrentUICulture
+        var fallbackCulture = CultureInfo.CurrentUICulture.Name;
+        Log.Debug("🎯 [Gerit:SwaggerTranslation] Culture from CurrentUICulture (fallback): {Culture}", fallbackCulture);
+        return fallbackCulture;
+    }
+
+    /// <summary>
+    /// Carrega as traduções do ficheiro common.json para a cultura especificada.
+    /// Apenas carregamentos bem-sucedidos são cacheados. Falhas são retentadas em cada pedido.
     /// </summary>
     private Dictionary<string, string>? LoadTranslations(string culture)
     {
         if (string.IsNullOrWhiteSpace(culture))
             culture = CultureInfo.CurrentUICulture.Name;
 
+        // Verifica cache (apenas loads bem-sucedidos são cacheados)
         if (_translationsCache.TryGetValue(culture, out var cached))
         {
-            return cached;
+            // Se o cache tem entradas, retorna. Se está vazio, pode ser uma falha anterior — retenta.
+            if (cached.Count > 0)
+            {
+                return cached;
+            }
+
+            Log.Debug("🔄 [Gerit:SwaggerTranslation] Cache hit for {Culture} is empty, retrying load", culture);
         }
 
         lock (_lock)
         {
-            if (_translationsCache.TryGetValue(culture, out cached))
+            // Double-check após lock
+            if (_translationsCache.TryGetValue(culture, out cached) && cached.Count > 0)
                 return cached;
 
             try
             {
-                // Use AppContext.BaseDirectory para garantir que localizamos os arquivos na pasta de sa�da
+                // Use AppContext.BaseDirectory para garantir que localizamos os arquivos na pasta de saída
                 var basePath = AppContext.BaseDirectory;
                 var localesPath = Path.Combine(basePath, "locales");
 
+                Log.Debug("🔍 [Gerit:SwaggerTranslation] Looking for locales at: {Path}", localesPath);
+
                 if (!Directory.Exists(localesPath))
                 {
-                    Log.Warning("[Gerit:SwaggerTranslation] Locales folder not found: {Path}", localesPath);
-                    _translationsCache[culture] = new Dictionary<string, string>();
-                    return _translationsCache[culture];
+                    Log.Warning("[Gerit:SwaggerTranslation] Locales folder not found: {Path}. BaseDirectory: {BaseDir}",
+                        localesPath, basePath);
+                    // NÃO cachear — permite retentativa no próximo pedido
+                    return null;
                 }
 
                 var merged = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
@@ -121,41 +180,61 @@ public class SwaggerTranslationFilter : IDocumentFilter
                             {
                                 merged[kvp.Key] = kvp.Value;
                             }
-                            Log.Debug("[Gerit:SwaggerTranslation] Loaded {Count} translations from {File}", dict.Count, Path.GetFileName(commonFilePath));
+                            Log.Debug("[Gerit:SwaggerTranslation] Loaded {Count} translations from {File}",
+                                dict.Count, Path.GetFileName(commonFilePath));
+                        }
+                        else
+                        {
+                            Log.Warning("[Gerit:SwaggerTranslation] File {File} is empty or deserialized to null",
+                                commonFilePath);
                         }
                     }
                     catch (Exception ex)
                     {
-                        Log.Error(ex, "[Gerit:SwaggerTranslation] Error loading {File}", commonFilePath);
+                        Log.Error(ex, "[Gerit:SwaggerTranslation] Error deserializing {File}", commonFilePath);
+                        // NÃO cachear — permite retentativa
+                        return null;
                     }
+                }
+                else
+                {
+                    Log.Warning("[Gerit:SwaggerTranslation] Translation file not found: {Path}", commonFilePath);
+                    // NÃO cachear — pode ser que a cultura não tenha traduções e precise de fallback
+                    return null;
                 }
 
                 if (merged.Count == 0)
                 {
-                    // Tentar fallback pt-PT
-                    if (!culture.Equals("pt-PT", StringComparison.OrdinalIgnoreCase))
-                    {
-                        Log.Warning("[Gerit:SwaggerTranslation] No translations for {Culture}, trying fallback pt-PT", culture);
-                        var fallback = LoadTranslations("pt-PT");
-                        _translationsCache[culture] = fallback ?? new Dictionary<string, string>();
-                        return _translationsCache[culture];
-                    }
-
-                    Log.Warning("[Gerit:SwaggerTranslation] No translation files found for culture: {Culture}", culture);
-                    _translationsCache[culture] = new Dictionary<string, string>();
-                    return _translationsCache[culture];
+                    Log.Warning("[Gerit:SwaggerTranslation] No translations loaded for culture: {Culture}", culture);
+                    // NÃO cachear vazio — permite retentativa e fallback
+                    return null;
                 }
 
+                // Só cachear carregamentos bem-sucedidos (com conteúdo)
                 _translationsCache[culture] = merged;
-                Log.Information("[Gerit:SwaggerTranslation] Successfully loaded {Count} translations for culture {Culture}", merged.Count, culture);
+                Log.Information("[Gerit:SwaggerTranslation] Successfully loaded and cached {Count} translations for culture {Culture}",
+                    merged.Count, culture);
                 return merged;
             }
             catch (Exception ex)
             {
                 Log.Error(ex, "[Gerit:SwaggerTranslation] Error loading translations for culture: {Culture}", culture);
-                _translationsCache[culture] = new Dictionary<string, string>();
-                return _translationsCache[culture];
+                // NÃO cachear falhas — permite retentativa no próximo pedido
+                return null;
             }
+        }
+    }
+
+    /// <summary>
+    /// Limpa o cache de traduções. Útil para forçar o recarregamento
+    /// após alterações nos ficheiros de localização sem reiniciar a aplicação.
+    /// </summary>
+    public static void ClearCache()
+    {
+        lock (_lock)
+        {
+            _translationsCache.Clear();
+            Log.Information("[Gerit:SwaggerTranslation] Translation cache cleared");
         }
     }
 
@@ -181,17 +260,17 @@ public class SwaggerTranslationFilter : IDocumentFilter
     {
         if (operation == null) return;
 
-        // Traduz o Summary se come�ar com "Swagger."
+        // Traduz o Summary se começar com "Swagger."
         if (!string.IsNullOrEmpty(operation.Summary) && operation.Summary.StartsWith("Swagger."))
         {
             operation.Summary = GetTranslation(translations, operation.Summary, operation.Summary);
         }
 
-        // Traduz o OperationId
+        // Traduz usando o OperationId como chave
         operation.Summary = GetTranslation(translations, $"Swagger.Endpoint.{operation.OperationId}.Summary", operation.Summary);
         operation.Description = GetTranslation(translations, $"Swagger.Endpoint.{operation.OperationId}.Description", operation.Description);
 
-        // Traduz par�metros
+        // Traduz parâmetros
         if (operation.Parameters != null)
         {
             foreach (var param in operation.Parameters)
@@ -228,7 +307,7 @@ public class SwaggerTranslationFilter : IDocumentFilter
     {
         if (schema == null) return;
 
-        // Tenta usar Title, se n�o existir usa Reference.Id (quando schemas s�o referenciados)
+        // Tenta usar Title, se não existir usa Reference.Id (quando schemas são referenciados)
         var schemaId = schema.Title ?? schema.Reference?.Id;
         if (!string.IsNullOrEmpty(schemaId))
         {
@@ -253,7 +332,7 @@ public class SwaggerTranslationFilter : IDocumentFilter
     }
 
     /// <summary>
-    /// Obt�m a tradu��o ou retorna o valor padr�o se n�o encontrar
+    /// Obtém a tradução ou retorna o valor padrão se não encontrar
     /// </summary>
     private string GetTranslation(Dictionary<string, string> translations, string key, string? defaultValue)
     {

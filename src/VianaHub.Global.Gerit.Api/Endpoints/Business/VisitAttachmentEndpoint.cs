@@ -37,7 +37,7 @@ public static class VisitAttachmentEndpoint
         .WithName("GetVisitAttachmentById")
         .WithSummary("Swagger.Endpoint.VisitAttachment.GetById.Summary")
         .Produces(StatusCodes.Status200OK)
-        .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
+        .Produces<ErrorResponse>(StatusCodes.Status410Gone)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
         groupV1.MapGet("/{visitId}/attachments/paged", async ([FromRoute] int visitId, [AsParameters] PagedFilterRequest request, [FromServices] IVisitAttachmentAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
@@ -60,10 +60,10 @@ public static class VisitAttachmentEndpoint
         .WithName("GetPrimaryVisitAttachment")
         .WithSummary("Swagger.Endpoint.VisitAttachment.GetPrimaryByVisitId.Summary")
         .Produces(StatusCodes.Status200OK)
-        .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
+        .Produces<ErrorResponse>(StatusCodes.Status410Gone)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapPost("/{visitId}/attachments/", async ([FromRoute] int visitId, [FromBody] CreateVisitAttachmentRequest request, [FromServices] IVisitAttachmentAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
+        groupV1.MapPost("/{visitId}/attachments", async ([FromRoute] int visitId, [FromBody] CreateVisitAttachmentRequest request, [FromServices] IVisitAttachmentAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var id = await appService.CreateAsync(visitId, request, ct);
             return notify.CustomResponse(new GenericResponse { Id = id }, 201);
@@ -98,7 +98,7 @@ public static class VisitAttachmentEndpoint
         .WithName("SetVisitAttachmentAsPrimary")
         .WithSummary("Swagger.Endpoint.VisitAttachment.SetAsPrimary.Summary")
         .Produces(StatusCodes.Status204NoContent)
-        .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
+        .Produces<ErrorResponse>(StatusCodes.Status410Gone)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
         groupV1.MapPatch("/{visitId}/attachments/{id}/activate", async ([FromRoute] int visitId, [FromRoute] int id, [FromServices] IVisitAttachmentAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
@@ -110,7 +110,7 @@ public static class VisitAttachmentEndpoint
         .WithName("ActivateVisitAttachment")
         .WithSummary("Swagger.Endpoint.VisitAttachment.Activate.Summary")
         .Produces(StatusCodes.Status204NoContent)
-        .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
+        .Produces<ErrorResponse>(StatusCodes.Status410Gone)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
         groupV1.MapPatch("/{visitId}/attachments/{id}/deactivate", async ([FromRoute] int visitId, [FromRoute] int id, [FromServices] IVisitAttachmentAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
@@ -122,7 +122,7 @@ public static class VisitAttachmentEndpoint
         .WithName("DeactivateVisitAttachment")
         .WithSummary("Swagger.Endpoint.VisitAttachment.Deactivate.Summary")
         .Produces(StatusCodes.Status204NoContent)
-        .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
+        .Produces<ErrorResponse>(StatusCodes.Status410Gone)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
         groupV1.MapDelete("/{visitId}/attachments/{id}", async ([FromRoute] int visitId, [FromRoute] int id, [FromServices] IVisitAttachmentAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
@@ -134,7 +134,7 @@ public static class VisitAttachmentEndpoint
         .WithName("DeleteVisitAttachment")
         .WithSummary("Swagger.Endpoint.VisitAttachment.Delete.Summary")
         .Produces(StatusCodes.Status204NoContent)
-        .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
+        .Produces<ErrorResponse>(StatusCodes.Status410Gone)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
         // Global route (not nested) — kept at /attachments/public/{publicId}
@@ -147,7 +147,7 @@ public static class VisitAttachmentEndpoint
         .WithName("GetVisitAttachmentByPublicId")
         .WithSummary("Swagger.Endpoint.VisitAttachment.GetByPublicId.Summary")
         .Produces(StatusCodes.Status200OK)
-        .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
+        .Produces<ErrorResponse>(StatusCodes.Status410Gone)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
     }
 }

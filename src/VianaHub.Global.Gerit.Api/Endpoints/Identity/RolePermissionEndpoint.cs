@@ -15,7 +15,7 @@ public static class RolePermissionEndpoint
 {
     public static void MapRolePermissionEndpoints(this IEndpointRouteBuilder app)
     {
-        var groupV1 = app.MapGroup("/v1/rolepermissions").WithTags("RolePermissions").WithGroupName("v1").RequireAuthorization();
+        var groupV1 = app.MapGroup("/v1/role-permissions").WithTags("RolePermissions").WithGroupName("v1").RequireAuthorization();
 
         groupV1.MapGet("/", async ([FromServices] IRolePermissionAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {

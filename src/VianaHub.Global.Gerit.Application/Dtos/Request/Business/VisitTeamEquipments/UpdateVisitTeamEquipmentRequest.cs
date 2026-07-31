@@ -2,7 +2,5 @@ namespace VianaHub.Global.Gerit.Application.Dtos.Request.Business.VisitTeamEquip
 
 public class UpdateVisitTeamEquipmentRequest
 {
-    public int VisitTeamId { get; set; }
     public int EquipmentId { get; set; }
-    public int ModifiedBy { get; set; }
 }

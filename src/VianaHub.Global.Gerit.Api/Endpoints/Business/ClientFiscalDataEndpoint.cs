@@ -35,7 +35,7 @@ public static class ClientFiscalDataEndpoint
         .WithName("GetClientFiscalDataById")
         .WithSummary("Swagger.Endpoint.ClientFiscalData.GetById.Summary")
         .Produces(StatusCodes.Status200OK)
-        .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
+        .Produces<ErrorResponse>(StatusCodes.Status410Gone)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
         groupV1.MapGet("/{clientId}/fiscal-data/paged", async ([FromRoute] int clientId, [AsParameters] PagedFilterRequest request, [FromServices] IClientFiscalDataAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
@@ -49,7 +49,7 @@ public static class ClientFiscalDataEndpoint
         .Produces(StatusCodes.Status200OK)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
-        groupV1.MapPost("/{clientId}/fiscal-data/", async ([FromRoute] int clientId, [FromBody] CreateClientFiscalDataRequest request, [FromServices] IClientFiscalDataAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
+        groupV1.MapPost("/{clientId}/fiscal-data", async ([FromRoute] int clientId, [FromBody] CreateClientFiscalDataRequest request, [FromServices] IClientFiscalDataAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {
             var id = await appService.CreateAsync(clientId, request, ct);
             return notify.CustomResponse(new GenericResponse { Id = id }, 201);
@@ -72,7 +72,7 @@ public static class ClientFiscalDataEndpoint
         .WithSummary("Swagger.Endpoint.ClientFiscalData.Update.Summary")
         .Produces(StatusCodes.Status204NoContent)
         .Produces<ErrorResponse>(StatusCodes.Status400BadRequest)
-        .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
+        .Produces<ErrorResponse>(StatusCodes.Status410Gone)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError)
         .WithValidation<UpdateClientFiscalDataRequest>();
 
@@ -85,7 +85,7 @@ public static class ClientFiscalDataEndpoint
         .WithName("ActivateClientFiscalData")
         .WithSummary("Swagger.Endpoint.ClientFiscalData.Activate.Summary")
         .Produces(StatusCodes.Status204NoContent)
-        .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
+        .Produces<ErrorResponse>(StatusCodes.Status410Gone)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
         groupV1.MapPatch("/{clientId}/fiscal-data/{id}/deactivate", async ([FromRoute] int clientId, [FromRoute] int id, [FromServices] IClientFiscalDataAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
@@ -97,7 +97,7 @@ public static class ClientFiscalDataEndpoint
         .WithName("DeactivateClientFiscalData")
         .WithSummary("Swagger.Endpoint.ClientFiscalData.Deactivate.Summary")
         .Produces(StatusCodes.Status204NoContent)
-        .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
+        .Produces<ErrorResponse>(StatusCodes.Status410Gone)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
         groupV1.MapDelete("/{clientId}/fiscal-data/{id}", async ([FromRoute] int clientId, [FromRoute] int id, [FromServices] IClientFiscalDataAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
@@ -109,7 +109,29 @@ public static class ClientFiscalDataEndpoint
         .WithName("DeleteClientFiscalData")
         .WithSummary("Swagger.Endpoint.ClientFiscalData.Delete.Summary")
         .Produces(StatusCodes.Status204NoContent)
-        .Produces<ErrorResponse>(StatusCodes.Status404NotFound)
+        .Produces<ErrorResponse>(StatusCodes.Status410Gone)
+        .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
+
+        // Upload massivo de client fiscal data via CSV
+        groupV1.MapPost("/{clientId}/fiscal-data/bulk-upload", async ([FromRoute] int clientId, HttpRequest request, [FromServices] IClientFiscalDataAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
+        {
+            if (!request.HasFormContentType || request.Form.Files.Count == 0)
+            {
+                notify.Add("Api.Upload.NoFileProvided", 400);
+                return notify.CustomResponse();
+            }
+
+            var file = request.Form.Files[0];
+            var success = await appService.BulkUploadAsync(clientId, file, ct);
+            return notify.CustomResponse(success);
+        })
+        .CustomAuthorize("Admin,BackOffice,Manager", "ClientFiscalData", "BulkUpload")
+        .WithName("BulkUploadClientFiscalData")
+        .WithSummary("Swagger.Endpoint.ClientFiscalData.BulkUpload.Summary")
+        .DisableAntiforgery()
+        .Accepts<IFormFile>("multipart/form-data")
+        .Produces(StatusCodes.Status200OK)
+        .Produces<ErrorResponse>(StatusCodes.Status400BadRequest)
         .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
     }
 }

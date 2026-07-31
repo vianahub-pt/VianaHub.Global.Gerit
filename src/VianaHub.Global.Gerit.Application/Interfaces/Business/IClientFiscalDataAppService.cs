@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http;
 using VianaHub.Global.Gerit.Application.Dtos.Base;
 using VianaHub.Global.Gerit.Application.Dtos.Request.Business.ClientFiscalData;
 using VianaHub.Global.Gerit.Application.Dtos.Response.Business.ClientFiscalData;
@@ -16,4 +17,5 @@ public interface IClientFiscalDataAppService
     Task<bool> ActivateAsync(int clientId, int id, CancellationToken ct);
     Task<bool> DeactivateAsync(int clientId, int id, CancellationToken ct);
     Task<bool> DeleteAsync(int clientId, int id, CancellationToken ct);
+    Task<bool> BulkUploadAsync(int clientId, IFormFile file, CancellationToken ct);
 }

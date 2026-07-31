@@ -15,7 +15,7 @@ public static class UserRoleEndpoint
 {
     public static void MapUserRoleEndpoints(this IEndpointRouteBuilder app)
     {
-        var groupV1 = app.MapGroup("/v1/userroles").WithTags("UserRoles").WithGroupName("v1").RequireAuthorization();
+        var groupV1 = app.MapGroup("/v1/user-roles").WithTags("UserRoles").WithGroupName("v1").RequireAuthorization();
 
         groupV1.MapGet("/", async ([FromServices] IUserRoleAppService appService, [FromServices] INotify notify, CancellationToken ct) =>
         {

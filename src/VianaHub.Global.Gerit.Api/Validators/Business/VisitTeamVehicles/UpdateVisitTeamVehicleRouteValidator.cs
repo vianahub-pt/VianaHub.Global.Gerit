@@ -8,9 +8,6 @@ public class UpdateVisitTeamVehicleRouteValidator : AbstractValidator<UpdateVisi
 {
     public UpdateVisitTeamVehicleRouteValidator(ILocalizationService localization)
     {
-        RuleFor(x => x.VisitTeamId)
-            .GreaterThan(0).WithMessage(localization.GetMessage("Api.Validator.VisitTeamVehicle.Update.VisitTeamId"));
-
         RuleFor(x => x.VehicleId)
             .GreaterThan(0).WithMessage(localization.GetMessage("Api.Validator.VisitTeamVehicle.Update.VehicleId"));
     }
