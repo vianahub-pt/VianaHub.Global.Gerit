@@ -26,8 +26,6 @@
   "Api.Middleware.GlobalException.DbUpdateException.Error.InternalServerError": "Internal Server Error",
   "Api.Middleware.GlobalException.DbUpdateException.Error.SaveDataError": "Error saving data. Please check the information and try again",
   "Api.Middleware.GlobalException.DbUpdateException.Error.TenantNotExistOrInactive": "The specified tenant does not exist or is inactive",
-  "Api.Middleware.GlobalException.DbUpdateException.Error.UnexpectedError": "Unexpected error processing request",
-  "Api.Middleware.GlobalException.DbUpdateException.Error.UnexpectedError.User": "An unexpected error occurred. Our team has been notified and is working on a solution",
   "Api.Middleware.GlobalException.JsonException.Error.ContactSupport": "Contact support with the ID: {0}",
   "Api.Middleware.GlobalException.JsonException.Error.FieldLabel.ErrorId": "Error ID",
   "Api.Middleware.GlobalException.JsonException.Error.FieldLabel.Format": "Format",
@@ -2749,5 +2747,5 @@
   "Job.SyncDefinitions.Cancelled": "Cancelled",
   "Job.SyncDefinitions.Completed": "Completed",
   "Job.SyncDefinitions.Error": "Error",
-  "Job.SyncDefinitions.Starting": "Starting",
+  "Job.SyncDefinitions.Starting": "Starting"
 }
