@@ -96,8 +96,8 @@ public static class SwaggerSetup
             // ✅ Adiciona suporte para upload de arquivos (IFormFile)
             options.OperationFilter<FileUploadOperationFilter>();
 
-            // ✅ Adiciona o filtro de tradução do Swagger
-            options.DocumentFilter<SwaggerTranslationFilter>();
+            // ✅ SwaggerTranslationFilter removido — substituído pelo SwaggerTranslationMiddleware
+            //    que gera documentos frescos por pedido, bypassing o cache do Swashbuckle
         });
 
         return services;
@@ -112,6 +112,11 @@ public static class SwaggerSetup
         app.UseMiddleware<Middleware.SwaggerLocalizationMiddleware>(
             new List<string> { "pt-PT", "pt-BR", "en-US", "es-ES" }
         );
+
+        // ✅ Novo middleware de tradução — intercepta /swagger/*/swagger.json,
+        //    gera documento fresco via ISwaggerProvider e aplica traduções por pedido,
+        //    bypassing o cache do Swashbuckle (que impedia traduções multi-idioma)
+        app.UseMiddleware<Middleware.SwaggerTranslationMiddleware>();
 
         app.UseSwagger(c =>
         {
