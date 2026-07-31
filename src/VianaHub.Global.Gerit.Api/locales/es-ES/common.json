@@ -2370,6 +2370,7 @@
   "Swagger.Tag.EmployeeAddresses": "Direcciones de Empleados",
   "Swagger.Tag.EmployeeContactPersons": "Contactos de Empleados",
   "Swagger.Tag.Employees": "Empleados",
+  "Swagger.Tag.EmployeeFiscalData": "Datos Fiscales de Empleados",
   "Swagger.Tag.EmployeeTeams": "Equipos de Empleados",
   "Swagger.Tag.Equipments": "Equipos",
   "Swagger.Tag.EquipmentTypes": "Tipos de Equipo",
