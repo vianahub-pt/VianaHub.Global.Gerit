@@ -127,7 +127,8 @@ public class LocalizationService : ILocalizationService
                 var json = File.ReadAllText(commonFilePath);
                 var options = new JsonSerializerOptions
                 {
-                    ReadCommentHandling = JsonCommentHandling.Skip
+                    ReadCommentHandling = JsonCommentHandling.Skip,
+                    AllowTrailingCommas = true
                 };
                 var messages = JsonSerializer.Deserialize<Dictionary<string, string>>(json, options);
 

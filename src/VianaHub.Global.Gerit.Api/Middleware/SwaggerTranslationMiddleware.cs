@@ -33,6 +33,7 @@ public class SwaggerTranslationMiddleware
         @"^/swagger/(?<documentName>[^/]+)/swagger\.json$",
         RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.CultureInvariant
     );
+    private static readonly string _envSuffix = GetEnvironmentSuffix();
 
     public SwaggerTranslationMiddleware(RequestDelegate next)
     {
@@ -232,7 +233,12 @@ public class SwaggerTranslationMiddleware
                     try
                     {
                         var json = File.ReadAllText(commonFilePath);
-                        var dict = JsonSerializer.Deserialize<Dictionary<string, string>>(json);
+                        var options = new JsonSerializerOptions
+                        {
+                            PropertyNameCaseInsensitive = true,
+                            AllowTrailingCommas = true
+                        };
+                        var dict = JsonSerializer.Deserialize<Dictionary<string, string>>(json, options);
                         if (dict != null && dict.Count > 0)
                         {
                             foreach (var kvp in dict)
@@ -283,8 +289,8 @@ public class SwaggerTranslationMiddleware
     {
         if (info == null) return;
 
-        info.Title = GetTranslation(translations, "Swagger.Api.Title", info.Title);
-        info.Description = GetTranslation(translations, "Swagger.Api.Description", info.Description);
+        info.Title = GetTranslation(translations, $"Swagger.Api.Title{_envSuffix}", info.Title);
+        info.Description = GetTranslation(translations, $"Swagger.Api.Description{_envSuffix}", info.Description);
 
         if (info.Contact != null)
         {
@@ -370,6 +376,22 @@ public class SwaggerTranslationMiddleware
         if (securityScheme == null) return;
 
         securityScheme.Description = GetTranslation(translations, "Swagger.Security.Bearer.Description", securityScheme.Description);
+    }
+
+    /// <summary>
+    /// Determina o sufixo de ambiente para as chaves de tradução do Swagger.
+    /// Lê a variável ASPNETCORE_ENVIRONMENT e retorna o sufixo correspondente.
+    /// </summary>
+    private static string GetEnvironmentSuffix()
+    {
+        var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production";
+        return env switch
+        {
+            "Development" => ".Development",
+            "Staging" => ".Staging",
+            "Production" => ".Production",
+            _ => ""
+        };
     }
 
     /// <summary>
