@@ -2354,7 +2354,7 @@
   "Swagger.Response.410.Description": "Removido",
   "Swagger.Response.500.Description": "Erro Interno do Servidor",
   "Swagger.Security.Bearer.Description": "Cabeçalho de autorização JWT usando o esquema Bearer. Introduza 'Bearer' [espaço] seguido do seu token no campo abaixo.",
-  "Swagger.Tag.AcquisitionSourceTypes": "Tipos de Origem de Aquisicao",
+  "Swagger.Tag.AcquisitionSourceTypes": "Tipos de Origem de Aquisição",
   "Swagger.Tag.Actions": "Ações",
   "Swagger.Tag.AddressTypes": "Tipos de Morada",
   "Swagger.Tag.AttachmentCategories": "Categorias de Anexos",
